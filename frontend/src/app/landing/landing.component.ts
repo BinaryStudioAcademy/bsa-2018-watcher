@@ -8,7 +8,7 @@ import {MenuItem } from 'primeng/primeng';
   styleUrls: ['./landing.component.sass']
 })
 export class LandingComponent implements OnInit { 
-  items: Array<MenuItem>
+  items: Array<MenuItem>;
   public values: Array<string>;
   
   constructor(private defaultService: DefaultService) {}

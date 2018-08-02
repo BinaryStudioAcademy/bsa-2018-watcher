@@ -16,6 +16,8 @@ import { FormsModule } from '@angular/forms';
 
 import { AuthorizationComponent } from './authorization/authorization.component';
 import { AdminModule } from './admin/admin.module';
+import { UserModule } from './user/user.module';
+import { DashboardsModule } from './dashboards/dashboards.module';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { AdminModule } from './admin/admin.module';
     PanelModule,
     ButtonModule,
     RadioButtonModule,
-    AdminModule
+    AdminModule,
+    UserModule,
+    DashboardsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
