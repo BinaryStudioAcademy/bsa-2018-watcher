@@ -1,6 +1,7 @@
 ﻿namespace Watcher.DataAccess
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -49,8 +50,9 @@
                 if (changes == 0) return true;
                 return await _context.SaveChangesAsync() > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message);
                 return false;
             }
         }

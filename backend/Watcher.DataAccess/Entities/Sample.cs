@@ -2,11 +2,13 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     using Watcher.Common.Enums;
 
     public class Sample : Entity<int>
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
 
         [Required]

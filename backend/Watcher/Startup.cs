@@ -1,16 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Watcher
+﻿namespace Watcher
 {
     using AutoMapper;
 
     using FluentValidation.AspNetCore;
 
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
 
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
@@ -43,14 +42,16 @@ namespace Watcher
                            .AllowCredentials();
                 }));
 
+             // TODO: Add Authorization
+
             services.ConfigureSwagger(Configuration);
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            // Add your services here
             services.AddTransient<ISamplesService, SamplesService>();
 
-            InitAutomapper(services);
-
+            InitializeAutomapper(services);
 
             // Add framework services.
             ConfigureDatabase(services, Configuration);
@@ -69,6 +70,8 @@ namespace Watcher
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // TODO: Use Authorization
+
             app.UseCors("CorsPolicy");
 
             app.UseHsts();
@@ -81,10 +84,11 @@ namespace Watcher
             app.UseMvc();
         }
 
-        public virtual IServiceCollection InitAutomapper(IServiceCollection services)
+        public virtual IServiceCollection InitializeAutomapper(IServiceCollection services)
         {
+            // Used in older versions
             // ServiceCollectionExtensions.UseStaticRegistration = false;
-
+            
             services.AddAutoMapper(cfg =>
                 {
                     cfg.AddProfile<SamplesProfile>();

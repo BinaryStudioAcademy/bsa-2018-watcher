@@ -1,12 +1,12 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-
-namespace Watcher.Middlewares
+﻿namespace Watcher.Middlewares
 {
+    using System;
+    using System.Net;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json;
+
     using Watcher.Common.Errors;
 
     public class HttpStatusCodeExceptionMiddleware

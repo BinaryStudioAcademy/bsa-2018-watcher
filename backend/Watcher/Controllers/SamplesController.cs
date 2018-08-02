@@ -7,23 +7,50 @@ namespace Watcher.Controllers
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
+
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
 
+    /// <summary>   
+    /// Controller to Manage Samples
+    /// </summary>
+    // [Authorize]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class SamplesController : ControllerBase
     {
+        /// <summary>
+        /// The Samples Service service
+        /// </summary>
         private readonly ISamplesService _samplesService;
 
-        protected SamplesController(ISamplesService service)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SamplesController"/> class. 
+        /// </summary>
+        /// <param name="service">
+        /// Samples service
+        /// </param>
+        public SamplesController(ISamplesService service)
         {
             _samplesService = service;
         }
 
-        // GET: api/Samples
+        /// <summary>
+        /// Get Samples
+        /// </summary>
+        /// <returns>
+        /// List of Dtos of Samples
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Samples not found</response>
+        /// <response code="403">You don`t have permission to create watch Samples</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
         [HttpGet]
+        [AllowAnonymous]
         public virtual async Task<ActionResult<IEnumerable<SampleDto>>> Get()
         {
             var dtos = await _samplesService.GetAllEntitiesAsync();
@@ -35,8 +62,20 @@ namespace Watcher.Controllers
             return Ok(dtos);
         }
 
-        // GET: api/Samples/5
+        /// <summary>
+        /// Get Sample by id
+        /// </summary>
+        /// <param name="id">Sample identifier</param>
+        /// <returns>
+        /// Dto of Sample
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Samples not found</response>
+        /// <response code="403">You don`t have permission to create watch Sample</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public virtual async Task<ActionResult<SampleDto>> GetById(int id)
         {
             var dto = await _samplesService.GetEntityByIdAsync(id);
@@ -48,7 +87,18 @@ namespace Watcher.Controllers
             return Ok(dto);
         }
 
-        // POST: api/Samples
+        /// <summary>
+        /// Add new Sample
+        /// </summary>
+        /// <param name="request">Sample create request</param>
+        /// <returns>
+        /// Dto of Sample
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Sample not found</response>
+        /// <response code="403">You don`t have permission to create Sample</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
         [HttpPost]
         public virtual async Task<ActionResult<SampleDto>> Create([FromBody] SampleRequest request)
         {
@@ -66,9 +116,21 @@ namespace Watcher.Controllers
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
 
-        // PUT: api/Samples/5
+        /// <summary>
+        /// Update Sample
+        /// </summary>
+        /// <param name="id">Sample identifier</param>
+        /// <param name="request">Sample update request</param>
+        /// <returns>
+        /// Action Result
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Sample not found</response>
+        /// <response code="403">You don`t have permission to update Sample</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
         [HttpPut("{id}")]
-        public virtual async Task<ActionResult<SampleDto>> Update([FromRoute] int id, [FromBody] SampleRequest request)
+        public virtual async Task<ActionResult> Update([FromRoute] int id, [FromBody] SampleRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -84,9 +146,20 @@ namespace Watcher.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Samples/5
+        /// <summary>
+        /// Delete Sample
+        /// </summary>
+        /// <param name="id">Sample identifier</param>
+        /// <returns>
+        /// Action Result
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Sample not found</response>
+        /// <response code="403">You don`t have permission to delete Sample</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
         [HttpDelete("{id}")]
-        public virtual async Task<ActionResult<bool>> Delete(int id)
+        public virtual async Task<ActionResult> Delete(int id)
         {
             var result = await _samplesService.DeleteEntityByIdAsync(id);
             if (!result)

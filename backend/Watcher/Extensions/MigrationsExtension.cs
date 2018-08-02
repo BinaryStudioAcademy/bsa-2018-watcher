@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Extensions
 {
     using System;
+    using System.Diagnostics;
 
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,11 @@
                 {
                     try
                     {
-                        // TODO: fix
                         context?.Database?.Migrate();
                     }
                     catch (Exception ex)
                     {
+                        Debug.WriteLine("Error occured while Migration Database!");
                         //context?.Database?.EnsureDeleted();
                         //context?.Database?.Migrate();
                     }
