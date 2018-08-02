@@ -15,6 +15,7 @@ import { RadioButtonModule } from 'primeng/primeng';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { AuthorizationComponent } from './authorization/authorization.component';
+import { AdminModule } from './admin/admin.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { AuthorizationComponent } from './authorization/authorization.component'
     AccordionModule,
     PanelModule,
     ButtonModule,
-    RadioButtonModule
+    RadioButtonModule,
+    AdminModule
   ],
   providers: [],
   bootstrap: [AppComponent]
