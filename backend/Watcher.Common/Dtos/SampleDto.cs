@@ -13,7 +13,7 @@
 
         public int Count { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public DateTime DateOfCreation { get; set; }
 
         public SampleEnum SampleField { get; set; }
     }
