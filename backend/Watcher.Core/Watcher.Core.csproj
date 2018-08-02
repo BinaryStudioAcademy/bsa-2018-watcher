@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Watcher.Common\Watcher.Common.csproj" />
+    <ProjectReference Include="..\Watcher.DataAccess\Watcher.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
