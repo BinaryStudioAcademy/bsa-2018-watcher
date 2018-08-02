@@ -1,0 +1,5 @@
+﻿npm:
+Add-Migration Init -OutputDir Data/Migrations
+
+terminal:
+dotnet ef migrations add Initial -o Data/Migrations
