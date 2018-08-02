@@ -7,6 +7,11 @@ import { SomeDirective } from './directives/some.directive';
   imports: [
     CommonModule
   ],
-  declarations: [SomePipe, SomeDirective]
+  declarations: [SomePipe, SomeDirective],
+  exports:[
+    CommonModule,
+    SomePipe,
+    SomeDirective
+  ]
 })
 export class SharedModule { }
