@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SomePipe } from './pipes/some.pipe';
+import { SomeDirective } from './directives/some.directive';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: []
+  declarations: [SomePipe, SomeDirective]
 })
 export class SharedModule { }
