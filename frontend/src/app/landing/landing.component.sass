@@ -6,12 +6,12 @@
   font-family: helvetica, sans-serif
 
 #header
+  background-color: rgba(0,0,0,0.2)
   z-index: 2
   position: fixed
   width: 100%
   height: 60px
   line-height: 60px
-  background:black
   color: white
   h1
     top: 0px
@@ -81,9 +81,9 @@
   align-items: center
   display: flex
   flex-direction: column
-  height: calc(100vh-100px)
+  height: 400px
   position: relative
-  background: url(https://i.amz.mshcdn.com/oPgdrflmxQQrhwRTF9MDoi8bmjg=/fit-in/1440x1000/https%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fcosmos%2F3927825968_afb30742a7_o.jpg) no-repeat center center fixed
+  background: url(https://newrelic.com/content/dam/component-assets/c04-marquee-carousel/c04-ravbg.jpg) no-repeat center center fixed
   -webkit-background-size: cover
   -moz-background-size: covero
   background-size: cover
@@ -97,12 +97,11 @@
 
 .content
   font-family: helvetica, sans-serif
-  border: 2px solid red
   display: grid
   grid-template-columns: 50% 50%
-  grid-template-rows: calc(90vh)
-  grid-template-areas: 'info screenshot'
-  .info
+  grid-template-areas: "info screenshot"
+  height: 600px
+  .info,.info3
     grid-area: 'info'
     .infoContent
       margin-top: 30vh
@@ -113,7 +112,99 @@
       h1
         margin-top: 2px
 
-  .picture
-    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot2.jpg) no-repeat
+  .picture,.picture3
+    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot1.jpg) no-repeat
     background-size: cover
     grid-area: 'screenshot'
+  
+  .picture2
+    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot2.jpg) no-repeat
+    background-size: cover
+    grid-area: 'info'
+
+  .info2
+    grid-area: 'screenshot'
+    .infoContent
+      margin-top: 30vh
+      margin-right: 8vh
+      margin-left:  16vh
+      border: 2px solid red
+      justify-self: center
+      h1
+        margin-top: 2px
+  .picture3
+        background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot3.jpg) no-repeat
+
+ul
+  list-style-type: none
+
+.cards
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(300px, 2fr))
+  grid-gap: 50px
+  align-items: stretch
+  .cards__item
+  display: flex
+  padding: 1rem
+
+.card
+  background-color: white
+  margin: auto 20px
+  border-radius: 0.25rem
+  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25)
+  display: flex
+  flex-direction: column
+  overflow: hidden
+  &:hover .card__image
+    -webkit-filter: contrast(100%)
+    filter: contrast(100%)
+
+.card__content
+  display: flex
+  flex-direction: column
+  padding: 1rem
+
+.card__image
+  background-position: center center
+  background-repeat: no-repeat
+  background-size: cover
+  border-top-left-radius: 0.25rem
+  border-top-right-radius: 0.25rem
+  -webkit-filter: contrast(70%)
+  filter: contrast(70%)
+  overflow: hidden
+  position: relative
+  transition: -webkit-filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91)
+  transition: filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91)
+  transition: filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91), -webkit-filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91)
+ 
+  &::before
+    content: ""
+    display: block
+    padding-top: 56.25%
+
+@media (min-width: 40rem)
+  .card__image::before
+    padding-top: 66.6%
+
+.card__image--ded
+  background-image: url('https://newrelic.com/content/dam/component-assets/homepage/hp02/hp02-dcx.jpg')
+
+.card__image--cloud
+  background-image: url('https://newrelic.com/content/dam/component-assets/homepage/hp02/hp02-cloud.jpg')
+
+.card__image--female
+  background-image: url('https://newrelic.com/content/dam/component-assets/homepage/hp02/hp02-devops.jpg')
+
+.card__title
+  color: #696969
+  font-size: 1.25rem
+  font-weight: 300
+  letter-spacing: 2px
+  text-transform: uppercase
+
+.card__text
+  flex: 1 1 auto
+  font-size: 0.875rem
+  line-height: 1.5
+  margin-bottom: 1.25rem
