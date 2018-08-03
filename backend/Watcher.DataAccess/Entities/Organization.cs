@@ -9,7 +9,7 @@
         [Required]
         public string Name { get; set; }
 
-        public int ThemeId { get; set; }
+        public int? ThemeId { get; set; }
         public Theme Theme { get; set; }
 
         public IList<UserOrganization> UserOrganizations { get; set; }
