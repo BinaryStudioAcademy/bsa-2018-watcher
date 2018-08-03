@@ -19,8 +19,8 @@
 
 <ng-template #signInTemplate let-entity> 
   <div class="auth-buttons">
-    <button type="text"  pButton icon="ui-button-raised" label="Sign In with Google"></button>
-    <button type="text"  pButton icon="ui-button-raised" label="Sign In with Facebook"></button>
+    <button type="text" (click)="signInWithGoogle()" pButton icon="ui-button-raised" label="Sign In with Google"></button>
+    <button type="text" (click)="signInWithFacebook()"  pButton icon="ui-button-raised" label="Sign In with Facebook"></button>
     <button type="text"  pButton icon="ui-button-raised" label="Sign In with Twitter"></button>
   </div>
 </ng-template>

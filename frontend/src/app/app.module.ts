@@ -21,6 +21,11 @@ import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { DashboardsModule } from './dashboards/dashboards.module';
 
+import { AngularFireModule } from 'angularfire2';
+import { environment } from '../environments/environment';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +46,10 @@ import { DashboardsModule } from './dashboards/dashboards.module';
     DialogModule,
     AdminModule,
     UserModule,
-    DashboardsModule
+    DashboardsModule,
+    AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]
