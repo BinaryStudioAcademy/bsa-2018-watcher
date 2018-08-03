@@ -37,8 +37,6 @@ export class LandingComponent implements OnInit {
     element.scrollIntoView( {block: "start",behavior:"smooth"});
   }
 
-  constructor(private defaultService: DefaultService) {}
-
   ngOnInit() {
     window.addEventListener('scroll', this.headerScroll, true); 
   }
