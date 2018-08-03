@@ -1,6 +1,7 @@
 ﻿namespace Watcher.DataAccess.Entities
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
 
     using System.Collections.Generic;
 
@@ -12,6 +13,10 @@
         public string Email { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        [Required]
+        public int RoleId { get; set; }
+        public Role Role { get; set; }
 
         public IList<UserOrganization> UserOrganizations { get; set; }
     }
