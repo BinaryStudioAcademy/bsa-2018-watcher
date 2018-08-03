@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DefaultService } from '../core/services/default.service';
-import {MenuItem } from 'primeng/primeng';
+import {ButtonModule} from 'primeng/button';
 
 @Component({
   selector: 'app-landing',
@@ -9,7 +9,6 @@ import {MenuItem } from 'primeng/primeng';
 })
 export class LandingComponent implements OnInit {
   
-  items: Array<MenuItem>
 
   constructor(private defaultService: DefaultService) {}
 

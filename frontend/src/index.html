@@ -8,49 +8,15 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="../node_modules/primeng/resources/primeng.min.css">
-    <link rel="stylesheet" href="../node_modules/primeng/resources/themes/darkness/theme.css">
-    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Montserrat|Cardo' rel='stylesheet' type='text/css'>
-    <link href='style.css' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/solid.css" integrity="sha384-S2gVFTIn1tJ/Plf+40+RRAxBCiBU5oAMFUJxTXT3vOlxtXm7MGjVj62mDpbujs4C" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/brands.css" integrity="sha384-SYNjKRRe+vDW0KSn/LrkhG++hqCLJg9ev1jIh8CHKuEA132pgAz+WofmKAhPpTR7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/fontawesome.css" integrity="sha384-0b7ERybvrT5RZyD80ojw6KNKz6nIAlgOKXIcJ0CV7A6Iia8yt2y1bBfLBOwoc9fQ" crossorigin="anonymous">
     <script type="text/javascript">
-        // Sticky Header
-        $(window).scroll(function() {
-
-            if ($(window).scrollTop() > 100) {
-                $('.main_h').addClass('sticky');
-            } else {
-                $('.main_h').removeClass('sticky');
-            }
-        });
-
-        // Mobile Navigation
-        $('.mobile-toggle').click(function() {
-            if ($('.main_h').hasClass('open-nav')) {
-                $('.main_h').removeClass('open-nav');
-            } else {
-                $('.main_h').addClass('open-nav');
-            }
-        });
-
-        $('.main_h li a').click(function() {
-            if ($('.main_h').hasClass('open-nav')) {
-                $('.navigation').removeClass('open-nav');
-                $('.main_h').removeClass('open-nav');
-            }
-        });
-
-        // navigation scroll lijepo radi materem
-        $('nav a').click(function(event) {
-            var id = $(this).attr("href");
-            var offset = 70;
-            var target = $(id).offset().top - offset;
-            $('html, body').animate({
-                scrollTop: target
-            }, 500);
-            event.preventDefault();
-        });
+        window.onscroll = function() {
+            document.getElementById("header").style.background = "rgba(0,0,0,0.8)";
+        };
     </script>
 
 </head>
