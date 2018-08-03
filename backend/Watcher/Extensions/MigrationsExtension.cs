@@ -21,7 +21,10 @@
                     }
                     catch (Exception ex)
                     {
+                        // TODO: Error can occur here in case your migrations failed 
                         Debug.WriteLine("Error occured while Migration Database!");
+                        Debug.WriteLine(ex.Message);
+
                         //context?.Database?.EnsureDeleted();
                         //context?.Database?.Migrate();
                     }

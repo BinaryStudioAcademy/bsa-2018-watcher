@@ -48,14 +48,16 @@
 
                 if (ex is HttpStatusCodeException httpException)
                 {
-                    if (httpException.StatusCode == HttpStatusCode.BadRequest)
-                    {
-                        context.Response.StatusCode = 452; // Custom status core for Client reasons
-                    }
-                    else
+                    // TODO: uncomment in case we need to deserialize error objects on the client
+                    //if (httpException.StatusCode == HttpStatusCode.BadRequest)
+                    //{
+                    //    context.Response.StatusCode = 452; // Custom status core for Client reasons
+                    //}
+                    //else
                     {
                         context.Response.StatusCode = (int)httpException.StatusCode;
                     }
+
                     context.Response.ContentType = httpException.ContentType;
                 }
                 else
