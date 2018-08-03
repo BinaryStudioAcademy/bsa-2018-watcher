@@ -1,6 +1,6 @@
 <button pButton type="button" (click)="showDialog()" class="ui-button-raised" label="Sign In / Sign Up"></button>
 
-<p-dialog class="authorization-dialog" [(visible)]="display" [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="10000">
+<p-dialog class="authorization-dialog" appendTo="body" [(visible)]="display" [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="10000">
     <p-header>
         <span *ngIf="isSignIn">Sign In</span>
         <span *ngIf="!isSignIn">Sign Up</span>
