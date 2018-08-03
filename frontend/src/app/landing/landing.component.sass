@@ -139,17 +139,25 @@ ul
   list-style-type: none
 
 .cards
-  display: grid
-  grid-template-columns: repeat(auto-fill, minmax(300px, 2fr))
+  font-family:  helvetica, sans-serif
+  display: flex
+  margin-left: auto
+  margin-right: auto
+  grid-template-columns: repeat(auto-fill, 300px)
   grid-gap: 50px
   align-items: stretch
   .cards__item
-  display: flex
-  padding: 1rem
+    border: 1px solid red
+    width: 30%
+    align-self: stretch
+    display: flex
+    padding: 1rem
+
 
 .card
   background-color: white
   margin: auto 20px
+  min-height: 100%
   border-radius: 0.25rem
   box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25)
   display: flex
@@ -162,6 +170,7 @@ ul
 .card__content
   display: flex
   flex-direction: column
+  align-content: center
   padding: 1rem
 
 .card__image
@@ -200,7 +209,7 @@ ul
   color: #696969
   font-size: 1.25rem
   font-weight: 300
-  letter-spacing: 2px
+  letter-spacing: 1px
   text-transform: uppercase
 
 .card__text
