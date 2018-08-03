@@ -7,8 +7,10 @@ import {ButtonModule} from 'primeng/button';
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.sass','./landing.component.cards.sass','./landing.component.footer.sass'],
 })
-export class LandingComponent implements OnInit {
-  
+export class LandingComponent implements OnInit { 
+
+  constructor(private defaultService: DefaultService) {}
+
   headerScroll(): any {
     var scrolled = window.pageYOffset || document.documentElement.scrollTop;
     if (scrolled < 100)
