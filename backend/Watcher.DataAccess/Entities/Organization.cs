@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Watcher.DataAccess.Entities
+﻿namespace Watcher.DataAccess.Entities
 {
+    using System.Collections.Generic;
+
     public class Organization : Entity<int>
     {
         public override int Id { get; set; }
