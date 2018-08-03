@@ -11,6 +11,8 @@ import { PanelModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/primeng';
 import { RadioButtonModule } from 'primeng/primeng';
 
+import { DialogModule } from 'primeng/primeng';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
@@ -36,6 +38,7 @@ import { DashboardsModule } from './dashboards/dashboards.module';
     PanelModule,
     ButtonModule,
     RadioButtonModule,
+    DialogModule,
     AdminModule,
     UserModule,
     DashboardsModule

@@ -1,3 +1,34 @@
-<p>
-  authorization works!
-</p>
+<button pButton type="button" (click)="showDialog()"  class="ui-button-raised" label="Sign In / Sign Up"></button>
+
+<p-dialog [(visible)]="display"  [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200"  
+[maximizable]="false" [baseZIndex]="10000" >
+  <p-header>
+   <span *ngIf="isSignIn">Sign In</span>
+   <span *ngIf="!isSignIn">Sign Up</span>
+  </p-header>
+  <ng-template [ngTemplateOutlet]="loadTemplate()">
+  </ng-template>
+
+  <p-footer>
+    <button *ngIf="isSignIn" (click)="showSignUp()" type="text"  pButton icon="pi pi-info-circle" label="Sign Up"></button>
+    <button *ngIf="!isSignIn" (click)="showSignIn()" type="text"  pButton icon="pi pi-info-circle" label="Sign In"></button>
+  </p-footer>
+
+</p-dialog>
+
+
+<ng-template #signInTemplate let-entity> 
+  <div class="auth-buttons">
+    <button type="text"  pButton icon="ui-button-raised" label="Sign In with Google"></button>
+    <button type="text"  pButton icon="ui-button-raised" label="Sign In with Facebook"></button>
+    <button type="text"  pButton icon="ui-button-raised" label="Sign In with Twitter"></button>
+  </div>
+</ng-template>
+
+<ng-template #signUpTemplate let-entity>
+  <div class="auth-buttons">
+    <button type="text"  pButton icon="ui-button-raised" label="Sign Up with Google"></button>
+    <button type="text"  pButton icon="ui-button-raised" label="Sign Up with Facebook"></button>
+    <button type="text"  pButton icon="ui-button-raised" label="Sign Up with Twitter"></button>
+  </div>
+</ng-template>
