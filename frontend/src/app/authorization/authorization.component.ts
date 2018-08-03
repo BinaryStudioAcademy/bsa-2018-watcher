@@ -1,7 +1,8 @@
 import { Component, OnInit, TemplateRef, ViewChild  } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
-import { Observable } from 'rxjs';
+import { AuthService } from '../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-authorization',
@@ -9,15 +10,15 @@ import { Observable } from 'rxjs';
   styleUrls: ['./authorization.component.sass']
 })
 export class AuthorizationComponent implements OnInit {
-  // private user: Observable<firebase.User>;
+
   @ViewChild('signInTemplate') signInTemplate;
   @ViewChild('signUpTemplate') signUpTemplate;
 
   display: boolean = false;
   isSignIn: boolean = true;
 
-  constructor(private _firebaseAuth: AngularFireAuth) {
-   // this.user = _firebaseAuth.authState;
+  constructor(private authService: AuthService, private router: Router) {
+
    }
 
   ngOnInit() {
@@ -44,14 +45,18 @@ export class AuthorizationComponent implements OnInit {
   }
 
   signInWithGoogle() {
-    return this._firebaseAuth.auth.signInWithPopup(
-      new firebase.auth.GoogleAuthProvider()
-    )
+    this.authService.signInWithGoogle()
+    .then((res) => { 
+        this.router.navigate(['landing'])
+      })
+    .catch((err) => console.log(err));
   }
 
   signInWithFacebook() {
-    return this._firebaseAuth.auth.signInWithPopup(
-      new firebase.auth.FacebookAuthProvider()
-    )
+    this.authService.signInWithFacebook()
+    .then((res) => { 
+        this.router.navigate(['landing'])
+      })
+    .catch((err) => console.log(err));
   }
 }
