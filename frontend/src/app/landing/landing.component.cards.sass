@@ -5,9 +5,7 @@ ul
   font-family:  helvetica, sans-serif
   display: flex
   justify-content: space-between
-  margin-left: auto
-  margin-right: auto
-  width: 100%
+
   .cards__item
     width: 30%
     display: flex
@@ -16,8 +14,8 @@ ul
 
 .card
   background-color: white
-  margin: auto 2%
   min-height: 100%
+  margin-right: 25px
   border-radius: 0.25rem
   box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25)
   display: flex
@@ -78,14 +76,15 @@ ul
   line-height: 1.5
   margin-bottom: 1.25rem
 
-@media (max-width: 730px)
+@media (max-width: 765px)
   .cards
     flex-direction: column
     flex-wrap: wrap
     border: 1px solid red
-    width: 90%
+    width: 95%
     .card
       float: left
       min-width: 270%
+      margin-right: auto
       border: 1px solid black
 
