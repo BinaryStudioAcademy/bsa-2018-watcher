@@ -5,7 +5,7 @@ import {ButtonModule} from 'primeng/button';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
-  styleUrls: ['./landing.component.sass'],
+  styleUrls: ['./landing.component.sass','./landing.component.cards.sass','./landing.component.footer.sass'],
 })
 export class LandingComponent implements OnInit {
   
