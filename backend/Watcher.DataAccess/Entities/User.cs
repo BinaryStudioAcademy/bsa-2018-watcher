@@ -23,8 +23,7 @@
 
         [Required]
         public DateTime CreatedAt { get; set; }
-
-        [Required]
+        
         public int RoleId { get; set; }
         public Role Role { get; set; }
 
