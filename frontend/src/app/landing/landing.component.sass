@@ -2,15 +2,8 @@
   position: relative
   margin: 0 auto
   width: 94%
-  max-width: 1100px
+  max-width: 1200px
   font-family: helvetica, sans-serif
-
-.content
-  position: relative
-  padding-top: 80px
-  height: 2000px
-  p
-    margin-bottom: 10px
 
 #header
   z-index: 2
@@ -43,6 +36,7 @@
 @media (max-width: 599px)
   #header
     .container
+      background-color:#222
       width: 100%
     h1
       padding-left: 3%
@@ -62,32 +56,64 @@
       background: #222
       width: 100%
       margin: 0px
+      display: flex
+      flex-direction: column
       li
         float: none
         a
           padding: 10px 3%
           line-height: 20px
           border-top: 1px solid #333
+        .ui-button-info
+          align-self: center
+          height: 30px
+          padding: 5px 3px
+          width: 100px
+
 
 .ui-button-info
   padding: 0 8px
-  margin-left: 5px
   height: 25px
+  margin-left: 5px
+
 .banner
   color: white
   align-items: center
   display: flex
   flex-direction: column
-  height: 400px
+  height: calc(100vh-100px)
   position: relative
   background: url(https://i.amz.mshcdn.com/oPgdrflmxQQrhwRTF9MDoi8bmjg=/fit-in/1440x1000/https%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fcosmos%2F3927825968_afb30742a7_o.jpg) no-repeat center center fixed
   -webkit-background-size: cover
-  -moz-background-size: cover
+  -moz-background-size: covero
   background-size: cover
   text-align: center
   h1
     padding-top: 150px
-    font-family: 'Century Gothic'
+    font-family: helvetica, sans-serif
     color: white
   p 
-    font-family: 'Century Gothic'
+    font-family: helvetica, sans-serif
+
+.content
+  font-family: helvetica, sans-serif
+  border: 2px solid red
+  display: grid
+  grid-template-columns: 50% 50%
+  grid-template-rows: calc(90vh)
+  grid-template-areas: 'info screenshot'
+  .info
+    grid-area: 'info'
+    .infoContent
+      margin-top: 30vh
+      margin-left: 8vh
+      margin-right: 16vh
+      border: 2px solid red
+      justify-self: center
+      h1
+        margin-top: 2px
+
+  .picture
+    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot2.jpg) no-repeat
+    background-size: cover
+    grid-area: 'screenshot'
