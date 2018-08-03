@@ -1,71 +1,152 @@
-<header class="main_h">
-
-    <div class="row">
-        <a class="logo" href="#">P/F</a>
-
-        <div class="mobile-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-        <nav>
+<header id="header">
+    <div class="container">
+        <h1>
+            Watcher
+        </h1>
+        <nav id="nav">
             <ul>
-                <li><a href=".sec01">Section 01</a></li>
-                <li><a href=".sec02">Section 02</a></li>
-                <li><a href=".sec03">Section 03</a></li>
-                <li><a href=".sec04">Section 04</a></li>
+                <li>
+                    <a (click)="scrollTo('startbanner')">Home</a>
+                </li>
+                <li>
+                    <a (click)="scrollTo('why-watcher')">Why watcher</a>
+                </li>
+                <li>
+                    <a (click)="scrollTo('cards')">Advantages</a>
+                </li>
+                <li>
+                    <button pButton type="button" class="ui-button-info ui-button-rounded">Sign in</button>
+                </li>
+                <li>
+                    <button pButton type="button" class="ui-button-info ui-button-rounded">Sign up</button>
+                </li>
             </ul>
             
             
         </nav>
-        
     </div>
-    <!-- / row -->
-
 </header>
-
-<div class="hero">
-
-    <h1><span>I'm a cool</span><br>Navigation</h1>
-    <app-authorization></app-authorization>
-    <div class="mouse">
-        <span></span>
+<div id="startbanner" class="banner">
+    <h1>Know right now</h1>
+    <p>Get the real-time insights that your software-driven business needs to innovate faster.</p>
+</div>
+<main>
+    <br>
+    <br>
+    <br>
+    <br id="why-watcher">
+    <div class="content">
+        <div class="info">
+            <div class="infoContent">
+                <img src="https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-bargraph.png" alt="Plot">
+                <h1>
+                    Instrument your entire environment in minutes.
+                </h1>
+                <p>
+                    From the frontend to the infrastructure layer. On-prem, cloud, or hybrid. Track every change across all your apps and services with pinpoint clarity and full context.
+                    <p>
+            </div>
+        </div>
+        <div class="picture">
+        </div>
     </div>
-    
-</div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="content">
+        <div class="picture2">
+        </div>
+        <div class="info2">
+            <div class="infoContent">
+                <img src="https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-piechart.png" alt="Plot">
+                <h1>
+                    See all the data in context.
+                </h1>
+                <p>
+                    No more jumping between tools and custom views in unstructured data sources. Our curated UIs give you a single, comprehensive view of your entire stack—every change, every second, in full context.
+                    <p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="content">
+        <div class="info3">
+            <div class="infoContent">
+                <img src="https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-arrows.png" alt="Plot">
+                <h1>
+                    Get everyone on the same page
+                </h1>
+                <p>
+                    We live and breathe DevOps every day, so we know the power of teamwork—which helps us empower your teams, too. You can orient around what matters, resolve issues fast, and accelerate deploy cycles.
+                    <p>
+            </div>
+        </div>
+        <div class="picture3">
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br id="cards">
+    <div class="cards">
+        <ul class="cards">
+            <li class="cards__item">
+                <div class="card">
+                    <div class="card__image card__image--female"></div>
+                    <div class="card__content">
+                        <div class="card__title">
+                            Measure what matters
+                        </div>
+                        <p class="card__text">Innovate faster and do DevOps right with New Relic.</p>
 
-<div class="row content">
-    <h1 class="sec01">Section 01</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, recusandae, at, labore velit eligendi amet nobis repellat natus sequi sint consectetur excepturi doloribus vero provident consequuntur accusamus quisquam nesciunt cupiditate soluta
-        alias illo et deleniti voluptates facilis repudiandae similique dolore quaerat architecto perspiciatis officiis dolor ullam expedita suscipit neque minima rem praesentium inventore ab officia quos dignissimos esse quam placeat iste porro eius!
-        Minus, aspernatur nesciunt consectetur. Sit, eius, itaque, porro, beatae impedit officia tenetur reiciendis autem vitae a quae ipsam repudiandae odio dolorum quaerat asperiores possimus corporis optio animi quisquam laboriosam nihil quam voluptatum
-        quidem veritatis iste culpa iure modi perspiciatis recusandae ipsa libero officiis aliquam doloremque similique id quasi atque distinctio enim sapiente ratione in quia eum perferendis earum blanditiis. Nobis, architecto, veniam molestias minus
-        iste necessitatibus est ab in earum ratione eveniet soluta molestiae sed illo nostrum nemo debitis. Minus, quod totam aliquam ea asperiores fugit quaerat excepturi dolores ratione numquam consequatur id unde alias provident vero incidunt exercitationem
-        similique consequuntur hic possimus? Fuga, eveniet quaerat inventore corporis laborum eligendi enim soluta obcaecati aliquid veritatis provident amet laudantium est quisquam dolore exercitationem modi? Distinctio, pariatur, ab velit praesentium
-        vitae quidem consequatur deleniti recusandae odit officiis. Quidem, cupiditate.</p>
-    <h1 class="sec02">Section 02</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, recusandae, at, labore velit eligendi amet nobis repellat natus sequi sint consectetur excepturi doloribus vero provident consequuntur accusamus quisquam nesciunt cupiditate soluta
-        alias illo et deleniti voluptates facilis repudiandae similique dolore quaerat architecto perspiciatis officiis dolor ullam expedita suscipit neque minima rem praesentium inventore ab officia quos dignissimos esse quam placeat iste porro eius!
-        Minus, aspernatur nesciunt consectetur. Sit, eius, itaque, porro, beatae impedit officia tenetur reiciendis autem vitae a quae ipsam repudiandae odio dolorum quaerat asperiores possimus corporis optio animi quisquam laboriosam nihil quam voluptatum
-        quidem veritatis iste culpa iure modi perspiciatis recusandae ipsa libero officiis aliquam doloremque similique id quasi atque distinctio enim sapiente ratione in quia eum perferendis earum blanditiis. Nobis, architecto, veniam molestias minus
-        iste necessitatibus est ab in earum ratione eveniet soluta molestiae sed illo nostrum nemo debitis. Minus, quod totam aliquam ea asperiores fugit quaerat excepturi dolores ratione numquam consequatur id unde alias provident vero incidunt exercitationem
-        similique consequuntur hic possimus? Fuga, eveniet quaerat inventore corporis laborum eligendi enim soluta obcaecati aliquid veritatis provident amet laudantium est quisquam dolore exercitationem modi? Distinctio, pariatur, ab velit praesentium
-        vitae quidem consequatur deleniti recusandae odit officiis. Quidem, cupiditate.</p>
-    <h1 class="sec03">Section 03</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, recusandae, at, labore velit eligendi amet nobis repellat natus sequi sint consectetur excepturi doloribus vero provident consequuntur accusamus quisquam nesciunt cupiditate soluta
-        alias illo et deleniti voluptates facilis repudiandae similique dolore quaerat architecto perspiciatis officiis dolor ullam expedita suscipit neque minima rem praesentium inventore ab officia quos dignissimos esse quam placeat iste porro eius!
-        Minus, aspernatur nesciunt consectetur. Sit, eius, itaque, porro, beatae impedit officia tenetur reiciendis autem vitae a quae ipsam repudiandae odio dolorum quaerat asperiores possimus corporis optio animi quisquam laboriosam nihil quam voluptatum
-        quidem veritatis iste culpa iure modi perspiciatis recusandae ipsa libero officiis aliquam doloremque similique id quasi atque distinctio enim sapiente ratione in quia eum perferendis earum blanditiis. Nobis, architecto, veniam molestias minus
-        iste necessitatibus est ab in earum ratione eveniet soluta molestiae sed illo nostrum nemo debitis. Minus, quod totam aliquam ea asperiores fugit quaerat excepturi dolores ratione numquam consequatur id unde alias provident vero incidunt exercitationem
-        similique consequuntur hic possimus? Fuga, eveniet quaerat inventore corporis laborum eligendi enim soluta obcaecati aliquid veritatis provident amet laudantium est quisquam dolore exercitationem modi? Distinctio, pariatur, ab velit praesentium
-        vitae quidem consequatur deleniti recusandae odit officiis. Quidem, cupiditate.</p>
-    <h1 class="sec04">Section 04</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, recusandae, at, labore velit eligendi amet nobis repellat natus sequi sint consectetur excepturi doloribus vero provident consequuntur accusamus quisquam nesciunt cupiditate soluta
-        alias illo et deleniti voluptates facilis repudiandae similique dolore quaerat architecto perspiciatis officiis dolor ullam expedita suscipit neque minima rem praesentium inventore ab officia quos dignissimos esse quam placeat iste porro eius!
-        Minus, aspernatur nesciunt consectetur. Sit, eius, itaque, porro, beatae impedit officia tenetur reiciendis autem vitae a quae ipsam repudiandae odio dolorum quaerat asperiores possimus corporis optio animi quisquam laboriosam nihil quam voluptatum
-        quidem veritatis iste culpa iure modi perspiciatis recusandae ipsa libero officiis aliquam doloremque similique id quasi atque distinctio enim sapiente ratione in quia eum perferendis earum blanditiis. Nobis, architecto, veniam molestias minus
-        iste necessitatibus est ab in earum ratione eveniet soluta molestiae sed illo nostrum nemo debitis. Minus, quod totam aliquam ea asperiores fugit quaerat excepturi dolores ratione numquam consequatur id unde alias provident vero incidunt exercitationem
-        similique consequuntur hic possimus? Fuga, eveniet quaerat inventore corporis laborum eligendi enim soluta obcaecati aliquid veritatis provident amet laudantium est quisquam dolore exercitationem modi? Distinctio, pariatur, ab velit praesentium
-        vitae quidem consequatur deleniti recusandae odit officiis. Quidem, cupiditate.</p>
-</div>
+                    </div>
+                </div>
+            </li>
+            <li class="cards__item">
+                <div class="card">
+                    <div class="card__image card__image--cloud"></div>
+                    <div class="card__content">
+                        <div class="card__title">
+                            Cloud monitoring for dynamic environments
+                        </div>
+                        <p class="card__text">Instrument your cloud apps and infrastructure with New Relic and see your stack like never before.</p>
+                    </div>
+                </div>
+            </li>
+            <li class="cards__item">
+                <div class="card">
+                    <div class="card__image card__image--ded"></div>
+                    <div class="card__content">
+                        <div class="card__title">
+                            See the truth behind your digital customer experience
+                        </div>
+                        <p class="card__text">Get end-to-end visibility for your services and ensure your end-user experiences are delightful.</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</main>
+<footer class="footer-distributed">
+
+    <div class="footer-right">
+        <a href="#"><i class="fa fa-facebook"></i></a>
+        <a href="#"><i class="fa fa-twitter"></i></a>
+        <a href="#"><i class="fa fa-linkedin"></i></a>
+        <a href="#"><i class="fa fa-github"></i></a>
+    </div>
+
+    <div class="footer-left">
+        <p class="footer-links">
+            <a (click)="scrollTo('startbanner')">Home</a> ·
+            <a (click)="scrollTo('why-watcher')">Why watcher</a> ·
+            <a (click)="scrollTo('cards')">Advantages</a>
+        </p>
+
+        <p>Watcher © 2018</p>
+    </div>
+</footer>
