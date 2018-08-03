@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-header',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard-header.component.sass']
 })
 export class DashboardHeaderComponent implements OnInit {
+
+  @Input()menu:any;
 
   constructor() { }
 

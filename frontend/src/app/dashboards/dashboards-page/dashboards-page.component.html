@@ -1,1 +1,5 @@
-<app-dashboard-header></app-dashboard-header>  
+<app-dashboard-header [menu]="dbMenu.menu"></app-dashboard-header>  
+<app-dashboard-menu #dbMenu></app-dashboard-menu>
+<div class="content">
+    <app-dashboard-tabs></app-dashboard-tabs>
+</div>
