@@ -6,32 +6,32 @@
         <nav id="nav">
             <ul>
                 <li>
-                    <a href="#">Home</a>
+                    <a (click)="scrollTo('startbanner')">Home</a>
                 </li>
                 <li>
-                    <a href="#">Why watcher</a>
+                    <a (click)="scrollTo('why-watcher')">Why watcher</a>
                 </li>
                 <li>
-                    <a href="#">Advantages</a>
+                    <a (click)="scrollTo('cards')">Advantages</a>
                 </li>
                 <li>
-                    <button pButton type="button" class="ui-button-info">Sign in</button>
+                    <button pButton type="button" class="ui-button-info ui-button-rounded">Sign in</button>
                 </li>
                 <li>
-                    <button pButton type="button" class="ui-button-info">Sign up</button>
+                    <button pButton type="button" class="ui-button-info ui-button-rounded">Sign up</button>
                 </li>
             </ul>
         </nav>
     </div>
 </header>
-<div class="banner">
+<div id="startbanner" class="banner">
     <h1>Know right now</h1>
     <p>Get the real-time insights that your software-driven business needs to innovate faster.</p>
 </div>
 <br>
 <br>
 <br>
-<br>
+<br id="why-watcher">
 <div class="content">
     <div class="info">
         <div class="infoContent">
@@ -88,8 +88,7 @@
 <br>
 <br>
 <br>
-<br>
-
+<br id="cards">
 <div class="cards">
     <ul class="cards">
         <li class="cards__item">
@@ -141,9 +140,9 @@
 
     <div class="footer-left">
         <p class="footer-links">
-            <a href="#">Home</a> ·
-            <a href="#">Why watcher</a> ·
-            <a href="#">Advantages</a>
+            <a href="#header">Home</a> ·
+            <a href="#why-watcher">Why watcher</a> ·
+            <a href="#cards">Advantages</a>
         </p>
 
         <p>Watcher © 2018</p>

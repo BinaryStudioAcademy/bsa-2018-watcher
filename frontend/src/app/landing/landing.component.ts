@@ -9,7 +9,13 @@ import {ButtonModule} from 'primeng/button';
 })
 export class LandingComponent implements OnInit {
   
-
+  scrollTo(id:string)
+  {
+    console.log(id);
+    const element = document.getElementById(id);
+    console.log(element);
+    element.scrollIntoView( {block: "start",behavior:"smooth"});
+  }
   constructor(private defaultService: DefaultService) {}
 
   ngOnInit() {
