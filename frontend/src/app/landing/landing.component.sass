@@ -140,21 +140,19 @@ ul
 .cards
   font-family:  helvetica, sans-serif
   display: flex
+  justify-content: space-between
   margin-left: auto
   margin-right: auto
-  grid-template-columns: repeat(auto-fill, 300px)
-  grid-gap: 50px
-  align-items: stretch
+  width: 100%
   .cards__item
     width: 30%
-    align-self: stretch
     display: flex
     padding: 1rem
 
 
 .card
   background-color: white
-  margin: auto 20px
+  margin: auto 2%
   min-height: 100%
   border-radius: 0.25rem
   box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25)
@@ -216,6 +214,13 @@ ul
   line-height: 1.5
   margin-bottom: 1.25rem
 
+@media (max-width: 730px)
+  .cards
+    flex-direction: column
+    flex-wrap: wrap
+    .card
+      min-width: 270%
+
 .footer-distributed
   background-color: rgb(0,0,0)
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12)
@@ -268,3 +273,6 @@ ul
       margin: 0 auto 20px
     .footer-left p.footer-links
       line-height: 1.8
+
+
+  
