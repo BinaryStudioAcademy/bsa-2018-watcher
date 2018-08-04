@@ -1,15 +1,14 @@
 <a class="auth-link" (click)="showDialogSignIn()" >Sign In</a><span> / </span>
 <a style="color: green;" class="auth-link" (click)="showDialogSignUp()" >Sign Up</a>
 
-<p-dialog class="authorization-dialog" (onHide)="closeDialog()" appendTo="body" [(visible)]="display" [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="10000">
-    <p-header>
-        <span *ngIf="isSignIn">Sign In</span>
-        <span *ngIf="!isSignIn">Sign Up</span>
-    </p-header>
+<p-dialog class="authorization-dialog" (onHide)="closeDialog()" [showHeader]="false" appendTo="body" [closable]=false [(visible)]="display" [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="10000">
+    <div class="auth-form-header">
+        <h1>WATCHER</h1>
+    </div>
     <ng-template [ngTemplateOutlet]="loadTemplate()">
     </ng-template>
 
-    <p-footer >
+    <div >
         <div class="auth-futer" *ngIf="isSignIn">
             <p>Not a member? </p>
             <button (click)="showSignUp()" pButton label="Sign Up"></button>
@@ -21,7 +20,7 @@
         <div class="auth-futer" *ngIf="!isSignIn && isSuccessSignUp">
                 <button (click)="beckToSignUp()" pButton label="Beck to Sign Up"></button>
             </div>
-    </p-footer>
+        </div>
 
 </p-dialog>
 
