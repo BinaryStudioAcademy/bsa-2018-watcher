@@ -36,6 +36,8 @@
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
+        public DbSet<Sample> Samples { get; set; }
+
         public DbSet<User> Users { get; set; }
 
         public DbSet<Role> Roles { get; set; }
@@ -47,7 +49,7 @@
         public DbSet<Dashboard> Dashboards { get; set; }
 
         public DbSet<Chart> Charts { get; set; }
-
+        
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<Chat> Chats { get; set; }
