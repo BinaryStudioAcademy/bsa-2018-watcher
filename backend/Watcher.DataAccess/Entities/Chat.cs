@@ -17,13 +17,13 @@
         [Required]
         public ChatType Type { get; set; }
 
-        public int CreatedById { get; set; }
+        public int? CreatedById { get; set; }
 
         public User CreatedBy { get; set; }
 
         public int? OrganizationId { get; set; }
         public Organization Organization { get; set; }
 
-        IList<Message> Messages { get; set; }
+        public IList<Message> Messages { get; set; }
     }
 }

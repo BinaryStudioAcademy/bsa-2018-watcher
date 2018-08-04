@@ -31,9 +31,17 @@
         public NotificationSetting NotificationSetting { get; set; }
 
         public IList<UserOrganization> UserOrganizations { get; set; }
+
         public IList<Notification> Notifications { get; set; }
+
         public IList<Feedback> Feedbacks { get; set; }
+
         public IList<Response> Responses { get; set; }
+
         public IList<Message> Messages { get; set; }
+
+        public IList<Chat> Chats { get; set; }
+
+        public IList<Chat> CreatedChats { get; set; }
     }
 }

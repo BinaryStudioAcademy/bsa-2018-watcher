@@ -18,6 +18,6 @@
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
         
-        IList<Dashboard> Dashboards { get; set; }
+        public IList<Dashboard> Dashboards { get; set; }
     }
 }

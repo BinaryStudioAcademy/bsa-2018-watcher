@@ -10,6 +10,7 @@
     {
         public WatcherDbContext(DbContextOptions<WatcherDbContext> options) : base(options)
         {
+            this.SeedIfEmpty();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,7 +22,7 @@
                 .HasKey(uo => new { uo.UserId, uo.OrganizationId });
 
             modelBuilder.Entity<Response>()
-                .HasOne<Feedback>(r => r.Feedback)
+                .HasOne(r => r.Feedback)
                 .WithOne(f => f.Response)
                 .HasForeignKey<Response>(r => r.FeedbackId);
 
@@ -34,6 +35,15 @@
                 .HasOne(m => m.User)
                 .WithMany(u => u.Messages)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Chat>()
+                .HasOne(c => c.CreatedBy)
+                .WithMany(u => u.CreatedChats)
+                .HasForeignKey(c => c.CreatedById);
+
+            modelBuilder.Entity<Chat>()
+                .HasOne(c => c.Organization)
+                .WithOne(o => o.Chat);
         }
 
         public DbSet<Sample> Samples { get; set; }
@@ -44,6 +54,8 @@
 
         public DbSet<Organization> Organizations { get; set; }
 
+        public DbSet<UserOrganization> UserOrganizations { get; set; }
+        
         public DbSet<Instance> Instances { get; set; }
 
         public DbSet<Dashboard> Dashboards { get; set; }
