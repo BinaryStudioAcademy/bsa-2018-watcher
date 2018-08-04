@@ -25,8 +25,13 @@ export class AuthorizationComponent implements OnInit {
   ngOnInit() {
   }
 
-  showDialog() {
+  showDialogSignIn() {
     this.display = true;
+  }
+
+  showDialogSignUp() {
+    this.display = true;
+    this.isSignIn = false;
   }
 
   loadTemplate() {
