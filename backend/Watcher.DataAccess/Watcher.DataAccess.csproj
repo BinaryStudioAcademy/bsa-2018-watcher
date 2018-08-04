@@ -8,6 +8,7 @@
     <Compile Remove="Data\Migrations\20180803195234_AddRelation.cs" />
     <Compile Remove="Data\Migrations\20180803200326_AddRelation.cs" />
     <Compile Remove="Data\Migrations\20180803201429_AddRelation.cs" />
+    <Compile Remove="Data\Migrations\20180804050935_AddRelation.cs" />
   </ItemGroup>
 
   <ItemGroup>
