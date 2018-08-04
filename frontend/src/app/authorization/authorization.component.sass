@@ -1,4 +1,84 @@
+.auth-link 
+    cursor: pointer
+    color: white
+    text-decoration: none
+    padding: 0 10px
+    font-size: 100%
+    font-family: helvetica, sans-serif;
+
+@media (max-width: 599px)
+    .auth-link 
+        padding: 10px 3%
+        line-height: 10px
+        border-top: 1px solid #333
+
 .auth-buttons
-    button
+    text-align: center
+    .auth-button
         margin: 5px
         width: 250px
+        display: inline-block
+        font-weight: 500
+        padding: 8px 16px
+        text-align: left
+        border: none
+        border-radius: 1px
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12)
+        will-change: box-shadow
+        transition: box-shadow .2s 
+        outline: none
+    .auth-button:active
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0)!important
+    .auth-button:hover
+        box-shadow: 0 6px 8px 0 rgba(0,0,0,.25), 0 8px 1px -5px rgba(0,0,0,.3), 0 6px 8px 0 rgba(0,0,0,.24)
+    .login-btn
+        margin: 5px
+
+.auth-btn-google
+    background-color: #fff
+    color: #757575
+
+.auth-btn-facebook
+    background-color: #3b5998
+    color: #fff
+
+.auth-btn-twitter
+    background-color: #55acee
+    color: #fff
+
+.firebaseui-idp-button
+    direction: ltr
+    text-align: left
+
+.firebaseui-idp-icon
+    width: 18px
+    height: 18px
+    border: none
+    vertical-align: middle
+    display: inline-block
+    margin-right: 10px
+
+.auth-inputs
+    text-align: center
+    .auth-input
+        margin: 5px
+        width: 250px
+        display: inline-block
+        font-weight: 500
+        input
+            color: #333333
+            background: #ffffff
+            border: 1px solid #a6a6a6
+            transition: border-color 0.2s
+            border-radius: 3px
+            padding: 0.429em
+            font: 14
+
+.auth-futer
+    margin: 0px
+    text-align: center
+
+.alert-danger
+    font-size: small
+    font-weight: 100
+    color: red
