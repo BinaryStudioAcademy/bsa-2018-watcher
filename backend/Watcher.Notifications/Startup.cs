@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Watcher.Notifications
 {
+    using Microsoft.Azure.SignalR;
+
     using Watcher.Notifications.Hubs;
 
     public class Startup
@@ -15,6 +17,8 @@ namespace Watcher.Notifications
         }
 
         public IConfiguration Configuration { get; }
+
+        public bool UseAzureSignalR => Configuration[ServiceOptions.ConnectionStringDefaultKey] != null;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -28,8 +32,13 @@ namespace Watcher.Notifications
                 }));
 
             services.AddMvc();
-            services.AddSignalR()
-                .AddAzureSignalR();
+
+            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
+
+            if (UseAzureSignalR)
+            {
+                addSignalRBuilder.AddAzureSignalR();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,11 +47,23 @@ namespace Watcher.Notifications
             app.UseCors("CorsPolicy");
             app.UseMvc();
             app.UseFileServer();
-            app.UseAzureSignalR(routes =>
-                {
-                    routes.MapHub<Chat>("/chat");
-                    routes.MapHub<NotificationsHub>("/notifications");
-                });
+
+            if (UseAzureSignalR)
+            {
+                app.UseAzureSignalR(routes =>
+                    {
+                        routes.MapHub<Chat>("/chat");
+                        routes.MapHub<NotificationsHub>("/notifications");
+                    });
+            }
+            else
+            {
+                app.UseSignalR(routes =>
+                    {
+                        routes.MapHub<Chat>("/chat");
+                        routes.MapHub<NotificationsHub>("/notifications");
+                    });
+            }
         }
     }
 }
