@@ -17,6 +17,9 @@
             <p>Already registered? </p>
             <button (click)="showSignIn()" pButton label="Sign In"></button>
         </div>
+        <div class="auth-futer" *ngIf="!isSignIn && isSuccessSignUp">
+                <button (click)="beckToSignUp()" pButton label="Beck to Sign Up"></button>
+            </div>
     </p-footer>
 
 </p-dialog>

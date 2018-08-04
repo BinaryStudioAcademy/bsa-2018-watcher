@@ -43,10 +43,12 @@ export class AuthorizationComponent implements OnInit {
 
   showSignUp(){
     this.isSignIn = false;
+    this.isSuccessSignUp = false;
   }
 
   showSignIn(){
     this.isSignIn = true;
+    this.isSuccessSignUp = false;
   }
 
   signInWithGoogle(){
@@ -82,6 +84,12 @@ export class AuthorizationComponent implements OnInit {
     this.isSuccessSignUp = false;
     this.isSignIn = true;
     this.display = false;
+  }
+
+  beckToSignUp(){
+
+
+    this.showSignUp();
   }
 
 
