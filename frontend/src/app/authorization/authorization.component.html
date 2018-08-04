@@ -9,14 +9,14 @@
     </ng-template>
 
     <p-footer >
-        <p class="auth-futer" *ngIf="isSignIn">
-            <span>Not a member? </span>
+        <div class="auth-futer" *ngIf="isSignIn">
+            <p>Not a member? </p>
             <button (click)="showSignUp()" pButton label="Sign Up"></button>
-        </p>
-        <p class="auth-futer" *ngIf="!isSignIn && !isSuccessSignUp">
-            <span>Already registered? </span>
+        </div>
+        <div class="auth-futer" *ngIf="!isSignIn && !isSuccessSignUp">
+            <p>Already registered? </p>
             <button (click)="showSignIn()" pButton label="Sign In"></button>
-        </p>
+        </div>
     </p-footer>
 
 </p-dialog>
