@@ -20,6 +20,7 @@ import { AuthorizationComponent } from './authorization/authorization.component'
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { DashboardsModule } from './dashboards/dashboards.module';
+import {NotificationsModule} from './notifications/notifications.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { DashboardsModule } from './dashboards/dashboards.module';
     DialogModule,
     AdminModule,
     UserModule,
-    DashboardsModule
+    DashboardsModule,
+    NotificationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
