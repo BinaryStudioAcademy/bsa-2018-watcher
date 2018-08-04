@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild  } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 
 
 @Component({
@@ -12,13 +12,13 @@ export class AuthorizationComponent implements OnInit {
   @ViewChild('signUpTemplate') signUpTemplate;
   @ViewChild('userDetailsTemplate') userDetailsTemplate;
 
-  display: boolean = false;
-  isSignIn: boolean = true;
+  display = false;
+  isSignIn = true;
   isSuccessSignUp = false;
 
-  companyName: string = "";
-  userName: string = "";
-  userEmail: string= "";
+  companyName =  '';
+  userName = '';
+  userEmail = '';
 
   constructor() { }
 
@@ -32,65 +32,60 @@ export class AuthorizationComponent implements OnInit {
   loadTemplate() {
     if (this.isSignIn) {
       return this.signInTemplate;
-    } 
-    else if(this.isSuccessSignUp) {
+    } else if (this.isSuccessSignUp) {
       return this.userDetailsTemplate;
-    }
-    else{
+    } else {
       return this.signUpTemplate;
     }
   }
 
-  showSignUp(){
+  showSignUp() {
     this.isSignIn = false;
     this.isSuccessSignUp = false;
   }
 
-  showSignIn(){
+  showSignIn() {
     this.isSignIn = true;
     this.isSuccessSignUp = false;
   }
 
-  signInWithGoogle(){
-    
+  signInWithGoogle() {
+    //
   }
 
-  signInWithFacebook(){
-    
+  signInWithFacebook() {
+    //
   }
 
-  signInWithTwitter(){
-    
+  signInWithTwitter() {
+    //
   }
 
-  signUpWithGoogle(){
+  signUpWithGoogle() {
     this.isSuccessSignUp = true;
   }
 
-  signUpWithFacebook(){
+  signUpWithFacebook() {
     this.isSuccessSignUp = true;
   }
 
-  signUpWithTwitter(){
+  signUpWithTwitter() {
     this.isSuccessSignUp = true;
   }
 
-  saveUserDetails(){
-   
+  saveUserDetails() {
     this.closeDialog();
   }
 
-  closeDialog(){
+  closeDialog() {
     this.isSuccessSignUp = false;
     this.isSignIn = true;
     this.display = false;
   }
 
-  beckToSignUp(){
-
+  beckToSignUp() {
 
     this.showSignUp();
   }
-
-
 }
+
