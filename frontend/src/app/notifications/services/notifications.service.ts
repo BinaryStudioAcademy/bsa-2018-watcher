@@ -61,7 +61,6 @@ export class NotificationsService {
     });
 
     this._hubConnection.on('BroadcastMessage', (message: string) => {
-      debugger;
       console.log('Broadcasted Message: ' + message);
     });
 
