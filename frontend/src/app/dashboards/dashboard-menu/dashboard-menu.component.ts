@@ -14,22 +14,22 @@ export class DashboardMenuComponent implements OnInit {
   items: MenuItem[];
 
   ngOnInit() {
-    this.menu.show(" ");
+    
     this.items = [
         {
             label: 'File',
-            icon: 'pi pi-fw pi-file',
+            icon: 'pi pi-pw pi-file',
             items: [{
                     label: 'New', 
                     icon: 'pi pi-fw pi-plus',
                     items: [
-                        {label: 'Project'},
-                        {label: 'Other'},
+                        {label: 'User', icon: 'pi pi-fw pi-user-plus'},
+                        {label: 'Filter', icon: 'pi pi-fw pi-filter'}
                     ]
                 },
-                {label: 'Open'},
-                {separator:true},
-                {label: 'Quit'}
+                {label: 'Open', icon: 'pi pi-fw pi-external-link'},
+                {separator: true},
+                {label: 'Quit', icon: 'pi pi-fw pi-times'}
             ]
         },
         {
@@ -45,11 +45,12 @@ export class DashboardMenuComponent implements OnInit {
             icon: 'pi pi-fw pi-question',
             items: [
                 {
-                    label: 'Contents'
+                    label: 'Contents',
+                    icon: 'pi pi-pi pi-bars'
                 },
                 {
                     label: 'Search', 
-                    icon: 'pi pi-fw pi-search', 
+                    icon: 'pi pi-pi pi-search', 
                     items: [
                         {
                             label: 'Text', 
@@ -60,7 +61,8 @@ export class DashboardMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'File'
+                            label: 'User',
+                            icon: 'pi pi-fw pi-file',
                         }
                 ]}
             ]
@@ -85,10 +87,6 @@ export class DashboardMenuComponent implements OnInit {
                     ]
                 }
             ]
-        },
-        {separator:true},
-        {
-            label: 'Quit', icon: 'pi pi-fw pi-times'
         }
     ];
 }
