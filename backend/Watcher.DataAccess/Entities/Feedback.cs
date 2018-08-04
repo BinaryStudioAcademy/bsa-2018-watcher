@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace Watcher.DataAccess.Entities
+﻿namespace Watcher.DataAccess.Entities
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class Feedback : Entity<int>
     {
         public override int Id { get; set; }
