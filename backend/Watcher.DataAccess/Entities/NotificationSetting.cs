@@ -8,5 +8,8 @@
         public NotificationType Type { get; set; }
         public bool IsMute { get; set; }
         public bool IsDisable { get; set; }
+
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }
