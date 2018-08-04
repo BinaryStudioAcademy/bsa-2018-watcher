@@ -1,0 +1,21 @@
+<div class="header">
+  <button type="button" class="menu-button"><i class="fa fa-list"></i></button>
+  <a href="" class="logo">Watcher</a>
+    <div class="ui-toolbar-group-right">
+        <p-tieredMenu #bell [model]="bellItems" [popup]="true"></p-tieredMenu>
+        <button #btn type="button" pButton icon="fa fa-fw fa-bell-o" (click)="bell.toggle($event)"></button>
+        
+        <p-tieredMenu #envelop [model]="mailItems" [popup]="true"></p-tieredMenu>
+        <button #btn type="button" pButton icon="fa fa-fw fa-envelope-o" (click)="envelop.toggle($event)"></button>
+        
+        <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
+        <button #btn type="button" pButton icon="fa fa-fw fa-cog" (click)="cog.toggle($event)"></button>
+
+        <p-tieredMenu #user [model]="userItems" [popup]="true"></p-tieredMenu>
+        <a class="user-info" (click)="user.toggle($event)">
+          <span>Pavlo Paitak</span>
+          <img src="https://avatars0.githubusercontent.com/u/38991419?s=460&v=4" class="user-photo" alt="">
+          <i class="fa fa-sort-desc"></i>
+        </a>
+    </div>
+</div>
