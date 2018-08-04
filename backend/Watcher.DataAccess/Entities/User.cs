@@ -40,8 +40,6 @@
 
         public IList<Message> Messages { get; set; }
 
-        public IList<Chat> Chats { get; set; }
-
         public IList<Chat> CreatedChats { get; set; }
     }
 }

@@ -41,6 +41,10 @@
                 .WithMany(u => u.CreatedChats)
                 .HasForeignKey(c => c.CreatedById);
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.CreatedChats)
+                .WithOne(c => c.CreatedBy);
+
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.Organization)
                 .WithOne(o => o.Chat);
