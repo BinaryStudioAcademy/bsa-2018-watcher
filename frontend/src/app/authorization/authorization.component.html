@@ -8,17 +8,14 @@
     <ng-template [ngTemplateOutlet]="loadTemplate()">
     </ng-template>
 
-    <p-footer>
-        <p *ngIf="isSignIn">
+    <p-footer >
+        <p class="auth-futer" *ngIf="isSignIn">
             <span>Not a member? </span>
             <button (click)="showSignUp()" pButton label="Sign Up"></button>
         </p>
-        <p *ngIf="!isSignIn && !isSuccessSignUp">
+        <p class="auth-futer" *ngIf="!isSignIn && !isSuccessSignUp">
             <span>Already registered? </span>
             <button (click)="showSignIn()" pButton label="Sign In"></button>
-        </p>
-        <p *ngIf="!isSignIn && isSuccessSignUp">
-            <button (click)="saveUserDetails()" pButton label="Save"></button>
         </p>
     </p-footer>
 
@@ -27,28 +24,85 @@
 
 <ng-template #signInTemplate>
     <div class="auth-buttons">
-        <button (click)="signInWithGoogle()" icon="fab fa-google" class="auth-buttons-item" pButton label="Sign In with Google"></button>
-        <button (click)="signInWithFacebook()" icon="fab fa-facebook-f" class="auth-buttons-item" pButton label="Sign In with Facebook"></button>
-        <button (click)="signInWithTwitter()" icon="fab fa-twitter" class="auth-buttons-item" pButton label="Sign In with Twitter"></button>
+        <button (click)="signInWithGoogle()" class="auth-button auth-btn-google">
+            <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span>
+            <span class="firebaseui-idp-text">Sign In with Google</span>
+        </button>
+        <button (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
+                <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
+                <span class="firebaseui-idp-text">Sign In with Facebook</span>
+        </button>
+        <button (click)="signInWithTwitter()"  class="auth-button auth-btn-twitter">
+                <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
+                <span class="firebaseui-idp-text">Sign In with Twitter</span>
+        </button>
     </div>
 </ng-template>
 
 
 <ng-template #signUpTemplate>
     <div class="auth-buttons">
-        <button (click)="signUpWithGoogle()" icon="fab fa-google" class="auth-buttons-item" pButton label="Sign Up with Google"></button>
-        <button (click)="signUpWithFacebook()" icon="fab fa-facebook-f" class="auth-buttons-item" pButton label="Sign Up with Facebook"></button>
-        <button (click)="signUpWithTwitter()" icon="fab fa-twitter" class="auth-buttons-item" pButton label="Sign Up with Twitter"></button>
+        <button (click)="signUpWithGoogle()" class="auth-button auth-btn-google">
+                <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span>
+                <span class="firebaseui-idp-text">Sign Up with Google</span>
+            </button>
+            <button (click)="signUpWithFacebook()" class="auth-button auth-btn-facebook">
+                    <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
+                    <span class="firebaseui-idp-text">Sign Up with Facebook</span>
+            </button>
+            <button (click)="signUpWithTwitter()"  class="auth-button auth-btn-twitter">
+                    <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
+                    <span class="firebaseui-idp-text">Sign Up with Twitter</span>
+            </button>
     </div>
 </ng-template>
 
 <ng-template #userDetailsTemplate>
-    <div class="auth-buttons">
-        <div class="ui-float-label auth-buttons-item">
-            <input placeholder="User name" type="text" size="27" pInputText>
+    <div class="auth-inputs">
+        <div class="auth-input">
+            <input placeholder="Company name" type="text" size="27" class="form-control"
+             id="cName" required minlength="4" #cName="ngModel"
+             [(ngModel)]="companyName"  />
+             <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
+                <div *ngIf="cName.errors.required">
+                    Company name is required.
+                </div>
+                <div *ngIf="cName.errors.minlength">
+                    Company name must be at least 4 characters long.
+                </div>
+            </div>
+            
         </div>
-        <div class="ui-float-label auth-buttons-item">
-            <input placeholder="Email" type="email" size="27" pInputText>
+        <div class="auth-input">
+            <input placeholder="User name" required type="text" size="27" class="form-control"
+            id="uName" required minlength="4" #uName="ngModel"
+            [(ngModel)]="userName"  />
+            <div *ngIf="uName?.invalid && (uName?.dirty || uName?.touched)" class="alert alert-danger">
+               <div *ngIf="uName.errors.required">
+                    User name is required.
+               </div>
+               <div *ngIf="uName.errors.minlength">
+                    User name must be at least 4 characters long.
+               </div>
+           </div>
+        </div>
+        <div class="auth-input">
+            <input placeholder="Email" required type="email" size="27" class="form-control"
+            id="email" required #email="ngModel"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+            [(ngModel)]="userEmail"  />
+            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="alert alert-danger">
+               <div *ngIf="!email.errors.required">
+                    Email is required.
+               </div>
+               <div *ngIf="email.errors.pattern">
+                    Invalid pattern.
+               </div>
+               </div>
+            </div>
+        <div class="auth-buttons ">
+            <input type="button" class="auth-button auth-btn-save" (click)="saveUserDetails()" 
+            [disabled]="cName?.invalid || uName?.invalid || email?.invalid" value="Save" />
         </div>
     </div>
 </ng-template>
