@@ -36,6 +36,30 @@
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
-        public DbSet<Sample> Samples { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<Organization> Organizations { get; set; }
+
+        public DbSet<Instance> Instances { get; set; }
+
+        public DbSet<Dashboard> Dashboards { get; set; }
+
+        public DbSet<Chart> Charts { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
+
+        public DbSet<Chat> Chats { get; set; }
+
+        public DbSet<Notification> Notifications { get; set; }
+
+        public DbSet<NotificationSetting> NotificationSettings { get; set; }
+
+        public DbSet<Feedback> Feedbacks { get; set; }
+
+        public DbSet<Response> Responses { get; set; }
+
+        public DbSet<Theme> Themes { get; set; }
     }
 }
