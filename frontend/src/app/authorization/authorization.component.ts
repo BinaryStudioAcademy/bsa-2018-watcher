@@ -16,6 +16,10 @@ export class AuthorizationComponent implements OnInit {
   isSignIn: boolean = true;
   isSuccessSignUp = false;
 
+  companyName: string = "";
+  userName: string = "";
+  userEmail: string= "";
+
   constructor() { }
 
   ngOnInit() {
