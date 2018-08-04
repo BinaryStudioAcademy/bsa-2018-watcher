@@ -1,5 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild  } from '@angular/core';
 
+
 @Component({
   selector: 'app-authorization',
   templateUrl: './authorization.component.html',
@@ -9,9 +10,15 @@ export class AuthorizationComponent implements OnInit {
 
   @ViewChild('signInTemplate') signInTemplate;
   @ViewChild('signUpTemplate') signUpTemplate;
+  @ViewChild('userDetailsTemplate') userDetailsTemplate;
 
   display: boolean = false;
   isSignIn: boolean = true;
+  isSuccessSignUp = false;
+
+  companyName: string = "";
+  userName: string = "";
+  userEmail: string= "";
 
   constructor() { }
 
@@ -25,7 +32,11 @@ export class AuthorizationComponent implements OnInit {
   loadTemplate() {
     if (this.isSignIn) {
       return this.signInTemplate;
-    } else {
+    } 
+    else if(this.isSuccessSignUp) {
+      return this.userDetailsTemplate;
+    }
+    else{
       return this.signUpTemplate;
     }
   }
@@ -37,5 +48,36 @@ export class AuthorizationComponent implements OnInit {
   showSignIn(){
     this.isSignIn = true;
   }
+
+  signInWithGoogle(){
+    
+  }
+
+  signInWithFacebook(){
+    
+  }
+
+  signInWithTwitter(){
+    
+  }
+
+  signUpWithGoogle(){
+    this.isSuccessSignUp = true;
+  }
+
+  signUpWithFacebook(){
+    this.isSuccessSignUp = true;
+  }
+
+  signUpWithTwitter(){
+    this.isSuccessSignUp = true;
+  }
+
+  saveUserDetails(){
+    this.isSuccessSignUp = false;
+    this.isSignIn = true;
+    this.display = false;
+  }
+
 
 }
