@@ -12,5 +12,8 @@ namespace Watcher.DataAccess.Entities
 
         public int UserId { get; set; }
         public User User { get; set; }
+
+        public int? ResponseId { get; set; }
+        public Response Response { get; set; }
     }
 }
