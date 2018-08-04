@@ -28,5 +28,7 @@
         public Role Role { get; set; }
 
         public IList<UserOrganization> UserOrganizations { get; set; }
+
+        public IList<Notification> Notifications { get; set; }
     }
 }
