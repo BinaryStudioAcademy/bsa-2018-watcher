@@ -17,7 +17,7 @@ namespace Watcher.Controllers
     /// Controller to Manage Samples
     /// </summary>
     // [Authorize]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
     public class SamplesController : ControllerBase

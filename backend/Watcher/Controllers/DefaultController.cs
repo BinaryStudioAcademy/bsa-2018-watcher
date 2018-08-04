@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Watcher.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class DefaultController : ControllerBase
     {
