@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="amount">Amount of generated pairs user-organization</param>
-        public static void SeedIfEmpty(this WatcherDbContext dbContext, int amount = 5)
+        public static void SeedIfEmpty(WatcherDbContext dbContext)
         {
             if(dbContext.UserOrganizations.Any() ||
                  dbContext.Users.Any() ||
@@ -100,7 +100,7 @@
                 .RuleFor(o => o.User, f => userFaker.Generate());
 
             dbContext.Chats.AddRange(chats);
-            dbContext.UserOrganizations.AddRange(userOrganizationFaker.Generate(amount));
+            dbContext.UserOrganizations.AddRange(userOrganizationFaker.Generate(5));
 
             dbContext.SaveChanges();
         }

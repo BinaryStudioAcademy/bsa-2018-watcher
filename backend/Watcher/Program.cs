@@ -18,7 +18,7 @@
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build().Migrate<WatcherDbContext>(SeedAction);
+            var host = CreateWebHostBuilder(args).Build().Migrate<WatcherDbContext>(WatcherDbInitializer.SeedIfEmpty);
 
             host.Run();
         }

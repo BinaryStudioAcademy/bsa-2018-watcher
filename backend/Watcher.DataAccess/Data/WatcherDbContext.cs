@@ -10,7 +10,7 @@
     {
         public WatcherDbContext(DbContextOptions<WatcherDbContext> options) : base(options)
         {
-            this.SeedIfEmpty();
+            // this.SeedIfEmpty();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
