@@ -74,6 +74,11 @@ export class AuthorizationComponent implements OnInit {
   }
 
   saveUserDetails(){
+   
+    this.closeDialog();
+  }
+
+  closeDialog(){
     this.isSuccessSignUp = false;
     this.isSignIn = true;
     this.display = false;
