@@ -30,5 +30,7 @@
         public IList<UserOrganization> UserOrganizations { get; set; }
 
         public IList<Notification> Notifications { get; set; }
+        public IList<Feedback> Feedbacks { get; set; }
+        public IList<Response> Responses { get; set; }
     }
 }
