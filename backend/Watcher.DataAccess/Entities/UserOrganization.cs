@@ -1,9 +1,7 @@
 ﻿namespace Watcher.DataAccess.Entities
 {
-    public class UserOrganization : Entity<int>
+    public class UserOrganization
     {
-        public override int Id { get; set; }
-
         public int UserId { get; set; }
         public User User { get; set; }
 
