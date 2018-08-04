@@ -1,7 +1,45 @@
-//@media (max-width: 730px)
-  //  #desktop
-    //    display: none
-    //#mobile
-      //  display: inline-block
-        //cursor: pointer
-        //font-family: fontawesome
+#mobile
+    display: none
+
+*
+    border: 1px solid red
+@media (max-width: 420px)
+    #mobile
+        border: 5px solid yellow
+        padding-right: 200px
+
+@media (max-width: 730px)
+  #mobile
+    display: inline-block
+    position: absolute
+    left: 91%
+    cursor: pointer
+    font-family: fontawesome
+    font-style: normal
+  #header
+    position: fixed
+    font-size: 75%
+    .container
+      background-color:#222
+      width: 100%
+    h1
+      padding-left: 3%
+      a
+          i
+              font-style: normal  
+  #nav
+    display: none
+    width: 100%
+    top: 60px
+    ul
+      background: #222
+      width: 100%
+      margin: 0px
+      display: flex
+      flex-direction: column
+      li
+        float: none
+        a
+          padding: 10px 3%
+          line-height: 10px
+          border-top: 1px solid #333

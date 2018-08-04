@@ -31,10 +31,13 @@ export class LandingComponent implements OnInit {
             return y;
   }; }
   scrollTo(id: string) {
-    console.log(id);
     const element = document.getElementById(id);
-    console.log(element);
     element.scrollIntoView( {block: 'start', behavior: 'smooth'});
+  }
+  show() {
+    const menu = document.getElementById('nav');
+    if (menu.style.display === 'block') {
+      menu.style.display = 'none'; } else { menu.style.display = 'block'; }
   }
 
   ngOnInit() {
