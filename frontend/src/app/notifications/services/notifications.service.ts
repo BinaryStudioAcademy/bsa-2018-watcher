@@ -50,7 +50,7 @@ export class NotificationsService {
   private init() {
 
     this._hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:29878/notifications')
+      .withUrl('https://bsa-watcher.azurewebsites.net/api/notifications')
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
