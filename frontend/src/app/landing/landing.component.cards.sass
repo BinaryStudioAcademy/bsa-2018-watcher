@@ -3,10 +3,9 @@ ul
 
 .cards
   font-family:  helvetica, sans-serif
-  display: flex
-  justify-content: space-between
-
-  .cards__item
+  max-width: 1200px
+  width: 100%
+  .cards_item
     width: 30%
     display: flex
     padding: 1rem
@@ -15,23 +14,22 @@ ul
 .card
   background-color: white
   min-height: 100%
-  margin-right: 25px
   border-radius: 0.25rem
   box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25)
   display: flex
   flex-direction: column
   overflow: hidden
-  &:hover .card__image
+  &:hover .card_image
     -webkit-filter: contrast(100%)
     filter: contrast(100%)
 
-.card__content
+.card_content
   display: flex
   flex-direction: column
   align-content: center
   padding: 1rem
 
-.card__image
+.card_image
   background-position: center center
   background-repeat: no-repeat
   background-size: cover
@@ -51,26 +49,26 @@ ul
     padding-top: 56.25%
 
 @media (min-width: 40rem)
-  .card__image::before
+  .card_image::before
     padding-top: 66.6%
 
-.card__image--ded
+.card_image--ded
   background-image: url('https://newrelic.com/content/dam/component-assets/homepage/hp02/hp02-dcx.jpg')
 
-.card__image--cloud
+.card_image--cloud
   background-image: url('https://newrelic.com/content/dam/component-assets/homepage/hp02/hp02-cloud.jpg')
 
-.card__image--female
+.card_image--female
   background-image: url('https://newrelic.com/content/dam/component-assets/homepage/hp02/hp02-devops.jpg')
 
-.card__title
+.card_title
   color: #696969
   font-size: 1.25rem
   font-weight: 300
   letter-spacing: 1px
   text-transform: uppercase
 
-.card__text
+.card_text
   flex: 1 1 auto
   font-size: 0.875rem
   line-height: 1.5
