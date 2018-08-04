@@ -1,12 +1,12 @@
-*
-  //font-family: helvetica, sans-serif
-
-
 .container
   position: relative
   margin: 0 auto
   width: 100%
   max-width: 1200px
+  font-family: helvetica, sans-serif
+
+#bars
+  display: none
 
 #header
   background-color: rgba(0,0,0,0.2)
@@ -39,6 +39,7 @@
       padding: 0 10px
 
 .banner
+  font-family: helvetica, sans-serif
   color: white
   align-items: center
   display: flex
@@ -63,15 +64,18 @@
   height: 100vh
   width: 100%
   .infoContent
-    max-width: 600px
+    max-width: 570px
     height: 30vh
     margin-top: 30vh
   .infoContent.left
     float: right
     text-align: left
+    padding-right: 30px
   .infoContent.right
     float: left
     text-align: right
+    padding-left: 30px
+
 
   h1
     margin-top: 2px
@@ -85,46 +89,6 @@
     background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot2.jpg) no-repeat center
   .pict3
     background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot3.jpg) no-repeat
-
-@media (max-width: 599px)
-  #header
-    position: relative
-    font-size: 75%
-    .container
-      background-color:#222
-      width: 100%
-    h1
-      padding-left: 3%
-  #nav
-    width: 100%
-    top: 60px
-    &:before
-      content: '\2630'
-      display: block
-      position: absolute
-      right: 3%
-      top: -50px
-      line-height: 40px
-      font-size: 1.4em
-      cursor: pointer
-    ul
-      background: #222
-      width: 100%
-      margin: 0px
-      display: flex
-
-      flex-direction: column
-      li
-        float: none
-        a
-          padding: 10px 3%
-          line-height: 10px
-          border-top: 1px solid #333
-        .ui-button-info
-          align-self: center
-          height: 25px
-          padding: 3px 1px
-          width: 100px
 
 @media (max-width: 730px)
   .content
