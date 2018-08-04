@@ -50,7 +50,7 @@ export class NotificationsService {
   private init() {
 
     this._hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:5000/notifications')
+      .withUrl('http://localhost:29878/notifications')
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
