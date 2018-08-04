@@ -1,7 +1,11 @@
+*
+  border: 1px solid black
+
+
 .container
   position: relative
   margin: 0 auto
-  width: 94%
+  width: 100%
   max-width: 1200px
   font-family: helvetica, sans-serif
 
@@ -10,20 +14,23 @@
   z-index: 2
   position: fixed
   width: 100%
-  height: 60px
-  line-height: 60px
+  height: 8vh
+  line-height: 8vh
   color: white
   h1
     top: 0px
     margin: 0px
     text-transform: uppercase
     font-size: 1.2em
+    border: 1px solid red
+
 
 #nav
   position: absolute
   right: 0
   top: -15px
-  height: 60px
+  height: 8vh
+  border: 1px solid green
   ul li
     float: left
     list-style: none
@@ -34,67 +41,59 @@
       text-decoration: none
       padding: 0 10px
 
-#btnAutorization
-  //margin-left: 10px
-  //padding: 0 8px
-  //height: 25px
-
 .banner
   color: white
   align-items: center
   display: flex
   flex-direction: column
-  height: 400px
+  height: 70vh
   position: relative
   background: url(https://newrelic.com/content/dam/component-assets/c04-marquee-carousel/c04-ravbg.jpg) no-repeat center center fixed
   -webkit-background-size: cover
-  -moz-background-size: covero
+  -moz-background-size: cover
   background-size: cover
   text-align: center
   h1
-    padding-top: 150px
+    padding-top: 30vh
     font-family: helvetica, sans-serif
     color: white
   p 
     font-family: helvetica, sans-serif
 
-.content
-  font-family: helvetica, sans-serif
-  display: grid
-  grid-template-columns: 50% 50%
-  grid-template-areas: 'info screenshot'
-  height: 600px
-  .info,.info3
-    grid-area: info
-    .infoContent
-      margin-top: 30vh
-      margin-left: 8vh
-      margin-right: 16vh
-      justify-self: center
-      h1
-        margin-top: 2px
+.ui-lg-6
+  padding: 0
+  margin: 0
 
-  .picture,.picture3
-    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot1.jpg) no-repeat
+.content
+  height: 92vh
+  width: 100%
+  .infoContent
+    max-width: 600px
+    height: 30vh
+    margin-top: 30vh
+    border: 1px solid red
+  .infoContent.left
+    float: right
+    text-align: left
+  .infoContent.right
+    float: left
+    text-align: right
+
+  h1
+    margin-top: 2px
+
+  .picture,
+  .picture2,
+  .picture3
     background-size: cover
-    grid-area: screenshot
   
+  .picture
+    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot1.jpg) no-repeat
   .picture2
     background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot2.jpg) no-repeat
-    background-size: cover
-    grid-area: info
 
-  .info2
-    grid-area: screenshot
-    .infoContent
-      margin-top: 30vh
-      margin-right: 8vh
-      margin-left:  16vh
-      justify-self: center
-      h1
-        margin-top: 2px
   .picture3
-        background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot3.jpg) no-repeat
+    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot3.jpg) no-repeat
 
 @media (max-width: 599px)
   #header
@@ -138,9 +137,7 @@
 
 @media (max-width: 730px)
   .content
-    margin-bottom: 250px
-    font-size: 12px
-    height: 200px
+    height: 100vh
     h1
       font-size: 14px
 
