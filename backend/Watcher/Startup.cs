@@ -137,7 +137,7 @@
         {
             // Use SQL Database if in Azure, otherwise, use Local DB
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (env == "Development")
+            if (env == "Production")
             {
                 var azureConnStr = Configuration.GetConnectionString("AzureDbConnection");
                 if (!string.IsNullOrWhiteSpace(azureConnStr))

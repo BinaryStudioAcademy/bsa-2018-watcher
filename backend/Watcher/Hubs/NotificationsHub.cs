@@ -42,7 +42,7 @@
         /// </returns>
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            Clients.All.SendAsync("BroadcastMessage", "Connection: " + Context.ConnectionId + " disconnected, reason: " + exception.Message);
+            Clients.All.SendAsync("BroadcastMessage", $"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
             return base.OnConnectedAsync();
         }
 

@@ -1,14 +1,11 @@
 ﻿namespace Watcher.Core.Services
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
 
     using Watcher.Common.Dtos;
-    using Watcher.Common.Enums;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Entities;

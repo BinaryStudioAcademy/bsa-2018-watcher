@@ -14,7 +14,7 @@ export class NotificationComponent implements OnInit {
   }
 
   send() {
-    this.notificationsService.send('Qew');
+    this.notificationsService.send('someUserId', 'Message');
   }
   sendMessage() {
     this.notificationsService.sendMessage('Qew');

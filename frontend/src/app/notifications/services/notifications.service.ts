@@ -52,7 +52,7 @@ export class NotificationsService {
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
-    this.startConnection();
+    startHubConnection(this._hubConnection);
 
     this._hubConnection.on('Send', (item: string) => {
       console.log('Message from Hub: ' + item);
@@ -68,7 +68,7 @@ export class NotificationsService {
     });
 
     this._hubConnection.on('DataFeedTick', (sampleDto: SampleDto) => {
-      console.log(`Received Data feed from the hub: ${sampleDto}`);
+      console.log(`Received Data feed from the hub: ${JSON.stringify(sampleDto)}`);
     });
 
     this._hubConnection.on('AddSample', (sampleDto: SampleDto, secondParam: string, thirdParam: number) => {
@@ -77,20 +77,20 @@ export class NotificationsService {
     });
 
     // On Close open connection again
-    this._hubConnection.onclose(function () {
-      this.startConnection();
+    this._hubConnection.onclose(function (error) {
+      console.error(error);
+      startHubConnection(this._hubConnection);
     });
   }
+}
 
-  // Reconnect loop
-  private startConnection() {
-    console.log('Conecting to Hub!!!');
-    this._hubConnection.start().catch(function (err) {
-      console.error(err.toString());
-      setTimeout(function () {
-        console.log('Recconecting to Hub!');
-        this.startConnection();
-      }, 3000);
-    });
-  }
+// Reconnect loop
+export function startHubConnection(hubConnection: HubConnection) {
+  console.log('Conecting to Hub!!!');
+  hubConnection.start().catch(function (err) {
+    console.error(err);
+    setTimeout(args => {
+      startHubConnection(hubConnection);
+    }, 3000);
+  });
 }
