@@ -1,7 +1,28 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20180803195234_AddRelation.cs" />
+    <Compile Remove="Data\Migrations\20180803200326_AddRelation.cs" />
+    <Compile Remove="Data\Migrations\20180803201429_AddRelation.cs" />
+    <Compile Remove="Data\Migrations\20180804050935_AddRelation.cs" />
+    <Compile Remove="Data\Migrations\20180804065527_AddRelation.cs" />
+    <Compile Remove="Data\Migrations\20180804073613_AddRelation.cs" />
+    <Compile Remove="Data\Migrations\20180804121748_FixedRelationBetweenUsersAndOrganizations.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="Bogus" Version="22.3.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Watcher.Common\Watcher.Common.csproj" />
+  </ItemGroup>
 
 </Project>

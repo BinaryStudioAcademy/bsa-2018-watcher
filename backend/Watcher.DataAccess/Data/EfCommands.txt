@@ -1,0 +1,12 @@
+﻿npm:
+Add-Migration Init -OutputDir Data/Migrations
+
+terminal:
+dotnet ef migrations add Initial -o Data/Migrations
+
+
+How To Add new Migration:
+1) Set Web Api project as a Startup project
+2) Open Package Manager Console
+3) Set DataAccess project as a Default project in Package Manager Console
+4) Run: dotnet ef migrations add <Your migration name> -o Data/Migrations
