@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { InstanceListComponent } from './instance-list/instance-list.component';
-import { TabViewModule } from 'primeng/primeng';
+import { TabViewModule, PanelMenuModule } from 'primeng/primeng';
 
 @NgModule({
   imports: [
     CommonModule,
-    TabViewModule  
+    TabViewModule,
+    PanelMenuModule,
   ],
   declarations: [DashboardComponent, InstanceListComponent],
   exports:[ DashboardComponent, InstanceListComponent ]
