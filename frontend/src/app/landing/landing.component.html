@@ -1,13 +1,11 @@
 <header id="header">
     <div class="container">
         <h1>
-            Watcher
+            <a href="/">Watcher</a>
+            <i class="fas fa-bars" id="mobile" (click)="show()"></i>
         </h1>
         <nav id="nav">
-            <ul>
-                <li>
-                    <a [routerLink]="['/notification']">Notifications</a>
-                </li>
+            <ul id="desktop">
                 <li>
                     <a (click)="scrollTo('startbanner')">Home</a>
                 </li>
@@ -28,15 +26,11 @@
     <h1>Stay up to date </h1>
     <p>Get the real-time insights that your machine needs for faster reaction.</p>
 </div>
-<main>
-    <br>
-    <br>
-    <br>
-    <br id="why-watcher">
-    <div class="content">
-        <div class="info">
-            <div class="infoContent">
-                <img src="https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-bargraph.png" alt="Plot">
+<div>
+    <div class="content ui-g " id="why-watcher">
+        <div class="ui-lg-6 ui-g-12 ">
+            <div class="infoContent left ">
+                <img src="https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-bargraph.png " alt="Plot ">
                 <h1>
                     Get the right tool.
                 </h1>
@@ -45,19 +39,15 @@
                     <p>
             </div>
         </div>
-        <div class="picture">
+        <div class="picture pict1 ui-lg-6 ui-g-12 ">
         </div>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="content">
-        <div class="picture2">
+    <div class="content ui-g ">
+        <div class="picture pict2 ui-lg-6 ui-g-12 ">
         </div>
-        <div class="info2">
-            <div class="infoContent">
-                <img src="https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-piechart.png" alt="Plot">
+        <div class="ui-lg-6 ui-g-12 ">
+            <div class="infoContent right ">
+                <img src="https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-piechart.png " alt="Plot ">
                 <h1>
                     Look at the whole data.
                 </h1>
@@ -67,80 +57,68 @@
             </div>
         </div>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="content">
-        <div class="info3">
-            <div class="infoContent">
-                <img src="https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-arrows.png" alt="Plot">
-                <h1>
-                    Get everyone on the same page.
-                </h1>
-                <p>
-                    We know the power of teamwork which helps us empower your teams, too. You can orient around what matters, resolve issues fast, and accelerate deploy cycles.
+    <div class="content ui-g ">
+        <div class="ui-lg-6 ui-g-12 ">
+            <div class="infoContent left ">
+                <img src="https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-arrows.png " alt="Plot ">
+                <h1> Get everyone on the same page.</h1>
+                <p>We know the power of teamwork which helps us empower your teams, too. You can orient around what matters, resolve issues fast, and accelerate deploy cycles.
                     <p>
             </div>
         </div>
-        <div class="picture3">
+        <div class="picture pict3 ui-lg-6 ui-g-12 ">
         </div>
     </div>
-    <br>
-    <br>
-    <br>
-    <br id="cards">
-    <ul class="cards">
-        <li class="cards__item">
-            <div class="card">
-                <div class="card__image card__image--female"></div>
-                <div class="card__content">
-                    <div class="card__title">
-                        Analyze important
-                    </div>
-                    <p class="card__text">Innovate faster and do things right with Watcher. It provides all of kinds of data representure.</p>
+</div>
+<div class="cards ui-g " id="cards">
+    <div class="cards_item ui-lg-4 ui-g-12 ">
+        <div class="card ">
+            <div class="card_image card_image--female "></div>
+            <div class="card_content ">
+                <h1>
+                    Analyze important
+                </h1>
+                <p>Innovate faster and do things right with Watcher. It provides all of kinds of data representure.</p>
+            </div>
+        </div>
+    </div>
+    <div class="cards_item ui-lg-4 ui-g-12 ">
+        <div class="card ">
+            <div class="card_image card_image--cloud "></div>
+            <div class="card_content ">
+                <h1>
+                    Monitoring for environments
+                </h1>
+                <p>Watcher is collecting data in real-time, so you can be sure about your systems health</p>
+            </div>
+        </div>
+    </div>
+    <div class="cards_item ui-lg-4 ui-g-12 ">
+        <div class="card ">
+            <div class="card_image card_image--ded "></div>
+            <div class="card_content ">
+                <h1>
+                    See the truth behind your experience
+                </h1>
+                <p>Get end-to-end visibility for your services and ensure your end-user experiences are delightful.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer-distributed ">
 
-                </div>
-            </div>
-        </li>
-        <li class="cards__item">
-            <div class="card">
-                <div class="card__image card__image--cloud"></div>
-                <div class="card__content">
-                    <div class="card__title">
-                        Monitoring for environments
-                    </div>
-                    <p class="card__text">Watcher is collecting data in real-time, so you can be sure about your systems health</p>
-                </div>
-            </div>
-        </li>
-        <li class="cards__item">
-            <div class="card">
-                <div class="card__image card__image--ded"></div>
-                <div class="card__content">
-                    <div class="card__title">
-                        See the truth behind your digital customer experience
-                    </div>
-                    <p class="card__text">Get end-to-end visibility for your services and ensure your end-user experiences are delightful.</p>
-                </div>
-            </div>
-        </li>
-    </ul>
-</main>
-<footer class="footer-distributed">
-
-    <div class="footer-right">
-        <a href="#"><i class="fa fa-facebook"></i></a>
-        <a href="#"><i class="fa fa-twitter"></i></a>
-        <a href="#"><i class="fa fa-linkedin"></i></a>
-        <a href="#"><i class="fa fa-github"></i></a>
+    <div class="footer-right ">
+        <a href="# "><i class="fa fa-facebook "></i></a>
+        <a href="# "><i class="fa fa-twitter "></i></a>
+        <a href="# "><i class="fa fa-linkedin "></i></a>
+        <a href="# "><i class="fa fa-github "></i></a>
     </div>
 
-    <div class="footer-left">
-        <p class="footer-links">
-            <a (click)="scrollTo('startbanner')">Home</a> ·
-            <a (click)="scrollTo('why-watcher')">Why watcher</a> ·
-            <a (click)="scrollTo('cards')">Advantages</a>
+    <div class="footer-left ">
+        <p class="footer-links ">
+            <a (click)="scrollTo( 'startbanner') ">Home</a> ·
+            <a (click)="scrollTo( 'why-watcher') ">Why watcher</a> ·
+            <a (click)="scrollTo( 'cards') ">Advantages</a>
         </p>
 
         <p>Watcher © 2018</p>

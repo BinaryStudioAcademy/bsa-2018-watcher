@@ -1,148 +1,75 @@
-.container
-  position: relative
-  margin: 0 auto
-  width: 94%
-  max-width: 1200px
-  font-family: helvetica, sans-serif
-
-#header
-  background-color: rgba(0,0,0,0.2)
-  z-index: 2
-  position: fixed
-  width: 100%
-  height: 60px
-  line-height: 60px
-  color: white
-  h1
-    top: 0px
-    margin: 0px
-    text-transform: uppercase
-    font-size: 1.2em
-
-#nav
-  position: absolute
-  right: 0
-  top: -15px
-  height: 60px
-  ul li
-    float: left
-    list-style: none
-    a
-      cursor: pointer
-      display: block
-      color: white
-      text-decoration: none
-      padding: 0 10px
-
-#btnAutorization
-  margin-left: 10px
-  padding: 0 8px
-  height: 25px
-
-.banner
-  color: white
-  align-items: center
-  display: flex
-  flex-direction: column
-  height: 400px
-  position: relative
-  background: url(https://newrelic.com/content/dam/component-assets/c04-marquee-carousel/c04-ravbg.jpg) no-repeat center center fixed
-  -webkit-background-size: cover
-  -moz-background-size: covero
-  background-size: cover
-  text-align: center
-  h1
-    padding-top: 150px
-    font-family: helvetica, sans-serif
-    color: white
-  p 
-    font-family: helvetica, sans-serif
+.ui-lg-6
+  padding: 0
+  margin: 0
 
 .content
-  font-family: helvetica, sans-serif
-  display: grid
-  grid-template-columns: 50% 50%
-  grid-template-areas: 'info screenshot'
-  height: 600px
-  .info,.info3
-    grid-area: info
-    .infoContent
-      margin-top: 30vh
-      margin-left: 8vh
-      margin-right: 16vh
-      justify-self: center
-      h1
-        margin-top: 2px
+  padding-top: 8vh
+  height: 100vh
+  width: 100%
+  .infoContent
+    max-width: 600px
+    height: 30vh
+    margin-top: 30vh
+  .infoContent.left
+    float: right
+    text-align: left
+    padding-right: 3vw
+  .infoContent.right
+    float: left
+    text-align: right
+    padding-left: 3vw
 
-  .picture,.picture3
-    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot1.jpg) no-repeat
+  h1
+    margin-top: 2px
+
+  .picture
     background-size: cover
-    grid-area: screenshot
   
-  .picture2
-    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot2.jpg) no-repeat
-    background-size: cover
-    grid-area: info
+  .pict1
+    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot1.jpg) no-repeat
+  .pict2
+    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot2.jpg) no-repeat center
+  .pict3
+    background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot3.jpg) no-repeat
 
-  .info2
-    grid-area: screenshot
-    .infoContent
-      margin-top: 30vh
-      margin-right: 8vh
-      margin-left:  16vh
-      justify-self: center
-      h1
-        margin-top: 2px
-  .picture3
-        background: url(https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-screenshot3.jpg) no-repeat
-
-@media (max-width: 599px)
+@media (max-width: 1250px)
+  .infoContent.left
+    padding-left: 3vw
+  .infoContent.right
+    padding-right: 3vw
   #header
-    position: relative
-    font-size: 75%
-    .container
-      background-color:#222
-      width: 100%
     h1
-      padding-left: 3%
+      padding-left: 3vw
   #nav
-    width: 100%
-    top: 60px
-    &:before
-      content: '\2630'
-      display: block
-      position: absolute
-      right: 3%
-      top: -50px
-      line-height: 40px
-      font-size: 1.4em
-      cursor: pointer
-    ul
-      background: #222
-      width: 100%
-      margin: 0px
-      display: flex
+    padding-right: 3vw
 
-      flex-direction: column
-      li
-        float: none
-        a
-          padding: 10px 3%
-          line-height: 10px
-          border-top: 1px solid #333
-        .ui-button-info
-          align-self: center
-          height: 25px
-          padding: 3px 1px
-          width: 100px
-
-@media (max-width: 730px)
+@media (max-width: 1025px)
   .content
-    margin-bottom: 250px
-    font-size: 12px
-    height: 200px
-    h1
-      font-size: 14px
+    padding: 20px
+    font-size: 15px
+    height: 100vh
+    width: 90vw
+    margin-top: 8vh
+    margin-left: 3vw
+    margin-right: 3vw
+    box-shadow: 3px 4px 21px -5px rgba(0,0,0,0.75)
+    img
+      width: 50px
+    .infoContent.left,
+    .infoContent.right
+      max-width: 600px
+      width: 100%
+      height: 25vh
+      margin: 0
+      padding: 0
+    .infoContent.left
+      float: left
+    .infoContent.right
+      float: right
+  .picture
+    height: 50vh
+    padding: 0
+
 
 
   
