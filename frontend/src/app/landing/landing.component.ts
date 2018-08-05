@@ -7,7 +7,6 @@ import { DefaultService } from '../core/services/default.service';
   styleUrls: ['./landing.component.sass',
   './landing.component.cards.sass',
   './landing.component.footer.sass',
-  './landing.component.mobileheader.sass',
   './landing.component.header.sass'],
 })
 export class LandingComponent implements OnInit, OnDestroy {

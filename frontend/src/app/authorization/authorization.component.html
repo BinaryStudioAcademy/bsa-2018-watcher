@@ -1,5 +1,5 @@
-<button pButton type="button" label="Sign in" class="ui-button-raised" (click)="showDialogSignIn()"></button>
-<button pButton type="button" label="Register" class="ui-button-secondary ui-button-raised" (click)="showDialogSignUp()" style="margin-left: 10px"></button>
+<button pButton type="button" label="Sign in" class="btnsign-in ui-button-raised ui-button-rounded" (click)="showDialogSignIn()"></button>
+<button pButton type="button" label="Sign up" class="btnsign-up ui-button-success ui-button-raised ui-button-rounded" (click)="showDialogSignUp()"></button>
 
 
 
@@ -9,22 +9,19 @@
     </div>
     <ng-template [ngTemplateOutlet]="loadTemplate()">
     </ng-template>
-    <div >
+    <div>
 
         <div class="auth-futer" *ngIf="isSignIn">
-            <p>Not a member? <a (click)="showSignUp()" a >Sign Up</a>
-                or <a (click)="closeDialog()">Close</a></p>
+            <p>Not a member? <a (click)="showSignUp()" a>Sign Up</a> or <a (click)="closeDialog()">Close</a></p>
         </div>
         <div class="auth-futer" *ngIf="!isSignIn && !isSuccessSignUp">
-            <p>Already registered? <a (click)="showSignIn()" >Sign In</a>
-                or <a (click)="closeDialog()">Close</a></p>
+            <p>Already registered? <a (click)="showSignIn()">Sign In</a> or <a (click)="closeDialog()">Close</a></p>
         </div>
         <div class="auth-futer" *ngIf="!isSignIn && isSuccessSignUp">
 
-                <p>Beck to <a (click)="beckToSignUp()" >Sign Up</a>
-                     or <a (click)="closeDialog()">Close</a></p>
-            </div>
+            <p>Beck to <a (click)="beckToSignUp()">Sign Up</a> or <a (click)="closeDialog()">Close</a></p>
         </div>
+    </div>
 
 </p-dialog>
 
@@ -68,9 +65,7 @@
     <div class="auth-inputs">
         <div class="auth-input">
 
-            <input placeholder="Company" pInputText type="text" class="form-control"
-            id="cName" required minlength="4" #cName="ngModel"
-            [(ngModel)]="companyName"  />
+            <input placeholder="Company" pInputText type="text" class="form-control" id="cName" required minlength="4" #cName="ngModel" [(ngModel)]="companyName" />
 
 
             <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
@@ -83,10 +78,8 @@
             </div>
 
         </div>
-         <div class="auth-input">
-            <input placeholder="FirstName" pInputText type="text" class="form-control"
-            id="fName" required minlength="4" #fName="ngModel"
-            [(ngModel)]="firstName"  />
+        <div class="auth-input">
+            <input placeholder="FirstName" pInputText type="text" class="form-control" id="fName" required minlength="4" #fName="ngModel" [(ngModel)]="firstName" />
             <div *ngIf="fName?.invalid && (fName?.dirty || fName?.touched)" class="alert alert-danger">
                 <div *ngIf="fName.errors.required">
                     FirstName is required.
@@ -95,12 +88,10 @@
                     FirstName must be at least 4 characters long.
                 </div>
             </div>
-        </div> 
+        </div>
         <div class="auth-input">
 
-            <input placeholder="LastName" pInputText type="text" class="form-control"
-            id="lName" required minlength="4" #lName="ngModel"
-            [(ngModel)]="lastName"  />
+            <input placeholder="LastName" pInputText type="text" class="form-control" id="lName" required minlength="4" #lName="ngModel" [(ngModel)]="lastName" />
             <div *ngIf="lName?.invalid && (lName?.dirty || lName?.touched)" class="alert alert-danger">
                 <div *ngIf="lName.errors.required">
                     LastName is required.
@@ -111,8 +102,7 @@
             </div>
         </div>
         <div class="auth-buttons">
-            <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" 
-            [disabled]="cName?.invalid || fName?.invalid || lName?.invalid" value="Save" />
+            <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" [disabled]="cName?.invalid || fName?.invalid || lName?.invalid" value="Save" />
 
         </div>
     </div>
