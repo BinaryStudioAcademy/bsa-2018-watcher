@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DefaultService } from '../core/services/default.service';
 import {ButtonModule} from 'primeng/button';
 
@@ -10,7 +10,7 @@ import {ButtonModule} from 'primeng/button';
   './landing.component.footer.sass',
   './landing.component.mobileheader.sass'],
 })
-export class LandingComponent implements OnInit {
+export class LandingComponent implements OnInit, OnDestroy {
 
   constructor(private defaultService: DefaultService) {}
 
