@@ -43,10 +43,9 @@ import { MainPageModule } from './main-page/main-page.module';
     AdminModule,
     UserModule,
     DashboardsModule,
-    MainPageModule,   
-    NotificationsModule
+    MainPageModule,
+    NotificationsModule,
     TabViewModule
-
   ],
   providers: [],
   bootstrap: [AppComponent]
