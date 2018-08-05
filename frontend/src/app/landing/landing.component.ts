@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DefaultService } from '../core/services/default.service';
-import {ButtonModule} from 'primeng/button';
 
 @Component({
   selector: 'app-landing',
@@ -8,7 +7,8 @@ import {ButtonModule} from 'primeng/button';
   styleUrls: ['./landing.component.sass',
   './landing.component.cards.sass',
   './landing.component.footer.sass',
-  './landing.component.mobileheader.sass'],
+  './landing.component.mobileheader.sass',
+  './landing.component.header.sass'],
 })
 export class LandingComponent implements OnInit, OnDestroy {
 
@@ -23,7 +23,8 @@ export class LandingComponent implements OnInit, OnDestroy {
     const dw_getScrollOffsets = () => {
       const doc = document, w = window;
       let y, docEl;
-            if (typeof w.pageYOffset === 'number') { y = w.pageYOffset; } else {
+            if (typeof w.pageYOffset === 'number') {
+              y = w.pageYOffset; } else {
                   docEl = (doc.compatMode && doc.compatMode === 'CSS1Compat') ?
                   doc.documentElement : doc.body;
                   y = docEl.scrollTop;
