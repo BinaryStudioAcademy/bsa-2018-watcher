@@ -1,6 +1,5 @@
-<button pButton type="button" label="Sign in" class="btnsign-in ui-button-primary ui-button-raised ui-button-rounded" (click)="showDialogSignIn()"></button>
-<button pButton type="button" label="Sign up" class="btnsign-up ui-button-success ui-button-raised ui-button-rounded" (click)="showDialogSignUp()"></button>
-
+<button pButton type="button" label="Sign In" class="btnsign-in ui-button-secondary ui-button-raised" (click)="showDialogSignIn()"></button>
+<button pButton type="button" label="Sign Up" class="btnsign-up ui-button-primary ui-button-raised" (click)="showDialogSignUp()"></button>
 
 
 <p-dialog class="authorization-dialog" (onHide)="closeDialog()" [showHeader]="false" appendTo="body" [closable]=false [(visible)]="display" [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="10000">
