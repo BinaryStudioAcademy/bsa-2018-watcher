@@ -3,6 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
+import { FirebaseCredential } from '../shared/models/firebase.model';
 
 
 @Component({
@@ -89,6 +90,9 @@ export class AuthorizationComponent implements OnInit {
   signInWithGoogle() {
     this.authService.signInWithGoogle()
     .then((res) => {
+        // const token : FirebaseCredential = res.credential;
+        
+
         this.router.navigate(['landing']);
       })
     .catch((err) => console.log(err));

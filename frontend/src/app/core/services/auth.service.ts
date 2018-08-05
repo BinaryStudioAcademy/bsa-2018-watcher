@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
@@ -18,8 +18,7 @@ export class AuthService {
         if (user) {
           this.userDetails = user;
           console.log(this.userDetails);
-        }
-        else {
+        } else {
           this.userDetails = null;
         }
       }
@@ -29,19 +28,19 @@ export class AuthService {
   signInWithTwitter() {
     return this._firebaseAuth.auth.signInWithPopup(
       new firebase.auth.TwitterAuthProvider()
-    )
+    );
   }
 
   signInWithFacebook() {
     return this._firebaseAuth.auth.signInWithPopup(
       new firebase.auth.FacebookAuthProvider()
-    )
+    );
   }
 
   signInWithGoogle() {
     return this._firebaseAuth.auth.signInWithPopup(
       new firebase.auth.GoogleAuthProvider()
-    )
+    );
   }
 
   isLoggedIn() {
@@ -51,7 +50,7 @@ export class AuthService {
       return true;
     }
   }
-  
+
   logout() {
     this._firebaseAuth.auth.signOut()
       .then((res) => this.router.navigate(['/']));
