@@ -6,20 +6,21 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AccordionModule } from 'primeng/primeng';
+import { AccordionModule, TabViewModule } from 'primeng/primeng';
 import { PanelModule } from 'primeng/primeng';
-import { ButtonModule } from 'primeng/primeng';
+import {ButtonModule} from 'primeng/components/button/button';
 import { RadioButtonModule } from 'primeng/primeng';
 
 import { DialogModule } from 'primeng/primeng';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-
 import { AuthorizationComponent } from './authorization/authorization.component';
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { DashboardsModule } from './dashboards/dashboards.module';
+import {NotificationsModule} from './notifications/notifications.module';
+import { MainPageModule } from './main-page/main-page.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,10 @@ import { DashboardsModule } from './dashboards/dashboards.module';
     DialogModule,
     AdminModule,
     UserModule,
-    DashboardsModule
+    DashboardsModule,
+    MainPageModule,
+    NotificationsModule,
+    TabViewModule
   ],
   providers: [],
   bootstrap: [AppComponent]
