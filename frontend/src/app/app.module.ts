@@ -21,6 +21,7 @@ import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { DashboardsModule } from './dashboards/dashboards.module';
 import {NotificationsModule} from './notifications/notifications.module';
+import { MainPageModule } from './main-page/main-page.module';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import {NotificationsModule} from './notifications/notifications.module';
     AdminModule,
     UserModule,
     DashboardsModule,
+    MainPageModule,   
     NotificationsModule
   ],
   providers: [],
