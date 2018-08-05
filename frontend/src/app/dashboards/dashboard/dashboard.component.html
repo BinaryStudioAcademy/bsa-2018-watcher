@@ -1,5 +1,32 @@
 <app-instance-list></app-instance-list>
-<p>
-  dashboard works!
-</p>
+<div class="working-area">
+    <div class="title">
+        Dashboards
+    </div>
+    <p-tabView>
+        <p-tabPanel header="RAM" [closable]="true">
+            <div class="chart">
+                <h3>Chart 1</h3>
+                <img src="https://www.excel-easy.com/smi/examples/line-chart.png" alt="">
+            </div>           
+        </p-tabPanel>
+        <p-tabPanel header="CAM" [closable]="true">
+            <div class="chart">
+                <h3>Chart 2</h3>
+                <img src="https://www.excel-easy.com/smi/examples/line-chart.png" alt="">
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="DAM" [closable]="true">
+            <div class="chart">
+                <h3>Chart 3</h3>
+                <img src="https://www.excel-easy.com/smi/examples/line-chart.png" alt="">
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Add Dashboard" rightIcon="pi pi-plus">
+                <div class="chart">
+                </div>
+        </p-tabPanel>
+    
+    </p-tabView>
+</div>
 

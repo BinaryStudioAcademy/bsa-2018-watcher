@@ -78,25 +78,25 @@
 
         </div>
         <div class="auth-input">
-            <input placeholder="FirstName" pInputText type="text" class="form-control" id="fName" required minlength="4" #fName="ngModel" [(ngModel)]="firstName" />
+            <input placeholder="First Name" pInputText type="text" class="form-control" id="fName" required minlength="4" #fName="ngModel" [(ngModel)]="firstName" />
             <div *ngIf="fName?.invalid && (fName?.dirty || fName?.touched)" class="alert alert-danger">
                 <div *ngIf="fName.errors.required">
-                    FirstName is required.
+                    First Name is required.
                 </div>
                 <div *ngIf="fName.errors.minlength">
-                    FirstName must be at least 4 characters long.
+                    First Name must be at least 4 characters long.
                 </div>
             </div>
         </div>
         <div class="auth-input">
 
-            <input placeholder="LastName" pInputText type="text" class="form-control" id="lName" required minlength="4" #lName="ngModel" [(ngModel)]="lastName" />
+            <input placeholder="Last Name" pInputText type="text" class="form-control" id="lName" required minlength="4" #lName="ngModel" [(ngModel)]="lastName" />
             <div *ngIf="lName?.invalid && (lName?.dirty || lName?.touched)" class="alert alert-danger">
                 <div *ngIf="lName.errors.required">
-                    LastName is required.
+                    Last Name is required.
                 </div>
                 <div *ngIf="lName.errors.minlength">
-                    LastName must be at least 4 characters long.
+                    Last Name must be at least 4 characters long.
                 </div>
             </div>
         </div>

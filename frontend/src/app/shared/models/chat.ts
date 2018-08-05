@@ -3,17 +3,15 @@ import { User } from './user';
 import { Organization } from './organization';
 import { Message } from './message';
 
-export class Chat {
-  constructor(
-    public id: number,
-    public name: string,
-    public type: ChatType,
-    public createdById: number,
-    public createdBy: User,
-    public organizationId: number,
-    public organization: Organization,
-    public messages: Message[]) {
-  }
+export interface Chat { 
+  id: number;
+  name: string;
+  type: ChatType;
+  createdById: number;
+  createdBy: User;
+  organizationId: number;
+  organization: Organization;
+  messages: Message[];
 }
 
 

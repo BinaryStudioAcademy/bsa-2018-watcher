@@ -122,7 +122,7 @@
                 .RuleFor(o => o.DashboardId, f => f.PickRandom(dashboards).Id);
 
             var charts = chartFaker.Generate(amount).ToArray();
-            
+
             var notificationFaker = new Faker<Notification>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.Text, f => f.Lorem.Text())
