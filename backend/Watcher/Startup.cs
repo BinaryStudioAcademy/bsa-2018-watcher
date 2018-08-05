@@ -1,5 +1,7 @@
 ﻿namespace Watcher
 {
+    using System;
+
     using AutoMapper;
 
     using FluentValidation.AspNetCore;
@@ -54,10 +56,10 @@
 
             // Add your services here
             services.AddTransient<ISamplesService, SamplesService>();
-
+            
             InitializeAutomapper(services);
             
-            // ConfigureDatabase(services, Configuration);
+            ConfigureDatabase(services, Configuration);
 
             services.AddMvc()
                 .AddFluentValidation(fv =>
@@ -80,9 +82,8 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            // UpdateDatabase(app);
+            UpdateDatabase(app);
             // TODO: Use Authorization
-
             app.UseCors("CorsPolicy");
 
             app.UseHsts();
@@ -127,9 +128,22 @@
 
         public virtual void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<WatcherDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                                     b => b.MigrationsAssembly(configuration["MigrationsAssembly"])));
+            // Use SQL Database if in Azure, otherwise, use SQLite
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                var azureConnStr = Configuration.GetConnectionString("AzureDbConnection");
+                if (!string.IsNullOrWhiteSpace(azureConnStr))
+                {
+                    services.AddDbContext<WatcherDbContext>(options => options.UseSqlServer(azureConnStr,
+                        b => b.MigrationsAssembly(configuration["MigrationsAssembly"])));
+                }
+            }
+            else
+            {
+                services.AddDbContext<WatcherDbContext>(options =>
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                                         b => b.MigrationsAssembly(configuration["MigrationsAssembly"])));
+            }
         }
 
         private static void UpdateDatabase(IApplicationBuilder app)
