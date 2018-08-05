@@ -2,13 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { UserRoutingModule } from './user-routing.module';
-import { UserPageComponent } from './user-page/user-page.component';
+import { UserComponent } from './user.component';
+import { DashboardsModule } from '../dashboards/dashboards.module';
+import { HeaderComponent } from '../header/header.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    UserRoutingModule
+    UserRoutingModule,
+    DashboardsModule
   ],
-  declarations: [UserPageComponent]
+  declarations: [ UserComponent, HeaderComponent ]
 })
 export class UserModule { }
