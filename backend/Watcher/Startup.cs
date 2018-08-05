@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@
     using Watcher.DataAccess.Data;
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
+    using Watcher.Hubs;
     using Watcher.Utils;
 
     public class Startup
@@ -29,6 +31,8 @@
         }
 
         public IConfiguration Configuration { get; }
+
+        public bool UseAzureSignalR => Configuration[ServiceOptions.ConnectionStringDefaultKey] != null;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -42,7 +46,7 @@
                            .AllowCredentials();
                 }));
 
-             // TODO: Add Authorization
+            // TODO: Add Authorization
 
             services.ConfigureSwagger(Configuration);
 
@@ -65,6 +69,13 @@
                     })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(MvcSetup.JsonSetupAction);
+
+            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
+
+            if (UseAzureSignalR)
+            {
+                addSignalRBuilder.AddAzureSignalR();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,13 +93,29 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseMvc();
+            app.UseFileServer();
+
+            if (UseAzureSignalR)
+            {
+                app.UseAzureSignalR(routes =>
+                    {
+                        routes.MapHub<NotificationsHub>("/notifications");
+                    });
+            }
+            else
+            {
+                app.UseSignalR(routes =>
+                    {
+                        routes.MapHub<NotificationsHub>("/notifications");
+                    });
+            }
         }
 
         public virtual IServiceCollection InitializeAutomapper(IServiceCollection services)
         {
             // Used in older versions
             // ServiceCollectionExtensions.UseStaticRegistration = false;
-            
+
             services.AddAutoMapper(cfg =>
                 {
                     cfg.AddProfile<SamplesProfile>();
@@ -101,7 +128,7 @@
         public virtual void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<WatcherDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                                      b => b.MigrationsAssembly(configuration["MigrationsAssembly"])));
         }
     }

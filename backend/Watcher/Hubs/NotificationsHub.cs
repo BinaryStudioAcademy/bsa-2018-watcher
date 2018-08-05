@@ -1,4 +1,4 @@
-﻿namespace Watcher.Notifications.Hubs
+﻿namespace Watcher.Hubs
 {
     using System.Threading.Tasks;
 
