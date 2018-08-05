@@ -56,9 +56,8 @@
             services.AddTransient<ISamplesService, SamplesService>();
 
             InitializeAutomapper(services);
-
-            // Add framework services.
-            ConfigureDatabase(services, Configuration);
+            
+            // ConfigureDatabase(services, Configuration);
 
             services.AddMvc()
                 .AddFluentValidation(fv =>
@@ -81,6 +80,7 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // UpdateDatabase(app);
             // TODO: Use Authorization
 
             app.UseCors("CorsPolicy");
@@ -130,6 +130,19 @@
             services.AddDbContext<WatcherDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                                      b => b.MigrationsAssembly(configuration["MigrationsAssembly"])));
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<WatcherDbContext>())
+                {
+                    context?.Database?.Migrate();
+                }
+            }
         }
     }
 }
