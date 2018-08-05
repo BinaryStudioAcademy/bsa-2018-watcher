@@ -33,6 +33,10 @@ export class LandingComponent implements OnInit {
   scrollTo(id: string) {
     const element = document.getElementById(id);
     element.scrollIntoView( {block: 'start', behavior: 'smooth'});
+    const menu = document.getElementById('nav');
+    if (menu.style.display === 'block') {
+      this.show();
+    }
   }
   show() {
     const menu = document.getElementById('nav');
