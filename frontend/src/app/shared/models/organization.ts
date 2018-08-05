@@ -4,15 +4,13 @@ import { UserOrganization } from './userOrganization';
 import { Instance } from './instance';
 import { Notification } from './notification';
 
-export class Organization {
-  constructor(
-    public id: number,
-    public name: string,
-    public themeId: number,
-    public theme: Theme,
-    public chat: Chat,
-    public userOrganizations: UserOrganization[],
-    public instances: Instance[],
-    public notifications: Notification[]) {
-  }
+export interface Organization { 
+  id: number;
+  name: string;
+  themeId: number;
+  theme: Theme;
+  chat: Chat;
+  userOrganizations: UserOrganization[];
+  instances: Instance[];
+  notifications: Notification[];
 }

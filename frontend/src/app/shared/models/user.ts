@@ -6,23 +6,21 @@ import { Response } from './response';
 import { Message } from './message';
 import { Chat } from './chat';
 
-export class User {
-  constructor(
-    public id: number,
-    public firstName: string,
-    public secondName: string,
-    public email: string,
-    public isActive: boolean,
-    public createdAt: Date,
-    public roleId: number,
-    public role: Role,
-    public notificationSettingId: number,
-    public notificationSetting: NotificationSetting,
-    public userOrganizations: UserOrganization[],
-    public notifications: Notification[],
-    public feedbacks: Feedback[],
-    public responses: Response[],
-    public messages: Message[],
-    public createdChats: Chat[]) {
-  }
-}  
+export interface User { 
+  id: number;
+  firstName: string;
+  secondName: string;
+  email: string;
+  isActive: boolean;
+  createdAt: Date;
+  roleId: number;
+  role: Role;
+  notificationSettingId: number;
+  notificationSetting: NotificationSetting;
+  userOrganizations: UserOrganization[];
+  notifications: Notification[];
+  feedbacks: Feedback[];
+  responses: Response[];
+  messages: Message[];
+  createdChats: Chat[];
+}
