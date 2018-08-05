@@ -20,6 +20,7 @@ import { AuthorizationComponent } from './authorization/authorization.component'
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { DashboardsModule } from './dashboards/dashboards.module';
+import {NotificationsModule} from './notifications/notifications.module';
 
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
@@ -50,7 +51,8 @@ import { AuthService } from './core/services/auth.service';
     DashboardsModule,
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    NotificationsModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

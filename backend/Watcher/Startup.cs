@@ -1,32 +1,135 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Watcher
+﻿namespace Watcher
 {
+    using AutoMapper;
+
+    using FluentValidation.AspNetCore;
+
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Azure.SignalR;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+
+    using Watcher.Common.Validators;
+    using Watcher.Core.Interfaces;
+    using Watcher.Core.MappingProfiles;
+    using Watcher.Core.Services;
+    using Watcher.DataAccess;
+    using Watcher.DataAccess.Data;
+    using Watcher.DataAccess.Interfaces;
+    using Watcher.Extensions;
+    using Watcher.Hubs;
+    using Watcher.Utils;
+
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        public bool UseAzureSignalR => Configuration[ServiceOptions.ConnectionStringDefaultKey] != null;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                }));
+
+            // TODO: Add Authorization
+
+            services.ConfigureSwagger(Configuration);
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Add your services here
+            services.AddTransient<ISamplesService, SamplesService>();
+
+            InitializeAutomapper(services);
+
+            // Add framework services.
+            ConfigureDatabase(services, Configuration);
+
+            services.AddMvc()
+                .AddFluentValidation(fv =>
+                    {
+                        fv.ImplicitlyValidateChildProperties = true;
+                        // fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                        fv.RegisterValidatorsFromAssemblyContaining<SampleValidator>();
+                    })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(MvcSetup.JsonSetupAction);
+
+            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
+
+            if (UseAzureSignalR)
+            {
+                addSignalRBuilder.AddAzureSignalR();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            // TODO: Use Authorization
 
+            app.UseCors("CorsPolicy");
+
+            app.UseHsts();
+
+            app.UseHttpStatusCodeExceptionMiddleware();
+            app.UseConfiguredSwagger();
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseMvc();
+            app.UseFileServer();
+
+            if (UseAzureSignalR)
+            {
+                app.UseAzureSignalR(routes =>
+                    {
+                        routes.MapHub<NotificationsHub>("/notifications");
+                    });
+            }
+            else
+            {
+                app.UseSignalR(routes =>
+                    {
+                        routes.MapHub<NotificationsHub>("/notifications");
+                    });
+            }
+        }
+
+        public virtual IServiceCollection InitializeAutomapper(IServiceCollection services)
+        {
+            // Used in older versions
+            // ServiceCollectionExtensions.UseStaticRegistration = false;
+
+            services.AddAutoMapper(cfg =>
+                {
+                    cfg.AddProfile<SamplesProfile>();
+                }); // Scoped Lifetime!
+            // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
+
+            return services;
+        }
+
+        public virtual void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<WatcherDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                                     b => b.MigrationsAssembly(configuration["MigrationsAssembly"])));
         }
     }
 }
