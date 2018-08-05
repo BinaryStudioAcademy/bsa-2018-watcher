@@ -1,6 +1,5 @@
 ﻿namespace Watcher.DataAccess.Data
 {
-
     using Microsoft.EntityFrameworkCore;
 
     using Watcher.DataAccess.Entities;
@@ -47,6 +46,8 @@
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.Organization)
                 .WithOne(o => o.Chat);
+
+            modelBuilder.Seed();
         }
 
         public DbSet<Sample> Samples { get; set; }
