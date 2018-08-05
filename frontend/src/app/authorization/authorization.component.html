@@ -10,15 +10,16 @@
 
     <div >
         <div class="auth-futer" *ngIf="isSignIn">
-            <p>Not a member? </p>
-            <button (click)="showSignUp()" pButton label="Sign Up"></button>
+            <p>Not a member? <a (click)="showSignUp()" a >Sign Up</a>
+                or <a (click)="closeDialog()">Close</a></p>
         </div>
         <div class="auth-futer" *ngIf="!isSignIn && !isSuccessSignUp">
-            <p>Already registered? </p>
-            <button (click)="showSignIn()" pButton label="Sign In"></button>
+            <p>Already registered? <a (click)="showSignIn()" >Sign In</a>
+                or <a (click)="closeDialog()">Close</a></p>
         </div>
         <div class="auth-futer" *ngIf="!isSignIn && isSuccessSignUp">
-                <button (click)="beckToSignUp()" pButton label="Beck to Sign Up"></button>
+                <p>Beck to <a (click)="beckToSignUp()" >Sign Up</a>
+                     or <a (click)="closeDialog()">Close</a></p>
             </div>
         </div>
 
@@ -63,49 +64,47 @@
 <ng-template #userDetailsTemplate>
     <div class="auth-inputs">
         <div class="auth-input">
-            <input placeholder="Company name" type="text" size="27" class="form-control"
-             id="cName" required minlength="4" #cName="ngModel"
-             [(ngModel)]="companyName"  />
-             <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
+            <input placeholder="Company" pInputText type="text" class="form-control"
+            id="cName" required minlength="4" #cName="ngModel"
+            [(ngModel)]="companyName"  />
+            <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
                 <div *ngIf="cName.errors.required">
-                    Company name is required.
+                    Company is required.
                 </div>
                 <div *ngIf="cName.errors.minlength">
-                    Company name must be at least 4 characters long.
+                    Company must be at least 4 characters long.
                 </div>
             </div>
-            
         </div>
-        <div class="auth-input">
-            <input placeholder="User name" required type="text" size="27" class="form-control"
-            id="uName" required minlength="4" #uName="ngModel"
-            [(ngModel)]="userName"  />
-            <div *ngIf="uName?.invalid && (uName?.dirty || uName?.touched)" class="alert alert-danger">
-               <div *ngIf="uName.errors.required">
-                    User name is required.
-               </div>
-               <div *ngIf="uName.errors.minlength">
-                    User name must be at least 4 characters long.
-               </div>
-           </div>
-        </div>
-        <div class="auth-input">
-            <input placeholder="Email" required type="email" size="27" class="form-control"
-            id="email" required #email="ngModel"
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-            [(ngModel)]="userEmail"  />
-            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="alert alert-danger">
-               <div *ngIf="!email.errors.required">
-                    Email is required.
-               </div>
-               <div *ngIf="email.errors.pattern">
-                    Invalid pattern.
-               </div>
-               </div>
+         <div class="auth-input">
+            <input placeholder="FirstName" pInputText type="text" class="form-control"
+            id="fName" required minlength="4" #fName="ngModel"
+            [(ngModel)]="firstName"  />
+            <div *ngIf="fName?.invalid && (fName?.dirty || fName?.touched)" class="alert alert-danger">
+                <div *ngIf="fName.errors.required">
+                    FirstName is required.
+                </div>
+                <div *ngIf="fName.errors.minlength">
+                    FirstName must be at least 4 characters long.
+                </div>
             </div>
-        <div class="auth-buttons ">
-            <input type="button" class="auth-button auth-btn-save" (click)="saveUserDetails()" 
-            [disabled]="cName?.invalid || uName?.invalid || email?.invalid" value="Save" />
+        </div> 
+        <div class="auth-input">
+            <input placeholder="LastName" pInputText type="text" class="form-control"
+            id="lName" required minlength="4" #lName="ngModel"
+            [(ngModel)]="lastName"  />
+            <div *ngIf="lName?.invalid && (lName?.dirty || lName?.touched)" class="alert alert-danger">
+                <div *ngIf="lName.errors.required">
+                    LastName is required.
+                </div>
+                <div *ngIf="lName.errors.minlength">
+                    LastName must be at least 4 characters long.
+                </div>
+            </div>
+        </div>
+        <div class="auth-buttons">
+            <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" 
+            [disabled]="cName?.invalid || fName?.invalid || lName?.invalid" value="Save" />
         </div>
     </div>
 </ng-template>
