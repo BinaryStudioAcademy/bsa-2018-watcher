@@ -1,5 +1,7 @@
-<a class="auth-link" (click)="showDialogSignIn()" >Sign In</a><span> / </span>
-<a style="color: green;" class="auth-link" (click)="showDialogSignUp()" >Sign Up</a>
+<button pButton type="button" label="Sign in" class="ui-button-raised" (click)="showDialogSignIn()"></button>
+<button pButton type="button" label="Register" class="ui-button-secondary ui-button-raised" (click)="showDialogSignUp()" style="margin-left: 10px"></button>
+
+
 
 <p-dialog class="authorization-dialog" (onHide)="closeDialog()" [showHeader]="false" appendTo="body" [closable]=false [(visible)]="display" [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="10000">
     <div class="auth-form-header">
@@ -8,7 +10,11 @@
     <ng-template [ngTemplateOutlet]="loadTemplate()">
     </ng-template>
 
+<<<<<<< HEAD
     <div >
+=======
+    <p-footer>
+>>>>>>> origin/landing-page-fix
         <div class="auth-futer" *ngIf="isSignIn">
             <p>Not a member? <a (click)="showSignUp()" a >Sign Up</a>
                 or <a (click)="closeDialog()">Close</a></p>
@@ -18,10 +24,16 @@
                 or <a (click)="closeDialog()">Close</a></p>
         </div>
         <div class="auth-futer" *ngIf="!isSignIn && isSuccessSignUp">
+<<<<<<< HEAD
                 <p>Beck to <a (click)="beckToSignUp()" >Sign Up</a>
                      or <a (click)="closeDialog()">Close</a></p>
             </div>
         </div>
+=======
+            <button (click)="beckToSignUp()" pButton label="Beck to Sign Up"></button>
+        </div>
+    </p-footer>
+>>>>>>> origin/landing-page-fix
 
 </p-dialog>
 
@@ -36,7 +48,7 @@
                 <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
                 <span class="firebaseui-idp-text">Sign In with Facebook</span>
         </button>
-        <button (click)="signInWithTwitter()"  class="auth-button auth-btn-twitter">
+        <button (click)="signInWithTwitter()" class="auth-button auth-btn-twitter">
                 <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
                 <span class="firebaseui-idp-text">Sign In with Twitter</span>
         </button>
@@ -50,11 +62,11 @@
                 <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span>
                 <span class="firebaseui-idp-text">Sign Up with Google</span>
             </button>
-            <button (click)="signUpWithFacebook()" class="auth-button auth-btn-facebook">
+        <button (click)="signUpWithFacebook()" class="auth-button auth-btn-facebook">
                     <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
                     <span class="firebaseui-idp-text">Sign Up with Facebook</span>
             </button>
-            <button (click)="signUpWithTwitter()"  class="auth-button auth-btn-twitter">
+        <button (click)="signUpWithTwitter()" class="auth-button auth-btn-twitter">
                     <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
                     <span class="firebaseui-idp-text">Sign Up with Twitter</span>
             </button>
@@ -64,9 +76,13 @@
 <ng-template #userDetailsTemplate>
     <div class="auth-inputs">
         <div class="auth-input">
+<<<<<<< HEAD
             <input placeholder="Company" pInputText type="text" class="form-control"
             id="cName" required minlength="4" #cName="ngModel"
             [(ngModel)]="companyName"  />
+=======
+            <input placeholder="Company name" type="text" size="27" class="form-control" id="cName" required minlength="4" #cName="ngModel" [(ngModel)]="companyName" />
+>>>>>>> origin/landing-page-fix
             <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
                 <div *ngIf="cName.errors.required">
                     Company is required.
@@ -75,6 +91,21 @@
                     Company must be at least 4 characters long.
                 </div>
             </div>
+<<<<<<< HEAD
+=======
+
+        </div>
+        <div class="auth-input">
+            <input placeholder="User name" required type="text" size="27" class="form-control" id="uName" required minlength="4" #uName="ngModel" [(ngModel)]="userName" />
+            <div *ngIf="uName?.invalid && (uName?.dirty || uName?.touched)" class="alert alert-danger">
+                <div *ngIf="uName.errors.required">
+                    User name is required.
+                </div>
+                <div *ngIf="uName.errors.minlength">
+                    User name must be at least 4 characters long.
+                </div>
+            </div>
+>>>>>>> origin/landing-page-fix
         </div>
          <div class="auth-input">
             <input placeholder="FirstName" pInputText type="text" class="form-control"
@@ -90,6 +121,7 @@
             </div>
         </div> 
         <div class="auth-input">
+<<<<<<< HEAD
             <input placeholder="LastName" pInputText type="text" class="form-control"
             id="lName" required minlength="4" #lName="ngModel"
             [(ngModel)]="lastName"  />
@@ -105,6 +137,20 @@
         <div class="auth-buttons">
             <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" 
             [disabled]="cName?.invalid || fName?.invalid || lName?.invalid" value="Save" />
+=======
+            <input placeholder="Email" required type="email" size="27" class="form-control" id="email" required #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [(ngModel)]="userEmail" />
+            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="alert alert-danger">
+                <div *ngIf="!email.errors.required">
+                    Email is required.
+                </div>
+                <div *ngIf="email.errors.pattern">
+                    Invalid pattern.
+                </div>
+            </div>
+        </div>
+        <div class="auth-buttons ">
+            <input type="button" class="auth-button auth-btn-save" (click)="saveUserDetails()" [disabled]="cName?.invalid || uName?.invalid || email?.invalid" value="Save" />
+>>>>>>> origin/landing-page-fix
         </div>
     </div>
 </ng-template>
