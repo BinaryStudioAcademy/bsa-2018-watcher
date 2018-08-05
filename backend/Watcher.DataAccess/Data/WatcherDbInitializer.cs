@@ -1,12 +1,13 @@
 ﻿namespace Watcher.DataAccess.Data
 {
-    using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.EntityFrameworkCore;
+
     using Bogus;
 
-    using Watcher.DataAccess.Entities;
+    using Microsoft.EntityFrameworkCore;
+
     using Watcher.Common.Enums;
+    using Watcher.DataAccess.Entities;
 
     public static class WatcherDbInitializer
     {
@@ -15,11 +16,7 @@
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="amount">Amount of generated pairs user-organization</param>
-<<<<<<< HEAD
         public static void Seed(this ModelBuilder modelBuilder, int amount = 10)
-=======
-        public static void SeedIfEmpty(WatcherDbContext dbContext)
->>>>>>> dev
         {
             Faker.GlobalUniqueIndex = 0;
 
@@ -124,13 +121,8 @@
                 .RuleFor(o => o.Type, f => f.Random.Enum<ChartType>())
                 .RuleFor(o => o.DashboardId, f => f.PickRandom(dashboards).Id);
 
-<<<<<<< HEAD
             var charts = chartFaker.Generate(amount).ToArray();
-=======
-            dbContext.Chats.AddRange(chats);
-            dbContext.UserOrganizations.AddRange(userOrganizationFaker.Generate(5));
->>>>>>> dev
-
+            
             var notificationFaker = new Faker<Notification>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.Text, f => f.Lorem.Text())

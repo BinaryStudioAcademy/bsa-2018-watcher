@@ -23,6 +23,7 @@
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
     using Watcher.Hubs;
+    using Watcher.Services;
     using Watcher.Utils;
 
     public class Startup
@@ -56,9 +57,13 @@
 
             // Add your services here
             services.AddTransient<ISamplesService, SamplesService>();
-            
+            services.AddTransient<ITransientService, TransientService>();
+
+            // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
+            services.AddHostedService<WatcherService>();
+
             InitializeAutomapper(services);
-            
+
             ConfigureDatabase(services, Configuration);
 
             services.AddMvc()
@@ -83,17 +88,18 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseHttpStatusCodeExceptionMiddleware();
+
             UpdateDatabase(app);
+
             // TODO: Use Authorization
             app.UseCors("CorsPolicy");
 
             app.UseHsts();
-
-            app.UseHttpStatusCodeExceptionMiddleware();
             app.UseConfiguredSwagger();
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseMvc();
             app.UseFileServer();
 
@@ -129,8 +135,9 @@
 
         public virtual void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
         {
-            // Use SQL Database if in Azure, otherwise, use SQLite
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            // Use SQL Database if in Azure, otherwise, use Local DB
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (env == "Development")
             {
                 var azureConnStr = Configuration.GetConnectionString("AzureDbConnection");
                 if (!string.IsNullOrWhiteSpace(azureConnStr))
