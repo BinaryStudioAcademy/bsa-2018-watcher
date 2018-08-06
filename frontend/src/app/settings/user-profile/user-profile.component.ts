@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { User } from '../../../../node_modules/firebase';
+import { FormControl, FormBuilder } from '@angular/forms';
+import { User } from 'firebase';
 
 @Component({
   selector: 'app-user-profile',
@@ -9,9 +9,13 @@ import { User } from '../../../../node_modules/firebase';
 })
 export class UserProfileComponent implements OnInit {
 
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
 
   user: User;
+  userForm = this.fb.group({
+    firstName: [''],
+    secondName: ['']
+  });
 
   ngOnInit() {
   }
