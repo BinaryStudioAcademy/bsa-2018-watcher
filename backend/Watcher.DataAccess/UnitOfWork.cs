@@ -20,6 +20,7 @@
         private readonly IMapper _mapper;
 
         private ISamplesRepository _samplesRepository;
+        private IDashboardsRepository _dashboardsRepository;
 
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
@@ -37,6 +38,19 @@
                 }
 
                 return _samplesRepository;
+            }
+        }
+
+        public IDashboardsRepository DashboardsRepository
+        {
+            get
+            {
+                if (_dashboardsRepository == null)
+                {
+                    _dashboardsRepository = new DashboardsRepository(_context, _mapper);
+                }
+
+                return _dashboardsRepository;
             }
         }
 

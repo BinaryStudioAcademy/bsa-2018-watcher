@@ -8,6 +8,7 @@
     public interface IUnitOfWork : IDisposable
     {
         ISamplesRepository SamplesRepository { get; }
+        IDashboardsRepository DashboardsRepository { get; }
 
         Task<bool> SaveAsync();
     }

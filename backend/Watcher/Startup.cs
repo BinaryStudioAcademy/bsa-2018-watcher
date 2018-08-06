@@ -56,7 +56,8 @@
 
             // Add your services here
             services.AddTransient<ISamplesService, SamplesService>();
-            
+            services.AddTransient<IDashboardsService, DashboardsService>();
+
             InitializeAutomapper(services);
             
             ConfigureDatabase(services, Configuration);
@@ -121,6 +122,7 @@
             services.AddAutoMapper(cfg =>
                 {
                     cfg.AddProfile<SamplesProfile>();
+                    cfg.AddProfile<DashboardsProfile>();
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 
