@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { User } from '../../../../node_modules/firebase';
 
 @Component({
   selector: 'app-user-profile',
@@ -8,6 +10,8 @@ import { Component, OnInit } from '@angular/core';
 export class UserProfileComponent implements OnInit {
 
   constructor() { }
+
+  user: User;
 
   ngOnInit() {
   }

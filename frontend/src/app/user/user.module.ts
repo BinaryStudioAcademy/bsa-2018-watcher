@@ -6,8 +6,6 @@ import { UserComponent } from './user.component';
 import { DashboardsModule } from '../dashboards/dashboards.module';
 import { HeaderComponent } from '../header/header.component';
 import { ToolbarModule, TieredMenuModule, ButtonModule, PanelMenuModule } from 'primeng/primeng';
-import { ProfileComponent } from './profile/profile.component';
-import { EditListComponent } from './edit-list/edit-list.component';
 
 @NgModule({
   imports: [
@@ -19,6 +17,6 @@ import { EditListComponent } from './edit-list/edit-list.component';
     ButtonModule,
     PanelMenuModule
   ],
-  declarations: [ UserComponent, HeaderComponent, ProfileComponent, EditListComponent ]
+  declarations: [ UserComponent, HeaderComponent ]
 })
 export class UserModule { }

@@ -6,7 +6,7 @@ import { Response } from './response';
 import { Message } from './message';
 import { Chat } from './chat';
 
-export interface User { 
+export interface User {
   id: number;
   firstName: string;
   secondName: string;
