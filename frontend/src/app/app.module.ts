@@ -18,6 +18,7 @@ import { AuthorizationComponent } from './authorization/authorization.component'
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { DashboardsModule } from './dashboards/dashboards.module';
+import { SettingsModule } from './settings/settings.module';
 import {NotificationsModule} from './notifications/notifications.module';
 
 import { AngularFireModule } from 'angularfire2';
@@ -25,6 +26,7 @@ import { environment } from '../environments/environment';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from './core/services/auth.service';
+
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { AuthService } from './core/services/auth.service';
     DialogModule,
     AdminModule,
     UserModule,
+    DashboardsModule,
+    SettingsModule,
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,
     AngularFireAuthModule,

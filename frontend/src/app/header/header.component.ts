@@ -75,13 +75,11 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userItems = [{
-      label: 'Profile',
-      icon: 'fa fa-fw fa-user',
-    },
+    this.userItems = [
       {
         label: 'Settings',
         icon: 'fa fa-fw fa-cog',
+        routerLink: ['/user/settings']
       },
       {
         label: 'Logout',
