@@ -1,10 +1,24 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { UserPageComponent } from './user-page/user-page.component';
+import { DashboardComponent } from '../dashboards/dashboard/dashboard.component';
+import { UserComponent } from './user.component';
+
+const userChildRoutes: Routes = [
+  {
+    path:"",
+    redirectTo:"dashboards",
+    pathMatch:"full"
+  },
+  {
+  path:"dashboards",
+  component:DashboardComponent
+  }
+];
 
 const routes: Routes = [{
   path:"user",
-  component:UserPageComponent
+  component:UserComponent,
+  children:userChildRoutes
 }];
 
 @NgModule({
