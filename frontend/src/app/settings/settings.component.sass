@@ -1,0 +1,79 @@
+.menu
+    position: fixed
+    left: 0
+    top: 60px
+    height: calc(100% - 60px)
+    overflow-x: hidden
+    overflow-y: auto
+    width: 250px
+    box-shadow: 0 0 5px 0 rgba(0,0,0,.3)
+    background: #ffffff
+
+
+/deep/ .menu 
+    .ui-panelmenu .ui-panelmenu-panel
+        margin-top: 0
+
+    .ui-panelmenu-header-link
+        color: #34393a
+        padding: .7em
+
+    .ui-menuitem-icon
+        color: #889597
+        font-size: 1.6em   
+
+    .ui-menuitem-text  
+        font-size: 1.3em 
+        font-weight: 500
+
+    .ui-panelmenu .ui-panelmenu-header > a  
+        background-color: #fff
+        width: 100%
+        height: 50px
+        display: block
+        padding: 10px 0 0 15px
+        cursor: pointer
+        border-top: 1px solid #e3e9ea
+        box-sizing: border-box        
+  
+.search 
+    position: relative
+    padding: .7em
+
+    input
+        position: relative
+        font-size: 1.2em
+        background-color: #ffffff
+        padding: 5px 12px
+        border: 1px solid #cccccc
+        -moz-border-radius: 4px
+        -webkit-border-radius: 4px
+        border-radius: 4px
+        -moz-transition: box-shadow 0.3s, border-color 0.3s
+        -o-transition: box-shadow 0.3s, border-color 0.3s
+        -webkit-transition: box-shadow 0.3s, border-color 0.3s
+        transition: box-shadow 0.3s, border-color 0.3s
+        width: 230px
+
+    i 
+        position: absolute
+        color: #777777
+        top: 18px
+        right: 15px
+        font-size: 1.2em
+        cursor: pointer
+
+.working-area
+    margin: 20px
+
+.title
+    padding-bottom: 10px
+    font-size: 1.4em
+    font-weight: 600
+    letter-spacing: 1px
+
+/deep/ .ui-tabview 
+    .ui-tabview-nav li .ui-tabview-close
+        color: #848484
+        margin: 0 0.5em 0 0 !important
+        vertical-align: middle

@@ -2,7 +2,19 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from '../dashboards/dashboard/dashboard.component';
 import { UserComponent } from './user.component';
-import { ProfileComponent } from './profile/profile.component';
+import { SettingsComponent } from '../settings/settings.component';
+import { NotificationSettingsComponent } from '../settings/notification-settings/notification-settings.component';
+import { UserProfileComponent } from '../settings/user-profile/user-profile.component';
+
+const settingsChildRoutes: Routes = [
+  {
+    path: '',
+    redirectTo: 'user-profile',
+    pathMatch: 'full'
+  },
+  { path: 'user-profile', component: UserProfileComponent },
+  { path: 'notification-settings', component: NotificationSettingsComponent }
+];
 
 const userChildRoutes: Routes = [
   {
@@ -14,10 +26,7 @@ const userChildRoutes: Routes = [
   path: 'dashboards',
   component: DashboardComponent
   },
-  {
-    path: 'profile',
-    component: ProfileComponent
-  }
+  { path: 'settings', component: SettingsComponent, children: settingsChildRoutes }
 ];
 
 const routes: Routes = [{
