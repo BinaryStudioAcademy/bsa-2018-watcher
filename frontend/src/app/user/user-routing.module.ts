@@ -4,13 +4,15 @@ import { DashboardComponent } from '../dashboards/dashboard/dashboard.component'
 import { UserComponent } from './user.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { NotificationSettingsComponent } from '../settings/notification-settings/notification-settings.component';
+import { UserProfileComponent } from '../settings/user-profile/user-profile.component';
 
 const settingsChildRoutes: Routes = [
   {
     path: '',
-    redirectTo: 'notification-settings',
+    redirectTo: 'user-profile',
     pathMatch: 'full'
   },
+  { path: 'user-profile', component: UserProfileComponent },
   { path: 'notification-settings', component: NotificationSettingsComponent }
 ];
 

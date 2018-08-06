@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-settings',
@@ -7,9 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor() { }
+constructor() { }
+
+menuItems: MenuItem[];
 
   ngOnInit() {
+    this.menuItems = [
+      {
+        label: 'User Profile',
+        icon: 'fa fa-fw fa-user',
+        routerLink: ['/user/settings/user-profile']
+      },
+      {
+        label: 'Notification Settings',
+        icon: 'fa fa-fw fa-send',
+        routerLink: ['/user/settings/notification-settings']
+      }
+    ];
   }
 
 }
