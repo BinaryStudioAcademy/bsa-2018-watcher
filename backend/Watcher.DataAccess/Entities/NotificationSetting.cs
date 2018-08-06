@@ -1,6 +1,7 @@
 ﻿namespace Watcher.DataAccess.Entities
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Collections.Generic;
 
     using Watcher.Common.Enums;
 
@@ -16,5 +17,7 @@
 
         [Required]
         public bool IsDisable { get; set; }
+
+        public IList<Notification> Notifications { get; set; }
     }
 }

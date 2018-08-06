@@ -57,15 +57,16 @@
             
             var ogranizations = organizationFaker.Generate(3);
 
-            var notificationFaker = new Faker<Notification>()
-                .RuleFor(o => o.Text, f => f.Lorem.Text())
-                .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
-                .RuleFor(o => o.Organization, f => f.PickRandom(ogranizations));
-
             var notificationSettingFaker = new Faker<NotificationSetting>()
                 .RuleFor(o => o.IsDisable, f => f.PickRandom(true, false))
                 .RuleFor(o => o.IsMute, f => f.PickRandom(true, false))
                 .RuleFor(o => o.Type, f => f.Random.Enum<NotificationType>());
+
+            var notificationFaker = new Faker<Notification>()
+                .RuleFor(o => o.NotificationSetting, f => notificationSettingFaker.Generate())
+                .RuleFor(o => o.Text, f => f.Lorem.Text())
+                .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
+                .RuleFor(o => o.Organization, f => f.PickRandom(ogranizations));
 
             var feedbackFaker = new Faker<Feedback>()
                 .RuleFor(o => o.Text, f => f.Lorem.Sentence())
