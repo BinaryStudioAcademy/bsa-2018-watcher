@@ -5,4 +5,4 @@ export class Theme {
         public fontFamily: string,
         public backgroundColor: string) {
     }
-}  
+}

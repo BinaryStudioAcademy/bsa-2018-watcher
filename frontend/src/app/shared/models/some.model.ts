@@ -1,3 +1,3 @@
-export interface SomeModel{
-    name:string;
+export interface SomeModel {
+    name: string;
 }

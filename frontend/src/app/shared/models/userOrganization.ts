@@ -8,4 +8,4 @@ export class UserOrganization {
         public organizationId: number,
         public organization: Organization) {
     }
-}  
+}

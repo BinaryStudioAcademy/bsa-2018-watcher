@@ -7,4 +7,4 @@ export class NotificationSetting {
         public isMute: boolean,
         public isDisable: boolean) {
     }
-}  
+}

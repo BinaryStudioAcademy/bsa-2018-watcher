@@ -25,4 +25,4 @@ export class User {
     public messages: Message[],
     public createdChats: Chat[]) {
   }
-}  
+}

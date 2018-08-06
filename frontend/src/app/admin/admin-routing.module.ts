@@ -3,8 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 
 const routes: Routes = [{
-  path:"admin",
-  component:AdminPageComponent
+  path: 'admin',
+  component: AdminPageComponent
 }];
 
 @NgModule({

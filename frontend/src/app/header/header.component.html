@@ -15,6 +15,10 @@
         
       <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
       <button #btn type="button" pButton icon="fa fa-fw fa-cog" (click)="cog.toggle($event)"></button>
+
+      <p-tieredMenu #org [model]="orgItems" [popup]="true"></p-tieredMenu>
+      <button #btn type="button" pButton icon="fa fa-sitemap" (click)="org.toggle($event)"></button>
+
       <p-tieredMenu #user [model]="userItems" [popup]="true"></p-tieredMenu>
       <a class="user-info" (click)="user.toggle($event)">
         <span>Pavlo Paitak</span>
