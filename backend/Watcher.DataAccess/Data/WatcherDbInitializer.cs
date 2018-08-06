@@ -15,11 +15,7 @@
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="amount">Amount of generated pairs user-organization</param>
-<<<<<<< HEAD
         public static void Seed(this ModelBuilder modelBuilder, int amount = 10)
-=======
-        public static void SeedIfEmpty(WatcherDbContext dbContext)
->>>>>>> dev
         {
             Faker.GlobalUniqueIndex = 0;
 
@@ -124,12 +120,7 @@
                 .RuleFor(o => o.Type, f => f.Random.Enum<ChartType>())
                 .RuleFor(o => o.DashboardId, f => f.PickRandom(dashboards).Id);
 
-<<<<<<< HEAD
             var charts = chartFaker.Generate(amount).ToArray();
-=======
-            dbContext.Chats.AddRange(chats);
-            dbContext.UserOrganizations.AddRange(userOrganizationFaker.Generate(5));
->>>>>>> dev
 
             var notificationFaker = new Faker<Notification>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
