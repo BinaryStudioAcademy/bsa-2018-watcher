@@ -17,10 +17,7 @@ export class HeaderComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.userItems = [{
-        label: 'Profile',
-        icon: 'fa fa-fw fa-user',
-      },
+    this.userItems = [
       {
         label: 'Settings',
         icon: 'fa fa-fw fa-cog',
