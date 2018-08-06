@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from '../dashboards/dashboard/dashboard.component';
 import { UserComponent } from './user.component';
+import { SettingsComponent } from '../settings/settings.component';
 
 const userChildRoutes: Routes = [
   {
@@ -12,7 +13,9 @@ const userChildRoutes: Routes = [
   {
   path: 'dashboards',
   component: DashboardComponent
-  }
+  },
+  { path: 'settings', component: SettingsComponent }
+
 ];
 
 const routes: Routes = [{

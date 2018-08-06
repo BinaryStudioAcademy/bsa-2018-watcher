@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Settings',
         icon: 'fa fa-fw fa-cog',
+        routerLink: ['/user/settings']
       },
       {
         label: 'Logout',
