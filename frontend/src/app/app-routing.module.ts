@@ -4,13 +4,9 @@ import {LandingComponent} from './landing/landing.component';
 import {AuthorizationComponent} from './authorization/authorization.component';
 import {NotificationComponent} from './notifications/notification/notification.component';
 
-const routes: Routes = [{
-  path: '',
-  redirectTo: 'landing',
-  pathMatch: 'full'
-},
+const routes: Routes = [
   {
-    path: 'landing',
+    path: '',
     component: LandingComponent
   },
   {

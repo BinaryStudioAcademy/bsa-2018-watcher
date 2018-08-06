@@ -7,6 +7,17 @@
 
     public class SampleDto : IEntity<int>
     {
+        public SampleDto() { }
+
+        public SampleDto(int num, SampleEnum @enum, string name)
+        {
+            Id = num;
+            Count = num;
+            SampleField = @enum;
+            Name = name;
+            DateOfCreation = DateTime.UtcNow;
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }

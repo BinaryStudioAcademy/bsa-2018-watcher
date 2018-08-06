@@ -2,13 +2,20 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { UserRoutingModule } from './user-routing.module';
-import { UserPageComponent } from './user-page/user-page.component';
+import { UserComponent } from './user.component';
+import { DashboardsModule } from '../dashboards/dashboards.module';
+import { HeaderComponent } from '../header/header.component';
+import { ToolbarModule, TieredMenuModule, ButtonModule } from 'primeng/primeng';
 
 @NgModule({
   imports: [
     CommonModule,
-    UserRoutingModule
+    UserRoutingModule,
+    DashboardsModule,
+    ToolbarModule,
+    TieredMenuModule,
+    ButtonModule
   ],
-  declarations: [UserPageComponent]
+  declarations: [ UserComponent, HeaderComponent ]
 })
 export class UserModule { }

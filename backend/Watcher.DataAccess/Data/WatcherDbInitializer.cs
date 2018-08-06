@@ -1,12 +1,13 @@
 ﻿namespace Watcher.DataAccess.Data
 {
-    using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.EntityFrameworkCore;
+
     using Bogus;
 
-    using Watcher.DataAccess.Entities;
+    using Microsoft.EntityFrameworkCore;
+
     using Watcher.Common.Enums;
+    using Watcher.DataAccess.Entities;
 
     public static class WatcherDbInitializer
     {
