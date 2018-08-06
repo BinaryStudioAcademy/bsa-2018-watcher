@@ -3,6 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from '../dashboards/dashboard/dashboard.component';
 import { UserComponent } from './user.component';
 import { SettingsComponent } from '../settings/settings.component';
+import { NotificationSettingsComponent } from '../settings/notification-settings/notification-settings.component';
+
+const settingsChildRoutes: Routes = [
+  {
+    path: '',
+    redirectTo: 'notification-settings',
+    pathMatch: 'full'
+  },
+  { path: 'notification-settings', component: NotificationSettingsComponent }
+];
 
 const userChildRoutes: Routes = [
   {
@@ -14,8 +24,7 @@ const userChildRoutes: Routes = [
   path: 'dashboards',
   component: DashboardComponent
   },
-  { path: 'settings', component: SettingsComponent }
-
+  { path: 'settings', component: SettingsComponent, children: settingsChildRoutes }
 ];
 
 const routes: Routes = [{
