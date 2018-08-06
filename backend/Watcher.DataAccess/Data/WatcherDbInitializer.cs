@@ -125,7 +125,7 @@
 
             var notificationFaker = new Faker<Notification>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
-                .RuleFor(o => o.Text, f => f.Lorem.Text())
+                .RuleFor(o => o.Text, f => f.Lorem.Sentence())
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
                 .RuleFor(o => o.UserId, f => f.PickRandom(users).Id)
                 .RuleFor(o => o.NotificationSettingId, f => f.PickRandom(notificationSettings).Id);
