@@ -1,10 +1,8 @@
 import { NotificationType } from '../enums/notificationType';
 
-export class NotificationSetting {
-    constructor(
-        public id: number,
-        public type: NotificationType,
-        public isMute: boolean,
-        public isDisable: boolean) {
-    }
+export interface NotificationSetting { 
+    id: number;
+    type: NotificationType;
+    isMute: boolean;
+    isDisable: boolean;
 }

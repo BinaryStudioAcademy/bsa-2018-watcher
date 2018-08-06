@@ -20,6 +20,11 @@ import { UserModule } from './user/user.module';
 import { DashboardsModule } from './dashboards/dashboards.module';
 import {NotificationsModule} from './notifications/notifications.module';
 
+import { AngularFireModule } from 'angularfire2';
+import { environment } from '../environments/environment';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AuthService } from './core/services/auth.service';
 
 @NgModule({
   declarations: [
@@ -42,10 +47,13 @@ import {NotificationsModule} from './notifications/notifications.module';
     AdminModule,
     UserModule,
     DashboardsModule,
+    AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
     NotificationsModule,
     TabViewModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

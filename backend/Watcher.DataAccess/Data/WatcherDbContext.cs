@@ -34,6 +34,11 @@
                 .WithMany(u => u.Messages)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<NotificationSetting>()
+                .HasMany(ns => ns.Notifications)
+                .WithOne(n => n.NotificationSetting)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.CreatedBy)
                 .WithMany(u => u.CreatedChats)

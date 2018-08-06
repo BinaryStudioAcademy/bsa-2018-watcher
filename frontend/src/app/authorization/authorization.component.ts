@@ -1,4 +1,9 @@
-import { Component, OnInit, ViewChild  } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild  } from '@angular/core';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+import { AuthService } from '../core/services/auth.service';
+import { Router } from '@angular/router';
+import { FirebaseCredential } from '../shared/models/firebase.model';
 
 
 @Component({
@@ -20,7 +25,9 @@ export class AuthorizationComponent implements OnInit {
   lastName = '';
   firstName = '';
 
-  constructor() { }
+  constructor(private authService: AuthService, private router: Router) {
+
+   }
 
   ngOnInit() {
   }
@@ -54,19 +61,11 @@ export class AuthorizationComponent implements OnInit {
     this.isSuccessSignUp = false;
   }
 
-  signInWithGoogle() {
-    //
-  }
-
-  signInWithFacebook() {
-    //
-  }
-
-  signInWithTwitter() {
-    //
-  }
-
   signUpWithGoogle() {
+    this.isSuccessSignUp = true;
+  }
+
+  signUpWithGitHub() {
     this.isSuccessSignUp = true;
   }
 
@@ -88,8 +87,52 @@ export class AuthorizationComponent implements OnInit {
     this.display = false;
   }
 
-  beckToSignUp() {
+  signInWithGoogle() {
+    this.authService.signInWithGoogle()
+    .then((res) => {
+        // var token : FirebaseCredential = res.credential;
+        // var user : firebase.User = res.user;
 
+        this.router.navigate(['landing']);
+      })
+    .catch((err) => console.log(err));
+  }
+
+  signInWithFacebook() {
+    this.authService.signInWithFacebook()
+    .then((res) => {
+        // var token : FirebaseCredential = res.credential;
+        // var user : firebase.User = res.user;
+
+        this.router.navigate(['landing']);
+      })
+    .catch((err) => console.log(err));
+  }
+
+  signInWithTwitter() {
+    this.authService.signInWithTwitter()
+    .then((res) => {
+        // var token : FirebaseCredential = res.credential;
+        // var user : firebase.User = res.user;
+
+        this.router.navigate(['landing']);
+      })
+    .catch((err) => console.log(err));
+  }
+
+  signInWithGitHub() {
+    this.authService.signInWithGitHub()
+    .then((res) => {
+        // var token : FirebaseCredential = res.credential;
+        // var user : firebase.User = res.user;
+
+        this.router.navigate(['landing']);
+      })
+    .catch((err) => console.log(err));
+  }
+
+
+  beckToSignUp() {
     this.showSignUp();
   }
 }
