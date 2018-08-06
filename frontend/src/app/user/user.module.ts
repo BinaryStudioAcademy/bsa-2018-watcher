@@ -5,7 +5,9 @@ import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
 import { DashboardsModule } from '../dashboards/dashboards.module';
 import { HeaderComponent } from '../header/header.component';
-import { ToolbarModule, TieredMenuModule, ButtonModule } from 'primeng/primeng';
+import { ToolbarModule, TieredMenuModule, ButtonModule, PanelMenuModule } from 'primeng/primeng';
+import { ProfileComponent } from './profile/profile.component';
+import { EditListComponent } from './edit-list/edit-list.component';
 
 @NgModule({
   imports: [
@@ -14,8 +16,9 @@ import { ToolbarModule, TieredMenuModule, ButtonModule } from 'primeng/primeng';
     DashboardsModule,
     ToolbarModule,
     TieredMenuModule,
-    ButtonModule
+    ButtonModule,
+    PanelMenuModule
   ],
-  declarations: [ UserComponent, HeaderComponent ]
+  declarations: [ UserComponent, HeaderComponent, ProfileComponent, EditListComponent ]
 })
 export class UserModule { }
