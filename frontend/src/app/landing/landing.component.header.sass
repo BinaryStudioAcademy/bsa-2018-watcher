@@ -20,6 +20,7 @@
     font-size: 1.2em
     a
       color: white
+      cursor: pointer
 #nav
   visibility: visible
   position: absolute
@@ -58,15 +59,19 @@
 #mobile
     visibility: hidden
 
+@media screen and (max-width: 550px)
+  #mobile
+    margin-left: 87vw
+
 @media screen and (max-width: 730px)
   #mobile
     visibility: visible
-    display: inline-block
-    position: fixed
+    display: block
+    position: relative
     cursor: pointer
     font-family: fontawesome
     font-style: normal
-    margin-left: 87vw
+    float: right
   #btnAutorization
     margin-left: 0
     font-size: 90%
@@ -77,10 +82,10 @@
     .container
       background-color:#222
     h1
-      padding-left: 3vw
-      width: 100%
-      display: flex
-      align-content: flex-end
+      margin-left: 3vw
+      padding-left: 0
+      width: 90vw
+      display: flexbox
 
   #nav
     visibility: hidden

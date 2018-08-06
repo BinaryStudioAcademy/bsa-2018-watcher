@@ -1,15 +1,13 @@
 import { Instance } from './instance';
 import { Chart } from './chart';
 
-export class Dashboard {
-  constructor(
-    public id: number,
-    public title: string,
-    public createdAt: Date,
-    public instanceId: number,
-    public instance: Instance,
-    public charts: Chart[]) {
-  }
+export interface Dashboard { 
+  id: number;
+  title: string;
+  createdAt: Date;
+  instanceId: number;
+  instance: Instance;
+  charts: Chart[];
 }
 
 
