@@ -1,10 +1,10 @@
-<form [formGroup]="userForm">
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <h4 class="label">Name</h4>
     <div class="ui-g ui-fluid"> 
         <div class="ui-g-12 ui-md-4">
             <div class="ui-inputgroup">
                 <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-                <input type="text" pInputText placeholder="Username">         
+                <input type="text" formControlName="firstName" pInputText placeholder="First name">         
             </div>
         </div>
     </div>
@@ -14,7 +14,7 @@
         <div class="ui-g-12 ui-md-4">
             <div class="ui-inputgroup">
                 <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-                <input type="text" pInputText placeholder="Username">         
+                <input type="text" formControlName="secondName" pInputText placeholder="Second name">         
             </div>
         </div>
     </div>
