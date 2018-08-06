@@ -5,20 +5,20 @@ import { UserComponent } from './user.component';
 
 const userChildRoutes: Routes = [
   {
-    path:"",
-    redirectTo:"dashboards",
-    pathMatch:"full"
+    path: '',
+    redirectTo: 'dashboards',
+    pathMatch: 'full'
   },
   {
-  path:"dashboards",
-  component:DashboardComponent
+  path: 'dashboards',
+  component: DashboardComponent
   }
 ];
 
 const routes: Routes = [{
-  path:"user",
-  component:UserComponent,
-  children:userChildRoutes
+  path: 'user',
+  component: UserComponent,
+  children: userChildRoutes
 }];
 
 @NgModule({

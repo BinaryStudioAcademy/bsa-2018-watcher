@@ -6,4 +6,4 @@ export interface UserOrganization {
     user: User;
     organizationId: number;
     organization: Organization;
-}  
+}

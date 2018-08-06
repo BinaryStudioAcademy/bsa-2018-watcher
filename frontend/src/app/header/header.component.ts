@@ -10,14 +10,14 @@ export class HeaderComponent implements OnInit {
 
   userItems: MenuItem[];
   cogItems: MenuItem[];
-  mailItems:MenuItem[];
-  bellItems:MenuItem[];
+  mailItems: MenuItem[];
+  bellItems: MenuItem[];
+  orgItems: MenuItem[];
 
   constructor() { }
 
   ngOnInit() {
-    this.userItems = [
-      {
+    this.userItems = [{
         label: 'Profile',
         icon: 'fa fa-fw fa-user',
       },
@@ -31,8 +31,7 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.cogItems=[
-      {
+    this.cogItems = [{
         label: 'Item',
         icon: 'fa fa-fw fa-cog',
       },
@@ -46,8 +45,7 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.mailItems=[
-      {
+    this.mailItems = [{
         label: 'Item',
         icon: 'fa fa-fw fa-envelope-o',
       },
@@ -61,8 +59,7 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.bellItems=[
-      {
+    this.bellItems = [{
         label: 'Item',
         icon: 'fa fa-fw fa-bell-o',
       },
@@ -73,6 +70,20 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Item',
         icon: 'fa fa-fw fa-bell-o',
+      }
+    ];
+
+    this.orgItems = [{
+      label: 'Organization1',
+      icon: 'fa fa-fw fa-building',
+      },
+      {
+        label: 'Organization2',
+        icon: 'fa fa-fw fa-building',
+      },
+      {
+        label: 'Organization3',
+        icon: 'fa fa-fw fa-building',
       }
     ];
   }

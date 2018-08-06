@@ -12,6 +12,6 @@ import { TabViewModule, PanelMenuModule } from 'primeng/primeng';
     PanelMenuModule,
   ],
   declarations: [DashboardComponent, InstanceListComponent],
-  exports:[ DashboardComponent, InstanceListComponent ]
+  exports: [ DashboardComponent, InstanceListComponent ]
 })
 export class DashboardsModule { }

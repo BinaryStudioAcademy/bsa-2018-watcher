@@ -12,18 +12,18 @@ export class InstanceListComponent implements OnInit {
 
   menuItems: MenuItem[];
 
-  ngOnInit() { 
+  ngOnInit() {
     this.menuItems = [
       {
         label: 'Create Instance',
         icon: 'pi pi-pw pi-plus',
       },
       {
-        label: 'Instance1', 
+        label: 'Instance1',
         icon: 'fa fa-fw fa-hdd-o'
       },
       {
-        label: 'Instance2', 
+        label: 'Instance2',
         icon: 'fa fa-fw fa-hdd-o'
       }
     ];
