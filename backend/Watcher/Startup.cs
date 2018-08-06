@@ -60,7 +60,7 @@
             services.AddTransient<ITransientService, TransientService>();
 
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
-            services.AddHostedService<WatcherService>();
+            // services.AddHostedService<WatcherService>();
 
             InitializeAutomapper(services);
 
