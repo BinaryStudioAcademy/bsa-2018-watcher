@@ -20,4 +20,8 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
   }
 
+  onSubmit() {
+    console.log('Ok');
+  }
+
 }
