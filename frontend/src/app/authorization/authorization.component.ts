@@ -132,7 +132,7 @@ export class AuthorizationComponent implements OnInit {
   }
 
 
-  beckToSignUp() {
+  backToSignUp() {
     this.showSignUp();
   }
 }
