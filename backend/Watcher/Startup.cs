@@ -1,5 +1,7 @@
 ﻿namespace Watcher
 {
+    using System;
+
     using AutoMapper;
 
     using FluentValidation.AspNetCore;
@@ -32,7 +34,7 @@
 
         public IConfiguration Configuration { get; }
 
-        public bool UseAzureSignalR => Configuration[ServiceOptions.ConnectionStringDefaultKey] != null;
+        public bool UseAzureSignalR => !string.IsNullOrWhiteSpace(Configuration.GetConnectionString(ServiceOptions.ConnectionStringDefaultKey));
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -54,10 +56,9 @@
 
             // Add your services here
             services.AddTransient<ISamplesService, SamplesService>();
-
+            
             InitializeAutomapper(services);
-
-            // Add framework services.
+            
             ConfigureDatabase(services, Configuration);
 
             services.AddMvc()
@@ -74,15 +75,16 @@
 
             if (UseAzureSignalR)
             {
-                addSignalRBuilder.AddAzureSignalR();
+                addSignalRBuilder.AddAzureSignalR(
+                    Configuration.GetConnectionString(ServiceOptions.ConnectionStringDefaultKey));
             }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            UpdateDatabase(app);
             // TODO: Use Authorization
-
             app.UseCors("CorsPolicy");
 
             app.UseHsts();
@@ -127,9 +129,35 @@
 
         public virtual void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<WatcherDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                                     b => b.MigrationsAssembly(configuration["MigrationsAssembly"])));
+            // Use SQL Database if in Azure, otherwise, use SQLite
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                var azureConnStr = Configuration.GetConnectionString("AzureDbConnection");
+                if (!string.IsNullOrWhiteSpace(azureConnStr))
+                {
+                    services.AddDbContext<WatcherDbContext>(options => options.UseSqlServer(azureConnStr,
+                        b => b.MigrationsAssembly(configuration["MigrationsAssembly"])));
+                }
+            }
+            else
+            {
+                services.AddDbContext<WatcherDbContext>(options =>
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                                         b => b.MigrationsAssembly(configuration["MigrationsAssembly"])));
+            }
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<WatcherDbContext>())
+                {
+                    context?.Database?.Migrate();
+                }
+            }
         }
     }
 }

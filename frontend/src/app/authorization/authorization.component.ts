@@ -17,8 +17,8 @@ export class AuthorizationComponent implements OnInit {
   isSuccessSignUp = false;
 
   companyName =  '';
-  userName = '';
-  userEmail = '';
+  lastName = '';
+  firstName = '';
 
   constructor() { }
 
