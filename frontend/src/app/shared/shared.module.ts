@@ -8,7 +8,7 @@ import { SomeDirective } from './directives/some.directive';
     CommonModule
   ],
   declarations: [SomePipe, SomeDirective],
-  exports:[
+  exports: [
     CommonModule,
     SomePipe,
     SomeDirective

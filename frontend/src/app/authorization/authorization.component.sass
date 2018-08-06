@@ -1,3 +1,39 @@
+.close
+    position: absolute
+    top: 10px
+    right: 10px
+    width: 30px
+    height: 30px
+    cursor: pointer
+    border: 3px solid #838385
+    border-radius: 50%
+    z-index: 1000
+
+.close:before,
+.close:after 
+    content: ""
+    position: absolute
+    top: 10px
+    left: 2px
+    width: 20px
+    height: 4px
+    background: #838385
+
+.close:before 
+    webkit-transform: rotate(45deg)
+    transform: rotate(45deg)
+
+.close:after 
+    webkit-transform: rotate(-45deg)
+    transform: rotate(-45deg)
+
+.close:hover
+    border-color: #007ad9
+    box-shadow: 0 6px 8px 0 rgba(0,0,0,.25), 0 8px 1px -5px rgba(0,0,0,.3), 0 6px 8px 0 rgba(0,0,0,.24)
+.close:active
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0)
+
+
 .btnsign-in,
 .btnsign-up
     font-weight: bold
@@ -25,6 +61,7 @@
 .auth-buttons
     text-align: center
     .auth-button
+        cursor: pointer
         margin-top: 15px 
         width: 300px
         height: 50px
@@ -52,6 +89,10 @@
 .auth-btn-google
     background-color: #fff
     color: #757575
+
+.auth-btn-githum
+    background-color: #333
+    color: #fff
 
 .auth-btn-facebook
     background-color: #3b5998
@@ -115,7 +156,7 @@
 
 .alert-danger
     font-size: small
-    font-weight: 100
+    font-weight: 500
     color: red
     position: absolute
     top: 35px

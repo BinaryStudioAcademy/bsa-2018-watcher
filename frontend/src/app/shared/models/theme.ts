@@ -3,4 +3,4 @@ export interface Theme {
     name: string;
     fontFamily: string;
     backgroundColor: string;
-} 
+}
