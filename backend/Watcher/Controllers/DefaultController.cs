@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Watcher.Controllers
@@ -9,6 +9,7 @@ namespace Watcher.Controllers
     public class DefaultController : ControllerBase
     {
         // GET: api/Default
+        [Authorize]
         [HttpGet]
         public IEnumerable<string> Get()
         {

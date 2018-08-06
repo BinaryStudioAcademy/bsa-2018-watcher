@@ -5,7 +5,7 @@
     using AutoMapper;
 
     using FluentValidation.AspNetCore;
-
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-
+    using Microsoft.IdentityModel.Tokens;
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
@@ -83,6 +83,20 @@
                 addSignalRBuilder.AddAzureSignalR(
                     Configuration.GetConnectionString(ServiceOptions.ConnectionStringDefaultKey));
             }
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://securetoken.google.com/watcherapp-2984b";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = "https://securetoken.google.com/watcherapp-2984b",
+                        ValidateAudience = true,
+                        ValidAudience = "watcherapp-2984b",
+                        ValidateLifetime = true
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,7 +113,7 @@
             app.UseConfiguredSwagger();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseMvc();
             app.UseFileServer();
 
