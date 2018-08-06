@@ -90,9 +90,15 @@ export class AuthorizationComponent implements OnInit {
   signInWithGoogle() {
     this.authService.signInWithGoogle()
     .then((res) => {
-        // var token : FirebaseCredential = res.credential;
-        // var user : firebase.User = res.user;
-
+      debugger;
+        var token : FirebaseCredential = res.credential;
+        var user = res.user.getIdToken(true).then(idToken => {
+          var i = idToken;
+          console.log(i);
+          debugger;
+        });
+        //firebase.auth().currentUser.getIdToken(true);
+        debugger;
         this.router.navigate(['landing']);
       })
     .catch((err) => console.log(err));
@@ -101,6 +107,7 @@ export class AuthorizationComponent implements OnInit {
   signInWithFacebook() {
     this.authService.signInWithFacebook()
     .then((res) => {
+
         // var token : FirebaseCredential = res.credential;
         // var user : firebase.User = res.user;
 
