@@ -123,6 +123,7 @@
             var charts = chartFaker.Generate(amount).ToArray();
 
             var notificationFaker = new Faker<Notification>()
+                .RuleFor(o => o.NotificationSetting, f => notificationSettingFaker.Generate())
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.Text, f => f.Lorem.Text())
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
