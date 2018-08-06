@@ -65,6 +65,10 @@ export class AuthorizationComponent implements OnInit {
     this.isSuccessSignUp = true;
   }
 
+  signUpWithGitHub() {
+    this.isSuccessSignUp = true;
+  }
+
   signUpWithFacebook() {
     this.isSuccessSignUp = true;
   }
