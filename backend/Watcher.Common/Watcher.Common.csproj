@@ -9,4 +9,61 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="MoveToFrontend\chart.ts">
+      <CustomToolNamespace>Dtos\Chart.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\chartType.ts">
+      <CustomToolNamespace>Enums\ChartType.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\chat.ts">
+      <CustomToolNamespace>Dtos\Chat.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\chatType.ts">
+      <CustomToolNamespace>Enums\ChatType.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\dashboard.ts">
+      <CustomToolNamespace>Dtos\Dashboard.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\entity.ts">
+      <CustomToolNamespace>Dtos\Entity.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\feedback.ts">
+      <CustomToolNamespace>Dtos\Feedback.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\instance.ts">
+      <CustomToolNamespace>Dtos\Instance.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\message.ts">
+      <CustomToolNamespace>Dtos\Message.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\notification.ts">
+      <CustomToolNamespace>Dtos\Notification.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\notificationSetting.ts">
+      <CustomToolNamespace>Dtos\NotificationSetting.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\notificationType.ts">
+      <CustomToolNamespace>Enums\NotificationType.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\organization.ts">
+      <CustomToolNamespace>Dtos\Organization.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\response.ts">
+      <CustomToolNamespace>Dtos\Response.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\role.ts">
+      <CustomToolNamespace>Dtos\Role.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\theme.ts">
+      <CustomToolNamespace>Dtos\Theme.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\user.ts">
+      <CustomToolNamespace>Dtos\User.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\userOrganization.ts">
+      <CustomToolNamespace>Dtos\UserOrganization.cs</CustomToolNamespace>
+    </None>
+  </ItemGroup>
+
 </Project>
