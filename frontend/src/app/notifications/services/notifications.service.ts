@@ -1,8 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
+import {environment} from '../../../environments/environment';
+import {SampleDto} from '../../shared/models/sample-dto.model';
+import {SampleRequest} from '../../shared/models/sample-request.model';
 
 
 @Injectable({
@@ -15,11 +18,18 @@ export class NotificationsService {
     this.init();
   }
 
-  send(item: string): string {
+  send(userId: string, item: string): string {
     if (this._hubConnection) {
-      this._hubConnection.invoke('Send', item);
+      this._hubConnection.invoke('Send', userId, item);
     }
     return item;
+  }
+
+  createSample(request: SampleRequest): SampleRequest {
+    if (this._hubConnection) {
+      this._hubConnection.invoke('CreateSample', request);
+    }
+    return request;
   }
 
   sendMessage(mess: string): string {
@@ -35,26 +45,14 @@ export class NotificationsService {
     }
   }
 
-  joinGroup(group: string): void {
-    if (this._hubConnection) {
-      this._hubConnection.invoke('JoinGroup', group);
-    }
-  }
-
-  leaveGroup(group: string): void {
-    if (this._hubConnection) {
-      this._hubConnection.invoke('LeaveGroup', group);
-    }
-  }
-
   private init() {
-
+    const connPath = environment.server_url + '/notifications';
     this._hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://bsa-watcher.azurewebsites.net/api/notifications')
+      .withUrl(connPath)
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
-    this._hubConnection.start().catch(err => console.error(err.toString()));
+    startHubConnection(this._hubConnection);
 
     this._hubConnection.on('Send', (item: string) => {
       console.log('Message from Hub: ' + item);
@@ -64,13 +62,35 @@ export class NotificationsService {
       console.log('Broadcasted Message: ' + message);
     });
 
-    this._hubConnection.on('JoinGroup', (data: string) => {
-      console.log('recieved data from the hub');
+    this._hubConnection.on('Echo', (data: string) => {
+      console.log('Received echo data from the hub');
       console.log(data);
     });
 
-    this._hubConnection.on('LeaveGroup', (data: string) => {
-      console.log('You left the group: ' + data);
+    this._hubConnection.on('DataFeedTick', (sampleDto: SampleDto) => {
+      console.log(`Received Data feed from the hub: ${JSON.stringify(sampleDto)}`);
+    });
+
+    this._hubConnection.on('AddSample', (sampleDto: SampleDto, secondParam: string, thirdParam: number) => {
+      console.log(`secondParam: ${secondParam}, thirdParam: ${thirdParam}`);
+      console.log('Created SampleDto: ' + JSON.stringify(sampleDto) + sampleDto);
+    });
+
+    // On Close open connection again
+    this._hubConnection.onclose(function (error) {
+      console.error(error);
+      startHubConnection(this._hubConnection);
     });
   }
+}
+
+// Reconnect loop
+export function startHubConnection(hubConnection: HubConnection) {
+  console.log('Conecting to Hub!!!');
+  hubConnection.start().catch(function (err) {
+    console.error(err);
+    setTimeout(args => {
+      startHubConnection(hubConnection);
+    }, 3000);
+  });
 }

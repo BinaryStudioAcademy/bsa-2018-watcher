@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  server_url: 'https://bsa-watcher.azurewebsites.net/api'
 };
