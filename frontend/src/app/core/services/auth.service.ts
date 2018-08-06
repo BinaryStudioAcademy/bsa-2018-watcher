@@ -25,21 +25,27 @@ export class AuthService {
     );
   }
 
-  signInWithTwitter() {
+  signInWithGoogle(): Promise<firebase.auth.UserCredential> {
     return this._firebaseAuth.auth.signInWithPopup(
-      new firebase.auth.TwitterAuthProvider()
+      new firebase.auth.GoogleAuthProvider()
     );
   }
 
-  signInWithFacebook() {
+  signInWithFacebook(): Promise<firebase.auth.UserCredential> {
     return this._firebaseAuth.auth.signInWithPopup(
       new firebase.auth.FacebookAuthProvider()
     );
   }
 
-  signInWithGoogle() {
+  signInWithTwitter(): Promise<firebase.auth.UserCredential> {
     return this._firebaseAuth.auth.signInWithPopup(
-      new firebase.auth.GoogleAuthProvider()
+      new firebase.auth.TwitterAuthProvider()
+    );
+  }
+
+  signInWithGitHub(): Promise<firebase.auth.UserCredential> {
+    return this._firebaseAuth.auth.signInWithPopup(
+      new firebase.auth.GithubAuthProvider()
     );
   }
 

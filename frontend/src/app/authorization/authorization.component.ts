@@ -61,10 +61,6 @@ export class AuthorizationComponent implements OnInit {
     this.isSuccessSignUp = false;
   }
 
-  signInWithTwitter() {
-    //
-  }
-
   signUpWithGoogle() {
     this.isSuccessSignUp = true;
   }
@@ -90,8 +86,8 @@ export class AuthorizationComponent implements OnInit {
   signInWithGoogle() {
     this.authService.signInWithGoogle()
     .then((res) => {
-        // const token : FirebaseCredential = res.credential;
-        
+        // var token : FirebaseCredential = res.credential;
+        // var user : firebase.User = res.user;
 
         this.router.navigate(['landing']);
       })
@@ -101,10 +97,36 @@ export class AuthorizationComponent implements OnInit {
   signInWithFacebook() {
     this.authService.signInWithFacebook()
     .then((res) => {
+        // var token : FirebaseCredential = res.credential;
+        // var user : firebase.User = res.user;
+
         this.router.navigate(['landing']);
       })
     .catch((err) => console.log(err));
   }
+
+  signInWithTwitter() {
+    this.authService.signInWithTwitter()
+    .then((res) => {
+        // var token : FirebaseCredential = res.credential;
+        // var user : firebase.User = res.user;
+
+        this.router.navigate(['landing']);
+      })
+    .catch((err) => console.log(err));
+  }
+
+  signInWithGitHub() {
+    this.authService.signInWithGitHub()
+    .then((res) => {
+        // var token : FirebaseCredential = res.credential;
+        // var user : firebase.User = res.user;
+
+        this.router.navigate(['landing']);
+      })
+    .catch((err) => console.log(err));
+  }
+
 
   beckToSignUp() {
     this.showSignUp();
