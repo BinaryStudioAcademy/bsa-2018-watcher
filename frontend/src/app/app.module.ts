@@ -46,7 +46,6 @@ import { AuthService } from './core/services/auth.service';
     DialogModule,
     AdminModule,
     UserModule,
-    DashboardsModule,
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
