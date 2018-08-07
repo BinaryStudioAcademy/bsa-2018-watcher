@@ -12,6 +12,9 @@
     {
         public OrganizationProfile()
         {
+            CreateMap<Organization, Organization>()
+                .ForMember(d => d.Id, o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
+
             CreateMap<OrganizationDto, Organization>()
                 .ForMember(d => d.Id, o => o.Ignore());
 
