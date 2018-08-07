@@ -34,8 +34,8 @@ export class UserProfileComponent implements OnInit {
     if (this.userForm.valid) {
 
     } else {
-      Object.keys(this.userForm.controls).forEach(field => { // {1}
-        const control = this.userForm.get(field);            // {2}
+      Object.keys(this.userForm.controls).forEach(field => {
+        const control = this.userForm.get(field);
         control.markAsDirty({ onlySelf: true });
         control.enable();
       });
