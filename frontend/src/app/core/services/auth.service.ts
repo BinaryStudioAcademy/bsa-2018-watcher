@@ -29,6 +29,7 @@ export class AuthService {
     return this._firebaseAuth.auth.signInWithPopup(
       new firebase.auth.GoogleAuthProvider()
     );
+
   }
 
   signInWithFacebook(): Promise<firebase.auth.UserCredential> {

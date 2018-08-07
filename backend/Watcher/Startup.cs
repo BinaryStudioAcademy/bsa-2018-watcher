@@ -15,6 +15,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Watcher.Common.Validators;
+    using Watcher.Core.Auth;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
     using Watcher.Core.Services;
@@ -28,6 +29,8 @@
 
     public class Startup
     {
+        private const string key = "someSercerKey"; // TODO: Transfer if to the Client (user) secrets
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -48,9 +51,7 @@
                            .AllowAnyHeader()
                            .AllowCredentials();
                 }));
-
-            // TODO: Add Authorization
-
+            
             services.ConfigureSwagger(Configuration);
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -84,17 +85,37 @@
                     Configuration.GetConnectionString(ServiceOptions.ConnectionStringDefaultKey));
             }
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(
+                    x =>
+                        {
+                            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                        })
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://securetoken.google.com/watcherapp-2984b";
+                    //options.Authority = "https://securetoken.google.com/watcherapp-2984b";
+                    //options.TokenValidationParameters = new TokenValidationParameters
+                    //{
+                    //    ValidateIssuer = true,
+                    //    ValidIssuer = "https://securetoken.google.com/watcherapp-2984b",
+                    //    ValidateAudience = true,
+                    //    ValidAudience = "watcherapp-2984b",
+                    //    ValidateLifetime = true
+                    //};
+
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = "https://securetoken.google.com/watcherapp-2984b",
+                        ValidIssuer = AuthOptions.Issuer,
+                        // ValidIssuer = _config["Security:Tokens:Issuer"],
                         ValidateAudience = true,
-                        ValidAudience = "watcherapp-2984b",
-                        ValidateLifetime = true
+                        ValidAudience = AuthOptions.Audience,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(key),
+                        ValidateLifetime = true,
                     };
                 });
         }
