@@ -14,13 +14,11 @@ export interface User {
   isActive: boolean;
   createdAt: Date;
   roleId: number;
-  role: Role;
-  notificationSettingId: number;
-  notificationSetting: NotificationSetting;
-  userOrganizations: UserOrganization[];
-  notifications: Notification[];
-  feedbacks: Feedback[];
-  responses: Response[];
-  messages: Message[];
-  createdChats: Chat[];
+  notificationSettingId: Array<Number>[];
+  userOrganizationsId: Array<Number>[];
+  notificationsId: Array<Number>[];
+  feedbacksId: Array<Number>[];
+  responsesId: Array<Number>[];
+  messagesId: Array<Number>[];
+  createdChatsId: Array<Number>[];
 }

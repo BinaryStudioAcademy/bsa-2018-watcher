@@ -18,6 +18,22 @@ export class UserProfileComponent implements OnInit {
   });
 
   ngOnInit() {
+    this.user = {
+      id: 6,
+      firstName: 'Neo',
+      secondName: 'Anderson',
+      email: 'email@matrix.com',
+      isActive: Boolean,
+      createdAt: String,
+      roleId: Number,
+      notificationSettingId: [],
+      userOrganizationsId: [],
+      notificationsId: [],
+      feedbacksId: [],
+      responsesId: [],
+      messagesId: [],
+      createdChatsId: []
+    }
   }
 
   editFirstName() {

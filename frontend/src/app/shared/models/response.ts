@@ -1,7 +1,7 @@
 import { User } from './user';
 import { Feedback } from './feedback';
 
-export interface Response { 
+export interface Response {
   id: number;
   text: string;
   createdAt: Date;

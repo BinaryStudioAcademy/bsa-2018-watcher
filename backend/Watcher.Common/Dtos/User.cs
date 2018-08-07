@@ -18,18 +18,17 @@ namespace Watcher.Common.Dtos
         public Role Role { get; set; }
 
         public int NotificationSettingId { get; set; }
-        public NotificationSetting NotificationSetting { get; set; }
 
-        public IList<UserOrganization> UserOrganizations { get; set; }
+        public IList<int> UserOrganizationsId { get; set; }
 
-        public IList<Notification> Notifications { get; set; }
+        public IList<int> NotificationsId { get; set; }
 
-        public IList<Feedback> Feedbacks { get; set; }
+        public IList<int> FeedbacksId { get; set; }
 
-        public IList<Response> Responses { get; set; }
+        public IList<int> ResponsesId { get; set; }
 
-        public IList<Message> Messages { get; set; }
+        public IList<int> MessagesId { get; set; }
 
-        public IList<Chat> CreatedChats { get; set; }
+        public IList<int> CreatedChatsId { get; set; }
     }
 }
