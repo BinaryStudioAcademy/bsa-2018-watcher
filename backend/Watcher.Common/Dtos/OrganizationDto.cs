@@ -21,7 +21,7 @@ namespace Watcher.Common.Dtos
 
         public int ThemeId { get; set; }
 
-        public int ChatId { get; set; }
+        public int? ChatId { get; set; }
 
         public int CreatedByUserId { get; set; }
         
