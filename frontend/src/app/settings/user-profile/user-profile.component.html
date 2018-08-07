@@ -42,9 +42,9 @@
             <p-toggleButton formControlName="isActive" onLabel="Active" offLabel="Disabled"></p-toggleButton>
         </div>
 
-        <button type="submit" pButton class="ui-button-secondary btn-update" [disabled]="!userForm.valid" label="Update"></button>
+        <button type="submit" pButton class="ui-button-success btn-update" [disabled]="!userForm.valid" label="Update"></button>
     </form>
     <div>
-        <p-button label="Edit" class="ui-button-secondary" (click)="edit()"></p-button>
+        <p-button label="Edit" class="ui-button-secondary" icon="fa fa-edit" iconPos="left" (click)="edit()"></p-button>
     </div>
 </div>
