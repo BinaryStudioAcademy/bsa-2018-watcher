@@ -9,9 +9,9 @@ const settingsRoutes: Routes = [{
   component: SettingsComponent,
   children: [{
     path: '',
-    redirectTo: 'profile'
+    redirectTo: 'user-profile'
   }, {
-    path: 'profile',
+    path: 'user-profile',
     component: UserProfileComponent
   }, {
     path: 'notification-settings',
