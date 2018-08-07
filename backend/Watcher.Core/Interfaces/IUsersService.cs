@@ -4,7 +4,7 @@
 
     using Watcher.Common.Requests;
 
-    public interface IUserService
+    public interface IUsersService
     {
         Task<bool> UpdateEntityByIdAsync(UserRequest request, int id);
     }

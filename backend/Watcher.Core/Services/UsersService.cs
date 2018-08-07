@@ -8,12 +8,12 @@
     using Watcher.DataAccess.Interfaces;
     using Watcher.DataAccess.Entities;
 
-    public class UserService : IUserService
+    public class UsersService : IUsersService
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
 
-        public UserService(IUnitOfWork uow, IMapper mapper)
+        public UsersService(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
             _mapper = mapper;

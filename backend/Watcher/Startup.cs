@@ -57,6 +57,7 @@
 
             // Add your services here
             services.AddTransient<ISamplesService, SamplesService>();
+            services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ITransientService, TransientService>();
 
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services

@@ -12,9 +12,9 @@ namespace Watcher.Controllers
     [ApiController]
     public class UsersController : Controller
     {
-        private readonly IUserService _usersService;
+        private readonly IUsersService _usersService;
 
-        public UsersController(IUserService service)
+        public UsersController(IUsersService service)
         {
             _usersService = service;
         }
