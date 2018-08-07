@@ -41,6 +41,14 @@ namespace Watcher.Core.Providers
             return blob.Uri.ToString();
         }
 
+        public async Task DeleteFileByPathAsync(string path)
+        {
+            var client = StorageAccount.CreateCloudBlobClient();
+            var blob = await client.GetBlobReferenceFromServerAsync(new Uri(path));
+            //will throw exception if there is no blob
+            await blob.DeleteAsync();
+        }
+
         private async Task SetPublicContainerPermissions(CloudBlobContainer container)
         {
             BlobContainerPermissions permissions = new BlobContainerPermissions
