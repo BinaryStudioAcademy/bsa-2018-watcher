@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { User } from 'firebase';
+import { UserUpdate } from '../../shared/models/userUpdate';
 
 @Component({
   selector: 'app-user-profile',
@@ -11,7 +11,7 @@ export class UserProfileComponent implements OnInit {
 
   constructor(private fb: FormBuilder) { }
 
-  user: User;
+  user: UserUpdate;
   userForm = this.fb.group({
     firstName: new FormControl({ value: '', disabled: true  }, Validators.required),
     secondName: new FormControl({ value: '', disabled: true  }, Validators.required)
@@ -19,20 +19,10 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit() {
     this.user = {
-      id: 6,
       firstName: 'Neo',
       secondName: 'Anderson',
-      email: 'email@matrix.com',
-      isActive: Boolean,
-      createdAt: String,
-      roleId: Number,
-      notificationSettingId: [],
-      userOrganizationsId: [],
-      notificationsId: [],
-      feedbacksId: [],
-      responsesId: [],
-      messagesId: [],
-      createdChatsId: []
+      isActive: true,
+      notificationSettingId: 5
     }
   }
 

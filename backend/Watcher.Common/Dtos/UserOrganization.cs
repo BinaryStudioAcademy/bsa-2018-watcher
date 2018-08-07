@@ -6,7 +6,7 @@ namespace Watcher.Common.Dtos
     public class UserOrganization
     {
         public int UserId { get; set; }
-        public User User { get; set; }
+        public UserDto User { get; set; }
 
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }

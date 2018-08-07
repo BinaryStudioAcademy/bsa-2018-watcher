@@ -14,6 +14,6 @@ namespace Watcher.Common.Dtos
         public Organization Organization { get; set; }
 
         public int UserId { get; set; }
-        public User User { get; set; }
+        public UserDto User { get; set; }
     }
 }

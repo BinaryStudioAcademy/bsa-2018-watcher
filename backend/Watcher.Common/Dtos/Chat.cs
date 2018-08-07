@@ -13,7 +13,7 @@ namespace Watcher.Common.Dtos
 
         public int? CreatedById { get; set; }
 
-        public User CreatedBy { get; set; }
+        public UserDto CreatedBy { get; set; }
 
         public int? OrganizationId { get; set; }
         public Organization Organization { get; set; }
