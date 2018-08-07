@@ -2,7 +2,7 @@
 {
     using Watcher.DataAccess.Entities;
 
-    public interface IUserRepository : IRepository<User, int>
+    public interface IUsersRepository : IRepository<User, int>
     {
     }
 }

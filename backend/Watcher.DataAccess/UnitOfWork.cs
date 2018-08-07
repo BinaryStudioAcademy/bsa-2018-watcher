@@ -20,6 +20,7 @@
         private readonly IMapper _mapper;
 
         private ISamplesRepository _samplesRepository;
+        private IUsersRepository _usersRepository;
 
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
@@ -37,6 +38,19 @@
                 }
 
                 return _samplesRepository;
+            }
+        }
+
+        public IUsersRepository UsersRepository
+        {
+            get
+            {
+                if (_usersRepository == null)
+                {
+                    _usersRepository = new  UsersRepository(_context, _mapper);
+                }
+
+                return _usersRepository;
             }
         }
 
