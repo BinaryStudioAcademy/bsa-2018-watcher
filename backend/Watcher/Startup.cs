@@ -58,7 +58,8 @@
             // Add your services here
             services.AddTransient<ISamplesService, SamplesService>();
             services.AddTransient<ITransientService, TransientService>();
-
+            services.AddTransient<IOrganizationService, OrganizationService>();
+            
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
 
@@ -72,6 +73,7 @@
                         fv.ImplicitlyValidateChildProperties = true;
                         // fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                         fv.RegisterValidatorsFromAssemblyContaining<SampleValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<OrganizationValidator>();
                     })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(MvcSetup.JsonSetupAction);
@@ -127,6 +129,7 @@
             services.AddAutoMapper(cfg =>
                 {
                     cfg.AddProfile<SamplesProfile>();
+                    cfg.AddProfile<OrganizationProfile>();
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 

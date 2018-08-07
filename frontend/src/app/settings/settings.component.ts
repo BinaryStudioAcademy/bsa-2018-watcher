@@ -19,8 +19,8 @@ menuItems: MenuItem[];
         routerLink: ['/user/settings/user-profile']
       }, {
         label: 'Organisation Profile',
-        icon: 'fa fa-fw fa-user',
-        routerLink: ['/user/settings/organisation-profile']
+        icon: 'fa fa-fw fa-building',
+        routerLink: ['/user/settings/organization-profile']
       }, {
         label: 'Notification Settings',
         icon: 'fa fa-fw fa-send',

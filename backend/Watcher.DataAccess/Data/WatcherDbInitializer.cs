@@ -38,7 +38,7 @@
                 .RuleFor(o => o.FirstName, f => f.Name.FirstName())
                 .RuleFor(o => o.SecondName, f => f.Name.LastName())
                 .RuleFor(o => o.Email, f => f.Internet.Email())
-                .RuleFor(o => o.IsActive, f => f.PickRandom(true, false))
+                .RuleFor(o => o.IsActive, true)
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
                 .RuleFor(o => o.RoleId, f => f.PickRandom(roles).Id)
                 .RuleFor(o => o.NotificationSettingId, f => f.PickRandom(notificationSettings).Id);
@@ -91,7 +91,13 @@
 
             var organizationFaker = new Faker<Organization>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
+                .RuleFor(o => o.IsActive, true)
                 .RuleFor(o => o.Name, f => f.PickRandom("Company" + f.Random.Number(999)))
+                .RuleFor(o => o.Email, f => f.Internet.Email())
+                .RuleFor(o => o.WebSite, f => f.Internet.Url())
+                .RuleFor(o => o.ContactNumber, f => f.Phone.PhoneNumber())
+                .RuleFor(o => o.Description, f => f.Lorem.Sentences(Randomizer.Seed.Next(5), " "))
+                .RuleFor(o => o.CreatedByUserId, f => f.PickRandom(users).Id)
                 .RuleFor(o => o.ThemeId, f => f.PickRandom(themes).Id);
             
             var organizations = organizationFaker.Generate(amount).ToArray();
