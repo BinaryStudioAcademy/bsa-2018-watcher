@@ -58,12 +58,11 @@
         {
             try
             {
+                var changes = _context.ChangeTracker.Entries().Count(
+                    p => p.State == EntityState.Modified || p.State == EntityState.Deleted
+                                                         || p.State == EntityState.Added);
+                if (changes == 0) return true;
                 return await _context.SaveChangesAsync() > 0;
-                //var changes = _context.ChangeTracker.Entries().Count(
-                //    p => p.State == EntityState.Modified || p.State == EntityState.Deleted
-                //                                         || p.State == EntityState.Added);
-                //if (changes == 0) return true;
-                //return await _context.SaveChangesAsync() > 0;
             }
             catch (Exception ex)
             {
