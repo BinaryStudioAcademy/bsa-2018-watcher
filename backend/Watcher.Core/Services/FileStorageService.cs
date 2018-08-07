@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
-    public class FileStorageProvider
+    public class FileStorageService:IFileStorageService
     {
         private CloudStorageAccount StorageAccount;
 
-        public FileStorageProvider(string ConnectionString)
+        public FileStorageService(string ConnectionString)
         {
             this.StorageAccount = CloudStorageAccount.Parse(ConnectionString);
         }
 
-        public async Task<string> UploadFileAsync(string path, string containerName = "watcher", string filename = "")
+        public async Task<string> UploadFileAsync(string path, string containerName = "watcher")
         {
             var client = StorageAccount.CreateCloudBlobClient();
 
@@ -29,8 +27,7 @@ namespace Watcher.Core.Providers
                 await container.CreateAsync();
             }
 
-            filename = filename == "" ? GetUniqueName(Path.GetFileName(path)) :
-                GetUniqueName(filename);
+            var filename = Guid.NewGuid().ToString();
 
             var blob = container.GetBlockBlobReference(filename);
 
@@ -41,7 +38,7 @@ namespace Watcher.Core.Providers
             return blob.Uri.ToString();
         }
 
-        public async Task DeleteFileByPathAsync(string path)
+        public async Task DeleteFileAsync(string path)
         {
             var client = StorageAccount.CreateCloudBlobClient();
             var blob = await client.GetBlobReferenceFromServerAsync(new Uri(path));
@@ -56,13 +53,6 @@ namespace Watcher.Core.Providers
                 PublicAccess = BlobContainerPublicAccessType.Blob
             };
             await container.SetPermissionsAsync(permissions);
-        }
-
-        private string GetUniqueName(string filename)
-        {
-            var GuidPrefix = Guid.NewGuid().ToString();
-            filename = GuidPrefix + "-" + filename;
-            return filename;
         }
     }
 }
