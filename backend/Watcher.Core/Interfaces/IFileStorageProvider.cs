@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Watcher.Core.Interfaces
 {
-    public interface IFileStorageService
+    public interface IFileStorageProvider
     {
         Task<string> UploadFileAsync(string path, string containerName);
         Task DeleteFileAsync(string UriPath);

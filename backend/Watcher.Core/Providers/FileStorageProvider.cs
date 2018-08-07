@@ -7,11 +7,11 @@ using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
-    public class FileStorageService:IFileStorageService
+    public class FileStorageProvider:IFileStorageProvider
     {
         private CloudStorageAccount StorageAccount;
 
-        public FileStorageService(string ConnectionString)
+        public FileStorageProvider(string ConnectionString)
         {
             this.StorageAccount = CloudStorageAccount.Parse(ConnectionString);
         }
