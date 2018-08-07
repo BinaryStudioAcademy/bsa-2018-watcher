@@ -7,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateEditDashboardComponent implements OnInit {
 
+  display: Boolean = false;
+  dashboardTitle =  '';
+  dashboardInstance = '';
+
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  showDialog() {
+      this.display = true;
   }
 
 }
