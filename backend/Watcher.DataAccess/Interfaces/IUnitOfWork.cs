@@ -9,6 +9,9 @@
     {
         ISamplesRepository SamplesRepository { get; }
 
+        IUsersRepository UsersRepository { get; }
+
+
         Task<bool> SaveAsync();
     }
 }

@@ -20,6 +20,8 @@
         private readonly IMapper _mapper;
 
         private ISamplesRepository _samplesRepository;
+        private IUsersRepository _usersRepository;
+
 
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
@@ -39,6 +41,8 @@
                 return _samplesRepository;
             }
         }
+
+        public IUsersRepository UsersRepository => _usersRepository ?? (_usersRepository = new UsersRepository(_context, _mapper));
 
         public async Task<bool> SaveAsync()
         {

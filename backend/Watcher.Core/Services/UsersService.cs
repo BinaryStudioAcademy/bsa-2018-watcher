@@ -7,10 +7,11 @@
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
+    using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Entities;
     using Watcher.DataAccess.Interfaces;
 
-    public class UsersService
+    public class UsersService : IUsersService
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
@@ -21,31 +22,31 @@
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<SampleDto>> GetAllEntitiesAsync()
+        public async Task<IEnumerable<UserDto>> GetAllEntitiesAsync()
         {
-            var samples = await _uow.SamplesRepository.GetRangeAsync();
+            var samples = await _uow.UsersRepository.GetRangeAsync();
 
-            var dtos = _mapper.Map<List<Sample>, List<SampleDto>>(samples);
+            var dtos = _mapper.Map<List<User>, List<UserDto>>(samples);
 
             return dtos;
         }
 
-        public async Task<SampleDto> GetEntityByIdAsync(int id)
+        public async Task<UserDto> GetEntityByIdAsync(string id)
         {
-            var sample = await _uow.SamplesRepository.GetFirstOrDefaultAsync(s => s.Id == id);
+            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id);
 
             if (sample == null) return null;
 
-            var dto = _mapper.Map<Sample, SampleDto>(sample);
+            var dto = _mapper.Map<User, UserDto>(sample);
 
             return dto;
         }
 
-        public async Task<SampleDto> CreateEntityAsync(SampleRequest request)
+        public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
-            var entity = _mapper.Map<SampleRequest, Sample>(request);
+            var entity = _mapper.Map<UserRegisterRequest, User>(request);
 
-            entity = await _uow.SamplesRepository.CreateAsync(entity);
+            entity = await _uow.UsersRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
             if (!result)
             {
@@ -54,26 +55,26 @@
 
             if (entity == null) return null;
 
-            var dto = _mapper.Map<Sample, SampleDto>(entity);
+            var dto = _mapper.Map<User, UserDto>(entity);
 
             return dto;
         }
 
-        public async Task<bool> UpdateEntityByIdAsync(SampleRequest request, int id)
+        public async Task<bool> UpdateEntityByIdAsync(UserUpdateRequest request, string id)
         {
-            var entity = _mapper.Map<SampleRequest, Sample>(request);
+            var entity = _mapper.Map<UserUpdateRequest, User>(request);
             entity.Id = id;
 
             // In returns updated entity, you could do smth with it or just leave as it is
-            var updated = await _uow.SamplesRepository.UpdateAsync(entity);
+            var updated = await _uow.UsersRepository.UpdateAsync(entity);
             var result = await _uow.SaveAsync();
 
             return result;
         }
 
-        public async Task<bool> DeleteEntityByIdAsync(int id)
+        public async Task<bool> DeleteEntityByIdAsync(string id)
         {
-            await _uow.SamplesRepository.DeleteAsync(id);
+            await _uow.UsersRepository.DeleteAsync(id);
 
             var result = await _uow.SaveAsync();
 

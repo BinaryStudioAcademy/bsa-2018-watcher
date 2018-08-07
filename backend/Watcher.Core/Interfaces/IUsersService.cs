@@ -10,12 +10,12 @@
     {
         Task<IEnumerable<UserDto>> GetAllEntitiesAsync();
 
-        Task<UserDto> GetEntityByIdAsync(int id);
+        Task<UserDto> GetEntityByIdAsync(string id);
 
         Task<UserDto> CreateEntityAsync(UserRegisterRequest request);
 
-        Task<bool> UpdateEntityByIdAsync(UserUpdateRequest request, int id);
+        Task<bool> UpdateEntityByIdAsync(UserUpdateRequest request, string id);
 
-        Task<bool> DeleteEntityByIdAsync(int id);
+        Task<bool> DeleteEntityByIdAsync(string id);
     }
 }
