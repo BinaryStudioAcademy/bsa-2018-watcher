@@ -4,6 +4,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { UserModel } from '../../shared/models/user.model';
+import { PostInfo } from '../../shared/models/post-info';
 
 @Injectable({
   providedIn: 'root'
@@ -32,11 +33,15 @@ export class AuthService {
   //   );
   // }
 
-  signInWithGoogle(): Promise<UserModel> {
-    let userModel: UserModel;
+  getIdToken() {
+    return this._firebaseAuth.idToken;
+  }
+
+  signInWithGoogle(): Promise<PostInfo> {
+    const info: PostInfo = new PostInfo();
     return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()
     ).then((res) => {
-      userModel = {
+      info.model = {
         uid: res.user.uid,
         email: res.user.email,
         displayName: res.user.displayName,
@@ -44,7 +49,10 @@ export class AuthService {
         photoURL: res.user.photoURL,
         isNewUser: res.additionalUserInfo.isNewUser
       };
-      return new Promise<UserModel>((res) => res(userModel));
+      
+      this.getIdToken().subscribe(token => info.token = token);
+      debugger;
+      return info;
     });
   }
 

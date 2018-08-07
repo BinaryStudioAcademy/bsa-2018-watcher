@@ -2,9 +2,12 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { AuthService } from '../core/services/auth.service';
+import { UserService } from '../core/services/user.service';
 import { Router } from '@angular/router';
 import { FirebaseCredential } from '../shared/models/firebase.model';
-
+import { concat, forkJoin, from, Observable } from 'rxjs';
+import { UserModel } from '../shared/models/user.model';
+import { mergeMap } from '../../../node_modules/rxjs/operators';
 
 @Component({
   selector: 'app-authorization',
@@ -25,7 +28,7 @@ export class AuthorizationComponent implements OnInit {
   lastName = '';
   firstName = '';
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private userService: UserService, private router: Router) {
 
   }
 
@@ -88,9 +91,25 @@ export class AuthorizationComponent implements OnInit {
   }
 
   signInWithGoogle() {
-    console.log(this.authService.signInWithGoogle()
-    .then((res) => {console.log(res);}));
+    debugger;
+    // const userModel = from(this.authService.signInWithGoogle());
+    // const token = userModel.pipe(
+    //   mergeMap(o => this.authService.getIdToken())
+    // );
+
+    const postInfo = this.authService.signInWithGoogle().then(res => this.userService.create(res) );
+    // const postInfo = forkJoin(userModel, token).subscribe((res) => {
+    //     debugger;
+    //     this.userService.create(res) ;
+    //   });
+
+    // const postInfo = forkJoin(userModel, token).subscribe((res: [UserModel, string]) => {
+    //   debugger;
+    //   this.userService.create(res) ;
+    // });
   }
+    // .then((res) => { return res;});
+
 
   signInWithFacebook() {
     this.authService.signInWithFacebook()
@@ -117,18 +136,18 @@ export class AuthorizationComponent implements OnInit {
 
   signInWithGitHub() {
     this.authService.signInWithGitHub()
-      .then((res) => {
-        debugger;
-        var token: FirebaseCredential = res.credential;
-        var user = res.user.getIdToken(true).then(idToken => {
-          var i = idToken;
-          console.log(i);
-          debugger;
-        });
-        //firebase.auth().currentUser.getIdToken(true);
-        debugger;
-        this.router.navigate(['landing']);
-      })
+      // .then((res) => {
+      //   debugger;
+      //   var token: FirebaseCredential = res.credential;
+      //   var user = res.user.getIdToken(true).then(idToken => {
+      //     var i = idToken;
+      //     console.log(i);
+      //     debugger;
+      //   });
+      //   //firebase.auth().currentUser.getIdToken(true);
+      //   debugger;
+      //   this.router.navigate(['landing']);
+      // })
       .catch((err) => console.log(err));
   }
 
