@@ -1,6 +1,8 @@
 ﻿
- 
-    export interface Notification { 
+ import { Organization } from './organization';
+import { User } from './user';
+
+    export interface Notification  { 
         id: number;
         text: string;
         createdAt: Date;

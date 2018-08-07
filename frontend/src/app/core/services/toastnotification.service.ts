@@ -1,33 +1,39 @@
 import { Injectable } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Injectable(/*{
   providedIn: 'root'
 }*/)
 export class ToastnotificationService {
 
-  constructor(private messageService: MessageService) { }
+  response: boolean;
+
+  constructor(private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
   success(message: string) {
-    switch (message) {
-      case 'Instance':
-        this.messageService.add({ severity: 'success', summary: 'Instance', detail: 'Instance was created' });
-        break;
-      case 'Profile':
-        this.messageService.add({ severity: 'success', summary: 'Profile', detail: 'Profile was updated' });
-        break;
-      default: this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Detail Text' });
-    }
+    this.messageService.add({ severity: 'success', summary: 'Success Message', detail: message });
+  }
+
+  info(message: string) {
+    this.messageService.add({severity: 'info', summary: 'Info Message', detail: message});
   }
 
   warn(message: string) {
-    this.messageService.add({ severity: 'warn', summary: 'Service Message', detail: 'Detail Text' });
+    this.messageService.add({ severity: 'warn', summary: 'Warn Message', detail: message });
   }
 
   error(message: string) {
-    this.messageService.add({ severity: 'error', summary: 'Service Message', detail: 'Detail Text' });
+    this.messageService.add({ severity: 'error', summary: 'Error Message', detail: message });
   }
 
-  confirm() {
-    this.messageService.add({ severity: 'success', summary: 'Service Message', detail: 'Detail Text' }); }
+  confirm(message: string) {
+    this.confirmationService.confirm({
+      message: message,
+      header: 'Attention',
+      icon: 'fa fa-question-circle',
+      accept: () => { this.response = true; },
+      reject: () => { this.response = false; }
+  });
+  return this.response;
+  }
 }

@@ -1,6 +1,7 @@
 ﻿
- 
-    export interface Entity<T> { 
+ import { T } from './t';
+
+    export interface Entity <T> { 
         id: T;
     }
 

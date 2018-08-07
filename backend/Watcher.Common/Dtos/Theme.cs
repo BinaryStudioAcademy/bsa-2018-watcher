@@ -3,7 +3,7 @@
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class Theme : Entity<int>
+    public class Theme : EntityDto<int>
     {
         public override int Id { get; set; }
         public string Name { get; set; }

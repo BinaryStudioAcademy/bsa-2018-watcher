@@ -1,6 +1,11 @@
 ﻿
- 
-    export interface Organization { 
+ import { Theme } from './theme';
+import { Chat } from './chat';
+import { UserOrganization } from './userOrganization';
+import { Instance } from './instance';
+import { Notification } from './notification';
+
+    export interface Organization  { 
         id: number;
         name: string;
         themeId: number;
