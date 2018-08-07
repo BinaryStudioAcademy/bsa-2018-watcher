@@ -1,7 +1,7 @@
 ﻿
  import { Theme } from './theme';
 import { Chat } from './chat';
-import { UserOrganization } from './userOrganization';
+import { UserOrganization } from './user-organization';
 import { Instance } from './instance';
 import { Notification } from './notification';
 

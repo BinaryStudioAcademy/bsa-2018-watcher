@@ -1,7 +1,7 @@
 ﻿
  import { Role } from './role';
-import { NotificationSetting } from './notificationSetting';
-import { UserOrganization } from './userOrganization';
+import { NotificationSetting } from './notification-setting';
+import { UserOrganization } from './user-organization';
 import { Notification } from './notification';
 import { Feedback } from './feedback';
 import { Response } from './response';

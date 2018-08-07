@@ -1,5 +1,5 @@
 ﻿
- import { ChatType } from './chatType';
+ import { ChatType } from './chat-type';
 import { User } from './user';
 import { Organization } from './organization';
 import { Message } from './message';
