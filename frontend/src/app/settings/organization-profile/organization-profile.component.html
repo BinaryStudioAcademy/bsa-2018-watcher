@@ -1,11 +1,18 @@
-<p-button icon="fa fa-edit" (click)="canEdit()"></p-button>
+<h3> Organization profile </h3>
+<a [hidden]="!editable" class="btn-edit" (click)="enableInputs()">
+  <i class="fa fa-edit"></i>
+</a>
+
+<div class="ui-g ui-fluid">
+  <div class="ui-g-12 ui-lg-6">
+    <hr>
+  </div>
+</div>
 
 <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
-  <h4 class="label">Organization profile</h4>
-
-  <label>Name:</label>
+  <div class="label">Name:</div>
   <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-md-4">
+    <div class="ui-g-12 ui-md-6 ui-lg-4">
       <div class="ui-inputgroup">
         <span class="ui-inputgroup-addon">
           <i class="fa fa-user"></i>
@@ -15,33 +22,54 @@
     </div>
   </div>
 
-  <div class="nonValid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
-    Name is required.
+  <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
+    <label>Name is required.</label>
   </div>
 
-  <label>Description:</label>
+  <div class="label">Email:</div>
   <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-md-4">
+    <div class="ui-g-12 ui-md-6 ui-lg-4">
       <div class="ui-inputgroup">
         <span class="ui-inputgroup-addon">
-          <i class="fa fa-email"></i>
-        </span>
-        <input type="text" formControlName="description" pInputText placeholder="Description">
-      </div>
-    </div>
-  </div>
-
-  <label>Email:</label>
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-md-4">
-      <div class="ui-inputgroup">
-        <span class="ui-inputgroup-addon">
-          <i class="fa fa-email"></i>
+          <i class="fa fa-envelope"></i>
         </span>
         <input type="text" formControlName="email" pInputText placeholder="Email">
       </div>
     </div>
   </div>
 
-  <button type="submit" pButton class="ui-button-secondary" label="Update"></button>
+  <div class="label">Contact number:</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-md-6 ui-lg-4">
+      <div class="ui-inputgroup">
+        <span class="ui-inputgroup-addon">
+          <i class="fa fa-phone"></i>
+        </span>
+        <input type="text" formControlName="contactNumber" pInputText placeholder="Contact number">
+      </div>
+    </div>
+  </div>
+
+  <div class="label">Web site:</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-md-6 ui-lg-4">
+      <div class="ui-inputgroup">
+        <span class="ui-inputgroup-addon">
+          <i class="fa fa-internet-explorer"></i>
+        </span>
+        <input type="text" formControlName="webSite" pInputText placeholder="Web site">
+      </div>
+    </div>
+  </div>
+
+  <div class="label">Description:</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-md-8 ui-lg-6">
+      <textarea rows="5" formControlName="description" pInputTextarea></textarea>
+      
+      <div [hidden]="!editable" class="btn-panel">
+          <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success btn-form"></button>
+      </div>
+    </div>
+  </div>
 </form>
