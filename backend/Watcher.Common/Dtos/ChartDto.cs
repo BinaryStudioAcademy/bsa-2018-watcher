@@ -5,7 +5,7 @@ using Watcher.Common.MoveToFrontend;
 namespace Watcher.Common.Dtos
 {  
     [ExportClassToTypescript]
-    public class Chart : Entity<int>
+    public class ChartDto : EntityDto<int>
     {
         public override int Id { get; set; }
         public ChartType Type { get; set; }
@@ -14,6 +14,6 @@ namespace Watcher.Common.Dtos
         public int Threshold { get; set; }
         public string MostLoaded { get; set; }
         public int DashboardId { get; set; }
-        public Dashboard Dashboard { get; set; }
+        public DashboardDto Dashboard { get; set; }
     }
 }

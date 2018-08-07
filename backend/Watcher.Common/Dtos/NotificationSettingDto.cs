@@ -4,7 +4,7 @@ using Watcher.Common.MoveToFrontend;
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class NotificationSetting : Entity<int>
+    public class NotificationSettingDto : EntityDto<int>
     {
         public override int Id { get; set; }
         public NotificationType Type { get; set; }

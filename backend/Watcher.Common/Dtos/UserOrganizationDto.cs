@@ -3,12 +3,12 @@
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class UserOrganization
+    public class UserOrganizationDto
     {
         public int UserId { get; set; }
-        public User User { get; set; }
+        public UserDto User { get; set; }
 
         public int OrganizationId { get; set; }
-        public Organization Organization { get; set; }
+        public OrganizationDto Organization { get; set; }
     }
 }

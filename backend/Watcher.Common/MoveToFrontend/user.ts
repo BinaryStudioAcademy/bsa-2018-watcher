@@ -1,6 +1,14 @@
 ﻿
- 
-    export interface User { 
+ import { Role } from './role';
+import { NotificationSetting } from './notificationSetting';
+import { UserOrganization } from './userOrganization';
+import { Notification } from './notification';
+import { Feedback } from './feedback';
+import { Response } from './response';
+import { Message } from './message';
+import { Chat } from './chat';
+
+    export interface User  { 
         id: number;
         firstName: string;
         secondName: string;
