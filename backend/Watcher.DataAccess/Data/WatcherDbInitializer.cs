@@ -1,5 +1,6 @@
 ﻿namespace Watcher.DataAccess.Data
 {
+    using System;
     using System.Linq;
 
     using Bogus;
@@ -34,7 +35,7 @@
             var notificationSettings = notificationSettingFaker.Generate(amount).ToArray();
             
             var userFaker = new Faker<User>()
-                .RuleFor(o => o.Id, f => f.UniqueIndex)
+                .RuleFor(o => o.Id, f => Guid.NewGuid().ToString())
                 .RuleFor(o => o.FirstName, f => f.Name.FirstName())
                 .RuleFor(o => o.SecondName, f => f.Name.LastName())
                 .RuleFor(o => o.Email, f => f.Internet.Email())

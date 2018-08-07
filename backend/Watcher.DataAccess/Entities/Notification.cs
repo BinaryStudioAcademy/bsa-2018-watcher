@@ -16,7 +16,7 @@
         public int? OrganizationId { get; set; }
         public Organization Organization { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
 
         public int NotificationSettingId { get; set; }

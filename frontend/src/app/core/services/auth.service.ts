@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
+import { UserModel } from '../../shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +26,26 @@ export class AuthService {
     );
   }
 
-  signInWithGoogle(): Promise<firebase.auth.UserCredential> {
-    return this._firebaseAuth.auth.signInWithPopup(
-      new firebase.auth.GoogleAuthProvider()
-    );
+  // signInWithGoogle(): Promise<firebase.auth.UserCredential> {
+  //   return this._firebaseAuth.auth.signInWithPopup(
+  //     new firebase.auth.GoogleAuthProvider()
+  //   );
+  // }
+
+  signInWithGoogle(): Promise<UserModel> {
+    let userModel: UserModel;
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()
+    ).then((res) => {
+      userModel = {
+        uid: res.user.uid,
+        email: res.user.email,
+        displayName: res.user.displayName,
+        refreshToken: res.user.refreshToken,
+        photoURL: res.user.photoURL,
+        isNewUser: res.additionalUserInfo.isNewUser
+      };
+      return new Promise<UserModel>((res) => res(userModel));
+    });
   }
 
   signInWithFacebook(): Promise<firebase.auth.UserCredential> {

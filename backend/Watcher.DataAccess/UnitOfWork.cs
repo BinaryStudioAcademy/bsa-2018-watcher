@@ -22,6 +22,7 @@
         private ISamplesRepository _samplesRepository;
         private IUsersRepository _usersRepository;
 
+
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -41,18 +42,7 @@
             }
         }
 
-        public IUsersRepository UsersRepository
-        {
-            get
-            {
-                if (_usersRepository == null)
-                {
-                    _usersRepository = new  UsersRepository(_context, _mapper);
-                }
-
-                return _usersRepository;
-            }
-        }
+        public IUsersRepository UsersRepository => _usersRepository ?? (_usersRepository = new UsersRepository(_context, _mapper));
 
         public async Task<bool> SaveAsync()
         {

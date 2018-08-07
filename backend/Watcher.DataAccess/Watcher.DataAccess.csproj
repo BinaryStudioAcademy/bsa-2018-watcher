@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Watcher.Common\Watcher.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
 </Project>
