@@ -6,9 +6,9 @@
     using Watcher.DataAccess.Entities;
     using Watcher.DataAccess.Interfaces.Repositories;
 
-    public class UserRepository : Repository<User, int>, IUserRepository
+    public class UsersRepository : Repository<User, int>, IUserRepository
     {
-        public UserRepository(WatcherDbContext context, IMapper automapper) : base(context, automapper)
+        public UsersRepository(WatcherDbContext context, IMapper automapper) : base(context, automapper)
         {
         }
     }
