@@ -20,7 +20,8 @@
         private readonly IMapper _mapper;
 
         private ISamplesRepository _samplesRepository;
-
+        private IOrganizationRepository _organizationRepository;
+        
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -40,15 +41,29 @@
             }
         }
 
+        public IOrganizationRepository OrganizationRepository
+        {
+            get
+            {
+                if (_organizationRepository == null)
+                {
+                    _organizationRepository = new OrganizationRepository(_context, _mapper);
+                }
+
+                return _organizationRepository;
+            }
+        }
+
         public async Task<bool> SaveAsync()
         {
             try
             {
-                var changes = _context.ChangeTracker.Entries().Count(
-                    p => p.State == EntityState.Modified || p.State == EntityState.Deleted
-                                                         || p.State == EntityState.Added);
-                if (changes == 0) return true;
                 return await _context.SaveChangesAsync() > 0;
+                //var changes = _context.ChangeTracker.Entries().Count(
+                //    p => p.State == EntityState.Modified || p.State == EntityState.Deleted
+                //                                         || p.State == EntityState.Added);
+                //if (changes == 0) return true;
+                //return await _context.SaveChangesAsync() > 0;
             }
             catch (Exception ex)
             {
