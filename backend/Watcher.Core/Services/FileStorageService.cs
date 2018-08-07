@@ -27,7 +27,7 @@ namespace Watcher.Core.Providers
                 await container.CreateAsync();
             }
 
-            var filename = Guid.NewGuid().ToString();
+            var filename = Guid.NewGuid().ToString()+Path.GetExtension(path);
 
             var blob = container.GetBlockBlobReference(filename);
 
