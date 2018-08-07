@@ -14,15 +14,6 @@ export interface User {
   isActive: boolean;
   createdAt: Date;
   roleId: number;
-<<<<<<< HEAD
-  notificationSettingId: Array<Number>[];
-  userOrganizationsId: Array<Number>[];
-  notificationsId: Array<Number>[];
-  feedbacksId: Array<Number>[];
-  responsesId: Array<Number>[];
-  messagesId: Array<Number>[];
-  createdChatsId: Array<Number>[];
-=======
   role: Role;
   notificationSettingId: number;
   notificationSetting: NotificationSetting;
@@ -32,5 +23,4 @@ export interface User {
   responses: Response[];
   messages: Message[];
   createdChats: Chat[];
->>>>>>> authorization/service
 }
