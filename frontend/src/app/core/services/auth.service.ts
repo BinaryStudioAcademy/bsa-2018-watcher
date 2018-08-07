@@ -32,6 +32,10 @@ export class AuthService {
   //   );
   // }
 
+  getIdToken() {
+    return this._firebaseAuth.idToken;
+  }
+
   signInWithGoogle(): Promise<UserModel> {
     let userModel: UserModel;
     return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()
@@ -44,7 +48,7 @@ export class AuthService {
         photoURL: res.user.photoURL,
         isNewUser: res.additionalUserInfo.isNewUser
       };
-      return new Promise<UserModel>((res) => res(userModel));
+      return userModel;
     });
   }
 
