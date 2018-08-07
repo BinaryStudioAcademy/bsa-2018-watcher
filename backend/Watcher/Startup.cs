@@ -73,6 +73,7 @@
                         fv.ImplicitlyValidateChildProperties = true;
                         // fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                         fv.RegisterValidatorsFromAssemblyContaining<SampleValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<OrganizationValidator>();
                     })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(MvcSetup.JsonSetupAction);
