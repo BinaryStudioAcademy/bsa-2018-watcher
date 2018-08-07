@@ -1,5 +1,5 @@
 ﻿
- import { ChartType } from './chartType';
+ import { ChartType } from './chart-type';
 import { Dashboard } from './dashboard';
 
     export interface Chart  { 

@@ -1,5 +1,5 @@
 ﻿
- import { NotificationType } from './notificationType';
+ import { NotificationType } from './notification-type';
 
     export interface NotificationSetting  { 
         id: number;
