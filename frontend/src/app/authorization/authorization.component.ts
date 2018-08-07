@@ -91,13 +91,16 @@ export class AuthorizationComponent implements OnInit {
   }
 
   signInWithGoogle() {
-    debugger;
     // const userModel = from(this.authService.signInWithGoogle());
     // const token = userModel.pipe(
     //   mergeMap(o => this.authService.getIdToken())
     // );
 
-    const postInfo = this.authService.signInWithGoogle().then(res => this.userService.create(res) );
+    const postInfo = this.authService.signInWithGoogle().then(res => {
+      console.log(res);
+      this.userService.create(res).subscribe(obj =>  console.log(obj));
+      debugger;
+    });
     // const postInfo = forkJoin(userModel, token).subscribe((res) => {
     //     debugger;
     //     this.userService.create(res) ;

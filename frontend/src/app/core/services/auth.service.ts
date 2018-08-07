@@ -39,6 +39,7 @@ export class AuthService {
 
   signInWithGoogle(): Promise<PostInfo> {
     const info: PostInfo = new PostInfo();
+    let result;
     return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()
     ).then((res) => {
       info.model = {
@@ -49,11 +50,24 @@ export class AuthService {
         photoURL: res.user.photoURL,
         isNewUser: res.additionalUserInfo.isNewUser
       };
-      
-      this.getIdToken().subscribe(token => info.token = token);
-      debugger;
-      return info;
+      result = res;
+      // res.user.getIdToken().then(token => info.token = token);
+      // this.getIdToken().subscribe(token => info.token = token);
+      // debugger;
+      return res;
+    }).then(resNext => {
+      // debugger;
+      return resNext.user.getIdToken().then(token => {
+        info.token = token;
+        return info; }
+      );
     });
+    // console.log(result);
+    // return result.user.getIdToken().then(token => {
+    //   console.log(token);
+    //   info.token = token;
+    // });
+    // return info;
   }
 
   signInWithFacebook(): Promise<firebase.auth.UserCredential> {

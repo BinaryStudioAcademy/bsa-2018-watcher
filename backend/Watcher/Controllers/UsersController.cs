@@ -95,20 +95,22 @@ namespace Watcher.Controllers
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
         [HttpPost]
-        public virtual async Task<ActionResult<SampleDto>> Create([FromBody] UserRegisterRequest request)
+        public virtual async Task<ActionResult<SampleDto>> Create([FromBody] FirebaseUserDto request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var dto = await _usersService.CreateEntityAsync(request);
-            if (dto == null)
-            {
-                return StatusCode(500);
-            }
+            //var dto = await _usersService.CreateEntityAsync(request);
+            //if (dto == null)
+            //{
+            //    return StatusCode(500);
+            //}
 
-            return CreatedAtAction("GetById", new { id = dto.Id }, dto);
+            return new SampleDto();
+
+            //return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
 
         /// <summary>
