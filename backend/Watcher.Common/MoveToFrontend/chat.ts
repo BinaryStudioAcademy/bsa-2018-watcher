@@ -1,6 +1,10 @@
 ﻿
- 
-    export interface Chat { 
+ import { ChatType } from './chatType';
+import { User } from './user';
+import { Organization } from './organization';
+import { Message } from './message';
+
+    export interface Chat  { 
         id: number;
         name: string;
         type: ChatType;

@@ -1,6 +1,8 @@
 ﻿
- 
-    export interface Chart { 
+ import { ChartType } from './chartType';
+import { Dashboard } from './dashboard';
+
+    export interface Chart  { 
         id: number;
         type: ChartType;
         source: string;

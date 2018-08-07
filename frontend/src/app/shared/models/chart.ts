@@ -1,7 +1,7 @@
 import { ChartType } from '../enums/chartType';
 import { Dashboard } from './dashboard';
 
-export interface Chart { 
+export interface Chart {
   id: number;
   type: ChartType;
   source: string;

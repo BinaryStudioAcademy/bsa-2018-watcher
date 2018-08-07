@@ -1,6 +1,8 @@
 ﻿
- 
-    export interface Instance { 
+ import { Organization } from './organization';
+import { Dashboard } from './dashboard';
+
+    export interface Instance  { 
         id: number;
         address: string;
         platform: string;
