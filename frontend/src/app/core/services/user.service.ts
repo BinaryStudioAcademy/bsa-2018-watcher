@@ -11,12 +11,10 @@ export class UserService {
   private headers: HttpHeaders;
   private accessPointUrl = 'http://localhost:51093/api/users';
 
- // this.headers = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${authtoken}`});
-
   constructor(private http: HttpClient) { }
 
   public create(postInfo: PostInfo) {
-    return this.http.post(this.accessPointUrl , postInfo.model,
+    return this.http.post(this.accessPointUrl + '/login' , postInfo.model,
      {headers: new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${postInfo.token}`})});
   }
 
