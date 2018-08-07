@@ -5,7 +5,7 @@ using Watcher.Common.MoveToFrontend;
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class User : Entity<int>
+    public class UserDto : EntityDto<int>
     {
         public override int Id { get; set; }
         public string FirstName { get; set; }
@@ -15,21 +15,21 @@ namespace Watcher.Common.Dtos
         public DateTime CreatedAt { get; set; }
         
         public int RoleId { get; set; }
-        public Role Role { get; set; }
+        public RoleDto Role { get; set; }
 
         public int NotificationSettingId { get; set; }
-        public NotificationSetting NotificationSetting { get; set; }
+        public NotificationSettingDto NotificationSetting { get; set; }
 
-        public IList<UserOrganization> UserOrganizations { get; set; }
+        public IList<UserOrganizationDto> UserOrganizations { get; set; }
 
-        public IList<Notification> Notifications { get; set; }
+        public IList<NotificationDto> Notifications { get; set; }
 
-        public IList<Feedback> Feedbacks { get; set; }
+        public IList<FeedbackDto> Feedbacks { get; set; }
 
-        public IList<Response> Responses { get; set; }
+        public IList<ResponseDto> Responses { get; set; }
 
-        public IList<Message> Messages { get; set; }
+        public IList<MessageDto> Messages { get; set; }
 
-        public IList<Chat> CreatedChats { get; set; }
+        public IList<ChatDto> CreatedChats { get; set; }
     }
 }

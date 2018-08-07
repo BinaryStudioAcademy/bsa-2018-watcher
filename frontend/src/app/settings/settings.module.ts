@@ -2,17 +2,19 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SettingsComponent } from './settings.component';
 import { NotificationSettingsComponent } from './notification-settings/notification-settings.component';
-import { RouterModule } from '../../../node_modules/@angular/router';
 import { TabViewModule, PanelMenuModule } from 'primeng/primeng';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { SettingsRoutingModule } from './settings-routing.module';
+import { OrganisationProfileComponent } from './organisation-profile/organisation-profile.component';
+
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
     TabViewModule,
+    SettingsRoutingModule,
     PanelMenuModule
   ],
-  declarations: [SettingsComponent, NotificationSettingsComponent, UserProfileComponent]
+  declarations: [ SettingsComponent, NotificationSettingsComponent, UserProfileComponent, OrganisationProfileComponent]
 })
 export class SettingsModule { }

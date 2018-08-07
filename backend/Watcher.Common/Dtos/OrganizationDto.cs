@@ -4,7 +4,7 @@ using Watcher.Common.MoveToFrontend;
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class OrganizationDto : Entity<int>
+    public class OrganizationDto : EntityDto<int>
     {
         public override int Id { get; set; }
         public string Name { get; set; }
@@ -24,7 +24,7 @@ namespace Watcher.Common.Dtos
         public int? ChatId { get; set; }
 
         public int CreatedByUserId { get; set; }
-        
+
         public IList<int> UsersId { get; set; }
 
         public IList<int> InstancesId { get; set; }
