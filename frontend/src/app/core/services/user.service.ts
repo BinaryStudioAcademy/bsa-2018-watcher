@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from '../../../../node_modules/rxjs';
 import { UserModel } from '../../shared/models/user.model';
+import { UserUpdate } from '../../shared/models/userUpdate';
+import { User } from '../../shared/models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +17,22 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   public create(postInfo) {
-    debugger;
     console.log(postInfo);
 
     // return this.http.post(this.accessPointUrl , postInfo['0'],
     //  {headers: new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${postInfo['1']}`})});
+  }
+
+  public update(id: string, user: UserUpdate) {
+    this.http.put(`${this.accessPointUrl}${id}`, user).subscribe();
+  }
+
+  public get(id: string): User {
+    let user: User;
+    this.http.get(`${this.accessPointUrl}${id}`).subscribe((value: User) => {
+      user = value;
+    });
+    return user;
   }
 
 }
