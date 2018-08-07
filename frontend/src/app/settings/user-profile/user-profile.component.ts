@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder } from '@angular/forms';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'firebase';
 
 @Component({
@@ -13,15 +13,27 @@ export class UserProfileComponent implements OnInit {
 
   user: User;
   userForm = this.fb.group({
-    firstName: [''],
-    secondName: ['']
+    firstName: new FormControl({ value: '', disabled: true  }, Validators.required),
+    secondName: new FormControl({ value: '', disabled: true  }, Validators.required)
   });
 
   ngOnInit() {
   }
 
+  editFirstName() {
+    const ctrl = this.userForm.get('firstName');
+    ctrl.enabled ? ctrl.disable() : ctrl.enable();
+  }
+
+  editSecondName() {
+    const ctrl = this.userForm.get('secondName');
+    console.log(ctrl.disabled);
+
+    ctrl.enabled ? ctrl.disable() : ctrl.enable();
+  }
+
   onSubmit() {
-    console.log('Ok');
+    console.log(this.userForm.valid);
   }
 
 }

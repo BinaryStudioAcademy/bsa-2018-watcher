@@ -4,9 +4,14 @@
         <div class="ui-g-12 ui-md-4">
             <div class="ui-inputgroup">
                 <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-                <input type="text" formControlName="firstName" pInputText placeholder="First name">         
+                <input type="text" formControlName="firstName" pInputText placeholder="First name">     
+                <p-button icon="fa fa-edit" (click)="editFirstName()"></p-button>    
             </div>
         </div>
+    </div>
+
+    <div class="nonValid" *ngIf="userForm.get('firstName').errors && userForm.get('firstName').dirty">
+        Fisrt Name is required.
     </div>
 
     <h4 class="label">Second Name</h4>
@@ -14,10 +19,15 @@
         <div class="ui-g-12 ui-md-4">
             <div class="ui-inputgroup">
                 <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-                <input type="text" formControlName="secondName" pInputText placeholder="Second name">         
+                <input type="text" disabled formControlName="secondName" pInputText placeholder="Second name">  
+                <p-button icon="fa fa-edit" (click)="editSecondName()"></p-button>          
             </div>
         </div>
     </div>
 
-        <button type="submit" pButton class="ui-button-secondary" label="Update"></button>
+    <div class="nonValid" *ngIf="userForm.get('secondName').errors && userForm.get('secondName').dirty">
+        Second Name is required.
+    </div>
+
+    <button type="submit" pButton class="ui-button-secondary" label="Update"></button>
 </form>
