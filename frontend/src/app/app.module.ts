@@ -18,7 +18,6 @@ import { AuthorizationComponent } from './authorization/authorization.component'
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { DashboardsModule } from './dashboards/dashboards.module';
-import { SettingsModule } from './settings/settings.module';
 import {NotificationsModule} from './notifications/notifications.module';
 
 import { AngularFireModule } from 'angularfire2';
@@ -37,8 +36,6 @@ import { AuthService } from './core/services/auth.service';
   imports: [
     BrowserModule,
     HttpClientModule,
-    CoreModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
     AccordionModule,
@@ -46,17 +43,20 @@ import { AuthService } from './core/services/auth.service';
     ButtonModule,
     RadioButtonModule,
     DialogModule,
-    AdminModule,
-    UserModule,
-    DashboardsModule,
-    SettingsModule,
+    TabViewModule,
+
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+
+    CoreModule,
     NotificationsModule,
-    TabViewModule
+    UserModule,
+    AdminModule,
+
+    AppRoutingModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -2,32 +2,25 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from '../dashboards/dashboard/dashboard.component';
 import { UserComponent } from './user.component';
-import { SettingsComponent } from '../settings/settings.component';
 
-
-/* export const settings = '../settings/settings.module#SettingsModule'; */
-
-const userChildRoutes: Routes = [
-  {
-    path: '',
-    redirectTo: 'dashboards',
-    pathMatch: 'full'
-  },
-  {
-  path: 'dashboards',
-  component: DashboardComponent
-  },
-  { path: 'settings', component: SettingsComponent }
-];
-
-const routes: Routes = [{
+const userRoutes: Routes = [{
   path: 'user',
   component: UserComponent,
-  children: userChildRoutes
+  children: [{
+      path: '',
+      redirectTo: 'dashboards',
+      pathMatch: 'full'
+    }, {
+      path: 'dashboards',
+      component: DashboardComponent
+    }, {
+      path: 'settings',
+      loadChildren: '../settings/settings.module#SettingsModule'
+  }]
 }];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(userRoutes)],
   exports: [RouterModule]
 })
 export class UserRoutingModule { }
