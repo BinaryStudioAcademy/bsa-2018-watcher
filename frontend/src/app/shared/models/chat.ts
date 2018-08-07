@@ -3,7 +3,7 @@ import { User } from './user';
 import { Organization } from './organization';
 import { Message } from './message';
 
-export interface Chat { 
+export interface Chat {
   id: number;
   name: string;
   type: ChatType;

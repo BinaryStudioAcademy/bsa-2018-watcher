@@ -1,7 +1,7 @@
 import { Instance } from './instance';
 import { Chart } from './chart';
 
-export interface Dashboard { 
+export interface Dashboard {
   id: number;
   title: string;
   createdAt: Date;
