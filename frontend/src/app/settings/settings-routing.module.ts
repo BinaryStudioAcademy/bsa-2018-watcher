@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsComponent } from './settings.component';
 import { NotificationSettingsComponent } from './notification-settings/notification-settings.component';
+import { OrganisationProfileComponent } from './organisation-profile/organisation-profile.component';
 
 const settingsRoutes: Routes = [{
   path: '',
@@ -13,6 +14,9 @@ const settingsRoutes: Routes = [{
   }, {
     path: 'user-profile',
     component: UserProfileComponent
+  }, {
+    path: 'organisation-profile',
+    component: OrganisationProfileComponent
   }, {
     path: 'notification-settings',
     component: NotificationSettingsComponent

@@ -5,6 +5,7 @@ import { NotificationSettingsComponent } from './notification-settings/notificat
 import { TabViewModule, PanelMenuModule } from 'primeng/primeng';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsRoutingModule } from './settings-routing.module';
+import { OrganisationProfileComponent } from './organisation-profile/organisation-profile.component';
 
 
 @NgModule({
@@ -14,6 +15,6 @@ import { SettingsRoutingModule } from './settings-routing.module';
     SettingsRoutingModule,
     PanelMenuModule
   ],
-  declarations: [ SettingsComponent, NotificationSettingsComponent, UserProfileComponent]
+  declarations: [ SettingsComponent, NotificationSettingsComponent, UserProfileComponent, OrganisationProfileComponent]
 })
 export class SettingsModule { }
