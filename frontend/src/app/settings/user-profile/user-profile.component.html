@@ -1,33 +1,50 @@
-<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-    <h4 class="label">Name</h4>
-    <div class="ui-g ui-fluid"> 
-        <div class="ui-g-12 ui-md-4">
+<div class="container">
+    <form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <h4 class="label">Name</h4>
+        <div class="ui-g ui-fluid"> 
             <div class="ui-inputgroup">
                 <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
                 <input type="text" formControlName="firstName" pInputText placeholder="First name">     
-                <p-button icon="fa fa-edit" (click)="editFirstName()"></p-button>    
             </div>
         </div>
-    </div>
 
-    <div class="nonValid" *ngIf="userForm.get('firstName').errors && userForm.get('firstName').dirty">
-        Fisrt Name is required.
-    </div>
+        <div class="nonValid" *ngIf="userForm.get('firstName').errors && userForm.get('firstName').dirty">
+            Fisrt Name is required.
+        </div>
 
-    <h4 class="label">Second Name</h4>
-    <div class="ui-g ui-fluid"> 
-        <div class="ui-g-12 ui-md-4">
+        <h4 class="label">Second Name</h4>
+        <div class="ui-g ui-fluid"> 
             <div class="ui-inputgroup">
                 <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-                <input type="text" disabled formControlName="secondName" pInputText placeholder="Second name">  
-                <p-button icon="fa fa-edit" (click)="editSecondName()"></p-button>          
+                <input type="text" formControlName="secondName" pInputText placeholder="Second name">       
             </div>
         </div>
-    </div>
 
-    <div class="nonValid" *ngIf="userForm.get('secondName').errors && userForm.get('secondName').dirty">
-        Second Name is required.
-    </div>
+        <h4 class="label">Nickname</h4>
+        <div class="ui-g ui-fluid"> 
+            <div class="ui-inputgroup">
+                <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+                <input type="text" formControlName="nickName" pInputText placeholder="Nickname">       
+            </div>
+        </div>
 
-    <button type="submit" pButton class="ui-button-secondary" label="Update"></button>
-</form>
+        <div class="nonValid" *ngIf="userForm.get('secondName').errors && userForm.get('secondName').dirty">
+            Second Name is required.
+        </div>
+
+        <h4 class="label">Bio</h4>
+        <div>
+            <textarea [rows]="5" [cols]="30" pInputTextarea autoResize="autoResize" formControlName="bio"></textarea>
+        </div>
+
+        <h4 class="label">Active</h4>
+        <div>
+            <p-toggleButton formControlName="isActive" onLabel="Active" offLabel="Disabled"></p-toggleButton>
+        </div>
+
+        <button type="submit" pButton class="ui-button-secondary btn-update" [disabled]="!userForm.valid" label="Update"></button>
+    </form>
+    <div>
+        <p-button label="Edit" class="ui-button-secondary" (click)="edit()"></p-button>
+    </div>
+</div>

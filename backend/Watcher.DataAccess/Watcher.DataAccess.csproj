@@ -12,6 +12,7 @@
     <Compile Remove="Data\Migrations\20180804065527_AddRelation.cs" />
     <Compile Remove="Data\Migrations\20180804073613_AddRelation.cs" />
     <Compile Remove="Data\Migrations\20180804121748_FixedRelationBetweenUsersAndOrganizations.cs" />
+    <Compile Remove="Data\Migrations\20180807164747_AddFieldsUser.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Watcher.Common\Watcher.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
 </Project>

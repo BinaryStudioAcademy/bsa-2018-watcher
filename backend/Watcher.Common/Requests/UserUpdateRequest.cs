@@ -10,10 +10,12 @@
 
         public bool IsActive { get; set; }
 
-        public int NotificationSettingId { get; set; }
+        public string NickName { get; set; }
 
-       // public string Email { get; set; } // TODO: can't be changed
+        public string Bio { get; set; }
 
-       // public string CompanyName { get; set; }
+        // public string Email { get; set; } // TODO: can't be changed
+
+        // public string CompanyName { get; set; }
     }
 }
