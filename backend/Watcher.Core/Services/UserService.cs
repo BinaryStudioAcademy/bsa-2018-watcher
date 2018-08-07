@@ -21,11 +21,11 @@
 
         public async Task<bool> UpdateEntityByIdAsync(UserRequest request, int id)
         {
-            var entity = _mapper.Map<SampleRequest, Sample>(request);
+            var entity = _mapper.Map<UserRequest, User>(request);
             entity.Id = id;
 
             // In returns updated entity, you could do smth with it or just leave as it is
-            var updated = await _uow.SamplesRepository.UpdateAsync(entity);
+            var updated = await _uow.UsersRepository.UpdateAsync(entity);
             var result = await _uow.SaveAsync();
 
             return result;
