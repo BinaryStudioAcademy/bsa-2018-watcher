@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { NotificationSetting } from '../../shared/models/notificationSetting';
 
 @Component({
   selector: 'app-notification-settings',
@@ -7,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotificationSettingsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private fb: FormBuilder) {
+
+   }
 
   ngOnInit() {
   }
