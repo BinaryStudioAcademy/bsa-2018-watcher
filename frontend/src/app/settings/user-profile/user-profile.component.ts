@@ -27,13 +27,19 @@ export class UserProfileComponent implements OnInit {
 
   editSecondName() {
     const ctrl = this.userForm.get('secondName');
-    console.log(ctrl.disabled);
-
     ctrl.enabled ? ctrl.disable() : ctrl.enable();
   }
 
   onSubmit() {
-    console.log(this.userForm.valid);
+    if (this.userForm.valid) {
+
+    } else {
+      Object.keys(this.userForm.controls).forEach(field => { // {1}
+        const control = this.userForm.get(field);            // {2}
+        control.markAsDirty({ onlySelf: true });
+        control.enable();
+      });
+    }
   }
 
 }
