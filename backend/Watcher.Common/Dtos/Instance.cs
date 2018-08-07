@@ -11,7 +11,7 @@ namespace Watcher.Common.Dtos
         public string Platform { get; set; }
 
         public int OrganizationId { get; set; }
-        public Organization Organization { get; set; }
+        public OrganizationDto Organization { get; set; }
         
         public IList<Dashboard> Dashboards { get; set; }
     }

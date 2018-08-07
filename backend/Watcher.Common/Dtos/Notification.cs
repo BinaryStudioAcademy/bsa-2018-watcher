@@ -11,7 +11,7 @@ namespace Watcher.Common.Dtos
         public DateTime CreatedAt { get; set; }
 
         public int? OrganizationId { get; set; }
-        public Organization Organization { get; set; }
+        public OrganizationDto Organization { get; set; }
 
         public int UserId { get; set; }
         public User User { get; set; }
