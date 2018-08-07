@@ -131,7 +131,8 @@
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
                 {
-                    services.AddTransient<IFileStorageProvider, FileStorageProvider>(prov => new FileStorageProvider(fileStorageString));
+                    services.AddSingleton<IFileStorageProvider, FileStorageProvider>
+                        (prov => new FileStorageProvider(fileStorageString));
                 }
             }
             else
@@ -139,8 +140,8 @@
                 var localFileStorageString = Configuration.GetConnectionString("AzureLocalFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(localFileStorageString))
                 {
-                    services.AddTransient<IFileStorageProvider, LocalFileStorageProvider>
-                        (prov => new LocalFileStorageProvider(localFileStorageString));
+                    services.AddSingleton<IFileStorageProvider, FileStorageProvider>
+                        (prov => new FileStorageProvider(localFileStorageString));
                 }
             }
         }
