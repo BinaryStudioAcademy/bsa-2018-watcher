@@ -6,8 +6,6 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 }*/)
 export class ToastnotificationService {
 
-  response: boolean;
-
   constructor(private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
   success(message: string) {
@@ -27,13 +25,17 @@ export class ToastnotificationService {
   }
 
   confirm(message: string) {
-    this.confirmationService.confirm({
-      message: message,
-      header: 'Attention',
-      icon: 'fa fa-question-circle',
-      accept: () => { this.response = true; },
-      reject: () => { this.response = false; }
+    return new Promise((resolve, reject) => {
+      this.confirmationService.confirm({
+          message: message,
+          accept: () => {
+              resolve(true);
+          },
+          reject: () => {
+            resolve(false);
+          }
+      });
   });
-  return this.response;
+
   }
 }
