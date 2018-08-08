@@ -1,5 +1,6 @@
 ﻿namespace Watcher.Core.MappingProfiles
 {
+    using System;
     using System.Linq;
     using System.Security.Claims;
 
@@ -17,9 +18,12 @@
                 .ForMember(d => d.Id, o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
 
             CreateMap<User, UserDto>()
-                .ForMember(d => d.Role, o => o.MapFrom(s => s.Role));
+                .ForMember(d => d.Role, o => o.MapFrom(s => s.RoleId == 1 ? new Watcher.DataAccess.Entities.Role(s.RoleId, "Admin") : new Watcher.DataAccess.Entities.Role(s.RoleId, "User")));
 
             CreateMap<UserRegisterRequest, User>()
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Uid))
+                .ForMember(d => d.CreatedAt, o => o.UseValue(DateTime.UtcNow))
+                .ForMember(d => d.IsActive, o => o.UseValue(true))
                 .ForMember(d => d.Id, o => o.UseValue(0))
                 .ForMember(d => d.RoleId, o => o.UseValue(2)); // (Id of User)
 

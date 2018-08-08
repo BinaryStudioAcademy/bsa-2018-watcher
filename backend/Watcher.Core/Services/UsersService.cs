@@ -1,13 +1,10 @@
 ﻿namespace Watcher.Core.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
     using AutoMapper;
-
-    using Microsoft.EntityFrameworkCore;
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
@@ -50,11 +47,8 @@
         {
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
 
-            entity.Id = request.Uid;
-            entity.IsActive = true;
-            entity.CreatedAt = DateTime.Now;
-
             entity = await _uow.UsersRepository.CreateAsync(entity);
+            
             var result = await _uow.SaveAsync();
             if (!result)
             {
@@ -64,21 +58,6 @@
             if (entity == null) return null;
 
             var dto = _mapper.Map<User, UserDto>(entity);
-
-           // var entity = await _uow.UsersRepository.GetFirstOrDefaultAsync();
-
-          //  var dto = _mapper.Map<User, UserDto>(entity);
-
-            //var dto = new UserDto()
-            //{
-            //    Id = request.Uid,
-            //    CreatedAt = DateTime.UtcNow,
-            //    Role = new RoleDto { Id = 1, Name = "Admin" },
-            //    Email = request.Email,
-            //    FirstName = request.DisplayName,
-            //    SecondName = request.DisplayName,
-            //    IsActive = true
-            //};
 
             return dto;
         }
