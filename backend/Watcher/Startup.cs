@@ -142,12 +142,8 @@
             }
             else
             {
-                var localFileStorageString = Configuration.GetConnectionString("LocalFileStorageConnection");
-                if (!string.IsNullOrWhiteSpace(localFileStorageString))
-                {
-                    services.AddSingleton<IFileStorageProvider, LocalFileStorageProvider>
-                        (prov => new LocalFileStorageProvider(localFileStorageString));
-                }
+                services.AddSingleton<IFileStorageProvider, LocalFileStorageProvider>
+                        (prov => new LocalFileStorageProvider());
             }
         }
 
