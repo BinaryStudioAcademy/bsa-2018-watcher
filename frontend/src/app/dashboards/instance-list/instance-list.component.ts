@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import {Component, OnInit} from '@angular/core';
+import {MenuItem, MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-instance-list',
   templateUrl: './instance-list.component.html',
-  styleUrls: ['./instance-list.component.sass']
+  styleUrls: ['./instance-list.component.sass'],
 })
 export class InstanceListComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   menuItems: MenuItem[];
 

@@ -5,7 +5,14 @@ import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
 import { DashboardsModule } from '../dashboards/dashboards.module';
 import { HeaderComponent } from '../header/header.component';
-import { ToolbarModule, TieredMenuModule, ButtonModule } from 'primeng/primeng';
+import {
+  ToolbarModule,
+  TieredMenuModule,
+  ButtonModule,
+  MessagesModule,
+  MessageModule,
+  GrowlModule
+} from 'primeng/primeng';
 
 @NgModule({
   imports: [
@@ -14,7 +21,10 @@ import { ToolbarModule, TieredMenuModule, ButtonModule } from 'primeng/primeng';
     DashboardsModule,
     ToolbarModule,
     TieredMenuModule,
-    ButtonModule
+    ButtonModule,
+    GrowlModule,
+    MessagesModule,
+    MessageModule,
   ],
   declarations: [ UserComponent, HeaderComponent ]
 })

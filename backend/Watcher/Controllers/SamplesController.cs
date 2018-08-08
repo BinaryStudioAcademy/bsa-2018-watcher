@@ -8,10 +8,12 @@ namespace Watcher.Controllers
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.SignalR;
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
+    using Watcher.Hubs;
 
     /// <summary>   
     /// Controller to Manage Samples
@@ -28,13 +30,22 @@ namespace Watcher.Controllers
         private readonly ISamplesService _samplesService;
 
         /// <summary>
+        /// Notifications Hub Context
+        /// </summary>
+        private readonly IHubContext<NotificationsHub> _notificationsHubContext;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SamplesController"/> class. 
         /// </summary>
         /// <param name="service">
         /// Samples service
         /// </param>
-        public SamplesController(ISamplesService service)
+        /// <param name="hubContext">
+        /// The hub Context.
+        /// </param>
+        public SamplesController(ISamplesService service, IHubContext<NotificationsHub> hubContext)
         {
+            _notificationsHubContext = hubContext;
             _samplesService = service;
         }
 
@@ -113,6 +124,7 @@ namespace Watcher.Controllers
                 return StatusCode(500);
             }
 
+            await _notificationsHubContext.Clients.All.SendAsync("AddSample", dto);
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
 
