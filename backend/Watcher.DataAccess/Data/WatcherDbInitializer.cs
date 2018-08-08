@@ -29,6 +29,7 @@
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.IsDisable, f => f.PickRandom(true, false))
                 .RuleFor(o => o.IsMute, f => f.PickRandom(true, false))
+                .RuleFor(o => o.IsEmailable, f => f.PickRandom(true, false))
                 .RuleFor(o => o.Type, f => f.Random.Enum<NotificationType>());
 
             var notificationSettings = notificationSettingFaker.Generate(amount).ToArray();

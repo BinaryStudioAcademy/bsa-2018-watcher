@@ -18,6 +18,9 @@
         [Required]
         public bool IsDisable { get; set; }
 
+        [Required]
+        public bool IsEmailable { get; set; }
+
         public IList<Notification> Notifications { get; set; }
     }
 }
