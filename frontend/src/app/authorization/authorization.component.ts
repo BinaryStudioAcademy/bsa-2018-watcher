@@ -29,10 +29,10 @@ export class AuthorizationComponent implements OnInit {
   firstName = '';
 
   constructor(private authService: AuthService,
-              private userService: UserService,
-              private router: Router
-              // ,private currentUser: UserModel
-            ) { }
+    private userService: UserService,
+    private router: Router
+    // ,private currentUser: UserModel
+  ) { }
 
   ngOnInit() {
   }
@@ -73,6 +73,11 @@ export class AuthorizationComponent implements OnInit {
   }
 
   signUpWithGoogle() {
+    const postInfo = this.authService.signInWithGoogle().then(res => {
+      console.log(res.token);
+      this.userService.register(res).subscribe(obj => console.log(obj));
+    });
+    this.saveUserDetails();
     this.isSuccessSignUp = true;
   }
 
@@ -100,9 +105,9 @@ export class AuthorizationComponent implements OnInit {
 
   signInWithGoogle() {
     const postInfo = this.authService.signInWithGoogle().then(res => {
-    // this.currentUser = res.user;
-    console.log(res.token);
-      this.userService.create(res).subscribe(obj =>  console.log(obj));
+      // this.currentUser = res.user;
+      console.log(res.token);
+      this.userService.create(res).subscribe(obj => console.log(obj));
     });
     this.saveUserDetails();
   }

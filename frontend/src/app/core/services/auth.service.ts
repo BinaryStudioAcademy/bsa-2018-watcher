@@ -74,6 +74,28 @@ export class AuthService {
     }
   }
 
+  signUpWithGoogle(): Promise<PostInfo> {
+    const info: PostInfo = new PostInfo();
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()
+    ).then((res) => {
+      info.user = {
+        uid: res.user.uid,
+        email: res.user.email,
+        displayName: res.user.displayName,
+        refreshToken: res.user.refreshToken,
+        photoURL: res.user.photoURL,
+        isNewUser: res.additionalUserInfo.isNewUser
+      };
+
+      return res;
+    }).then(resNext => {
+      return resNext.user.getIdToken().then(token => {
+        info.token = token;
+        return info; }
+      );
+    });
+  }
+
   logout() {
     this._firebaseAuth.auth.signOut()
       .then((res) => this.router.navigate(['/']));
