@@ -1,13 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
 import { AuthService } from '../core/services/auth.service';
 import { UserService } from '../core/services/user.service';
 import { Router } from '@angular/router';
-import { FirebaseCredential } from '../shared/models/firebase.model';
-import { concat, forkJoin, from, Observable } from 'rxjs';
-import { UserModel } from '../shared/models/user.model';
-import { mergeMap } from '../../../node_modules/rxjs/operators';
 import {TokenService} from '../core/services/token.service';
 
 @Component({
@@ -34,17 +28,10 @@ export class AuthorizationComponent implements OnInit {
     private userService: UserService,
     private tokenService: TokenService,
     private router: Router
-    // ,private currentUser: UserModel
   ) { }
 
   ngOnInit() {
   }
-
-  // getCurrentUser(): UserModel {
-  //   if (this.currentUser != null) {
-  //     return this.currentUser;
-  //   }
-  // }
 
   showDialogSignIn() {
     this.display = true;
@@ -83,7 +70,7 @@ export class AuthorizationComponent implements OnInit {
     if (result) {
       return this.router.navigate(['/user/dashboards']);
     } else {
-      return this.router.navigate(['landing']);
+      return this.router.navigate(['/']);
     }
   }
 

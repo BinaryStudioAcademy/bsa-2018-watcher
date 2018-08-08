@@ -23,7 +23,7 @@ export class TokenService {
   // }
 
   register(postInfo: PostInfo): Observable<TokenDto>  {
-    const headers = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${postInfo.token}`});
-    return this.apiService.post(`/${this.ctrlUrl}/Register`, postInfo.user, headers);
+    // const headers = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${postInfo.token}`});
+    return this.apiService.post(`/${this.ctrlUrl}/Register`, postInfo.user);
   }
 }
