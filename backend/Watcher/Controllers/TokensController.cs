@@ -34,7 +34,7 @@
             var tokenResponse = await _tokensService.CreateTokenAsync(request, User);
             if (tokenResponse == null)
             {
-                return BadRequest("User тще not registered");
+                return BadRequest("User is not registered");
             }
 
             return Ok(tokenResponse);
