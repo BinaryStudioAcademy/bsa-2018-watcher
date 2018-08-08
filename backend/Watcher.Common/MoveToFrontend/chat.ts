@@ -5,7 +5,7 @@
         name: string;
         type: ChatType;
         createdById: number;
-        createdBy: User;
+        createdBy: UserDto;
         organizationId: number;
         organization: Organization;
         messages: Message[];

@@ -7,7 +7,7 @@
         organizationId: number;
         organization: Organization;
         userId: number;
-        user: User;
+        user: UserDto;
     }
 
 
