@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from '../../../../node_modules/rxjs';
-import { UserModel } from '../../shared/models/user.model';
-import { User } from '../../shared/models/user';
 import { PostInfo } from '../../shared/models/post-info';
+import { User } from '../../shared/models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private headers: HttpHeaders;
-  private accessPointUrl = 'http://localhost:65246/api/users';
+  private accessPointUrl = 'http://localhost:65246/users';
   private accessTokensPointUrl = 'http://localhost:65246/api/tokens';
   private tokensUrl = 'http://localhost:65246/api/Tokens';
 

@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20180808174823_AddFieldsForUser.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="Bogus" Version="22.3.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.0" />

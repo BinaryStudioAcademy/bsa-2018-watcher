@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
+import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/models/user';
 
 @Component({
@@ -11,11 +12,13 @@ import { User } from '../../shared/models/user';
 export class UserProfileComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
-              private userService: UserService) { }
+              private userService: UserService,
+              private authService: AuthService) { }
 
   private user: User;
   private userId: string;
   private userForm = this.fb.group({
+    displayName: new FormControl({ value: '', disabled: true }, Validators.required),
     firstName: new FormControl({ value: '', disabled: true  }, Validators.required),
     secondName: new FormControl({ value: '', disabled: true  }, Validators.required),
     isActive: new FormControl({ value: '', disabled: true }, Validators.required),
@@ -24,8 +27,8 @@ export class UserProfileComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.userId = 'User uid from database';
-    this.userService.get(this.userId).subscribe((value: User) => {
+    this.userId = this.authService.getCurrentUser().id;
+    this.userService.get(this.userId).subscribe((value) => {
       this.user = value;
       this.setUserData();
     });

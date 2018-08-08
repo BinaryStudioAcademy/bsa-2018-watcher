@@ -1,5 +1,17 @@
 <div class="container">
     <form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <h4 class="label">Display Name</h4>
+        <div class="ui-g ui-fluid"> 
+            <div class="ui-inputgroup">
+                <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+                <input type="text" formControlName="displayName" pInputText placeholder="Display name">     
+            </div>
+        </div>
+
+        <div class="nonValid" *ngIf="userForm.get('displayName').errors && userForm.get('displayName').dirty">
+                Display Name is required.
+        </div>
+        
         <h4 class="label">Name</h4>
         <div class="ui-g ui-fluid"> 
             <div class="ui-inputgroup">

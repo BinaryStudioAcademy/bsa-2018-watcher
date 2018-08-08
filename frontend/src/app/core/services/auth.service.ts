@@ -48,9 +48,8 @@ export class AuthService {
         }
       };
 
-      const tokenDto = await this.tokenService.register(info).toPromise();
-
       localStorage.setItem('firebaseToken', info.token);
+      const tokenDto = await this.tokenService.register(info).toPromise();
       localStorage.setItem('currentUser', JSON.stringify(tokenDto.user));
       localStorage.setItem('watcherToken', tokenDto.watcherJWT);
 

@@ -63,6 +63,7 @@ export class AuthorizationComponent implements OnInit {
   }
 
   async signUpWithGoogle() {
+    debugger;
     const result = await this.authService.signInWithGoogle();
     this.closeDialog();
     // this.isSuccessSignUp = true;
