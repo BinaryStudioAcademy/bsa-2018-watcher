@@ -14,7 +14,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   public create(postInfo: PostInfo) {
-    return this.http.post(this.accessPointUrl + '/login' , postInfo.model,
+    return this.http.post(this.accessPointUrl + '/login' , postInfo.user,
      {headers: new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${postInfo.token}`})});
   }
 
