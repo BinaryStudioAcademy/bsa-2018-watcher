@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user';
-import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -13,7 +11,6 @@ import { AuthService } from '../../core/services/auth.service';
 export class UserProfileComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
-              private httpClient: HttpClient,
               private userService: UserService) { }
 
   private user: User;
