@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Organization } from '../../shared/models/organization';
+import { Organization } from '../../shared/models/organization.model';
+
 
 @Component({
   selector: 'app-organization-profile',

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { NotificationSetting } from '../../shared/models/notificationSetting';
-import { NotificationType } from '../../shared/enums/notificationType';
+import { NotificationType } from '../../shared/models/notification-type.enum';
+
 
 @Injectable({
   providedIn: 'root'

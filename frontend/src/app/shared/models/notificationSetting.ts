@@ -1,4 +1,5 @@
-import { NotificationType } from '../enums/notificationType';
+import { NotificationType } from './notification-type.enum';
+
 
 export interface NotificationSetting {
     id: number;
