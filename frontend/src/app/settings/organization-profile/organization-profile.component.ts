@@ -13,6 +13,8 @@ import { OrganizationService } from '../../core/services/organization.service';
 export class OrganizationProfileComponent implements OnInit {
 
   editable: boolean;
+  canUpdate: boolean;
+
   organization: Organization;
   organizationForm: FormGroup;
 
@@ -47,11 +49,12 @@ export class OrganizationProfileComponent implements OnInit {
     });
   }
 
-  enableInputs() {
+  enableEditing() {
     Object.keys(this.organizationForm.controls).forEach(field => {
       const control = this.organizationForm.get(field);
       control.enable();
     });
+    this.canUpdate = true;
   }
 
 onSubmit() {

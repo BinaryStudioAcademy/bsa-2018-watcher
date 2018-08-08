@@ -1,5 +1,5 @@
 <h3> Organization profile </h3>
-<a [hidden]="!editable" class="btn-edit" (click)="enableInputs()">
+<a [hidden]="!editable" class="btn-edit" (click)="enableEditing()">
   <i class="fa fa-edit"></i>
 </a>
 
@@ -66,10 +66,9 @@
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-md-8 ui-lg-6">
       <textarea rows="5" formControlName="description" pInputTextarea></textarea>
-      
-      <div [hidden]="!editable" class="btn-panel">
-          <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success btn-form"></button>
-      </div>
     </div>
   </div>
+  <div [hidden]="!canUpdate" class="btn-panel">
+    <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success"></button>
+</div>
 </form>
