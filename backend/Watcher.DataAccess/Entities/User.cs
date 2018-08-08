@@ -10,11 +10,12 @@
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public override string Id { get; set; }
 
-        [Required]
         public string FirstName { get; set; }
 
-        [Required]
         public string SecondName { get; set; }
+
+        [Required]
+        public string DisplayName { get; set; }
 
         [Required]
         public string Email { get; set; }
@@ -27,9 +28,8 @@
         
         public int RoleId { get; set; }
         public Role Role { get; set; }
-
-        public int NotificationSettingId { get; set; }
-        public NotificationSetting NotificationSetting { get; set; }
+        
+        public IList<NotificationSetting> NotificationSettings { get; set; }
 
         public IList<UserOrganization> UserOrganizations { get; set; }
 
