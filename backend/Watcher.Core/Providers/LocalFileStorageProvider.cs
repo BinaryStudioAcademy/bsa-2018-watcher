@@ -14,53 +14,44 @@ namespace Watcher.Core.Providers
         }
         public Task<string> UploadFileAsync(string path, string containerName = "watcher")
         {
-            var tcs = new TaskCompletionSource<string>();
-            Task.Run(() =>
+            try
             {
-                try
-                {
-                    string dirPath = defaultPath + containerName;
+                string dirPath = defaultPath + containerName;
 
-                    var directory = new DirectoryInfo(dirPath);
-                    if (!directory.Exists) directory.Create();
+                var directory = new DirectoryInfo(dirPath);
+                if (!directory.Exists) directory.Create();
 
-                    var file = new FileInfo(path);
+                var file = new FileInfo(path);
 
-                    if (!file.Exists)
-                        throw new ArgumentNullException("Invalid path");
+                if (!file.Exists)
+                    throw new ArgumentNullException("Invalid path");
 
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(path);
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(path);
 
-                    var fileInfo = file.CopyTo(dirPath + @"\" + filename);
+                var fileInfo = file.CopyTo(dirPath + @"\\" + filename);
 
-                    string newPath = dirPath + @"\" + filename;
-                    tcs.SetResult(newPath);
-                }
-                catch (Exception ex)
-                {
-                    tcs.SetException(ex);
-                }
-            });
-            return tcs.Task;
+                string newPath = dirPath + @"\\" + filename;
+                return Task.FromResult<string>(newPath);
+            }
+            catch(Exception ex)
+            {
+                return Task.FromException<string>(ex);
+            }
         }
         public Task DeleteFileAsync(string path)
         {
-            var tcs = new TaskCompletionSource<object>();
-            Task.Run(() => {
-                try
-                {
-                    var file = new FileInfo(path);
-                    if (!file.Exists)
-                        throw new ArgumentNullException("Invalid path");
-                    file.Delete();
-                    tcs.SetResult(null);
-                }
-                catch (Exception ex)
-                {
-                    tcs.SetException(ex);
-                }
-            });
-            return tcs.Task;
+            try
+            {
+                var file = new FileInfo(path);
+                if (!file.Exists)
+                    throw new ArgumentNullException("Invalid path");
+                file.Delete();
+                return Task.FromResult<object>(null);
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<object>(ex);
+            }
         }
     }
 }
