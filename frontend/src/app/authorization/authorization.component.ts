@@ -28,21 +28,20 @@ export class AuthorizationComponent implements OnInit {
   lastName = '';
   firstName = '';
 
-  constructor(private currentUser: UserModel,
-              private authService: AuthService,
+  constructor(private authService: AuthService,
               private userService: UserService,
-              private router: Router) {
-
-  }
+              private router: Router
+              // ,private currentUser: UserModel
+            ) { }
 
   ngOnInit() {
   }
 
-  getCurrentUser(): UserModel {
-    if (this.currentUser != null) {
-      return this.currentUser;
-    }
-  }
+  // getCurrentUser(): UserModel {
+  //   if (this.currentUser != null) {
+  //     return this.currentUser;
+  //   }
+  // }
 
   showDialogSignIn() {
     this.display = true;
