@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
 import {TokenService} from '../core/services/token.service';
+import { UserDto } from '../shared/models/user-dto';
 
 @Component({
   selector: 'app-authorization',
@@ -106,13 +107,21 @@ export class AuthorizationComponent implements OnInit {
 
   async signInWithGoogle() {
     const result = await this.authService.signInWithGoogle();
-    this.closeDialog();
-    // this.isSuccessSignUp = true;
 
-    if (result) {
-      return this.router.navigate(['/user/dashboards']);
+    const currentUser: UserDto  = this.authService.getCurrentUser();
+    
+
+    if (currentUser == null) {
+      this.showNotRegisteredSignIn();
     } else {
-      return this.router.navigate(['/']);
+        this.closeDialog();
+      // this.isSuccessSignUp = true;
+
+      if (result) {
+        return this.router.navigate(['/user/dashboards']);
+      } else {
+        return this.router.navigate(['/']);
+      }
     }
   }
 
@@ -164,7 +173,7 @@ export class AuthorizationComponent implements OnInit {
 
   noRegistration() {
     this.display = false;
-    this.router.navigate(['landing']);
+    this.router.navigate(['/']);
   }
 
 }
