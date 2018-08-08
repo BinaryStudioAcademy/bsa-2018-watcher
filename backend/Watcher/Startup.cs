@@ -137,11 +137,11 @@
             }
             else
             {
-                var localFileStorageString = Configuration.GetConnectionString("AzureLocalFileStorageConnection");
+                var localFileStorageString = Configuration.GetConnectionString("LocalFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(localFileStorageString))
                 {
-                    services.AddSingleton<IFileStorageProvider, FileStorageProvider>
-                        (prov => new FileStorageProvider(localFileStorageString));
+                    services.AddSingleton<IFileStorageProvider, LocalFileStorageProvider>
+                        (prov => new LocalFileStorageProvider(localFileStorageString));
                 }
             }
         }
