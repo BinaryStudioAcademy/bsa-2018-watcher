@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using Watcher.Common.Interfaces.Entities;
 using Watcher.Common.MoveToFrontend;
 
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class OrganizationDto : EntityDto<int>
+    public class OrganizationDto : IEntity<int>
     {
-        public override int Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
 
         public string Description { get; set; }
