@@ -16,19 +16,23 @@ export class NotificationSettingsComponent implements OnInit {
 
 
   constructor(private service: NotificationSettingsService) {
+    this.dropdown = new Array<SelectItem>();
     this.notificationSettings = this.service.getDefaultData();
     this.selectedNotificationSetting = this.notificationSettings[0];
-    this.dropdown = [
-      {label: NotificationType[this.notificationSettings[0].type], value: this.notificationSettings[0]},
-      {label: NotificationType[this.notificationSettings[1].type], value: this.notificationSettings[1]},
-    ];
-    }
+    this.fillDropdown(this.notificationSettings);
+  }
 
   ngOnInit() {
 
   }
 
   onSubmit() {
+  }
+
+  private fillDropdown(notificationSettings: NotificationSetting[]) {
+    notificationSettings.forEach(element => {
+      this.dropdown.push({label: NotificationType[element.type], value: element});
+    });
   }
 
 }
