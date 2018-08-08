@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from '../../../../node_modules/rxjs';
 import { UserModel } from '../../shared/models/user.model';
-import { UserUpdate } from '../../shared/models/userUpdate';
 import { User } from '../../shared/models/user';
 
 @Injectable({
@@ -23,7 +22,7 @@ export class UserService {
     //  {headers: new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${postInfo['1']}`})});
   }
 
-  public update(id: string, user: UserUpdate) {
+  public update(id: string, user: User) {
     this.http.put(`${this.accessPointUrl}${id}`, user).subscribe();
   }
 
