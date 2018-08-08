@@ -23,11 +23,11 @@ export class UserService {
   }
 
   public update(id: string, user: User) {
-    this.http.put(`${this.accessPointUrl}${id}`, user).subscribe();
+    this.http.put(`${this.accessPointUrl}/${id}`, user).subscribe();
   }
 
   public get(id: string): Observable<User> {
-    return this.http.get(`${this.accessPointUrl}${id}`) as Observable<User>;
+    return this.http.get(`${this.accessPointUrl}/${id}`) as Observable<User>;
   }
 
   public register(postInfo: PostInfo) {
