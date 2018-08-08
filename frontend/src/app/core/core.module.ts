@@ -3,13 +3,16 @@ import { throwIfAlreadyLoaded } from './guards/module-import.guard';
 import { CommonModule } from '@angular/common';
 import { DefaultService } from './services/default.service';
 import { ToastnotificationService } from './services/toastnotification.service';
+import { OrganizationService } from './services/organization.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   providers: [
-    DefaultService, ToastnotificationService
+    DefaultService,
+    ToastnotificationService,
+    OrganizationService
   ],
   declarations: []
 })
