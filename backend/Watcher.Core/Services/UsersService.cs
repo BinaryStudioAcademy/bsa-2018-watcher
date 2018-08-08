@@ -49,6 +49,7 @@ namespace Watcher.Core.Services
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
 
             entity = await _uow.UsersRepository.CreateAsync(entity);
+            
             var result = await _uow.SaveAsync();
             if (!result)
             {

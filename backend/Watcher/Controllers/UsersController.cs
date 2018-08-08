@@ -12,7 +12,7 @@ namespace Watcher.Controllers
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
 
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
     public class UsersController : ControllerBase

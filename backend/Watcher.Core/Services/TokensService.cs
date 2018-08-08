@@ -31,7 +31,7 @@
             // TODO: Parse token claim to get user email
             var userDto = await _usersService.GetEntityByIdAsync("Some email"); // email (from token )
 
-            return CreateTokenDto(userDto);
+            return CreateFakeTokenDto(userDto);
         }
 
         public TokenDto CreateTokenDto(UserDto user)
@@ -54,11 +54,38 @@
                 subject: claimsIdentity,
                 expires: now.Add(TimeSpan.FromMinutes(_tokenOptions.Value.Access_Token_Lifetime)),
                 signingCredentials: new SigningCredentials(_tokenOptions.Value.GetSymmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature)
-                ); // TODO: Get secret key from Configs
+            ); // TODO: Get secret key from Configs
 
             var encodedJwt = tokenHandler.WriteToken(jwt);
 
             return new TokenDto(encodedJwt);
+        }
+
+        public TokenDto CreateFakeTokenDto(UserDto user)
+        {
+            var claims = new List<Claim>
+                             {
+                                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+                                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
+                             };
+
+            var claimsIdentity = TokenUtil.CreateDefaultClaimsIdentity(claims);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var now = DateTime.UtcNow;
+
+            var jwt = tokenHandler.CreateJwtSecurityToken(
+                issuer: _tokenOptions.Value.Issuer,
+                audience: _tokenOptions.Value.Audience,
+                notBefore: now,
+                subject: claimsIdentity,
+                expires: now.Add(TimeSpan.FromMinutes(_tokenOptions.Value.Access_Token_Lifetime)),
+                signingCredentials: new SigningCredentials(_tokenOptions.Value.GetSymmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature)
+                ); // TODO: Get secret key from Configs
+
+            var encodedJwt = tokenHandler.WriteToken(jwt);
+
+            return new TokenDto(encodedJwt, user);
         }
     }
 }

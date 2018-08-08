@@ -1,6 +1,6 @@
 import { UserModel } from './user.model';
 
-export class PostInfo {
+export interface PostInfo {
     user: UserModel;
     token: string;
 }

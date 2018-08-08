@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DefaultService } from '../core/services/default.service';
 
 @Component({
   selector: 'app-landing',
@@ -11,7 +10,7 @@ import { DefaultService } from '../core/services/default.service';
 })
 export class LandingComponent implements OnInit, OnDestroy {
 
-  constructor(private defaultService: DefaultService) {}
+  constructor() {}
 
   headerScroll(): any {
     const scrolled = window.pageYOffset || document.documentElement.scrollTop;

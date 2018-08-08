@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Watcher.DataAccess.Data;
 
 namespace Watcher.DataAccess.Data.Migrations
 {
     [DbContext(typeof(WatcherDbContext))]
-    partial class WatcherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180808151328_AddedDisplayNameToUser")]
+    partial class AddedDisplayNameToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -396,6 +398,11 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new { Id = 1, Name = "Admin" },
+                        new { Id = 2, Name = "User" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Sample", b =>
@@ -454,12 +461,6 @@ namespace Watcher.DataAccess.Data.Migrations
                 {
                     b.Property<string>("Id");
 
-                    b.Property<string>("Bio");
-
-                    b.Property<int>("ChhosedOrganizationId");
-
-                    b.Property<int?>("ChoosedOrganizationId");
-
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("DisplayName")
@@ -469,6 +470,7 @@ namespace Watcher.DataAccess.Data.Migrations
                         .IsRequired();
 
                     b.Property<string>("FirstName");
+
                     b.Property<bool>("IsActive");
 
                     b.Property<int>("RoleId");
@@ -476,6 +478,7 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("SecondName");
 
                     b.HasKey("Id");
+
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
@@ -505,6 +508,7 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("UserOrganizations");
+
                     b.HasData(
                         new { UserId = "59cd0d8c-07ba-4e60-943f-7a06a967cdfd", OrganizationId = 76 },
                         new { UserId = "87f77ff4-670d-4715-9831-a703e38d52ca", OrganizationId = 74 },

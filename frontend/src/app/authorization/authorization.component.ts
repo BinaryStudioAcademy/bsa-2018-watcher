@@ -8,6 +8,7 @@ import { FirebaseCredential } from '../shared/models/firebase.model';
 import { concat, forkJoin, from, Observable } from 'rxjs';
 import { UserModel } from '../shared/models/user.model';
 import { mergeMap } from '../../../node_modules/rxjs/operators';
+import {TokenService} from '../core/services/token.service';
 
 @Component({
   selector: 'app-authorization',
@@ -28,8 +29,10 @@ export class AuthorizationComponent implements OnInit {
   lastName = '';
   firstName = '';
 
-  constructor(private authService: AuthService,
+  constructor(
+    private authService: AuthService,
     private userService: UserService,
+    private tokenService: TokenService,
     private router: Router
     // ,private currentUser: UserModel
   ) { }
@@ -72,13 +75,16 @@ export class AuthorizationComponent implements OnInit {
     this.isSuccessSignUp = false;
   }
 
-  signUpWithGoogle() {
-    const postInfo = this.authService.signInWithGoogle().then(res => {
-      console.log(res.token);
-      this.userService.register(res).subscribe(obj => console.log(obj));
-    });
-    this.saveUserDetails();
-    this.isSuccessSignUp = true;
+  async signUpWithGoogle() {
+    const result = await this.authService.signInWithGoogle();
+    this.closeDialog();
+    // this.isSuccessSignUp = true;
+
+    if (result) {
+      return this.router.navigate(['/user/dashboards']);
+    } else {
+      return this.router.navigate(['landing']);
+    }
   }
 
   signUpWithGitHub() {
@@ -104,11 +110,11 @@ export class AuthorizationComponent implements OnInit {
   }
 
   signInWithGoogle() {
-    const postInfo = this.authService.signInWithGoogle().then(res => {
-      // this.currentUser = res.user;
-      console.log(res.token);
-      this.userService.create(res).subscribe(obj => console.log(obj));
-    });
+    // const postInfo = this.authService.signInWithGoogle().then(res => {
+    //   // this.currentUser = res.user;
+    //   console.log(res.token);
+    //   this.userService.create(res).subscribe(obj => console.log(obj));
+    // });
     this.saveUserDetails();
   }
 

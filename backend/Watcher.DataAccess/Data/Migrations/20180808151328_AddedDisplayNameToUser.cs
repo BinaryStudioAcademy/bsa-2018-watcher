@@ -4,25 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Watcher.DataAccess.Data.Migrations
 {
-    public partial class ChangedUserIdType : Migration
+    public partial class AddedDisplayNameToUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "NotificationSettings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<int>(nullable: false),
-                    IsMute = table.Column<bool>(nullable: false),
-                    IsDisable = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NotificationSettings", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
@@ -72,23 +57,17 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    SecondName = table.Column<string>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    SecondName = table.Column<string>(nullable: true),
+                    DisplayName = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false),
-                    NotificationSettingId = table.Column<int>(nullable: false)
+                    RoleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_NotificationSettings_NotificationSettingId",
-                        column: x => x.NotificationSettingId,
-                        principalTable: "NotificationSettings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
@@ -134,6 +113,29 @@ namespace Watcher.DataAccess.Data.Migrations
                     table.ForeignKey(
                         name: "FK_Feedbacks_Users_UserId",
                         column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotificationSettings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Type = table.Column<int>(nullable: false),
+                    IsMute = table.Column<bool>(nullable: false),
+                    IsDisable = table.Column<bool>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    UserId1 = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotificationSettings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NotificationSettings_Users_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -189,41 +191,6 @@ namespace Watcher.DataAccess.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notifications",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Text = table.Column<string>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    OrganizationId = table.Column<int>(nullable: true),
-                    UserId = table.Column<string>(nullable: true),
-                    NotificationSettingId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Notifications", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Notifications_NotificationSettings_NotificationSettingId",
-                        column: x => x.NotificationSettingId,
-                        principalTable: "NotificationSettings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Notifications_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Notifications_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserOrganizations",
                 columns: table => new
                 {
@@ -269,6 +236,41 @@ namespace Watcher.DataAccess.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Responses_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Text = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    OrganizationId = table.Column<int>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    NotificationSettingId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_NotificationSettings_NotificationSettingId",
+                        column: x => x.NotificationSettingId,
+                        principalTable: "NotificationSettings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -351,19 +353,19 @@ namespace Watcher.DataAccess.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "NotificationSettings",
-                columns: new[] { "Id", "IsDisable", "IsMute", "Type" },
+                columns: new[] { "Id", "IsDisable", "IsMute", "Type", "UserId", "UserId1" },
                 values: new object[,]
                 {
-                    { 1, false, false, 1 },
-                    { 2, false, true, 1 },
-                    { 3, true, true, 0 },
-                    { 4, true, true, 0 },
-                    { 5, false, true, 1 },
-                    { 6, true, false, 0 },
-                    { 7, true, true, 1 },
-                    { 8, true, true, 1 },
-                    { 9, false, true, 1 },
-                    { 10, true, true, 1 }
+                    { 1, true, true, 0, 0, null },
+                    { 2, false, false, 1, 0, null },
+                    { 3, false, true, 0, 0, null },
+                    { 4, true, true, 0, 0, null },
+                    { 5, false, false, 0, 0, null },
+                    { 6, true, false, 0, 0, null },
+                    { 7, true, true, 0, 0, null },
+                    { 8, true, true, 0, 0, null },
+                    { 9, true, true, 0, 0, null },
+                    { 10, false, true, 1, 0, null }
                 });
 
             migrationBuilder.InsertData(
@@ -380,16 +382,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "BackgroundColor", "FontFamily", "Name" },
                 values: new object[,]
                 {
-                    { 61, "Yellow", "Frutiger", "Theme413" },
-                    { 62, "Yellow", "Helvetica", "Theme910" },
-                    { 63, "Gray", "Trade", "Theme0" },
-                    { 64, "Gray", "Helvetica", "Theme527" },
-                    { 65, "Gray", "Univers", "Theme895" },
-                    { 66, "Yellow", "Trade", "Theme633" },
-                    { 67, "Gray", "Helvetica", "Theme264" },
-                    { 68, "White", "Univers", "Theme315" },
-                    { 69, "Yellow", "Trade", "Theme936" },
-                    { 70, "Gray", "Helvetica", "Theme875" }
+                    { 61, "White", "Helvetica", "Theme261" },
+                    { 62, "Gray", "Frutiger", "Theme287" },
+                    { 63, "White", "Frutiger", "Theme603" },
+                    { 64, "Gray", "Trade", "Theme818" },
+                    { 65, "Yellow", "Frutiger", "Theme245" },
+                    { 66, "White", "Frutiger", "Theme129" },
+                    { 67, "Gray", "Univers", "Theme975" },
+                    { 68, "Yellow", "Univers", "Theme299" },
+                    { 69, "White", "Trade", "Theme527" },
+                    { 70, "Gray", "Frutiger", "Theme105" }
                 });
 
             migrationBuilder.InsertData(
@@ -397,33 +399,33 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "Name", "ThemeId" },
                 values: new object[,]
                 {
-                    { 79, "Company957", 70 },
-                    { 74, "Company874", 69 },
-                    { 76, "Company306", 68 },
-                    { 73, "Company311", 68 },
-                    { 71, "Company460", 68 },
-                    { 80, "Company550", 66 },
-                    { 77, "Company237", 64 },
-                    { 75, "Company106", 62 },
-                    { 72, "Company996", 61 },
-                    { 78, "Company590", 69 }
+                    { 75, "Company192", 70 },
+                    { 78, "Company984", 69 },
+                    { 73, "Company678", 69 },
+                    { 74, "Company233", 68 },
+                    { 71, "Company899", 66 },
+                    { 76, "Company773", 65 },
+                    { 79, "Company177", 62 },
+                    { 77, "Company115", 61 },
+                    { 72, "Company134", 61 },
+                    { 80, "Company25", 69 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "CreatedAt", "Email", "FirstName", "IsActive", "NotificationSettingId", "RoleId", "SecondName" },
+                columns: new[] { "Id", "CreatedAt", "DisplayName", "Email", "FirstName", "IsActive", "RoleId", "SecondName" },
                 values: new object[,]
                 {
-                    { "c716da2b-a608-4e2d-b525-a164e2f0aa12", new DateTime(2018, 8, 7, 10, 9, 45, 917, DateTimeKind.Local), "Katelin85@yahoo.com", "Evans", false, 2, 2, "Weimann" },
-                    { "e5f54f66-0cb0-46b9-857f-9aca56305c3d", new DateTime(2018, 8, 6, 15, 2, 30, 954, DateTimeKind.Local), "Davin26@gmail.com", "Nat", true, 8, 2, "Kuhn" },
-                    { "acc88de3-e94d-46f3-a04d-07b0c5bdb0fe", new DateTime(2018, 8, 7, 10, 17, 11, 816, DateTimeKind.Local), "Chris_Ebert@hotmail.com", "Isidro", false, 10, 2, "Daugherty" },
-                    { "f8a4e5e2-ef65-46d8-adba-9f341e3cd924", new DateTime(2018, 8, 6, 14, 21, 50, 88, DateTimeKind.Local), "Josiah.VonRueden@hotmail.com", "Hollis", true, 8, 2, "Howe" },
-                    { "65397671-3a9c-437c-97b0-4ea3309c82e8", new DateTime(2018, 8, 7, 8, 5, 28, 829, DateTimeKind.Local), "Violet60@yahoo.com", "Maci", false, 6, 2, "Walker" },
-                    { "0c24406d-3139-4e89-a48d-53a9ff4c7bfc", new DateTime(2018, 8, 6, 16, 12, 4, 759, DateTimeKind.Local), "Kali85@hotmail.com", "Chaya", true, 5, 1, "Littel" },
-                    { "9dac3529-7462-48ab-99ea-df3e17506402", new DateTime(2018, 8, 7, 6, 5, 17, 127, DateTimeKind.Local), "Kylee1@yahoo.com", "Bernhard", true, 1, 1, "Graham" },
-                    { "1ebcd497-ea1f-4f45-a9c3-b7782bcc027c", new DateTime(2018, 8, 6, 16, 44, 27, 881, DateTimeKind.Local), "Mandy10@yahoo.com", "Desmond", true, 10, 1, "Paucek" },
-                    { "8bd9ceb7-2599-4270-8cb1-4133bf305731", new DateTime(2018, 8, 6, 23, 26, 15, 71, DateTimeKind.Local), "Elody_Gorczany@gmail.com", "Jermain", true, 7, 2, "Marvin" },
-                    { "54179531-bb49-4e4f-9c03-48fe4d5c430a", new DateTime(2018, 8, 7, 5, 31, 0, 489, DateTimeKind.Local), "Mose_Terry@yahoo.com", "Velva", false, 2, 1, "Kerluke" }
+                    { "8e70d16d-c344-43d2-a917-0a0e087c8b5a", new DateTime(2018, 8, 7, 21, 37, 36, 351, DateTimeKind.Local), "Tommie", "Gerson.Dare@hotmail.com", "Woodrow", true, 2, "Grimes" },
+                    { "3008686f-a95c-4e25-b0f7-1ac58ccccefe", new DateTime(2018, 8, 7, 22, 5, 14, 166, DateTimeKind.Local), "Spencer", "Else.Kunde73@yahoo.com", "Federico", false, 2, "Tromp" },
+                    { "28d9560d-e2f2-409e-bc0e-8864ea939882", new DateTime(2018, 8, 8, 17, 3, 45, 697, DateTimeKind.Local), "Ethelyn", "Rhiannon_Breitenberg38@gmail.com", "Jan", true, 2, "Rau" },
+                    { "5282bfd7-5a16-4bc0-92d2-354a14217853", new DateTime(2018, 8, 8, 8, 21, 32, 799, DateTimeKind.Local), "Mateo", "Lorena_Blanda@hotmail.com", "Armani", false, 1, "Doyle" },
+                    { "04db4214-f5bb-4449-a4eb-cc485c03244f", new DateTime(2018, 8, 8, 16, 51, 25, 653, DateTimeKind.Local), "Maude", "Lorenz47@hotmail.com", "Lora", true, 1, "Quitzon" },
+                    { "de8f0970-c1bc-4072-9c76-a5e598e3d6e4", new DateTime(2018, 8, 8, 9, 41, 47, 297, DateTimeKind.Local), "Micah", "Gerson62@hotmail.com", "Keaton", false, 1, "Hilpert" },
+                    { "a257c7de-ea3b-4c26-ace2-68b0d490577b", new DateTime(2018, 8, 7, 23, 9, 49, 597, DateTimeKind.Local), "Sigrid", "Kurt58@hotmail.com", "Ross", true, 1, "Herzog" },
+                    { "87f77ff4-670d-4715-9831-a703e38d52ca", new DateTime(2018, 8, 8, 7, 57, 12, 296, DateTimeKind.Local), "Sylvan", "Leonor.Graham9@gmail.com", "Rowland", false, 1, "Nader" },
+                    { "18d3bc15-1982-43a9-a7e0-ef2226ed89e0", new DateTime(2018, 8, 8, 5, 58, 59, 864, DateTimeKind.Local), "Gideon", "Ardith.Torp@yahoo.com", "Chadd", true, 2, "Kessler" },
+                    { "59cd0d8c-07ba-4e60-943f-7a06a967cdfd", new DateTime(2018, 8, 8, 16, 54, 26, 920, DateTimeKind.Local), "Jaylen", "Kyla95@gmail.com", "Jarrod", true, 1, "Stehr" }
                 });
 
             migrationBuilder.InsertData(
@@ -431,16 +433,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "CreatedById", "Name", "OrganizationId", "Type" },
                 values: new object[,]
                 {
-                    { 25, "54179531-bb49-4e4f-9c03-48fe4d5c430a", "earum", null, 0 },
-                    { 26, "54179531-bb49-4e4f-9c03-48fe4d5c430a", "ab", null, 0 },
-                    { 23, "1ebcd497-ea1f-4f45-a9c3-b7782bcc027c", "ut", null, 0 },
-                    { 24, "c716da2b-a608-4e2d-b525-a164e2f0aa12", "amet", null, 0 },
-                    { 22, "0c24406d-3139-4e89-a48d-53a9ff4c7bfc", "qui", null, 0 },
-                    { 27, "65397671-3a9c-437c-97b0-4ea3309c82e8", "voluptatem", null, 0 },
-                    { 29, "65397671-3a9c-437c-97b0-4ea3309c82e8", "quam", null, 0 },
-                    { 21, "e5f54f66-0cb0-46b9-857f-9aca56305c3d", "est", null, 0 },
-                    { 30, "f8a4e5e2-ef65-46d8-adba-9f341e3cd924", "similique", null, 0 },
-                    { 28, "acc88de3-e94d-46f3-a04d-07b0c5bdb0fe", "est", null, 0 }
+                    { 25, "59cd0d8c-07ba-4e60-943f-7a06a967cdfd", "est", null, 0 },
+                    { 30, "8e70d16d-c344-43d2-a917-0a0e087c8b5a", "nemo", null, 0 },
+                    { 24, "8e70d16d-c344-43d2-a917-0a0e087c8b5a", "officia", null, 0 },
+                    { 28, "18d3bc15-1982-43a9-a7e0-ef2226ed89e0", "et", null, 0 },
+                    { 26, "a257c7de-ea3b-4c26-ace2-68b0d490577b", "voluptas", null, 0 },
+                    { 22, "a257c7de-ea3b-4c26-ace2-68b0d490577b", "totam", null, 0 },
+                    { 21, "04db4214-f5bb-4449-a4eb-cc485c03244f", "illum", null, 0 },
+                    { 27, "87f77ff4-670d-4715-9831-a703e38d52ca", "illum", null, 0 },
+                    { 23, "87f77ff4-670d-4715-9831-a703e38d52ca", "aut", null, 0 },
+                    { 29, "59cd0d8c-07ba-4e60-943f-7a06a967cdfd", "consectetur", null, 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -448,16 +450,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "ResponseId", "Text", "UserId" },
                 values: new object[,]
                 {
-                    { 49, new DateTime(2018, 8, 7, 9, 42, 1, 670, DateTimeKind.Local), null, "Eligendi officia eligendi soluta rem.", "c716da2b-a608-4e2d-b525-a164e2f0aa12" },
-                    { 47, new DateTime(2018, 8, 6, 18, 36, 20, 29, DateTimeKind.Local), null, "Consequatur voluptatum dolorem nisi natus doloremque quisquam adipisci dolorem necessitatibus.", "c716da2b-a608-4e2d-b525-a164e2f0aa12" },
-                    { 42, new DateTime(2018, 8, 7, 4, 28, 59, 172, DateTimeKind.Local), null, "Et possimus odit.", "8bd9ceb7-2599-4270-8cb1-4133bf305731" },
-                    { 46, new DateTime(2018, 8, 6, 18, 48, 44, 429, DateTimeKind.Local), null, "Inventore quod quo sit sed accusantium.", "e5f54f66-0cb0-46b9-857f-9aca56305c3d" },
-                    { 41, new DateTime(2018, 8, 7, 3, 15, 31, 451, DateTimeKind.Local), null, "Animi dolores ab soluta nisi suscipit maiores enim ut.", "e5f54f66-0cb0-46b9-857f-9aca56305c3d" },
-                    { 48, new DateTime(2018, 8, 7, 3, 9, 17, 767, DateTimeKind.Local), null, "Enim debitis explicabo sunt.", "8bd9ceb7-2599-4270-8cb1-4133bf305731" },
-                    { 43, new DateTime(2018, 8, 6, 23, 57, 51, 573, DateTimeKind.Local), null, "Qui tenetur non similique omnis at at qui.", "65397671-3a9c-437c-97b0-4ea3309c82e8" },
-                    { 50, new DateTime(2018, 8, 6, 16, 8, 13, 954, DateTimeKind.Local), null, "Cupiditate id molestiae repellendus laudantium magni voluptatem et minus aut.", "0c24406d-3139-4e89-a48d-53a9ff4c7bfc" },
-                    { 45, new DateTime(2018, 8, 7, 12, 49, 58, 220, DateTimeKind.Local), null, "Eum cum ratione.", "0c24406d-3139-4e89-a48d-53a9ff4c7bfc" },
-                    { 44, new DateTime(2018, 8, 7, 2, 36, 28, 416, DateTimeKind.Local), null, "Ut perspiciatis natus.", "9dac3529-7462-48ab-99ea-df3e17506402" }
+                    { 49, new DateTime(2018, 8, 8, 10, 49, 39, 119, DateTimeKind.Local), null, "Iure dolores officia nesciunt asperiores occaecati quisquam inventore ratione.", "87f77ff4-670d-4715-9831-a703e38d52ca" },
+                    { 41, new DateTime(2018, 8, 8, 5, 33, 1, 298, DateTimeKind.Local), null, "Voluptatibus voluptate repellat voluptates aliquid quaerat facilis cupiditate iusto accusamus.", "59cd0d8c-07ba-4e60-943f-7a06a967cdfd" },
+                    { 47, new DateTime(2018, 8, 7, 23, 54, 44, 720, DateTimeKind.Local), null, "Quisquam fugiat laudantium velit.", "59cd0d8c-07ba-4e60-943f-7a06a967cdfd" },
+                    { 45, new DateTime(2018, 8, 8, 14, 7, 30, 856, DateTimeKind.Local), null, "Et sed qui est repellat sed molestiae.", "28d9560d-e2f2-409e-bc0e-8864ea939882" },
+                    { 44, new DateTime(2018, 8, 8, 12, 13, 30, 475, DateTimeKind.Local), null, "Velit incidunt sed consequatur quia exercitationem numquam dolor dolores.", "28d9560d-e2f2-409e-bc0e-8864ea939882" },
+                    { 48, new DateTime(2018, 8, 8, 2, 22, 30, 313, DateTimeKind.Local), null, "Dolores praesentium repellendus modi deleniti quod saepe quia rerum.", "87f77ff4-670d-4715-9831-a703e38d52ca" },
+                    { 43, new DateTime(2018, 8, 8, 15, 48, 46, 720, DateTimeKind.Local), null, "Non eum quisquam eos porro saepe rerum eos.", "8e70d16d-c344-43d2-a917-0a0e087c8b5a" },
+                    { 50, new DateTime(2018, 8, 7, 19, 39, 30, 851, DateTimeKind.Local), null, "Quisquam saepe necessitatibus aut.", "04db4214-f5bb-4449-a4eb-cc485c03244f" },
+                    { 42, new DateTime(2018, 8, 8, 5, 10, 14, 614, DateTimeKind.Local), null, "Quis quo consectetur rerum tenetur eaque ad id inventore labore.", "8e70d16d-c344-43d2-a917-0a0e087c8b5a" },
+                    { 46, new DateTime(2018, 8, 7, 20, 58, 6, 500, DateTimeKind.Local), null, "Facilis quae vel aut sunt sequi harum consectetur odit amet.", "de8f0970-c1bc-4072-9c76-a5e598e3d6e4" }
                 });
 
             migrationBuilder.InsertData(
@@ -465,16 +467,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "Address", "OrganizationId", "Platform" },
                 values: new object[,]
                 {
-                    { 82, "35:0a:9c:68:71:a3", 75, "Windows" },
-                    { 84, "de:b1:ef:09:b5:0f", 78, "Linux" },
-                    { 86, "71:71:07:84:bc:2e", 74, "Linux" },
-                    { 89, "47:16:45:b7:45:01", 76, "Windows" },
-                    { 87, "88:9e:aa:c3:cb:11", 71, "Windows" },
-                    { 85, "23:b9:5d:6b:d3:c4", 71, "Linux" },
-                    { 88, "95:61:f7:7d:66:cd", 77, "Linux" },
-                    { 90, "c7:b1:0c:a9:77:56", 72, "Linux" },
-                    { 83, "54:c9:a9:7d:1a:7e", 79, "Windows" },
-                    { 81, "29:70:47:d6:2f:56", 79, "Windows" }
+                    { 84, "ea:09:b0:f5:8e:ec", 77, "Linux" },
+                    { 88, "18:81:da:b2:46:fa", 71, "Linux" },
+                    { 90, "b0:af:03:c1:12:f5", 72, "Windows" },
+                    { 89, "dd:74:7b:7c:be:1b", 72, "Windows" },
+                    { 85, "0d:94:12:18:0e:a7", 72, "Windows" },
+                    { 82, "f0:84:8d:89:10:d1", 73, "Linux" },
+                    { 86, "68:e0:2c:92:82:72", 73, "Linux" },
+                    { 87, "f9:57:02:26:72:6a", 71, "Windows" },
+                    { 83, "1a:df:7e:6b:a1:3f", 76, "Windows" },
+                    { 81, "e1:a0:23:c5:bb:f7", 80, "Linux" }
                 });
 
             migrationBuilder.InsertData(
@@ -482,16 +484,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "NotificationSettingId", "OrganizationId", "Text", "UserId" },
                 values: new object[,]
                 {
-                    { 119, new DateTime(2018, 8, 7, 4, 54, 48, 807, DateTimeKind.Local), 9, null, "Voluptas sunt est et saepe et deserunt ut dolor.", "acc88de3-e94d-46f3-a04d-07b0c5bdb0fe" },
-                    { 115, new DateTime(2018, 8, 7, 0, 42, 48, 217, DateTimeKind.Local), 1, null, "Qui cum fuga.", "0c24406d-3139-4e89-a48d-53a9ff4c7bfc" },
-                    { 112, new DateTime(2018, 8, 7, 6, 26, 11, 599, DateTimeKind.Local), 5, null, "Blanditiis harum non rerum.", "e5f54f66-0cb0-46b9-857f-9aca56305c3d" },
-                    { 118, new DateTime(2018, 8, 7, 10, 14, 0, 472, DateTimeKind.Local), 5, null, "Sit animi tenetur expedita commodi aut.", "e5f54f66-0cb0-46b9-857f-9aca56305c3d" },
-                    { 111, new DateTime(2018, 8, 7, 9, 38, 53, 38, DateTimeKind.Local), 1, null, "Nulla labore eos eius inventore unde praesentium.", "1ebcd497-ea1f-4f45-a9c3-b7782bcc027c" },
-                    { 116, new DateTime(2018, 8, 6, 17, 48, 33, 300, DateTimeKind.Local), 5, null, "Voluptatibus adipisci voluptatem laboriosam non autem dolorem sit.", "c716da2b-a608-4e2d-b525-a164e2f0aa12" },
-                    { 120, new DateTime(2018, 8, 6, 20, 30, 57, 572, DateTimeKind.Local), 7, null, "Porro modi et saepe nobis error amet pariatur numquam totam.", "f8a4e5e2-ef65-46d8-adba-9f341e3cd924" },
-                    { 114, new DateTime(2018, 8, 6, 13, 31, 36, 481, DateTimeKind.Local), 5, null, "Veniam omnis sed odit eos possimus natus asperiores nesciunt.", "9dac3529-7462-48ab-99ea-df3e17506402" },
-                    { 117, new DateTime(2018, 8, 6, 16, 24, 11, 249, DateTimeKind.Local), 8, null, "Sint qui quia officiis qui quo molestiae saepe.", "8bd9ceb7-2599-4270-8cb1-4133bf305731" },
-                    { 113, new DateTime(2018, 8, 6, 21, 8, 55, 355, DateTimeKind.Local), 6, null, "Aut odio molestias accusantium quasi illo eaque id et.", "acc88de3-e94d-46f3-a04d-07b0c5bdb0fe" }
+                    { 120, new DateTime(2018, 8, 7, 22, 13, 31, 533, DateTimeKind.Local), 8, null, "Doloribus rerum dolor.", "18d3bc15-1982-43a9-a7e0-ef2226ed89e0" },
+                    { 119, new DateTime(2018, 8, 8, 16, 20, 47, 373, DateTimeKind.Local), 3, null, "Ut odio maiores voluptate aut.", "18d3bc15-1982-43a9-a7e0-ef2226ed89e0" },
+                    { 114, new DateTime(2018, 8, 8, 2, 7, 30, 988, DateTimeKind.Local), 8, null, "Est qui vel.", "28d9560d-e2f2-409e-bc0e-8864ea939882" },
+                    { 116, new DateTime(2018, 8, 8, 6, 20, 7, 50, DateTimeKind.Local), 8, null, "Cumque quia dolores deserunt libero unde ut.", "5282bfd7-5a16-4bc0-92d2-354a14217853" },
+                    { 112, new DateTime(2018, 8, 7, 19, 21, 31, 714, DateTimeKind.Local), 10, null, "Dolorem vel ab dignissimos aliquid ut iusto dolor quis quam.", "a257c7de-ea3b-4c26-ace2-68b0d490577b" },
+                    { 115, new DateTime(2018, 8, 8, 1, 57, 43, 99, DateTimeKind.Local), 3, null, "Atque quas aut placeat non modi ipsam unde harum sit.", "a257c7de-ea3b-4c26-ace2-68b0d490577b" },
+                    { 117, new DateTime(2018, 8, 8, 17, 36, 3, 729, DateTimeKind.Local), 10, null, "Eum quos maxime velit et placeat cupiditate iusto sit quis.", "04db4214-f5bb-4449-a4eb-cc485c03244f" },
+                    { 111, new DateTime(2018, 8, 8, 14, 41, 6, 217, DateTimeKind.Local), 9, null, "Totam incidunt cum tempora.", "8e70d16d-c344-43d2-a917-0a0e087c8b5a" },
+                    { 113, new DateTime(2018, 8, 8, 12, 9, 47, 989, DateTimeKind.Local), 6, null, "Non quas minus iste et enim aut sit sint.", "04db4214-f5bb-4449-a4eb-cc485c03244f" },
+                    { 118, new DateTime(2018, 8, 8, 1, 26, 38, 335, DateTimeKind.Local), 6, null, "Sit repellat laudantium.", "de8f0970-c1bc-4072-9c76-a5e598e3d6e4" }
                 });
 
             migrationBuilder.InsertData(
@@ -499,16 +501,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "UserId", "OrganizationId" },
                 values: new object[,]
                 {
-                    { "f8a4e5e2-ef65-46d8-adba-9f341e3cd924", 77 },
-                    { "9dac3529-7462-48ab-99ea-df3e17506402", 77 },
-                    { "8bd9ceb7-2599-4270-8cb1-4133bf305731", 77 },
-                    { "c716da2b-a608-4e2d-b525-a164e2f0aa12", 75 },
-                    { "65397671-3a9c-437c-97b0-4ea3309c82e8", 75 },
-                    { "0c24406d-3139-4e89-a48d-53a9ff4c7bfc", 71 },
-                    { "1ebcd497-ea1f-4f45-a9c3-b7782bcc027c", 76 },
-                    { "e5f54f66-0cb0-46b9-857f-9aca56305c3d", 72 },
-                    { "54179531-bb49-4e4f-9c03-48fe4d5c430a", 78 },
-                    { "acc88de3-e94d-46f3-a04d-07b0c5bdb0fe", 78 }
+                    { "3008686f-a95c-4e25-b0f7-1ac58ccccefe", 73 },
+                    { "de8f0970-c1bc-4072-9c76-a5e598e3d6e4", 74 },
+                    { "87f77ff4-670d-4715-9831-a703e38d52ca", 74 },
+                    { "59cd0d8c-07ba-4e60-943f-7a06a967cdfd", 76 },
+                    { "5282bfd7-5a16-4bc0-92d2-354a14217853", 77 },
+                    { "04db4214-f5bb-4449-a4eb-cc485c03244f", 77 },
+                    { "a257c7de-ea3b-4c26-ace2-68b0d490577b", 77 },
+                    { "28d9560d-e2f2-409e-bc0e-8864ea939882", 72 },
+                    { "8e70d16d-c344-43d2-a917-0a0e087c8b5a", 76 },
+                    { "18d3bc15-1982-43a9-a7e0-ef2226ed89e0", 73 }
                 });
 
             migrationBuilder.InsertData(
@@ -516,16 +518,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "InstanceId", "Title" },
                 values: new object[,]
                 {
-                    { 98, new DateTime(2018, 8, 7, 4, 10, 3, 481, DateTimeKind.Local), 83, "Title100" },
-                    { 94, new DateTime(2018, 8, 7, 0, 57, 36, 913, DateTimeKind.Local), 86, "Title444" },
-                    { 91, new DateTime(2018, 8, 6, 19, 36, 39, 124, DateTimeKind.Local), 86, "Title689" },
-                    { 93, new DateTime(2018, 8, 6, 20, 32, 38, 868, DateTimeKind.Local), 89, "Title69" },
-                    { 100, new DateTime(2018, 8, 7, 0, 33, 38, 200, DateTimeKind.Local), 88, "Title663" },
-                    { 92, new DateTime(2018, 8, 6, 13, 25, 42, 122, DateTimeKind.Local), 88, "Title87" },
-                    { 99, new DateTime(2018, 8, 7, 6, 40, 9, 381, DateTimeKind.Local), 82, "Title247" },
-                    { 97, new DateTime(2018, 8, 7, 10, 49, 8, 579, DateTimeKind.Local), 90, "Title523" },
-                    { 96, new DateTime(2018, 8, 6, 22, 58, 49, 65, DateTimeKind.Local), 90, "Title648" },
-                    { 95, new DateTime(2018, 8, 6, 16, 10, 43, 612, DateTimeKind.Local), 83, "Title642" }
+                    { 93, new DateTime(2018, 8, 8, 7, 44, 4, 222, DateTimeKind.Local), 81, "Title639" },
+                    { 94, new DateTime(2018, 8, 8, 6, 34, 19, 700, DateTimeKind.Local), 86, "Title549" },
+                    { 100, new DateTime(2018, 8, 7, 22, 24, 1, 236, DateTimeKind.Local), 82, "Title601" },
+                    { 95, new DateTime(2018, 8, 8, 14, 25, 6, 498, DateTimeKind.Local), 88, "Title430" },
+                    { 92, new DateTime(2018, 8, 8, 6, 12, 15, 765, DateTimeKind.Local), 87, "Title215" },
+                    { 96, new DateTime(2018, 8, 7, 22, 49, 8, 122, DateTimeKind.Local), 83, "Title52" },
+                    { 99, new DateTime(2018, 8, 8, 8, 55, 33, 516, DateTimeKind.Local), 90, "Title136" },
+                    { 91, new DateTime(2018, 8, 8, 2, 1, 38, 260, DateTimeKind.Local), 90, "Title467" },
+                    { 97, new DateTime(2018, 8, 8, 4, 42, 50, 405, DateTimeKind.Local), 85, "Title867" },
+                    { 98, new DateTime(2018, 8, 8, 11, 52, 46, 275, DateTimeKind.Local), 86, "Title759" }
                 });
 
             migrationBuilder.InsertData(
@@ -533,16 +535,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "ChatId", "CreatedAt", "Text", "UserId", "WasRead" },
                 values: new object[,]
                 {
-                    { 35, 24, new DateTime(2018, 8, 7, 4, 41, 8, 677, DateTimeKind.Local), "Ullam saepe eum voluptate animi ut ut saepe.", "1ebcd497-ea1f-4f45-a9c3-b7782bcc027c", true },
-                    { 31, 24, new DateTime(2018, 8, 6, 13, 49, 41, 569, DateTimeKind.Local), "Quasi quis qui quisquam odio id.", "acc88de3-e94d-46f3-a04d-07b0c5bdb0fe", true },
-                    { 33, 25, new DateTime(2018, 8, 6, 21, 5, 35, 880, DateTimeKind.Local), "Nihil nostrum quo et consequuntur corrupti quisquam.", "9dac3529-7462-48ab-99ea-df3e17506402", true },
-                    { 38, 28, new DateTime(2018, 8, 7, 13, 7, 6, 608, DateTimeKind.Local), "Pariatur aperiam quo doloribus nisi vitae nulla.", "0c24406d-3139-4e89-a48d-53a9ff4c7bfc", true },
-                    { 37, 29, new DateTime(2018, 8, 7, 11, 26, 51, 125, DateTimeKind.Local), "Error unde voluptatem dolorum voluptas beatae consequatur et explicabo.", "9dac3529-7462-48ab-99ea-df3e17506402", false },
-                    { 32, 29, new DateTime(2018, 8, 7, 9, 40, 43, 473, DateTimeKind.Local), "Qui at numquam.", "1ebcd497-ea1f-4f45-a9c3-b7782bcc027c", false },
-                    { 36, 27, new DateTime(2018, 8, 6, 21, 13, 22, 350, DateTimeKind.Local), "Quisquam nemo ducimus provident.", "9dac3529-7462-48ab-99ea-df3e17506402", false },
-                    { 39, 23, new DateTime(2018, 8, 7, 6, 37, 11, 73, DateTimeKind.Local), "Non est voluptas qui eum commodi et totam.", "0c24406d-3139-4e89-a48d-53a9ff4c7bfc", true },
-                    { 40, 25, new DateTime(2018, 8, 7, 8, 46, 41, 851, DateTimeKind.Local), "Saepe non maxime voluptatem.", "1ebcd497-ea1f-4f45-a9c3-b7782bcc027c", false },
-                    { 34, 25, new DateTime(2018, 8, 6, 22, 33, 0, 613, DateTimeKind.Local), "Ipsam aut voluptatem et ipsam alias velit laudantium occaecati inventore.", "54179531-bb49-4e4f-9c03-48fe4d5c430a", false }
+                    { 36, 30, new DateTime(2018, 8, 8, 13, 48, 0, 876, DateTimeKind.Local), "Ipsam nemo repellat non est qui pariatur voluptatum.", "3008686f-a95c-4e25-b0f7-1ac58ccccefe", true },
+                    { 39, 28, new DateTime(2018, 8, 7, 21, 48, 3, 998, DateTimeKind.Local), "Nesciunt et vitae commodi voluptas quia qui laudantium.", "59cd0d8c-07ba-4e60-943f-7a06a967cdfd", true },
+                    { 33, 21, new DateTime(2018, 8, 7, 20, 15, 3, 172, DateTimeKind.Local), "Ratione explicabo fugit similique assumenda reprehenderit.", "8e70d16d-c344-43d2-a917-0a0e087c8b5a", true },
+                    { 38, 27, new DateTime(2018, 8, 8, 14, 36, 22, 130, DateTimeKind.Local), "Sed et est officia temporibus voluptatem at error molestiae molestiae.", "28d9560d-e2f2-409e-bc0e-8864ea939882", true },
+                    { 35, 27, new DateTime(2018, 8, 8, 16, 14, 17, 433, DateTimeKind.Local), "Non dolor ducimus ut aut.", "28d9560d-e2f2-409e-bc0e-8864ea939882", false },
+                    { 37, 23, new DateTime(2018, 8, 8, 9, 21, 26, 18, DateTimeKind.Local), "Commodi incidunt incidunt.", "59cd0d8c-07ba-4e60-943f-7a06a967cdfd", false },
+                    { 40, 29, new DateTime(2018, 8, 7, 23, 36, 22, 505, DateTimeKind.Local), "Sunt eius quo dignissimos et.", "a257c7de-ea3b-4c26-ace2-68b0d490577b", false },
+                    { 34, 29, new DateTime(2018, 8, 7, 23, 0, 23, 633, DateTimeKind.Local), "Suscipit aut aut sequi sit vero sunt.", "3008686f-a95c-4e25-b0f7-1ac58ccccefe", false },
+                    { 32, 28, new DateTime(2018, 8, 8, 11, 13, 5, 258, DateTimeKind.Local), "Adipisci adipisci quo quis iure ipsum et iure aut.", "18d3bc15-1982-43a9-a7e0-ef2226ed89e0", true },
+                    { 31, 25, new DateTime(2018, 8, 8, 10, 2, 36, 403, DateTimeKind.Local), "Deleniti quo blanditiis sunt.", "a257c7de-ea3b-4c26-ace2-68b0d490577b", false }
                 });
 
             migrationBuilder.InsertData(
@@ -550,12 +552,11 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "FeedbackId", "Text", "UserId" },
                 values: new object[,]
                 {
-                    { 54, new DateTime(2018, 8, 7, 6, 53, 3, 856, DateTimeKind.Local), 46, "Nihil aut aut consequatur ea rem ut assumenda dolorem non.", "acc88de3-e94d-46f3-a04d-07b0c5bdb0fe" },
-                    { 60, new DateTime(2018, 8, 6, 22, 12, 5, 785, DateTimeKind.Local), 49, "Ut nihil impedit.", "0c24406d-3139-4e89-a48d-53a9ff4c7bfc" },
-                    { 55, new DateTime(2018, 8, 7, 6, 25, 13, 418, DateTimeKind.Local), 43, "Suscipit commodi reiciendis quis adipisci dolorem omnis aut non pariatur.", "acc88de3-e94d-46f3-a04d-07b0c5bdb0fe" },
-                    { 59, new DateTime(2018, 8, 6, 13, 30, 5, 871, DateTimeKind.Local), 45, "Ut voluptatem sit neque occaecati assumenda labore et.", "c716da2b-a608-4e2d-b525-a164e2f0aa12" },
-                    { 57, new DateTime(2018, 8, 7, 8, 43, 6, 648, DateTimeKind.Local), 42, "Debitis architecto veritatis quaerat.", "0c24406d-3139-4e89-a48d-53a9ff4c7bfc" },
-                    { 52, new DateTime(2018, 8, 7, 8, 26, 3, 794, DateTimeKind.Local), 48, "Sapiente ut perspiciatis animi accusantium ea.", "9dac3529-7462-48ab-99ea-df3e17506402" }
+                    { 59, new DateTime(2018, 8, 8, 14, 36, 39, 998, DateTimeKind.Local), 45, "Et suscipit enim illo consequuntur labore.", "3008686f-a95c-4e25-b0f7-1ac58ccccefe" },
+                    { 58, new DateTime(2018, 8, 8, 5, 34, 14, 607, DateTimeKind.Local), 44, "Qui sint nostrum ut saepe qui fuga voluptas.", "87f77ff4-670d-4715-9831-a703e38d52ca" },
+                    { 55, new DateTime(2018, 8, 8, 13, 50, 12, 153, DateTimeKind.Local), 43, "Recusandae nesciunt ut ut veritatis eveniet sed.", "59cd0d8c-07ba-4e60-943f-7a06a967cdfd" },
+                    { 57, new DateTime(2018, 8, 8, 10, 50, 41, 893, DateTimeKind.Local), 47, "Omnis quasi optio sequi neque reiciendis sit laborum.", "5282bfd7-5a16-4bc0-92d2-354a14217853" },
+                    { 60, new DateTime(2018, 8, 8, 17, 44, 25, 390, DateTimeKind.Local), 41, "Corrupti doloribus velit delectus.", "59cd0d8c-07ba-4e60-943f-7a06a967cdfd" }
                 });
 
             migrationBuilder.InsertData(
@@ -563,16 +564,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "DashboardId", "MostLoaded", "ShowCommon", "Source", "Threshold", "Type" },
                 values: new object[,]
                 {
-                    { 109, 96, "MostLoaded1", "Common2", "Source3", 86, 0 },
-                    { 102, 99, "MostLoaded1", "Common3", "Source1", 12, 1 },
-                    { 103, 99, "MostLoaded2", "Common1", "Source2", 78, 2 },
-                    { 101, 92, "MostLoaded1", "Common2", "Source1", 3, 1 },
-                    { 108, 92, "MostLoaded2", "Common3", "Source3", 54, 1 },
-                    { 106, 93, "MostLoaded1", "Common2", "Source3", 12, 2 },
-                    { 104, 91, "MostLoaded1", "Common3", "Source3", 0, 1 },
-                    { 110, 91, "MostLoaded3", "Common1", "Source2", 15, 2 },
-                    { 107, 94, "MostLoaded2", "Common2", "Source3", 35, 0 },
-                    { 105, 95, "MostLoaded2", "Common2", "Source1", 22, 1 }
+                    { 108, 99, "MostLoaded3", "Common2", "Source1", 34, 1 },
+                    { 105, 96, "MostLoaded3", "Common3", "Source1", 16, 1 },
+                    { 101, 92, "MostLoaded3", "Common3", "Source2", 93, 0 },
+                    { 103, 95, "MostLoaded1", "Common1", "Source3", 50, 2 },
+                    { 110, 95, "MostLoaded3", "Common1", "Source3", 61, 1 },
+                    { 102, 100, "MostLoaded1", "Common2", "Source2", 15, 1 },
+                    { 107, 100, "MostLoaded3", "Common3", "Source1", 77, 1 },
+                    { 109, 98, "MostLoaded1", "Common3", "Source1", 19, 2 },
+                    { 104, 93, "MostLoaded2", "Common1", "Source1", 3, 2 },
+                    { 106, 93, "MostLoaded1", "Common2", "Source3", 5, 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -633,6 +634,11 @@ namespace Watcher.DataAccess.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NotificationSettings_UserId1",
+                table: "NotificationSettings",
+                column: "UserId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Organizations_ThemeId",
                 table: "Organizations",
                 column: "ThemeId");
@@ -652,11 +658,6 @@ namespace Watcher.DataAccess.Data.Migrations
                 name: "IX_UserOrganizations_OrganizationId",
                 table: "UserOrganizations",
                 column: "OrganizationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_NotificationSettingId",
-                table: "Users",
-                column: "NotificationSettingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
@@ -691,6 +692,9 @@ namespace Watcher.DataAccess.Data.Migrations
                 name: "Chats");
 
             migrationBuilder.DropTable(
+                name: "NotificationSettings");
+
+            migrationBuilder.DropTable(
                 name: "Feedbacks");
 
             migrationBuilder.DropTable(
@@ -701,9 +705,6 @@ namespace Watcher.DataAccess.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Organizations");
-
-            migrationBuilder.DropTable(
-                name: "NotificationSettings");
 
             migrationBuilder.DropTable(
                 name: "Roles");
