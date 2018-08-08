@@ -8,7 +8,7 @@
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
 
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
     public class TokensController : ControllerBase
@@ -50,7 +50,7 @@
             }
 
             var userDto = await _usersService.CreateEntityAsync(request);
-            var token = _tokensService.CreateTokenDto(userDto);
+            var token = _tokensService.CreateFakeTokenDto(userDto);
             if (token == null)
             {
                 return BadRequest("User with such email already exists");

@@ -1,5 +1,6 @@
 ﻿namespace Watcher.Core.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -45,18 +46,33 @@
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
-            var entity = _mapper.Map<UserRegisterRequest, User>(request);
+            //var entity = _mapper.Map<UserRegisterRequest, User>(request);
 
-            entity = await _uow.UsersRepository.CreateAsync(entity);
-            var result = await _uow.SaveAsync();
-            if (!result)
-            {
-                return null;
-            }
+            //entity = await _uow.UsersRepository.CreateAsync(entity);
+            //var result = await _uow.SaveAsync();
+            //if (!result)
+            //{
+            //    return null;
+            //}
 
-            if (entity == null) return null;
+            //if (entity == null) return null;
+
+            //var dto = _mapper.Map<User, UserDto>(entity);
+
+            var entity = await _uow.UsersRepository.GetFirstOrDefaultAsync();
 
             var dto = _mapper.Map<User, UserDto>(entity);
+
+            //var dto = new UserDto()
+            //{
+            //    Id = request.Uid,
+            //    CreatedAt = DateTime.UtcNow,
+            //    Role = new RoleDto { Id = 1, Name = "Admin" },
+            //    Email = request.Email,
+            //    FirstName = request.DisplayName,
+            //    SecondName = request.DisplayName,
+            //    IsActive = true
+            //};
 
             return dto;
         }
