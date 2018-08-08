@@ -4,6 +4,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { PostInfo } from '../../shared/models/post-info';
+import {TokenService} from './token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,9 @@ export class AuthService {
   private user: Observable<firebase.User>;
   private userDetails: firebase.User = null;
 
-  constructor(private _firebaseAuth: AngularFireAuth, private router: Router) {
+  constructor(private _firebaseAuth: AngularFireAuth,
+              private tokenService: TokenService,
+              private router: Router) {
     this.user = _firebaseAuth.authState;
     this.user.subscribe(
       (user) => {
@@ -43,6 +46,7 @@ export class AuthService {
     }).then(resNext => {
       return resNext.user.getIdToken().then(token => {
         info.token = token;
+
         return info; }
       );
     });
