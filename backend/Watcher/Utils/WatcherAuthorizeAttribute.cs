@@ -3,20 +3,20 @@
     using System;
     using System.Linq;
     using System.Net;
-    using System.Security.Claims;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Options;
 
+    using Watcher.Common.Options;
     using Watcher.Core.Auth;
     using Watcher.Core.Services;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class WatcherAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
-        private const string key = "401b09eab3c013d4ca54922bb802bec8fd5318192b0a75f201d8b3727429090fb337591abd3e44453b954555b7a0812e1081c39b740293f765eae731f5a65ed1"; // TODO: Transfer if to the Client (user) secrets
-
         private readonly string _role;
 
         public WatcherAuthorizeAttribute(string role)
@@ -38,7 +38,8 @@
             }
 
             // you can also use registered services
-            // var someService = context.HttpContext.RequestServices.GetService<ISomeService>(); // TODO: Inject Options Here
+            var tokenOptions = context.HttpContext.RequestServices.GetService<IOptions<WatcherTokenOptions>>();
+            
 
             if (!context.HttpContext.Request.Headers.TryGetValue("WatcherAuthorize", out var values))
             {
@@ -46,14 +47,15 @@
                 return;
             }
 
-            var jwt = TokenUtil.GetDecodedJwt(values.FirstOrDefault(), TokenUtil.GetAccessTokenValidationParameters(key), key);
+            var jwt = TokenUtil.GetDecodedJwt(values.FirstOrDefault(), 
+                                              tokenOptions.Value.GetAccessTokenValidationParameters);
 
             var role = jwt.Claims.FirstOrDefault(claim => claim.Type == "role" && claim.Value == _role);
-            var name = jwt.Claims.FirstOrDefault(claim => claim.Type == "name");
+            var name = jwt.Claims.FirstOrDefault(claim => claim.Type == "unique_name");
 
             if (role != null && name != null)
             {
-                var identity = TokensService.CreateDefaultClaimsIdentity(jwt.Claims);
+                var identity = TokenUtil.CreateDefaultClaimsIdentity(jwt.Claims);
                 user.AddIdentity(identity);
             }
             else

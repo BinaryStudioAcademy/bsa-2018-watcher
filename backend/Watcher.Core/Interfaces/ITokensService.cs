@@ -10,6 +10,6 @@
     {
         Task<TokenDto> CreateTokenAsync(ClaimsPrincipal principal);
 
-        TokenDto GenerateToken(UserDto user);
+        TokenDto CreateTokenDto(UserDto user);
     }
 }

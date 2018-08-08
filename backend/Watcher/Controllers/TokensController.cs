@@ -49,7 +49,7 @@
             }
 
             var userDto = await _usersService.CreateEntityAsync(User);
-            var token = _tokensService.GenerateToken(userDto);
+            var token = _tokensService.CreateTokenDto(userDto);
             if (token == null)
             {
                 return BadRequest("User with such email already exists");
