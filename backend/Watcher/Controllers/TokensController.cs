@@ -23,21 +23,21 @@
         }
 
         [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> Login()
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var tokenResponse = await _tokensService.CreateTokenAsync(User);
-            if (tokenResponse != null)
+            var tokenResponse = await _tokensService.CreateTokenAsync(request, User);
+            if (tokenResponse == null)
             {
-                return Ok(tokenResponse);
+                return BadRequest("User тще not registered");
             }
 
-            return BadRequest();
+            return Ok(tokenResponse);
         }
 
         [Authorize] // Authorize Validate only Firebase token
@@ -50,7 +50,7 @@
             }
 
             var userDto = await _usersService.CreateEntityAsync(request);
-            var token = _tokensService.CreateFakeTokenDto(userDto);
+            var token = _tokensService.CreateTokenDto(userDto);
             if (token == null)
             {
                 return BadRequest("User with such email already exists");

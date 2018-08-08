@@ -8,8 +8,8 @@
 
     public interface ITokensService
     {
-        Task<TokenDto> CreateTokenAsync(ClaimsPrincipal principal);
+        Task<TokenDto> CreateTokenAsync(UserLoginRequest request, ClaimsPrincipal principal);
 
-        TokenDto CreateFakeTokenDto(UserDto user);
+        TokenDto CreateTokenDto(UserDto user);
     }
 }

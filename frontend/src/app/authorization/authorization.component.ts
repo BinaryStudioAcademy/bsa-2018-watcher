@@ -1,6 +1,5 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
-import { UserService } from '../core/services/user.service';
 import { Router } from '@angular/router';
 import {TokenService} from '../core/services/token.service';
 
@@ -25,7 +24,6 @@ export class AuthorizationComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private userService: UserService,
     private tokenService: TokenService,
     private router: Router
   ) { }
@@ -63,7 +61,7 @@ export class AuthorizationComponent implements OnInit {
   }
 
   async signUpWithGoogle() {
-    const result = await this.authService.signInWithGoogle();
+    const result = await this.authService.signUpWithGoogle();
     this.closeDialog();
     // this.isSuccessSignUp = true;
 
@@ -96,13 +94,16 @@ export class AuthorizationComponent implements OnInit {
     this.display = false;
   }
 
-  signInWithGoogle() {
-    // const postInfo = this.authService.signInWithGoogle().then(res => {
-    //   // this.currentUser = res.user;
-    //   console.log(res.token);
-    //   this.userService.create(res).subscribe(obj => console.log(obj));
-    // });
-    this.saveUserDetails();
+  async signInWithGoogle() {
+    const result = await this.authService.signInWithGoogle();
+    this.closeDialog();
+    // this.isSuccessSignUp = true;
+
+    if (result) {
+      return this.router.navigate(['/user/dashboards']);
+    } else {
+      return this.router.navigate(['/']);
+    }
   }
 
 

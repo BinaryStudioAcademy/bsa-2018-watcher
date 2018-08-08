@@ -3,9 +3,10 @@ import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import {Observable} from 'rxjs';
-import {PostInfo} from '../../shared/models/post-info';
+import {UserRegisterRequest} from '../../shared/models/user-register-request';
 import {TokenService} from './token.service';
 import {UserDto} from '../../shared/models/user-dto';
+import {UserLoginRequest} from '../../shared/models/user-login-request';
 
 @Injectable({
   providedIn: 'root'
@@ -36,21 +37,45 @@ export class AuthService {
     try {
       const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
 
-      const info: PostInfo = {
-        token: await res.user.getIdToken(),
-        user: {
+      const request: UserLoginRequest = {
           uid: res.user.uid,
-          email: res.user.email,
-          displayName: res.user.displayName,
-          refreshToken: res.user.refreshToken,
-          photoURL: res.user.photoURL,
-          isNewUser: res.additionalUserInfo.isNewUser
-        }
+          email: res.user.email
       };
+
+      const fbToken = await res.user.getIdToken();
+      localStorage.setItem('firebaseToken', fbToken);
+
+      const tokenDto = await this.tokenService.login(request).toPromise();
+
+      localStorage.setItem('currentUser', JSON.stringify(tokenDto.user));
+      localStorage.setItem('watcherToken', tokenDto.watcherJWT);
+
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+
+    return true;
+  }
+
+  async signUpWithGoogle(): Promise<boolean> {
+    try {
+      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+
+      const info: UserRegisterRequest = {
+        uid: res.user.uid,
+        email: res.user.email,
+        displayName: res.user.displayName,
+        refreshToken: res.user.refreshToken,
+        photoURL: res.user.photoURL,
+        isNewUser: res.additionalUserInfo.isNewUser
+      };
+
+      const fbToken = await res.user.getIdToken();
+      localStorage.setItem('firebaseToken', fbToken);
 
       const tokenDto = await this.tokenService.register(info).toPromise();
 
-      localStorage.setItem('firebaseToken', info.token);
       localStorage.setItem('currentUser', JSON.stringify(tokenDto.user));
       localStorage.setItem('watcherToken', tokenDto.watcherJWT);
 
