@@ -48,14 +48,14 @@
             }
 
             var jwt = TokenUtil.GetDecodedJwt(values.FirstOrDefault(), 
-                                              tokenOptions.Value.GetAccessTokenValidationParameters());
+                                              tokenOptions.Value.GetAccessTokenValidationParameters);
 
             var role = jwt.Claims.FirstOrDefault(claim => claim.Type == "role" && claim.Value == _role);
             var name = jwt.Claims.FirstOrDefault(claim => claim.Type == "unique_name");
 
             if (role != null && name != null)
             {
-                var identity = TokensService.CreateDefaultClaimsIdentity(jwt.Claims);
+                var identity = TokenUtil.CreateDefaultClaimsIdentity(jwt.Claims);
                 user.AddIdentity(identity);
             }
             else
