@@ -23,8 +23,7 @@ export class TokenService {
   // }
 
   register(postInfo: PostInfo): Observable<TokenDto>  {
-    const headeres = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${postInfo.token}`});
-    localStorage.setItem('firebaseToken', postInfo.token);
-    return this.apiService.post(`/${this.ctrlUrl}/Register`, postInfo.user, headeres);
+    const headers = new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${postInfo.token}`});
+    return this.apiService.post(`/${this.ctrlUrl}/Register`, postInfo.user, headers);
   }
 }

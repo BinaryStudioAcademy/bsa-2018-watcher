@@ -75,18 +75,16 @@ export class AuthorizationComponent implements OnInit {
     this.isSuccessSignUp = false;
   }
 
-  signUpWithGoogle() {
-    const postInfo = this.authService.signInWithGoogle().then(res => {
-      console.log(res.token);
-      this.tokenService.register(res).subscribe(tokenDto => {
-        debugger;
-        console.log(tokenDto);
-        localStorage.setItem('watcherToken', tokenDto.watcherJWT);
-      });
-      // this.userService.register(res).subscribe(obj => console.log(obj));
-    });
-    this.saveUserDetails();
-    this.isSuccessSignUp = true;
+  async signUpWithGoogle() {
+    const result = await this.authService.signInWithGoogle();
+    this.closeDialog();
+    // this.isSuccessSignUp = true;
+
+    if (result) {
+      return this.router.navigate(['/user/dashboards']);
+    } else {
+      return this.router.navigate(['landing']);
+    }
   }
 
   signUpWithGitHub() {
@@ -112,11 +110,11 @@ export class AuthorizationComponent implements OnInit {
   }
 
   signInWithGoogle() {
-    const postInfo = this.authService.signInWithGoogle().then(res => {
-      // this.currentUser = res.user;
-      console.log(res.token);
-      this.userService.create(res).subscribe(obj => console.log(obj));
-    });
+    // const postInfo = this.authService.signInWithGoogle().then(res => {
+    //   // this.currentUser = res.user;
+    //   console.log(res.token);
+    //   this.userService.create(res).subscribe(obj => console.log(obj));
+    // });
     this.saveUserDetails();
   }
 

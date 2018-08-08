@@ -7,6 +7,8 @@
 
     using AutoMapper;
 
+    using Microsoft.EntityFrameworkCore;
+
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
@@ -59,7 +61,7 @@
 
             //var dto = _mapper.Map<User, UserDto>(entity);
 
-            var entity = await _uow.UsersRepository.GetFirstOrDefaultAsync();
+            var entity = await _uow.UsersRepository.GetFirstOrDefaultAsync(include: users => users.Include(u => u.Role));
 
             var dto = _mapper.Map<User, UserDto>(entity);
 
