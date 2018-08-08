@@ -10,7 +10,7 @@ import { PostInfo } from '../../shared/models/post-info';
 })
 export class UserService {
   private headers: HttpHeaders;
-  private accessPointUrl = 'http://localhost:51093/api/users';
+  private accessPointUrl = 'http://localhost:51880/api/users';
 
   constructor(private http: HttpClient) { }
 
