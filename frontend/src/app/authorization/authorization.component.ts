@@ -13,10 +13,12 @@ export class AuthorizationComponent implements OnInit {
   @ViewChild('signInTemplate') signInTemplate;
   @ViewChild('signUpTemplate') signUpTemplate;
   @ViewChild('userDetailsTemplate') userDetailsTemplate;
+  @ViewChild('notRegisteredSignInTemplate') notRegisteredSignInTemplate;
 
   display = false;
   isSignIn = true;
   isSuccessSignUp = false;
+  isNotRegisteredSignIn = false;
 
   companyName = '';
   lastName = '';
@@ -45,6 +47,8 @@ export class AuthorizationComponent implements OnInit {
       return this.signInTemplate;
     } else if (this.isSuccessSignUp) {
       return this.userDetailsTemplate;
+    } else if (this.isNotRegisteredSignIn) {
+      return this.notRegisteredSignInTemplate;
     } else {
       return this.signUpTemplate;
     }
@@ -58,6 +62,12 @@ export class AuthorizationComponent implements OnInit {
   showSignIn() {
     this.isSignIn = true;
     this.isSuccessSignUp = false;
+  }
+
+  showNotRegisteredSignIn() {
+    this.display = true;
+    this.isSignIn = false;
+    this.isNotRegisteredSignIn = true;
   }
 
   async signUpWithGoogle() {
@@ -151,5 +161,10 @@ export class AuthorizationComponent implements OnInit {
   backToSignUp() {
     this.showSignUp();
   }
-}
 
+  noRegistration() {
+    this.display = false;
+    this.router.navigate(['landing']);
+  }
+
+}
