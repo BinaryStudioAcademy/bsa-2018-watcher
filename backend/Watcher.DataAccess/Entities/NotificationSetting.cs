@@ -21,6 +21,9 @@
         [Required]
         public bool IsEmailable { get; set; }
 
+        public int UserId { get; set; }
+        public User User { get; set; }
+
         public IList<Notification> Notifications { get; set; }
     }
 }

@@ -33,7 +33,7 @@
                 .RuleFor(o => o.Type, f => f.Random.Enum<NotificationType>());
 
             var notificationSettings = notificationSettingFaker.Generate(amount).ToArray();
-            
+
             var userFaker = new Faker<User>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.FirstName, f => f.Name.FirstName())
@@ -41,8 +41,8 @@
                 .RuleFor(o => o.Email, f => f.Internet.Email())
                 .RuleFor(o => o.IsActive, true)
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
-                .RuleFor(o => o.RoleId, f => f.PickRandom(roles).Id)
-                .RuleFor(o => o.NotificationSettingId, f => f.PickRandom(notificationSettings).Id);
+                .RuleFor(o => o.RoleId, f => f.PickRandom(roles).Id);
+                //.RuleFor(o => o.NotificationSettings, f => f.PickRandom(notificationSettings.Where());
 
 
             var users = userFaker.Generate(amount).ToArray();

@@ -27,8 +27,7 @@
         public int RoleId { get; set; }
         public Role Role { get; set; }
 
-        public int NotificationSettingId { get; set; }
-        public NotificationSetting NotificationSetting { get; set; }
+        public IList<NotificationSetting> NotificationSettings { get; set; }
 
         public IList<UserOrganization> UserOrganizations { get; set; }
 
