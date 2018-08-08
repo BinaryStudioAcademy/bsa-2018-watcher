@@ -3,6 +3,7 @@ import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user';
+import { UserModel } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -11,7 +12,8 @@ import { User } from '../../shared/models/user';
 })
 export class UserProfileComponent implements OnInit {
 
-  constructor(private fb: FormBuilder,
+  constructor(private currentUser: UserModel,
+              private fb: FormBuilder,
               private httpClient: HttpClient,
               private userService: UserService) { }
 
@@ -26,8 +28,8 @@ export class UserProfileComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.userId = '398a6c59-ab37-4765-9434-1ae9020856e0';
-    this.userService.get('398a6c59-ab37-4765-9434-1ae9020856e0').subscribe((value: User) => {
+    this.userId = this.currentUser.uid;
+    this.userService.get(this.userId).subscribe((value: User) => {
       this.user = value;
       this.setUserData();
     });
