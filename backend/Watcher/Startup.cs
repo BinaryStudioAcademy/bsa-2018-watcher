@@ -9,12 +9,15 @@
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+
+    using Watcher.Common.Options;
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
@@ -28,8 +31,6 @@
 
     public class Startup
     {
-        private const string key = "401b09eab3c013d4ca54922bb802bec8fd5318192b0a75f201d8b3727429090fb337591abd3e44453b954555b7a0812e1081c39b740293f765eae731f5a65ed1"; // TODO: Transfer if to the Client (user) secrets
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -50,6 +51,17 @@
                            .AllowAnyHeader()
                            .AllowCredentials();
                 }));
+
+            var securitySection = Configuration.GetSection("Security");
+            
+            services.Configure<WatcherTokenOptions>(o =>
+                {
+                    o.Issuer = securitySection["Issuer"];
+                    o.Audience = securitySection["Audience"];
+                    o.Access_Token_Lifetime = Convert.ToInt32(securitySection["Access_Token_Lifetime"]);
+                    o.Refresh_Token_Lifetime = Convert.ToInt32(securitySection["Refresh_Token_Lifetime"]);
+                    o.Security_Key = securitySection["Security_Key"];
+                });
 
             services.ConfigureSwagger(Configuration);
 

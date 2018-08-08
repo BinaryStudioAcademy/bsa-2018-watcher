@@ -28,7 +28,8 @@ export class AuthorizationComponent implements OnInit {
   lastName = '';
   firstName = '';
 
-  constructor(private currentUser: UserModel,
+  private currentUser: UserModel;
+  constructor(
               private authService: AuthService,
               private userService: UserService,
               private router: Router) {
@@ -102,6 +103,7 @@ export class AuthorizationComponent implements OnInit {
   signInWithGoogle() {
     const postInfo = this.authService.signInWithGoogle().then(res => {
     this.currentUser = res.user;
+    console.log(res.token);
       this.userService.create(res).subscribe(obj =>  console.log(obj));
     });
     this.saveUserDetails();
