@@ -5,6 +5,7 @@
     using AutoMapper;
 
     using FluentValidation.AspNetCore;
+
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -15,7 +16,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Watcher.Common.Validators;
-    using Watcher.Core.Auth;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
     using Watcher.Core.Services;
@@ -24,12 +24,11 @@
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
     using Watcher.Hubs;
-    using Watcher.Services;
     using Watcher.Utils;
 
     public class Startup
     {
-        private const string key = "someSercerKey"; // TODO: Transfer if to the Client (user) secrets
+        private const string key = "401b09eab3c013d4ca54922bb802bec8fd5318192b0a75f201d8b3727429090fb337591abd3e44453b954555b7a0812e1081c39b740293f765eae731f5a65ed1"; // TODO: Transfer if to the Client (user) secrets
 
         public Startup(IConfiguration configuration)
         {
@@ -51,7 +50,7 @@
                            .AllowAnyHeader()
                            .AllowCredentials();
                 }));
-            
+
             services.ConfigureSwagger(Configuration);
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -59,6 +58,8 @@
             // Add your services here
             services.AddTransient<ISamplesService, SamplesService>();
             services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<ITokensService, TokensService>();
+
 
             services.AddTransient<ITransientService, TransientService>();
 
@@ -68,6 +69,26 @@
             InitializeAutomapper(services);
 
             ConfigureDatabase(services, Configuration);
+
+            services.AddAuthentication(o =>
+                    {
+                        o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    })
+                    .AddJwtBearer(options =>
+                    {
+                        options.Authority = "https://securetoken.google.com/watcherapp-2984b";
+                        options.TokenValidationParameters =
+                            new TokenValidationParameters
+                            {
+                                ValidateIssuer = true,
+                                ValidIssuer =
+                                        "https://securetoken.google.com/watcherapp-2984b",
+                                ValidateAudience = true,
+                                ValidAudience = "watcherapp-2984b",
+                                ValidateLifetime = true
+                            };
+                    });
 
             services.AddMvc()
                 .AddFluentValidation(fv =>
@@ -86,40 +107,6 @@
                 addSignalRBuilder.AddAzureSignalR(
                     Configuration.GetConnectionString(ServiceOptions.ConnectionStringDefaultKey));
             }
-
-            services.AddAuthentication(
-                    x =>
-                        {
-                            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                        })
-                .AddJwtBearer(options =>
-                {
-                    //options.Authority = "https://securetoken.google.com/watcherapp-2984b";
-                    //options.TokenValidationParameters = new TokenValidationParameters
-                    //{
-                    //    ValidateIssuer = true,
-                    //    ValidIssuer = "https://securetoken.google.com/watcherapp-2984b",
-                    //    ValidateAudience = true,
-                    //    ValidAudience = "watcherapp-2984b",
-                    //    ValidateLifetime = true
-                    //};
-
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true;
-
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = AuthOptions.Issuer,
-                        // ValidIssuer = _config["Security:Tokens:Issuer"],
-                        ValidateAudience = true,
-                        ValidAudience = AuthOptions.Audience,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(key),
-                        ValidateLifetime = true,
-                    };
-                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,6 @@
 import { UserModel } from './user.model';
 
 export class PostInfo {
-    model: UserModel;
+    user: UserModel;
     token: string;
 }

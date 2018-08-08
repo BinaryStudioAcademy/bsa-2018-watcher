@@ -3,6 +3,7 @@
 namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -80,6 +81,24 @@ namespace Watcher.Core.Services
             var result = await _uow.SaveAsync();
 
             return result;
+        }
+
+        public async Task<UserDto> CreateEntityAsync(ClaimsPrincipal request)
+        {
+            var entity = _mapper.Map<ClaimsPrincipal, User>(request);
+
+            entity = await _uow.UsersRepository.CreateAsync(entity);
+            var result = await _uow.SaveAsync();
+            if (!result)
+            {
+                return null;
+            }
+
+            if (entity == null) return null;
+
+            var dto = _mapper.Map<User, UserDto>(entity);
+
+            return dto;
         }
     }
 }

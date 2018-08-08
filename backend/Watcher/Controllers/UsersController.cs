@@ -111,6 +111,21 @@ namespace Watcher.Controllers
         }
 
         /// <summary>
+        /// Temporary realization of Login method
+        /// </summary>
+        /// <param name="firebaseUserDto">Sample create request</param>
+        /// <returns>
+        /// Parameter
+        /// </returns>
+        [Authorize]
+        [Route("login")]
+        [HttpPost]
+        public virtual async Task<ActionResult<FirebaseUserDto>> Login([FromBody] FirebaseUserDto firebaseUserDto)
+        {
+            return Ok(firebaseUserDto);
+        }
+
+        /// <summary>
         /// Update Sample
         /// </summary>
         /// <param name="id">Sample identifier</param>

@@ -27,21 +27,11 @@ export class AuthService {
     );
   }
 
-  // signInWithGoogle(): Promise<firebase.auth.UserCredential> {
-  //   return this._firebaseAuth.auth.signInWithPopup(
-  //     new firebase.auth.GoogleAuthProvider()
-  //   );
-  // }
-
-  getIdToken() {
-    return this._firebaseAuth.idToken;
-  }
-
   signInWithGoogle(): Promise<PostInfo> {
     const info: PostInfo = new PostInfo();
     return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()
     ).then((res) => {
-      info.model = {
+      info.user = {
         uid: res.user.uid,
         email: res.user.email,
         displayName: res.user.displayName,
@@ -49,10 +39,13 @@ export class AuthService {
         photoURL: res.user.photoURL,
         isNewUser: res.additionalUserInfo.isNewUser
       };
-      
-      this.getIdToken().subscribe(token => info.token = token);
-      debugger;
-      return info;
+
+      return res;
+    }).then(resNext => {
+      return resNext.user.getIdToken().then(token => {
+        info.token = token;
+        return info; }
+      );
     });
   }
 

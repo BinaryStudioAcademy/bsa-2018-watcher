@@ -28,11 +28,20 @@ export class AuthorizationComponent implements OnInit {
   lastName = '';
   firstName = '';
 
-  constructor(private authService: AuthService, private userService: UserService, private router: Router) {
+  constructor(private currentUser: UserModel,
+              private authService: AuthService,
+              private userService: UserService,
+              private router: Router) {
 
   }
 
   ngOnInit() {
+  }
+
+  getCurrentUser(): UserModel {
+    if (this.currentUser != null) {
+      return this.currentUser;
+    }
   }
 
   showDialogSignIn() {
@@ -91,24 +100,12 @@ export class AuthorizationComponent implements OnInit {
   }
 
   signInWithGoogle() {
-    debugger;
-    // const userModel = from(this.authService.signInWithGoogle());
-    // const token = userModel.pipe(
-    //   mergeMap(o => this.authService.getIdToken())
-    // );
-
-    const postInfo = this.authService.signInWithGoogle().then(res => this.userService.create(res) );
-    // const postInfo = forkJoin(userModel, token).subscribe((res) => {
-    //     debugger;
-    //     this.userService.create(res) ;
-    //   });
-
-    // const postInfo = forkJoin(userModel, token).subscribe((res: [UserModel, string]) => {
-    //   debugger;
-    //   this.userService.create(res) ;
-    // });
+    const postInfo = this.authService.signInWithGoogle().then(res => {
+    this.currentUser = res.user;
+      this.userService.create(res).subscribe(obj =>  console.log(obj));
+    });
+    this.saveUserDetails();
   }
-    // .then((res) => { return res;});
 
 
   signInWithFacebook() {
