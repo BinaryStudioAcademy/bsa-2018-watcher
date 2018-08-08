@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { UserModel } from '../../shared/models/user.model';
 import { PostInfo } from '../../shared/models/post-info';
 
 @Injectable({
@@ -73,6 +72,28 @@ export class AuthService {
     } else {
       return true;
     }
+  }
+
+  signUpWithGoogle(): Promise<PostInfo> {
+    const info: PostInfo = new PostInfo();
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()
+    ).then((res) => {
+      info.user = {
+        uid: res.user.uid,
+        email: res.user.email,
+        displayName: res.user.displayName,
+        refreshToken: res.user.refreshToken,
+        photoURL: res.user.photoURL,
+        isNewUser: res.additionalUserInfo.isNewUser
+      };
+
+      return res;
+    }).then(resNext => {
+      return resNext.user.getIdToken().then(token => {
+        info.token = token;
+        return info; }
+      );
+    });
   }
 
   logout() {

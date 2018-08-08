@@ -1,5 +1,4 @@
-﻿using System;
-using Watcher.Common.Enums;
+﻿using Watcher.Common.Enums;
 using Watcher.Common.MoveToFrontend;
 
 namespace Watcher.Common.Dtos

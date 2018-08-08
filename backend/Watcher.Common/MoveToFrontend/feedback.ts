@@ -5,7 +5,7 @@
         text: string;
         createdAt: Date;
         userId: number;
-        user: User;
+        user: UserDto;
         responseId: number;
         response: Response;
     }

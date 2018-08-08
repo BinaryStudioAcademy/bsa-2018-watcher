@@ -10,7 +10,10 @@ import { PostInfo } from '../../shared/models/post-info';
 })
 export class UserService {
   private headers: HttpHeaders;
-  private accessPointUrl = 'http://localhost:51880/api/users';
+  private accessPointUrl = 'http://localhost:51093/api/users';
+  private accessTokensPointUrl = 'http://localhost:54426/api/tokens';
+  // private tokensUrl = 'http://localhost:29878/api/Tokens';
+
 
   constructor(private http: HttpClient) { }
 
@@ -27,4 +30,8 @@ export class UserService {
     return this.http.get(`${this.accessPointUrl}${id}`) as Observable<User>;
   }
 
+  public register(postInfo: PostInfo) {
+    return this.http.post(this.accessTokensPointUrl + '/Register' , postInfo.user,
+     {headers: new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${postInfo.token}`})});
+  }
 }

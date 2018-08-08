@@ -16,6 +16,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using Microsoft.Extensions.Logging;
 
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
@@ -75,8 +76,10 @@
 
             services.AddTransient<ITransientService, TransientService>();
 
+            services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
+
 
             InitializeAutomapper(services);
 
@@ -102,6 +105,14 @@
                             };
                     });
 
+            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
+
+            if (UseAzureSignalR)
+            {
+                addSignalRBuilder.AddAzureSignalR(
+                    Configuration.GetConnectionString(ServiceOptions.ConnectionStringDefaultKey));
+            }
+
             services.AddMvc()
                 .AddFluentValidation(fv =>
                     {
@@ -111,19 +122,14 @@
                     })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(MvcSetup.JsonSetupAction);
-
-            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
-
-            if (UseAzureSignalR)
-            {
-                addSignalRBuilder.AddAzureSignalR(
-                    Configuration.GetConnectionString(ServiceOptions.ConnectionStringDefaultKey));
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+
             app.UseHttpStatusCodeExceptionMiddleware();
 
             UpdateDatabase(app);
@@ -134,6 +140,7 @@
             app.UseHsts();
             app.UseConfiguredSwagger();
             app.UseHttpsRedirection();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc();
@@ -153,6 +160,8 @@
                         routes.MapHub<NotificationsHub>("/notifications");
                     });
             }
+
+            app.UseMvc();
         }
 
         public virtual IServiceCollection InitializeAutomapper(IServiceCollection services)

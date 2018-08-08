@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
 
     [Route("api/[controller]")]
@@ -40,15 +41,15 @@
         }
 
         [Authorize] // Authorize Validate only Firebase token
-        [HttpGet("Register")]
-        public async Task<IActionResult> Register()
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var userDto = await _usersService.CreateEntityAsync(User);
+            var userDto = await _usersService.CreateEntityAsync(request);
             var token = _tokensService.CreateTokenDto(userDto);
             if (token == null)
             {

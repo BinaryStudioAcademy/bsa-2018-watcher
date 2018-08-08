@@ -2,7 +2,7 @@
  
     export interface UserOrganization { 
         userId: number;
-        user: User;
+        user: UserDto;
         organizationId: number;
         organization: Organization;
     }

@@ -6,7 +6,7 @@
         createdAt: Date;
         wasRead: boolean;
         userId: number;
-        user: User;
+        user: UserDto;
         chatId: number;
         chat: Chat;
     }

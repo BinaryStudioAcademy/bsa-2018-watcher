@@ -33,7 +33,7 @@
                 // it isn't needed to set unauthorized result 
                 // as the base class already requires the user to be authenticated
                 // this also makes redirect to a login page work properly
-                // context.Result = new UnauthorizedResult();
+                context.Result = new UnauthorizedResult();
                 return;
             }
 
