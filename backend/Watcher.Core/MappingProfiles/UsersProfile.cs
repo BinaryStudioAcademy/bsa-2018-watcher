@@ -24,7 +24,6 @@
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Uid))
                 .ForMember(d => d.CreatedAt, o => o.UseValue(DateTime.UtcNow))
                 .ForMember(d => d.IsActive, o => o.UseValue(true))
-                .ForMember(d => d.Id, o => o.UseValue(0))
                 .ForMember(d => d.RoleId, o => o.UseValue(2)); // (Id of User)
 
             CreateMap<ClaimsPrincipal, User>()

@@ -40,7 +40,7 @@ export class ApiService {
   }
 
   public post(path: string, body: Object = {}, head: HttpHeaders = new HttpHeaders()): Observable<any> {
-    return this.http.post(`${environment.server_url}${path}`, body, {headers: head})
+    return this.http.post(`${environment.server_url}${path}`, body)
       .pipe(
           map(this.extractData),
           catchError(this.handleError));
