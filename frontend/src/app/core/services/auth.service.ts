@@ -31,7 +31,7 @@ export class AuthService {
     const info: PostInfo = new PostInfo();
     return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()
     ).then((res) => {
-      info.model = {
+      info.user = {
         uid: res.user.uid,
         email: res.user.email,
         displayName: res.user.displayName,

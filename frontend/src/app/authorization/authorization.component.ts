@@ -28,11 +28,20 @@ export class AuthorizationComponent implements OnInit {
   lastName = '';
   firstName = '';
 
-  constructor(private authService: AuthService, private userService: UserService, private router: Router) {
+  constructor(private currentUser: UserModel,
+              private authService: AuthService,
+              private userService: UserService,
+              private router: Router) {
 
   }
 
   ngOnInit() {
+  }
+
+  getCurrentUser(): UserModel {
+    if (this.currentUser != null) {
+      return this.currentUser;
+    }
   }
 
   showDialogSignIn() {
@@ -92,8 +101,10 @@ export class AuthorizationComponent implements OnInit {
 
   signInWithGoogle() {
     const postInfo = this.authService.signInWithGoogle().then(res => {
-    this.userService.create(res).subscribe(obj =>  console.log(obj));
+    this.currentUser = res.user;
+      this.userService.create(res).subscribe(obj =>  console.log(obj));
     });
+    this.saveUserDetails();
   }
 
 
