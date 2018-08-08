@@ -7,6 +7,8 @@
 
     public class User : Entity<string>
     {
+        public User() { }
+
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public override string Id { get; set; }
 

@@ -94,6 +94,14 @@ export class AuthService {
     return userDto;
   }
 
+  getFirebaseToken(): string | null {
+    return localStorage.getItem('firebaseToken');
+  }
+
+  getWatcherToken(): string | null {
+    return localStorage.getItem('watcherToken');
+  }
+
   logout(): boolean {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('watcherToken');
