@@ -1,15 +1,15 @@
 ﻿
- import { Instance } from './instance';
-import { Chart } from './chart';
+import { Instance } from './instance.model';
+import { Chart } from './chart.model';
 
-    export interface Dashboard  { 
-        id: number;
-        title: string;
-        createdAt: Date;
-        instanceId: number;
-        instance: Instance;
-        charts: Chart[];
-    }
+export interface Dashboard  {
+   id: number;
+   title: string;
+   createdAt: Date;
+   instanceId: number;
+   instance: Instance;
+   charts: Chart[];
+}
 
 
 

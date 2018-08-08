@@ -5,28 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="MoveToFrontend\chart-type.enum.ts" />
-    <None Include="MoveToFrontend\chart.model.ts">
-      <CustomToolNamespace>Dtos\ChartDto.cs</CustomToolNamespace>
-    </None>
-    <None Include="MoveToFrontend\chat-type.enum.ts" />
-    <None Include="MoveToFrontend\chat.model.ts" />
-    <None Include="MoveToFrontend\dashboard.model.ts" />
-    <None Include="MoveToFrontend\feedback.model.ts" />
-    <None Include="MoveToFrontend\instance.model.ts" />
-    <None Include="MoveToFrontend\message.model.ts" />
-    <None Include="MoveToFrontend\notification-setting.model.ts" />
-    <None Include="MoveToFrontend\notification-type.enum.ts" />
-    <None Include="MoveToFrontend\notification.model.ts" />
-    <None Include="MoveToFrontend\organization.model.ts" />
-    <None Include="MoveToFrontend\response.model.ts" />
-    <None Include="MoveToFrontend\role.model.ts" />
-    <None Include="MoveToFrontend\theme.model.ts" />
-    <None Include="MoveToFrontend\user-organization.model.ts" />
-    <None Include="MoveToFrontend\user.model.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="7.6.104" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
@@ -34,6 +12,9 @@
   <ItemGroup>
     <None Update="MoveToFrontend\chart-type.enum.ts">
       <CustomToolNamespace>Enums\ChartType.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\chart.model.ts">
+      <CustomToolNamespace>Dtos\ChartDto.cs</CustomToolNamespace>
     </None>
     <None Update="MoveToFrontend\chat-type.enum.ts">
       <CustomToolNamespace>Enums\ChatType.cs</CustomToolNamespace>
