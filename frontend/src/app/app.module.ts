@@ -24,7 +24,7 @@ import { environment } from '../environments/environment';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from './core/services/auth.service';
-
+import {ToastModule} from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -43,6 +43,7 @@ import { AuthService } from './core/services/auth.service';
     RadioButtonModule,
     DialogModule,
     TabViewModule,
+    ToastModule,
 
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,
