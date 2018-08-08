@@ -21,6 +21,7 @@
 
         private ISamplesRepository _samplesRepository;
         private IOrganizationRepository _organizationRepository;
+        private INotificationSettingsRepository _notificationSettingsRepository;
         
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
@@ -51,6 +52,19 @@
                 }
 
                 return _organizationRepository;
+            }
+        }
+
+        public INotificationSettingsRepository NotificationSettingsRepository
+        {
+            get
+            {
+                if (_notificationSettingsRepository == null)
+                {
+                    _notificationSettingsRepository = new NotificationSettingsRepository(_context, _mapper);
+                }
+
+                return _notificationSettingsRepository;
             }
         }
 
