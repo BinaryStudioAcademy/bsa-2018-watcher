@@ -24,7 +24,8 @@ import { environment } from '../environments/environment';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from './core/services/auth.service';
-import {ToastModule} from 'primeng/toast';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import {ToastModule} from 'primeng/toast';
     DialogModule,
     TabViewModule,
     ToastModule,
+    ConfirmDialogModule,
 
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,

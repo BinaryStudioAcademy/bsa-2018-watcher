@@ -39,7 +39,7 @@ export class ToastrService {
           header: 'Confirmation',
           icon: 'fa fa-question-circle',
           accept: () => {
-              resolve(true);
+            resolve(true);
           },
           reject: () => {
             resolve(false);
