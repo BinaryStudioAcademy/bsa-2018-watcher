@@ -11,6 +11,8 @@ export class UserService {
   private headers: HttpHeaders;
   private accessPointUrl = 'http://localhost:51093/api/users';
   private accessTokensPointUrl = 'http://localhost:54426/api/tokens';
+  // private tokensUrl = 'http://localhost:29878/api/Tokens';
+
 
   constructor(private http: HttpClient) { }
 
@@ -20,7 +22,7 @@ export class UserService {
   }
 
   public register(postInfo: PostInfo) {
-    return this.http.post(this.accessTokensPointUrl + '/register' , postInfo.user,
+    return this.http.post(this.accessTokensPointUrl + '/Register' , postInfo.user,
      {headers: new HttpHeaders({'Content-Type': 'application/json; charset=utf-8', 'Authorization': `Bearer ${postInfo.token}`})});
   }
 }
