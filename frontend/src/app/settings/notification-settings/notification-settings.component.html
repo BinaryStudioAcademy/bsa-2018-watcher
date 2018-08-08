@@ -1,6 +1,27 @@
-<form [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
-   
-  
-  
-    <button type="submit" pButton class="ui-button-secondary" label="Update"></button>
-  </form>
+
+
+<p-dropdown [options]="dropdown" [(ngModel)]="selectedNotificationSetting"></p-dropdown>
+
+<div *ngIf="selectedNotificationSetting" class="ui-g ui-fluid">
+      <div class="ui-g-12 ui-md-4">
+        <h4 class="first">Disable</h4>
+        <p-inputSwitch  [(ngModel)]="selectedNotificationSetting.isDisable"></p-inputSwitch>
+      </div>
+
+    <div class="ui-g-12 ui-md-4">
+      <h4 class="first">Mute</h4>
+      <p-inputSwitch  [disabled]="selectedNotificationSetting.isDisable" [(ngModel)]="selectedNotificationSetting.isMute"></p-inputSwitch>
+    </div>
+
+    <div class="ui-g-12 ui-md-4">
+      <h4 class="first">Emailable</h4>
+      <p-inputSwitch  [disabled]="selectedNotificationSetting.isDisable" [(ngModel)]="selectedNotificationSetting.isMute"></p-inputSwitch>
+    </div>
+  </div>
+  <div class="ui-g ui-fluid">
+      <div class="ui-g-12 ui-md-4">
+      <button (onClick)="onSubmit()" type="submit" pButton class="ui-button-secondary" label="Update"></button>
+      </div>
+  </div>
+
+

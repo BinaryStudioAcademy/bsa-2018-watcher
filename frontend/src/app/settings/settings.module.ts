@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SettingsComponent } from './settings.component';
 import { NotificationSettingsComponent } from './notification-settings/notification-settings.component';
 import { TabViewModule, PanelMenuModule, InputTextModule, ButtonModule } from 'primeng/primeng';
-import { InputSwitchModule } from 'primeng/primeng';
+import { InputSwitchModule, DropdownModule } from 'primeng/primeng';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { UserProfileComponent } from './user-profile/user-profile.component';
@@ -20,6 +20,8 @@ import { OrganizationProfileComponent } from './organization-profile/organizatio
     FormsModule,
     InputTextModule,
     ButtonModule,
+    InputSwitchModule,
+    DropdownModule,
     ReactiveFormsModule,
     SettingsRoutingModule
   ],
