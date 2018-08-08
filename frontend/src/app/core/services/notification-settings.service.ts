@@ -13,7 +13,7 @@ export class NotificationSettingsService {
 
   }
 
-  getDefaultData():  NotificationSetting[] {
+  getNotificationSettings(userId: number):  NotificationSetting[] {
     /* return this.http.get<NotificationSetting[]>('/api/settings/notificationSetting')
       .pipe(
         map(response => {

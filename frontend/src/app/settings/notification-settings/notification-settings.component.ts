@@ -3,6 +3,7 @@ import { NotificationSetting } from '../../shared/models/notificationSetting';
 import { NotificationType } from '../../shared/enums/notificationType';
 import { NotificationSettingsService } from '../../core/services/notification-settings.service';
 import {SelectItem} from 'primeng/api';
+import { ToastnotificationService } from '../../core/services/toastnotification.service';
 
 @Component({
   selector: 'app-notification-settings',
@@ -15,9 +16,9 @@ export class NotificationSettingsComponent implements OnInit {
   selectedNotificationSetting: NotificationSetting;
 
 
-  constructor(private service: NotificationSettingsService) {
+  constructor(private service: NotificationSettingsService, private toastnotificationService: ToastnotificationService) {
     this.dropdown = new Array<SelectItem>();
-    this.notificationSettings = this.service.getDefaultData();
+    this.notificationSettings = this.service.getNotificationSettings(1); // send userId
     this.selectedNotificationSetting = this.notificationSettings[0];
     this.fillDropdown(this.notificationSettings);
   }
@@ -34,5 +35,20 @@ export class NotificationSettingsComponent implements OnInit {
       this.dropdown.push({label: NotificationType[element.type], value: element});
     });
   }
+
+  saveSetting() {
+    if (this.selectedNotificationSetting && this.selectedNotificationSetting.isDisable) {
+      // this.toastnotificationService.confirm("Are you sure you want to disable all notifications?").the
+      this.toastnotificationService.success('oK!');
+    }
+
+    // toast
+    // save
+    // toast
+
+    // tslint:disable-next-line:no-debugger
+    debugger;
+  }
+
 
 }
