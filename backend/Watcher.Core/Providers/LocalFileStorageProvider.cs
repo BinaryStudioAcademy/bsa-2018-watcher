@@ -7,14 +7,11 @@ namespace Watcher.Core.Providers
 {
     public class LocalFileStorageProvider:IFileStorageProvider
     {
-        string defaultPath;
-        public LocalFileStorageProvider(string path)
-        {
-            defaultPath = path;
-        }
+        public LocalFileStorageProvider()
+        { }
+
         public Task<string> UploadFileAsync(string path, string containerName = "watcher")
         {
-
             try
             {
                 string parent = string.Copy(Directory.GetCurrentDirectory());
@@ -44,6 +41,7 @@ namespace Watcher.Core.Providers
                 return Task.FromException<string>(ex);
             }
         }
+
         public Task DeleteFileAsync(string path)
         {
             try
