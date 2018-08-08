@@ -1,11 +1,11 @@
 ﻿
- 
-    export interface Theme  { 
-        id: number;
-        name: string;
-        fontFamily: string;
-        backgroundColor: string;
-    }
+
+export interface Theme  {
+   id: number;
+   name: string;
+   fontFamily: string;
+   backgroundColor: string;
+}
 
 
 
