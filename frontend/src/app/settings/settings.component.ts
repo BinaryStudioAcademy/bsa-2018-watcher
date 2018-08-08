@@ -13,18 +13,18 @@ constructor() { }
 menuItems: MenuItem[];
 
   ngOnInit() {
-    this.menuItems = [
-      {
+    this.menuItems = [{
         label: 'User Profile',
         icon: 'fa fa-fw fa-user',
         routerLink: ['/user/settings/user-profile']
-      },
-      {
+      }, {
+        label: 'Organisation Profile',
+        icon: 'fa fa-fw fa-building',
+        routerLink: ['/user/settings/organization-profile']
+      }, {
         label: 'Notification Settings',
         icon: 'fa fa-fw fa-send',
         routerLink: ['/user/settings/notification-settings']
-      }
-    ];
+      }];
   }
-
 }

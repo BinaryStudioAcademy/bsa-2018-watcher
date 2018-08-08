@@ -52,6 +52,12 @@
                 .HasOne(c => c.Organization)
                 .WithOne(o => o.Chat);
 
+            modelBuilder.Entity<Organization>()
+                .HasOne(u => u.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(x => x.CreatedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Seed();
         }
 
