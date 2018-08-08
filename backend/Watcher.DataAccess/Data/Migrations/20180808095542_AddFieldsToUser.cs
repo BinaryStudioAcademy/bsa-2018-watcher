@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Watcher.DataAccess.Data.Migrations
 {
-    public partial class AddFieldsUser : Migration
+    public partial class AddFieldsToUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -672,16 +672,56 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Users",
                 nullable: true);
 
+            migrationBuilder.AddColumn<int>(
+                name: "ChhosedOrganizationId",
+                table: "Users",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "ChoosedOrganizationId",
+                table: "Users",
+                nullable: true);
+
             migrationBuilder.AddColumn<string>(
                 name: "NickName",
                 table: "Users",
                 nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ChoosedOrganizationId",
+                table: "Users",
+                column: "ChoosedOrganizationId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Users_Organizations_ChoosedOrganizationId",
+                table: "Users",
+                column: "ChoosedOrganizationId",
+                principalTable: "Organizations",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Users_Organizations_ChoosedOrganizationId",
+                table: "Users");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Users_ChoosedOrganizationId",
+                table: "Users");
+
             migrationBuilder.DropColumn(
                 name: "Bio",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "ChhosedOrganizationId",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "ChoosedOrganizationId",
                 table: "Users");
 
             migrationBuilder.DropColumn(

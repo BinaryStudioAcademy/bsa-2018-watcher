@@ -10,8 +10,8 @@ using Watcher.DataAccess.Data;
 namespace Watcher.DataAccess.Data.Migrations
 {
     [DbContext(typeof(WatcherDbContext))]
-    [Migration("20180807164933_AddFieldsUser")]
-    partial class AddFieldsUser
+    [Migration("20180808095542_AddFieldsToUser")]
+    partial class AddFieldsToUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -309,6 +309,10 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<string>("Bio");
 
+                    b.Property<int>("ChhosedOrganizationId");
+
+                    b.Property<int?>("ChoosedOrganizationId");
+
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Email")
@@ -329,6 +333,8 @@ namespace Watcher.DataAccess.Data.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChoosedOrganizationId");
 
                     b.HasIndex("NotificationSettingId");
 
@@ -444,6 +450,10 @@ namespace Watcher.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.User", b =>
                 {
+                    b.HasOne("Watcher.DataAccess.Entities.Organization", "ChoosedOrganization")
+                        .WithMany()
+                        .HasForeignKey("ChoosedOrganizationId");
+
                     b.HasOne("Watcher.DataAccess.Entities.NotificationSetting", "NotificationSetting")
                         .WithMany()
                         .HasForeignKey("NotificationSettingId")

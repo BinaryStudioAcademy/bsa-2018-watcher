@@ -52,7 +52,7 @@
                 .HasOne(c => c.Organization)
                 .WithOne(o => o.Chat);
 
-            modelBuilder.Seed();
+            //modelBuilder.Seed();
         }
 
         public DbSet<Sample> Samples { get; set; }
