@@ -27,12 +27,8 @@ export class UserService {
     this.http.put(`${this.accessPointUrl}${id}`, user).subscribe();
   }
 
-  public get(id: string): User {
-    let user: User;
-    this.http.get(`${this.accessPointUrl}${id}`).subscribe((value: User) => {
-      user = value;
-    });
-    return user;
+  public get(id: string): Observable<User> {
+    return this.http.get(`${this.accessPointUrl}${id}`) as Observable<User>;
   }
 
 }

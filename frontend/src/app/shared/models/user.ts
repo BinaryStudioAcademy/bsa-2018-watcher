@@ -7,7 +7,7 @@ import { Message } from './message';
 import { Chat } from './chat';
 
 export interface User {
-  id: number;
+  id: string;
   firstName: string;
   secondName: string;
   email: string;
@@ -15,12 +15,6 @@ export interface User {
   createdAt: Date;
   roleId: number;
   role: Role;
-  notificationSettingId: number;
-  notificationSetting: NotificationSetting;
-  userOrganizations: UserOrganization[];
-  notifications: Notification[];
-  feedbacks: Feedback[];
-  responses: Response[];
-  messages: Message[];
-  createdChats: Chat[];
+  nickName: string;
+  bio: string;
 }
