@@ -9,8 +9,8 @@ import { Organization } from '../../shared/models/organization';
 export class OrganizationService {
 
   URL = 'http://localhost:28046/organizations/';
-  constructor(private http: HttpClient) {
 
+  constructor(private http: HttpClient) {
   }
 
   getAll(): Observable<Organization[]> {
