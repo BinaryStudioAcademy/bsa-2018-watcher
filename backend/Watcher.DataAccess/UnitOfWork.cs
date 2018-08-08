@@ -20,8 +20,11 @@
         private readonly IMapper _mapper;
 
         private ISamplesRepository _samplesRepository;
+        
         private IDashboardsRepository _dashboardsRepository;
 
+        private IOrganizationRepository _organizationRepository;
+        
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -51,6 +54,17 @@
                 }
 
                 return _dashboardsRepository;
+
+        public IOrganizationRepository OrganizationRepository
+        {
+            get
+            {
+                if (_organizationRepository == null)
+                {
+                    _organizationRepository = new OrganizationRepository(_context, _mapper);
+                }
+
+                return _organizationRepository;
             }
         }
 

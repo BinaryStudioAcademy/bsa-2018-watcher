@@ -10,6 +10,8 @@
         ISamplesRepository SamplesRepository { get; }
         IDashboardsRepository DashboardsRepository { get; }
 
+        IOrganizationRepository OrganizationRepository { get; }
+        
         Task<bool> SaveAsync();
     }
 }

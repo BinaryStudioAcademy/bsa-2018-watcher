@@ -1,0 +1,47 @@
+<p-button icon="fa fa-edit" (click)="canEdit()"></p-button>
+
+<form [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
+  <h4 class="label">Organization profile</h4>
+
+  <label>Name:</label>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-md-4">
+      <div class="ui-inputgroup">
+        <span class="ui-inputgroup-addon">
+          <i class="fa fa-user"></i>
+        </span>
+        <input type="text" formControlName="name" pInputText placeholder="Name">
+      </div>
+    </div>
+  </div>
+
+  <div class="nonValid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
+    Name is required.
+  </div>
+
+  <label>Description:</label>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-md-4">
+      <div class="ui-inputgroup">
+        <span class="ui-inputgroup-addon">
+          <i class="fa fa-email"></i>
+        </span>
+        <input type="text" formControlName="description" pInputText placeholder="Description">
+      </div>
+    </div>
+  </div>
+
+  <label>Email:</label>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-md-4">
+      <div class="ui-inputgroup">
+        <span class="ui-inputgroup-addon">
+          <i class="fa fa-email"></i>
+        </span>
+        <input type="text" formControlName="email" pInputText placeholder="Email">
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" pButton class="ui-button-secondary" label="Update"></button>
+</form>

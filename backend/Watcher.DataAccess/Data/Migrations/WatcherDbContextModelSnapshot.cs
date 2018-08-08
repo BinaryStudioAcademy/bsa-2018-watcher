@@ -15,7 +15,7 @@ namespace Watcher.DataAccess.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -211,12 +211,26 @@ namespace Watcher.DataAccess.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ContactNumber");
+
+                    b.Property<int>("CreatedByUserId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("IsActive");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int>("ThemeId");
+                    b.Property<int?>("ThemeId");
+
+                    b.Property<string>("WebSite");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("ThemeId");
 
@@ -421,10 +435,14 @@ namespace Watcher.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Organization", b =>
                 {
+                    b.HasOne("Watcher.DataAccess.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Watcher.DataAccess.Entities.Theme", "Theme")
                         .WithMany()
-                        .HasForeignKey("ThemeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ThemeId");
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Response", b =>
