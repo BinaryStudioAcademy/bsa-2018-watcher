@@ -17,6 +17,7 @@
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
+    using Watcher.Core.Providers;
     using Watcher.Core.Services;
     using Watcher.DataAccess;
     using Watcher.DataAccess.Data;
@@ -58,14 +59,20 @@
             // Add your services here
             services.AddTransient<ISamplesService, SamplesService>();
             services.AddTransient<ITransientService, TransientService>();
+
             services.AddTransient<IOrganizationService, OrganizationService>();
             
+
+            services.AddSingleton<IFileStorageProvider, FileStorageProvider>();
+
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
 
             InitializeAutomapper(services);
 
             ConfigureDatabase(services, Configuration);
+
+            ConfigureFileStorage(services, Configuration);
 
             services.AddMvc()
                 .AddFluentValidation(fv =>
@@ -121,6 +128,29 @@
             }
         }
 
+        public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
+        {
+            var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if(enviroment=="production")
+            {
+                var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
+                if (!string.IsNullOrWhiteSpace(fileStorageString))
+                {
+                    services.AddSingleton<IFileStorageProvider, FileStorageProvider>
+                        (prov => new FileStorageProvider(fileStorageString));
+                }
+            }
+            else
+            {
+                var localFileStorageString = Configuration.GetConnectionString("LocalFileStorageConnection");
+                if (!string.IsNullOrWhiteSpace(localFileStorageString))
+                {
+                    services.AddSingleton<IFileStorageProvider, LocalFileStorageProvider>
+                        (prov => new LocalFileStorageProvider(localFileStorageString));
+                }
+            }
+        }
+
         public virtual IServiceCollection InitializeAutomapper(IServiceCollection services)
         {
             // Used in older versions
@@ -135,6 +165,7 @@
 
             return services;
         }
+
 
         public virtual void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
         {
