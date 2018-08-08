@@ -48,22 +48,26 @@
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
-            //var entity = _mapper.Map<UserRegisterRequest, User>(request);
+            var entity = _mapper.Map<UserRegisterRequest, User>(request);
 
-            //entity = await _uow.UsersRepository.CreateAsync(entity);
-            //var result = await _uow.SaveAsync();
-            //if (!result)
-            //{
-            //    return null;
-            //}
+            entity.Id = request.Uid;
+            entity.IsActive = true;
+            entity.CreatedAt = DateTime.Now;
 
-            //if (entity == null) return null;
+            entity = await _uow.UsersRepository.CreateAsync(entity);
+            var result = await _uow.SaveAsync();
+            if (!result)
+            {
+                return null;
+            }
 
-            //var dto = _mapper.Map<User, UserDto>(entity);
-
-            var entity = await _uow.UsersRepository.GetFirstOrDefaultAsync(include: users => users.Include(u => u.Role));
+            if (entity == null) return null;
 
             var dto = _mapper.Map<User, UserDto>(entity);
+
+           // var entity = await _uow.UsersRepository.GetFirstOrDefaultAsync();
+
+          //  var dto = _mapper.Map<User, UserDto>(entity);
 
             //var dto = new UserDto()
             //{
