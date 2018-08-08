@@ -14,11 +14,16 @@ namespace Watcher.Core.Providers
         }
         public Task<string> UploadFileAsync(string path, string containerName = "watcher")
         {
+
             try
             {
-                string dirPath = defaultPath + containerName;
+                string parent = string.Copy(Directory.GetCurrentDirectory());
+                while (new DirectoryInfo(parent).Name != "Watcher")
+                {
+                    parent = Directory.GetParent(parent).FullName;
+                }
 
-                var directory = new DirectoryInfo(dirPath);
+                var directory = new DirectoryInfo(parent + @"\" + "content");
                 if (!directory.Exists) directory.Create();
 
                 var file = new FileInfo(path);
@@ -28,12 +33,13 @@ namespace Watcher.Core.Providers
 
                 string filename = Guid.NewGuid().ToString() + Path.GetExtension(path);
 
-                var fileInfo = file.CopyTo(dirPath + @"\\" + filename);
+                var fileInfo = file.CopyTo(directory + @"\\" + filename);
 
-                string newPath = dirPath + @"\\" + filename;
-                return Task.FromResult<string>(newPath);
+                string newPath = fileInfo.FullName;
+
+                return Task.FromResult(ConvertToUri(newPath));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Task.FromException<string>(ex);
             }
@@ -42,6 +48,8 @@ namespace Watcher.Core.Providers
         {
             try
             {
+                path = ConvertToAbsolutePath(path);
+
                 var file = new FileInfo(path);
                 if (!file.Exists)
                     throw new ArgumentNullException("Invalid path");
@@ -52,6 +60,26 @@ namespace Watcher.Core.Providers
             {
                 return Task.FromException<object>(ex);
             }
+        }
+
+        private string ConvertToUri(string path)
+        {
+            Uri uri1 = new Uri(path);
+            Uri uri2 = new Uri(new FileInfo(path).Directory.Parent.FullName + @"\" + "frontend");
+            Uri relativeUri = uri2.MakeRelativeUri(uri1);
+            return relativeUri.ToString();
+        }
+
+        private string ConvertToAbsolutePath(string relativePath)
+        {
+            string parent = string.Copy(Directory.GetCurrentDirectory());
+            while (new DirectoryInfo(parent).Name != "Watcher")
+            {
+                parent = Directory.GetParent(parent).FullName;
+                if (parent == Directory.GetDirectoryRoot(parent)) throw new ArgumentNullException("Wrong relative path");
+            }
+            parent += @"\" + relativePath;
+            return parent;
         }
     }
 }
