@@ -22,6 +22,11 @@ import { OrganizationProfileComponent } from './organization-profile/organizatio
     ReactiveFormsModule,
     SettingsRoutingModule
   ],
-  declarations: [ SettingsComponent, NotificationSettingsComponent, UserProfileComponent, OrganizationProfileComponent]
+  declarations: [
+    SettingsComponent,
+    NotificationSettingsComponent,
+    UserProfileComponent,
+    OrganizationProfileComponent
+  ]
 })
 export class SettingsModule { }
