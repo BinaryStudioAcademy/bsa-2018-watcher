@@ -12,6 +12,7 @@ import { NotificationSetting } from '../../shared/models/notification-setting.mo
   styleUrls: ['./notification-settings.component.sass']
 })
 export class NotificationSettingsComponent implements OnInit {
+  userId: string;
   dropdown: SelectItem[];
   notificationSettings: NotificationSetting[];
   selectedNotificationSetting: NotificationSetting;
@@ -24,7 +25,8 @@ export class NotificationSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.service.getByUserId('6').subscribe((entitys) => {
+    this.userId = this.authService.getCurrentUser().id;
+    this.service.getByUserId(this.userId).subscribe((entitys) => {
       this.notificationSettings = entitys;
       if (this.notificationSettings) {
         this.fillDropdown();
