@@ -18,7 +18,7 @@ export class DashboardService {
   }
 
   create(dashboard: Dashboard) {
-      return this.http.post(this.url, dashboard);
+    return this.http.post(this.url, dashboard);
   }
 
   update(dashboard: Dashboard) {

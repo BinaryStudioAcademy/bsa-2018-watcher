@@ -18,16 +18,16 @@ inctanceId: number;
 menuItems: MenuItem[];
 dashboards: Dashboard[];
 activeItem: MenuItem;
-newDashboard: Dashboard;
 
   constructor(private service: DashboardService) {
     this.menuItems = [];
     this.dashboards = [];
+    this.inctanceId = 1;
   }
 
-  createDashboard() {
-   this.newDashboard.title = this.popup.dashboardTitle;
-   this.newDashboard.createdAt = new Date();
+  createDashboard(title: string, createdAt: Date, instanceId: number) {
+   const newDashboard = new Dashboard(title, createdAt, instanceId);
+   this.service.create(newDashboard).subscribe((res: Response) => console.log(res));
   }
 
   getDashboards() {
@@ -38,8 +38,8 @@ newDashboard: Dashboard;
        new Dashboard('RAM',  new Date(),  this.inctanceId),
        new Dashboard('CAM',  new Date(),  this.inctanceId),
        new Dashboard('DAM',  new Date(),  this.inctanceId), ];
-      this.dashboards.forEach(dash => {this.menuItems.push({label: dash.title});
-      } );
+      this.dashboards.forEach(dash => {
+        this.menuItems.push({label: dash.title}); });
   }
   ngOnInit() {
     this.getDashboards();
@@ -50,6 +50,11 @@ newDashboard: Dashboard;
       this.activeItem = this.menuItems[index];
   }} );
   this.activeItem = this.menuItems[0];
+  this.popup.onHide = () => {
+    if (this.popup.creation === true) {
+      this.createDashboard(this.popup.dashboardTitle, new Date(), this.inctanceId);
+    }
+  };
   }
 
 }

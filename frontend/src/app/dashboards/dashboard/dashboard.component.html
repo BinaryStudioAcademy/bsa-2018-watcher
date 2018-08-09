@@ -5,10 +5,9 @@
         Dashboards
     </div>
     <p-tabMenu [model]="menuItems" [activeItem]="activeItem"> </p-tabMenu>
-    <p-tabPanel header="RAM" [closable]="false">
-        <div class="chart">
-            <h3>Chart 1</h3>
-            <img src="https://www.excel-easy.com/smi/examples/line-chart.png" alt="">
-        </div>
-    </p-tabPanel>
+
+    <div class="chart">
+        <h3>{{activeItem.label}} chart</h3>
+        <img src="https://www.excel-easy.com/smi/examples/line-chart.png" alt="">
+    </div>
 </div>

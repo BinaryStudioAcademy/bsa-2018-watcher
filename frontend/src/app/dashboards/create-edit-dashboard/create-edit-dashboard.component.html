@@ -1,6 +1,6 @@
-<p-dialog [(visible)]="display" (onHide)="closeDialog()" [modal]="true" [closable]=false [responsive]="true" [showHeader]="false" [width]="350" [minWidth]="200" [minY]="70" header="Create Dashboard" [maximizable]="false" [baseZIndex]="10000" [draggable]="false"
-    appendTo="body">
+<p-dialog [(visible)]="display" (onHide)="onHide()" [modal]="true" [closable]=false [responsive]="true" [width]="350" [minWidth]="200" header="Create Dashboard" [maximizable]="false" [baseZIndex]="10000" [draggable]="false" [showHeader]="false" appendTo="body">
     <div class="dashboard-inputs">
+        <h2>Dashboard</h2>
         <div class="dashboard-input">
             <input placeholder="Title" pInputText type="text" class="form-control" id="dTitle" #dTitle="ngModel" [(ngModel)]="dashboardTitle" required/>
             <div [hidden]="dTitle.valid || dTitle.untouched" class="alert alert-danger">

@@ -8,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 export class CreateEditDashboardComponent implements OnInit {
 
   display: Boolean = false;
-  dashboardTitle =  '';
+  dashboardTitle =  'dfg';
+  creation = false;
 
   constructor() { }
 
@@ -16,15 +17,18 @@ export class CreateEditDashboardComponent implements OnInit {
     this.display = false;
   }
 
-  ngOnInit() {
-  }
   onSave() {
     console.log(this.dashboardTitle);
     console.log(new Date());
     this.display = false;
+    this.creation = true;
   }
   showDialog() {
       this.display = true;
   }
+  onHide() {
+  }
 
+  ngOnInit() {
+  }
 }
