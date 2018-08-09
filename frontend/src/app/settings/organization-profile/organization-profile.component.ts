@@ -2,23 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Organization } from '../../shared/models/organization';
 import { OrganizationService } from '../../core/services/organization.service';
+import { MessageService } from '../../../../node_modules/primeng/api';
 
 @Component({
   selector: 'app-organization-profile',
   templateUrl: './organization-profile.component.html',
   styleUrls: ['./organization-profile.component.sass'],
-  providers: [OrganizationService]
+  providers: [
+    MessageService, OrganizationService
+  ]
 })
 export class OrganizationProfileComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private organizationService: OrganizationService) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    private organizationService: OrganizationService,
+    private messageService: MessageService) { }
 
-  editable: boolean;
-  canUpdate: boolean;
-  organization: Organization;
+  private editable: boolean;
+  private canUpdate: boolean;
+  private organization: Organization;
 
-  organizationForm = this.fb.group({
+  private organizationForm = this.fb.group({
     name: new FormControl({ value: '', disabled: true }, Validators.required),
     email: new FormControl({ value: '', disabled: true }),
     contactNumber: new FormControl({ value: '', disabled: true }),
@@ -27,7 +32,7 @@ export class OrganizationProfileComponent implements OnInit {
   });
 
   ngOnInit() {
-    const organizationId = 76; // currentUser.choosedOrganizationId
+    const organizationId = 76; // currentUser.lastPickedOrganizationId
     this.organizationService.get(organizationId).subscribe((value: Organization) => {
       this.organization = value;
       this.subscribeOrganizationFormToData();
@@ -58,7 +63,14 @@ export class OrganizationProfileComponent implements OnInit {
 
   onSubmit() {
     if (this.organizationForm.valid && this.editable) {
-      this.organizationService.update(this.organization.id, this.organization).subscribe();
+      this.organizationService.update(this.organization.id, this.organization).subscribe(
+        value => {
+          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Organization was updated'});
+        },
+        err => {
+          this.messageService.add({severity: 'error', summary: 'Error', detail: 'Organization was not updated'});
+        }
+      );
     } else {
       Object.keys(this.organizationForm.controls).forEach(field => {
         const control = this.organizationForm.get(field);
