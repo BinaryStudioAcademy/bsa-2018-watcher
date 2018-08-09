@@ -76,9 +76,7 @@
             services.AddTransient<ITransientService, TransientService>();
             services.AddTransient<IOrganizationService, OrganizationService>();  
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
-
-
-            services.AddSingleton<IFileStorageProvider, FileStorageProvider>();
+            
             ConfigureFileStorage(services, Configuration);
 
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
