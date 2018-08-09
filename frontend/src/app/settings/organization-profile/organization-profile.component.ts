@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Organization } from '../../shared/models/organization.model';
 import { OrganizationService } from '../../core/services/organization.service';
-import { MessageService } from '../../../../node_modules/primeng/api';
+import { ToastrService } from '../../core/services/toastr.service';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { MessageService } from '../../../../node_modules/primeng/api';
   templateUrl: './organization-profile.component.html',
   styleUrls: ['./organization-profile.component.sass'],
   providers: [
-    MessageService, OrganizationService
+    ToastrService, OrganizationService
   ]
 })
 export class OrganizationProfileComponent implements OnInit {
@@ -18,7 +18,7 @@ export class OrganizationProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private organizationService: OrganizationService,
-    private messageService: MessageService) { }
+    private toastrService: ToastrService) { }
 
   private editable: boolean;
   private canUpdate: boolean;
@@ -66,10 +66,10 @@ export class OrganizationProfileComponent implements OnInit {
     if (this.organizationForm.valid && this.editable) {
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
-          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Organization was updated'});
+          this.toastrService.success('Organization was updated');
         },
         err => {
-          this.messageService.add({severity: 'error', summary: 'Error', detail: 'Organization was not updated'});
+          this.toastrService.error('Organization was not updated');
         }
       );
     } else {
