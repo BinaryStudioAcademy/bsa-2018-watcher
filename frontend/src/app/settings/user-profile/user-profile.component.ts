@@ -19,8 +19,8 @@ export class UserProfileComponent implements OnInit {
 
   private user: User;
   private userId: string;
-  private canUpdate: boolean;
 
+  public canUpdate: boolean;
   public userForm = this.fb.group({
     displayName: new FormControl({ value: '', disabled: true }, Validators.required),
     firstName: new FormControl({ value: '', disabled: true  }, Validators.required),
