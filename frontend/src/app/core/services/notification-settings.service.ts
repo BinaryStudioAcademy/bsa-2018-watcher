@@ -1,27 +1,21 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { NotificationSetting } from '../../shared/models/notificationSetting';
-import { NotificationType } from '../../shared/models/notification-type.enum';
-import { environment } from '../../../environments/environment';
-
+import { Observable } from '../../../../node_modules/rxjs';
+import { ApiService } from '../../shared/services/api.service';
+import { NotificationSetting } from '../../shared/models/notification-setting.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationSettingsService {
-  url: string;
-  constructor(private http: HttpClient) {
-   this.url = environment.server_url;
+  private readonly ctrlUrl = 'NotificationSettings';
+
+  constructor(private apiService: ApiService) { }
+
+  public update(id: number, entity: NotificationSetting): Observable<Object> {
+    return this.apiService.put(`/${this.ctrlUrl}/${id}`, entity);
   }
 
-  getNotificationSettings(userId: number):  NotificationSetting[] {
-   // let entity = this.http.get<Array<NotificationSetting>>(this.url + '/' + userId);
-
-      let notificationSettings: NotificationSetting[];
-      notificationSettings = [
-        { id: 1, type: NotificationType.Chat, isDisable: false, isMute: false },
-        { id: 1, type: NotificationType.System, isDisable: false, isMute: true }
-      ];
-      return notificationSettings;
+  public getByUserId(userId: string): Observable<NotificationSetting[]> {
+    return this.apiService.get(`/${this.ctrlUrl}/${userId}`) as Observable<NotificationSetting[]>;
   }
 }

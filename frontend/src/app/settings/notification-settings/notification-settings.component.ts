@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NotificationSetting } from '../../shared/models/notificationSetting';
 import { NotificationSettingsService } from '../../core/services/notification-settings.service';
-import {SelectItem} from 'primeng/api';
-// import { ToastnotificationService } from '../../core/services/toastnotification.service';
+import { SelectItem } from 'primeng/api';
 import { NotificationType } from '../../shared/models/notification-type.enum';
+import { AuthService } from '../../core/services/auth.service';
+import { ToastrService } from '../../core/services/toastr.service';
+import { NotificationSetting } from '../../shared/models/notification-setting.model';
 
 @Component({
   selector: 'app-notification-settings',
@@ -16,35 +17,48 @@ export class NotificationSettingsComponent implements OnInit {
   selectedNotificationSetting: NotificationSetting;
 
 
-  constructor(private service: NotificationSettingsService) {
+  constructor(private service: NotificationSettingsService,
+              private authService: AuthService,
+              private toastrService: ToastrService) {
     this.dropdown = new Array<SelectItem>();
-    this.notificationSettings = this.service.getNotificationSettings(1); // send userId
-    this.selectedNotificationSetting = this.notificationSettings[0];
-    this.fillDropdown(this.notificationSettings);
   }
 
   ngOnInit() {
-
+    this.service.getByUserId('6').subscribe((entitys) => {
+      this.notificationSettings = entitys;
+      if (this.notificationSettings) {
+        this.fillDropdown();
+        this.selectedNotificationSetting = this.notificationSettings[0];
+      }
+    });
   }
 
-  onSubmit() {
-  }
-
-  private fillDropdown(notificationSettings: NotificationSetting[]) {
-    notificationSettings.forEach(element => {
+  private fillDropdown() {
+    this.notificationSettings.forEach(element => {
       this.dropdown.push({label: NotificationType[element.type], value: element});
     });
   }
 
-  saveSetting() {
+  onSave() {
     if (this.selectedNotificationSetting && this.selectedNotificationSetting.isDisable) {
-      // this.toastnotificationService.confirm("Are you sure you want to disable all notifications?").the
-      // this.toastnotificationService.success('oK!');
+      this.toastrService.confirm('Are you sure you want to disable all notifications?').then((value) => {
+        if (value) {
+          this.updateSetting();
+        }
+      });
+    } else {
+      this.updateSetting();
     }
-
-    // tslint:disable-next-line:no-debugger
-    debugger;
   }
 
+  private updateSetting() {
+    this.service.update(this.selectedNotificationSetting.id, this.selectedNotificationSetting)
+    .subscribe(value => {
+      this.toastrService.success('Notification setting was updated.');
+    },
+    err => {
+      this.toastrService.error('Notification setting was not updated.');
+    });
+  }
 
 }

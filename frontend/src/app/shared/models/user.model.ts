@@ -11,17 +11,17 @@ import { Organization } from './organization.model';
 
 export interface User  {
    id: string;
+   displayName: string;
    firstName: string;
    secondName: string;
-   displayName: string;
-   email: string;
    bio: string;
+   email: string;
    isActive: boolean;
    createdAt: Date;
    role: Role;
    lastPickedOrganizationId: number;
    lastPickedOrganization: Organization;
-   notificationSettings: NotificationSetting[];
+   notificationSetting: NotificationSetting;
    userOrganizations: UserOrganization[];
    notifications: Notification[];
    feedbacks: Feedback[];
