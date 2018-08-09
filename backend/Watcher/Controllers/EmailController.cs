@@ -22,7 +22,7 @@ namespace Watcher.Controllers
 
         public async Task SendEmail()
         {
-            await _emailProvider.SendMessage("tt@gmail.com", "Try", new List<string>(){ "tanyazaychuk@gmail.com" }, "msg", "msgHtml");
+            await _emailProvider.SendMessage("tt@gmail.com", "Try", new List<string>(){ "t@gmail.com" }, "msg", "msgHtml");
         }
     }
 }
