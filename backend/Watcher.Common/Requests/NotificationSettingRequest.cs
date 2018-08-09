@@ -12,5 +12,7 @@ namespace Watcher.Common.Requests
         public bool IsMute { get; set; }
         public bool IsDisable { get; set; }
         public bool IsEmailable { get; set; }
+
+        public string UserId { get; set; }
     }
 }
