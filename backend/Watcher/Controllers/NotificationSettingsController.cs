@@ -9,7 +9,7 @@ namespace Watcher.Controllers
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
 
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class NotificationSettingsController : ControllerBase
     {  
