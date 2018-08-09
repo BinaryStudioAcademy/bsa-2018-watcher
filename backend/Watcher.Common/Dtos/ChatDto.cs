@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using Watcher.Common.Enums;
+using Watcher.Common.Interfaces.Entities;
 using Watcher.Common.MoveToFrontend;
 
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class ChatDto : EntityDto<int>
+    public class ChatDto : IEntity<int>
     {
-        public override int Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public ChatType Type { get; set; }
 

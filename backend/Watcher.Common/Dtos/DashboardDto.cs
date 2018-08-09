@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Watcher.Common.Interfaces.Entities;
 using Watcher.Common.MoveToFrontend;
 
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class DashboardDto : EntityDto<int>
+    public class DashboardDto : IEntity<int>
     {
-        public override int Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public DateTime CreatedAt { get; set; }
 
