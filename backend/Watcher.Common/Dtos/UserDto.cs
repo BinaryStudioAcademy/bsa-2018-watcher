@@ -6,9 +6,11 @@ using Watcher.Common.MoveToFrontend;
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class UserDto : IEntity<int>
+    public class UserDto : IEntity<string>
     {
-        public int Id { get; set; }
+        public UserDto() { }
+
+        public string Id { get; set; }
 
         public string FirstName { get; set; }
 
