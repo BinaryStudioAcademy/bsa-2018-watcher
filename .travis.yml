@@ -4,6 +4,8 @@ node_js:
 branches:
   only:
   - dev
+notifications:
+  slack: academy2018:BWktvMWEA8awF8T3vWkm6sIx
 before_script:
 - cd frontend
 - npm install
