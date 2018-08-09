@@ -12,6 +12,10 @@
         IUsersRepository UsersRepository { get; }
 
 
+        IOrganizationRepository OrganizationRepository { get; }
+
+        INotificationSettingsRepository NotificationSettingsRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }

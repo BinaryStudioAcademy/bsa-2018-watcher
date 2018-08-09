@@ -18,7 +18,12 @@
         [Required]
         public bool IsDisable { get; set; }
 
+        [Required]
+        public bool IsEmailable { get; set; }
+
+        [Required]
         public int UserId { get; set; }
+        [Required]
         public User User { get; set; }
 
         public IList<Notification> Notifications { get; set; }
