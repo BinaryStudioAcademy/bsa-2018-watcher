@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsRoutingModule } from './settings-routing.module';
+import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { SettingsRoutingModule } from './settings-routing.module';
     SettingsComponent,
     NotificationSettingsComponent,
     UserProfileComponent,
-    OrganizationProfileComponent
+    OrganizationProfileComponent,
+    MenuComponent
   ]
 })
 export class SettingsModule { }
