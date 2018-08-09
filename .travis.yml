@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+- '10.5.0'
+branches:
+  only:
+  - dev
+before_script:
+- cd frontend
+- npm install
+script:
+- npx ng build --prod
+after_success:
+- cd dist
+- find ./ -name '*' -type f -exec curl -u $FTP_USERNAME:$FTP_PASSWORD --ftp-create-dirs -T {} ftp://$FTP_SERVER_HOST/{} \;

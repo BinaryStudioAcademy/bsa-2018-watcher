@@ -1,13 +1,14 @@
 ﻿using System;
 using Watcher.Common.Enums;
+using Watcher.Common.Interfaces.Entities;
 using Watcher.Common.MoveToFrontend;
 
 namespace Watcher.Common.Dtos
 {  
     [ExportClassToTypescript]
-    public class ChartDto : EntityDto<int>
+    public class ChartDto : IEntity<int>
     {
-        public override int Id { get; set; }
+        public int Id { get; set; }
         public ChartType Type { get; set; }
         public string Source { get; set; }
         public string ShowCommon { get; set; }
