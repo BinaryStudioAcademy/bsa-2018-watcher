@@ -3,7 +3,7 @@ import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/models/user.model';
-import { MessageService } from 'primeng/api';
+import { ToastrService } from '../../core/services/toastr.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -15,7 +15,7 @@ export class UserProfileComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private userService: UserService,
               private authService: AuthService,
-              private messageService: MessageService) { }
+              private toastrService: ToastrService) { }
 
   private user: User;
   private userId: string;
@@ -58,10 +58,10 @@ export class UserProfileComponent implements OnInit {
   onSubmit() {
     if (this.userForm.valid) {
       this.userService.update(this.userId, this.user).subscribe(value => {
-        this.messageService.add({severity: 'success', summary: 'Success', detail: 'Profile was updated'});
+        this.toastrService.success('Profile was updated');
       },
       err => {
-        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Profile was not updated'});
+        this.toastrService.error('Profile was not updated');
       });
     } else {
       Object.keys(this.userForm.controls).forEach(field => {

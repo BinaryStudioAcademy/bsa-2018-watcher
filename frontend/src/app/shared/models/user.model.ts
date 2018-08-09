@@ -15,6 +15,7 @@ export interface User  {
    secondName: string;
    displayName: string;
    email: string;
+   bio: string;
    isActive: boolean;
    createdAt: Date;
    role: Role;

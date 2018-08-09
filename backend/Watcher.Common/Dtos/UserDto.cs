@@ -18,6 +18,8 @@ namespace Watcher.Common.Dtos
 
         public string SecondName { get; set; }
 
+        public string Bio { get; set; }
+
         public string Email { get; set; }
 
         public bool IsActive { get; set; }
@@ -25,7 +27,6 @@ namespace Watcher.Common.Dtos
         public DateTime CreatedAt { get; set; }
 
         public RoleDto Role { get; set; }
-
 
         public NotificationSettingDto NotificationSetting { get; set; }
 
