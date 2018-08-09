@@ -20,6 +20,8 @@ export class OrganizationProfileComponent implements OnInit {
     private organizationService: OrganizationService,
     private authService: AuthService,
     private toastrService: ToastrService) {
+      // TODO: Delete this after testing. Its need only to show how it works.
+      this.editable = true;
   }
 
   editable: boolean;
@@ -36,8 +38,10 @@ export class OrganizationProfileComponent implements OnInit {
 
   ngOnInit() {
     const user = this.authService.getCurrentUser();
-    const organizationId = 76; // user.lastPickedOrganizationId
-    this.organizationService.get(organizationId).subscribe((value: Organization) => {
+    if (user == null) {
+      return;
+    }
+    this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => {
       this.organization = value;
       this.subscribeOrganizationFormToData();
 
