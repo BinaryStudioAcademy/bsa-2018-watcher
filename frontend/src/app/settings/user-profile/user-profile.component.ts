@@ -19,11 +19,12 @@ export class UserProfileComponent implements OnInit {
 
   private user: User;
   private userId: string;
+  private canUpdate: boolean;
+
   public userForm = this.fb.group({
     displayName: new FormControl({ value: '', disabled: true }, Validators.required),
     firstName: new FormControl({ value: '', disabled: true  }, Validators.required),
     secondName: new FormControl({ value: '', disabled: true  }, Validators.required),
-    isActive: new FormControl({ value: '', disabled: true }),
     bio: new FormControl({ value: '', disabled: true })
   });
 
@@ -48,17 +49,20 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  edit() {
+  enableEditing() {
     Object.keys(this.userForm.controls).forEach(field => {
       const control = this.userForm.get(field);
       control.enabled ? control.disable() : control.enable();
     });
+
+    this.canUpdate ? this.canUpdate = false : this.canUpdate = true;
   }
 
   onSubmit() {
     if (this.userForm.valid) {
       this.userService.update(this.userId, this.user).subscribe(value => {
         this.toastrService.success('Profile was updated');
+        this.enableEditing();
       },
       err => {
         this.toastrService.error('Profile was not updated');
