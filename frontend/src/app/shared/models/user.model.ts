@@ -12,6 +12,7 @@ export interface User  {
    id: number;
    firstName: string;
    secondName: string;
+   displayName: string;
    email: string;
    isActive: boolean;
    createdAt: Date;
