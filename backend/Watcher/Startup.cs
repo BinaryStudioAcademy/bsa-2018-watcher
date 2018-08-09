@@ -132,14 +132,16 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseDeveloperExceptionPage();
+            app.UseDatabaseErrorPage();
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             app.UseHttpStatusCodeExceptionMiddleware();
 
             UpdateDatabase(app);
-
-            // TODO: Use Authorization
+            
             app.UseCors("CorsPolicy");
 
             app.UseHsts();
@@ -172,7 +174,7 @@
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if(enviroment=="production")
+            if (enviroment == "Production")
             {
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
