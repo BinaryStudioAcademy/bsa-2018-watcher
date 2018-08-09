@@ -3,42 +3,90 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using DataAccumulator.Entities;
+using DataAccumulator.Interfaces;
 
 namespace DataAccumulator.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class ValuesController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IDataAccumulatorRepository _repository;
+
+        public ValuesController(IDataAccumulatorRepository repository)
         {
-            return new string[] { "value1", "value2" };
+            _repository = repository;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // Call an initialization - GET api/v1/values/init
+        [HttpGet("{setting}")]
+        public async Task<IActionResult> Get(string setting)
         {
-            return "value";
-        }
+            try
+            {
+                if (setting == "init")
+                {
+                    await _repository.RemoveAllEntities();
+                    var name = _repository.CreateIndex();
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
+                    await _repository.AddEntity(new CollectedData()
+                    {
+                        Id = "1",
+                        ProcessesCount = 2,
+                        CpuUsagePercent = 3,
+                        RamUsagePercent = 4,
+                        InterruptsTimePercent = 100,
+                        LocalDiskFreeSpacePercent = 80,
+                        AvaliableRamBytes = 60,
+                        InterruptsPerSeconds = 10,
+                        LocalDiskFreeMBytes = 90,
+                        Time = DateTime.Now,
+                        ProcessesCPU = new Dictionary<string, float>
+                        {
+                            { "ProcessesCPU1", 1 },
+                            { "ProcessesCPU2", 2 }
+                        },
+                        ProcessesRAM = new Dictionary<string, float>
+                        {
+                            { "ProcessesRAM1", 1 },
+                            { "ProcessesRAM2", 2 }
+                        }
+                    });
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+                    await _repository.AddEntity(new CollectedData()
+                    {
+                        Id = "2",
+                        ProcessesCount = 5,
+                        CpuUsagePercent = 6,
+                        RamUsagePercent = 9,
+                        InterruptsTimePercent = 99,
+                        LocalDiskFreeSpacePercent = 60,
+                        AvaliableRamBytes = 60,
+                        InterruptsPerSeconds = 10,
+                        LocalDiskFreeMBytes = 90,
+                        Time = DateTime.Now,
+                        ProcessesCPU = new Dictionary<string, float>
+                        {
+                            { "ProcessesCPU21", 3 },
+                            { "ProcessesCPU22", 4 }
+                        },
+                        ProcessesRAM = new Dictionary<string, float>
+                        {
+                            { "ProcessesRAM21", 3 },
+                            { "ProcessesRAM22", 4 }
+                        }
+                    });
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+                    return Ok("Database DataAccumulator was created, and collection 'CollectedData' was filled with 2 sample items");
+                }
+
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500);
+            }
         }
     }
 }
