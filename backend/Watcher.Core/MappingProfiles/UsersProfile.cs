@@ -40,7 +40,9 @@
 
             // .ForMember(d => d.Email, o => o.MapFrom(s => s.Claims.FirstOrDefault(c => c.Type == "Some string").Value)); 
             // TODO: Get Claim with user Data, extract email from this data, maybe use deserializer
-            CreateMap<UserUpdateRequest, User>().ForMember(d => d.Id, o => o.UseValue(0));
+            CreateMap<UserUpdateRequest, User>().ForMember(d => d.Id, o => o.UseValue(0))
+                .ForMember(d => d.RoleId, o => o.MapFrom(s => s.Role.Id))
+                .ForMember(d => d.Role, o => o.Ignore());
         }
     }
 }

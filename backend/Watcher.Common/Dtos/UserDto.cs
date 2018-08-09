@@ -12,11 +12,13 @@ namespace Watcher.Common.Dtos
 
         public string Id { get; set; }
 
+        public string DisplayName { get; set; }
+
         public string FirstName { get; set; }
 
         public string SecondName { get; set; }
 
-        public string DisplayName { get; set; }
+        public string Bio { get; set; }
 
         public string Email { get; set; }
 

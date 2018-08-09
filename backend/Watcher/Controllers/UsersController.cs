@@ -32,7 +32,6 @@ namespace Watcher.Controllers
         {
             _usersService = service;
         }
-
         /// <summary>
         /// Get Samples
         /// </summary>
@@ -71,7 +70,7 @@ namespace Watcher.Controllers
         /// <response code="200">Success</response>
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public virtual async Task<ActionResult<SampleDto>> GetById(string id)
+        public virtual async Task<ActionResult<UserDto>> GetById(string id)
         {
             var dto = await _usersService.GetEntityByIdAsync(id);
             if (dto == null)
@@ -95,7 +94,7 @@ namespace Watcher.Controllers
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
         [HttpPost]
-        public virtual async Task<ActionResult<SampleDto>> Create([FromBody] UserRegisterRequest request)
+        public virtual async Task<ActionResult<UserDto>> Create([FromBody] UserRegisterRequest request)
         {
             if (!ModelState.IsValid)
             {
