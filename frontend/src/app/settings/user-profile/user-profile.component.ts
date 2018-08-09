@@ -3,6 +3,7 @@ import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/models/user';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-user-profile',
@@ -13,16 +14,17 @@ export class UserProfileComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private userService: UserService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private messageService: MessageService) { }
 
   private user: User;
   private userId: string;
+  private isUpdating: boolean;
   private userForm = this.fb.group({
     displayName: new FormControl({ value: '', disabled: true }, Validators.required),
     firstName: new FormControl({ value: '', disabled: true  }, Validators.required),
     secondName: new FormControl({ value: '', disabled: true  }, Validators.required),
-    isActive: new FormControl({ value: '', disabled: true }, Validators.required),
-    nickName: new FormControl({ value: '', disabled: true }),
+    isActive: new FormControl({ value: '', disabled: true }),
     bio: new FormControl({ value: '', disabled: true })
   });
 
@@ -54,7 +56,14 @@ export class UserProfileComponent implements OnInit {
 
   onSubmit() {
     if (this.userForm.valid) {
-      this.userService.update(this.userId, this.user);
+      this.isUpdating = true;
+      this.userService.update(this.userId, this.user).subscribe(value => {
+        this.isUpdating = false;
+        this.messageService.add({severity: 'success', summary: 'Success', detail: 'Profile was updated'});
+      },
+      err => {
+        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Profile was not updated'});
+      });
     } else {
       Object.keys(this.userForm.controls).forEach(field => {
         const control = this.userForm.get(field);

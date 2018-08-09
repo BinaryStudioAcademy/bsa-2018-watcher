@@ -10,6 +10,5 @@ export interface User {
   createdAt: Date;
   roleId: number;
   role: Role;
-  nickName: string;
   bio: string;
 }

@@ -1,3 +1,4 @@
+<p-toast [style]="{marginTop: '80px'}"></p-toast>
 <div class="container">
     <form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
         <h4 class="label">Display Name</h4>
@@ -32,18 +33,6 @@
             </div>
         </div>
 
-        <h4 class="label">Nickname</h4>
-        <div class="ui-g ui-fluid"> 
-            <div class="ui-inputgroup">
-                <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-                <input type="text" formControlName="nickName" pInputText placeholder="Nickname">       
-            </div>
-        </div>
-
-        <div class="nonValid" *ngIf="userForm.get('secondName').errors && userForm.get('secondName').dirty">
-            Second Name is required.
-        </div>
-
         <h4 class="label">Bio</h4>
         <div>
             <textarea [rows]="5" [cols]="30" pInputTextarea autoResize="autoResize" formControlName="bio"></textarea>
@@ -53,8 +42,9 @@
         <div>
             <p-toggleButton formControlName="isActive" onLabel="Active" offLabel="Disabled"></p-toggleButton>
         </div>
-
-        <button type="submit" pButton class="ui-button-success btn-update" [disabled]="!userForm.valid" label="Update"></button>
+        <div>
+            <button type="submit" pButton class="ui-button-success btn-update" [disabled]="!userForm.valid" label="Update"></button>
+        </div>  
     </form>
     <div>
         <p-button label="Edit" class="ui-button-secondary" icon="fa fa-edit" iconPos="left" (click)="edit()"></p-button>

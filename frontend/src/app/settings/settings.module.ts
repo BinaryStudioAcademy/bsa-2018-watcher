@@ -4,6 +4,8 @@ import { SettingsComponent } from './settings.component';
 import { NotificationSettingsComponent } from './notification-settings/notification-settings.component';
 import { RouterModule } from '@angular/router';
 import { TabViewModule, PanelMenuModule, InputTextModule, ButtonModule, InputTextareaModule, ToggleButtonModule } from 'primeng/primeng';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -19,8 +21,10 @@ import { FormsModule } from '@angular/forms';
     ButtonModule,
     ReactiveFormsModule,
     InputTextareaModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    ToastModule
   ],
-  declarations: [SettingsComponent, NotificationSettingsComponent, UserProfileComponent]
+  declarations: [SettingsComponent, NotificationSettingsComponent, UserProfileComponent],
+  providers: [ MessageService ]
 })
 export class SettingsModule { }

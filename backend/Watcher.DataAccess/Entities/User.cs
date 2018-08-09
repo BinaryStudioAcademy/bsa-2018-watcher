@@ -28,8 +28,6 @@
         [Required]
         public DateTime CreatedAt { get; set; }
 
-        public string NickName { get; set; }
-
         public string Bio { get; set; }
 
         public int ChhosedOrganizationId { get; set; }

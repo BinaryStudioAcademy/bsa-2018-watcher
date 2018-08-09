@@ -15,8 +15,8 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  public update(id: string, user: User) {
-    this.http.put(`${this.accessPointUrl}/${id}`, user).subscribe();
+  public update(id: string, user: User): Observable<Object> {
+    return this.http.put(`${this.accessPointUrl}/${id}`, user);
   }
 
   public get(id: string): Observable<User> {
