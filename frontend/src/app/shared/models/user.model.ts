@@ -21,7 +21,7 @@ export interface User  {
    role: Role;
    lastPickedOrganizationId: number;
    lastPickedOrganization: Organization;
-   notificationSetting: NotificationSetting;
+   notificationSettings: NotificationSetting[];
    userOrganizations: UserOrganization[];
    notifications: Notification[];
    feedbacks: Feedback[];
