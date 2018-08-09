@@ -1,4 +1,4 @@
-import {Role} from './role.model';
+import { Role } from './role.model';
 
 export interface UserDto {
     id: string;
@@ -8,4 +8,5 @@ export interface UserDto {
     isActive: boolean;
     createdAt: Date;
     role: Role;
+    lastPickedOrganizationId: number;
 }

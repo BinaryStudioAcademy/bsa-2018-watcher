@@ -19,6 +19,8 @@ export interface User  {
    isActive: boolean;
    createdAt: Date;
    role: Role;
+   lastPickedOrganizationId: number;
+   lastPickedOrganization: Organization;
    notificationSettings: NotificationSetting[];
    userOrganizations: UserOrganization[];
    notifications: Notification[];
