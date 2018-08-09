@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, Input } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-create-edit-dashboard',
   templateUrl: './create-edit-dashboard.component.html',
   styleUrls: ['./create-edit-dashboard.component.sass']
 })
-export class CreateEditDashboardComponent implements OnInit {
+export class EditDashboardComponent implements OnInit {
 
-  display = false;
+  @Output() saved = new EventEmitter<string>();
+
+  @Input() display = false;
   dashboardTitle: string;
-  creation = false;
-  updating = false;
+  @Input() creation = false;
 
   constructor() { }
 
@@ -18,9 +20,8 @@ export class CreateEditDashboardComponent implements OnInit {
     this.display = false;
   }
 
-  onSave() {
-    console.log(this.dashboardTitle);
-    console.log(new Date());
+  Save() {
+    this.saved.emit(this.dashboardTitle.slice());
     this.display = false;
   }
   showDialog() {
@@ -30,9 +31,7 @@ export class CreateEditDashboardComponent implements OnInit {
   onHide() {
   }
   onShow() {
-    if (this.updating !== true) {
-    this.dashboardTitle = '';
-  }}
+  }
 
   ngOnInit() {
   }

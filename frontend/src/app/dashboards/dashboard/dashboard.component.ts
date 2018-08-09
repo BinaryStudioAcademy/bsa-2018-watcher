@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { MenuItem, MenuItemContent, ConfirmationService } from '../../../../node_modules/primeng/primeng';
-import { CreateEditDashboardComponent } from '../create-edit-dashboard/create-edit-dashboard.component';
-import { DashboardService } from '../../core/services/dashboard.service';
+import { EditDashboardComponent } from '../create-edit-dashboard/create-edit-dashboard.component';
+import { DashboardService } from '../../core/Services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard';
 @Component({
   selector: 'app-dashboard',
@@ -10,10 +10,9 @@ import { Dashboard } from '../../shared/models/dashboard';
   providers: [ConfirmationService, DashboardService]
 })
 
-
 export class DashboardComponent implements OnInit {
 
-@ViewChild(CreateEditDashboardComponent) popup: CreateEditDashboardComponent;
+@ViewChild(EditDashboardComponent) popup: EditDashboardComponent;
 
 inctanceId: number;
 
@@ -21,8 +20,10 @@ menuItems: MenuItem[];
 dashboards: Dashboard[];
 activeItem: MenuItem;
 activeDashboard: Dashboard;
+creation: boolean;
+displayEditDashboard = false;
 
-  constructor(private service: DashboardService, private confirmationService: ConfirmationService) {
+  constructor(private dashboardsService: DashboardService, private confirmationService: ConfirmationService) {
     this.menuItems = [];
     this.dashboards = [];
     this.inctanceId = 1;
@@ -32,21 +33,21 @@ activeDashboard: Dashboard;
    this.dashboards.push(newDashboard);
    this.menuItems.splice(this.menuItems.length - 1, 0, {label: newDashboard.title,
     command: (onclick) => this.activeDashboard = newDashboard});
-   // this.service.create(newDashboard).subscribe((res: Response) => console.log(res));
+   // this.dashboardsService.create(newDashboard).subscribe((res: Response) => console.log(res));
   }
 
   updateDashboard(newTitle: string) {
     const index = this.dashboards.findIndex(d => d === this.activeDashboard);
     this.dashboards[index].title = newTitle;
     this.menuItems[index].label = newTitle;
-    // this.service.update(this.dashboards[index]).subscribe((res: Response) => console.log(res));
+    // this.dashboardsService.update(this.dashboards[index]).subscribe((res: Response) => console.log(res));
   }
 
   deleteDashboard(dashboard: Dashboard) {
     const index = this.dashboards.findIndex(d => d === this.activeDashboard);
     this.menuItems.splice(index, 1);
     this.dashboards.splice(index, 1);
-    // this.service.delete(dashboard.id).subscribe((res: Response) => console.log(res));
+    // this.dashboardsService.delete(dashboard.id).subscribe((res: Response) => console.log(res));
   }
   delete() {
     this.confirmationService.confirm({
@@ -62,7 +63,7 @@ activeDashboard: Dashboard;
 }); }
 
   getDashboards() {
-    /*this.service.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
+    /*this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
       this.dashboards = data;
      });*/
       this.dashboards = [
@@ -73,34 +74,30 @@ activeDashboard: Dashboard;
         this.menuItems.push({label: dash.title, command: (onclick) => this.activeDashboard = dash}); });
   }
 
-  showCreatePopup(title?: string, update?: boolean) {
+  showCreatePopup(creation: boolean) {
+    this.creation = creation;
     this.popup.display = true;
-    if (update === true) {
-      this.popup.dashboardTitle = title.slice();
-      this.popup.updating = true;
-      this.popup.creation = false;
-    } else {
-      this.popup.creation = true;
-      this.popup.updating = false;
-    }
   }
 
-  onPopupHide() {
-    if (this.popup.creation === true) {
+  onSaved(title: string) {
+    if (this.creation === true) {
       const newdash = new Dashboard(this.popup.dashboardTitle, new Date(), this.inctanceId);
       this.createDashboard(newdash);
       const index: number = this.menuItems.length - 2;
       this.activeDashboard = newdash;
       this.activeItem = this.menuItems[index];
+      this.creation = false;
+    } else {
+      this.updateDashboard(title);
     }
-    if (this.popup.updating === true) {
-     this.updateDashboard(this.popup.dashboardTitle);
-    }
+  }
+  onPopupHide() {
+    this.popup.display = false;
   }
 
   ngOnInit() {
     this.getDashboards();
-    this.menuItems.push(  {label: 'Add new', command: (onlick) => this.showCreatePopup() } );
+    this.menuItems.push(  {label: 'Add new', command: (onlick) => this.showCreatePopup(true) } );
 
   this.activeItem = this.menuItems[0];
   this.activeDashboard = this.dashboards[0];

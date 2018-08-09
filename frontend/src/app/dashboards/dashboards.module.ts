@@ -4,7 +4,7 @@ import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { InstanceListComponent } from './instance-list/instance-list.component';
 import { TabViewModule, PanelMenuModule, DialogModule, ButtonModule, TabMenuModule, CodeHighlighterModule } from 'primeng/primeng';
-import { CreateEditDashboardComponent } from './create-edit-dashboard/create-edit-dashboard.component';
+import { EditDashboardComponent } from './create-edit-dashboard/create-edit-dashboard.component';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -20,7 +20,7 @@ import { FormsModule } from '@angular/forms';
     CodeHighlighterModule,
     ConfirmDialogModule
   ],
-  declarations: [DashboardComponent, InstanceListComponent, CreateEditDashboardComponent],
+  declarations: [DashboardComponent, InstanceListComponent, EditDashboardComponent],
   exports: [ DashboardComponent, InstanceListComponent ]
 })
 export class DashboardsModule { }
