@@ -24,7 +24,7 @@ namespace Watcher.Controllers
         // GET: /dashboards
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public virtual async Task<ActionResult<IEnumerable<DashboardDto>>> Get(int id)
+        public virtual async Task<ActionResult<IEnumerable<DashboardDto>>> GetInstanceDashboards(int id)
         {
             var dtos = await _dashboardsService.GetInstanceDashboards(id);
             if (!dtos.Any())

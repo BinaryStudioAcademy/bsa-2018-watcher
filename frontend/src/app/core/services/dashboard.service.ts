@@ -13,11 +13,7 @@ export class DashboardService {
   constructor(private http: HttpClient) {
   }
 
-  getAll() {
-      return this.http.get(this.url);
-  }
-
-  get(id: number) {
+  getAllByInstance(id: number) {
       return this.http.get(this.url + '/' + id);
   }
 
