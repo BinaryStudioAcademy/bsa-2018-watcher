@@ -1,4 +1,5 @@
-<p-dialog [(visible)]="display" [modal]="true" [closable]=false [responsive]="true" [showHeader]="false" [width]="350" [minWidth]="200" [minY]="70" header="Create Dashboard" [maximizable]="false" [baseZIndex]="10000" [draggable]="false" appendTo="body">
+<p-dialog [(visible)]="display" (onHide)="closeDialog()" [modal]="true" [closable]=false [responsive]="true" [showHeader]="false" [width]="350" [minWidth]="200" [minY]="70" header="Create Dashboard" [maximizable]="false" [baseZIndex]="10000" [draggable]="false"
+    appendTo="body">
     <div class="dashboard-inputs">
         <div class="dashboard-input">
             <input placeholder="Title" pInputText type="text" class="form-control" id="dTitle" #dTitle="ngModel" [(ngModel)]="dashboardTitle" required/>
@@ -7,6 +8,8 @@
             </div>
         </div>
     </div>
-    <button type="button" pButton (click)="display=false" label="Save" class="ui-button-success" [disabled]="dTitle.invalid "></button>
-    <button type="button" pButton (click)="display=false" label="Close" class="ui-button-danger"></button>
+    <div class="footerbuttons">
+        <button type="button" pButton (click)="onSave()" label="Save" class="save ui-button-success" [disabled]="dTitle.invalid "></button>
+        <button type="button" pButton (click)="closeDialog()" label="Close" class="close ui-button-danger"></button>
+    </div>
 </p-dialog>

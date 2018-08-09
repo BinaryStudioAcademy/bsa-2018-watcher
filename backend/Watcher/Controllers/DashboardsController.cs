@@ -51,7 +51,7 @@ namespace Watcher.Controllers
 
         // POST: /dashboards
         [HttpPost]
-        public virtual async Task<ActionResult<SampleDto>> Create([FromBody] DashboardRequest request)
+        public virtual async Task<ActionResult<DashboardDto>> Create([FromBody] DashboardRequest request)
         {
             if (!ModelState.IsValid)
             {

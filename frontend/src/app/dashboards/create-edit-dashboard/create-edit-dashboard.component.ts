@@ -9,14 +9,20 @@ export class CreateEditDashboardComponent implements OnInit {
 
   display: Boolean = false;
   dashboardTitle =  '';
-  dashboardInstance = '';
-
 
   constructor() { }
 
-  ngOnInit() {
+  closeDialog() {
+    this.display = false;
   }
 
+  ngOnInit() {
+  }
+  onSave() {
+    console.log(this.dashboardTitle);
+    console.log(new Date());
+    this.display = false;
+  }
   showDialog() {
       this.display = true;
   }
