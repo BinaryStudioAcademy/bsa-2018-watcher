@@ -1,18 +1,17 @@
-<h3> Organization profile </h3>
-<a [hidden]="!editable" class="btn-edit" (click)="enableEditing()">
-  <i class="fa fa-edit"></i>
-</a>
-
 <div class="ui-g ui-fluid">
   <div class="ui-g-12 ui-lg-6">
+      <h3> Organization profile </h3>
+      <a [hidden]="!editable" class="btn-edit" (click)="enableEditing()">
+        <i class="fa fa-edit"></i>
+      </a>
     <hr>
   </div>
 </div>
 
 <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
-  <div class="label">Name:</div>
+  <div class="label">Name*:</div>
   <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-md-6 ui-lg-4">
+    <div class="ui-g-12 ui-lg-4">
       <div class="ui-inputgroup">
         <span class="ui-inputgroup-addon">
           <i class="fa fa-user"></i>
@@ -28,7 +27,7 @@
 
   <div class="label">Email:</div>
   <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-md-6 ui-lg-4">
+    <div class="ui-g-12 ui-lg-4">
       <div class="ui-inputgroup">
         <span class="ui-inputgroup-addon">
           <i class="fa fa-envelope"></i>
@@ -40,7 +39,7 @@
 
   <div class="label">Contact number:</div>
   <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-md-6 ui-lg-4">
+    <div class="ui-g-12 ui-lg-4">
       <div class="ui-inputgroup">
         <span class="ui-inputgroup-addon">
           <i class="fa fa-phone"></i>
@@ -52,7 +51,7 @@
 
   <div class="label">Web site:</div>
   <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-md-6 ui-lg-4">
+    <div class="ui-g-12 ui-lg-4">
       <div class="ui-inputgroup">
         <span class="ui-inputgroup-addon">
           <i class="fa fa-internet-explorer"></i>
@@ -64,7 +63,7 @@
 
   <div class="label">Description:</div>
   <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-md-8 ui-lg-6">
+    <div class="ui-g-12 ui-lg-6">
       <textarea rows="5" formControlName="description" pInputTextarea></textarea>
     </div>
   </div>
