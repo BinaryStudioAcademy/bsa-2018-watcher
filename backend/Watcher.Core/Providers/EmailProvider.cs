@@ -17,12 +17,12 @@ namespace Watcher.Core.Providers
             _configuration = configuration;
         }
 
-        public async Task SendMessage(string from,string subject, List<string> recepients, string message, string messageHtml)
+        public async Task SendMessage(string from,string subject, string recepient, string message, string messageHtml)
         {
             var fromAddress = new EmailAddress(from);
-            var recepientsAddresses = recepients.Select(r => new EmailAddress(r)).ToList();
+            var recepientsAddress =  new EmailAddress(recepient);
             
-            var msg = MailHelper.CreateSingleEmailToMultipleRecipients(fromAddress,recepientsAddresses,subject,message,messageHtml);
+            var msg = MailHelper.CreateSingleEmail(fromAddress, recepientsAddress, subject, message, messageHtml);
         
             var client = new SendGridClient(_configuration.GetSection("SENDGRID_API_KEY").Value);
 

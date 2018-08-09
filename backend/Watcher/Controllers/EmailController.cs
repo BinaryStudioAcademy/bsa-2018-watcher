@@ -28,16 +28,13 @@ namespace Watcher.Controllers
             //enter your subject here
             var subject = "test";
 
-            var recepients = new List<string>()
-            {
-                //enter recipient email here
-                "recepientTest@mail.com"
-            };
+            //enter recipient email here
+            var recepient = "recepientTest@mail.com";
 
             //enter your email message here
             var msg = "msg";
 
-            await _emailProvider.SendMessage(from, subject, recepients, "msg", $"<h1>{msg}</h1>");
+            await _emailProvider.SendMessage(from, subject, recepient, "msg", $"<h1>{msg}</h1>");
         }
     }
 }
