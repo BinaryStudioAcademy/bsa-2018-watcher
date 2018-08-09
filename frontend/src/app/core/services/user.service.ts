@@ -1,25 +1,21 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from '../../../../node_modules/rxjs';
 import { User } from '../../shared/models/user.model';
+import { ApiService } from '../../shared/services/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private headers: HttpHeaders;
-  private accessPointUrl = 'http://localhost:65246/users';
-  private accessTokensPointUrl = 'http://localhost:65246/api/tokens';
-  private tokensUrl = 'http://localhost:65246/api/Tokens';
+  private readonly ctrlUrl = 'Users';
 
-
-  constructor(private http: HttpClient) { }
+  constructor(private apiService: ApiService) { }
 
   public update(id: string, user: User): Observable<Object> {
-    return this.http.put(`${this.accessPointUrl}/${id}`, user);
+    return this.apiService.put(`/${this.ctrlUrl}/${id}`, user);
   }
 
   public get(id: string): Observable<User> {
-    return this.http.get(`${this.accessPointUrl}/${id}`) as Observable<User>;
+    return this.apiService.get(`/${this.ctrlUrl}/${id}`) as Observable<User>;
   }
 }
