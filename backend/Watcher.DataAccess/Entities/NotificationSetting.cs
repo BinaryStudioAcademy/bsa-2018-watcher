@@ -1,7 +1,7 @@
 ﻿namespace Watcher.DataAccess.Entities
 {
-    using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using Watcher.Common.Enums;
 
@@ -21,9 +21,8 @@
         [Required]
         public bool IsEmailable { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
-        [Required]
+        public string UserId { get; set; }
+
         public User User { get; set; }
 
         public IList<Notification> Notifications { get; set; }

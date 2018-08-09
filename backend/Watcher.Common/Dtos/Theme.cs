@@ -7,8 +7,11 @@ namespace Watcher.Common.Dtos
     public class Theme : IEntity<int>
     {
         public int Id { get; set; }
+
         public string Name { get; set; }
+
         public string FontFamily { get; set; }
+
         public string BackgroundColor { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Watcher.DataAccess.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -45,16 +45,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Charts");
 
                     b.HasData(
-                        new { Id = 101, DashboardId = 95, MostLoaded = "MostLoaded3", ShowCommon = "Common1", Source = "Source3", Threshold = 26, Type = 2 },
-                        new { Id = 102, DashboardId = 94, MostLoaded = "MostLoaded2", ShowCommon = "Common2", Source = "Source1", Threshold = 69, Type = 2 },
-                        new { Id = 103, DashboardId = 91, MostLoaded = "MostLoaded2", ShowCommon = "Common1", Source = "Source3", Threshold = 63, Type = 1 },
-                        new { Id = 104, DashboardId = 91, MostLoaded = "MostLoaded2", ShowCommon = "Common2", Source = "Source1", Threshold = 25, Type = 1 },
-                        new { Id = 105, DashboardId = 91, MostLoaded = "MostLoaded3", ShowCommon = "Common3", Source = "Source2", Threshold = 18, Type = 2 },
-                        new { Id = 106, DashboardId = 99, MostLoaded = "MostLoaded3", ShowCommon = "Common1", Source = "Source3", Threshold = 17, Type = 0 },
-                        new { Id = 107, DashboardId = 100, MostLoaded = "MostLoaded2", ShowCommon = "Common3", Source = "Source3", Threshold = 55, Type = 2 },
-                        new { Id = 108, DashboardId = 92, MostLoaded = "MostLoaded2", ShowCommon = "Common1", Source = "Source1", Threshold = 79, Type = 0 },
-                        new { Id = 109, DashboardId = 93, MostLoaded = "MostLoaded2", ShowCommon = "Common2", Source = "Source2", Threshold = 14, Type = 1 },
-                        new { Id = 110, DashboardId = 98, MostLoaded = "MostLoaded3", ShowCommon = "Common2", Source = "Source1", Threshold = 85, Type = 2 }
+                        new { Id = 101, DashboardId = 100, MostLoaded = "MostLoaded1", ShowCommon = "Common3", Source = "Source1", Threshold = 14, Type = 1 },
+                        new { Id = 102, DashboardId = 96, MostLoaded = "MostLoaded3", ShowCommon = "Common2", Source = "Source1", Threshold = 48, Type = 0 },
+                        new { Id = 103, DashboardId = 97, MostLoaded = "MostLoaded1", ShowCommon = "Common1", Source = "Source1", Threshold = 91, Type = 1 },
+                        new { Id = 104, DashboardId = 92, MostLoaded = "MostLoaded1", ShowCommon = "Common3", Source = "Source3", Threshold = 35, Type = 2 },
+                        new { Id = 105, DashboardId = 93, MostLoaded = "MostLoaded2", ShowCommon = "Common1", Source = "Source2", Threshold = 21, Type = 2 },
+                        new { Id = 106, DashboardId = 92, MostLoaded = "MostLoaded1", ShowCommon = "Common2", Source = "Source1", Threshold = 85, Type = 0 },
+                        new { Id = 107, DashboardId = 93, MostLoaded = "MostLoaded1", ShowCommon = "Common3", Source = "Source2", Threshold = 31, Type = 0 },
+                        new { Id = 108, DashboardId = 95, MostLoaded = "MostLoaded2", ShowCommon = "Common1", Source = "Source3", Threshold = 40, Type = 0 },
+                        new { Id = 109, DashboardId = 91, MostLoaded = "MostLoaded1", ShowCommon = "Common1", Source = "Source2", Threshold = 81, Type = 1 },
+                        new { Id = 110, DashboardId = 94, MostLoaded = "MostLoaded1", ShowCommon = "Common3", Source = "Source3", Threshold = 0, Type = 2 }
                     );
                 });
 
@@ -64,7 +64,7 @@ namespace Watcher.DataAccess.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CreatedById");
+                    b.Property<string>("CreatedById");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -84,16 +84,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Chats");
 
                     b.HasData(
-                        new { Id = 21, CreatedById = 9, Name = "veritatis", Type = 0 },
-                        new { Id = 22, CreatedById = 3, Name = "quis", Type = 0 },
-                        new { Id = 23, CreatedById = 2, Name = "deleniti", Type = 0 },
-                        new { Id = 24, CreatedById = 3, Name = "ullam", Type = 0 },
-                        new { Id = 25, CreatedById = 4, Name = "cum", Type = 0 },
-                        new { Id = 26, CreatedById = 1, Name = "molestiae", Type = 0 },
-                        new { Id = 27, CreatedById = 1, Name = "non", Type = 0 },
-                        new { Id = 28, CreatedById = 5, Name = "facilis", Type = 0 },
-                        new { Id = 29, CreatedById = 5, Name = "sit", Type = 0 },
-                        new { Id = 30, CreatedById = 1, Name = "doloremque", Type = 0 }
+                        new { Id = 21, CreatedById = "febeb402-29c2-411f-a6a6-4377e9b55835", Name = "eius", Type = 0 },
+                        new { Id = 22, CreatedById = "ca404c18-30b5-4013-870a-3b985772b799", Name = "pariatur", Type = 0 },
+                        new { Id = 23, CreatedById = "b05710a2-28da-4da2-9acb-cd549be125ee", Name = "laudantium", Type = 0 },
+                        new { Id = 24, CreatedById = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567", Name = "et", Type = 0 },
+                        new { Id = 25, CreatedById = "febeb402-29c2-411f-a6a6-4377e9b55835", Name = "eos", Type = 0 },
+                        new { Id = 26, CreatedById = "febeb402-29c2-411f-a6a6-4377e9b55835", Name = "accusantium", Type = 0 },
+                        new { Id = 27, CreatedById = "8494cede-b032-4d27-9e14-76b53134d093", Name = "facilis", Type = 0 },
+                        new { Id = 28, CreatedById = "b05710a2-28da-4da2-9acb-cd549be125ee", Name = "id", Type = 0 },
+                        new { Id = 29, CreatedById = "febeb402-29c2-411f-a6a6-4377e9b55835", Name = "ea", Type = 0 },
+                        new { Id = 30, CreatedById = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3", Name = "accusamus", Type = 0 }
                     );
                 });
 
@@ -117,16 +117,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Dashboards");
 
                     b.HasData(
-                        new { Id = 91, CreatedAt = new DateTime(2018, 8, 9, 5, 21, 1, 110, DateTimeKind.Local), InstanceId = 84, Title = "Title307" },
-                        new { Id = 92, CreatedAt = new DateTime(2018, 8, 8, 15, 58, 18, 476, DateTimeKind.Local), InstanceId = 87, Title = "Title825" },
-                        new { Id = 93, CreatedAt = new DateTime(2018, 8, 9, 11, 49, 17, 190, DateTimeKind.Local), InstanceId = 83, Title = "Title267" },
-                        new { Id = 94, CreatedAt = new DateTime(2018, 8, 9, 5, 47, 20, 907, DateTimeKind.Local), InstanceId = 82, Title = "Title150" },
-                        new { Id = 95, CreatedAt = new DateTime(2018, 8, 8, 16, 11, 23, 708, DateTimeKind.Local), InstanceId = 90, Title = "Title150" },
-                        new { Id = 96, CreatedAt = new DateTime(2018, 8, 9, 7, 3, 48, 805, DateTimeKind.Local), InstanceId = 83, Title = "Title158" },
-                        new { Id = 97, CreatedAt = new DateTime(2018, 8, 9, 4, 30, 40, 157, DateTimeKind.Local), InstanceId = 86, Title = "Title36" },
-                        new { Id = 98, CreatedAt = new DateTime(2018, 8, 9, 7, 29, 47, 213, DateTimeKind.Local), InstanceId = 81, Title = "Title7" },
-                        new { Id = 99, CreatedAt = new DateTime(2018, 8, 9, 6, 43, 21, 234, DateTimeKind.Local), InstanceId = 83, Title = "Title269" },
-                        new { Id = 100, CreatedAt = new DateTime(2018, 8, 8, 15, 55, 58, 640, DateTimeKind.Local), InstanceId = 87, Title = "Title201" }
+                        new { Id = 91, CreatedAt = new DateTime(2018, 8, 9, 9, 3, 46, 965, DateTimeKind.Local), InstanceId = 82, Title = "Title645" },
+                        new { Id = 92, CreatedAt = new DateTime(2018, 8, 8, 17, 25, 39, 16, DateTimeKind.Local), InstanceId = 86, Title = "Title164" },
+                        new { Id = 93, CreatedAt = new DateTime(2018, 8, 9, 6, 14, 0, 38, DateTimeKind.Local), InstanceId = 81, Title = "Title781" },
+                        new { Id = 94, CreatedAt = new DateTime(2018, 8, 8, 16, 4, 58, 947, DateTimeKind.Local), InstanceId = 86, Title = "Title847" },
+                        new { Id = 95, CreatedAt = new DateTime(2018, 8, 9, 0, 11, 49, 148, DateTimeKind.Local), InstanceId = 86, Title = "Title753" },
+                        new { Id = 96, CreatedAt = new DateTime(2018, 8, 9, 12, 57, 45, 810, DateTimeKind.Local), InstanceId = 87, Title = "Title74" },
+                        new { Id = 97, CreatedAt = new DateTime(2018, 8, 9, 1, 28, 17, 350, DateTimeKind.Local), InstanceId = 86, Title = "Title239" },
+                        new { Id = 98, CreatedAt = new DateTime(2018, 8, 8, 15, 11, 22, 770, DateTimeKind.Local), InstanceId = 82, Title = "Title692" },
+                        new { Id = 99, CreatedAt = new DateTime(2018, 8, 9, 11, 21, 15, 709, DateTimeKind.Local), InstanceId = 87, Title = "Title707" },
+                        new { Id = 100, CreatedAt = new DateTime(2018, 8, 8, 16, 12, 16, 619, DateTimeKind.Local), InstanceId = 88, Title = "Title428" }
                     );
                 });
 
@@ -143,7 +143,7 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Text")
                         .IsRequired();
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -152,16 +152,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Feedbacks");
 
                     b.HasData(
-                        new { Id = 41, CreatedAt = new DateTime(2018, 8, 9, 0, 10, 45, 480, DateTimeKind.Local), Text = "Atque rerum aliquam est.", UserId = 7 },
-                        new { Id = 42, CreatedAt = new DateTime(2018, 8, 9, 8, 49, 3, 956, DateTimeKind.Local), Text = "Tempore blanditiis esse facilis tempora velit ut odit soluta.", UserId = 4 },
-                        new { Id = 43, CreatedAt = new DateTime(2018, 8, 9, 2, 1, 40, 711, DateTimeKind.Local), Text = "Ratione sit nihil rem pariatur.", UserId = 10 },
-                        new { Id = 44, CreatedAt = new DateTime(2018, 8, 9, 4, 3, 26, 721, DateTimeKind.Local), Text = "Et rerum consequatur est fugit.", UserId = 9 },
-                        new { Id = 45, CreatedAt = new DateTime(2018, 8, 9, 10, 33, 0, 332, DateTimeKind.Local), Text = "Laudantium animi sequi ut.", UserId = 8 },
-                        new { Id = 46, CreatedAt = new DateTime(2018, 8, 9, 0, 53, 25, 205, DateTimeKind.Local), Text = "Vel est alias.", UserId = 8 },
-                        new { Id = 47, CreatedAt = new DateTime(2018, 8, 8, 21, 4, 40, 430, DateTimeKind.Local), Text = "Rem odit dolores et.", UserId = 7 },
-                        new { Id = 48, CreatedAt = new DateTime(2018, 8, 8, 17, 24, 59, 639, DateTimeKind.Local), Text = "Veritatis velit voluptate commodi corrupti in eos est dicta.", UserId = 6 },
-                        new { Id = 49, CreatedAt = new DateTime(2018, 8, 8, 15, 9, 5, 244, DateTimeKind.Local), Text = "Corporis ea facilis vitae ut et sed consequatur corporis ipsa.", UserId = 9 },
-                        new { Id = 50, CreatedAt = new DateTime(2018, 8, 9, 10, 37, 36, 44, DateTimeKind.Local), Text = "Labore eos ratione voluptas ut nulla et et accusantium architecto.", UserId = 2 }
+                        new { Id = 41, CreatedAt = new DateTime(2018, 8, 9, 1, 34, 49, 307, DateTimeKind.Local), Text = "Nisi asperiores quia quaerat laudantium enim velit voluptatem.", UserId = "febeb402-29c2-411f-a6a6-4377e9b55835" },
+                        new { Id = 42, CreatedAt = new DateTime(2018, 8, 9, 9, 45, 47, 738, DateTimeKind.Local), Text = "Sunt aspernatur non laudantium autem libero ducimus quia odio labore.", UserId = "febeb402-29c2-411f-a6a6-4377e9b55835" },
+                        new { Id = 43, CreatedAt = new DateTime(2018, 8, 9, 13, 21, 50, 790, DateTimeKind.Local), Text = "Maxime numquam sapiente harum.", UserId = "07073d56-481a-4e97-9ae2-9ff377492a8a" },
+                        new { Id = 44, CreatedAt = new DateTime(2018, 8, 9, 1, 32, 4, 167, DateTimeKind.Local), Text = "Illo voluptatem officia voluptas voluptas tempora eveniet ipsum est libero.", UserId = "febeb402-29c2-411f-a6a6-4377e9b55835" },
+                        new { Id = 45, CreatedAt = new DateTime(2018, 8, 8, 16, 17, 1, 768, DateTimeKind.Local), Text = "Ex voluptas qui et.", UserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3" },
+                        new { Id = 46, CreatedAt = new DateTime(2018, 8, 9, 11, 1, 33, 230, DateTimeKind.Local), Text = "Alias sapiente vel corrupti.", UserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3" },
+                        new { Id = 47, CreatedAt = new DateTime(2018, 8, 8, 17, 15, 23, 199, DateTimeKind.Local), Text = "Sint dolore nemo dolor aut et odio eveniet enim excepturi.", UserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3" },
+                        new { Id = 48, CreatedAt = new DateTime(2018, 8, 8, 18, 18, 2, 393, DateTimeKind.Local), Text = "Est ad mollitia est optio qui ipsum.", UserId = "07073d56-481a-4e97-9ae2-9ff377492a8a" },
+                        new { Id = 49, CreatedAt = new DateTime(2018, 8, 9, 10, 10, 28, 874, DateTimeKind.Local), Text = "Ipsa nihil dignissimos cum necessitatibus sunt rerum aut.", UserId = "8668b4f7-ba1a-464d-8b3a-3258ee90be2c" },
+                        new { Id = 50, CreatedAt = new DateTime(2018, 8, 8, 20, 13, 51, 373, DateTimeKind.Local), Text = "Vel et esse necessitatibus similique.", UserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3" }
                     );
                 });
 
@@ -186,16 +186,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Instances");
 
                     b.HasData(
-                        new { Id = 81, Address = "8f:ec:37:ae:27:ad", OrganizationId = 73, Platform = "Linux" },
-                        new { Id = 82, Address = "1c:c2:74:83:0a:5f", OrganizationId = 74, Platform = "Windows" },
-                        new { Id = 83, Address = "36:11:8d:2c:69:ea", OrganizationId = 77, Platform = "Windows" },
-                        new { Id = 84, Address = "29:11:35:1c:7f:a7", OrganizationId = 72, Platform = "Linux" },
-                        new { Id = 85, Address = "56:04:a5:91:b3:ae", OrganizationId = 74, Platform = "Linux" },
-                        new { Id = 86, Address = "4e:55:46:8e:16:da", OrganizationId = 73, Platform = "Linux" },
-                        new { Id = 87, Address = "c7:ab:d6:4e:e5:11", OrganizationId = 73, Platform = "Linux" },
-                        new { Id = 88, Address = "51:8c:85:15:78:28", OrganizationId = 77, Platform = "Linux" },
-                        new { Id = 89, Address = "a0:ed:2d:06:ba:bd", OrganizationId = 75, Platform = "Windows" },
-                        new { Id = 90, Address = "bb:e3:dd:13:a3:0c", OrganizationId = 76, Platform = "Linux" }
+                        new { Id = 81, Address = "83:29:6f:1d:77:60", OrganizationId = 79, Platform = "Linux" },
+                        new { Id = 82, Address = "c7:2f:cb:61:aa:22", OrganizationId = 77, Platform = "Linux" },
+                        new { Id = 83, Address = "34:d8:35:3f:16:9c", OrganizationId = 76, Platform = "Linux" },
+                        new { Id = 84, Address = "56:35:b8:5d:91:7a", OrganizationId = 71, Platform = "Linux" },
+                        new { Id = 85, Address = "6d:23:3f:ac:95:d2", OrganizationId = 72, Platform = "Windows" },
+                        new { Id = 86, Address = "37:4e:e5:b4:98:b1", OrganizationId = 76, Platform = "Windows" },
+                        new { Id = 87, Address = "43:66:ed:2c:b5:a5", OrganizationId = 78, Platform = "Windows" },
+                        new { Id = 88, Address = "95:bc:c6:42:a7:76", OrganizationId = 71, Platform = "Linux" },
+                        new { Id = 89, Address = "22:85:f4:86:e3:06", OrganizationId = 72, Platform = "Windows" },
+                        new { Id = 90, Address = "a6:04:08:c8:b7:df", OrganizationId = 72, Platform = "Windows" }
                     );
                 });
 
@@ -212,7 +212,7 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Text")
                         .IsRequired();
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.Property<bool>("WasRead");
 
@@ -225,16 +225,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Messages");
 
                     b.HasData(
-                        new { Id = 31, ChatId = 22, CreatedAt = new DateTime(2018, 8, 9, 2, 30, 2, 912, DateTimeKind.Local), Text = "Aut harum cupiditate dolor voluptatem nulla.", UserId = 2, WasRead = true },
-                        new { Id = 32, ChatId = 21, CreatedAt = new DateTime(2018, 8, 9, 6, 21, 22, 679, DateTimeKind.Local), Text = "Est omnis qui quia.", UserId = 10, WasRead = false },
-                        new { Id = 33, ChatId = 30, CreatedAt = new DateTime(2018, 8, 9, 9, 7, 23, 654, DateTimeKind.Local), Text = "Pariatur rerum suscipit commodi qui est autem nesciunt qui.", UserId = 2, WasRead = true },
-                        new { Id = 34, ChatId = 29, CreatedAt = new DateTime(2018, 8, 9, 8, 54, 35, 476, DateTimeKind.Local), Text = "Illo aliquam nulla doloremque voluptas.", UserId = 6, WasRead = true },
-                        new { Id = 35, ChatId = 30, CreatedAt = new DateTime(2018, 8, 8, 20, 4, 11, 374, DateTimeKind.Local), Text = "Quod vel facere et.", UserId = 5, WasRead = true },
-                        new { Id = 36, ChatId = 25, CreatedAt = new DateTime(2018, 8, 9, 7, 59, 2, 363, DateTimeKind.Local), Text = "Dolorem harum consequatur.", UserId = 6, WasRead = true },
-                        new { Id = 37, ChatId = 25, CreatedAt = new DateTime(2018, 8, 9, 5, 37, 30, 115, DateTimeKind.Local), Text = "Sit asperiores nobis.", UserId = 5, WasRead = true },
-                        new { Id = 38, ChatId = 28, CreatedAt = new DateTime(2018, 8, 8, 20, 41, 55, 817, DateTimeKind.Local), Text = "Tenetur aut velit.", UserId = 10, WasRead = false },
-                        new { Id = 39, ChatId = 28, CreatedAt = new DateTime(2018, 8, 8, 18, 33, 38, 768, DateTimeKind.Local), Text = "Aspernatur dolorum ut vero.", UserId = 6, WasRead = false },
-                        new { Id = 40, ChatId = 29, CreatedAt = new DateTime(2018, 8, 9, 9, 23, 16, 857, DateTimeKind.Local), Text = "Quo accusantium est nobis tenetur est culpa temporibus.", UserId = 9, WasRead = true }
+                        new { Id = 31, ChatId = 21, CreatedAt = new DateTime(2018, 8, 9, 8, 33, 24, 212, DateTimeKind.Local), Text = "Facilis ea atque inventore iusto tenetur non labore.", UserId = "be1d775a-e864-4389-a1de-b182cfb36d11", WasRead = true },
+                        new { Id = 32, ChatId = 25, CreatedAt = new DateTime(2018, 8, 8, 18, 44, 9, 17, DateTimeKind.Local), Text = "Qui beatae est.", UserId = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567", WasRead = true },
+                        new { Id = 33, ChatId = 26, CreatedAt = new DateTime(2018, 8, 8, 15, 7, 38, 605, DateTimeKind.Local), Text = "Tempora asperiores aut.", UserId = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567", WasRead = false },
+                        new { Id = 34, ChatId = 26, CreatedAt = new DateTime(2018, 8, 9, 11, 33, 23, 393, DateTimeKind.Local), Text = "Esse quo magni excepturi aut sunt repellat consequatur molestias accusantium.", UserId = "8668b4f7-ba1a-464d-8b3a-3258ee90be2c", WasRead = true },
+                        new { Id = 35, ChatId = 27, CreatedAt = new DateTime(2018, 8, 9, 1, 51, 0, 148, DateTimeKind.Local), Text = "Perferendis est provident.", UserId = "febeb402-29c2-411f-a6a6-4377e9b55835", WasRead = false },
+                        new { Id = 36, ChatId = 27, CreatedAt = new DateTime(2018, 8, 9, 5, 28, 58, 546, DateTimeKind.Local), Text = "Praesentium facere et esse commodi quis et.", UserId = "b05710a2-28da-4da2-9acb-cd549be125ee", WasRead = true },
+                        new { Id = 37, ChatId = 28, CreatedAt = new DateTime(2018, 8, 9, 11, 44, 47, 303, DateTimeKind.Local), Text = "Velit aut eius eos dolorem vitae voluptatem sint.", UserId = "ca404c18-30b5-4013-870a-3b985772b799", WasRead = false },
+                        new { Id = 38, ChatId = 24, CreatedAt = new DateTime(2018, 8, 9, 6, 27, 58, 998, DateTimeKind.Local), Text = "Eveniet aspernatur sit dignissimos.", UserId = "8668b4f7-ba1a-464d-8b3a-3258ee90be2c", WasRead = false },
+                        new { Id = 39, ChatId = 26, CreatedAt = new DateTime(2018, 8, 9, 12, 37, 59, 618, DateTimeKind.Local), Text = "Libero possimus ut sequi harum.", UserId = "07073d56-481a-4e97-9ae2-9ff377492a8a", WasRead = false },
+                        new { Id = 40, ChatId = 23, CreatedAt = new DateTime(2018, 8, 9, 3, 46, 59, 301, DateTimeKind.Local), Text = "Nemo esse nobis dolores iure qui.", UserId = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567", WasRead = false }
                     );
                 });
 
@@ -253,7 +253,7 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Text")
                         .IsRequired();
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -266,16 +266,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Notifications");
 
                     b.HasData(
-                        new { Id = 111, CreatedAt = new DateTime(2018, 8, 8, 12, 8, 54, 488, DateTimeKind.Local), NotificationSettingId = 19, Text = "Sunt quam totam optio iure perspiciatis rerum.", UserId = 6 },
-                        new { Id = 112, CreatedAt = new DateTime(2018, 8, 8, 16, 25, 20, 147, DateTimeKind.Local), NotificationSettingId = 17, Text = "Qui facere animi in sequi enim culpa autem.", UserId = 9 },
-                        new { Id = 113, CreatedAt = new DateTime(2018, 8, 8, 21, 46, 18, 27, DateTimeKind.Local), NotificationSettingId = 20, Text = "Esse at et animi ab.", UserId = 2 },
-                        new { Id = 114, CreatedAt = new DateTime(2018, 8, 8, 20, 47, 36, 51, DateTimeKind.Local), NotificationSettingId = 11, Text = "Quod eaque rerum sint.", UserId = 7 },
-                        new { Id = 115, CreatedAt = new DateTime(2018, 8, 8, 14, 40, 55, 137, DateTimeKind.Local), NotificationSettingId = 18, Text = "Perspiciatis neque asperiores quisquam.", UserId = 6 },
-                        new { Id = 116, CreatedAt = new DateTime(2018, 8, 9, 10, 32, 51, 702, DateTimeKind.Local), NotificationSettingId = 19, Text = "Omnis reprehenderit ea ut saepe molestiae cum laudantium.", UserId = 1 },
-                        new { Id = 117, CreatedAt = new DateTime(2018, 8, 8, 18, 40, 50, 277, DateTimeKind.Local), NotificationSettingId = 11, Text = "Earum deserunt in ea itaque totam voluptas.", UserId = 8 },
-                        new { Id = 118, CreatedAt = new DateTime(2018, 8, 8, 23, 0, 24, 608, DateTimeKind.Local), NotificationSettingId = 11, Text = "Eligendi deleniti unde voluptatem libero quidem facilis.", UserId = 4 },
-                        new { Id = 119, CreatedAt = new DateTime(2018, 8, 8, 17, 13, 31, 896, DateTimeKind.Local), NotificationSettingId = 14, Text = "Et adipisci quo expedita aliquid illum ea nihil praesentium sunt.", UserId = 6 },
-                        new { Id = 120, CreatedAt = new DateTime(2018, 8, 8, 16, 56, 46, 724, DateTimeKind.Local), NotificationSettingId = 17, Text = "Omnis harum dolor velit quo inventore recusandae corrupti eos libero.", UserId = 4 }
+                        new { Id = 111, CreatedAt = new DateTime(2018, 8, 8, 14, 37, 52, 574, DateTimeKind.Local), NotificationSettingId = 14, Text = "Ab molestiae nihil autem rerum nostrum ad.", UserId = "07073d56-481a-4e97-9ae2-9ff377492a8a" },
+                        new { Id = 112, CreatedAt = new DateTime(2018, 8, 9, 12, 17, 11, 452, DateTimeKind.Local), NotificationSettingId = 17, Text = "Natus omnis nulla et unde expedita quo perferendis.", UserId = "07073d56-481a-4e97-9ae2-9ff377492a8a" },
+                        new { Id = 113, CreatedAt = new DateTime(2018, 8, 9, 9, 57, 18, 307, DateTimeKind.Local), NotificationSettingId = 18, Text = "Sed ullam necessitatibus modi aspernatur voluptate accusantium error.", UserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3" },
+                        new { Id = 114, CreatedAt = new DateTime(2018, 8, 9, 8, 33, 24, 617, DateTimeKind.Local), NotificationSettingId = 13, Text = "Est iure quo ducimus odit autem voluptate est aut praesentium.", UserId = "07073d56-481a-4e97-9ae2-9ff377492a8a" },
+                        new { Id = 115, CreatedAt = new DateTime(2018, 8, 8, 14, 38, 7, 685, DateTimeKind.Local), NotificationSettingId = 12, Text = "Ex et dolorem quisquam nostrum error odio quod eius architecto.", UserId = "8668b4f7-ba1a-464d-8b3a-3258ee90be2c" },
+                        new { Id = 116, CreatedAt = new DateTime(2018, 8, 9, 10, 37, 11, 576, DateTimeKind.Local), NotificationSettingId = 14, Text = "Necessitatibus dolor odio debitis temporibus et doloremque.", UserId = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567" },
+                        new { Id = 117, CreatedAt = new DateTime(2018, 8, 9, 0, 15, 20, 339, DateTimeKind.Local), NotificationSettingId = 15, Text = "Ullam in sint aut quod ab earum aut sequi illo.", UserId = "febeb402-29c2-411f-a6a6-4377e9b55835" },
+                        new { Id = 118, CreatedAt = new DateTime(2018, 8, 9, 13, 37, 5, 218, DateTimeKind.Local), NotificationSettingId = 19, Text = "Velit sed doloremque dolorem voluptas qui.", UserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3" },
+                        new { Id = 119, CreatedAt = new DateTime(2018, 8, 8, 19, 0, 4, 795, DateTimeKind.Local), NotificationSettingId = 20, Text = "Aut sit quis nesciunt ut repudiandae consectetur laborum omnis.", UserId = "07073d56-481a-4e97-9ae2-9ff377492a8a" },
+                        new { Id = 120, CreatedAt = new DateTime(2018, 8, 9, 7, 25, 54, 976, DateTimeKind.Local), NotificationSettingId = 20, Text = "Itaque deleniti voluptatem ab inventore sit provident.", UserId = "febeb402-29c2-411f-a6a6-4377e9b55835" }
                     );
                 });
 
@@ -293,7 +293,7 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<int>("Type");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -302,16 +302,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("NotificationSettings");
 
                     b.HasData(
-                        new { Id = 11, IsDisable = false, IsEmailable = false, IsMute = true, Type = 0, UserId = 6 },
-                        new { Id = 12, IsDisable = true, IsEmailable = true, IsMute = false, Type = 1, UserId = 3 },
-                        new { Id = 13, IsDisable = false, IsEmailable = true, IsMute = false, Type = 0, UserId = 2 },
-                        new { Id = 14, IsDisable = false, IsEmailable = true, IsMute = true, Type = 1, UserId = 9 },
-                        new { Id = 15, IsDisable = true, IsEmailable = false, IsMute = false, Type = 1, UserId = 3 },
-                        new { Id = 16, IsDisable = false, IsEmailable = false, IsMute = true, Type = 0, UserId = 6 },
-                        new { Id = 17, IsDisable = true, IsEmailable = true, IsMute = true, Type = 0, UserId = 6 },
-                        new { Id = 18, IsDisable = true, IsEmailable = true, IsMute = true, Type = 0, UserId = 8 },
-                        new { Id = 19, IsDisable = false, IsEmailable = false, IsMute = true, Type = 1, UserId = 9 },
-                        new { Id = 20, IsDisable = false, IsEmailable = false, IsMute = false, Type = 1, UserId = 3 }
+                        new { Id = 11, IsDisable = false, IsEmailable = true, IsMute = false, Type = 1, UserId = "07073d56-481a-4e97-9ae2-9ff377492a8a" },
+                        new { Id = 12, IsDisable = true, IsEmailable = true, IsMute = true, Type = 0, UserId = "be1d775a-e864-4389-a1de-b182cfb36d11" },
+                        new { Id = 13, IsDisable = false, IsEmailable = false, IsMute = false, Type = 0, UserId = "ca404c18-30b5-4013-870a-3b985772b799" },
+                        new { Id = 14, IsDisable = false, IsEmailable = false, IsMute = true, Type = 0, UserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3" },
+                        new { Id = 15, IsDisable = true, IsEmailable = false, IsMute = false, Type = 1, UserId = "a869a697-3585-49ae-9745-77614d6c803a" },
+                        new { Id = 16, IsDisable = true, IsEmailable = false, IsMute = true, Type = 1, UserId = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567" },
+                        new { Id = 17, IsDisable = true, IsEmailable = false, IsMute = false, Type = 1, UserId = "b05710a2-28da-4da2-9acb-cd549be125ee" },
+                        new { Id = 18, IsDisable = false, IsEmailable = true, IsMute = false, Type = 0, UserId = "febeb402-29c2-411f-a6a6-4377e9b55835" },
+                        new { Id = 19, IsDisable = false, IsEmailable = false, IsMute = false, Type = 0, UserId = "a869a697-3585-49ae-9745-77614d6c803a" },
+                        new { Id = 20, IsDisable = false, IsEmailable = false, IsMute = true, Type = 1, UserId = "8494cede-b032-4d27-9e14-76b53134d093" }
                     );
                 });
 
@@ -323,7 +323,7 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<string>("ContactNumber");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<string>("CreatedByUserId");
 
                     b.Property<string>("Description");
 
@@ -347,16 +347,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Organizations");
 
                     b.HasData(
-                        new { Id = 71, ContactNumber = "(972) 589-7915 x2885", CreatedByUserId = 8, Description = "Amet est quis a sapiente alias.", Email = "Jaydon.Cassin78@hotmail.com", IsActive = true, Name = "Company717", ThemeId = 63, WebSite = "https://beverly.biz" },
-                        new { Id = 72, ContactNumber = "306-667-0280 x65595", CreatedByUserId = 1, Description = "Voluptatem optio voluptatibus distinctio dignissimos vel sit molestiae. Quia exercitationem iusto ut fugit sed beatae ea. Qui est porro laboriosam. Asperiores culpa ea in.", Email = "Bell.Rice37@gmail.com", IsActive = true, Name = "Company435", ThemeId = 65, WebSite = "https://eliezer.info" },
-                        new { Id = 73, ContactNumber = "896.777.9915 x1703", CreatedByUserId = 10, Description = "", Email = "Barton_Murray@gmail.com", IsActive = true, Name = "Company524", ThemeId = 66, WebSite = "http://buster.net" },
-                        new { Id = 74, ContactNumber = "(662) 947-7935", CreatedByUserId = 6, Description = "Dignissimos voluptatum et voluptates aliquid consequatur sed qui id.", Email = "Hardy.Dach@gmail.com", IsActive = true, Name = "Company988", ThemeId = 61, WebSite = "http://arnoldo.biz" },
-                        new { Id = 75, ContactNumber = "(499) 322-6059 x7259", CreatedByUserId = 2, Description = "Quibusdam quam aut id nam perferendis pariatur.", Email = "Gene79@hotmail.com", IsActive = true, Name = "Company483", ThemeId = 62, WebSite = "http://lloyd.info" },
-                        new { Id = 76, ContactNumber = "1-279-515-0177 x1446", CreatedByUserId = 10, Description = "Placeat eum accusantium enim quia omnis quisquam quas et. Quaerat et similique illo necessitatibus nulla dolor. Deserunt commodi cum saepe dolores sunt hic. Ut in quidem aut harum voluptatem est dolorum.", Email = "Ollie_Mitchell@gmail.com", IsActive = true, Name = "Company758", ThemeId = 66, WebSite = "http://newell.com" },
-                        new { Id = 77, ContactNumber = "726.980.6083 x936", CreatedByUserId = 8, Description = "Accusamus dolorem non aut enim. Voluptatem laboriosam quia itaque consequuntur consequatur est odio nihil tenetur.", Email = "Dangelo18@yahoo.com", IsActive = true, Name = "Company724", ThemeId = 69, WebSite = "https://elvis.com" },
-                        new { Id = 78, ContactNumber = "573.833.6286 x5517", CreatedByUserId = 6, Description = "Voluptatibus facilis voluptatem vel nesciunt unde ducimus aut. Molestias excepturi amet doloribus suscipit velit aut consequuntur suscipit. Voluptas sunt aliquam et nisi laboriosam.", Email = "Flossie.Hahn97@yahoo.com", IsActive = true, Name = "Company158", ThemeId = 70, WebSite = "https://amalia.biz" },
-                        new { Id = 79, ContactNumber = "995-488-4241 x4482", CreatedByUserId = 8, Description = "Qui culpa aut. Culpa natus ut.", Email = "Consuelo.McKenzie99@hotmail.com", IsActive = true, Name = "Company546", ThemeId = 69, WebSite = "https://stacey.org" },
-                        new { Id = 80, ContactNumber = "624.793.4354 x33532", CreatedByUserId = 5, Description = "Autem ab autem.", Email = "Justice.Harvey@gmail.com", IsActive = true, Name = "Company303", ThemeId = 63, WebSite = "http://meaghan.name" }
+                        new { Id = 71, ContactNumber = "633.313.8643", CreatedByUserId = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567", Description = "Iste eum iste. Vitae nemo deleniti iusto ducimus sequi aperiam. Quia eius asperiores eius ea. Perferendis et voluptate accusamus dicta vel rerum.", Email = "Katelin80@gmail.com", IsActive = true, Name = "Company601", ThemeId = 64, WebSite = "http://rudolph.biz" },
+                        new { Id = 72, ContactNumber = "1-877-441-9293 x6293", CreatedByUserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3", Description = "", Email = "Bernita.Corwin70@hotmail.com", IsActive = true, Name = "Company408", ThemeId = 67, WebSite = "https://vern.name" },
+                        new { Id = 73, ContactNumber = "822-687-1461 x6666", CreatedByUserId = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567", Description = "Et cum eos. Laborum optio voluptatem aut numquam fuga rem voluptates ullam.", Email = "Delphine85@hotmail.com", IsActive = true, Name = "Company743", ThemeId = 63, WebSite = "http://ally.org" },
+                        new { Id = 74, ContactNumber = "(910) 626-5998 x9100", CreatedByUserId = "07073d56-481a-4e97-9ae2-9ff377492a8a", Description = "Ab adipisci voluptatem enim consequuntur. Non incidunt laudantium sit sit earum voluptatem quos adipisci.", Email = "Isidro41@yahoo.com", IsActive = true, Name = "Company405", ThemeId = 66, WebSite = "http://cheyanne.biz" },
+                        new { Id = 75, ContactNumber = "633-297-3289 x525", CreatedByUserId = "febeb402-29c2-411f-a6a6-4377e9b55835", Description = "Sint odio in ut qui id earum. Dicta ea asperiores et rerum qui laudantium. Qui vero dolores qui laboriosam accusantium autem delectus ut magni. Explicabo distinctio voluptate et ut asperiores culpa blanditiis esse qui.", Email = "Sanford_Cummerata@yahoo.com", IsActive = true, Name = "Company944", ThemeId = 65, WebSite = "http://elmira.org" },
+                        new { Id = 76, ContactNumber = "1-412-286-6736 x8868", CreatedByUserId = "a869a697-3585-49ae-9745-77614d6c803a", Description = "", Email = "Daija.Balistreri47@yahoo.com", IsActive = true, Name = "Company828", ThemeId = 64, WebSite = "http://graham.com" },
+                        new { Id = 77, ContactNumber = "946.766.1783 x57261", CreatedByUserId = "be1d775a-e864-4389-a1de-b182cfb36d11", Description = "", Email = "Jefferey.Hills@gmail.com", IsActive = true, Name = "Company367", ThemeId = 68, WebSite = "https://raheem.net" },
+                        new { Id = 78, ContactNumber = "908-667-6212 x972", CreatedByUserId = "febeb402-29c2-411f-a6a6-4377e9b55835", Description = "Aut veniam nulla vero sed provident blanditiis aut ut animi. Et atque ut.", Email = "Shanon34@hotmail.com", IsActive = true, Name = "Company540", ThemeId = 67, WebSite = "https://danny.org" },
+                        new { Id = 79, ContactNumber = "(654) 552-1201 x37954", CreatedByUserId = "febeb402-29c2-411f-a6a6-4377e9b55835", Description = "Cupiditate est sit ut et. Non cupiditate non est voluptatem voluptas reprehenderit aliquam. Cumque est saepe sed porro qui molestias est nostrum illo. Rem sunt velit laudantium ut.", Email = "Santiago_Senger@yahoo.com", IsActive = true, Name = "Company461", ThemeId = 67, WebSite = "https://selina.name" },
+                        new { Id = 80, ContactNumber = "983-702-6901", CreatedByUserId = "07073d56-481a-4e97-9ae2-9ff377492a8a", Description = "", Email = "Emmalee_Wyman2@gmail.com", IsActive = true, Name = "Company613", ThemeId = 69, WebSite = "https://makayla.name" }
                     );
                 });
 
@@ -373,7 +373,7 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Text")
                         .IsRequired();
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -385,16 +385,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Responses");
 
                     b.HasData(
-                        new { Id = 51, CreatedAt = new DateTime(2018, 8, 8, 18, 0, 26, 611, DateTimeKind.Local), FeedbackId = 41, Text = "Maxime et rerum nemo nostrum voluptas rem omnis qui.", UserId = 9 },
-                        new { Id = 52, CreatedAt = new DateTime(2018, 8, 9, 11, 24, 18, 965, DateTimeKind.Local), FeedbackId = 46, Text = "Id velit corporis similique.", UserId = 6 },
-                        new { Id = 53, CreatedAt = new DateTime(2018, 8, 9, 11, 5, 4, 575, DateTimeKind.Local), FeedbackId = 43, Text = "Dolore quaerat asperiores rerum at et.", UserId = 3 },
-                        new { Id = 54, CreatedAt = new DateTime(2018, 8, 8, 18, 21, 35, 968, DateTimeKind.Local), FeedbackId = 48, Text = "Deserunt rerum sit voluptatem unde.", UserId = 10 },
-                        new { Id = 55, CreatedAt = new DateTime(2018, 8, 9, 2, 19, 37, 678, DateTimeKind.Local), FeedbackId = 49, Text = "Autem in temporibus.", UserId = 4 },
-                        new { Id = 56, CreatedAt = new DateTime(2018, 8, 9, 0, 47, 24, 297, DateTimeKind.Local), FeedbackId = 45, Text = "Aut dicta ut.", UserId = 1 },
-                        new { Id = 57, CreatedAt = new DateTime(2018, 8, 9, 4, 37, 10, 117, DateTimeKind.Local), FeedbackId = 45, Text = "Autem et reprehenderit facilis nihil odio et odio.", UserId = 2 },
-                        new { Id = 58, CreatedAt = new DateTime(2018, 8, 8, 21, 58, 40, 531, DateTimeKind.Local), FeedbackId = 43, Text = "Qui voluptatibus esse eos.", UserId = 6 },
-                        new { Id = 59, CreatedAt = new DateTime(2018, 8, 8, 16, 24, 49, 691, DateTimeKind.Local), FeedbackId = 50, Text = "Sit aut praesentium et cum quasi repellendus.", UserId = 10 },
-                        new { Id = 60, CreatedAt = new DateTime(2018, 8, 9, 9, 31, 19, 655, DateTimeKind.Local), FeedbackId = 41, Text = "Enim explicabo dolore aut qui sequi vitae sunt enim.", UserId = 10 }
+                        new { Id = 51, CreatedAt = new DateTime(2018, 8, 8, 21, 9, 15, 404, DateTimeKind.Local), FeedbackId = 47, Text = "Non architecto aperiam incidunt eaque voluptatum.", UserId = "febeb402-29c2-411f-a6a6-4377e9b55835" },
+                        new { Id = 52, CreatedAt = new DateTime(2018, 8, 9, 1, 14, 11, 713, DateTimeKind.Local), FeedbackId = 45, Text = "Voluptas occaecati beatae laborum et ut architecto non earum.", UserId = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567" },
+                        new { Id = 53, CreatedAt = new DateTime(2018, 8, 8, 17, 19, 12, 505, DateTimeKind.Local), FeedbackId = 41, Text = "Nihil dolorum voluptatem reprehenderit ex sit.", UserId = "8494cede-b032-4d27-9e14-76b53134d093" },
+                        new { Id = 54, CreatedAt = new DateTime(2018, 8, 9, 9, 44, 53, 129, DateTimeKind.Local), FeedbackId = 48, Text = "Eum autem natus consequatur voluptatum voluptate.", UserId = "8494cede-b032-4d27-9e14-76b53134d093" },
+                        new { Id = 55, CreatedAt = new DateTime(2018, 8, 9, 7, 12, 56, 410, DateTimeKind.Local), FeedbackId = 49, Text = "Enim at iste modi voluptas.", UserId = "8494cede-b032-4d27-9e14-76b53134d093" },
+                        new { Id = 56, CreatedAt = new DateTime(2018, 8, 9, 12, 5, 21, 233, DateTimeKind.Local), FeedbackId = 44, Text = "Qui dolores et.", UserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3" },
+                        new { Id = 57, CreatedAt = new DateTime(2018, 8, 9, 13, 38, 27, 581, DateTimeKind.Local), FeedbackId = 43, Text = "Est dicta consequatur amet est distinctio ut.", UserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3" },
+                        new { Id = 58, CreatedAt = new DateTime(2018, 8, 8, 20, 41, 36, 60, DateTimeKind.Local), FeedbackId = 41, Text = "Quaerat animi sed.", UserId = "febeb402-29c2-411f-a6a6-4377e9b55835" },
+                        new { Id = 59, CreatedAt = new DateTime(2018, 8, 8, 23, 29, 17, 504, DateTimeKind.Local), FeedbackId = 41, Text = "Explicabo pariatur et eaque.", UserId = "8668b4f7-ba1a-464d-8b3a-3258ee90be2c" },
+                        new { Id = 60, CreatedAt = new DateTime(2018, 8, 8, 21, 1, 23, 738, DateTimeKind.Local), FeedbackId = 49, Text = "Dicta labore ut.", UserId = "b05710a2-28da-4da2-9acb-cd549be125ee" }
                     );
                 });
 
@@ -456,24 +456,22 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Themes");
 
                     b.HasData(
-                        new { Id = 61, BackgroundColor = "White", FontFamily = "Frutiger", Name = "Theme609" },
-                        new { Id = 62, BackgroundColor = "White", FontFamily = "Trade", Name = "Theme87" },
-                        new { Id = 63, BackgroundColor = "Yellow", FontFamily = "Univers", Name = "Theme888" },
-                        new { Id = 64, BackgroundColor = "Gray", FontFamily = "Trade", Name = "Theme364" },
-                        new { Id = 65, BackgroundColor = "White", FontFamily = "Univers", Name = "Theme352" },
-                        new { Id = 66, BackgroundColor = "White", FontFamily = "Helvetica", Name = "Theme395" },
-                        new { Id = 67, BackgroundColor = "Gray", FontFamily = "Frutiger", Name = "Theme894" },
-                        new { Id = 68, BackgroundColor = "Yellow", FontFamily = "Univers", Name = "Theme493" },
-                        new { Id = 69, BackgroundColor = "Yellow", FontFamily = "Trade", Name = "Theme245" },
-                        new { Id = 70, BackgroundColor = "Yellow", FontFamily = "Helvetica", Name = "Theme594" }
+                        new { Id = 61, BackgroundColor = "Gray", FontFamily = "Helvetica", Name = "Theme677" },
+                        new { Id = 62, BackgroundColor = "Gray", FontFamily = "Frutiger", Name = "Theme796" },
+                        new { Id = 63, BackgroundColor = "Gray", FontFamily = "Frutiger", Name = "Theme587" },
+                        new { Id = 64, BackgroundColor = "White", FontFamily = "Trade", Name = "Theme246" },
+                        new { Id = 65, BackgroundColor = "Gray", FontFamily = "Trade", Name = "Theme77" },
+                        new { Id = 66, BackgroundColor = "Gray", FontFamily = "Frutiger", Name = "Theme567" },
+                        new { Id = 67, BackgroundColor = "White", FontFamily = "Frutiger", Name = "Theme458" },
+                        new { Id = 68, BackgroundColor = "Yellow", FontFamily = "Trade", Name = "Theme573" },
+                        new { Id = 69, BackgroundColor = "Gray", FontFamily = "Frutiger", Name = "Theme966" },
+                        new { Id = 70, BackgroundColor = "Gray", FontFamily = "Frutiger", Name = "Theme485" }
                     );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -498,22 +496,22 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Users");
 
                     b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2018, 8, 9, 1, 4, 28, 760, DateTimeKind.Local), DisplayName = "Ova", Email = "Weldon_Steuber92@yahoo.com", FirstName = "Novella", IsActive = true, RoleId = 2, SecondName = "Okuneva" },
-                        new { Id = 2, CreatedAt = new DateTime(2018, 8, 9, 3, 1, 46, 140, DateTimeKind.Local), DisplayName = "Josiah", Email = "Sharon.Ondricka@hotmail.com", FirstName = "Breanna", IsActive = true, RoleId = 2, SecondName = "Powlowski" },
-                        new { Id = 3, CreatedAt = new DateTime(2018, 8, 9, 2, 21, 13, 78, DateTimeKind.Local), DisplayName = "Isabel", Email = "Carole_Sauer58@yahoo.com", FirstName = "Eleanore", IsActive = true, RoleId = 1, SecondName = "Hilpert" },
-                        new { Id = 4, CreatedAt = new DateTime(2018, 8, 8, 22, 42, 32, 977, DateTimeKind.Local), DisplayName = "Emilia", Email = "Boris_Cruickshank57@yahoo.com", FirstName = "Tierra", IsActive = true, RoleId = 2, SecondName = "Ledner" },
-                        new { Id = 5, CreatedAt = new DateTime(2018, 8, 8, 16, 42, 36, 241, DateTimeKind.Local), DisplayName = "Katlynn", Email = "Isaac.Harvey47@yahoo.com", FirstName = "Burley", IsActive = true, RoleId = 1, SecondName = "Botsford" },
-                        new { Id = 6, CreatedAt = new DateTime(2018, 8, 9, 5, 52, 29, 466, DateTimeKind.Local), DisplayName = "Edna", Email = "Velva3@yahoo.com", FirstName = "Maribel", IsActive = true, RoleId = 1, SecondName = "Kovacek" },
-                        new { Id = 7, CreatedAt = new DateTime(2018, 8, 8, 23, 23, 47, 940, DateTimeKind.Local), DisplayName = "Connie", Email = "Colten.Crona66@gmail.com", FirstName = "Amir", IsActive = true, RoleId = 2, SecondName = "O'Kon" },
-                        new { Id = 8, CreatedAt = new DateTime(2018, 8, 8, 20, 48, 28, 902, DateTimeKind.Local), DisplayName = "Dannie", Email = "Sheldon.Metz@yahoo.com", FirstName = "Camilla", IsActive = true, RoleId = 1, SecondName = "Hegmann" },
-                        new { Id = 9, CreatedAt = new DateTime(2018, 8, 8, 22, 53, 59, 855, DateTimeKind.Local), DisplayName = "Lia", Email = "Roscoe.Hegmann1@hotmail.com", FirstName = "Teagan", IsActive = true, RoleId = 2, SecondName = "Kirlin" },
-                        new { Id = 10, CreatedAt = new DateTime(2018, 8, 9, 7, 20, 5, 871, DateTimeKind.Local), DisplayName = "Audreanne", Email = "Fanny18@yahoo.com", FirstName = "Elias", IsActive = true, RoleId = 2, SecondName = "Monahan" }
+                        new { Id = "8668b4f7-ba1a-464d-8b3a-3258ee90be2c", CreatedAt = new DateTime(2018, 8, 9, 7, 50, 32, 379, DateTimeKind.Local), DisplayName = "Shaniya", Email = "Camila_Von10@gmail.com", FirstName = "Darron", IsActive = true, RoleId = 2, SecondName = "Armstrong" },
+                        new { Id = "8494cede-b032-4d27-9e14-76b53134d093", CreatedAt = new DateTime(2018, 8, 9, 11, 15, 52, 762, DateTimeKind.Local), DisplayName = "Tess", Email = "Kaitlin_Kulas@gmail.com", FirstName = "Justina", IsActive = true, RoleId = 2, SecondName = "Schmidt" },
+                        new { Id = "b05710a2-28da-4da2-9acb-cd549be125ee", CreatedAt = new DateTime(2018, 8, 9, 10, 50, 29, 608, DateTimeKind.Local), DisplayName = "Fiona", Email = "Aaliyah.Kozey@gmail.com", FirstName = "Katrine", IsActive = true, RoleId = 2, SecondName = "Kassulke" },
+                        new { Id = "febeb402-29c2-411f-a6a6-4377e9b55835", CreatedAt = new DateTime(2018, 8, 8, 23, 56, 33, 77, DateTimeKind.Local), DisplayName = "Lambert", Email = "Amanda_Bartoletti25@hotmail.com", FirstName = "Brooks", IsActive = true, RoleId = 2, SecondName = "Rice" },
+                        new { Id = "a869a697-3585-49ae-9745-77614d6c803a", CreatedAt = new DateTime(2018, 8, 8, 17, 15, 52, 243, DateTimeKind.Local), DisplayName = "Sanford", Email = "Rafael15@gmail.com", FirstName = "Eulah", IsActive = true, RoleId = 2, SecondName = "McDermott" },
+                        new { Id = "ca404c18-30b5-4013-870a-3b985772b799", CreatedAt = new DateTime(2018, 8, 9, 12, 25, 42, 165, DateTimeKind.Local), DisplayName = "Guy", Email = "Lafayette.Leffler44@hotmail.com", FirstName = "Albin", IsActive = true, RoleId = 1, SecondName = "MacGyver" },
+                        new { Id = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3", CreatedAt = new DateTime(2018, 8, 9, 0, 59, 23, 937, DateTimeKind.Local), DisplayName = "Rashad", Email = "Cortez50@hotmail.com", FirstName = "Urban", IsActive = true, RoleId = 2, SecondName = "Herzog" },
+                        new { Id = "be1d775a-e864-4389-a1de-b182cfb36d11", CreatedAt = new DateTime(2018, 8, 8, 19, 8, 46, 847, DateTimeKind.Local), DisplayName = "Claude", Email = "Rolando19@gmail.com", FirstName = "Delpha", IsActive = true, RoleId = 2, SecondName = "Legros" },
+                        new { Id = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567", CreatedAt = new DateTime(2018, 8, 9, 2, 20, 29, 373, DateTimeKind.Local), DisplayName = "Felipa", Email = "Chadd45@gmail.com", FirstName = "Chloe", IsActive = true, RoleId = 1, SecondName = "Gleason" },
+                        new { Id = "07073d56-481a-4e97-9ae2-9ff377492a8a", CreatedAt = new DateTime(2018, 8, 9, 0, 11, 38, 735, DateTimeKind.Local), DisplayName = "Josie", Email = "Giovani47@gmail.com", FirstName = "Muhammad", IsActive = true, RoleId = 2, SecondName = "Schumm" }
                     );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.UserOrganization", b =>
                 {
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.Property<int>("OrganizationId");
 
@@ -524,16 +522,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("UserOrganizations");
 
                     b.HasData(
-                        new { UserId = 1, OrganizationId = 71 },
-                        new { UserId = 2, OrganizationId = 78 },
-                        new { UserId = 3, OrganizationId = 74 },
-                        new { UserId = 4, OrganizationId = 75 },
-                        new { UserId = 5, OrganizationId = 75 },
-                        new { UserId = 6, OrganizationId = 76 },
-                        new { UserId = 7, OrganizationId = 79 },
-                        new { UserId = 8, OrganizationId = 71 },
-                        new { UserId = 9, OrganizationId = 72 },
-                        new { UserId = 10, OrganizationId = 75 }
+                        new { UserId = "8668b4f7-ba1a-464d-8b3a-3258ee90be2c", OrganizationId = 75 },
+                        new { UserId = "8494cede-b032-4d27-9e14-76b53134d093", OrganizationId = 76 },
+                        new { UserId = "b05710a2-28da-4da2-9acb-cd549be125ee", OrganizationId = 73 },
+                        new { UserId = "febeb402-29c2-411f-a6a6-4377e9b55835", OrganizationId = 79 },
+                        new { UserId = "a869a697-3585-49ae-9745-77614d6c803a", OrganizationId = 79 },
+                        new { UserId = "ca404c18-30b5-4013-870a-3b985772b799", OrganizationId = 71 },
+                        new { UserId = "02fd40d4-7d38-402e-b77b-06d76ccdb5d3", OrganizationId = 79 },
+                        new { UserId = "be1d775a-e864-4389-a1de-b182cfb36d11", OrganizationId = 78 },
+                        new { UserId = "b0560ef3-3c5d-4f55-a63f-77a4b91a0567", OrganizationId = 77 },
+                        new { UserId = "07073d56-481a-4e97-9ae2-9ff377492a8a", OrganizationId = 77 }
                     );
                 });
 
@@ -568,8 +566,7 @@ namespace Watcher.DataAccess.Data.Migrations
                 {
                     b.HasOne("Watcher.DataAccess.Entities.User", "User")
                         .WithMany("Feedbacks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Instance", b =>
@@ -606,8 +603,7 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.HasOne("Watcher.DataAccess.Entities.User", "User")
                         .WithMany("Notifications")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.NotificationSetting", b =>

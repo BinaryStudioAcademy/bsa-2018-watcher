@@ -9,16 +9,14 @@ import { Message } from './message.model';
 import { Chat } from './chat.model';
 
 export interface User  {
-   id: number;
+   id: string;
    firstName: string;
    secondName: string;
    displayName: string;
    email: string;
    isActive: boolean;
    createdAt: Date;
-   roleId: number;
    role: Role;
-   notificationSettingId: number;
    notificationSetting: NotificationSetting;
    userOrganizations: UserOrganization[];
    notifications: Notification[];

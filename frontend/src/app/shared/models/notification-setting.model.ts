@@ -6,6 +6,7 @@ export interface NotificationSetting  {
    type: NotificationType;
    isMute: boolean;
    isDisable: boolean;
+   isEmailable: boolean;
 }
 
 

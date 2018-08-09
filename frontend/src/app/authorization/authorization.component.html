@@ -13,11 +13,14 @@
         <div class="auth-futer" *ngIf="isSignIn">
             <p>Not a member? <a (click)="showSignUp()" a>Sign Up</a></p>
         </div>
-        <div class="auth-futer" *ngIf="!isSignIn && !isSuccessSignUp">
+        <div class="auth-futer" *ngIf="isNotRegisteredSignIn">
+            <p></p>    
+        </div>
+        <div class="auth-futer" *ngIf="!isSignIn && !isSuccessSignUp && !isNotRegisteredSignIn">
             <p>Already registered? <a (click)="showSignIn()">Sign In</a></p>
         </div>
         <div class="auth-futer" *ngIf="!isSignIn && isSuccessSignUp">
-            <p>Beck to <a (click)="beckToSignUp()">Sign Up</a></p>
+            <p>Back to <a (click)="backToSignUp()">Sign Up</a></p>
         </div>
     </div>
 </p-dialog>
@@ -35,10 +38,10 @@
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
             <span class="firebaseui-idp-text">Sign In with Facebook</span>
         </button>
-        <button (click)="signInWithTwitter()" class="auth-button auth-btn-twitter">
+        <!-- <button (click)="signInWithTwitter()" class="auth-button auth-btn-twitter">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
             <span class="firebaseui-idp-text">Sign In with Twitter</span>
-        </button>
+        </button> -->
     </div>
 </ng-template>
 
@@ -56,10 +59,10 @@
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
             <span class="firebaseui-idp-text">Sign Up with Facebook</span>
         </button>
-        <button (click)="signUpWithTwitter()" class="auth-button auth-btn-twitter">
+        <!-- <button (click)="signUpWithTwitter()" class="auth-button auth-btn-twitter">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
             <span class="firebaseui-idp-text">Sign Up with Twitter</span>
-        </button>
+        </button> -->
     </div>
 </ng-template>
 
@@ -102,4 +105,17 @@
             <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" [disabled]="cName?.invalid || fName?.invalid || lName?.invalid" value="Save" />
         </div>
     </div>
+</ng-template>
+
+
+<ng-template #notRegisteredSignInTemplate>
+        <span class="close" (click)="closeDialog()"> </span>    
+        <div class="auth-form-header">
+            <h2>Seems, you are new here</h2>
+            <h2>Would you like to register?</h2>
+        </div>
+        <div class="auth-buttons">
+            <button pButton type="button" label="Yes" class="btnsign-in ui-button-primary ui-button-raised" (click)="signUpWithGoogle()"></button>
+            <button pButton type="button" label="No"  class="btnsign-up ui-button-primary ui-button-raised" (click)="noRegistration()"></button>
+        </div>
 </ng-template>

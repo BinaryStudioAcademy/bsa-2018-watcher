@@ -9,6 +9,9 @@
     {
         ISamplesRepository SamplesRepository { get; }
 
+        IUsersRepository UsersRepository { get; }
+
+
         IOrganizationRepository OrganizationRepository { get; }
 
         INotificationSettingsRepository NotificationSettingsRepository { get; }

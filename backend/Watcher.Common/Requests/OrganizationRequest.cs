@@ -22,9 +22,9 @@
 
         public int? ChatId { get; set; }
 
-        public int CreatedByUserId { get; set; }
+        public string CreatedByUserId { get; set; }
 
-        public IList<int> UsersId { get; set; }
+        public IList<string> UsersId { get; set; }
 
         public IList<int> InstancesId { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿namespace Watcher.DataAccess.Data
 {
+    using System;
     using System.Linq;
 
     using Bogus;
@@ -26,7 +27,7 @@
             };
 
             var userFaker = new Faker<User>()
-                .RuleFor(o => o.Id, f => f.UniqueIndex)
+                .RuleFor(o => o.Id, f => Guid.NewGuid().ToString())
                 .RuleFor(o => o.FirstName, f => f.Name.FirstName())
                 .RuleFor(o => o.SecondName, f => f.Name.LastName())
                 .RuleFor(o => o.DisplayName, f => f.Name.FirstName())
@@ -146,13 +147,13 @@
                     OrganizationId = organizations[Randomizer.Seed.Next(0, organizations.Length - 1)].Id
                 }).ToArray();
 
-            modelBuilder.Entity<NotificationSetting>().HasData(notificationSettings);
             modelBuilder.Entity<Role>().HasData(roles);
             modelBuilder.Entity<User>().HasData(users);
             modelBuilder.Entity<Chat>().HasData(userChats);
             modelBuilder.Entity<Message>().HasData(messages);
             modelBuilder.Entity<Feedback>().HasData(feedbacks);
             modelBuilder.Entity<Response>().HasData(responces);
+            modelBuilder.Entity<NotificationSetting>().HasData(notificationSettings);
 
             modelBuilder.Entity<Theme>().HasData(themes);
             modelBuilder.Entity<Organization>().HasData(organizations);

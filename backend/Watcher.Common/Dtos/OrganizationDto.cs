@@ -8,6 +8,7 @@ namespace Watcher.Common.Dtos
     public class OrganizationDto : IEntity<int>
     {
         public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -24,9 +25,9 @@ namespace Watcher.Common.Dtos
 
         public int? ChatId { get; set; }
 
-        public int CreatedByUserId { get; set; }
+        public string CreatedByUserId { get; set; }
 
-        public IList<int> UsersId { get; set; }
+        public IList<string> UsersId { get; set; }
 
         public IList<int> InstancesId { get; set; }
 

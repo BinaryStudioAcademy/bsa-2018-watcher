@@ -20,6 +20,9 @@
         private readonly IMapper _mapper;
 
         private ISamplesRepository _samplesRepository;
+        private IUsersRepository _usersRepository;
+
+
         private IOrganizationRepository _organizationRepository;
         private INotificationSettingsRepository _notificationSettingsRepository;
         
@@ -41,6 +44,8 @@
                 return _samplesRepository;
             }
         }
+
+        public IUsersRepository UsersRepository => _usersRepository ?? (_usersRepository = new UsersRepository(_context, _mapper));
 
         public IOrganizationRepository OrganizationRepository
         {

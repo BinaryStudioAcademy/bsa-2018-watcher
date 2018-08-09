@@ -10,8 +10,8 @@ export interface Organization  {
    isActive: boolean;
    themeId: number;
    chatId: number;
-   createdByUserId: number;
-   usersId: number[];
+   createdByUserId: string;
+   usersId: string[];
    instancesId: number[];
    notificationsId: number[];
 }
