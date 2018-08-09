@@ -11,6 +11,7 @@
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Options;
+    using Watcher.Common.Requests;
     using Watcher.Core.Auth;
     using Watcher.Core.Interfaces;
 
@@ -26,42 +27,21 @@
             _tokenOptions = tokenOptions;
         }
 
-        public async Task<TokenDto> CreateTokenAsync(ClaimsPrincipal principal)
+        public async Task<TokenDto> CreateTokenAsync(UserLoginRequest request, ClaimsPrincipal principal)
         {
             // TODO: Parse token claim to get user email
-            var userDto = await _usersService.GetEntityByIdAsync("Some email"); // email (from token )
+            var userDto = await _usersService.GetEntityByIdAsync(request.Uid);
 
-            return CreateFakeTokenDto(userDto);
+            // TODO: Add logic about registration purpose
+            if (userDto == null)
+            {
+                return null;
+            }
+
+            return CreateTokenDto(userDto);
         }
 
         public TokenDto CreateTokenDto(UserDto user)
-        {
-            var claims = new List<Claim>
-                             {
-                                 new Claim(ClaimsIdentity.DefaultNameClaimType, "rostik@gmail.com"), // user.Email
-                                 new Claim(ClaimsIdentity.DefaultRoleClaimType, "Admin") // user.Role.Name
-                             };
-
-            var claimsIdentity = TokenUtil.CreateDefaultClaimsIdentity(claims);
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var now = DateTime.UtcNow;
-
-            var jwt = tokenHandler.CreateJwtSecurityToken(
-                issuer: _tokenOptions.Value.Issuer,
-                audience: _tokenOptions.Value.Audience,
-                notBefore: now,
-                subject: claimsIdentity,
-                expires: now.Add(TimeSpan.FromMinutes(_tokenOptions.Value.Access_Token_Lifetime)),
-                signingCredentials: new SigningCredentials(_tokenOptions.Value.GetSymmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature)
-            ); // TODO: Get secret key from Configs
-
-            var encodedJwt = tokenHandler.WriteToken(jwt);
-
-            return new TokenDto(encodedJwt);
-        }
-
-        public TokenDto CreateFakeTokenDto(UserDto user)
         {
             var claims = new List<Claim>
                              {

@@ -3,9 +3,10 @@ import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import {Observable} from 'rxjs';
-import {PostInfo} from '../../shared/models/post-info';
+import {UserRegisterRequest} from '../../shared/models/user-register-request';
 import {TokenService} from './token.service';
 import {UserDto} from '../../shared/models/user-dto';
+import {UserLoginRequest} from '../../shared/models/user-login-request';
 
 @Injectable({
   providedIn: 'root'
@@ -32,26 +33,46 @@ export class AuthService {
     );
   }
 
+  async login(credential: firebase.auth.UserCredential): Promise<void> {
+
+    const request: UserLoginRequest = {
+      uid: credential.user.uid,
+      email: credential.user.email
+    };
+
+    const firebaseToken = await credential.user.getIdToken();
+    localStorage.setItem('firebaseToken', firebaseToken);
+
+    const tokenDto = await this.tokenService.login(request).toPromise();
+
+    localStorage.setItem('currentUser', JSON.stringify(tokenDto.user));
+    localStorage.setItem('watcherToken', tokenDto.watcherJWT);
+  }
+
+  async register(credential: firebase.auth.UserCredential): Promise<void> {
+    const info: UserRegisterRequest = {
+      uid: credential.user.uid,
+      email: credential.user.email,
+      displayName: credential.user.displayName,
+      refreshToken: credential.user.refreshToken,
+      photoURL: credential.user.photoURL,
+      isNewUser: credential.additionalUserInfo.isNewUser
+    };
+
+    const firebaseToken = await credential.user.getIdToken();
+    localStorage.setItem('firebaseToken', firebaseToken);
+
+    const tokenDto = await this.tokenService.register(info).toPromise();
+
+    localStorage.setItem('currentUser', JSON.stringify(tokenDto.user));
+    localStorage.setItem('watcherToken', tokenDto.watcherJWT);
+  }
+
   async signInWithGoogle(): Promise<boolean> {
     try {
       const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
 
-      const info: PostInfo = {
-        token: await res.user.getIdToken(),
-        user: {
-          uid: res.user.uid,
-          email: res.user.email,
-          displayName: res.user.displayName,
-          refreshToken: res.user.refreshToken,
-          photoURL: res.user.photoURL,
-          isNewUser: res.additionalUserInfo.isNewUser
-        }
-      };
-
-      localStorage.setItem('firebaseToken', info.token);
-      const tokenDto = await this.tokenService.register(info).toPromise();
-      localStorage.setItem('currentUser', JSON.stringify(tokenDto.user));
-      localStorage.setItem('watcherToken', tokenDto.watcherJWT);
+      await this.login(res);
 
     } catch (e) {
       console.log(e);
@@ -61,22 +82,102 @@ export class AuthService {
     return true;
   }
 
-  signInWithFacebook(): Promise<firebase.auth.UserCredential> {
-    return this._firebaseAuth.auth.signInWithPopup(
-      new firebase.auth.FacebookAuthProvider()
-    );
+  async signUpWithGoogle(): Promise<boolean> {
+    try {
+      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+
+      await this.register(res);
+
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+
+    return true;
   }
 
-  signInWithTwitter(): Promise<firebase.auth.UserCredential> {
-    return this._firebaseAuth.auth.signInWithPopup(
-      new firebase.auth.TwitterAuthProvider()
-    );
+  async signInWithFacebook(): Promise<boolean> {
+    try {
+      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
+
+      await this.login(res);
+
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+
+    return true;
   }
 
-  signInWithGitHub(): Promise<firebase.auth.UserCredential> {
-    return this._firebaseAuth.auth.signInWithPopup(
-      new firebase.auth.GithubAuthProvider()
-    );
+  async signUpWithFacebook(): Promise<boolean> {
+    try {
+      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
+
+      await this.register(res);
+
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+
+    return true;
+  }
+
+  async signInWithGitHub(): Promise<boolean> {
+    try {
+      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
+
+      await this.login(res);
+
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+
+    return true;
+  }
+
+  async signUpWithGitHub(): Promise<boolean> {
+    try {
+      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
+
+      await this.register(res);
+
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+
+    return true;
+  }
+
+  async signInWithTwitter(): Promise<boolean> {
+    try {
+      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
+
+      await this.login(res);
+
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+
+    return true;
+  }
+
+  async signUpWithTwitter(): Promise<boolean> {
+    try {
+      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
+
+      await this.register(res);
+
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+
+    return true;
   }
 
   isLoggedIn(): boolean {

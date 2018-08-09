@@ -53,7 +53,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.userForm.valid);
     if (this.userForm.valid) {
       this.userService.update(this.userId, this.user);
     } else {

@@ -3,7 +3,6 @@ import { throwIfAlreadyLoaded } from './guards/module-import.guard';
 import { CommonModule } from '@angular/common';
 import {AuthService} from './services/auth.service';
 import {TokenService} from './services/token.service';
-import {UserService} from './services/user.service';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TokensInterceptor} from './interceptors/tokens-interceptor';
 
@@ -14,7 +13,6 @@ import {TokensInterceptor} from './interceptors/tokens-interceptor';
   providers: [
     AuthService,
     TokenService,
-    UserService,
     { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true }
   ],
   declarations: []
