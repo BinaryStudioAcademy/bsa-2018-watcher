@@ -10,8 +10,8 @@ using Watcher.DataAccess.Data;
 namespace Watcher.DataAccess.Data.Migrations
 {
     [DbContext(typeof(WatcherDbContext))]
-    [Migration("20180804083537_AddedBasicEntitiesAndTheirRelations")]
-    partial class AddedBasicEntitiesAndTheirRelations
+    [Migration("20180809075305_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,7 +53,7 @@ namespace Watcher.DataAccess.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CreatedById");
+                    b.Property<int?>("CreatedById");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -66,7 +66,9 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.HasIndex("OrganizationId");
+                    b.HasIndex("OrganizationId")
+                        .IsUnique()
+                        .HasFilter("[OrganizationId] IS NOT NULL");
 
                     b.ToTable("Chats");
                 });
@@ -168,6 +170,8 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<int>("NotificationSettingId");
+
                     b.Property<int?>("OrganizationId");
 
                     b.Property<string>("Text")
@@ -176,6 +180,8 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NotificationSettingId");
 
                     b.HasIndex("OrganizationId");
 
@@ -192,11 +198,17 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<bool>("IsDisable");
 
+                    b.Property<bool>("IsEmailable");
+
                     b.Property<bool>("IsMute");
 
                     b.Property<int>("Type");
 
+                    b.Property<int>("UserId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("NotificationSettings");
                 });
@@ -207,12 +219,26 @@ namespace Watcher.DataAccess.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ContactNumber");
+
+                    b.Property<int>("CreatedByUserId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("IsActive");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int>("ThemeId");
+                    b.Property<int?>("ThemeId");
+
+                    b.Property<string>("WebSite");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("ThemeId");
 
@@ -313,16 +339,12 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<int>("NotificationSettingId");
-
                     b.Property<int>("RoleId");
 
                     b.Property<string>("SecondName")
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NotificationSettingId");
 
                     b.HasIndex("RoleId");
 
@@ -339,7 +361,7 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("UserOrganization");
+                    b.ToTable("UserOrganizations");
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Chart", b =>
@@ -353,19 +375,18 @@ namespace Watcher.DataAccess.Data.Migrations
             modelBuilder.Entity("Watcher.DataAccess.Entities.Chat", b =>
                 {
                     b.HasOne("Watcher.DataAccess.Entities.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("CreatedChats")
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("Watcher.DataAccess.Entities.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId");
+                        .WithOne("Chat")
+                        .HasForeignKey("Watcher.DataAccess.Entities.Chat", "OrganizationId");
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Dashboard", b =>
                 {
                     b.HasOne("Watcher.DataAccess.Entities.Instance", "Instance")
-                        .WithMany()
+                        .WithMany("Dashboards")
                         .HasForeignKey("InstanceId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -381,7 +402,7 @@ namespace Watcher.DataAccess.Data.Migrations
             modelBuilder.Entity("Watcher.DataAccess.Entities.Instance", b =>
                 {
                     b.HasOne("Watcher.DataAccess.Entities.Organization", "Organization")
-                        .WithMany()
+                        .WithMany("Instances")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -389,7 +410,7 @@ namespace Watcher.DataAccess.Data.Migrations
             modelBuilder.Entity("Watcher.DataAccess.Entities.Message", b =>
                 {
                     b.HasOne("Watcher.DataAccess.Entities.Chat", "Chat")
-                        .WithMany()
+                        .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -401,8 +422,13 @@ namespace Watcher.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Notification", b =>
                 {
+                    b.HasOne("Watcher.DataAccess.Entities.NotificationSetting", "NotificationSetting")
+                        .WithMany("Notifications")
+                        .HasForeignKey("NotificationSettingId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Watcher.DataAccess.Entities.Organization", "Organization")
-                        .WithMany()
+                        .WithMany("Notifications")
                         .HasForeignKey("OrganizationId");
 
                     b.HasOne("Watcher.DataAccess.Entities.User", "User")
@@ -411,12 +437,24 @@ namespace Watcher.DataAccess.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Watcher.DataAccess.Entities.NotificationSetting", b =>
+                {
+                    b.HasOne("Watcher.DataAccess.Entities.User", "User")
+                        .WithMany("NotificationSettings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Watcher.DataAccess.Entities.Organization", b =>
                 {
+                    b.HasOne("Watcher.DataAccess.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Watcher.DataAccess.Entities.Theme", "Theme")
                         .WithMany()
-                        .HasForeignKey("ThemeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ThemeId");
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Response", b =>
@@ -434,11 +472,6 @@ namespace Watcher.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.User", b =>
                 {
-                    b.HasOne("Watcher.DataAccess.Entities.NotificationSetting", "NotificationSetting")
-                        .WithMany()
-                        .HasForeignKey("NotificationSettingId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Watcher.DataAccess.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")

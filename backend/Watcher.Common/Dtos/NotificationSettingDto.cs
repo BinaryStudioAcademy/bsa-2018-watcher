@@ -11,5 +11,6 @@ namespace Watcher.Common.Dtos
         public NotificationType Type { get; set; }
         public bool IsMute { get; set; }
         public bool IsDisable { get; set; }
+        public bool IsEmailable { get; set; }
     }
 }

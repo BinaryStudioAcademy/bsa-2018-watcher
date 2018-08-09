@@ -25,26 +25,27 @@
                 new Role { Id = 2, Name = "User"}
             };
 
-            var notificationSettingFaker = new Faker<NotificationSetting>()
-                .RuleFor(o => o.Id, f => f.UniqueIndex)
-                .RuleFor(o => o.IsDisable, f => f.PickRandom(true, false))
-                .RuleFor(o => o.IsMute, f => f.PickRandom(true, false))
-                .RuleFor(o => o.Type, f => f.Random.Enum<NotificationType>());
-
-            var notificationSettings = notificationSettingFaker.Generate(amount).ToArray();
-            
             var userFaker = new Faker<User>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.FirstName, f => f.Name.FirstName())
                 .RuleFor(o => o.SecondName, f => f.Name.LastName())
+                .RuleFor(o => o.DisplayName, f => f.Name.FirstName())
                 .RuleFor(o => o.Email, f => f.Internet.Email())
                 .RuleFor(o => o.IsActive, true)
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
-                .RuleFor(o => o.RoleId, f => f.PickRandom(roles).Id)
-                .RuleFor(o => o.NotificationSettingId, f => f.PickRandom(notificationSettings).Id);
-
+                .RuleFor(o => o.RoleId, f => f.PickRandom(roles).Id);
 
             var users = userFaker.Generate(amount).ToArray();
+
+            var notificationSettingFaker = new Faker<NotificationSetting>()
+             .RuleFor(o => o.Id, f => f.UniqueIndex)
+             .RuleFor(o => o.IsDisable, f => f.PickRandom(true, false))
+             .RuleFor(o => o.IsMute, f => f.PickRandom(true, false))
+             .RuleFor(o => o.IsEmailable, f => f.PickRandom(true, false))
+             .RuleFor(o => o.UserId, f => f.PickRandom(users).Id)
+             .RuleFor(o => o.Type, f => f.Random.Enum<NotificationType>());
+
+            var notificationSettings = notificationSettingFaker.Generate(amount).ToArray();
 
             var userChatFaker = new Faker<Chat>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
