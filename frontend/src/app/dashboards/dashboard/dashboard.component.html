@@ -1,13 +1,16 @@
 <app-instance-list></app-instance-list>
 <app-create-edit-dashboard></app-create-edit-dashboard>
-<div class="working-area">
+<div class="site-wrap">
     <div class="title">
         Dashboards
     </div>
     <p-tabMenu [model]="menuItems" [activeItem]="activeItem"> </p-tabMenu>
 
-    <div class="chart">
-        <h3>{{activeItem.label}} chart</h3>
+    <div class="workspace">
+        <h3>{{activeDashboard.title}} chart
+            <button pButton type="button" label="Edit" class="btnedit ui-button-primary ui-button-raised" (click)="showCreatePopup(activeDashboard.title, true)"></button>
+            <button pButton type="button" label="Delete" class="btnedit ui-button-danger ui-button-raised" (click)="delete()"></button>
+        </h3>
         <img src="https://www.excel-easy.com/smi/examples/line-chart.png" alt="">
     </div>
 </div>

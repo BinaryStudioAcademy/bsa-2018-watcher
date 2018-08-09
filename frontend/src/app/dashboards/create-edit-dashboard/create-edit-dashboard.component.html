@@ -1,4 +1,5 @@
-<p-dialog [(visible)]="display" (onHide)="onHide()" [modal]="true" [closable]=false [responsive]="true" [width]="350" [minWidth]="200" header="Create Dashboard" [maximizable]="false" [baseZIndex]="10000" [draggable]="false" [showHeader]="false" appendTo="body">
+<p-dialog [(visible)]="display" (onHide)="onHide()" (onShow)="onShow()" [modal]="true" [closable]=false [responsive]="true" [width]="350" [minWidth]="200" header="Create Dashboard" [maximizable]="false" [baseZIndex]="10000" [draggable]="false" [showHeader]="false"
+    appendTo="body">
     <div class="dashboard-inputs">
         <h2>Dashboard</h2>
         <div class="dashboard-input">
