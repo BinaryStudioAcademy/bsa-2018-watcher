@@ -16,14 +16,14 @@ export class TokensInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const fbToken = this.auth.getFirebaseToken();
+    const firebaseToken = this.auth.getFirebaseToken();
     const watcherToken = this.auth.getWatcherToken();
 
-    if (fbToken) {
-      this.headersConfig['Authorization'] = `Bearer ${fbToken}`;
+    if (firebaseToken) {
+      this.headersConfig['Authorization'] = `Bearer ${firebaseToken}`;
     }
     if (watcherToken) {
-      this.headersConfig['WatcherAuthorization'] = fbToken;
+      this.headersConfig['WatcherAuthorization'] = firebaseToken;
     }
 
     const request = req.clone({setHeaders: this.headersConfig, responseType: 'json'});
