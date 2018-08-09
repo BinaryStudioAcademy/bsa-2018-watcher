@@ -1,11 +1,15 @@
-﻿using Watcher.Common.MoveToFrontend;
-
-namespace Watcher.Common.Dtos
+﻿namespace Watcher.Common.Dtos
 {
+    using Watcher.Common.Interfaces.Entities;
+    using Watcher.Common.MoveToFrontend;
+
     [ExportClassToTypescript]
-    public class RoleDto : EntityDto<int>
+    public class RoleDto : IEntity<int>
     {
-        public override int Id { get; set; }
+        public RoleDto() { }
+
+        public int Id { get; set; }
+        
         public string Name { get; set; }
     }
 }

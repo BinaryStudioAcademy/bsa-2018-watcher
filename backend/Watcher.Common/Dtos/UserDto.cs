@@ -1,23 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using Watcher.Common.Interfaces.Entities;
 using Watcher.Common.MoveToFrontend;
 
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class UserDto : EntityDto<int>
+    public class UserDto : IEntity<string>
     {
-        public override int Id { get; set; }
+        public UserDto() { }
+
+        public string Id { get; set; }
+
         public string FirstName { get; set; }
+
         public string SecondName { get; set; }
+
+        public string DisplayName { get; set; }
+
         public string Email { get; set; }
+
         public bool IsActive { get; set; }
+
         public DateTime CreatedAt { get; set; }
-        
-        public int RoleId { get; set; }
+
         public RoleDto Role { get; set; }
 
-        public int NotificationSettingId { get; set; }
         public NotificationSettingDto NotificationSetting { get; set; }
 
         public IList<UserOrganizationDto> UserOrganizations { get; set; }

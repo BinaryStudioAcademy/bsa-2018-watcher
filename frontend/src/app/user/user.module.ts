@@ -4,7 +4,14 @@ import { CommonModule } from '@angular/common';
 import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
 import { HeaderComponent } from '../header/header.component';
-import { ToolbarModule, TieredMenuModule, ButtonModule } from 'primeng/primeng';
+import {
+  ToolbarModule,
+  TieredMenuModule,
+  ButtonModule,
+  MessagesModule,
+  MessageModule,
+  GrowlModule
+} from 'primeng/primeng';
 import { DashboardsModule } from '../dashboards/dashboards.module';
 
 @NgModule({
@@ -13,6 +20,9 @@ import { DashboardsModule } from '../dashboards/dashboards.module';
     ToolbarModule,
     TieredMenuModule,
     ButtonModule,
+    GrowlModule,
+    MessagesModule,
+    MessageModule,
     DashboardsModule,
     UserRoutingModule
   ],

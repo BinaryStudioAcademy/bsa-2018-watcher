@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Organization } from '../../shared/models/organization';
+import { Organization } from '../../shared/models/organization.model';
 import { OrganizationService } from '../../core/services/organization.service';
 import { MessageService } from '../../../../node_modules/primeng/api';
+
 
 @Component({
   selector: 'app-organization-profile',

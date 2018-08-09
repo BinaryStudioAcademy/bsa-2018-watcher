@@ -1,12 +1,15 @@
-﻿namespace Watcher.Common.Dtos
+namespace Watcher.Common.Dtos
 {
     using System.Collections.Generic;
+
+    using Watcher.Common.Interfaces.Entities;
     using Watcher.Common.MoveToFrontend;
 
     [ExportClassToTypescript]
-    public class OrganizationDto : EntityDto<int>
+    public class OrganizationDto : IEntity<int>
     {
-        public override int Id { get; set; }
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -19,15 +22,15 @@
 
         public bool IsActive { get; set; }
 
-        public int ThemeId { get; set; }
+        public ThemeDto Theme { get; set; }
 
         public int? ChatId { get; set; }
 
-        public int CreatedByUserId { get; set; }
+        public string CreatedByUserId { get; set; }
 
-        public IList<int> UsersId { get; set; }
+        public IList<string> UsersId { get; set; }
 
-        public IList<InstanceDto> Instances { get; set; }
+        public IList<int> InstancesId { get; set; }
 
         public IList<NotificationDto> Notifications { get; set; }
     }

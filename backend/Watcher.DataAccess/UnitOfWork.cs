@@ -20,7 +20,11 @@
         private readonly IMapper _mapper;
 
         private ISamplesRepository _samplesRepository;
+        private IUsersRepository _usersRepository;
+
+
         private IOrganizationRepository _organizationRepository;
+        private INotificationSettingsRepository _notificationSettingsRepository;
         
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
@@ -41,6 +45,8 @@
             }
         }
 
+        public IUsersRepository UsersRepository => _usersRepository ?? (_usersRepository = new UsersRepository(_context, _mapper));
+
         public IOrganizationRepository OrganizationRepository
         {
             get
@@ -51,6 +57,19 @@
                 }
 
                 return _organizationRepository;
+            }
+        }
+
+        public INotificationSettingsRepository NotificationSettingsRepository
+        {
+            get
+            {
+                if (_notificationSettingsRepository == null)
+                {
+                    _notificationSettingsRepository = new NotificationSettingsRepository(_context, _mapper);
+                }
+
+                return _notificationSettingsRepository;
             }
         }
 
