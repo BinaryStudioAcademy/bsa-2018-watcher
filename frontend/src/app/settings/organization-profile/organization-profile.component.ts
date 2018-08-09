@@ -4,7 +4,6 @@ import { OrganizationService } from '../../core/services/organization.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
-import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-organization-profile',
@@ -20,13 +19,14 @@ export class OrganizationProfileComponent implements OnInit {
     private fb: FormBuilder,
     private organizationService: OrganizationService,
     private authService: AuthService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService) {
+  }
 
-  private editable: boolean;
-  private canUpdate: boolean;
-  private organization: Organization;
+  editable: boolean;
+  canUpdate: boolean;
+  organization: Organization;
 
-  private organizationForm = this.fb.group({
+  organizationForm = this.fb.group({
     name: new FormControl({ value: '', disabled: true }, Validators.required),
     email: new FormControl({ value: '', disabled: true }),
     contactNumber: new FormControl({ value: '', disabled: true }),
@@ -40,12 +40,12 @@ export class OrganizationProfileComponent implements OnInit {
     this.organizationService.get(organizationId).subscribe((value: Organization) => {
       this.organization = value;
       this.subscribeOrganizationFormToData();
-    });
 
     // Only user who create organozation can edit it
-    if (this.organization.createdByUserId === user.id) {
-      this.editable = true;
-    }
+      if (this.organization.createdByUserId === user.id) {
+        this.editable = true;
+      }
+    });
   }
 
   enableEditing() {
