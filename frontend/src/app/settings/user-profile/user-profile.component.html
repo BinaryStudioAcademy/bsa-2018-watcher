@@ -33,6 +33,10 @@
             </div>
         </div>
 
+        <div class="nonValid" *ngIf="userForm.get('secondName').errors && userForm.get('secondName').dirty">
+            Second Name is required.
+        </div>
+
         <h4 class="label">Bio</h4>
         <div>
             <textarea [rows]="5" [cols]="30" pInputTextarea autoResize="autoResize" formControlName="bio"></textarea>
