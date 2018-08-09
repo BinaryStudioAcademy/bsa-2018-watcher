@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
-import { MenuItem, MenuItemContent, ConfirmationService } from '../../../../node_modules/primeng/primeng';
-import { EditDashboardComponent } from '../create-edit-dashboard/create-edit-dashboard.component';
+import { Component, OnInit } from '@angular/core';
+import { MenuItem, ConfirmationService } from '../../../../node_modules/primeng/primeng';
 import { DashboardService } from '../../core/Services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard';
+import { ToastrService } from '../../core/services/toastr.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -19,9 +19,9 @@ activeItem: MenuItem;
 activeDashboard: Dashboard;
 creation: boolean;
 displayEditDashboard = false;
-newtitle: string;
+newTitle: string;
 
-  constructor(private dashboardsService: DashboardService, private confirmationService: ConfirmationService) {
+  constructor(private dashboardsService: DashboardService, private toastrService: ToastrService) {
     this.menuItems = [];
     this.dashboards = [];
     this.inctanceId = 1;
@@ -47,18 +47,8 @@ newtitle: string;
     this.dashboards.splice(index, 1);
     // this.dashboardsService.delete(dashboard.id).subscribe((res: Response) => console.log(res));
   }
-  delete() {
-    this.confirmationService.confirm({
-    message: 'Are you sure that you want to delete this dashboard?',
-    header: 'Confirmation',
-    icon: 'pi pi-exclamation-triangle',
-    accept: () => {
-        this.deleteDashboard(this.activeDashboard);
-    },
-    reject: () => {
-      console.log('rejected');
-    }
-}); }
+  async delete() { if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
+    this.deleteDashboard(this.activeDashboard); }}
 
   getDashboards() {
     /*this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
@@ -76,9 +66,9 @@ newtitle: string;
     this.creation = creation;
 
     if (creation === true) {
-      this.newtitle = '';
+      this.newTitle = '';
     } else {
-      this.newtitle = this.activeDashboard.title;
+      this.newTitle = this.activeDashboard.title;
     }
     this.displayEditDashboard = true;
   }
