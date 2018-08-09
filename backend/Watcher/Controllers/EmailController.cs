@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Watcher.Core.Interfaces;
-using Watcher.Core.Providers;
+
 
 namespace Watcher.Controllers
 {
-    [Route("api/[controller]")]
+    //THIS A COMTROLLER FOR TESTING SENDGRID. BEFORE MERGE IT WILL BE DELETED
+
+    [Route("[controller]")]
     [ApiController]
     public class EmailController : ControllerBase
     {
@@ -20,9 +19,25 @@ namespace Watcher.Controllers
             _emailProvider = emailProvider;
         }
 
+        [HttpGet]
         public async Task SendEmail()
         {
-            await _emailProvider.SendMessage("tt@gmail.com", "Try", new List<string>(){ "tanyazaychuk@gmail.com" }, "msg", "msgHtml");
+            //enter from email here
+            var from = "test@mail.com";
+
+            //enter your subject here
+            var subject = "test";
+
+            var recepients = new List<string>()
+            {
+                //enter recipient email here
+                "recepientTest@mail.com"
+            };
+
+            //enter your email message here
+            var msg = "msg";
+
+            await _emailProvider.SendMessage(from, subject, recepients, "msg", $"<h1>{msg}</h1>");
         }
     }
 }
