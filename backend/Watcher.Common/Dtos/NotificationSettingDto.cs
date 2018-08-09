@@ -16,5 +16,7 @@ namespace Watcher.Common.Dtos
         public bool IsDisable { get; set; }
 
         public bool IsEmailable { get; set; }
+
+        public string UserId { get; set; }
     }
 }

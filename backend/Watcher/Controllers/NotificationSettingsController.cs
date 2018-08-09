@@ -2,6 +2,7 @@
 
 namespace Watcher.Controllers
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Watcher.Common.Dtos;
@@ -26,6 +27,30 @@ namespace Watcher.Controllers
         public NotificationSettingsController(INotificationSettingsService service)
         {
             _service = service;
+        }
+
+        /// <summary>
+        /// Get Sample by id
+        /// </summary>
+        /// <param name="userId">Sample identifier</param>
+        /// <returns>
+        /// Dto of Sample
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Samples not found</response>
+        /// <response code="403">You don`t have permission to create watch Sample</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
+        [HttpGet("{userId}")]
+        public virtual async Task<ActionResult<IEnumerable<NotificationSettingDto>>> GetByUserId(string userId)
+        {
+            var dto = await _service.GetEntitysByUserIdAsync(userId);
+            if (dto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
         }
 
         [HttpPost]

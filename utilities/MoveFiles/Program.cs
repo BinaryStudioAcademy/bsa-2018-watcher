@@ -6,7 +6,7 @@ namespace MoveFiles
     {
         static void Main(string[] args)
         {
-            CopyFiles(); //Run();
+            CopyFiles();
         }
     }
 }

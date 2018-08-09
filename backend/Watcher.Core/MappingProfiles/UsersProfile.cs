@@ -24,7 +24,7 @@
                 .ForMember(d => d.CreatedChats, o => o.UseValue(new List<ChartDto>()))
                 .ForMember(d => d.Feedbacks, o => o.UseValue(new List<FeedbackDto>()))
                 .ForMember(d => d.Messages, o => o.UseValue(new List<MessageDto>()))
-                .ForMember(d => d.NotificationSetting, o => o.UseValue(new NotificationSettingDto()))
+                .ForMember(d => d.NotificationSettings, o => o.UseValue(new List<NotificationSettingDto>()))
                 .ForMember(d => d.Notifications, o => o.UseValue(new List<NotificationDto>()))
                 .ForMember(d => d.Responses, o => o.UseValue(new List<ResponseDto>()));
 
