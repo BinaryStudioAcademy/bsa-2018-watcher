@@ -34,11 +34,11 @@ export class AuthorizationComponent implements OnInit {
   ngOnInit() {
   }
 
-  showDialogSignIn() {
+  showDialogSignIn(): void {
     this.display = true;
   }
 
-  showDialogSignUp() {
+  showDialogSignUp(): void {
     this.display = true;
     this.isSignIn = false;
   }
@@ -55,125 +55,110 @@ export class AuthorizationComponent implements OnInit {
     }
   }
 
-  showSignUp() {
+  showSignUp(): void {
     this.isSignIn = false;
     this.isSuccessSignUp = false;
   }
 
-  showSignIn() {
+  showSignIn(): void {
     this.isSignIn = true;
     this.isSuccessSignUp = false;
   }
 
-  showNotRegisteredSignIn() {
+  showNotRegisteredSignIn(): void {
     this.display = true;
     this.isSignIn = false;
     this.isNotRegisteredSignIn = true;
   }
 
-  async signUpWithGoogle() {
+  async signUpWithGoogle(): Promise<void> {
     const result = await this.authService.signUpWithGoogle();
     this.closeDialog();
-    // this.isSuccessSignUp = true;
 
-    if (result) {
-      return this.router.navigate(['/user/dashboards']);
-    } else {
-      return this.router.navigate(['/']);
-    }
+    this.signInPostProcessing(result);
   }
 
-  signUpWithGitHub() {
-    this.isSuccessSignUp = true;
-  }
-
-  signUpWithFacebook() {
-    this.isSuccessSignUp = true;
-  }
-
-  signUpWithTwitter() {
-    this.isSuccessSignUp = true;
-  }
-
-  saveUserDetails() {
+  async signUpWithGitHub(): Promise<void> {
+    const result = await this.authService.signUpWithGitHub();
     this.closeDialog();
+
+    this.signInPostProcessing(result);
   }
 
-  closeDialog() {
+  async signUpWithFacebook(): Promise<void> {
+    const result = await this.authService.signUpWithFacebook();
+    this.closeDialog();
+
+    this.signInPostProcessing(result);
+  }
+
+  async signUpWithTwitter(): Promise<void> {
+    const result = await this.authService.signUpWithTwitter();
+    this.closeDialog();
+
+    this.signInPostProcessing(result);
+  }
+
+  async signInWithGoogle(): Promise<void> {
+    const result = await this.authService.signInWithGoogle();
+
+    this.currentUserCheck(result);
+  }
+
+  async signInWithFacebook(): Promise<void> {
+    const result = await this.authService.signInWithFacebook();
+
+    this.currentUserCheck(result);
+  }
+
+  async signInWithTwitter(): Promise<void> {
+    const result = await this.authService.signInWithTwitter();
+
+    this.currentUserCheck(result);
+  }
+
+  async signInWithGitHub(): Promise<void> {
+    const result = await this.authService.signInWithGitHub();
+
+    this.currentUserCheck(result);
+  }
+
+  backToSignUp(): void {
+    this.showSignUp();
+  }
+
+  closeDialog(): void {
     this.isSuccessSignUp = false;
     this.isSignIn = true;
     this.display = false;
   }
 
-  async signInWithGoogle() {
-    const result = await this.authService.signInWithGoogle();
-
+  currentUserCheck(result: boolean): void {
     const currentUser: UserDto  = this.authService.getCurrentUser();
-    
 
     if (currentUser == null) {
       this.showNotRegisteredSignIn();
     } else {
         this.closeDialog();
-      // this.isSuccessSignUp = true;
-
-      if (result) {
-        return this.router.navigate(['/user/dashboards']);
-      } else {
-        return this.router.navigate(['/']);
-      }
+    this.signInPostProcessing(result);
     }
   }
 
-
-  signInWithFacebook() {
-    this.authService.signInWithFacebook()
-      .then((res) => {
-
-        // var token : FirebaseCredential = res.credential;
-        // var user : firebase.User = res.user;
-
-        this.router.navigate(['landing']);
-      })
-      .catch((err) => console.log(err));
-  }
-
-  signInWithTwitter() {
-    this.authService.signInWithTwitter()
-      .then((res) => {
-        // var token : FirebaseCredential = res.credential;
-        // var user : firebase.User = res.user;
-
-        this.router.navigate(['landing']);
-      })
-      .catch((err) => console.log(err));
-  }
-
-  signInWithGitHub() {
-    this.authService.signInWithGitHub()
-      // .then((res) => {
-      //   debugger;
-      //   var token: FirebaseCredential = res.credential;
-      //   var user = res.user.getIdToken(true).then(idToken => {
-      //     var i = idToken;
-      //     console.log(i);
-      //     debugger;
-      //   });
-      //   //firebase.auth().currentUser.getIdToken(true);
-      //   debugger;
-      //   this.router.navigate(['landing']);
-      // })
-      .catch((err) => console.log(err));
-  }
-
-
-  backToSignUp() {
-    this.showSignUp();
-  }
-
-  noRegistration() {
+  noRegistration(): void {
     this.display = false;
     this.router.navigate(['/']);
   }
+
+  saveUserDetails(): void {
+    this.closeDialog();
+  }
+
+  signInPostProcessing(result: boolean): Promise<boolean> {
+    if (result) {
+      return this.router.navigate(['/user/dashboards']);
+    } else {
+      return this.router.navigate(['/']);
+    }
+}
 
 }
