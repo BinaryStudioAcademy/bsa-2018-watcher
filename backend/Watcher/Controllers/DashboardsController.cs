@@ -22,31 +22,17 @@ namespace Watcher.Controllers
         }
 
         // GET: /dashboards
-        [HttpGet]
+        [HttpGet("{id}")]
         [AllowAnonymous]
-        public virtual async Task<ActionResult<IEnumerable<DashboardDto>>> Get()
+        public virtual async Task<ActionResult<IEnumerable<DashboardDto>>> Get(int id)
         {
-            var dtos = await _dashboardsService.GetAllDashboardsAsync();
+            var dtos = await _dashboardsService.GetInstanceDashboards(id);
             if (!dtos.Any())
             {
                 return NoContent();
             }
 
             return Ok(dtos);
-        }
-
-        // GET: /dashboards/:id
-        [HttpGet("{id}")]
-        [AllowAnonymous]
-        public virtual async Task<ActionResult<DashboardDto>> GetById(int id)
-        {
-            var dto = await _dashboardsService.GetDashboardByIdAsync(id);
-            if (dto == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(dto);
         }
 
         // POST: /dashboards

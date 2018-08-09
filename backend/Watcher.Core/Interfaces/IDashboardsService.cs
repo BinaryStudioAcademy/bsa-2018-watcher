@@ -7,7 +7,7 @@ namespace Watcher.Core.Interfaces
 {
     public interface IDashboardsService
     {
-        Task<IEnumerable<DashboardDto>> GetAllDashboardsAsync();
+        Task<IEnumerable<DashboardDto>> GetInstanceDashboards(int id);
 
         Task<DashboardDto> GetDashboardByIdAsync(int id);
 

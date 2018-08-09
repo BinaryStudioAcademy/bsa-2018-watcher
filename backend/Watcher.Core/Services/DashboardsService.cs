@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Watcher.Common.Dtos;
 using Watcher.Common.Requests;
@@ -20,9 +21,9 @@ namespace Watcher.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<DashboardDto>> GetAllDashboardsAsync()
+        public async Task<IEnumerable<DashboardDto>> GetInstanceDashboards(int id)
         {
-            var dashboards = await _uow.DashboardsRepository.GetRangeAsync();
+            var dashboards = (await _uow.DashboardsRepository.GetRangeAsync()).Where(dash => dash.InstanceId == id).ToList();
 
             var dtos = _mapper.Map<List<Dashboard>, List<DashboardDto>>(dashboards);
 
