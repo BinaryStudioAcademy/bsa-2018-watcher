@@ -3,7 +3,6 @@ import { throwIfAlreadyLoaded } from './guards/module-import.guard';
 import { CommonModule } from '@angular/common';
 import { DefaultService } from './services/default.service';
 import { ToastnotificationService } from './services/toastnotification.service';
-import { OrganizationService } from './services/organization.service';
 
 @NgModule({
   imports: [
@@ -11,8 +10,7 @@ import { OrganizationService } from './services/organization.service';
   ],
   providers: [
     DefaultService,
-    ToastnotificationService,
-    OrganizationService
+    ToastnotificationService
   ],
   declarations: []
 })
