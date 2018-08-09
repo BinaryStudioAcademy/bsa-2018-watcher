@@ -10,9 +10,10 @@ import { Chat } from './chat.model';
 
 export interface User  {
    id: string;
+   displayName: string;
    firstName: string;
    secondName: string;
-   displayName: string;
+   bio: string;
    email: string;
    isActive: boolean;
    createdAt: Date;
