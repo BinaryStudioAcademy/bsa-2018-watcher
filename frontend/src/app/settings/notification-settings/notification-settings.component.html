@@ -15,7 +15,7 @@
 
     <div class="ui-g-12 ui-md-4">
       <h4 class="first">Emailable</h4>
-      <p-inputSwitch  [disabled]="selectedNotificationSetting.isDisable" [(ngModel)]="selectedNotificationSetting.isMute"></p-inputSwitch>
+      <p-inputSwitch  [disabled]="selectedNotificationSetting.isDisable" [(ngModel)]="selectedNotificationSetting.isMailable"></p-inputSwitch>
     </div>
   </div>
   <div class="ui-g ui-fluid">
@@ -23,5 +23,4 @@
       <button (click)="saveSetting()" pButton class="ui-button-secondary" label="Save"></button>
       </div>
   </div>
-
 
