@@ -9,17 +9,21 @@ namespace Watcher.Common.Dtos
     public class UserDto : IEntity<int>
     {
         public int Id { get; set; }
+
         public string FirstName { get; set; }
+
         public string SecondName { get; set; }
+
         public string DisplayName { get; set; }
+
         public string Email { get; set; }
+
         public bool IsActive { get; set; }
+
         public DateTime CreatedAt { get; set; }
-        
-        public int RoleId { get; set; }
+
         public RoleDto Role { get; set; }
 
-        public int NotificationSettingId { get; set; }
         public NotificationSettingDto NotificationSetting { get; set; }
 
         public IList<UserOrganizationDto> UserOrganizations { get; set; }

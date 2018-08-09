@@ -8,10 +8,11 @@ namespace Watcher.Common.Dtos
     public class InstanceDto : IEntity<int>
     {
         public int Id { get; set; }
+
         public string Address { get; set; }
+
         public string Platform { get; set; }
 
-        public int OrganizationId { get; set; }
         public OrganizationDto Organization { get; set; }
         
         public IList<DashboardDto> Dashboards { get; set; }

@@ -8,9 +8,13 @@ namespace Watcher.Common.Dtos
     public class NotificationSettingDto : IEntity<int>
     {
         public int Id { get; set; }
+
         public NotificationType Type { get; set; }
+
         public bool IsMute { get; set; }
+
         public bool IsDisable { get; set; }
+
         public bool IsEmailable { get; set; }
     }
 }
