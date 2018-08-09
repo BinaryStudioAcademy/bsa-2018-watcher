@@ -67,7 +67,7 @@
                 .HasForeignKey(x => x.CreatedByUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Seed();
+           // modelBuilder.Seed();
         }
 
         public DbSet<Sample> Samples { get; set; }

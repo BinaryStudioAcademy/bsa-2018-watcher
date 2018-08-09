@@ -10,14 +10,14 @@ using Watcher.DataAccess.Data;
 namespace Watcher.DataAccess.Data.Migrations
 {
     [DbContext(typeof(WatcherDbContext))]
-    [Migration("20180807131749_AddedNewFieldsToOrganization")]
-    partial class AddedNewFieldsToOrganization
+    [Migration("20180809084227_ChangedRemoveRequiredFirstNameAndSecondName_AddedNewRequiredFieldDisplayName")]
+    partial class ChangedRemoveRequiredFirstNameAndSecondName_AddedNewRequiredFieldDisplayName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -198,11 +198,17 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<bool>("IsDisable");
 
+                    b.Property<bool>("IsEmailable");
+
                     b.Property<bool>("IsMute");
 
                     b.Property<int>("Type");
 
+                    b.Property<int>("UserId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("NotificationSettings");
                 });
@@ -325,24 +331,21 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired();
+
                     b.Property<string>("Email")
                         .IsRequired();
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
+                    b.Property<string>("FirstName");
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<int>("NotificationSettingId");
-
                     b.Property<int>("RoleId");
 
-                    b.Property<string>("SecondName")
-                        .IsRequired();
+                    b.Property<string>("SecondName");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NotificationSettingId");
 
                     b.HasIndex("RoleId");
 
@@ -435,6 +438,14 @@ namespace Watcher.DataAccess.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Watcher.DataAccess.Entities.NotificationSetting", b =>
+                {
+                    b.HasOne("Watcher.DataAccess.Entities.User", "User")
+                        .WithMany("NotificationSettings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Watcher.DataAccess.Entities.Organization", b =>
                 {
                     b.HasOne("Watcher.DataAccess.Entities.User", "CreatedByUser")
@@ -462,11 +473,6 @@ namespace Watcher.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.User", b =>
                 {
-                    b.HasOne("Watcher.DataAccess.Entities.NotificationSetting", "NotificationSetting")
-                        .WithMany()
-                        .HasForeignKey("NotificationSettingId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Watcher.DataAccess.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")

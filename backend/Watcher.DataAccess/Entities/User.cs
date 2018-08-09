@@ -9,11 +9,12 @@
     {
         public override int Id { get; set; }
 
-        [Required]
         public string FirstName { get; set; }
 
-        [Required]
         public string SecondName { get; set; }
+
+        [Required]
+        public string DisplayName { get; set; }
 
         [Required]
         public string Email { get; set; }
