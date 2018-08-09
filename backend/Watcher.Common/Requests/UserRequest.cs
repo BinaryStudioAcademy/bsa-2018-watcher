@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Watcher.Common.Dtos;
-
-namespace Watcher.Common.Requests
+﻿namespace Watcher.Common.Requests
 {
-    public class UserUpdateRequest
+    using System;
+    using System.Collections.Generic;
+
+    using Watcher.Common.Dtos;
+
+    public class UserRequest
     {
         public string FirstName { get; set; }
         public string SecondName { get; set; }
@@ -13,10 +14,12 @@ namespace Watcher.Common.Requests
         public DateTime CreatedAt { get; set; }
         public string DisplayName { get; set; }
         public string Bio { get; set; }
-        
+
+        public int RoleId { get; set; }
         public RoleDto Role { get; set; }
 
-        public IList<NotificationSettingDto> NotificationSettings { get; set; }
+        public int NotificationSettingId { get; set; }
+        public NotificationSettingDto NotificationSetting { get; set; }
 
         public IList<UserOrganizationDto> UserOrganizations { get; set; }
 
