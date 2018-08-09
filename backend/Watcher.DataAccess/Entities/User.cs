@@ -30,9 +30,6 @@
 
         public string Bio { get; set; }
 
-        public int ChhosedOrganizationId { get; set; }
-        public Organization ChoosedOrganization { get; set; }
-
         public int RoleId { get; set; }
         public Role Role { get; set; }
         

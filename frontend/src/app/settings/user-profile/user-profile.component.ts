@@ -19,7 +19,6 @@ export class UserProfileComponent implements OnInit {
 
   private user: User;
   private userId: string;
-  private isUpdating: boolean;
   private userForm = this.fb.group({
     displayName: new FormControl({ value: '', disabled: true }, Validators.required),
     firstName: new FormControl({ value: '', disabled: true  }, Validators.required),
@@ -43,7 +42,9 @@ export class UserProfileComponent implements OnInit {
     });
 
     this.userForm.valueChanges.subscribe(value => {
-      this.user = value;
+      Object.keys(this.userForm.controls).forEach(field => {
+        this.user[field] = this.userForm.get(field).value;
+      });
     });
   }
 
@@ -56,9 +57,7 @@ export class UserProfileComponent implements OnInit {
 
   onSubmit() {
     if (this.userForm.valid) {
-      this.isUpdating = true;
       this.userService.update(this.userId, this.user).subscribe(value => {
-        this.isUpdating = false;
         this.messageService.add({severity: 'success', summary: 'Success', detail: 'Profile was updated'});
       },
       err => {
