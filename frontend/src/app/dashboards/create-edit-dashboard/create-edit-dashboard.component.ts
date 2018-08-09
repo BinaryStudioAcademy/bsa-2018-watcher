@@ -11,9 +11,7 @@ export class EditDashboardComponent implements OnInit {
   @Output() saved = new EventEmitter<string>();
 
   @Input() display = false;
-  dashboardTitle: string;
-  @Input() creation = false;
-
+  @Input() dashboardTitle: string;
   constructor() { }
 
   closeDialog() {
@@ -29,6 +27,7 @@ export class EditDashboardComponent implements OnInit {
   }
 
   onHide() {
+    this.display = false;
   }
   onShow() {
   }

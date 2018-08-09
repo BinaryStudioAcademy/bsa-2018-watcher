@@ -12,16 +12,14 @@ import { Dashboard } from '../../shared/models/dashboard';
 
 export class DashboardComponent implements OnInit {
 
-@ViewChild(EditDashboardComponent) popup: EditDashboardComponent;
-
 inctanceId: number;
-
 menuItems: MenuItem[];
 dashboards: Dashboard[];
 activeItem: MenuItem;
 activeDashboard: Dashboard;
 creation: boolean;
 displayEditDashboard = false;
+newtitle: string;
 
   constructor(private dashboardsService: DashboardService, private confirmationService: ConfirmationService) {
     this.menuItems = [];
@@ -76,12 +74,20 @@ displayEditDashboard = false;
 
   showCreatePopup(creation: boolean) {
     this.creation = creation;
-    this.popup.display = true;
+    alert(this.displayEditDashboard);
+
+    if (creation === true) {
+      this.newtitle = '';
+    } else {
+      this.newtitle = this.activeDashboard.title;
+    }
+    this.displayEditDashboard = true;
+    alert(this.displayEditDashboard);
   }
 
   onSaved(title: string) {
     if (this.creation === true) {
-      const newdash = new Dashboard(this.popup.dashboardTitle, new Date(), this.inctanceId);
+      const newdash = new Dashboard(title, new Date(), this.inctanceId);
       this.createDashboard(newdash);
       const index: number = this.menuItems.length - 2;
       this.activeDashboard = newdash;
@@ -91,9 +97,6 @@ displayEditDashboard = false;
       this.updateDashboard(title);
     }
   }
-  onPopupHide() {
-    this.popup.display = false;
-  }
 
   ngOnInit() {
     this.getDashboards();
@@ -102,6 +105,5 @@ displayEditDashboard = false;
   this.activeItem = this.menuItems[0];
   this.activeDashboard = this.dashboards[0];
 
-  this.popup.onHide = () => this.onPopupHide();
   }
 }
