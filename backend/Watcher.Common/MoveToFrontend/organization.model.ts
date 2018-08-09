@@ -10,6 +10,7 @@ export interface Organization  {
    webSite: string;
    contactNumber: string;
    isActive: boolean;
+   themeId: number;
    theme: Theme;
    chatId: number;
    createdByUserId: string;
