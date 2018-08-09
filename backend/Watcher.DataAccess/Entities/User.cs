@@ -33,10 +33,9 @@
         public int RoleId { get; set; }
         public Role Role { get; set; }
 
-        //public int? LastPickedOrganizationId { get; set; }
-        //public Organization LastPickedOrganization { get; set; }
-
-
+        public int? LastPickedOrganizationId { get; set; }
+        public Organization LastPickedOrganization { get; set; }
+        
         public IList<NotificationSetting> NotificationSettings { get; set; }
 
         public IList<UserOrganization> UserOrganizations { get; set; }

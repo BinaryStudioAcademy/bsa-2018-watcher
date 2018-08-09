@@ -1,4 +1,5 @@
-﻿
+﻿import { Notification } from './notification.model';
+import { Theme } from './theme.model';
 
 export interface Organization  {
    id: number;
@@ -9,11 +10,12 @@ export interface Organization  {
    contactNumber: string;
    isActive: boolean;
    themeId: number;
+   theme: Theme;
    chatId: number;
    createdByUserId: string;
    usersId: string[];
    instancesId: number[];
-   notificationsId: number[];
+   notifications: Notification[];
 }
 
 

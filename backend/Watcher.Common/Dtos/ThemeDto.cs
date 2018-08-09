@@ -4,7 +4,7 @@ using Watcher.Common.MoveToFrontend;
 namespace Watcher.Common.Dtos
 {
     [ExportClassToTypescript]
-    public class Theme : IEntity<int>
+    public class ThemeDto : IEntity<int>
     {
         public int Id { get; set; }
 
