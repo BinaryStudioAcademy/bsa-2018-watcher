@@ -1,10 +1,12 @@
 <app-instance-list></app-instance-list>
-<app-create-edit-dashboard #createEditDash></app-create-edit-dashboard>
+<app-create-edit-dashboard></app-create-edit-dashboard>
 <div class="working-area">
     <div class="title">
         Dashboards
     </div>
-    <p-tabView>
+    <p-tabMenu [model]="items" [activeItem]="activeItem"> </p-tabMenu>
+
+    <!--
         <p-tabPanel header="RAM" [closable]="false">
             <div class="chart">
                 <h3>Chart 1</h3>
@@ -24,5 +26,5 @@
             </div>
         </p-tabPanel>
         <p-tabPanel header="Add Dashboard" rightIcon="pi pi-plus"></p-tabPanel>
-    </p-tabView>
+        -->
 </div>

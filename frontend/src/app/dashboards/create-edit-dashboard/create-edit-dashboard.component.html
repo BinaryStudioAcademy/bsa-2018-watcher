@@ -1,20 +1,12 @@
-<p-dialog [(visible)]="display" [modal]="true" [responsive]="true"
- [width]="350" [minWidth]="200" [minY]="70" header="Create Dashboard" 
- [maximizable]="true" [baseZIndex]="10000">
-
- <div class="dashboard-inputs">
-    <div class="dashboard-input">
-      <input placeholder="Title" pInputText type="text" class="form-control" id="dTitle" #dTitle="ngModel" [(ngModel)]="dashboardTitle" required/>
-      <div [hidden]="dTitle.valid || dTitle.untouched" class="alert alert-danger">
-            Title is required.
-      </div>
+<p-dialog [(visible)]="display" [modal]="true" [closable]=false [responsive]="true" [showHeader]="false" [width]="350" [minWidth]="200" [minY]="70" header="Create Dashboard" [maximizable]="false" [baseZIndex]="10000" [draggable]="false" appendTo="body">
+    <div class="dashboard-inputs">
+        <div class="dashboard-input">
+            <input placeholder="Title" pInputText type="text" class="form-control" id="dTitle" #dTitle="ngModel" [(ngModel)]="dashboardTitle" required/>
+            <div [hidden]="dTitle.valid || dTitle.untouched" class="alert alert-danger">
+                Title is required.
+            </div>
+        </div>
     </div>
- </div>
- <p-footer>
-    <button type="button" pButton (click)="display=false" label="Save" class="ui-button-success"
-    [disabled]="dTitle.invalid "></button>
+    <button type="button" pButton (click)="display=false" label="Save" class="ui-button-success" [disabled]="dTitle.invalid "></button>
     <button type="button" pButton (click)="display=false" label="Close" class="ui-button-danger"></button>
- </p-footer>
 </p-dialog>
-
-

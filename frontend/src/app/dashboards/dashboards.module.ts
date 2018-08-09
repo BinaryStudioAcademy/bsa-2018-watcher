@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { InstanceListComponent } from './instance-list/instance-list.component';
-import { TabViewModule, PanelMenuModule, DialogModule, ButtonModule } from 'primeng/primeng';
+import { TabViewModule, PanelMenuModule, DialogModule, ButtonModule, TabMenuModule, CodeHighlighterModule } from 'primeng/primeng';
 import { CreateEditDashboardComponent } from './create-edit-dashboard/create-edit-dashboard.component';
 import { FormsModule } from '@angular/forms';
 
@@ -14,7 +14,10 @@ import { FormsModule } from '@angular/forms';
     PanelMenuModule,
     ButtonModule,
     DialogModule,
-    FormsModule
+    FormsModule,
+    CommonModule,
+    TabMenuModule,
+    CodeHighlighterModule
   ],
   declarations: [DashboardComponent, InstanceListComponent, CreateEditDashboardComponent],
   exports: [ DashboardComponent, InstanceListComponent ]
