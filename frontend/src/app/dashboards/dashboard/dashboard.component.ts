@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
-import { MenuItem, MenuItemContent } from '../../../../node_modules/primeng/primeng';
+import { MenuItem, MenuItemContent, ConfirmationService } from '../../../../node_modules/primeng/primeng';
 import { CreateEditDashboardComponent } from '../create-edit-dashboard/create-edit-dashboard.component';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard';
-import { and } from '../../../../node_modules/@angular/router/src/utils/collection';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.sass']
+  styleUrls: ['./dashboard.component.sass'],
+  providers: [ConfirmationService, DashboardService]
 })
 
 
@@ -22,7 +22,7 @@ dashboards: Dashboard[];
 activeItem: MenuItem;
 activeDashboard: Dashboard;
 
-  constructor(private service: DashboardService) {
+  constructor(private service: DashboardService, private confirmationService: ConfirmationService) {
     this.menuItems = [];
     this.dashboards = [];
     this.inctanceId = 1;
@@ -41,6 +41,26 @@ activeDashboard: Dashboard;
     this.menuItems[index].label = newTitle;
     // this.service.update(this.dashboards[index]).subscribe((res: Response) => console.log(res));
   }
+
+  deleteDashboard(dashboard: Dashboard) {
+    const index = this.dashboards.findIndex(d => d === this.activeDashboard);
+    this.menuItems.splice(index, 1);
+    this.dashboards.splice(index, 1);
+    // this.service.delete(dashboard.id).subscribe((res: Response) => console.log(res));
+  }
+  delete() {
+    this.confirmationService.confirm({
+    message: 'Are you sure that you want to delete this dashboard?',
+    header: 'Confirmation',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+        this.deleteDashboard(this.activeDashboard);
+    },
+    reject: () => {
+      console.log('rejected');
+    }
+}); }
+
   getDashboards() {
     /*this.service.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
       this.dashboards = data;
@@ -65,14 +85,7 @@ activeDashboard: Dashboard;
     }
   }
 
-  ngOnInit() {
-    this.getDashboards();
-    this.menuItems.push(  {label: 'Add new', command: (onlick) => this.showCreatePopup() } );
-
-  this.activeItem = this.menuItems[0];
-  this.activeDashboard = this.dashboards[0];
-
-  this.popup.onHide = () => {
+  onPopupHide() {
     if (this.popup.creation === true) {
       const newdash = new Dashboard(this.popup.dashboardTitle, new Date(), this.inctanceId);
       this.createDashboard(newdash);
@@ -83,7 +96,15 @@ activeDashboard: Dashboard;
     if (this.popup.updating === true) {
      this.updateDashboard(this.popup.dashboardTitle);
     }
-  };
   }
 
+  ngOnInit() {
+    this.getDashboards();
+    this.menuItems.push(  {label: 'Add new', command: (onlick) => this.showCreatePopup() } );
+
+  this.activeItem = this.menuItems[0];
+  this.activeDashboard = this.dashboards[0];
+
+  this.popup.onHide = () => this.onPopupHide();
+  }
 }

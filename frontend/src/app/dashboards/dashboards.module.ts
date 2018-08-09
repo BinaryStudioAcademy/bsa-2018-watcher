@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { InstanceListComponent } from './instance-list/instance-list.component';
 import { TabViewModule, PanelMenuModule, DialogModule, ButtonModule, TabMenuModule, CodeHighlighterModule } from 'primeng/primeng';
@@ -17,7 +17,8 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     CommonModule,
     TabMenuModule,
-    CodeHighlighterModule
+    CodeHighlighterModule,
+    ConfirmDialogModule
   ],
   declarations: [DashboardComponent, InstanceListComponent, CreateEditDashboardComponent],
   exports: [ DashboardComponent, InstanceListComponent ]
