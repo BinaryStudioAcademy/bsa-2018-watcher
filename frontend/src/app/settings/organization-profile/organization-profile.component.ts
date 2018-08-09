@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Organization } from '../../shared/models/organization.model';
 import { OrganizationService } from '../../core/services/organization.service';
 import { ToastrService } from '../../core/services/toastr.service';
-
+import { AuthService } from '../../core/services/auth.service';
+import { Organization } from '../../shared/models/organization.model';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-organization-profile',
@@ -18,6 +19,7 @@ export class OrganizationProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private organizationService: OrganizationService,
+    private authService: AuthService,
     private toastrService: ToastrService) { }
 
   private editable: boolean;
@@ -33,15 +35,17 @@ export class OrganizationProfileComponent implements OnInit {
   });
 
   ngOnInit() {
-    const organizationId = 76; // currentUser.lastPickedOrganizationId
+    const user = this.authService.getCurrentUser();
+    const organizationId = 76; // user.lastPickedOrganizationId
     this.organizationService.get(organizationId).subscribe((value: Organization) => {
       this.organization = value;
       this.subscribeOrganizationFormToData();
     });
 
-    // There need to check if organization created by current user
-    // if (this.organization.createdByUserId == currentUser.id)
-    this.editable = true;
+    // Only user who create organozation can edit it
+    if (this.organization.createdByUserId === user.id) {
+      this.editable = true;
+    }
   }
 
   enableEditing() {
