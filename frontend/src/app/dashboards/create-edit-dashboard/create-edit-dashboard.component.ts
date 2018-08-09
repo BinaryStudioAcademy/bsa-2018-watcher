@@ -9,29 +9,18 @@ import { EventEmitter } from '@angular/core';
 export class EditDashboardComponent implements OnInit {
 
   @Output() saved = new EventEmitter<string>();
-
-  @Input() display = false;
+  @Output() closed = new EventEmitter();
+  @Input() display: boolean;
   @Input() dashboardTitle: string;
   constructor() { }
 
   closeDialog() {
-    this.display = false;
+    this.closed.emit();
   }
 
   Save() {
     this.saved.emit(this.dashboardTitle.slice());
-    this.display = false;
   }
-  showDialog() {
-      this.display = true;
-  }
-
-  onHide() {
-    this.display = false;
-  }
-  onShow() {
-  }
-
   ngOnInit() {
   }
 }

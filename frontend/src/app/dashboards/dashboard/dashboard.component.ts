@@ -74,7 +74,6 @@ newtitle: string;
 
   showCreatePopup(creation: boolean) {
     this.creation = creation;
-    alert(this.displayEditDashboard);
 
     if (creation === true) {
       this.newtitle = '';
@@ -82,7 +81,6 @@ newtitle: string;
       this.newtitle = this.activeDashboard.title;
     }
     this.displayEditDashboard = true;
-    alert(this.displayEditDashboard);
   }
 
   onSaved(title: string) {
@@ -93,10 +91,18 @@ newtitle: string;
       this.activeDashboard = newdash;
       this.activeItem = this.menuItems[index];
       this.creation = false;
+      this.displayEditDashboard = false;
     } else {
       this.updateDashboard(title);
+      this.displayEditDashboard = false;
     }
   }
+  onClosed() {
+    this.displayEditDashboard = false;
+    if (this.creation === true) {
+      const index = this.dashboards.length - 2;
+      this.activeItem = this.menuItems[index];
+      this.activeDashboard = this.dashboards[index]; }}
 
   ngOnInit() {
     this.getDashboards();
