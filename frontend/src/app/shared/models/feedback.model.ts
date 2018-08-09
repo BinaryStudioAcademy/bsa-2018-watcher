@@ -1,6 +1,4 @@
-﻿
-import { User } from './user.model';
-import { Response } from './response.model';
+﻿import { Response } from './response.model';
 
 export interface Feedback  {
    id: number;

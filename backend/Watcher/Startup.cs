@@ -53,8 +53,9 @@
                            .AllowCredentials();
                 }));
 
+            services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
+
             var securitySection = Configuration.GetSection("Security");
-            
             services.Configure<WatcherTokenOptions>(o =>
                 {
                     o.Issuer = securitySection["Issuer"];
@@ -72,13 +73,10 @@
             services.AddTransient<ISamplesService, SamplesService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ITokensService, TokensService>();
-
-
             services.AddTransient<ITransientService, TransientService>();
+            services.AddTransient<IOrganizationService, OrganizationService>();  
+            services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
 
-            services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
-            services.AddTransient<IOrganizationService, OrganizationService>();
-            
 
             services.AddSingleton<IFileStorageProvider, FileStorageProvider>();
             ConfigureFileStorage(services, Configuration);

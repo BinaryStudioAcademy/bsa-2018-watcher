@@ -8,9 +8,8 @@
     public class NotificationSettingsRepository : Repository<NotificationSetting, int>, INotificationSettingsRepository
     {
         public NotificationSettingsRepository(WatcherDbContext context, IMapper mapper)
-            :base(context, mapper)
+            : base(context, mapper)
         {
-
         }
     }
 }

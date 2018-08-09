@@ -51,10 +51,9 @@
 
 
             modelBuilder.Entity<User>()
-                .HasMany(u => u.NotificationSettings);
-                
-
-
+                .HasMany(u => u.NotificationSettings)
+                .WithOne(n => n.User)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             modelBuilder.Entity<Chat>()

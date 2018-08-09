@@ -21,7 +21,7 @@
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<NotificationSettingDto>> GetEntitysByUserIdAsync(int userId)
+        public async Task<IEnumerable<NotificationSettingDto>> GetEntitysByUserIdAsync(string userId)
         {
             var entity = await _uow.NotificationSettingsRepository.GetRangeAsync(1, int.MaxValue);
 
@@ -30,6 +30,24 @@
             var dto = _mapper.Map<IEnumerable<NotificationSetting>, IEnumerable<NotificationSettingDto>>(entity);
 
             return dto;
+        }
+
+        public async Task<NotificationSetting> CreateEntityAsync(NotificationSettingRequest request, string userId)
+        {
+
+            var entity = new NotificationSetting()
+                             {
+                                 UserId = userId,
+                                 IsDisable = request.IsDisable,
+                                 IsEmailable = request.IsEmailable,
+                                 IsMute = request.IsMute,
+                                 Type = request.Type,
+                             };
+
+            var a = await _uow.NotificationSettingsRepository.CreateAsync(entity);
+            await _uow.SaveAsync();
+
+            return entity;
         }
 
         public async Task<bool> UpdateEntityByIdAsync(NotificationSettingRequest request, int id)

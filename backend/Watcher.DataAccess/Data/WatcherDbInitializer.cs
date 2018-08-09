@@ -43,7 +43,7 @@
              .RuleFor(o => o.IsDisable, f => f.PickRandom(true, false))
              .RuleFor(o => o.IsMute, f => f.PickRandom(true, false))
              .RuleFor(o => o.IsEmailable, f => f.PickRandom(true, false))
-             .RuleFor(o => o.UserId, f => new Guid().ToString())
+             .RuleFor(o => o.UserId, f => f.PickRandom(users).Id)
              .RuleFor(o => o.Type, f => f.Random.Enum<NotificationType>());
 
             var notificationSettings = notificationSettingFaker.Generate(amount).ToArray();
@@ -147,13 +147,13 @@
                     OrganizationId = organizations[Randomizer.Seed.Next(0, organizations.Length - 1)].Id
                 }).ToArray();
 
-            modelBuilder.Entity<NotificationSetting>().HasData(notificationSettings);
             modelBuilder.Entity<Role>().HasData(roles);
             modelBuilder.Entity<User>().HasData(users);
             modelBuilder.Entity<Chat>().HasData(userChats);
             modelBuilder.Entity<Message>().HasData(messages);
             modelBuilder.Entity<Feedback>().HasData(feedbacks);
             modelBuilder.Entity<Response>().HasData(responces);
+            modelBuilder.Entity<NotificationSetting>().HasData(notificationSettings);
 
             modelBuilder.Entity<Theme>().HasData(themes);
             modelBuilder.Entity<Organization>().HasData(organizations);
