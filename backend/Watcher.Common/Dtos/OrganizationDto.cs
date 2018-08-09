@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Watcher.Common.MoveToFrontend;
-
-namespace Watcher.Common.Dtos
+﻿namespace Watcher.Common.Dtos
 {
+    using System.Collections.Generic;
+    using Watcher.Common.MoveToFrontend;
+
     [ExportClassToTypescript]
     public class OrganizationDto : EntityDto<int>
     {
@@ -27,8 +27,8 @@ namespace Watcher.Common.Dtos
 
         public IList<int> UsersId { get; set; }
 
-        public IList<int> InstancesId { get; set; }
+        public IList<InstanceDto> Instances { get; set; }
 
-        public IList<int> NotificationsId { get; set; }
+        public IList<NotificationDto> Notifications { get; set; }
     }
 }

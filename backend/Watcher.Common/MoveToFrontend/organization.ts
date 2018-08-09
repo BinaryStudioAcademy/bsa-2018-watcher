@@ -1,5 +1,7 @@
 ﻿
- 
+ import { Instance } from './instance';
+import { Notification } from './notification';
+
     export interface Organization  { 
         id: number;
         name: string;
@@ -12,8 +14,8 @@
         chatId: number;
         createdByUserId: number;
         usersId: number[];
-        instancesId: number[];
-        notificationsId: number[];
+        instances: Instance[];
+        notifications: Notification[];
     }
 
 
