@@ -8,7 +8,6 @@
     public interface IUnitOfWork : IDisposable
     {
         ISamplesRepository SamplesRepository { get; }
-
         IUsersRepository UsersRepository { get; }
 
 

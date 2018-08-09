@@ -1,4 +1,6 @@
-﻿namespace Watcher.Core.Services
+﻿using Watcher.DataAccess.Entities;
+
+namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
     using System.Security.Claims;
@@ -9,7 +11,6 @@
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
-    using Watcher.DataAccess.Entities;
     using Watcher.DataAccess.Interfaces;
 
     public class UsersService : IUsersService

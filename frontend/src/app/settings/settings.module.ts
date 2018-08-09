@@ -4,7 +4,7 @@ import { SettingsComponent } from './settings.component';
 import { NotificationSettingsComponent } from './notification-settings/notification-settings.component';
 import { OrganizationProfileComponent } from './organization-profile/organization-profile.component';
 
-import { TabViewModule, PanelMenuModule, InputTextModule, ButtonModule, InputTextareaModule } from 'primeng/primeng';
+import { TabViewModule, PanelMenuModule, InputTextModule, ButtonModule, ToggleButtonModule, InputTextareaModule } from 'primeng/primeng';
 import { InputSwitchModule, DropdownModule } from 'primeng/primeng';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,6 @@ import { SettingsRoutingModule } from './settings-routing.module';
   imports: [
     CommonModule,
     TabViewModule,
-    InputSwitchModule,
     PanelMenuModule,
     FormsModule,
     InputTextModule,
@@ -24,7 +23,8 @@ import { SettingsRoutingModule } from './settings-routing.module';
     InputSwitchModule,
     DropdownModule,
     ReactiveFormsModule,
-    SettingsRoutingModule
+    SettingsRoutingModule,
+    ToggleButtonModule
   ],
   declarations: [
     SettingsComponent,
