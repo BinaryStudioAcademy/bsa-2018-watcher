@@ -35,6 +35,12 @@ activeDashboard: Dashboard;
    // this.service.create(newDashboard).subscribe((res: Response) => console.log(res));
   }
 
+  updateDashboard(newTitle: string) {
+    const index = this.dashboards.findIndex(d => d === this.activeDashboard);
+    this.dashboards[index].title = newTitle;
+    this.menuItems[index].label = newTitle;
+    // this.service.update(this.dashboards[index]).subscribe((res: Response) => console.log(res));
+  }
   getDashboards() {
     /*this.service.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
       this.dashboards = data;
@@ -71,13 +77,11 @@ activeDashboard: Dashboard;
       const newdash = new Dashboard(this.popup.dashboardTitle, new Date(), this.inctanceId);
       this.createDashboard(newdash);
       const index: number = this.menuItems.length - 2;
-      console.log(index);
       this.activeDashboard = newdash;
       this.activeItem = this.menuItems[index];
     }
     if (this.popup.updating === true) {
-      this.dashboards.find(d => d === this.activeDashboard).title =
-      this.popup.dashboardTitle;
+     this.updateDashboard(this.popup.dashboardTitle);
     }
   };
   }
