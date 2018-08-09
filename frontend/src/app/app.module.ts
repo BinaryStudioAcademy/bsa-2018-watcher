@@ -17,8 +17,6 @@ import { CoreModule } from './core/core.module';
 import { AuthorizationComponent } from './authorization/authorization.component';
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
-import { DashboardsModule } from './dashboards/dashboards.module';
-import { SettingsModule } from './settings/settings.module';
 import {NotificationsModule} from './notifications/notifications.module';
 
 import { AngularFireModule } from 'angularfire2';
@@ -26,7 +24,8 @@ import { environment } from '../environments/environment';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from './core/services/auth.service';
-
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -37,8 +36,6 @@ import { AuthService } from './core/services/auth.service';
   imports: [
     BrowserModule,
     HttpClientModule,
-    CoreModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
     AccordionModule,
@@ -46,17 +43,22 @@ import { AuthService } from './core/services/auth.service';
     ButtonModule,
     RadioButtonModule,
     DialogModule,
-    AdminModule,
-    UserModule,
-    DashboardsModule,
-    SettingsModule,
+    TabViewModule,
+    ToastModule,
+    ConfirmDialogModule,
+
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+
+    CoreModule,
     NotificationsModule,
-    TabViewModule
+    UserModule,
+    AdminModule,
+
+    AppRoutingModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -5,6 +5,8 @@ import {AuthService} from './services/auth.service';
 import {TokenService} from './services/token.service';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TokensInterceptor} from './interceptors/tokens-interceptor';
+import { ToastrService } from './services/toastr.service';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 @NgModule({
   imports: [
@@ -13,7 +15,10 @@ import {TokensInterceptor} from './interceptors/tokens-interceptor';
   providers: [
     AuthService,
     TokenService,
-    { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },
+    ToastrService,
+    ConfirmationService,
+    MessageService
   ],
   declarations: []
 })

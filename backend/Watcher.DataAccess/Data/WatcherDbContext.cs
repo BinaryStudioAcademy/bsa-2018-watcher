@@ -4,6 +4,7 @@
 
     using Watcher.DataAccess.Entities;
 
+
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class WatcherDbContext : DbContext
     {
@@ -48,9 +49,22 @@
                 .HasMany(u => u.CreatedChats)
                 .WithOne(c => c.CreatedBy);
 
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.NotificationSettings)
+                .WithOne(n => n.User)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.Organization)
                 .WithOne(o => o.Chat);
+
+            modelBuilder.Entity<Organization>()
+                .HasOne(u => u.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(x => x.CreatedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Seed();
         }

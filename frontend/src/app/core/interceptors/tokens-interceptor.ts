@@ -23,7 +23,7 @@ export class TokensInterceptor implements HttpInterceptor {
       this.headersConfig['Authorization'] = `Bearer ${firebaseToken}`;
     }
     if (watcherToken) {
-      this.headersConfig['WatcherAuthorization'] = firebaseToken;
+      this.headersConfig['WatcherAuthorization'] = watcherToken;
     }
 
     const request = req.clone({setHeaders: this.headersConfig, responseType: 'json'});

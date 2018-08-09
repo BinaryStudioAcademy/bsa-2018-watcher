@@ -6,6 +6,7 @@ import {SampleEnum} from '../shared/models/sample-enum.enum';
 import {SampleDto} from '../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
 import {HttpClient} from '@angular/common/http';
+import {AuthService} from '../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -27,6 +28,7 @@ export class HeaderComponent implements OnInit {
   orgItems: MenuItem[];
 
   constructor(private notificationsService: NotificationsService,
+              private authService: AuthService,
               private messageService: MessageService,
               private http: HttpClient) {
     this.subscribeToEvents();

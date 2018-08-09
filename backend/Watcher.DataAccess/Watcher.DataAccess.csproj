@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20180808174823_AddFieldsForUser.cs" />
-    <Compile Remove="Data\Migrations\20180809080511_Seed.cs" />
+    <Compile Remove="Data\Migrations\20180808151328_AddedDisplayNameToUser.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

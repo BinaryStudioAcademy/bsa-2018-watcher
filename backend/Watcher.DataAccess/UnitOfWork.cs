@@ -23,6 +23,9 @@
         private IUsersRepository _usersRepository;
 
 
+        private IOrganizationRepository _organizationRepository;
+        private INotificationSettingsRepository _notificationSettingsRepository;
+        
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -43,6 +46,32 @@
         }
 
         public IUsersRepository UsersRepository => _usersRepository ?? (_usersRepository = new UsersRepository(_context, _mapper));
+
+        public IOrganizationRepository OrganizationRepository
+        {
+            get
+            {
+                if (_organizationRepository == null)
+                {
+                    _organizationRepository = new OrganizationRepository(_context, _mapper);
+                }
+
+                return _organizationRepository;
+            }
+        }
+
+        public INotificationSettingsRepository NotificationSettingsRepository
+        {
+            get
+            {
+                if (_notificationSettingsRepository == null)
+                {
+                    _notificationSettingsRepository = new NotificationSettingsRepository(_context, _mapper);
+                }
+
+                return _notificationSettingsRepository;
+            }
+        }
 
         public async Task<bool> SaveAsync()
         {

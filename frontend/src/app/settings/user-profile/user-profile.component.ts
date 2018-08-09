@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
-import { User } from '../../shared/models/user';
+import { User } from '../../shared/models/user.model';
 import { MessageService } from 'primeng/api';
 
 @Component({

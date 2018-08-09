@@ -9,19 +9,19 @@
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.IdentityModel.Tokens;
     using Microsoft.Extensions.Logging;
+    using Microsoft.IdentityModel.Tokens;
 
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
+    using Watcher.Core.Providers;
     using Watcher.Core.Services;
     using Watcher.DataAccess;
     using Watcher.DataAccess.Data;
@@ -53,8 +53,9 @@
                            .AllowCredentials();
                 }));
 
+            services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
+
             var securitySection = Configuration.GetSection("Security");
-            
             services.Configure<WatcherTokenOptions>(o =>
                 {
                     o.Issuer = securitySection["Issuer"];
@@ -72,11 +73,14 @@
             services.AddTransient<ISamplesService, SamplesService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ITokensService, TokensService>();
-
-
             services.AddTransient<ITransientService, TransientService>();
+            services.AddTransient<IOrganizationService, OrganizationService>();  
+            services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
 
-            services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
+
+            services.AddSingleton<IFileStorageProvider, FileStorageProvider>();
+            ConfigureFileStorage(services, Configuration);
+
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
 
@@ -119,6 +123,7 @@
                         fv.ImplicitlyValidateChildProperties = true;
                         // fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                         fv.RegisterValidatorsFromAssemblyContaining<SampleValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<OrganizationValidator>();
                     })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(MvcSetup.JsonSetupAction);
@@ -164,6 +169,25 @@
             app.UseMvc();
         }
 
+        public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
+        {
+            var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if(enviroment=="production")
+            {
+                var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
+                if (!string.IsNullOrWhiteSpace(fileStorageString))
+                {
+                    services.AddSingleton<IFileStorageProvider, FileStorageProvider>
+                        (prov => new FileStorageProvider(fileStorageString));
+                }
+            }
+            else
+            {
+                services.AddSingleton<IFileStorageProvider, LocalFileStorageProvider>
+                        (prov => new LocalFileStorageProvider());
+            }
+        }
+
         public virtual IServiceCollection InitializeAutomapper(IServiceCollection services)
         {
             // Used in older versions
@@ -173,11 +197,13 @@
                 {
                     cfg.AddProfile<SamplesProfile>();
                     cfg.AddProfile<UsersProfile>();
+                    cfg.AddProfile<OrganizationProfile>();
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 
             return services;
         }
+
 
         public virtual void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
         {

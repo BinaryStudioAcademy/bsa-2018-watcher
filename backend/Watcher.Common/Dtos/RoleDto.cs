@@ -1,7 +1,9 @@
 ﻿namespace Watcher.Common.Dtos
 {
     using Watcher.Common.Interfaces.Entities;
+    using Watcher.Common.MoveToFrontend;
 
+    [ExportClassToTypescript]
     public class RoleDto : IEntity<int>
     {
         public RoleDto() { }
