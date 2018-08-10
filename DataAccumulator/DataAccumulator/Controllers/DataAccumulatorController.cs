@@ -83,8 +83,6 @@ namespace DataAccumulator.Controllers
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
-
-            
         }
 
         // PUT: api/v1/dataaccumulator/5
