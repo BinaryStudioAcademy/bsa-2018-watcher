@@ -38,30 +38,38 @@ export class DashboardComponent implements OnInit {
 
     this.dashboards.push(newDashboard);
     this.menuItems.splice(this.menuItems.length - 1, 0, item);
-    // this.dashboardsService.create(newDashboard).subscribe((res: Response) => console.log(res));
+
+    this.dashboardsService.create(newDashboard)
+      .subscribe((res: Response) => { console.log(res); });
     }
 
   updateDashboard(editTitle: string) {
     const index = this.dashboards.findIndex(d => d === this.activeDashboard);
     this.dashboards[index].title = editTitle;
     this.menuItems[index].label = editTitle;
-    // this.dashboardsService.update(this.dashboards[index]).subscribe((res: Response) => console.log(res));
+
+    this.dashboardsService.update(this.dashboards[index])
+      .subscribe((res: Response) => {console.log(res); });
   }
 
   deleteDashboard(dashboard: Dashboard) {
     const index = this.dashboards.findIndex(d => d === this.activeDashboard);
     this.menuItems.splice(index, 1);
     this.dashboards.splice(index, 1);
-    // this.dashboardsService.delete(dashboard.id).subscribe((res: Response) => console.log(res));
+    this.dashboardsService.delete(dashboard.id)
+      .subscribe((res: Response) => {console.log(res); });
   }
+
   async delete() {
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
     this.deleteDashboard(this.activeDashboard); }}
 
   getDashboards() {
-    /*this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
+   /* this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
       this.dashboards = data;
      });*/
+     // uncomment in case testing on local machine
+
       this.dashboards = [
        new Dashboard('RAM',  new Date(),  this.inctanceId),
        new Dashboard('CAM',  new Date(),  this.inctanceId),
@@ -84,7 +92,7 @@ export class DashboardComponent implements OnInit {
       const newdash = new Dashboard(title, new Date(), this.inctanceId);
       this.createDashboard(newdash);
 
-    // switching to another tab
+    // switching to new tab
       const index: number = this.menuItems.length - 2;
       this.activeDashboard = newdash;
       this.activeItem = this.menuItems[index];
@@ -97,7 +105,7 @@ export class DashboardComponent implements OnInit {
 
   onClosed() {
     if (this.creation === true) {
-      // switching to last dashboard if if popup is closed without save
+      // switching to last dashboard if popup is closed without save
       const index = this.menuItems.length - 2;
       const label = this.menuItems[index].label.slice();
 
