@@ -3,7 +3,6 @@ import { MenuItem, ConfirmationService } from 'primeng/primeng';
 import {NotificationsService} from '../../shared/services/notifications.service';
 import {SampleDto} from '../../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
-import { MenuItem, ConfirmationService } from '../../../../node_modules/primeng/primeng';
 import { DashboardService } from '../../core/Services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard';
 import { ToastrService } from '../../core/services/toastr.service';
@@ -30,19 +29,7 @@ export class DashboardComponent implements OnInit {
   creation: boolean;
   displayEditDashboard = false;
 
-  
-
-inctanceId: number;
-menuItems: MenuItem[];
-dashboards: Dashboard[];
-activeItem: MenuItem;
-activeDashboard: Dashboard;
-creation: boolean;
-displayEditDashboard = false;
-newTitle: string;
-
-
-  constructor(private dashboardsService: DashboardService, private toastrService: ToastrService, 
+  constructor(private dashboardsService: DashboardService, private toastrService: ToastrService,
               private notificationsService: NotificationsService,
               private messageService: MessageService) {
     this.menuItems = [];
@@ -60,6 +47,7 @@ newTitle: string;
     this.dashboards.push(newDashboard);
     this.menuItems.splice(this.menuItems.length - 1, 0, item);
 
+    // comment this if testing on local machine
     this.dashboardsService.create(newDashboard)
       .subscribe((res: Response) => { console.log(res); });
     }
@@ -69,6 +57,7 @@ newTitle: string;
     this.dashboards[index].title = editTitle;
     this.menuItems[index].label = editTitle;
 
+    // comment this if testing on local machine
     this.dashboardsService.update(this.dashboards[index])
       .subscribe((res: Response) => {console.log(res); });
   }
@@ -77,6 +66,7 @@ newTitle: string;
     const index = this.dashboards.findIndex(d => d === this.activeDashboard);
     this.menuItems.splice(index, 1);
     this.dashboards.splice(index, 1);
+    // comment this if testing on local machine
     this.dashboardsService.delete(dashboard.id)
       .subscribe((res: Response) => {console.log(res); });
   }
@@ -86,20 +76,23 @@ newTitle: string;
     this.deleteDashboard(this.activeDashboard); }}
 
   getDashboards() {
-   /* this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
+
+    // comment this if testing on local machine
+    this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
       this.dashboards = data;
-     });*/
+     });
+
      // uncomment in case testing on local machine
 
-      this.dashboards = [
+      /*this.dashboards = [
        new Dashboard('RAM',  new Date(),  this.inctanceId),
        new Dashboard('CAM',  new Date(),  this.inctanceId),
-       new Dashboard('DAM',  new Date(),  this.inctanceId), ];
-      this.dashboards.forEach(dash => {
-        this.menuItems.push({
-          label: dash.title,
-          command: (onclick) => {
-            this.activeDashboard = dash; }}); });
+       new Dashboard('DAM',  new Date(),  this.inctanceId), ];*/
+    this.dashboards.forEach(dash => {
+      this.menuItems.push({
+        label: dash.title,
+        command: (onclick) => {
+          this.activeDashboard = dash; }}); });
   }
 
   showCreatePopup(creation: boolean) {
@@ -150,8 +143,8 @@ newTitle: string;
       });
     });
   }
-  
-  
+
+
   ngOnInit() {
     this.getDashboards();
     const lastItem: MenuItem = {
