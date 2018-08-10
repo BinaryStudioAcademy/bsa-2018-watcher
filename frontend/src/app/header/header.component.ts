@@ -86,6 +86,11 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Logout',
         icon: 'fa fa-fw fa-sign-out',
+        command: (onclick) => {
+          if (this.authService.isLoggedIn()) {
+            this.authService.logout();
+          }
+        }
       }
     ];
 
