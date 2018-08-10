@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { AuthService } from '../core/services/auth.service';
-import { Router } from '@angular/router';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {AuthService} from '../core/services/auth.service';
+import {Router} from '@angular/router';
 import {TokenService} from '../core/services/token.service';
-import { UserDto } from '../shared/models/user-dto';
+import {UserDto} from '../shared/models/user-dto';
 
 @Component({
   selector: 'app-authorization',
@@ -29,7 +29,8 @@ export class AuthorizationComponent implements OnInit {
     private authService: AuthService,
     private tokenService: TokenService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
   }
@@ -72,10 +73,43 @@ export class AuthorizationComponent implements OnInit {
   }
 
   async signUpWithGoogle(): Promise<void> {
-    const result = await this.authService.signUpWithGoogle();
-    this.closeDialog();
+    await this.authService.signInWithGoogle()
+      .then(res => {
+        this.closeDialog();
+        this.signInPostProcessing(res);
+      })
+      .catch(err => {
+        if (err) {
+          if (err.status === 400) {
+            // TODO: Close providers window, open details
+            console.log('User not Registered, opening User Details dialog');
 
-    this.signInPostProcessing(result);
+            this.isSignIn = false;
+            this.isSuccessSignUp = true;
+          }
+        }
+      });
+    // this.currentUserCheck(result);
+  }
+
+  // TODO: change this to In
+  async signInWithGoogle(): Promise<void> {
+    await this.authService.signInWithGoogle()
+      .then(res => {
+        this.closeDialog();
+        this.signInPostProcessing(res);
+      })
+      .catch(err => {
+        if (err) {
+          if (err.status === 400) {
+            // TODO: Close providers window, open details
+            console.log('User not Registered, opening User Details dialog');
+
+            this.isSignIn = false;
+            this.isSuccessSignUp = true;
+          }
+        }
+      });
   }
 
   async signUpWithGitHub(): Promise<void> {
@@ -97,12 +131,6 @@ export class AuthorizationComponent implements OnInit {
     this.closeDialog();
 
     this.signInPostProcessing(result);
-  }
-
-  async signInWithGoogle(): Promise<void> {
-    const result = await this.authService.signInWithGoogle();
-
-    this.currentUserCheck(result);
   }
 
   async signInWithFacebook(): Promise<void> {
@@ -134,13 +162,13 @@ export class AuthorizationComponent implements OnInit {
   }
 
   currentUserCheck(result: boolean): void {
-    const currentUser: UserDto  = this.authService.getCurrentUser();
+    const currentUser: UserDto = this.authService.getCurrentUser();
 
     if (currentUser == null) {
       this.showNotRegisteredSignIn();
     } else {
-        this.closeDialog();
-    this.signInPostProcessing(result);
+      this.closeDialog();
+      this.signInPostProcessing(result);
     }
   }
 
@@ -149,7 +177,17 @@ export class AuthorizationComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  saveUserDetails(): void {
+  async saveUserDetails(): Promise<void> {
+    await this.authService.signUpWithGoogle(this.companyName, this.lastName, this.firstName)
+      .then(res => {
+        this.closeDialog();
+        this.signInPostProcessing(true);
+      })
+      .catch(err => {
+        if (err) {
+          console.log(err);
+        }
+      });
     this.closeDialog();
   }
 
@@ -159,6 +197,6 @@ export class AuthorizationComponent implements OnInit {
     } else {
       return this.router.navigate(['/']);
     }
-}
+  }
 
 }

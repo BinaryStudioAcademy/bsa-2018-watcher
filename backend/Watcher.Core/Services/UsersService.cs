@@ -2,13 +2,14 @@
 
 namespace Watcher.Core.Services
 {
+    using System;
     using System.Collections.Generic;
-    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using AutoMapper;
 
     using Watcher.Common.Dtos;
+    using Watcher.Common.Enums;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Interfaces;
@@ -46,21 +47,33 @@ namespace Watcher.Core.Services
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
+            var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == request.Uid);
+
+            if (user != null)
+            {
+                return _mapper.Map<User, UserDto>(user);
+                // throw new HttpStatusCodeException(HttpStatusCode.BadRequest, "User with such Uid already exists");
+            }
+
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
+            //var organization = new Organization()
+            //                       {
+            //                           Name = request.CompanyName
+            //                       };
+            //entity.LastPickedOrganization = organization;
+            //e
+
 
             entity = await _uow.UsersRepository.CreateAsync(entity);
             
+            entity.NotificationSettings = CreateNotificationSetting();
             var result = await _uow.SaveAsync();
             if (!result)
             {
                 return null;
             }
 
-            if (entity == null) return null;
-
-            var dto = _mapper.Map<User, UserDto>(entity);
-
-            return dto;
+            return _mapper.Map<User, UserDto>(entity);
         }
 
         public async Task<bool> UpdateEntityByIdAsync(UserUpdateRequest request, string id)
@@ -84,22 +97,20 @@ namespace Watcher.Core.Services
             return result;
         }
 
-        public async Task<UserDto> CreateEntityAsync(ClaimsPrincipal request)
+        private IList<NotificationSetting> CreateNotificationSetting()
         {
-            var entity = _mapper.Map<ClaimsPrincipal, User>(request);
-
-            entity = await _uow.UsersRepository.CreateAsync(entity);
-            var result = await _uow.SaveAsync();
-            if (!result)
+            var notificationSettings = new List<NotificationSetting>();
+            foreach (NotificationType suit in (NotificationType[])Enum.GetValues(typeof(NotificationType)))
             {
-                return null;
+                notificationSettings.Add(new NotificationSetting
+                {
+                    Type = suit,
+                    IsDisable = false,
+                    IsMute = false,
+                    IsEmailable = true
+                });
             }
-
-            if (entity == null) return null;
-
-            var dto = _mapper.Map<User, UserDto>(entity);
-
-            return dto;
+            return notificationSettings;
         }
     }
 }

@@ -26,6 +26,8 @@
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
+            // return BadRequest("User with such Uid not registered yet!");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -34,7 +36,7 @@
             var tokenResponse = await _tokensService.CreateTokenAsync(request, User);
             if (tokenResponse == null)
             {
-                return BadRequest("User is not registered");
+                return BadRequest("User with such Uid not registered yet!");
             }
 
             return Ok(tokenResponse);
@@ -53,7 +55,7 @@
             var token = _tokensService.CreateTokenDto(userDto);
             if (token == null)
             {
-                return BadRequest("User with such email already exists");
+                return StatusCode(500, "Internal Servcer Error");
             }
 
             return Ok(token);

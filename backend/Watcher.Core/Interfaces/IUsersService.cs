@@ -18,7 +18,5 @@
         Task<bool> UpdateEntityByIdAsync(UserUpdateRequest request, string id);
 
         Task<bool> DeleteEntityByIdAsync(string id);
-
-        Task<UserDto> CreateEntityAsync(ClaimsPrincipal request);
     }
 }

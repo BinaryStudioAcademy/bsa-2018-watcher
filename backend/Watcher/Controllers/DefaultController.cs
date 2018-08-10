@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Watcher.Controllers
 {
+    using System.Net;
+
+    using Watcher.Common.Errors;
     using Watcher.Utils;
 
     [Route("[controller]")]
@@ -28,8 +31,7 @@ namespace Watcher.Controllers
         [HttpGet("Get")]
         public string Get(int id)
         {
-            var a = User;
-            return "value";
+            throw new HttpStatusCodeException(HttpStatusCode.BadRequest, "Qwewtreter");
         }
         
         [HttpGet("Post")]
