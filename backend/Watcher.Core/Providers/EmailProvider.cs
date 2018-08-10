@@ -17,19 +17,7 @@ namespace Watcher.Core.Providers
             _configuration = configuration;
         }
 
-        public async Task SendMessageOneToOne(string from,string subject, string recepient, string message, string messageHtml)
-        {
-            var fromAddress = new EmailAddress(from);
-            var recepientsAddress =  new EmailAddress(recepient);
-            
-            var msg = MailHelper.CreateSingleEmail(fromAddress, recepientsAddress, subject, message, messageHtml);
-        
-            var client = new SendGridClient(_configuration.GetSection("SENDGRID_API_KEY").Value);
-
-            var response = await client.SendEmailAsync(msg);
-        }
-
-        public async Task SendMessageOneToMany(string from, string subject, List<string> recepients, string message, string messageHtml)
+        private async Task SendMessage(string from, string subject, List<string> recepients, string message, string messageHtml)
         {
             var fromAddress = new EmailAddress(from);
             var recepientsAddresses = recepients.Select(r => new EmailAddress(r)).ToList();
@@ -39,6 +27,16 @@ namespace Watcher.Core.Providers
             var client = new SendGridClient(_configuration.GetSection("SENDGRID_API_KEY").Value);
 
             var response = await client.SendEmailAsync(msg);
+        }
+
+        public async Task SendMessageOneToOne(string from,string subject, string recepient, string message, string messageHtml)
+        {
+            await SendMessage(from, subject, new List<string>(){recepient}, message, messageHtml);
+        }
+
+        public async Task SendMessageOneToMany(string from, string subject, List<string> recepients, string message, string messageHtml)
+        {
+            await SendMessage(from, subject, recepients, message, messageHtml);
         }
 
     }
