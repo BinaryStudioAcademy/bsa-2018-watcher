@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuItem, Message} from 'primeng/api';
-import {NotificationsService} from '../shared/services/notifications.service';
+import {NotificationsService} from '../core/services/notifications.service';
 import {SampleRequest} from '../shared/models/sample-request.model';
 import {SampleEnum} from '../shared/models/sample-enum.enum';
 import {SampleDto} from '../shared/models/sample-dto.model';
@@ -86,6 +86,11 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Logout',
         icon: 'fa fa-fw fa-sign-out',
+        command: (onclick) => {
+          if (this.authService.isLoggedIn()) {
+            this.authService.logout();
+          }
+        }
       }
     ];
 

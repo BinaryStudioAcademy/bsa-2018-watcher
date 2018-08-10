@@ -63,9 +63,12 @@
                 else
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = @"application/json";
+                    context.Response.ContentType = "application/json; charset=utf-8";
+
                     _logger.LogError(0, ex, "An unhandled exception has occurred: " + ex.Message);
                 }
+
+                context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
                 var result = JsonConvert.SerializeObject(new ErrorResponse(ex.Message));
 

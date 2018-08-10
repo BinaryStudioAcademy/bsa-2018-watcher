@@ -4,11 +4,6 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
 
-const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json',
-                                   'Accept': 'application/json'}),
-};
-
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +19,7 @@ export class ApiService {
 
   getById(path: string, id: any): Observable<any> {
     const url = `${environment.server_url}${path}/${id}`;
-    return this.http.get(url, httpOptions)
+    return this.http.get(url)
       .pipe(
           map(this.extractData),
           catchError(this.handleError));
@@ -32,7 +27,7 @@ export class ApiService {
 
   public put(path: string, body: Object = {}): Observable<any> {
     const url = `${environment.server_url}${path}`;
-    return this.http.put(url, body, httpOptions)
+    return this.http.put(url, body)
       .pipe(
           catchError(this.handleError)
       );
@@ -46,7 +41,7 @@ export class ApiService {
   }
 
   public delete(path): Observable<any> {
-    return this.http.delete(`${environment.server_url}${path}`, httpOptions)
+    return this.http.delete(`${environment.server_url}${path}`)
       .pipe(
           catchError(this.handleError)
       );
@@ -64,10 +59,10 @@ export class ApiService {
         `body was: ${error.error}`);
     }
     // return an observable with a user-facing error message
-    return throwError(error.error);
+    return throwError(error);
   }
 
-  private extractData(res: Response) {
+  private extractData(res: Response): Response | {} {
     return res || { };
   }
 }

@@ -7,6 +7,8 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {TokensInterceptor} from './interceptors/tokens-interceptor';
 import { ToastrService } from './services/toastr.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import {ApiService} from './services/api.service';
+import {NotificationsService} from './services/notifications.service';
 
 @NgModule({
   imports: [
@@ -15,11 +17,14 @@ import { MessageService, ConfirmationService } from 'primeng/api';
   providers: [
     AuthService,
     TokenService,
-    { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },
+    ApiService,
+    NotificationsService,
     ToastrService,
     ConfirmationService,
-    MessageService
+    MessageService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true }
   ],
+
   declarations: []
 })
 export class CoreModule {

@@ -14,28 +14,28 @@ namespace DataCollector
         //static Dictionary<string, string> counters;
         static void Main(string[] args)
         {
-            DataReceiver rs = new DataReceiver(9050, IPAddress.Loopback);
-            DataSender s = new DataSender("127.0.0.1", 9050);
-            
-            /*TcpClient socket = new TcpClient("localhost", 122);
-            byte[] buffer = new byte[1024];
-            int bytes = socket.GetStream().Read(buffer, 0, 100);
-            XmlSerializer s = new XmlSerializer(typeof(CollectedData));
-            s.Deserialize(socket.GetStream());*/
-
+            //DataReceiver rs = new DataReceiver(9050, IPAddress.Loopback);
+            DataSender s = new DataSender();
             var collector = new Collector();
             collector.Start();
-            for (int i = 0; i < 10; i++)
+            while(true)
             {
                 Thread.Sleep(10000);
-                var dataItem = new CollectedData();
+                var tempDataItem = new CollectedData();
+                var sendDataItem = new CollectedData();
+                int count = 0;
                 while (!collector.data.IsEmpty)
                 {
-                    collector.data.TryTake(out dataItem);
-                    //Console.WriteLine($"{dataItem.CpuUsagePercent}  {dataItem.Time}     {dataItem.ProcessesCount}");
-                    s.Send(dataItem);
-                    rs.Receive();
+                    collector.data.TryTake(out tempDataItem);
+                    sendDataItem += tempDataItem;
+                    count++;
                 }
+                Console.WriteLine($"{DateTime.Now}         Avarage counted\n");
+                sendDataItem /= count;
+                Console.WriteLine($"{DateTime.Now}         Avarage:\n{sendDataItem.ToString()}");
+                s.Send(sendDataItem,"localhost");
+                Console.WriteLine($"{DateTime.Now}         Data was send");
+                //rs.Receive();
             }
             /*
             counters = new Dictionary<string, string>();
