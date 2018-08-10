@@ -1,0 +1,15 @@
+<p-dialog [(visible)]="display" [modal]="true" [closable]=false [responsive]="true" [width]="350" [minWidth]="200" header="Create Dashboard" [maximizable]="false" [baseZIndex]="10000" [draggable]="false" [showHeader]="false" appendTo="body">
+    <div class="dashboard-inputs">
+        <h2>Dashboard</h2>
+        <div class="dashboard-input">
+            <input placeholder="Title" pInputText type="text" class="form-control" id="dTitle" #dTitle="ngModel" [(ngModel)]="dashboardTitle" required/>
+            <div [hidden]="dTitle.valid || dTitle.untouched" class="alert alert-danger">
+                Title is required.
+            </div>
+        </div>
+    </div>
+    <div class="footerbuttons">
+        <button type="button" pButton (click)="Save()" label="Save" class="save ui-button-success" [disabled]="dTitle.invalid "></button>
+        <button type="button" pButton (click)="closeDialog()" label="Close" class="close ui-button-danger"></button>
+    </div>
+</p-dialog>

@@ -73,6 +73,7 @@
             services.AddTransient<ISamplesService, SamplesService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ITokensService, TokensService>();
+            services.AddTransient<IDashboardsService, DashboardsService>();
             services.AddTransient<ITransientService, TransientService>();
             services.AddTransient<IOrganizationService, OrganizationService>();  
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
@@ -197,8 +198,13 @@
             services.AddAutoMapper(cfg =>
                 {
                     cfg.AddProfile<SamplesProfile>();
+
                     cfg.AddProfile<UsersProfile>();
+
+                    cfg.AddProfile<DashboardsProfile>();
+
                     cfg.AddProfile<OrganizationProfile>();
+                    
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 

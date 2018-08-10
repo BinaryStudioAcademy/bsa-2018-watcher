@@ -20,8 +20,10 @@
         private readonly IMapper _mapper;
 
         private ISamplesRepository _samplesRepository;
-        private IUsersRepository _usersRepository;
 
+        private IUsersRepository _usersRepository;
+        
+        private IDashboardsRepository _dashboardsRepository;
 
         private IOrganizationRepository _organizationRepository;
         private INotificationSettingsRepository _notificationSettingsRepository;
@@ -46,6 +48,16 @@
         }
 
         public IUsersRepository UsersRepository => _usersRepository ?? (_usersRepository = new UsersRepository(_context, _mapper));
+        public IDashboardsRepository DashboardsRepository
+        {
+            get
+            {
+                if (_dashboardsRepository == null)
+                {
+                    _dashboardsRepository = new DashboardsRepository(_context, _mapper);
+                }
+
+                return _dashboardsRepository;
 
         public IOrganizationRepository OrganizationRepository
         {

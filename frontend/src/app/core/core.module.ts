@@ -20,6 +20,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
     ConfirmationService,
     MessageService
   ],
+
   declarations: []
 })
 export class CoreModule {
