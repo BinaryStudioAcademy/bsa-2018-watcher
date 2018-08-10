@@ -36,6 +36,21 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<UserDto> GetEntityByIdEmail(string email)
+        {
+            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Email == email,
+                             include: users => users.Include(u => u.Role)
+                                 .Include(u => u.LastPickedOrganization)
+                                 .Include(u => u.UserOrganizations)
+                                 .ThenInclude(uo => uo.Organization));
+
+            if (sample == null) return null;
+
+            var dto = _mapper.Map<User, UserDto>(sample);
+
+            return dto;
+        }
+
         public async Task<UserDto> GetEntityByIdAsync(string id)
         {
             var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id,
@@ -53,11 +68,11 @@ namespace Watcher.Core.Services
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
-            var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == request.Uid);
+            var user = await GetEntityByIdEmail(request.Email);
 
             if (user != null)
             {
-                return _mapper.Map<User, UserDto>(user);
+                return user;
             }
 
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
