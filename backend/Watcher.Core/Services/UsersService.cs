@@ -7,6 +7,8 @@ namespace Watcher.Core.Services
 
     using AutoMapper;
 
+    using Microsoft.EntityFrameworkCore;
+
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
@@ -34,7 +36,9 @@ namespace Watcher.Core.Services
 
         public async Task<UserDto> GetEntityByIdAsync(string id)
         {
-            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id);
+            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id, 
+                             include: users => users.Include(u => u.Role)
+                                                    .Include(u => u.LastPickedOrganization));
 
             if (sample == null) return null;
 
