@@ -7,6 +7,7 @@ import {TokenService} from './token.service';
 import {UserDto} from '../../shared/models/user-dto';
 import {UserLoginRequest} from '../../shared/models/user-login-request';
 import * as firebase from 'firebase';
+import {UserInfoProfile} from '../../shared/models/user-info-profile';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class AuthService {
     );
   }
 
-  async login(credential: firebase.auth.UserCredential): Promise<void> {
+  async login(credential: firebase.auth.UserCredential, provider: string): Promise<void> {
     this.userRegisterRequest = {
       uid: credential.user.uid,
       email: credential.user.email,
@@ -46,6 +47,11 @@ export class AuthService {
       firstName: '',
       lastName: ''
     };
+
+    if (provider === 'Facebook' || provider === 'GitHub') {
+      this.userRegisterRequest.email = (<UserInfoProfile>credential.additionalUserInfo.profile).email;
+    }
+
 
     const request: UserLoginRequest = {
       uid: this.userRegisterRequest.uid,
@@ -76,18 +82,15 @@ export class AuthService {
       });
   }
 
-   signInWithGoogle(): Promise<boolean> {
+  signInWithGoogle(): Promise<boolean> {
     return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then( res => {
-
-        return this.login(res);
+      .then(res => {
+        return this.login(res, 'Google');
       })
       .then(() => {
-
         return true;
       })
       .catch(err => {
-
         if (err) {
           if (err.status === 400) {
             throw err;
@@ -99,7 +102,47 @@ export class AuthService {
       });
   }
 
-  async signUpWithGoogle(companyName: string, firstName: string, lastName: string): Promise<void> {
+  signInWithFacebook(): Promise<boolean> {
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+      .then(res => {
+        return this.login(res, 'Facebook');
+      })
+      .then(() => {
+        return true;
+      })
+      .catch(err => {
+        if (err) {
+          if (err.status === 400) {
+            throw err;
+          }
+        } else {
+          console.log(err);
+          return false;
+        }
+      });
+  }
+
+  signInWithGitHub(): Promise<boolean> {
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider())
+      .then(res => {
+        return this.login(res, 'GitHub');
+      })
+      .then(() => {
+        return true;
+      })
+      .catch(err => {
+        if (err) {
+          if (err.status === 400) {
+            throw err;
+          }
+        } else {
+          console.log(err);
+          return false;
+        }
+      });
+  }
+
+  async signUpWithProvider(companyName: string, firstName: string, lastName: string): Promise<void> {
     this.userRegisterRequest.companyName = companyName;
     this.userRegisterRequest.firstName = firstName;
     this.userRegisterRequest.lastName = lastName;
@@ -110,107 +153,6 @@ export class AuthService {
       .catch(err => {
         throw err;
       });
-    // return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-    //   .then(res => {
-    //     return this.register(res);
-    //   })
-    //   .then(() => {
-    //     return true;
-    //   })
-    //   .catch(err => {
-    //     if (err) {
-    //       if (err.status === 400) {
-    //         throw err;
-    //       }
-    //     } else {
-    //       console.log(err);
-    //       return false;
-    //     }
-    //   });
-  }
-
-  async signInWithFacebook(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
-
-      await this.login(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
-  }
-
-  async signUpWithFacebook(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
-
-      await true; // this.register(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
-  }
-
-  async signInWithGitHub(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
-
-      await this.login(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
-  }
-
-  async signUpWithGitHub(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
-
-      await true; //this.register(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
-  }
-
-  async signInWithTwitter(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
-
-      await this.login(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
-  }
-
-  async signUpWithTwitter(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
-
-      await true; // this.register(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
   }
 
   isLoggedIn(): boolean {
