@@ -73,14 +73,7 @@ export class AuthorizationComponent implements OnInit {
   }
 
   async signUpWithGoogle(): Promise<void> {
-    const result = await this.authService.signInWithGoogle();
-
-    this.currentUserCheck(result);
-  }
-
-  // TODO: change this to In
-  async signInWithGoogle(): Promise<void> {
-    await this.authService.signUpWithGoogle()
+    await this.authService.signInWithGoogle()
       .then(res => {
         this.closeDialog();
         this.signInPostProcessing(res);
@@ -88,11 +81,32 @@ export class AuthorizationComponent implements OnInit {
       .catch(err => {
         if (err) {
           if (err.status === 400) {
-            console.log('AMA IN COMPONENT!!!');
+            // TODO: Close providers window, open details
+            console.log('User not Registered, opening User Details dialog');
+
             this.isSignIn = false;
             this.isSuccessSignUp = true;
-            debugger;
+          }
+        }
+      });
+    // this.currentUserCheck(result);
+  }
+
+  // TODO: change this to In
+  async signInWithGoogle(): Promise<void> {
+    await this.authService.signInWithGoogle()
+      .then(res => {
+        this.closeDialog();
+        this.signInPostProcessing(res);
+      })
+      .catch(err => {
+        if (err) {
+          if (err.status === 400) {
             // TODO: Close providers window, open details
+            console.log('User not Registered, opening User Details dialog');
+
+            this.isSignIn = false;
+            this.isSuccessSignUp = true;
           }
         }
       });
@@ -163,11 +177,21 @@ export class AuthorizationComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  saveUserDetails(): void {
+  async saveUserDetails(): Promise<void> {
+    await this.authService.signUpWithGoogle(this.companyName, this.lastName, this.firstName)
+      .then(res => {
+        this.closeDialog();
+        this.signInPostProcessing(true);
+      })
+      .catch(err => {
+        if (err) {
+          console.log(err);
+        }
+      });
     this.closeDialog();
   }
 
-  signInPostProcessing(result: boolean | void): Promise<boolean> {
+  signInPostProcessing(result: boolean): Promise<boolean> {
     if (result) {
       return this.router.navigate(['/user/dashboards']);
     } else {

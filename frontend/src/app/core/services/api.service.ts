@@ -62,7 +62,7 @@ export class ApiService {
     return throwError(error);
   }
 
-  private extractData(res: Response) {
+  private extractData(res: Response): Response | {} {
     return res || { };
   }
 }
