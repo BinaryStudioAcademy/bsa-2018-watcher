@@ -39,6 +39,7 @@ namespace DataCollector
 
         public void Collect(object obj, ElapsedEventArgs args)
         {
+            Console.WriteLine($"{DateTime.Now}          Data collecting started");
             var dataItem = new CollectedData();
             dataItem.AvaliableRamBytes = systemCounters["FreeRam"].NextValue();
             dataItem.InterruptsPerSeconds = systemCounters["Interrupts"].NextValue();
@@ -52,6 +53,8 @@ namespace DataCollector
             dataItem.ProcessesCount = processes;
             dataItem.Time=DateTime.Now;
             data.Add(dataItem);
+            Console.WriteLine($"{DateTime.Now}          Data collecting finished");
+            Console.WriteLine($"{DateTime.Now}          Collected data:\n{dataItem.ToString()}");
             tm.Start();
         }
 

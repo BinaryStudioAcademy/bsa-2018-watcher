@@ -22,7 +22,6 @@ namespace DataCollector
             TcpClient client = server.AcceptTcpClient();
             NetworkStream stream = client.GetStream();
             IFormatter formatter = new BinaryFormatter();
-
             CollectedData dataItem = (CollectedData)formatter.Deserialize(stream); // you have to cast the deserialized object 
             Console.WriteLine(dataItem.AvaliableRamBytes);
             stream.Close();
