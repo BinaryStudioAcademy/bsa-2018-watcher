@@ -4,6 +4,7 @@
 
     using Watcher.DataAccess.Entities;
 
+
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class WatcherDbContext : DbContext
     {
@@ -19,14 +20,20 @@
             modelBuilder.Entity<UserOrganization>()
                 .HasKey(uo => new { uo.UserId, uo.OrganizationId });
 
-            modelBuilder.Entity<Response>()
-                .HasOne(r => r.Feedback)
-                .WithOne(f => f.Response)
-                .HasForeignKey<Response>(r => r.FeedbackId);
+            modelBuilder.Entity<Feedback>()
+                .HasOne(f => f.Response)
+                .WithOne(r => r.Feedback)
+                .HasForeignKey<Feedback>(r => r.ResponseId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Response>()
                 .HasOne(r => r.User)
                 .WithMany(u => u.Responses)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Feedback>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Feedbacks)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
@@ -47,6 +54,13 @@
             modelBuilder.Entity<User>()
                 .HasMany(u => u.CreatedChats)
                 .WithOne(c => c.CreatedBy);
+
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.NotificationSettings)
+                .WithOne(n => n.User)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.Organization)

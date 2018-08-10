@@ -6,6 +6,7 @@
 
     using FluentValidation.AspNetCore;
 
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,10 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.IdentityModel.Tokens;
 
+    using Watcher.Common.Options;
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
@@ -24,7 +28,6 @@
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
     using Watcher.Hubs;
-    using Watcher.Services;
     using Watcher.Utils;
 
     public class Startup
@@ -50,7 +53,17 @@
                            .AllowCredentials();
                 }));
 
-            // TODO: Add Authorization
+            services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
+
+            var securitySection = Configuration.GetSection("Security");
+            services.Configure<WatcherTokenOptions>(o =>
+                {
+                    o.Issuer = securitySection["Issuer"];
+                    o.Audience = securitySection["Audience"];
+                    o.Access_Token_Lifetime = Convert.ToInt32(securitySection["Access_Token_Lifetime"]);
+                    o.Refresh_Token_Lifetime = Convert.ToInt32(securitySection["Refresh_Token_Lifetime"]);
+                    o.Security_Key = securitySection["Security_Key"];
+                });
 
             services.ConfigureSwagger(Configuration);
 
@@ -58,21 +71,51 @@
 
             // Add your services here
             services.AddTransient<ISamplesService, SamplesService>();
-
+            services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<ITokensService, TokensService>();
             services.AddTransient<IDashboardsService, DashboardsService>();
-
             services.AddTransient<ITransientService, TransientService>();
-
-            services.AddTransient<IOrganizationService, OrganizationService>();
+            services.AddTransient<IOrganizationService, OrganizationService>();  
+            services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
+            services.AddTransient<IEmailProvider, EmailProvider>();
             
+            ConfigureFileStorage(services, Configuration);
+
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
+
 
             InitializeAutomapper(services);
 
             ConfigureDatabase(services, Configuration);
 
-            ConfigureFileStorage(services, Configuration);
+            services.AddAuthentication(o =>
+                    {
+                        o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    })
+                    .AddJwtBearer(options =>
+                    {
+                        options.Authority = "https://securetoken.google.com/watcherapp-2984b";
+                        options.TokenValidationParameters =
+                            new TokenValidationParameters
+                            {
+                                ValidateIssuer = true,
+                                ValidIssuer =
+                                        "https://securetoken.google.com/watcherapp-2984b",
+                                ValidateAudience = true,
+                                ValidAudience = "watcherapp-2984b",
+                                ValidateLifetime = true
+                            };
+                    });
+
+            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
+
+            if (UseAzureSignalR)
+            {
+                addSignalRBuilder.AddAzureSignalR(
+                    Configuration.GetConnectionString(ServiceOptions.ConnectionStringDefaultKey));
+            }
 
             services.AddMvc()
                 .AddFluentValidation(fv =>
@@ -84,31 +127,29 @@
                     })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(MvcSetup.JsonSetupAction);
-
-            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
-
-            if (UseAzureSignalR)
-            {
-                addSignalRBuilder.AddAzureSignalR(
-                    Configuration.GetConnectionString(ServiceOptions.ConnectionStringDefaultKey));
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseDeveloperExceptionPage();
+            app.UseDatabaseErrorPage();
+
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+
             app.UseHttpStatusCodeExceptionMiddleware();
 
             UpdateDatabase(app);
-
-            // TODO: Use Authorization
+            
             app.UseCors("CorsPolicy");
 
             app.UseHsts();
             app.UseConfiguredSwagger();
             app.UseHttpsRedirection();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseMvc();
             app.UseFileServer();
 
@@ -126,12 +167,14 @@
                         routes.MapHub<NotificationsHub>("/notifications");
                     });
             }
+
+            app.UseMvc();
         }
 
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if(enviroment=="production")
+            if (enviroment == "Production")
             {
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
@@ -155,6 +198,8 @@
             services.AddAutoMapper(cfg =>
                 {
                     cfg.AddProfile<SamplesProfile>();
+
+                    cfg.AddProfile<UsersProfile>();
 
                     cfg.AddProfile<DashboardsProfile>();
 

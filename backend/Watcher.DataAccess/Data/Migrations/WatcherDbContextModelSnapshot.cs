@@ -43,6 +43,19 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasIndex("DashboardId");
 
                     b.ToTable("Charts");
+
+                    b.HasData(
+                        new { Id = 101, DashboardId = 97, MostLoaded = "MostLoaded2", ShowCommon = "Common3", Source = "Source2", Threshold = 61, Type = 2 },
+                        new { Id = 102, DashboardId = 96, MostLoaded = "MostLoaded2", ShowCommon = "Common2", Source = "Source1", Threshold = 60, Type = 0 },
+                        new { Id = 103, DashboardId = 96, MostLoaded = "MostLoaded2", ShowCommon = "Common1", Source = "Source2", Threshold = 33, Type = 2 },
+                        new { Id = 104, DashboardId = 100, MostLoaded = "MostLoaded2", ShowCommon = "Common3", Source = "Source3", Threshold = 14, Type = 2 },
+                        new { Id = 105, DashboardId = 99, MostLoaded = "MostLoaded2", ShowCommon = "Common1", Source = "Source2", Threshold = 39, Type = 1 },
+                        new { Id = 106, DashboardId = 100, MostLoaded = "MostLoaded2", ShowCommon = "Common2", Source = "Source2", Threshold = 36, Type = 1 },
+                        new { Id = 107, DashboardId = 99, MostLoaded = "MostLoaded1", ShowCommon = "Common3", Source = "Source3", Threshold = 71, Type = 1 },
+                        new { Id = 108, DashboardId = 91, MostLoaded = "MostLoaded1", ShowCommon = "Common1", Source = "Source2", Threshold = 36, Type = 0 },
+                        new { Id = 109, DashboardId = 94, MostLoaded = "MostLoaded2", ShowCommon = "Common2", Source = "Source2", Threshold = 1, Type = 2 },
+                        new { Id = 110, DashboardId = 96, MostLoaded = "MostLoaded3", ShowCommon = "Common1", Source = "Source3", Threshold = 71, Type = 0 }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Chat", b =>
@@ -51,7 +64,7 @@ namespace Watcher.DataAccess.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CreatedById");
+                    b.Property<string>("CreatedById");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -69,6 +82,19 @@ namespace Watcher.DataAccess.Data.Migrations
                         .HasFilter("[OrganizationId] IS NOT NULL");
 
                     b.ToTable("Chats");
+
+                    b.HasData(
+                        new { Id = 21, CreatedById = "198a12e6-ef20-4a43-ac12-39187e7efc52", Name = "laborum", Type = 0 },
+                        new { Id = 22, CreatedById = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c", Name = "maxime", Type = 0 },
+                        new { Id = 23, CreatedById = "783b295c-e5ba-4f3f-822c-ea2956b9edab", Name = "minus", Type = 0 },
+                        new { Id = 24, CreatedById = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f", Name = "enim", Type = 0 },
+                        new { Id = 25, CreatedById = "d459eb30-de1a-49ef-9cfe-175147483ea5", Name = "maiores", Type = 0 },
+                        new { Id = 26, CreatedById = "198a12e6-ef20-4a43-ac12-39187e7efc52", Name = "sed", Type = 0 },
+                        new { Id = 27, CreatedById = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c", Name = "consequatur", Type = 0 },
+                        new { Id = 28, CreatedById = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c", Name = "repellat", Type = 0 },
+                        new { Id = 29, CreatedById = "4ff7c2a4-f212-42f4-9b57-4362f334992b", Name = "autem", Type = 0 },
+                        new { Id = 30, CreatedById = "4ff7c2a4-f212-42f4-9b57-4362f334992b", Name = "quis", Type = 0 }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Dashboard", b =>
@@ -89,6 +115,19 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasIndex("InstanceId");
 
                     b.ToTable("Dashboards");
+
+                    b.HasData(
+                        new { Id = 91, CreatedAt = new DateTime(2018, 8, 9, 14, 28, 55, 733, DateTimeKind.Local), InstanceId = 83, Title = "Title719" },
+                        new { Id = 92, CreatedAt = new DateTime(2018, 8, 9, 20, 47, 40, 957, DateTimeKind.Local), InstanceId = 87, Title = "Title509" },
+                        new { Id = 93, CreatedAt = new DateTime(2018, 8, 8, 23, 49, 15, 835, DateTimeKind.Local), InstanceId = 88, Title = "Title364" },
+                        new { Id = 94, CreatedAt = new DateTime(2018, 8, 9, 12, 51, 31, 631, DateTimeKind.Local), InstanceId = 89, Title = "Title457" },
+                        new { Id = 95, CreatedAt = new DateTime(2018, 8, 8, 22, 54, 57, 312, DateTimeKind.Local), InstanceId = 81, Title = "Title15" },
+                        new { Id = 96, CreatedAt = new DateTime(2018, 8, 9, 12, 48, 47, 510, DateTimeKind.Local), InstanceId = 88, Title = "Title702" },
+                        new { Id = 97, CreatedAt = new DateTime(2018, 8, 9, 9, 57, 45, 200, DateTimeKind.Local), InstanceId = 89, Title = "Title392" },
+                        new { Id = 98, CreatedAt = new DateTime(2018, 8, 8, 22, 57, 24, 239, DateTimeKind.Local), InstanceId = 89, Title = "Title701" },
+                        new { Id = 99, CreatedAt = new DateTime(2018, 8, 9, 1, 40, 54, 116, DateTimeKind.Local), InstanceId = 85, Title = "Title213" },
+                        new { Id = 100, CreatedAt = new DateTime(2018, 8, 9, 14, 46, 9, 947, DateTimeKind.Local), InstanceId = 86, Title = "Title524" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Feedback", b =>
@@ -104,13 +143,30 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Text")
                         .IsRequired();
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ResponseId")
+                        .IsUnique()
+                        .HasFilter("[ResponseId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Feedbacks");
+
+                    b.HasData(
+                        new { Id = 41, CreatedAt = new DateTime(2018, 8, 9, 10, 29, 50, 874, DateTimeKind.Local), Text = "Odit ut blanditiis maiores voluptas laboriosam qui.", UserId = "4ff7c2a4-f212-42f4-9b57-4362f334992b" },
+                        new { Id = 42, CreatedAt = new DateTime(2018, 8, 9, 20, 7, 29, 426, DateTimeKind.Local), Text = "Aut labore consequatur voluptatibus.", UserId = "2c9f98fb-92dc-48e5-8cd7-fd8a19c43ab0" },
+                        new { Id = 43, CreatedAt = new DateTime(2018, 8, 8, 23, 5, 39, 240, DateTimeKind.Local), Text = "Odio est et.", UserId = "783b295c-e5ba-4f3f-822c-ea2956b9edab" },
+                        new { Id = 44, CreatedAt = new DateTime(2018, 8, 9, 1, 3, 28, 158, DateTimeKind.Local), Text = "Modi alias ea animi.", UserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52" },
+                        new { Id = 45, CreatedAt = new DateTime(2018, 8, 9, 6, 58, 22, 431, DateTimeKind.Local), Text = "Et ea reiciendis nam magnam nobis odit minus veniam.", UserId = "e5593b29-7c25-4985-a179-0ba5eaf01c00" },
+                        new { Id = 46, CreatedAt = new DateTime(2018, 8, 9, 1, 20, 41, 796, DateTimeKind.Local), Text = "Reiciendis quibusdam accusamus est.", UserId = "783b295c-e5ba-4f3f-822c-ea2956b9edab" },
+                        new { Id = 47, CreatedAt = new DateTime(2018, 8, 8, 21, 38, 51, 403, DateTimeKind.Local), Text = "Beatae delectus ratione natus veritatis expedita laboriosam eos incidunt.", UserId = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f" },
+                        new { Id = 48, CreatedAt = new DateTime(2018, 8, 9, 12, 33, 58, 896, DateTimeKind.Local), Text = "Aut iusto sed corporis laborum voluptatem ratione minus.", UserId = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f" },
+                        new { Id = 49, CreatedAt = new DateTime(2018, 8, 9, 13, 26, 17, 920, DateTimeKind.Local), Text = "Sequi dolor labore omnis temporibus.", UserId = "4ff7c2a4-f212-42f4-9b57-4362f334992b" },
+                        new { Id = 50, CreatedAt = new DateTime(2018, 8, 9, 3, 4, 11, 70, DateTimeKind.Local), Text = "Non quo ipsa itaque aut.", UserId = "b547163a-781c-44d5-a498-4b8430b5cc94" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Instance", b =>
@@ -132,6 +188,19 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Instances");
+
+                    b.HasData(
+                        new { Id = 81, Address = "98:24:72:a9:73:6e", OrganizationId = 80, Platform = "Linux" },
+                        new { Id = 82, Address = "41:15:2d:20:6e:df", OrganizationId = 76, Platform = "Linux" },
+                        new { Id = 83, Address = "f5:f3:25:30:99:2f", OrganizationId = 77, Platform = "Windows" },
+                        new { Id = 84, Address = "1f:a3:9f:14:cd:98", OrganizationId = 77, Platform = "Windows" },
+                        new { Id = 85, Address = "1b:79:4e:2e:aa:ec", OrganizationId = 72, Platform = "Linux" },
+                        new { Id = 86, Address = "dd:67:97:6e:1a:67", OrganizationId = 74, Platform = "Linux" },
+                        new { Id = 87, Address = "cb:4a:81:aa:2b:be", OrganizationId = 72, Platform = "Windows" },
+                        new { Id = 88, Address = "76:34:89:cf:cf:d9", OrganizationId = 78, Platform = "Windows" },
+                        new { Id = 89, Address = "65:66:04:f5:91:67", OrganizationId = 77, Platform = "Linux" },
+                        new { Id = 90, Address = "c9:78:52:31:97:3f", OrganizationId = 72, Platform = "Windows" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Message", b =>
@@ -147,7 +216,7 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Text")
                         .IsRequired();
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.Property<bool>("WasRead");
 
@@ -158,6 +227,19 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Messages");
+
+                    b.HasData(
+                        new { Id = 31, ChatId = 30, CreatedAt = new DateTime(2018, 8, 9, 11, 15, 59, 232, DateTimeKind.Local), Text = "Quaerat aut quasi voluptatum fugit delectus iste et ut velit.", UserId = "4ff7c2a4-f212-42f4-9b57-4362f334992b", WasRead = true },
+                        new { Id = 32, ChatId = 29, CreatedAt = new DateTime(2018, 8, 9, 3, 52, 48, 98, DateTimeKind.Local), Text = "Odio corporis sit aut.", UserId = "2c9f98fb-92dc-48e5-8cd7-fd8a19c43ab0", WasRead = true },
+                        new { Id = 33, ChatId = 26, CreatedAt = new DateTime(2018, 8, 9, 6, 14, 34, 299, DateTimeKind.Local), Text = "Nihil molestiae perspiciatis.", UserId = "783b295c-e5ba-4f3f-822c-ea2956b9edab", WasRead = true },
+                        new { Id = 34, ChatId = 27, CreatedAt = new DateTime(2018, 8, 9, 1, 42, 34, 96, DateTimeKind.Local), Text = "Ea qui ex dicta.", UserId = "b547163a-781c-44d5-a498-4b8430b5cc94", WasRead = false },
+                        new { Id = 35, ChatId = 21, CreatedAt = new DateTime(2018, 8, 9, 19, 36, 5, 57, DateTimeKind.Local), Text = "Animi porro sint ratione cumque vitae pariatur omnis.", UserId = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c", WasRead = false },
+                        new { Id = 36, ChatId = 27, CreatedAt = new DateTime(2018, 8, 9, 2, 51, 51, 258, DateTimeKind.Local), Text = "Incidunt ea cupiditate.", UserId = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f", WasRead = false },
+                        new { Id = 37, ChatId = 24, CreatedAt = new DateTime(2018, 8, 9, 19, 52, 21, 854, DateTimeKind.Local), Text = "Labore nihil tempore.", UserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52", WasRead = true },
+                        new { Id = 38, ChatId = 22, CreatedAt = new DateTime(2018, 8, 9, 18, 16, 46, 225, DateTimeKind.Local), Text = "Voluptas corrupti impedit exercitationem.", UserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52", WasRead = false },
+                        new { Id = 39, ChatId = 28, CreatedAt = new DateTime(2018, 8, 9, 7, 49, 40, 584, DateTimeKind.Local), Text = "Alias ut eligendi nam vero quos optio earum magnam ex.", UserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52", WasRead = false },
+                        new { Id = 40, ChatId = 24, CreatedAt = new DateTime(2018, 8, 9, 7, 15, 52, 192, DateTimeKind.Local), Text = "Reprehenderit animi ea aut nulla delectus facilis maxime pariatur est.", UserId = "d459eb30-de1a-49ef-9cfe-175147483ea5", WasRead = true }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Notification", b =>
@@ -175,7 +257,7 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Text")
                         .IsRequired();
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -186,6 +268,19 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Notifications");
+
+                    b.HasData(
+                        new { Id = 111, CreatedAt = new DateTime(2018, 8, 9, 0, 44, 11, 650, DateTimeKind.Local), NotificationSettingId = 13, Text = "Quo architecto similique quaerat.", UserId = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c" },
+                        new { Id = 112, CreatedAt = new DateTime(2018, 8, 9, 4, 24, 47, 92, DateTimeKind.Local), NotificationSettingId = 19, Text = "Cupiditate animi incidunt esse amet occaecati temporibus.", UserId = "b547163a-781c-44d5-a498-4b8430b5cc94" },
+                        new { Id = 113, CreatedAt = new DateTime(2018, 8, 9, 19, 14, 44, 19, DateTimeKind.Local), NotificationSettingId = 14, Text = "Sint quas possimus.", UserId = "4ff7c2a4-f212-42f4-9b57-4362f334992b" },
+                        new { Id = 114, CreatedAt = new DateTime(2018, 8, 9, 3, 11, 10, 716, DateTimeKind.Local), NotificationSettingId = 19, Text = "Reiciendis velit et accusantium voluptatem unde quas cupiditate perspiciatis.", UserId = "b547163a-781c-44d5-a498-4b8430b5cc94" },
+                        new { Id = 115, CreatedAt = new DateTime(2018, 8, 9, 14, 34, 46, 359, DateTimeKind.Local), NotificationSettingId = 15, Text = "Qui eos qui odit aut.", UserId = "2c9f98fb-92dc-48e5-8cd7-fd8a19c43ab0" },
+                        new { Id = 116, CreatedAt = new DateTime(2018, 8, 9, 16, 16, 47, 189, DateTimeKind.Local), NotificationSettingId = 11, Text = "Neque cupiditate architecto aut eos tempore soluta beatae maiores.", UserId = "d459eb30-de1a-49ef-9cfe-175147483ea5" },
+                        new { Id = 117, CreatedAt = new DateTime(2018, 8, 9, 5, 0, 16, 888, DateTimeKind.Local), NotificationSettingId = 17, Text = "Aut sed dolores culpa.", UserId = "d459eb30-de1a-49ef-9cfe-175147483ea5" },
+                        new { Id = 118, CreatedAt = new DateTime(2018, 8, 9, 3, 38, 19, 262, DateTimeKind.Local), NotificationSettingId = 12, Text = "Aperiam fugiat ut sunt repudiandae inventore ab est sed beatae.", UserId = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c" },
+                        new { Id = 119, CreatedAt = new DateTime(2018, 8, 9, 1, 1, 48, 894, DateTimeKind.Local), NotificationSettingId = 18, Text = "Et tenetur eos velit eum.", UserId = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f" },
+                        new { Id = 120, CreatedAt = new DateTime(2018, 8, 9, 4, 50, 5, 798, DateTimeKind.Local), NotificationSettingId = 19, Text = "Repudiandae quia ut voluptatibus suscipit laborum ullam animi.", UserId = "b547163a-781c-44d5-a498-4b8430b5cc94" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.NotificationSetting", b =>
@@ -196,13 +291,32 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<bool>("IsDisable");
 
+                    b.Property<bool>("IsEmailable");
+
                     b.Property<bool>("IsMute");
 
                     b.Property<int>("Type");
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("NotificationSettings");
+
+                    b.HasData(
+                        new { Id = 11, IsDisable = true, IsEmailable = true, IsMute = true, Type = 0, UserId = "198a12e6-ef20-4a43-ac12-39187e7efc52" },
+                        new { Id = 12, IsDisable = true, IsEmailable = true, IsMute = true, Type = 0, UserId = "198a12e6-ef20-4a43-ac12-39187e7efc52" },
+                        new { Id = 13, IsDisable = true, IsEmailable = true, IsMute = false, Type = 1, UserId = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c" },
+                        new { Id = 14, IsDisable = true, IsEmailable = false, IsMute = true, Type = 0, UserId = "783b295c-e5ba-4f3f-822c-ea2956b9edab" },
+                        new { Id = 15, IsDisable = false, IsEmailable = false, IsMute = false, Type = 0, UserId = "783b295c-e5ba-4f3f-822c-ea2956b9edab" },
+                        new { Id = 16, IsDisable = false, IsEmailable = true, IsMute = false, Type = 1, UserId = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f" },
+                        new { Id = 17, IsDisable = true, IsEmailable = false, IsMute = true, Type = 1, UserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52" },
+                        new { Id = 18, IsDisable = false, IsEmailable = false, IsMute = true, Type = 1, UserId = "2c9f98fb-92dc-48e5-8cd7-fd8a19c43ab0" },
+                        new { Id = 19, IsDisable = false, IsEmailable = false, IsMute = true, Type = 1, UserId = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f" },
+                        new { Id = 20, IsDisable = false, IsEmailable = false, IsMute = true, Type = 1, UserId = "783b295c-e5ba-4f3f-822c-ea2956b9edab" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Organization", b =>
@@ -213,7 +327,7 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<string>("ContactNumber");
 
-                    b.Property<int>("CreatedByUserId");
+                    b.Property<string>("CreatedByUserId");
 
                     b.Property<string>("Description");
 
@@ -235,6 +349,19 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasIndex("ThemeId");
 
                     b.ToTable("Organizations");
+
+                    b.HasData(
+                        new { Id = 71, ContactNumber = "(461) 692-3410 x40384", CreatedByUserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52", Description = "Amet qui quia.", Email = "Nettie_Streich@hotmail.com", IsActive = true, Name = "Company709", ThemeId = 62, WebSite = "https://leland.name" },
+                        new { Id = 72, ContactNumber = "786.524.0136", CreatedByUserId = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c", Description = "", Email = "Garland_Zboncak@yahoo.com", IsActive = true, Name = "Company431", ThemeId = 66, WebSite = "https://nico.com" },
+                        new { Id = 73, ContactNumber = "(452) 676-1236", CreatedByUserId = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c", Description = "Fuga omnis autem id quasi sunt. Culpa voluptatem quia repudiandae debitis architecto sit iste. Iure distinctio earum qui.", Email = "Davonte.Schroeder@yahoo.com", IsActive = true, Name = "Company496", ThemeId = 68, WebSite = "http://rita.com" },
+                        new { Id = 74, ContactNumber = "(806) 733-1581 x661", CreatedByUserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52", Description = "Repellat ut nam. Eos sed et ipsum sed voluptas ut minus.", Email = "Roberto.Herzog87@hotmail.com", IsActive = true, Name = "Company381", ThemeId = 62, WebSite = "https://wallace.net" },
+                        new { Id = 75, ContactNumber = "792.792.6754 x922", CreatedByUserId = "d459eb30-de1a-49ef-9cfe-175147483ea5", Description = "Voluptates sint ut temporibus sequi. Consequuntur reprehenderit molestiae ut minus et unde. Labore eum eos qui. Dolor et alias.", Email = "Anibal_Moore@hotmail.com", IsActive = true, Name = "Company386", ThemeId = 62, WebSite = "http://noble.biz" },
+                        new { Id = 76, ContactNumber = "(491) 495-3422 x515", CreatedByUserId = "783b295c-e5ba-4f3f-822c-ea2956b9edab", Description = "Quo officiis velit est omnis voluptates similique.", Email = "Ignacio_Reinger@hotmail.com", IsActive = true, Name = "Company631", ThemeId = 62, WebSite = "https://bernie.info" },
+                        new { Id = 77, ContactNumber = "(621) 361-5680 x43115", CreatedByUserId = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f", Description = "", Email = "Manley7@hotmail.com", IsActive = true, Name = "Company590", ThemeId = 64, WebSite = "https://clinton.net" },
+                        new { Id = 78, ContactNumber = "398.240.6501", CreatedByUserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52", Description = "Debitis recusandae sed voluptatem enim in. Ducimus perferendis fuga ipsum est velit aut.", Email = "Jazmyn.Schultz@hotmail.com", IsActive = true, Name = "Company590", ThemeId = 64, WebSite = "https://luella.info" },
+                        new { Id = 79, ContactNumber = "(243) 910-1956 x3921", CreatedByUserId = "198a12e6-ef20-4a43-ac12-39187e7efc52", Description = "", Email = "Karley_Bernhard@hotmail.com", IsActive = true, Name = "Company758", ThemeId = 66, WebSite = "https://josefa.name" },
+                        new { Id = 80, ContactNumber = "1-516-479-4552", CreatedByUserId = "4ff7c2a4-f212-42f4-9b57-4362f334992b", Description = "Aperiam velit occaecati expedita eum fugiat laudantium. Inventore nemo explicabo eaque velit ut. Aut officia laborum odit quibusdam. Pariatur sint minima provident maxime non eum rerum laudantium et.", Email = "Evangeline83@yahoo.com", IsActive = true, Name = "Company913", ThemeId = 70, WebSite = "http://gladys.com" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Response", b =>
@@ -250,16 +377,26 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Text")
                         .IsRequired();
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FeedbackId")
-                        .IsUnique();
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Responses");
+
+                    b.HasData(
+                        new { Id = 51, CreatedAt = new DateTime(2018, 8, 9, 9, 26, 12, 545, DateTimeKind.Local), FeedbackId = 45, Text = "Aut voluptates unde officiis placeat debitis vero dolor porro odio.", UserId = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c" },
+                        new { Id = 52, CreatedAt = new DateTime(2018, 8, 9, 8, 4, 33, 66, DateTimeKind.Local), FeedbackId = 49, Text = "Doloremque iusto laborum expedita asperiores eum qui aut.", UserId = "b547163a-781c-44d5-a498-4b8430b5cc94" },
+                        new { Id = 53, CreatedAt = new DateTime(2018, 8, 9, 18, 2, 4, 904, DateTimeKind.Local), FeedbackId = 49, Text = "Officiis ut voluptas dolores expedita perspiciatis vel ut.", UserId = "b547163a-781c-44d5-a498-4b8430b5cc94" },
+                        new { Id = 54, CreatedAt = new DateTime(2018, 8, 9, 18, 54, 32, 285, DateTimeKind.Local), FeedbackId = 49, Text = "Natus ad voluptatem blanditiis inventore ut fugiat.", UserId = "b547163a-781c-44d5-a498-4b8430b5cc94" },
+                        new { Id = 55, CreatedAt = new DateTime(2018, 8, 8, 21, 21, 44, 22, DateTimeKind.Local), FeedbackId = 41, Text = "Id quia modi assumenda quam sunt consequuntur ea id.", UserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52" },
+                        new { Id = 56, CreatedAt = new DateTime(2018, 8, 9, 18, 59, 14, 744, DateTimeKind.Local), FeedbackId = 41, Text = "Earum eius repellendus hic dignissimos sed omnis sed dolorum voluptatem.", UserId = "783b295c-e5ba-4f3f-822c-ea2956b9edab" },
+                        new { Id = 57, CreatedAt = new DateTime(2018, 8, 9, 20, 30, 46, 414, DateTimeKind.Local), FeedbackId = 43, Text = "Qui sed reiciendis omnis eveniet.", UserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52" },
+                        new { Id = 58, CreatedAt = new DateTime(2018, 8, 9, 21, 4, 25, 957, DateTimeKind.Local), FeedbackId = 41, Text = "Et omnis reprehenderit aliquam.", UserId = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f" },
+                        new { Id = 59, CreatedAt = new DateTime(2018, 8, 9, 5, 32, 20, 762, DateTimeKind.Local), FeedbackId = 43, Text = "Cupiditate enim ea sint voluptas error aut.", UserId = "e5593b29-7c25-4985-a179-0ba5eaf01c00" },
+                        new { Id = 60, CreatedAt = new DateTime(2018, 8, 9, 17, 37, 13, 171, DateTimeKind.Local), FeedbackId = 43, Text = "Maiores corporis consequuntur ab ex est corporis.", UserId = "783b295c-e5ba-4f3f-822c-ea2956b9edab" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Role", b =>
@@ -274,6 +411,11 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new { Id = 1, Name = "Admin" },
+                        new { Id = 2, Name = "User" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Sample", b =>
@@ -313,43 +455,70 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Themes");
+
+                    b.HasData(
+                        new { Id = 61, BackgroundColor = "Yellow", FontFamily = "Frutiger", Name = "Theme138" },
+                        new { Id = 62, BackgroundColor = "White", FontFamily = "Helvetica", Name = "Theme49" },
+                        new { Id = 63, BackgroundColor = "Yellow", FontFamily = "Frutiger", Name = "Theme863" },
+                        new { Id = 64, BackgroundColor = "Gray", FontFamily = "Frutiger", Name = "Theme430" },
+                        new { Id = 65, BackgroundColor = "Gray", FontFamily = "Helvetica", Name = "Theme850" },
+                        new { Id = 66, BackgroundColor = "Yellow", FontFamily = "Univers", Name = "Theme118" },
+                        new { Id = 67, BackgroundColor = "White", FontFamily = "Frutiger", Name = "Theme246" },
+                        new { Id = 68, BackgroundColor = "Yellow", FontFamily = "Univers", Name = "Theme38" },
+                        new { Id = 69, BackgroundColor = "Gray", FontFamily = "Univers", Name = "Theme323" },
+                        new { Id = 70, BackgroundColor = "Yellow", FontFamily = "Helvetica", Name = "Theme494" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id");
+
+                    b.Property<string>("Bio");
 
                     b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired();
 
                     b.Property<string>("Email")
                         .IsRequired();
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
+                    b.Property<string>("FirstName");
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<int>("NotificationSettingId");
+                    b.Property<int?>("LastPickedOrganizationId");
 
                     b.Property<int>("RoleId");
 
-                    b.Property<string>("SecondName")
-                        .IsRequired();
+                    b.Property<string>("SecondName");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NotificationSettingId");
+                    b.HasIndex("LastPickedOrganizationId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new { Id = "b752f3c0-ed83-4394-b041-bf5ec10bde52", CreatedAt = new DateTime(2018, 8, 8, 21, 21, 11, 722, DateTimeKind.Local), DisplayName = "Frederic", Email = "Alec.Hamill55@gmail.com", FirstName = "Seamus", IsActive = true, RoleId = 1, SecondName = "Zemlak" },
+                        new { Id = "198a12e6-ef20-4a43-ac12-39187e7efc52", CreatedAt = new DateTime(2018, 8, 9, 11, 2, 8, 18, DateTimeKind.Local), DisplayName = "Gwen", Email = "Helga17@hotmail.com", FirstName = "Benton", IsActive = true, RoleId = 1, SecondName = "Hammes" },
+                        new { Id = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c", CreatedAt = new DateTime(2018, 8, 8, 23, 33, 0, 93, DateTimeKind.Local), DisplayName = "Jonatan", Email = "Willard53@yahoo.com", FirstName = "Thomas", IsActive = true, RoleId = 1, SecondName = "Hickle" },
+                        new { Id = "4ff7c2a4-f212-42f4-9b57-4362f334992b", CreatedAt = new DateTime(2018, 8, 9, 19, 47, 2, 716, DateTimeKind.Local), DisplayName = "Jacinthe", Email = "Julianne.Sanford@gmail.com", FirstName = "Estella", IsActive = true, RoleId = 1, SecondName = "Larkin" },
+                        new { Id = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f", CreatedAt = new DateTime(2018, 8, 9, 18, 21, 47, 912, DateTimeKind.Local), DisplayName = "Cornelius", Email = "Hanna_Harris14@hotmail.com", FirstName = "Jerrell", IsActive = true, RoleId = 1, SecondName = "Ernser" },
+                        new { Id = "2c9f98fb-92dc-48e5-8cd7-fd8a19c43ab0", CreatedAt = new DateTime(2018, 8, 9, 17, 32, 14, 907, DateTimeKind.Local), DisplayName = "Elmer", Email = "Linwood.Stehr@hotmail.com", FirstName = "Elliott", IsActive = true, RoleId = 2, SecondName = "Little" },
+                        new { Id = "e5593b29-7c25-4985-a179-0ba5eaf01c00", CreatedAt = new DateTime(2018, 8, 9, 5, 51, 57, 744, DateTimeKind.Local), DisplayName = "Josefa", Email = "Larissa.Stroman@gmail.com", FirstName = "Madelyn", IsActive = true, RoleId = 2, SecondName = "O'Connell" },
+                        new { Id = "783b295c-e5ba-4f3f-822c-ea2956b9edab", CreatedAt = new DateTime(2018, 8, 9, 16, 46, 45, 29, DateTimeKind.Local), DisplayName = "Ashley", Email = "Maybelle.Crona64@hotmail.com", FirstName = "Trycia", IsActive = true, RoleId = 1, SecondName = "Bruen" },
+                        new { Id = "b547163a-781c-44d5-a498-4b8430b5cc94", CreatedAt = new DateTime(2018, 8, 8, 23, 5, 35, 270, DateTimeKind.Local), DisplayName = "Frederick", Email = "Waino90@gmail.com", FirstName = "Giovani", IsActive = true, RoleId = 2, SecondName = "Sawayn" },
+                        new { Id = "d459eb30-de1a-49ef-9cfe-175147483ea5", CreatedAt = new DateTime(2018, 8, 9, 7, 2, 45, 648, DateTimeKind.Local), DisplayName = "Keanu", Email = "Kiera_Pouros46@hotmail.com", FirstName = "Darryl", IsActive = true, RoleId = 1, SecondName = "Ullrich" }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.UserOrganization", b =>
                 {
-                    b.Property<int>("UserId");
+                    b.Property<string>("UserId");
 
                     b.Property<int>("OrganizationId");
 
@@ -358,6 +527,19 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("UserOrganizations");
+
+                    b.HasData(
+                        new { UserId = "b752f3c0-ed83-4394-b041-bf5ec10bde52", OrganizationId = 72 },
+                        new { UserId = "198a12e6-ef20-4a43-ac12-39187e7efc52", OrganizationId = 77 },
+                        new { UserId = "73d76bb0-05c1-4fbb-ba1f-6d53f7dd829c", OrganizationId = 71 },
+                        new { UserId = "4ff7c2a4-f212-42f4-9b57-4362f334992b", OrganizationId = 73 },
+                        new { UserId = "f7baf1d1-39e0-494f-90d6-5f5787f1b72f", OrganizationId = 73 },
+                        new { UserId = "2c9f98fb-92dc-48e5-8cd7-fd8a19c43ab0", OrganizationId = 76 },
+                        new { UserId = "e5593b29-7c25-4985-a179-0ba5eaf01c00", OrganizationId = 76 },
+                        new { UserId = "783b295c-e5ba-4f3f-822c-ea2956b9edab", OrganizationId = 74 },
+                        new { UserId = "b547163a-781c-44d5-a498-4b8430b5cc94", OrganizationId = 78 },
+                        new { UserId = "d459eb30-de1a-49ef-9cfe-175147483ea5", OrganizationId = 72 }
+                    );
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Chart", b =>
@@ -389,10 +571,15 @@ namespace Watcher.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Feedback", b =>
                 {
+                    b.HasOne("Watcher.DataAccess.Entities.Response", "Response")
+                        .WithOne("Feedback")
+                        .HasForeignKey("Watcher.DataAccess.Entities.Feedback", "ResponseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Watcher.DataAccess.Entities.User", "User")
                         .WithMany("Feedbacks")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Instance", b =>
@@ -429,6 +616,13 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.HasOne("Watcher.DataAccess.Entities.User", "User")
                         .WithMany("Notifications")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Watcher.DataAccess.Entities.NotificationSetting", b =>
+                {
+                    b.HasOne("Watcher.DataAccess.Entities.User", "User")
+                        .WithMany("NotificationSettings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -447,11 +641,6 @@ namespace Watcher.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Response", b =>
                 {
-                    b.HasOne("Watcher.DataAccess.Entities.Feedback", "Feedback")
-                        .WithOne("Response")
-                        .HasForeignKey("Watcher.DataAccess.Entities.Response", "FeedbackId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Watcher.DataAccess.Entities.User", "User")
                         .WithMany("Responses")
                         .HasForeignKey("UserId")
@@ -460,10 +649,9 @@ namespace Watcher.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.User", b =>
                 {
-                    b.HasOne("Watcher.DataAccess.Entities.NotificationSetting", "NotificationSetting")
+                    b.HasOne("Watcher.DataAccess.Entities.Organization", "LastPickedOrganization")
                         .WithMany()
-                        .HasForeignKey("NotificationSettingId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("LastPickedOrganizationId");
 
                     b.HasOne("Watcher.DataAccess.Entities.Role", "Role")
                         .WithMany()

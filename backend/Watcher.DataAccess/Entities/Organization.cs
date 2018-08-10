@@ -20,7 +20,7 @@
 
         public bool IsActive { get; set; }
 
-        public int CreatedByUserId { get; set; }
+        public string CreatedByUserId { get; set; }
         public User CreatedByUser { get; set; }
 
         public int? ThemeId { get; set; }

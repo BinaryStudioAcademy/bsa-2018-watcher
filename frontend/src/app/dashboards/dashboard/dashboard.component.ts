@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {NotificationsService} from '../../shared/services/notifications.service';
+import {SampleDto} from '../../shared/models/sample-dto.model';
+import {MessageService} from 'primeng/api';
+
 import { MenuItem, ConfirmationService } from '../../../../node_modules/primeng/primeng';
 import { DashboardService } from '../../core/Services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard';
@@ -7,10 +11,12 @@ import { ToastrService } from '../../core/services/toastr.service';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.sass'],
-  providers: [ConfirmationService, DashboardService]
+
+  providers: [ConfirmationService, DashboardService, MessageService]
 })
 
 export class DashboardComponent implements OnInit {
+
 
 inctanceId: number;
 menuItems: MenuItem[];
@@ -21,10 +27,13 @@ creation: boolean;
 displayEditDashboard = false;
 newTitle: string;
 
-  constructor(private dashboardsService: DashboardService, private toastrService: ToastrService) {
+  constructor(private dashboardsService: DashboardService, private toastrService: ToastrService, 
+              private notificationsService: NotificationsService,
+              private messageService: MessageService) {
     this.menuItems = [];
     this.dashboards = [];
     this.inctanceId = 1;
+    this.subscribeToEvents();
   }
 
   createDashboard(newDashboard: Dashboard) {
@@ -94,9 +103,24 @@ newTitle: string;
       this.activeItem = this.menuItems[index];
       this.activeDashboard = this.dashboards[index]; }}
 
+  private subscribeToEvents(): void {
+    this.notificationsService.connectionEstablished.subscribe(() => {
+        console.log('Connected from dashboard');
+    });
+
+    this.notificationsService.sampleReceived.subscribe((sample: SampleDto) => {
+      this.messageService.add({
+        severity: 'info', summary: sample.name, detail: `Name: ${sample.name}, Id: ${sample.id},
+          Sample Field: ${sample.sampleField.toString()}, Date of creation: ${sample.dateOfCreation}, Count: ${sample.count}, `
+      });
+    });
+  }
+  
+  
   ngOnInit() {
     this.getDashboards();
     this.menuItems.push(  {label: 'Add new', command: (onlick) => this.showCreatePopup(true) } );
+
 
   this.activeItem = this.menuItems[0];
   this.activeDashboard = this.dashboards[0];

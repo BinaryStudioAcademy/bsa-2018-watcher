@@ -9,10 +9,11 @@ namespace Watcher.Common.Dtos
     public class DashboardDto : IEntity<int>
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public DateTime CreatedAt { get; set; }
 
-        public int InstanceId { get; set; }
+        public string Title { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        
         public InstanceDto Instance { get; set; }
 
         public IList<ChartDto> Charts { get; set; }

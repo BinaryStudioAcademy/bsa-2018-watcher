@@ -4,28 +4,38 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Watcher.Controllers
 {
+    using Watcher.Utils;
+
     [Route("[controller]")]
     [ApiController]
     public class DefaultController : ControllerBase
     {
-        // GET: api/Default
+        [WatcherAuthorize("Admin")]
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            var a = User;
             return new string[] { "value1", "value2" };
         }
-
-        // GET: api/Default/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        
+        [HttpGet("Admin")]
+        public string Getdmin(int id)
         {
+            var a = User;
             return "value";
         }
-
-        // POST: api/Default
-        [HttpPost]
+        
+        [HttpGet("Get")]
+        public string Get(int id)
+        {
+            var a = User;
+            return "value";
+        }
+        
+        [HttpGet("Post")]
         public void Post([FromBody] string value)
         {
+            var a = User;
         }
 
         // PUT: api/Default/5
