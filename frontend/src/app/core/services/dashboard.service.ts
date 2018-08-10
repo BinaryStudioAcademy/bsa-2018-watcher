@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Dashboard } from '../../shared/models/dashboard';
+import { Dashboard } from '../../shared/models/dashboard.model';
+import { Instance } from '../../shared/models/instance.model';
 import { environment } from '../../../environments/environment';
 import { Observable, throwError } from '../../../../node_modules/rxjs';
 import { retry, catchError } from '../../../../node_modules/rxjs/operators';
-import { ToastrService } from './toastr.service';
 
 @Injectable({
   providedIn: 'root'

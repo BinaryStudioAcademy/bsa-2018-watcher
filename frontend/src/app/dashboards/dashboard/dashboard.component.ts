@@ -4,9 +4,10 @@ import {NotificationsService} from '../../shared/services/notifications.service'
 import {SampleDto} from '../../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
 import { DashboardService } from '../../core/services/dashboard.service';
-import { Dashboard } from '../../shared/models/dashboard';
+import { Dashboard } from '../../shared/models/dashboard.model';
+import { Instance } from '../../shared/models/instance.model';
 import { ToastrService } from '../../core/services/toastr.service';
-import { Observable } from '../../../../node_modules/rxjs';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -17,7 +18,7 @@ import { Observable } from '../../../../node_modules/rxjs';
 
 export class DashboardComponent implements OnInit {
 
-  inctanceId: number;
+  instance: Instance;
 
   menuItems: MenuItem[];
   activeItem: MenuItem;
@@ -36,7 +37,7 @@ export class DashboardComponent implements OnInit {
     this.activeItem = {};
 
     this.dashboards = [];
-    this.inctanceId = 1;
+    this.instance = {address: 'adress', platform: 'platform'};
     this.subscribeToEvents();
   }
 
@@ -49,7 +50,6 @@ export class DashboardComponent implements OnInit {
     this.dashboards.push(newDashboard);
     this.menuItems.splice(this.menuItems.length - 1, 0, item);
 
-    // comment this if testing on local machine
     this.dashboardsService.create(newDashboard)
       .subscribe((res: Response) => { console.log(res); });
     }
@@ -59,7 +59,6 @@ export class DashboardComponent implements OnInit {
     this.dashboards[index].title = editTitle;
     this.menuItems[index].label = editTitle;
 
-    // comment this if testing on local machine
     this.dashboardsService.update(this.dashboards[index])
       .subscribe((res: Response) => {console.log(res); });
   }
@@ -68,7 +67,7 @@ export class DashboardComponent implements OnInit {
     const index = this.dashboards.findIndex(d => d === this.activeDashboard);
     this.menuItems.splice(index, 1);
     this.dashboards.splice(index, 1);
-    // comment this if testing on local machine
+
     this.dashboardsService.delete(dashboard.id)
       .subscribe((res: Response) => {console.log(res); });
   }
@@ -78,8 +77,7 @@ export class DashboardComponent implements OnInit {
     this.deleteDashboard(this.activeDashboard); }}
 
   configureDashboards() {
-    // comment this if testing on local machine
-      this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
+      this.dashboardsService.getAllByInstance(this.instance.id).subscribe((data: Dashboard[]) => {
       this.dashboards = data; });
       this.dashboards.forEach(dash => {
       this.menuItems.push({
@@ -96,7 +94,7 @@ export class DashboardComponent implements OnInit {
 
   onEdited(title: string) {
     if (this.creation === true) {
-      const newdash = new Dashboard(title, new Date(), this.inctanceId);
+      const newdash: Dashboard = {title: title, createdAt: new Date(), instance: this.instance };
       this.createDashboard(newdash);
     let index = 0;
     // switching to new tab
@@ -104,7 +102,6 @@ export class DashboardComponent implements OnInit {
       index = this.menuItems.length - 2;
       this.activeDashboard = newdash;
       this.activeItem = this.menuItems[index]; }
-
     } else {
       this.updateDashboard(title);
     }
@@ -150,7 +147,6 @@ export class DashboardComponent implements OnInit {
       id: 'lastTab' };
 
     this.menuItems.push(lastItem);
-
     this.activeDashboard = this.dashboards[0];
     this.activeItem = this.menuItems[0];
   }
