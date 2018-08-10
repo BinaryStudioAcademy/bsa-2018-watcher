@@ -74,7 +74,7 @@
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ITokensService, TokensService>();
             services.AddTransient<ITransientService, TransientService>();
-            services.AddTransient<IOrganizationService, OrganizationService>();  
+            services.AddTransient<IOrganizationService, OrganizationService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
             
@@ -140,7 +140,7 @@
             app.UseHttpStatusCodeExceptionMiddleware();
 
             UpdateDatabase(app);
-            
+
             app.UseCors("CorsPolicy");
 
             app.UseHsts();

@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import {ApiService} from '../../shared/services/api.service';
+import {ApiService} from './api.service';
 import {Observable} from 'rxjs';
 import {UserRegisterRequest} from '../../shared/models/user-register-request';
-import {HttpHeaders, HttpParams} from '@angular/common/http';
-import {environment} from '../../../environments/environment';
-import {catchError, map} from 'rxjs/operators';
 import {TokenDto} from '../../shared/models/token-dto';
 import {UserLoginRequest} from '../../shared/models/user-login-request';
 

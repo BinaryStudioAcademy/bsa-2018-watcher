@@ -3,8 +3,8 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {HubConnection} from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import {environment} from '../../../environments/environment';
-import {SampleDto} from '../models/sample-dto.model';
-import {SampleRequest} from '../models/sample-request.model';
+import {SampleDto} from '../../shared/models/sample-dto.model';
+import {SampleRequest} from '../../shared/models/sample-request.model';
 
 
 @Injectable({
@@ -107,7 +107,6 @@ export class NotificationsService {
       .then(() => {
         console.log('CONNECTION STARTED!!!');
         this.connectionIsEstablished = true;
-        console.log('Hub connection started');
         this.connectionEstablished.emit(true);
       })
       .catch(function (err) {
