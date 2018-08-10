@@ -79,9 +79,8 @@ export class DashboardComponent implements OnInit {
 
   configureDashboards() {
     // comment this if testing on local machine
-    this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
+      this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
       this.dashboards = data; });
-
       this.dashboards.forEach(dash => {
       this.menuItems.push({
         label: dash.title,
@@ -96,15 +95,16 @@ export class DashboardComponent implements OnInit {
   }
 
   onEdited(title: string) {
-    console.log('savedclick');
     if (this.creation === true) {
       const newdash = new Dashboard(title, new Date(), this.inctanceId);
       this.createDashboard(newdash);
-
+    let index = 0;
     // switching to new tab
-      const index: number = this.menuItems.length - 2;
+    if (this.menuItems.length >= 2 ) {
+      index = this.menuItems.length - 2;
       this.activeDashboard = newdash;
-      this.activeItem = this.menuItems[index];
+      this.activeItem = this.menuItems[index]; }
+
     } else {
       this.updateDashboard(title);
     }
@@ -114,13 +114,13 @@ export class DashboardComponent implements OnInit {
 
   onClosed() {
     if (this.creation === true) {
-      // switching to last dashboard if popup is closed without save
-      const index = this.menuItems.length - 2;
-      const label = this.menuItems[index].label.slice();
-
-      this.menuItems[index] = {label: label };
-      this.activeItem = this.menuItems[index];
-      this.activeDashboard = this.dashboards[index];
+      if (this.menuItems.length >= 2) {
+        // switching to last dashboard if popup is closed without save
+        const index = this.menuItems.length - 2;
+        const label = this.menuItems[index].label.slice();
+        this.menuItems[index] = {label: label };
+        this.activeItem = this.menuItems[index];
+        this.activeDashboard = this.dashboards[index]; }
     }
       this.creation = false;
       this.displayEditDashboard = false;
