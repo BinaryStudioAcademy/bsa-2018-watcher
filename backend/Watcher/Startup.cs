@@ -76,6 +76,7 @@
             services.AddTransient<ITransientService, TransientService>();
             services.AddTransient<IOrganizationService, OrganizationService>();  
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
+            services.AddTransient<IEmailProvider, EmailProvider>();
             
             ConfigureFileStorage(services, Configuration);
 
