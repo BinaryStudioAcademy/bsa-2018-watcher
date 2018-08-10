@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, ConfirmationService } from 'primeng/primeng';
+import {NotificationsService} from '../../shared/services/notifications.service';
+import {SampleDto} from '../../shared/models/sample-dto.model';
+import {MessageService} from 'primeng/api';
+import { MenuItem, ConfirmationService } from '../../../../node_modules/primeng/primeng';
 import { DashboardService } from '../../core/Services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard';
 import { ToastrService } from '../../core/services/toastr.service';
@@ -7,10 +11,12 @@ import { ToastrService } from '../../core/services/toastr.service';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.sass'],
-  providers: [ConfirmationService, DashboardService]
+
+  providers: [ConfirmationService, DashboardService, MessageService]
 })
 
 export class DashboardComponent implements OnInit {
+
 
   inctanceId: number;
 
@@ -24,10 +30,25 @@ export class DashboardComponent implements OnInit {
   creation: boolean;
   displayEditDashboard = false;
 
-  constructor(private dashboardsService: DashboardService, private toastrService: ToastrService) {
+  
+
+inctanceId: number;
+menuItems: MenuItem[];
+dashboards: Dashboard[];
+activeItem: MenuItem;
+activeDashboard: Dashboard;
+creation: boolean;
+displayEditDashboard = false;
+newTitle: string;
+
+
+  constructor(private dashboardsService: DashboardService, private toastrService: ToastrService, 
+              private notificationsService: NotificationsService,
+              private messageService: MessageService) {
     this.menuItems = [];
     this.dashboards = [];
     this.inctanceId = 1;
+    this.subscribeToEvents();
   }
 
   createDashboard(newDashboard: Dashboard) {
@@ -117,6 +138,20 @@ export class DashboardComponent implements OnInit {
       this.displayEditDashboard = false;
   }
 
+  private subscribeToEvents(): void {
+    this.notificationsService.connectionEstablished.subscribe(() => {
+        console.log('Connected from dashboard');
+    });
+
+    this.notificationsService.sampleReceived.subscribe((sample: SampleDto) => {
+      this.messageService.add({
+        severity: 'info', summary: sample.name, detail: `Name: ${sample.name}, Id: ${sample.id},
+          Sample Field: ${sample.sampleField.toString()}, Date of creation: ${sample.dateOfCreation}, Count: ${sample.count}, `
+      });
+    });
+  }
+  
+  
   ngOnInit() {
     this.getDashboards();
     const lastItem: MenuItem = {
@@ -127,6 +162,7 @@ export class DashboardComponent implements OnInit {
       id: 'lastTab' };
 
     this.menuItems.push(lastItem);
+
 
   this.activeItem = this.menuItems[0];
   this.activeDashboard = this.dashboards[0];

@@ -1,19 +1,23 @@
 ﻿namespace Watcher.DataAccess.Entities
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
-
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
-    public class User : Entity<int>
+    public class User : Entity<string>
     {
-        public override int Id { get; set; }
+        public User() { }
 
-        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public override string Id { get; set; }
+
         public string FirstName { get; set; }
 
-        [Required]
         public string SecondName { get; set; }
+
+        [Required]
+        public string DisplayName { get; set; }
 
         [Required]
         public string Email { get; set; }
@@ -23,12 +27,16 @@
 
         [Required]
         public DateTime CreatedAt { get; set; }
-        
+
+        public string Bio { get; set; }
+
         public int RoleId { get; set; }
         public Role Role { get; set; }
 
-        public int NotificationSettingId { get; set; }
-        public NotificationSetting NotificationSetting { get; set; }
+        public int? LastPickedOrganizationId { get; set; }
+        public Organization LastPickedOrganization { get; set; }
+        
+        public IList<NotificationSetting> NotificationSettings { get; set; }
 
         public IList<UserOrganization> UserOrganizations { get; set; }
 

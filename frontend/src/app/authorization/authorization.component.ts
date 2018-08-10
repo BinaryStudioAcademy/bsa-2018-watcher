@@ -1,10 +1,8 @@
-import { Component, OnInit, TemplateRef, ViewChild  } from '@angular/core';
-import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
-import { FirebaseCredential } from '../shared/models/firebase.model';
-
+import {TokenService} from '../core/services/token.service';
+import { UserDto } from '../shared/models/user-dto';
 
 @Component({
   selector: 'app-authorization',
@@ -16,27 +14,31 @@ export class AuthorizationComponent implements OnInit {
   @ViewChild('signInTemplate') signInTemplate;
   @ViewChild('signUpTemplate') signUpTemplate;
   @ViewChild('userDetailsTemplate') userDetailsTemplate;
+  @ViewChild('notRegisteredSignInTemplate') notRegisteredSignInTemplate;
 
   display = false;
   isSignIn = true;
   isSuccessSignUp = false;
+  isNotRegisteredSignIn = false;
 
-  companyName =  '';
+  companyName = '';
   lastName = '';
   firstName = '';
 
-  constructor(private authService: AuthService, private router: Router) {
-
-   }
+  constructor(
+    private authService: AuthService,
+    private tokenService: TokenService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
   }
 
-  showDialogSignIn() {
+  showDialogSignIn(): void {
     this.display = true;
   }
 
-  showDialogSignUp() {
+  showDialogSignUp(): void {
     this.display = true;
     this.isSignIn = false;
   }
@@ -46,94 +48,117 @@ export class AuthorizationComponent implements OnInit {
       return this.signInTemplate;
     } else if (this.isSuccessSignUp) {
       return this.userDetailsTemplate;
+    } else if (this.isNotRegisteredSignIn) {
+      return this.notRegisteredSignInTemplate;
     } else {
       return this.signUpTemplate;
     }
   }
 
-  showSignUp() {
+  showSignUp(): void {
     this.isSignIn = false;
     this.isSuccessSignUp = false;
   }
 
-  showSignIn() {
+  showSignIn(): void {
     this.isSignIn = true;
     this.isSuccessSignUp = false;
   }
 
-  signUpWithGoogle() {
-    this.isSuccessSignUp = true;
+  showNotRegisteredSignIn(): void {
+    this.display = true;
+    this.isSignIn = false;
+    this.isNotRegisteredSignIn = true;
   }
 
-  signUpWithGitHub() {
-    this.isSuccessSignUp = true;
-  }
-
-  signUpWithFacebook() {
-    this.isSuccessSignUp = true;
-  }
-
-  signUpWithTwitter() {
-    this.isSuccessSignUp = true;
-  }
-
-  saveUserDetails() {
+  async signUpWithGoogle(): Promise<void> {
+    const result = await this.authService.signUpWithGoogle();
     this.closeDialog();
+
+    this.signInPostProcessing(result);
   }
 
-  closeDialog() {
+  async signUpWithGitHub(): Promise<void> {
+    const result = await this.authService.signUpWithGitHub();
+    this.closeDialog();
+
+    this.signInPostProcessing(result);
+  }
+
+  async signUpWithFacebook(): Promise<void> {
+    const result = await this.authService.signUpWithFacebook();
+    this.closeDialog();
+
+    this.signInPostProcessing(result);
+  }
+
+  async signUpWithTwitter(): Promise<void> {
+    const result = await this.authService.signUpWithTwitter();
+    this.closeDialog();
+
+    this.signInPostProcessing(result);
+  }
+
+  async signInWithGoogle(): Promise<void> {
+    const result = await this.authService.signInWithGoogle();
+
+    this.currentUserCheck(result);
+  }
+
+  async signInWithFacebook(): Promise<void> {
+    const result = await this.authService.signInWithFacebook();
+
+    this.currentUserCheck(result);
+  }
+
+  async signInWithTwitter(): Promise<void> {
+    const result = await this.authService.signInWithTwitter();
+
+    this.currentUserCheck(result);
+  }
+
+  async signInWithGitHub(): Promise<void> {
+    const result = await this.authService.signInWithGitHub();
+
+    this.currentUserCheck(result);
+  }
+
+  backToSignUp(): void {
+    this.showSignUp();
+  }
+
+  closeDialog(): void {
     this.isSuccessSignUp = false;
     this.isSignIn = true;
     this.display = false;
   }
 
-  signInWithGoogle() {
-    this.authService.signInWithGoogle()
-    .then((res) => {
-        // var token : FirebaseCredential = res.credential;
-        // var user : firebase.User = res.user;
+  currentUserCheck(result: boolean): void {
+    const currentUser: UserDto  = this.authService.getCurrentUser();
 
-        this.router.navigate(['landing']);
-      })
-    .catch((err) => console.log(err));
+    if (currentUser == null) {
+      this.showNotRegisteredSignIn();
+    } else {
+        this.closeDialog();
+    this.signInPostProcessing(result);
+    }
   }
 
-  signInWithFacebook() {
-    this.authService.signInWithFacebook()
-    .then((res) => {
-        // var token : FirebaseCredential = res.credential;
-        // var user : firebase.User = res.user;
-
-        this.router.navigate(['landing']);
-      })
-    .catch((err) => console.log(err));
+  noRegistration(): void {
+    this.display = false;
+    this.router.navigate(['/']);
   }
 
-  signInWithTwitter() {
-    this.authService.signInWithTwitter()
-    .then((res) => {
-        // var token : FirebaseCredential = res.credential;
-        // var user : firebase.User = res.user;
-
-        this.router.navigate(['landing']);
-      })
-    .catch((err) => console.log(err));
+  saveUserDetails(): void {
+    this.closeDialog();
   }
 
-  signInWithGitHub() {
-    this.authService.signInWithGitHub()
-    .then((res) => {
-        // var token : FirebaseCredential = res.credential;
-        // var user : firebase.User = res.user;
-
-        this.router.navigate(['landing']);
-      })
-    .catch((err) => console.log(err));
-  }
-
-
-  beckToSignUp() {
-    this.showSignUp();
-  }
+  signInPostProcessing(result: boolean): Promise<boolean> {
+    if (result) {
+      return this.router.navigate(['/user/dashboards']);
+    } else {
+      return this.router.navigate(['/']);
+    }
 }
 
+}

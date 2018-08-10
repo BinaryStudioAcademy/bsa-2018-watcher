@@ -1,5 +1,6 @@
 ﻿
 import { Role } from './role.model';
+import { Organization } from './organization.model';
 import { NotificationSetting } from './notification-setting.model';
 import { UserOrganization } from './user-organization.model';
 import { Notification } from './notification.model';
@@ -9,16 +10,18 @@ import { Message } from './message.model';
 import { Chat } from './chat.model';
 
 export interface User  {
-   id: number;
+   id: string;
+   displayName: string;
    firstName: string;
    secondName: string;
+   bio: string;
    email: string;
    isActive: boolean;
    createdAt: Date;
-   roleId: number;
    role: Role;
-   notificationSettingId: number;
-   notificationSetting: NotificationSetting;
+   lastPickedOrganizationId: number;
+   lastPickedOrganization: Organization;
+   notificationSettings: NotificationSetting[];
    userOrganizations: UserOrganization[];
    notifications: Notification[];
    feedbacks: Feedback[];

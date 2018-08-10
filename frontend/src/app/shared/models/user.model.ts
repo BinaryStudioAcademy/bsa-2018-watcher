@@ -7,18 +7,21 @@ import { Feedback } from './feedback.model';
 import { Response } from './response.model';
 import { Message } from './message.model';
 import { Chat } from './chat.model';
+import { Organization } from './organization.model';
 
 export interface User  {
-   id: number;
+   id: string;
+   displayName: string;
    firstName: string;
    secondName: string;
+   bio: string;
    email: string;
    isActive: boolean;
    createdAt: Date;
-   roleId: number;
    role: Role;
-   notificationSettingId: number;
-   notificationSetting: NotificationSetting;
+   lastPickedOrganizationId: number;
+   lastPickedOrganization: Organization;
+   notificationSettings: NotificationSetting[];
    userOrganizations: UserOrganization[];
    notifications: Notification[];
    feedbacks: Feedback[];
