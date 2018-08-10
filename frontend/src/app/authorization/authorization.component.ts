@@ -151,10 +151,6 @@ export class AuthorizationComponent implements OnInit {
     this.currentUserCheck(result);
   }
 
-  backToSignUp(): void {
-    this.showSignUp();
-  }
-
   closeDialog(): void {
     this.isSuccessSignUp = false;
     this.isSignIn = true;
