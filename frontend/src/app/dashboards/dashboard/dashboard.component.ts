@@ -12,14 +12,16 @@ import { ToastrService } from '../../core/services/toastr.service';
 
 export class DashboardComponent implements OnInit {
 
-inctanceId: number;
-menuItems: MenuItem[];
-dashboards: Dashboard[];
-activeItem: MenuItem;
-activeDashboard: Dashboard;
-creation: boolean;
-displayEditDashboard = false;
-newTitle: string;
+  inctanceId: number;
+
+  menuItems: MenuItem[];
+  activeItem: MenuItem;
+  dashboards: Dashboard[];
+  activeDashboard: Dashboard;
+  newTitle: string;
+
+  creation: boolean;
+  displayEditDashboard = false;
 
   constructor(private dashboardsService: DashboardService, private toastrService: ToastrService) {
     this.menuItems = [];
@@ -28,11 +30,15 @@ newTitle: string;
   }
 
   createDashboard(newDashboard: Dashboard) {
-   this.dashboards.push(newDashboard);
-   this.menuItems.splice(this.menuItems.length - 1, 0, {label: newDashboard.title,
-    command: (onclick) => this.activeDashboard = newDashboard});
-   // this.dashboardsService.create(newDashboard).subscribe((res: Response) => console.log(res));
-  }
+    const item: MenuItem = {
+      label: newDashboard.title,
+      command: (onclick) => {
+        this.activeDashboard = newDashboard; }};
+
+    this.dashboards.push(newDashboard);
+    this.menuItems.splice(this.menuItems.length - 1, 0, item);
+    // this.dashboardsService.create(newDashboard).subscribe((res: Response) => console.log(res));
+    }
 
   updateDashboard(newTitle: string) {
     const index = this.dashboards.findIndex(d => d === this.activeDashboard);
@@ -59,17 +65,15 @@ newTitle: string;
        new Dashboard('CAM',  new Date(),  this.inctanceId),
        new Dashboard('DAM',  new Date(),  this.inctanceId), ];
       this.dashboards.forEach(dash => {
-        this.menuItems.push({label: dash.title, command: (onclick) => this.activeDashboard = dash}); });
+        this.menuItems.push({
+          label: dash.title,
+          command: (onclick) => {
+            this.activeDashboard = dash; }}); });
   }
 
   showCreatePopup(creation: boolean) {
     this.creation = creation;
-
-    if (creation === true) {
-      this.newTitle = '';
-    } else {
-      this.newTitle = this.activeDashboard.title;
-    }
+    this.newTitle = creation ? '' : this.activeDashboard.title;
     this.displayEditDashboard = true;
   }
 
@@ -80,26 +84,42 @@ newTitle: string;
       const index: number = this.menuItems.length - 2;
       this.activeDashboard = newdash;
       this.activeItem = this.menuItems[index];
-      this.creation = false;
-      this.displayEditDashboard = false;
     } else {
       this.updateDashboard(title);
-      this.displayEditDashboard = false;
     }
+    this.creation = false;
+    this.displayEditDashboard = false;
   }
   onClosed() {
-    this.displayEditDashboard = false;
+    console.log('closed start' + this.creation);
     if (this.creation === true) {
       const index = this.dashboards.length - 2;
-      this.activeItem = this.menuItems[index];
-      this.activeDashboard = this.dashboards[index]; }}
+
+      console.log(this.activeItem);
+      console.log(this.menuItems[0]);
+
+      this.activeItem = this.menuItems[0];
+      this.activeDashboard = this.dashboards[0];
+
+      console.log(this.activeItem);
+      console.log(this.activeDashboard);
+
+    }
+      this.creation = false;
+      this.displayEditDashboard = false;
+      console.log('closed end' + this.creation);
+  }
 
   ngOnInit() {
     this.getDashboards();
-    this.menuItems.push(  {label: 'Add new', command: (onlick) => this.showCreatePopup(true) } );
+    const lastItem: MenuItem = {
+      label: 'Add new',
+      command: (onlick) =>  {
+        this.showCreatePopup(true); }};
+
+    this.menuItems.push(lastItem);
 
   this.activeItem = this.menuItems[0];
   this.activeDashboard = this.dashboards[0];
-
   }
 }

@@ -2,8 +2,8 @@
     <div class="dashboard-inputs">
         <h2>Dashboard</h2>
         <div class="dashboard-input">
-            <input placeholder="Title" pInputText type="text" class="form-control" id="dTitle" #dTitle="ngModel" [(ngModel)]="dashboardTitle" required/>
-            <div [hidden]="dTitle.valid || dTitle.untouched" class="alert alert-danger">
+            <input placeholder="Title" pInputText type="text" class="form-control" id="dTitle" #dTitle="ngModel" [(ngModel)]="title" required/>
+            <div [hidden]="dTitle.valid || dTitle.untouched || dTitle.pristine" class="alert alert-danger">
                 Title is required.
             </div>
         </div>
