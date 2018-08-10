@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Dashboard } from '../../shared/models/dashboard';
 import { environment } from '../../../environments/environment';
+import { Observable } from '../../../../node_modules/rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class DashboardService {
   constructor(private http: HttpClient) {
   }
 
-  getAllByInstance(id: number) {
-      return this.http.get(this.url + '/' + id);
+  getAllByInstance(id: number): Observable<Dashboard[]> {
+      return this.http.get(`${this.url}/${id}`) as Observable<Dashboard[]>;
   }
 
   create(dashboard: Dashboard) {
@@ -22,10 +23,10 @@ export class DashboardService {
   }
 
   update(dashboard: Dashboard) {
-      return this.http.put(this.url + '/' + dashboard.id, dashboard);
+      return this.http.put(`${this.url}/${dashboard.id}`, dashboard);
   }
 
   delete(id: number) {
-      return this.http.delete(this.url + '/' + id);
+      return this.http.delete(`${this.url}/${id}`);
   }
 }

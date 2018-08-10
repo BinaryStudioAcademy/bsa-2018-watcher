@@ -6,6 +6,7 @@ import {MessageService} from 'primeng/api';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard';
 import { ToastrService } from '../../core/services/toastr.service';
+import { Observable } from '../../../../node_modules/rxjs';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -32,6 +33,8 @@ export class DashboardComponent implements OnInit {
               private notificationsService: NotificationsService,
               private messageService: MessageService) {
     this.menuItems = [];
+    this.activeItem = {};
+
     this.dashboards = [];
     this.inctanceId = 1;
     this.subscribeToEvents();
@@ -47,8 +50,8 @@ export class DashboardComponent implements OnInit {
     this.menuItems.splice(this.menuItems.length - 1, 0, item);
 
     // comment this if testing on local machine
-    this.dashboardsService.create(newDashboard)
-      .subscribe((res: Response) => { console.log(res); });
+    /*this.dashboardsService.create(newDashboard)
+      .subscribe((res: Response) => { console.log(res); });*/
     }
 
   updateDashboard(editTitle: string) {
@@ -57,8 +60,8 @@ export class DashboardComponent implements OnInit {
     this.menuItems[index].label = editTitle;
 
     // comment this if testing on local machine
-    this.dashboardsService.update(this.dashboards[index])
-      .subscribe((res: Response) => {console.log(res); });
+   /*this.dashboardsService.update(this.dashboards[index])
+      .subscribe((res: Response) => {console.log(res); });*/
   }
 
   deleteDashboard(dashboard: Dashboard) {
@@ -66,27 +69,26 @@ export class DashboardComponent implements OnInit {
     this.menuItems.splice(index, 1);
     this.dashboards.splice(index, 1);
     // comment this if testing on local machine
-    this.dashboardsService.delete(dashboard.id)
-      .subscribe((res: Response) => {console.log(res); });
+   /* this.dashboardsService.delete(dashboard.id)
+      .subscribe((res: Response) => {console.log(res); });*/
   }
 
   async delete() {
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
     this.deleteDashboard(this.activeDashboard); }}
 
-  getDashboards() {
-
+  configureDashboards() {
     // comment this if testing on local machine
     this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
+      console.log('here it is');
+      console.log(data);
       this.dashboards = data;
-     });
+       if (this.dashboards.length === 0) {
+        this.dashboards = [new Dashboard('sda', new Date(), 1)]
+       }
+     } );
 
-     // uncomment in case testing on local machine
 
-      /*this.dashboards = [
-       new Dashboard('RAM',  new Date(),  this.inctanceId),
-       new Dashboard('CAM',  new Date(),  this.inctanceId),
-       new Dashboard('DAM',  new Date(),  this.inctanceId), ];*/
     this.dashboards.forEach(dash => {
       this.menuItems.push({
         label: dash.title,
@@ -101,6 +103,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onEdited(title: string) {
+    console.log('savedclick');
     if (this.creation === true) {
       const newdash = new Dashboard(title, new Date(), this.inctanceId);
       this.createDashboard(newdash);
@@ -145,7 +148,7 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getDashboards();
+    this.configureDashboards();
     const lastItem: MenuItem = {
       label: 'Add new',
       icon: 'fa fa-plus',
@@ -155,8 +158,7 @@ export class DashboardComponent implements OnInit {
 
     this.menuItems.push(lastItem);
 
-
-  this.activeItem = this.menuItems[0];
-  this.activeDashboard = this.dashboards[0];
+    this.activeDashboard = this.dashboards[0];
+    this.activeItem = this.menuItems[0];
   }
 }

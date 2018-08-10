@@ -140,7 +140,7 @@
 
             app.UseHttpStatusCodeExceptionMiddleware();
 
-            UpdateDatabase(app);
+            //UpdateDatabase(app);
             
             app.UseCors("CorsPolicy");
 
