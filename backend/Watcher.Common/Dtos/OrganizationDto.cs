@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using Watcher.Common.Interfaces.Entities;
-using Watcher.Common.MoveToFrontend;
-
 namespace Watcher.Common.Dtos
 {
+    using System.Collections.Generic;
+
+    using Watcher.Common.Interfaces.Entities;
+    using Watcher.Common.MoveToFrontend;
+
     [ExportClassToTypescript]
     public class OrganizationDto : IEntity<int>
     {
@@ -23,6 +24,8 @@ namespace Watcher.Common.Dtos
 
         public int ThemeId { get; set; }
 
+        public ThemeDto Theme { get; set; }
+
         public int? ChatId { get; set; }
 
         public string CreatedByUserId { get; set; }
@@ -31,6 +34,6 @@ namespace Watcher.Common.Dtos
 
         public IList<int> InstancesId { get; set; }
 
-        public IList<int> NotificationsId { get; set; }
+        public IList<NotificationDto> Notifications { get; set; }
     }
 }

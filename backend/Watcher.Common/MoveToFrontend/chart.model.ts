@@ -9,7 +9,6 @@ export interface Chart  {
    showCommon: string;
    threshold: number;
    mostLoaded: string;
-   dashboardId: number;
    dashboard: Dashboard;
 }
 

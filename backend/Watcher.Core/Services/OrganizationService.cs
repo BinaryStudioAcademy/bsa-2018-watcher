@@ -1,6 +1,10 @@
-﻿namespace Watcher.Core.Services
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+
+namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -24,7 +28,11 @@
 
         public async Task<IEnumerable<OrganizationDto>> GetAllEntitiesAsync()
         {
-            var entities = await _uow.OrganizationRepository.GetRangeAsync();
+            var entities = await _uow.OrganizationRepository.GetRangeAsync(include: x => x
+                .Include(o => o.Theme)
+                .Include(o => o.Notifications)
+                .Include(o => o.Instances)
+                .Include(o => o.UserOrganizations));
 
             var dtos = _mapper.Map<List<Organization>, List<OrganizationDto>>(entities);
 
@@ -33,7 +41,14 @@
 
         public async Task<OrganizationDto> GetEntityByIdAsync(int id)
         {
-            var entity = await _uow.OrganizationRepository.GetFirstOrDefaultAsync(s => s.Id == id);
+            var entity = await _uow.OrganizationRepository
+                .GetFirstOrDefaultAsync(
+                    predicate: o => o.Id == id, 
+                    include: x => x
+                        .Include(o => o.Theme)
+                        .Include(o => o.Notifications)
+                        .Include(o => o.Instances)
+                        .Include(o => o.UserOrganizations));
 
             if (entity == null) return null;
 

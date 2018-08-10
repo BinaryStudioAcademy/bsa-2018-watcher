@@ -1,8 +1,11 @@
-﻿namespace Watcher.Common.Dtos
+﻿using Watcher.Common.MoveToFrontend;
+
+namespace Watcher.Common.Dtos
 {
     using Watcher.Common.Enums;
     using Watcher.Common.Interfaces.Entities;
 
+    [ExportClassToTypescript]
     public class ChartDto : IEntity<int>
     {
         public int Id { get; set; }
