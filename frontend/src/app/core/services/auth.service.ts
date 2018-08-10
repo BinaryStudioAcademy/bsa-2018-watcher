@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
-import {Observable, throwError} from 'rxjs';
+import {Observable} from 'rxjs';
 import {UserRegisterRequest} from '../../shared/models/user-register-request';
 import {TokenService} from './token.service';
 import {UserDto} from '../../shared/models/user-dto';
 import {UserLoginRequest} from '../../shared/models/user-login-request';
 import * as firebase from 'firebase';
-import {debounce} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -67,9 +66,6 @@ export class AuthService {
   }
 
   async register(): Promise<void> {
-    // const firebaseToken = this.getFirebaseToken();
-    // localStorage.setItem('firebaseToken', firebaseToken);
-
     await this.tokenService.register(this.userRegisterRequest).toPromise()
       .then(tokenDto => {
         localStorage.setItem('currentUser', JSON.stringify(tokenDto.user));
@@ -80,8 +76,8 @@ export class AuthService {
       });
   }
 
-  async signInWithGoogle(): Promise<boolean> {
-    return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+   signInWithGoogle(): Promise<boolean> {
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then( res => {
 
         return this.login(res);

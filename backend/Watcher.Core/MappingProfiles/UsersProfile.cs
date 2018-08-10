@@ -14,13 +14,21 @@
     {
         public UsersProfile()
         {
+            CreateMap<Role, Role>().ForMember(d => d.Id, o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
+
+            CreateMap<Role, RoleDto>()
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name));
+
+
             CreateMap<User, User>().ForMember(
                 d => d.Id,
                 o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
 
             CreateMap<User, UserDto>()
-                .ForMember(d => d.Role, o => o.MapFrom(s => s.Role))
+                .ForMember(d => d.Role, o => o.MapFrom(s => s.RoleId == 1 ? new Role(1, "Admin") : new Role(2, "User")))
                 .ForMember(d => d.Organizations, o => o.MapFrom(s => s.UserOrganizations))
+                .ForMember(d => d.LastPickedOrganization, o => o.MapFrom(s => s.LastPickedOrganization))
                 .ForMember(d => d.CreatedChats, o => o.UseValue(new List<ChartDto>()))
                 .ForMember(d => d.Feedbacks, o => o.UseValue(new List<FeedbackDto>()))
                 .ForMember(d => d.Messages, o => o.UseValue(new List<MessageDto>()))
@@ -48,11 +56,6 @@
                 .ForMember(d => d.IsActive, o => o.MapFrom(s => s.User.IsActive))
                 .ForMember(d => d.Role, o => o.MapFrom(s => s.User.Role))
                 .ForMember(d => d.LastPickedOrganization, o => o.MapFrom(s => s.User.LastPickedOrganization)); // TODO: Include
-
-            CreateMap<Role, Role>().ForMember(d => d.Id, o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
-
-            CreateMap<Role, RoleDto>();
-
 
             CreateMap<UserRegisterRequest, User>().ForMember(d => d.Id, o => o.MapFrom(s => s.Uid))
                 .ForMember(d => d.CreatedAt, o => o.UseValue(DateTime.UtcNow))
