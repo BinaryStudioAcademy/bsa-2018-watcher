@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -77,6 +79,32 @@ namespace DataAccumulator.Controllers
 
                 await _repository.AddEntity(collectedData);
                 return CreatedAtRoute("GetDataAccumulator", new { id = collectedDataDto.Id }, collectedData);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500);
+            }
+        }
+
+        // POST: api/v1/dataaccumulator/bytearray
+        [HttpPost(Name = "bytearray")]
+        public async Task<IActionResult> Post([FromBody]byte[] collectedDataByte)
+        {
+            try
+            {
+                CollectedData collectedData;
+
+                BinaryFormatter bf = new BinaryFormatter();
+                using (MemoryStream ms = new MemoryStream(collectedDataByte))
+                {
+                    object obj = bf.Deserialize(ms);
+                    collectedData = (CollectedData) obj;
+                }
+
+                await _repository.AddEntity(collectedData);
+
+                return NoContent();
             }
             catch (Exception e)
             {
