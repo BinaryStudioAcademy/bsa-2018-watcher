@@ -6,6 +6,7 @@ import {MessageService} from 'primeng/api';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard';
 import { ToastrService } from '../../core/services/toastr.service';
+import { Observable } from '../../../../node_modules/rxjs';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -32,6 +33,8 @@ export class DashboardComponent implements OnInit {
               private notificationsService: NotificationsService,
               private messageService: MessageService) {
     this.menuItems = [];
+    this.activeItem = {};
+
     this.dashboards = [];
     this.inctanceId = 1;
     this.subscribeToEvents();
@@ -74,20 +77,12 @@ export class DashboardComponent implements OnInit {
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
     this.deleteDashboard(this.activeDashboard); }}
 
-  getDashboards() {
-
+  configureDashboards() {
     // comment this if testing on local machine
     this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
-      this.dashboards = data;
-     });
+      this.dashboards = data; });
 
-     // uncomment in case testing on local machine
-
-      /*this.dashboards = [
-       new Dashboard('RAM',  new Date(),  this.inctanceId),
-       new Dashboard('CAM',  new Date(),  this.inctanceId),
-       new Dashboard('DAM',  new Date(),  this.inctanceId), ];*/
-    this.dashboards.forEach(dash => {
+      this.dashboards.forEach(dash => {
       this.menuItems.push({
         label: dash.title,
         command: (onclick) => {
@@ -101,6 +96,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onEdited(title: string) {
+    console.log('savedclick');
     if (this.creation === true) {
       const newdash = new Dashboard(title, new Date(), this.inctanceId);
       this.createDashboard(newdash);
@@ -145,7 +141,7 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getDashboards();
+    this.configureDashboards();
     const lastItem: MenuItem = {
       label: 'Add new',
       icon: 'fa fa-plus',
@@ -155,8 +151,7 @@ export class DashboardComponent implements OnInit {
 
     this.menuItems.push(lastItem);
 
-
-  this.activeItem = this.menuItems[0];
-  this.activeDashboard = this.dashboards[0];
+    this.activeDashboard = this.dashboards[0];
+    this.activeItem = this.menuItems[0];
   }
 }
