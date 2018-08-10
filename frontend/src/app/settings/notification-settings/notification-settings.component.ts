@@ -25,8 +25,15 @@ export class NotificationSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.userId = 'f7baf1d1-39e0-494f-90d6-5f5787f1b72f';
-    this.userId = this.authService.getCurrentUser().id;
+    const user = this.authService.getCurrentUser();
+    if (user == null) {
+      console.log(`user = ${user}`);
+      this.userId = 'f7baf1d1-39e0-494f-90d6-5f5787f1b72f';
+      // return;
+    } else {
+      this.userId = this.authService.getCurrentUser().id;
+    }
+
     this.service.getByUserId(this.userId).subscribe((entitys) => {
       this.notificationSettings = entitys;
       if (this.notificationSettings) {
