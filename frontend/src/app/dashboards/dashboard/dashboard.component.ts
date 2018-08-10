@@ -3,7 +3,7 @@ import { MenuItem, ConfirmationService } from 'primeng/primeng';
 import {NotificationsService} from '../../shared/services/notifications.service';
 import {SampleDto} from '../../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
-import { DashboardService } from '../../core/Services/dashboard.service';
+import { DashboardService } from '../../core/services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard';
 import { ToastrService } from '../../core/services/toastr.service';
 @Component({
@@ -11,11 +11,10 @@ import { ToastrService } from '../../core/services/toastr.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.sass'],
 
-  providers: [ConfirmationService, DashboardService, MessageService]
+  providers: [ToastrService, ConfirmationService, DashboardService, MessageService]
 })
 
 export class DashboardComponent implements OnInit {
-
 
   inctanceId: number;
 
