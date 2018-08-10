@@ -9,14 +9,15 @@ namespace Watcher.Common.Dtos
     public class ChatDto : IEntity<int>
     {
         public int Id { get; set; }
+
         public string Name { get; set; }
+
         public ChatType Type { get; set; }
 
-        public int? CreatedById { get; set; }
+        public string CreatedById { get; set; }
 
         public UserDto CreatedBy { get; set; }
-
-        public int? OrganizationId { get; set; }
+        
         public OrganizationDto Organization { get; set; }
 
         public IList<MessageDto> Messages { get; set; }

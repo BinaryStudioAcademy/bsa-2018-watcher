@@ -7,9 +7,11 @@
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
 
     using Watcher.Core.Interfaces;
     using Watcher.Hubs;
+    using Watcher.Utils;
 
     public class WatcherService : BackgroundService
     {
@@ -29,6 +31,11 @@
         private readonly ILogger<WatcherService> _logger;
 
         /// <summary>
+        /// Configurations for watcher service
+        /// </summary>
+        private readonly IOptions<TimeServiceConfiguration> _options;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="WatcherService"/> class.
         /// </summary>
         /// <param name="hubContext">
@@ -40,11 +47,18 @@
         /// <param name="logger">
         /// The logger.
         /// </param>
-        public WatcherService(IHubContext<NotificationsHub> hubContext, ITransientService service, ILogger<WatcherService> logger)
+        /// <param name="options">
+        /// Options
+        /// </param>
+        public WatcherService(IHubContext<NotificationsHub> hubContext, 
+                              ITransientService service, 
+                              ILogger<WatcherService> logger,
+                              IOptions<TimeServiceConfiguration> options)
         {
             _hubContext = hubContext;
             _service = service;
             _logger = logger;
+            _options = options;
         }
 
 
@@ -67,7 +81,9 @@
             {
                 try
                 {
-                    var sample = _service.GenerateRandomSampleDtoAsync();
+                    var sample = await _service.GenerateRandomSampleDtoAsync();
+
+                    _logger.LogInformation($"Sending generated sample id: {sample.Id}.");
 
                     // Method Name on Angular Client: "DataFeedTick",
                     // Single argument of that method is SampleDto
@@ -78,8 +94,8 @@
                     _logger.LogError(e.Message);
                 }
                 
-                // Repeat this message feed every 0.5 seconds
-                await Task.Delay(500, stoppingToken);
+                // Repeat this message feed every period seconds
+                await Task.Delay(TimeSpan.FromMilliseconds(_options.Value.Period), stoppingToken);
             }
 
             _logger.LogError("Watcher Service stopped! Unexpected error occurred!");
