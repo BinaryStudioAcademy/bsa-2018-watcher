@@ -54,12 +54,20 @@ namespace Watcher.Core.Services
             }
 
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
-            //var organization = new Organization()
-            //                       {
-            //                           Name = request.CompanyName
-            //                       };
-            //entity.LastPickedOrganization = organization;
-            //e
+            var organization = new Organization()
+            {
+                Name = request.CompanyName,
+               // CreatedByUser = entity // TODO: circular dependency
+            };
+            entity.LastPickedOrganization = organization;
+            entity.UserOrganizations = new List<UserOrganization>
+                                           {
+                                               new UserOrganization
+                                                   {
+                                                       Organization = organization,
+                                                       User = entity
+                                                   }
+                                           };
 
             await _uow.UsersRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
