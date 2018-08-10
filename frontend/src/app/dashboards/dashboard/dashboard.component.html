@@ -1,32 +1,24 @@
 <app-instance-list></app-instance-list>
-<div class="working-area">
+<app-edit-dashboard (saved)="onEdited($event)" (closed)="onClosed($event)" [display]="displayEditDashboard" [dashboardTitle]="editTitle"></app-edit-dashboard>
+
+<div class="site-wrap">
     <div class="title">
         Dashboards
     </div>
-    <p-tabView>
-        <p-tabPanel header="RAM" [closable]="true">
-            <div class="chart">
-                <h3>Chart 1</h3>
-                <img src="https://www.excel-easy.com/smi/examples/line-chart.png" alt="">
-            </div>           
-        </p-tabPanel>
-        <p-tabPanel header="CAM" [closable]="true">
-            <div class="chart">
-                <h3>Chart 2</h3>
-                <img src="https://www.excel-easy.com/smi/examples/line-chart.png" alt="">
-            </div>
-        </p-tabPanel>
-        <p-tabPanel header="DAM" [closable]="true">
-            <div class="chart">
-                <h3>Chart 3</h3>
-                <img src="https://www.excel-easy.com/smi/examples/line-chart.png" alt="">
-            </div>
-        </p-tabPanel>
-        <p-tabPanel header="Add Dashboard" rightIcon="pi pi-plus">
-                <div class="chart">
-                </div>
-        </p-tabPanel>
-    
-    </p-tabView>
+    <p-tabMenu [model]="menuItems" [activeItem]="activeItem"> </p-tabMenu>
+
+    <div class=" workspace ">
+        <h3>{{activeDashboard.title}} chart
+            <button pButton type="button " label="Delete " class="btnedit ui-button-danger ui-button-raised " (click)="delete() "></button>
+            <button pButton type="button " label="Edit " class="btnedit ui-button-primary ui-button-raised " (click)="showCreatePopup(false) "></button>
+        </h3>
+        <img src="https://www.excel-easy.com/smi/examples/line-chart.png " alt=" ">
+    </div>
 </div>
 
+<p-confirmDialog header="Confirmation " icon="pi pi-exclamation-triangle " width="425 " #cd>
+    <p-footer>
+        <button pButton type="button " class="ui-button-success ui-button-raised " pButton icon="pi pi-times " label="No " (click)="cd.reject() "></button>
+        <button pButton type="button " pButton class="ui-button-danger ui-button-raised " icon="pi pi-check " label="Yes " (click)="cd.accept() "></button>
+    </p-footer>
+</p-confirmDialog>

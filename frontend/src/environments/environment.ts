@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   server_url: 'http://localhost:65246',
+
   firebase: {
     apiKey: 'AIzaSyDkG6cWbERooMWbAn9sRBbYiRkXm81WP8U',
     authDomain: 'watcherapp-2984b.firebaseapp.com',
