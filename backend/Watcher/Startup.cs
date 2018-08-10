@@ -74,9 +74,9 @@
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ITokensService, TokensService>();
             services.AddTransient<ITransientService, TransientService>();
-            services.AddTransient<IOrganizationService, OrganizationService>();  
+            services.AddTransient<IOrganizationService, OrganizationService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
-            
+
             ConfigureFileStorage(services, Configuration);
 
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
@@ -139,7 +139,7 @@
             app.UseHttpStatusCodeExceptionMiddleware();
 
             UpdateDatabase(app);
-            
+
             app.UseCors("CorsPolicy");
 
             app.UseHsts();

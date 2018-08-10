@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {NotificationsService} from '../../shared/services/notifications.service';
+import {NotificationsService} from '../../core/services/notifications.service';
 import {SampleDto} from '../../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
 

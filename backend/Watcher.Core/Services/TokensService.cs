@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
+    using System.Net;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@
     using Microsoft.IdentityModel.Tokens;
 
     using Watcher.Common.Dtos;
+    using Watcher.Common.Errors;
     using Watcher.Common.Options;
     using Watcher.Common.Requests;
     using Watcher.Core.Auth;
@@ -35,7 +37,7 @@
             // TODO: Add logic about registration purpose
             if (userDto == null)
             {
-                return null;
+                throw new HttpStatusCodeException(HttpStatusCode.BadRequest, "User with such Uid not registered yet!");
             }
 
             return CreateTokenDto(userDto);

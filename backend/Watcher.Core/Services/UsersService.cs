@@ -3,12 +3,14 @@
 namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
+    using System.Net;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
     using AutoMapper;
 
     using Watcher.Common.Dtos;
+    using Watcher.Common.Errors;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Interfaces;
@@ -46,17 +48,22 @@ namespace Watcher.Core.Services
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
+            var exists = await _uow.UsersRepository.ExistAsync(u => u.Id == request.Uid);
+
+            if (exists)
+            {
+                throw new HttpStatusCodeException(HttpStatusCode.BadRequest, "User with such Uid already exists");
+            }
+
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
 
-            entity = await _uow.UsersRepository.CreateAsync(entity);
+            await _uow.UsersRepository.CreateAsync(entity);
             
             var result = await _uow.SaveAsync();
             if (!result)
             {
                 return null;
             }
-
-            if (entity == null) return null;
 
             var dto = _mapper.Map<User, UserDto>(entity);
 
