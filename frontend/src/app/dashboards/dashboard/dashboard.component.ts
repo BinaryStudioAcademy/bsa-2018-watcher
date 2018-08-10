@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem, ConfirmationService } from '../../../../node_modules/primeng/primeng';
+import { MenuItem, ConfirmationService } from 'primeng/primeng';
 import { DashboardService } from '../../core/Services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard';
 import { ToastrService } from '../../core/services/toastr.service';
@@ -16,9 +16,10 @@ export class DashboardComponent implements OnInit {
 
   menuItems: MenuItem[];
   activeItem: MenuItem;
+
   dashboards: Dashboard[];
   activeDashboard: Dashboard;
-  newTitle: string;
+  editTitle: string;
 
   creation: boolean;
   displayEditDashboard = false;
@@ -40,10 +41,10 @@ export class DashboardComponent implements OnInit {
     // this.dashboardsService.create(newDashboard).subscribe((res: Response) => console.log(res));
     }
 
-  updateDashboard(newTitle: string) {
+  updateDashboard(editTitle: string) {
     const index = this.dashboards.findIndex(d => d === this.activeDashboard);
-    this.dashboards[index].title = newTitle;
-    this.menuItems[index].label = newTitle;
+    this.dashboards[index].title = editTitle;
+    this.menuItems[index].label = editTitle;
     // this.dashboardsService.update(this.dashboards[index]).subscribe((res: Response) => console.log(res));
   }
 
@@ -53,7 +54,8 @@ export class DashboardComponent implements OnInit {
     this.dashboards.splice(index, 1);
     // this.dashboardsService.delete(dashboard.id).subscribe((res: Response) => console.log(res));
   }
-  async delete() { if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
+  async delete() {
+    if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
     this.deleteDashboard(this.activeDashboard); }}
 
   getDashboards() {
@@ -73,7 +75,7 @@ export class DashboardComponent implements OnInit {
 
   showCreatePopup(creation: boolean) {
     this.creation = creation;
-    this.newTitle = creation ? '' : this.activeDashboard.title;
+    this.editTitle = creation ? '' : this.activeDashboard.title;
     this.displayEditDashboard = true;
   }
 
@@ -81,6 +83,8 @@ export class DashboardComponent implements OnInit {
     if (this.creation === true) {
       const newdash = new Dashboard(title, new Date(), this.inctanceId);
       this.createDashboard(newdash);
+
+    // switching to another tab
       const index: number = this.menuItems.length - 2;
       this.activeDashboard = newdash;
       this.activeItem = this.menuItems[index];
@@ -90,24 +94,19 @@ export class DashboardComponent implements OnInit {
     this.creation = false;
     this.displayEditDashboard = false;
   }
+
   onClosed() {
-    console.log('closed start' + this.creation);
     if (this.creation === true) {
-      const index = this.dashboards.length - 2;
+      // switching to last dashboard if if popup is closed without save
+      const index = this.menuItems.length - 2;
+      const label = this.menuItems[index].label.slice();
 
-      console.log(this.activeItem);
-      console.log(this.menuItems[0]);
-
-      this.activeItem = this.menuItems[0];
-      this.activeDashboard = this.dashboards[0];
-
-      console.log(this.activeItem);
-      console.log(this.activeDashboard);
-
+      this.menuItems[index] = {label: label };
+      this.activeItem = this.menuItems[index];
+      this.activeDashboard = this.dashboards[index];
     }
       this.creation = false;
       this.displayEditDashboard = false;
-      console.log('closed end' + this.creation);
   }
 
   ngOnInit() {

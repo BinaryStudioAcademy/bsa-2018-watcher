@@ -1,11 +1,11 @@
 <app-instance-list></app-instance-list>
-<app-create-edit-dashboard (saved)="onSaved($event)" (closed)="onClosed($event)" [display]="displayEditDashboard" [dashboardTitle]="newTitle"></app-create-edit-dashboard>
+<app-edit-dashboard (saved)="onSaved($event)" (closed)="onClosed($event)" [display]="displayEditDashboard" [dashboardTitle]="editTitle"></app-edit-dashboard>
 
 <div class="site-wrap">
     <div class="title">
         Dashboards
     </div>
-    <p-tabMenu [model]="menuItems" [activeItem]="items[0]"> </p-tabMenu>
+    <p-tabMenu [model]="menuItems" [activeItem]="activeItem"> </p-tabMenu>
 
     <div class=" workspace ">
         <h3>{{activeDashboard.title}} chart

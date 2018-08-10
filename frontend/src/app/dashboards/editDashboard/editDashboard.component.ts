@@ -2,9 +2,9 @@ import { Component, OnInit, OnChanges, Output, Input } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-create-edit-dashboard',
-  templateUrl: './create-edit-dashboard.component.html',
-  styleUrls: ['./create-edit-dashboard.component.sass']
+  selector: 'app-edit-dashboard',
+  templateUrl: './editDashboard.component.html',
+  styleUrls: ['./editDashboard.component.sass']
 })
 export class EditDashboardComponent implements OnInit, OnChanges {
 
