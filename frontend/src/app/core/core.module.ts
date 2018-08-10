@@ -24,6 +24,7 @@ import {NotificationsService} from './services/notifications.service';
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true }
   ],
+
   declarations: []
 })
 export class CoreModule {

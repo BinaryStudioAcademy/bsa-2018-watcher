@@ -1,55 +1,64 @@
-<div class="container">
-    <form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-        <h4 class="label">Display Name</h4>
-        <div class="ui-g ui-fluid"> 
-            <div class="ui-inputgroup">
-                <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-                <input type="text" formControlName="displayName" pInputText placeholder="Display name">     
-            </div>
-        </div>
-
-        <div class="nonValid" *ngIf="userForm.get('displayName').errors && userForm.get('displayName').dirty">
-                Display Name is required.
-        </div>
-        
-        <h4 class="label">Name</h4>
-        <div class="ui-g ui-fluid"> 
-            <div class="ui-inputgroup">
-                <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-                <input type="text" formControlName="firstName" pInputText placeholder="First name">     
-            </div>
-        </div>
-
-        <div class="nonValid" *ngIf="userForm.get('firstName').errors && userForm.get('firstName').dirty">
-            Fisrt Name is required.
-        </div>
-
-        <h4 class="label">Second Name</h4>
-        <div class="ui-g ui-fluid"> 
-            <div class="ui-inputgroup">
-                <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-                <input type="text" formControlName="secondName" pInputText placeholder="Second name">       
-            </div>
-        </div>
-
-        <div class="nonValid" *ngIf="userForm.get('secondName').errors && userForm.get('secondName').dirty">
-            Second Name is required.
-        </div>
-
-        <h4 class="label">Bio</h4>
-        <div>
-            <textarea [rows]="5" [cols]="30" pInputTextarea autoResize="autoResize" formControlName="bio"></textarea>
-        </div>
-
-        <h4 class="label">Active</h4>
-        <div>
-            <p-toggleButton formControlName="isActive" onLabel="Active" offLabel="Disabled"></p-toggleButton>
-        </div>
-        <div>
-            <button type="submit" pButton class="ui-button-success btn-update" [disabled]="!userForm.valid" label="Update"></button>
-        </div>  
-    </form>
-    <div>
-        <p-button label="Edit" class="ui-button-secondary" icon="fa fa-edit" iconPos="left" (click)="edit()"></p-button>
-    </div>
+<div class="ui-g ui-fluid">
+	<div class="ui-g-12 ui-lg-6">
+			<h3> User profile </h3>
+			<a class="btn-edit" (click)="enableEditing()">
+				<i class="fa fa-edit"></i>
+			</a>
+		<hr>
+	</div>
 </div>
+
+<form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+	<div class="label">Display Name*:</div>
+	<div class="ui-g ui-fluid">
+			<div class="ui-g-12 ui-lg-4">
+				<div class="ui-inputgroup">
+					<span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+					<input type="text" formControlName="displayName" pInputText placeholder="Display name">    
+				</div>
+			</div>
+		</div>
+
+	<div class="invalid" *ngIf="userForm.get('displayName').errors && userForm.get('displayName').dirty">
+			Display Name is required.
+	</div>
+	
+	<div class="label">First Name*:</div>
+	<div class="ui-g ui-fluid">
+		<div class="ui-g-12 ui-lg-4">
+			<div class="ui-inputgroup">
+				<span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+				<input type="text" formControlName="firstName" pInputText placeholder="First name">   
+			</div>
+		</div>
+	</div>
+
+	<div class="invalid" *ngIf="userForm.get('firstName').errors && userForm.get('firstName').dirty">
+			Fisrt Name is required.
+	</div>
+
+	<div class="label">Last Name*:</div>
+	<div class="ui-g ui-fluid">
+		<div class="ui-g-12 ui-lg-4">
+			<div class="ui-inputgroup">
+				<span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+				<input type="text" formControlName="secondName" pInputText placeholder="Last name">   
+			</div>
+		</div>
+	</div>
+
+	<div class="invalid" *ngIf="userForm.get('secondName').errors && userForm.get('secondName').dirty">
+			Last Name is required.
+	</div>
+
+	<div class="label">Bio:</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-6">
+      <textarea rows="5" formControlName="bio" pInputTextarea></textarea>
+    </div>
+  </div>
+	
+	<div [hidden]="!canUpdate" class="btn-panel">
+			<button pButton type="submit" [disabled]="!userForm.valid" label="Update" class="ui-button-raised ui-button-success"></button>
+	</div>  
+</form>

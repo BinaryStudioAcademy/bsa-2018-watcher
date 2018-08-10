@@ -2,6 +2,7 @@
 
 namespace Watcher.Core.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace Watcher.Core.Services
     using Microsoft.EntityFrameworkCore;
 
     using Watcher.Common.Dtos;
+    using Watcher.Common.Enums;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Interfaces;
@@ -76,7 +78,10 @@ namespace Watcher.Core.Services
                                                    }
                                            };
 
-            await _uow.UsersRepository.CreateAsync(entity);
+
+            entity = await _uow.UsersRepository.CreateAsync(entity);
+            
+            entity.NotificationSettings = CreateNotificationSetting();
             var result = await _uow.SaveAsync();
             if (!result)
             {
@@ -107,6 +112,22 @@ namespace Watcher.Core.Services
             var result = await _uow.SaveAsync();
 
             return result;
+        }
+
+        private IList<NotificationSetting> CreateNotificationSetting()
+        {
+            var notificationSettings = new List<NotificationSetting>();
+            foreach (NotificationType suit in (NotificationType[])Enum.GetValues(typeof(NotificationType)))
+            {
+                notificationSettings.Add(new NotificationSetting
+                {
+                    Type = suit,
+                    IsDisable = false,
+                    IsMute = false,
+                    IsEmailable = true
+                });
+            }
+            return notificationSettings;
         }
     }
 }

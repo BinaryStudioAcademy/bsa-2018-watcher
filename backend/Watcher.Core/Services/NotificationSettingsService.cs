@@ -23,7 +23,7 @@
 
         public async Task<IEnumerable<NotificationSettingDto>> GetEntitysByUserIdAsync(string userId)
         {
-            var entity = await _uow.NotificationSettingsRepository.GetRangeAsync(1, int.MaxValue);
+            var entity = await _uow.NotificationSettingsRepository.GetRangeAsync(1, int.MaxValue, x => x.UserId == userId);
 
             if (entity == null) return null;
 
