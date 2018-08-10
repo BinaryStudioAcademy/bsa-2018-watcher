@@ -48,6 +48,7 @@
         }
 
         public IUsersRepository UsersRepository => _usersRepository ?? (_usersRepository = new UsersRepository(_context, _mapper));
+
         public IDashboardsRepository DashboardsRepository
         {
             get
@@ -58,6 +59,8 @@
                 }
 
                 return _dashboardsRepository;
+            }
+        }
 
         public IOrganizationRepository OrganizationRepository
         {
