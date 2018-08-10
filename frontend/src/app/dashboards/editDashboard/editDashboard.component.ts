@@ -10,7 +10,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
 
   title = '';
 
-  @Output() saved = new EventEmitter<string>();
+  @Output() edited = new EventEmitter<string>();
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardTitle: string;
@@ -21,8 +21,8 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.dashboardTitle = '';
   }
 
-  Save() {
-    this.saved.emit(this.title);
+  edit() {
+    this.edited.emit(this.title);
   }
 
   ngOnChanges(changes) {

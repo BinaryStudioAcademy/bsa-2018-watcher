@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit {
     this.displayEditDashboard = true;
   }
 
-  onSaved(title: string) {
+  onEdited(title: string) {
     if (this.creation === true) {
       const newdash = new Dashboard(title, new Date(), this.inctanceId);
       this.createDashboard(newdash);
@@ -113,8 +113,10 @@ export class DashboardComponent implements OnInit {
     this.getDashboards();
     const lastItem: MenuItem = {
       label: 'Add new',
+      icon: 'fa fa-plus',
       command: (onlick) =>  {
-        this.showCreatePopup(true); }};
+        this.showCreatePopup(true); },
+      id: 'lastTab' };
 
     this.menuItems.push(lastItem);
 
