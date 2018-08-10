@@ -50,8 +50,8 @@ export class DashboardComponent implements OnInit {
     this.menuItems.splice(this.menuItems.length - 1, 0, item);
 
     // comment this if testing on local machine
-    /*this.dashboardsService.create(newDashboard)
-      .subscribe((res: Response) => { console.log(res); });*/
+    this.dashboardsService.create(newDashboard)
+      .subscribe((res: Response) => { console.log(res); });
     }
 
   updateDashboard(editTitle: string) {
@@ -60,8 +60,8 @@ export class DashboardComponent implements OnInit {
     this.menuItems[index].label = editTitle;
 
     // comment this if testing on local machine
-   /*this.dashboardsService.update(this.dashboards[index])
-      .subscribe((res: Response) => {console.log(res); });*/
+    this.dashboardsService.update(this.dashboards[index])
+      .subscribe((res: Response) => {console.log(res); });
   }
 
   deleteDashboard(dashboard: Dashboard) {
@@ -69,8 +69,8 @@ export class DashboardComponent implements OnInit {
     this.menuItems.splice(index, 1);
     this.dashboards.splice(index, 1);
     // comment this if testing on local machine
-   /* this.dashboardsService.delete(dashboard.id)
-      .subscribe((res: Response) => {console.log(res); });*/
+    this.dashboardsService.delete(dashboard.id)
+      .subscribe((res: Response) => {console.log(res); });
   }
 
   async delete() {
@@ -80,16 +80,9 @@ export class DashboardComponent implements OnInit {
   configureDashboards() {
     // comment this if testing on local machine
     this.dashboardsService.getAllByInstance(this.inctanceId).subscribe((data: Dashboard[]) => {
-      console.log('here it is');
-      console.log(data);
-      this.dashboards = data;
-       if (this.dashboards.length === 0) {
-        this.dashboards = [new Dashboard('sda', new Date(), 1)]
-       }
-     } );
+      this.dashboards = data; });
 
-
-    this.dashboards.forEach(dash => {
+      this.dashboards.forEach(dash => {
       this.menuItems.push({
         label: dash.title,
         command: (onclick) => {
