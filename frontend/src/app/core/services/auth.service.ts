@@ -8,7 +8,6 @@ import {TokenService} from './token.service';
 import {UserDto} from '../../shared/models/user-dto';
 import {UserLoginRequest} from '../../shared/models/user-login-request';
 import {HttpErrorResponse} from '@angular/common/http';
-import {e} from '@angular/core/src/render3';
 
 @Injectable({
   providedIn: 'root'
