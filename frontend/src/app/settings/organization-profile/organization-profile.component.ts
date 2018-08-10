@@ -38,7 +38,7 @@ export class OrganizationProfileComponent implements OnInit {
 
   ngOnInit() {
     const user = this.authService.getCurrentUser();
-    if (user == null) {
+    if (user == null || user.lastPickedOrganizationId == null) {
       return;
     }
     this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => {
