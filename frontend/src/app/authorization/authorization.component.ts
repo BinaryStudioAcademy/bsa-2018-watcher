@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { AuthService } from '../core/services/auth.service';
-import { Router } from '@angular/router';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {AuthService} from '../core/services/auth.service';
+import {Router} from '@angular/router';
 import {TokenService} from '../core/services/token.service';
-import { UserDto } from '../shared/models/user-dto';
+import {UserDto} from '../shared/models/user-dto';
 
 @Component({
   selector: 'app-authorization',
@@ -29,7 +29,8 @@ export class AuthorizationComponent implements OnInit {
     private authService: AuthService,
     private tokenService: TokenService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
   }
@@ -72,10 +73,29 @@ export class AuthorizationComponent implements OnInit {
   }
 
   async signUpWithGoogle(): Promise<void> {
-    const result = await this.authService.signUpWithGoogle();
-    this.closeDialog();
+    const result = await this.authService.signInWithGoogle();
 
-    this.signInPostProcessing(result);
+    this.currentUserCheck(result);
+  }
+
+  // TODO: change this to In
+  async signInWithGoogle(): Promise<void> {
+    await this.authService.signUpWithGoogle()
+      .then(res => {
+        this.closeDialog();
+        this.signInPostProcessing(res);
+      })
+      .catch(err => {
+        if (err) {
+          if (err.status === 400) {
+            console.log('AMA IN COMPONENT!!!');
+            this.isSignIn = false;
+            this.isSuccessSignUp = true;
+            debugger;
+            // TODO: Close providers window, open details
+          }
+        }
+      });
   }
 
   async signUpWithGitHub(): Promise<void> {
@@ -97,12 +117,6 @@ export class AuthorizationComponent implements OnInit {
     this.closeDialog();
 
     this.signInPostProcessing(result);
-  }
-
-  async signInWithGoogle(): Promise<void> {
-    const result = await this.authService.signInWithGoogle();
-
-    this.currentUserCheck(result);
   }
 
   async signInWithFacebook(): Promise<void> {
@@ -134,13 +148,13 @@ export class AuthorizationComponent implements OnInit {
   }
 
   currentUserCheck(result: boolean): void {
-    const currentUser: UserDto  = this.authService.getCurrentUser();
+    const currentUser: UserDto = this.authService.getCurrentUser();
 
     if (currentUser == null) {
       this.showNotRegisteredSignIn();
     } else {
-        this.closeDialog();
-    this.signInPostProcessing(result);
+      this.closeDialog();
+      this.signInPostProcessing(result);
     }
   }
 
@@ -153,12 +167,12 @@ export class AuthorizationComponent implements OnInit {
     this.closeDialog();
   }
 
-  signInPostProcessing(result: boolean): Promise<boolean> {
+  signInPostProcessing(result: boolean | void): Promise<boolean> {
     if (result) {
       return this.router.navigate(['/user/dashboards']);
     } else {
       return this.router.navigate(['/']);
     }
-}
+  }
 
 }

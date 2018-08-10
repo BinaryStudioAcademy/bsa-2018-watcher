@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
 import {Observable, throwError} from 'rxjs';
 import {UserRegisterRequest} from '../../shared/models/user-register-request';
 import {TokenService} from './token.service';
 import {UserDto} from '../../shared/models/user-dto';
 import {UserLoginRequest} from '../../shared/models/user-login-request';
-import {HttpErrorResponse} from '@angular/common/http';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +33,7 @@ export class AuthService {
     );
   }
 
-  async login(credential: firebase.auth.UserCredential): Promise<void> {
+  login(credential: firebase.auth.UserCredential): Observable<any> {
 
     const request: UserLoginRequest = {
       uid: credential.user.uid,
@@ -44,24 +43,16 @@ export class AuthService {
     const firebaseToken = await credential.user.getIdToken();
     localStorage.setItem('firebaseToken', firebaseToken);
 
-    debugger;
-
     await this.tokenService.login(request)
       .subscribe(tokenDto => {
-        debugger;
         localStorage.setItem('currentUser', JSON.stringify(tokenDto.user));
         localStorage.setItem('watcherToken', tokenDto.watcherJWT);
       }, err => {
-        // throw new HttpStatusCodeException(HttpStatusCode.BadRequest, "User with such Uid not registered yet!");
-        // TODO: Close Providers, open Details form
-        debugger;
-        console.log(err);
+        throwError(err);
       });
-
-    debugger;
   }
 
-  async register(credential: firebase.auth.UserCredential) {
+  async register(credential: firebase.auth.UserCredential): Promise<void> {
     const info: UserRegisterRequest = {
       uid: credential.user.uid,
       email: credential.user.email,
@@ -74,23 +65,15 @@ export class AuthService {
     const firebaseToken = await credential.user.getIdToken();
     localStorage.setItem('firebaseToken', firebaseToken);
 
-    debugger;
-
     await this.tokenService.register(info).toPromise()
       .then(tokenDto => {
-        debugger;
         localStorage.setItem('currentUser', JSON.stringify(tokenDto.user));
         localStorage.setItem('watcherToken', tokenDto.watcherJWT);
       })
       .catch(err => {
-        // throw new HttpStatusCodeException(HttpStatusCode.BadRequest, "User with such Uid already exists");
-        // TODO: Close Providers, open Details form
-        debugger;
-        console.log(err);
-        return throwError(err);
+        throw err;
       });
 
-    debugger;
   }
 
   async signInWithGoogle(): Promise<boolean> {
@@ -107,23 +90,24 @@ export class AuthService {
     return true;
   }
 
-  async signUpWithGoogle(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-
-      await this.register(res);
-
-    } catch (e) {
-      debugger;
-      if (e.status === 400) {
-        debugger;
-        // TODO: Close providers window, open details
-      }
-      console.log(e);
-      return false;
-    }
-
-    return true;
+  async signUpWithGoogle(): Promise<boolean | void> {
+    return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(res => {
+        return this.register(res);
+      })
+      .then(regRes => {
+        return regRes;
+      })
+      .catch(err => {
+        if (err) {
+          if (err.status === 400) {
+            throw err;
+          }
+        } else {
+          console.log(err);
+          return false;
+        }
+      });
   }
 
   async signInWithFacebook(): Promise<boolean> {
