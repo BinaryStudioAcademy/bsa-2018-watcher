@@ -7,6 +7,7 @@ import { DashboardService } from '../../core/services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard.model';
 import { Instance } from '../../shared/models/instance.model';
 import { ToastrService } from '../../core/services/toastr.service';
+import { DashboardMenuItem } from '../models/dashboard-menuitem.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,11 +20,14 @@ export class DashboardComponent implements OnInit {
 
   instance: Instance;
 
-  menuItems: MenuItem[];
-  activeItem: MenuItem;
+  // menuItems: MenuItem[];
+  // activeItem: MenuItem;
 
-  dashboards: Dashboard[];
-  activeDashboard: Dashboard;
+  dashboardMenuitems: DashboardMenuItem[];
+  activeDashboardItem: DashboardMenuItem;
+
+  // dashboards: Dashboard[];
+  // activeDashboard: Dashboard;
   editTitle: string;
 
   creation: boolean;
@@ -33,92 +37,130 @@ export class DashboardComponent implements OnInit {
   constructor(private dashboardsService: DashboardService, private toastrService: ToastrService,
               private notificationsService: NotificationsService,
               private messageService: MessageService) {
-    this.menuItems = [];
-    this.activeItem = {};
-
-    this.dashboards = [];
+    this.activeDashboardItem = {};
+    this.dashboardMenuitems = [];
     this.instance = {id: 1, address: 'adress', platform: 'platform'};
     this.subscribeToEvents();
   }
 
+  transformToDashboard(dashboard: DashboardMenuItem): Dashboard {
+    const newdash: Dashboard = {
+      title: dashboard.label,
+      createdAt: dashboard.createdAt,
+      id: dashboard.dashId,
+      instance: dashboard.instance,
+      charts: dashboard.charts, };
+    return newdash;
+  }
+
   createDashboard(newDashboard: Dashboard) {
+    const item: DashboardMenuItem = {
+      dashId: newDashboard.id,
+      label: newDashboard.title,
+      instance: newDashboard.instance,
+      createdAt: newDashboard.createdAt,
+      charts: newDashboard.charts,
+      command: (onclick) => { this.activeDashboardItem = item; }
+    };
+    this.dashboardMenuitems.splice(this.dashboardMenuitems.length - 1, 0, item);
+    this.loading = false; /*
     this.dashboardsService.create(newDashboard)
     .subscribe(
       (res: Response) => {
         console.log(res);
-        const item: MenuItem = {
+        const item: DashboardMenuItem = {
           label: newDashboard.title,
-          command: (onclick) => { this.activeDashboard = newDashboard; }
+          command: (onclick) => { this.activeDashboardItem = {
+            dashId: newDashboard.id,
+            label: newDashboard.title,
+            instance: newDashboard.instance,
+            createdAt: newDashboard.createdAt,
+            charts: newDashboard.charts}; }
         };
-        this.dashboards.push(newDashboard);
-        this.menuItems.splice(this.menuItems.length - 1, 0, item);
+        this.dashboardMenuitems.splice(this.dashboardMenuitems.length - 1, 0, item);
         this.loading = false; },
       error => {
         console.log(`Error: ${error}`);
         this.loading = false;
-      });
+      });*/
     }
 
   updateDashboard(editTitle: string) {
-    const index = this.dashboards.findIndex(d => d === this.activeDashboard);
-    this.dashboardsService.update(this.dashboards[index])
+    const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
+    const payload: Dashboard = this.transformToDashboard(this.dashboardMenuitems[index]);
+    payload.title = editTitle;
+    this.dashboardMenuitems[index].label = payload.title;
+    this.loading = false;
+
+    /*this.dashboardsService.update(payload)
       .subscribe(
         (res: Response) => {
           console.log(res);
-          this.dashboards[index].title = editTitle;
-          this.menuItems[index].label = editTitle;
+          this.dashboardMenuitems[index].label = payload.title;
           this.loading = false; },
         error => {
           console.log(`Error: ${error}`);
           this.loading = false;
-         });
+         });*/
   }
 
-  deleteDashboard(dashboard: Dashboard) {
-    this.dashboardsService.delete(dashboard.id)
+  deleteDashboard(dashboard: DashboardMenuItem) {
+    const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
+        this.dashboardMenuitems.splice(index, 1);
+
+        if (this.dashboardMenuitems.length >= 1 ) {
+          this.activeDashboardItem = this.dashboardMenuitems[0];
+        } else {
+            this.activeDashboardItem = null; }
+
+        this.loading = false;
+    /*this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
         console.log(res);
-        const index = this.dashboards.findIndex(d => d === this.activeDashboard);
-        this.menuItems.splice(index, 1);
-        this.dashboards.splice(index, 1);
+        const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
+        this.dashboardMenuitems.splice(index, 1);
 
-        if (this.menuItems.length >= 1 ) {
-          this.activeDashboard = this.dashboards[0];
-          this.activeItem = this.menuItems[0];
+        if (this.dashboardMenuitems.length >= 1 ) {
+          this.activeDashboardItem = this.dashboardMenuitems[0];
         } else {
-            this.activeDashboard = null; }
+            this.activeDashboardItem = null; }
 
         this.loading = false; },
         error => {
           console.log(`Error: ${error}`);
-          this.loading = false; }); }
+        this.loading = false; });*/ }
 
   async delete() {
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
       this.loading = true;
-      this.deleteDashboard(this.activeDashboard); }}
+      this.deleteDashboard(this.activeDashboardItem); }}
 
   configureDashboards() {
       this.dashboardsService.getAllByInstance(this.instance.id).subscribe(
     (data: Dashboard[]) => {
-      this.dashboards = data;
-
-      this.dashboards.map(dash => {
-        this.menuItems.push({
-          label: dash.title,
-          command: (onclick) => {
-            this.activeDashboard = dash; }}); });
+      this.dashboardMenuitems = data.map(
+        dash => {
+          const item: DashboardMenuItem = {
+            label: dash.title,
+            dashId: dash.id,
+            instance: dash.instance,
+            createdAt: dash.createdAt,
+            charts: dash.charts,
+            command: (onclick) => {
+              this.activeDashboardItem = item; }
+          };
+          return item; }
+      );
 
       this.loading = false; },
     error => {
       console.log(`Error: ${error}`);
-      this.loading = false;
-    } );
+      this.loading = false; } );
   }
 
   showCreatePopup(creation: boolean) {
     this.creation = creation;
-    this.editTitle = creation ? '' : this.activeDashboard.title;
+    this.editTitle = creation ? '' : this.activeDashboardItem.label;
     this.displayEditDashboard = true;
   }
 
@@ -129,10 +171,16 @@ export class DashboardComponent implements OnInit {
       this.createDashboard(newdash);
     let index = 0;
     // switching to new tab
-    if (this.menuItems.length >= 2 ) {
-      index = this.menuItems.length - 2;
-      this.activeDashboard = newdash;
-      this.activeItem = this.menuItems[index]; }
+    if (this.dashboardMenuitems.length >= 2 ) {
+      index = this.dashboardMenuitems.length - 2;
+      this.activeDashboardItem = {
+        label: newdash.title,
+        dashId: newdash.id,
+        createdAt: newdash.createdAt,
+        instance: newdash.instance,
+        charts: newdash.charts
+      };
+      this.activeDashboardItem = this.dashboardMenuitems[index]; }
     } else {
       this.updateDashboard(title);
     }
@@ -142,16 +190,24 @@ export class DashboardComponent implements OnInit {
 
   onClosed() {
     if (this.creation === true) {
-      if (this.menuItems.length >= 2) {
+      if (this.dashboardMenuitems.length >= 2) {
         // switching to last dashboard if popup is closed without save
-        const index = this.menuItems.length - 2;
-        const label = this.menuItems[index].label.slice();
-        this.menuItems[index] = {label: label };
-        this.activeItem = this.menuItems[index];
-        this.activeDashboard = this.dashboards[index]; }
+        const index = this.dashboardMenuitems.length - 2;
+        const label = this.dashboardMenuitems[index].label.slice();
+
+        const x: DashboardMenuItem = {
+          label: label,
+          dashId: this.dashboardMenuitems[index].dashId,
+          createdAt: this.dashboardMenuitems[index].createdAt,
+          instance: this.dashboardMenuitems[index].instance,
+          charts: this.dashboardMenuitems[index].charts
+        };
+        this.dashboardMenuitems[index] = x;
+        this.activeDashboardItem = this.dashboardMenuitems[index]; }
     }
       this.creation = false;
       this.displayEditDashboard = false;
+      this.toastrService.success('sadasda');
   }
 
   private subscribeToEvents(): void {
@@ -169,17 +225,33 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.toastrService.success('message');
-    this.loading = true;
-    this.configureDashboards();
-    const lastItem: MenuItem = {
+    // this.loading = true;
+    // this.configureDashboards();
+    const item1: DashboardMenuItem = {
+      label: 'RAM',
+      instance: this.instance,
+      createdAt: new Date(),
+      command: (onclick) => {
+        this.activeDashboardItem = item1; }
+    };
+    const item2: DashboardMenuItem = {
+      label: 'CAM',
+      instance: this.instance,
+      createdAt: new Date(),
+      command: (onclick) => {
+        this.activeDashboardItem = item2;
+        console.log(this.activeDashboardItem); }
+    };
+    this.dashboardMenuitems = [item1, item2];
+
+    const lastItem: DashboardMenuItem = {
       label: 'Add new',
       icon: 'fa fa-plus',
       command: (onlick) =>  {
         this.showCreatePopup(true); },
       id: 'lastTab' };
 
-    this.menuItems.push(lastItem);
-    this.activeDashboard = this.dashboards[0];
-    this.activeItem = this.menuItems[0];
+    this.dashboardMenuitems.push(lastItem);
+    this.activeDashboardItem = this.dashboardMenuitems[0];
   }
 }

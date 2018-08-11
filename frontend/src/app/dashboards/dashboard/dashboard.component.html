@@ -4,10 +4,10 @@
     <div class="title">
         Dashboards
     </div>
-    <p-tabMenu [model]="menuItems" [activeItem]="activeItem"></p-tabMenu>
+    <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem"></p-tabMenu>
     <p-progressSpinner *ngIf="loading" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
-    <div class="workspace" *ngIf="activeDashboard">
-        <h3>{{activeDashboard.title}} chart
+    <div class="workspace" *ngIf="activeDashboardItem">
+        <h3>{{activeDashboardItem.label}} chart
             <button pButton type="button " label="Delete " class="btnedit ui-button-danger ui-button-raised " (click)="delete() "></button>
             <button pButton type="button " label="Edit " class="btnedit ui-button-primary ui-button-raised " (click)="showCreatePopup(false) "></button>
         </h3>

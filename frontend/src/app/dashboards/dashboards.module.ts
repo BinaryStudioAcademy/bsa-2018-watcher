@@ -6,6 +6,7 @@ import { InstanceListComponent } from './instance-list/instance-list.component';
 import { TabViewModule, PanelMenuModule, DialogModule, ButtonModule, TabMenuModule, ProgressSpinnerModule } from 'primeng/primeng';
 import { EditDashboardComponent } from './editDashboard/editDashboard.component';
 import { FormsModule } from '@angular/forms';
+import { ToastModule } from '../../../node_modules/primeng/toast';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
     TabMenuModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
+    ToastModule
   ],
   declarations: [DashboardComponent, InstanceListComponent, EditDashboardComponent],
   exports: [ DashboardComponent, InstanceListComponent ]
