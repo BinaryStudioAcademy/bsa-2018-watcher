@@ -18,7 +18,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     TabMenuModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
   ],
   declarations: [DashboardComponent, InstanceListComponent, EditDashboardComponent],
   exports: [ DashboardComponent, InstanceListComponent ]

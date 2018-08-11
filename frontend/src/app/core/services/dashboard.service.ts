@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Dashboard } from '../../shared/models/dashboard.model';
-import { Instance } from '../../shared/models/instance.model';
 import { environment } from '../../../environments/environment';
 import { Observable, throwError } from '../../../../node_modules/rxjs';
 import { retry, catchError } from '../../../../node_modules/rxjs/operators';
@@ -45,7 +44,6 @@ export class DashboardService {
     console.error(
       `Backend returned code ${error.status}, ` +
       `body was: ${error.error}`);
-
     return throwError(error.status);
   }
 }
