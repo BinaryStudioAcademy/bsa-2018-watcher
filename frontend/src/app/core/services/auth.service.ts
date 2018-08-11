@@ -89,8 +89,8 @@ export class AuthService {
       });
   }
 
-  signInWithGoogle(): Promise<boolean> {
-    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider().addScope('email'))
+  async signInWithGoogle(): Promise<boolean> {
+    return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider().addScope('email'))
       .then(res => {
         return this.login(res, 'Google');
       })
@@ -106,8 +106,8 @@ export class AuthService {
       });
   }
 
-  signInWithFacebook(): Promise<boolean> {
-    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider().addScope('email'))
+  async signInWithFacebook(): Promise<boolean> {
+    return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider().addScope('email'))
       .then(res => {
         return this.login(res, 'Facebook');
       })
@@ -115,16 +115,16 @@ export class AuthService {
         return true;
       })
       .catch(err => {
-          if (err.status === 400) {
-            throw err;
-          }
-          console.error(err);
-          return false;
+        if (err.status === 400) {
+          throw err;
+        }
+        console.error(err);
+        return false;
       });
   }
 
-  signInWithGitHub(): Promise<boolean> {
-    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider().addScope('email'))
+  async signInWithGitHub(): Promise<boolean> {
+    return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider().addScope('email'))
       .then(res => {
         return this.login(res, 'GitHub');
       })
