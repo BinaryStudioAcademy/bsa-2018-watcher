@@ -4,7 +4,7 @@ import { DashboardComponent } from '../dashboards/dashboard/dashboard.component'
 import { UserComponent } from './user.component';
 
 const userRoutes: Routes = [{
-  path: ' ',
+  path: '',
   component: UserComponent,
   children: [{
       path: '',
