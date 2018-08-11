@@ -15,6 +15,8 @@
 
         IOrganizationRepository OrganizationRepository { get; }
 
+        IFeedbackRepository FeedbackRepository { get; }
+
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 
         IInstanceRepository InstanceRepository { get; }
