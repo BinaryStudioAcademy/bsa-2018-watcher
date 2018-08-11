@@ -20,16 +20,10 @@ export class DashboardComponent implements OnInit {
 
   instance: Instance;
 
-  // menuItems: MenuItem[];
-  // activeItem: MenuItem;
-
   dashboardMenuitems: DashboardMenuItem[];
   activeDashboardItem: DashboardMenuItem;
 
-  // dashboards: Dashboard[];
-  // activeDashboard: Dashboard;
   editTitle: string;
-
   creation: boolean;
   loading = false;
   displayEditDashboard = false;
@@ -89,6 +83,7 @@ export class DashboardComponent implements OnInit {
     const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
     const payload: Dashboard = this.transformToDashboard(this.dashboardMenuitems[index]);
     payload.title = editTitle;
+    // remove below
     this.dashboardMenuitems[index].label = payload.title;
     this.loading = false;
 
@@ -135,6 +130,7 @@ export class DashboardComponent implements OnInit {
       this.loading = true;
       this.deleteDashboard(this.activeDashboardItem); }}
 
+      suc() { this.toastrService.success('gt'); }
   configureDashboards() {
       this.dashboardsService.getAllByInstance(this.instance.id).subscribe(
     (data: Dashboard[]) => {

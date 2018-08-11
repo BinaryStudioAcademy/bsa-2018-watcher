@@ -2,10 +2,11 @@
 <app-edit-dashboard (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard" [dashboardTitle]="editTitle"></app-edit-dashboard>
 <div class="site-wrap">
     <div class="title">
-        Dashboards
-    </div>
+        <h3>Dashboards</h3>
+        <p-progressSpinner *ngIf="loading" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        <!--<button pButton type="submit" label="Submit feedback" class="ui-button-raised ui-button-success" (click)="suc()"></button>
+        --></div>
     <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem"></p-tabMenu>
-    <p-progressSpinner *ngIf="loading" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
     <div class="workspace" *ngIf="activeDashboardItem">
         <h3>{{activeDashboardItem.label}} chart
             <button pButton type="button " label="Delete " class="btnedit ui-button-danger ui-button-raised " (click)="delete() "></button>

@@ -12,10 +12,23 @@
         background-color: #518c2a
 
 .title
-    padding-bottom: 10px
-    font-size: 1.4em
-    font-weight: 600
-    letter-spacing: 1px
+    height: 60px
+    display: flex
+    padding: 0
+    h3
+        height: 100%
+        margin: 0
+        padding: 17px 0px 
+        font-size: 25px
+        font-weight: bold
+        width: 200px
+        display: block
+    /deep/.ui-progress-spinner
+        display: block
+        margin-top: 10px
+        margin-left: 5%
+        width: 40px
+        height: 40px
 
 .workspace
     h3
@@ -25,11 +38,6 @@
         margin-left: 10px
         width: 70px
 
-/deep/.ui-progress-spinner
-    margin: 10% 45%
-    width: 10%
-    height: 10%
-    
 @keyframes ui-progress-spinner-color
   100%,
     0%
