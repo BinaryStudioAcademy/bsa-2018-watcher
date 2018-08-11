@@ -5,7 +5,10 @@ import { ShellComponent } from './shell.component';
 const routes: Routes = [{
   path: 'user',
   component: ShellComponent,
-  loadChildren: '../user/user.module#UserModule'
+  children: [{
+    path: '',
+    loadChildren: '../user/user.module#UserModule'
+  }]
 }];
 
 @NgModule({
