@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Hubs
 {
     using System;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -59,7 +60,7 @@
         /// <summary>
         /// Send message to caller of this method(to connection that invoked this method)
         /// </summary>
-        [Authorize(Roles = "User")]
+        [Authorize]
         public void Echo()
         {
             Clients.Client(Context.ConnectionId).SendAsync("Echo", " (echo from server)");
@@ -79,11 +80,12 @@
             await Clients.Client(Context.ConnectionId).SendAsync("AddSample", dto, "Second Parameter", 3);
         }
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         public void Send(string userId, string message)
         {
             // We don't have authorization yet so message wont be sent to anyone
-            Clients.User(userId).SendAsync("BroadcastMessage", $"{Context.ConnectionId } sent you message: {message}");
+            var senderCurrentUserId = Context.User.FindFirstValue("unique_name");
+            Clients.User(userId).SendAsync("BroadcastMessage", $"User with Id {senderCurrentUserId} sent you message: {message}");
         }
     }
 }

@@ -82,7 +82,7 @@ export class HeaderComponent implements OnInit {
   }
 
   sendMess() {
-    this.notificationsService.send('userId', 'message');
+    this.notificationsService.send('ri3bE0PElDT8gLU35sonvnMzbEq2', 'From Sdadadafsd message');
   }
 
   connectToServer() {
