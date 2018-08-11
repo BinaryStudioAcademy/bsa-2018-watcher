@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
       command: (onclick) => { this.activeDashboardItem = item; }
     };
     this.dashboardMenuitems.splice(this.dashboardMenuitems.length - 1, 0, item);
-    this.loading = false; /*
+    this.loading = false; this.toastrService.success('Added new dashboard'); /*
     this.dashboardsService.create(newDashboard)
     .subscribe(
       (res: Response) => {
@@ -72,10 +72,12 @@ export class DashboardComponent implements OnInit {
             charts: newDashboard.charts}; }
         };
         this.dashboardMenuitems.splice(this.dashboardMenuitems.length - 1, 0, item);
-        this.loading = false; },
+        this.loading = false;
+        this.toastrService.success('Added new dashboard'); },
       error => {
         console.log(`Error: ${error}`);
         this.loading = false;
+        this.toastrService.error(`Error ocured status: ${error}`);
       });*/
     }
 
@@ -86,16 +88,18 @@ export class DashboardComponent implements OnInit {
     // remove below
     this.dashboardMenuitems[index].label = payload.title;
     this.loading = false;
-
+    this.toastrService.success('Updated dashboard');
     /*this.dashboardsService.update(payload)
       .subscribe(
         (res: Response) => {
           console.log(res);
           this.dashboardMenuitems[index].label = payload.title;
-          this.loading = false; },
+          this.loading = false;
+          this.toastrService.success('Updated dashboard'); },
         error => {
           console.log(`Error: ${error}`);
           this.loading = false;
+          this.toastrService.success(`Error ocured status: ${error}`);
          });*/
   }
 
@@ -109,6 +113,7 @@ export class DashboardComponent implements OnInit {
             this.activeDashboardItem = null; }
 
         this.loading = false;
+        this.toastrService.success('Deleted dashboard');
     /*this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
         console.log(res);
@@ -120,10 +125,12 @@ export class DashboardComponent implements OnInit {
         } else {
             this.activeDashboardItem = null; }
 
-        this.loading = false; },
+        this.loading = false;
+        this.toastrService.success('Deleted dashboard'); },
         error => {
           console.log(`Error: ${error}`);
-        this.loading = false; });*/ }
+          this.loading = false;
+          this.toastrService.error(`Error occured status: ${error}`); });*/ }
 
   async delete() {
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
@@ -203,7 +210,6 @@ export class DashboardComponent implements OnInit {
     }
       this.creation = false;
       this.displayEditDashboard = false;
-      this.toastrService.success('sadasda');
   }
 
   private subscribeToEvents(): void {
@@ -220,7 +226,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toastrService.success('message');
     // this.loading = true;
     // this.configureDashboards();
     const item1: DashboardMenuItem = {
