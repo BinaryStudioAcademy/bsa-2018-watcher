@@ -33,7 +33,7 @@ namespace Watcher.Common.Dtos
 
         public IList<NotificationSettingDto> NotificationSettings { get; set; }
 
-        public IList<UserOrganizationDto> UserOrganizations { get; set; }
+        public IList<OrganizationDto> Organizations { get; set; }
 
         public IList<NotificationDto> Notifications { get; set; }
 

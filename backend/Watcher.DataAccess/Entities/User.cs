@@ -33,6 +33,8 @@
         public int RoleId { get; set; }
         public Role Role { get; set; }
 
+        //    public Organization Organization { get; set; }
+
         public int? LastPickedOrganizationId { get; set; }
         public Organization LastPickedOrganization { get; set; }
         

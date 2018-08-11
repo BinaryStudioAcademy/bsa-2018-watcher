@@ -8,6 +8,8 @@ namespace Watcher.Core.Services
 
     using AutoMapper;
 
+    using Microsoft.EntityFrameworkCore;
+
     using Watcher.Common.Dtos;
     using Watcher.Common.Enums;
     using Watcher.Common.Requests;
@@ -34,9 +36,28 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<UserDto> GetEntityByEmailAsync(string email)
+        {
+            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Email == email,
+                             include: users => users.Include(u => u.Role)
+                                 .Include(u => u.LastPickedOrganization)
+                                 .Include(u => u.UserOrganizations)
+                                 .ThenInclude(uo => uo.Organization));
+
+            if (sample == null) return null;
+
+            var dto = _mapper.Map<User, UserDto>(sample);
+
+            return dto;
+        }
+
         public async Task<UserDto> GetEntityByIdAsync(string id)
         {
-            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id);
+            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id,
+                             include: users => users.Include(u => u.Role)
+                                                    .Include(u => u.LastPickedOrganization)
+                                                    .Include(u => u.UserOrganizations)
+                                                            .ThenInclude(uo => uo.Organization));
 
             if (sample == null) return null;
 
@@ -47,21 +68,30 @@ namespace Watcher.Core.Services
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
-            var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == request.Uid);
+            var user = await GetEntityByIdAsync(request.Email);
 
             if (user != null)
             {
-                return _mapper.Map<User, UserDto>(user);
-                // throw new HttpStatusCodeException(HttpStatusCode.BadRequest, "User with such Uid already exists");
+                return user;
             }
 
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
-            //var organization = new Organization()
-            //                       {
-            //                           Name = request.CompanyName
-            //                       };
-            //entity.LastPickedOrganization = organization;
-            //e
+            var organization = new Organization()
+            {
+                Name = request.CompanyName,
+                Instances = new List<Instance>(),
+                Notifications = new List<Notification>(),
+                // CreatedByUser = entity // TODO: circular dependency
+            };
+            entity.LastPickedOrganization = organization;
+            entity.UserOrganizations = new List<UserOrganization>
+                                           {
+                                               new UserOrganization
+                                                   {
+                                                       Organization = organization,
+                                                       User = entity
+                                                   }
+                                           };
 
 
             entity = await _uow.UsersRepository.CreateAsync(entity);
@@ -73,7 +103,9 @@ namespace Watcher.Core.Services
                 return null;
             }
 
-            return _mapper.Map<User, UserDto>(entity);
+            var dto = _mapper.Map<User, UserDto>(entity);
+
+            return dto;
         }
 
         public async Task<bool> UpdateEntityByIdAsync(UserUpdateRequest request, string id)

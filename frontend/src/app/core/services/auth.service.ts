@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
-import {Observable, throwError} from 'rxjs';
+import {Observable} from 'rxjs';
 import {UserRegisterRequest} from '../../shared/models/user-register-request';
 import {TokenService} from './token.service';
 import {UserDto} from '../../shared/models/user-dto';
 import {UserLoginRequest} from '../../shared/models/user-login-request';
 import * as firebase from 'firebase';
-import {debounce} from 'rxjs/operators';
+import {UserInfoProfile} from '../../shared/models/user-info-profile';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class AuthService {
       (user) => {
         if (user) {
           this.userDetails = user;
-          console.log(this.userDetails);
+          // console.log(this.userDetails);
         } else {
           this.userDetails = null;
         }
@@ -35,7 +35,7 @@ export class AuthService {
     );
   }
 
-  async login(credential: firebase.auth.UserCredential): Promise<void> {
+  async login(credential: firebase.auth.UserCredential, provider: string): Promise<void> {
     this.userRegisterRequest = {
       uid: credential.user.uid,
       email: credential.user.email,
@@ -47,6 +47,11 @@ export class AuthService {
       firstName: '',
       lastName: ''
     };
+
+    if (!this.userRegisterRequest.email) {
+      this.userRegisterRequest.email = (<UserInfoProfile>credential.additionalUserInfo.profile).email;
+    }
+
 
     const request: UserLoginRequest = {
       uid: this.userRegisterRequest.uid,
@@ -67,9 +72,6 @@ export class AuthService {
   }
 
   async register(): Promise<void> {
-    // const firebaseToken = this.getFirebaseToken();
-    // localStorage.setItem('firebaseToken', firebaseToken);
-
     await this.tokenService.register(this.userRegisterRequest).toPromise()
       .then(tokenDto => {
         localStorage.setItem('currentUser', JSON.stringify(tokenDto.user));
@@ -80,30 +82,58 @@ export class AuthService {
       });
   }
 
-  async signInWithGoogle(): Promise<boolean> {
-    return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then( res => {
-
-        return this.login(res);
+  signInWithGoogle(): Promise<boolean> {
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider().addScope('email'))
+      .then(res => {
+        return this.login(res, 'Google');
       })
       .then(() => {
-
         return true;
       })
       .catch(err => {
-
-        if (err) {
-          if (err.status === 400) {
-            throw err;
-          }
-        } else {
-          console.log(err);
-          return false;
+        if (err.status === 400) {
+          throw err;
         }
+        console.error(err);
+        return false;
       });
   }
 
-  async signUpWithGoogle(companyName: string, firstName: string, lastName: string): Promise<void> {
+  signInWithFacebook(): Promise<boolean> {
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider().addScope('email'))
+      .then(res => {
+        return this.login(res, 'Facebook');
+      })
+      .then(() => {
+        return true;
+      })
+      .catch(err => {
+          if (err.status === 400) {
+            throw err;
+          }
+          console.error(err);
+          return false;
+      });
+  }
+
+  signInWithGitHub(): Promise<boolean> {
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider().addScope('email'))
+      .then(res => {
+        return this.login(res, 'GitHub');
+      })
+      .then(() => {
+        return true;
+      })
+      .catch(err => {
+        if (err.status === 400) {
+          throw err;
+        }
+        console.error(err);
+        return false;
+      });
+  }
+
+  async signUpWithProvider(companyName: string, firstName: string, lastName: string): Promise<void> {
     this.userRegisterRequest.companyName = companyName;
     this.userRegisterRequest.firstName = firstName;
     this.userRegisterRequest.lastName = lastName;
@@ -114,107 +144,6 @@ export class AuthService {
       .catch(err => {
         throw err;
       });
-    // return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-    //   .then(res => {
-    //     return this.register(res);
-    //   })
-    //   .then(() => {
-    //     return true;
-    //   })
-    //   .catch(err => {
-    //     if (err) {
-    //       if (err.status === 400) {
-    //         throw err;
-    //       }
-    //     } else {
-    //       console.log(err);
-    //       return false;
-    //     }
-    //   });
-  }
-
-  async signInWithFacebook(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
-
-      await this.login(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
-  }
-
-  async signUpWithFacebook(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
-
-      await true; // this.register(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
-  }
-
-  async signInWithGitHub(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
-
-      await this.login(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
-  }
-
-  async signUpWithGitHub(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
-
-      await true; //this.register(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
-  }
-
-  async signInWithTwitter(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
-
-      await this.login(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
-  }
-
-  async signUpWithTwitter(): Promise<boolean> {
-    try {
-      const res = await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
-
-      await true; // this.register(res);
-
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
-    return true;
   }
 
   isLoggedIn(): boolean {
