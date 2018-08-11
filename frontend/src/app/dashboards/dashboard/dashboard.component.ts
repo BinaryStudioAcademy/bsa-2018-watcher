@@ -1,18 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem, ConfirmationService } from 'primeng/primeng';
-import {SampleDto} from '../../shared/models/sample-dto.model';
-import {MessageService} from 'primeng/api';
+import { ConfirmationService } from 'primeng/primeng';
+import { SampleDto } from '../../shared/models/sample-dto.model';
+import { MessageService } from 'primeng/api';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard.model';
 import { Instance } from '../../shared/models/instance.model';
 import { ToastrService } from '../../core/services/toastr.service';
-<<<<<<< HEAD
 import { DashboardMenuItem } from '../models/dashboard-menuitem.model';
-
-=======
-import { Observable } from '../../../../node_modules/rxjs';
 import { NotificationsService } from '../../core/services/notifications.service';
->>>>>>> dev
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -33,11 +29,11 @@ export class DashboardComponent implements OnInit {
   displayEditDashboard = false;
 
   constructor(private dashboardsService: DashboardService, private toastrService: ToastrService,
-              private notificationsService: NotificationsService,
-              private messageService: MessageService) {
+    private notificationsService: NotificationsService,
+    private messageService: MessageService) {
     this.activeDashboardItem = {};
     this.dashboardMenuitems = [];
-    this.instance = {id: 1, address: 'adress', platform: 'platform'};
+    this.instance = { id: 1, address: 'adress', platform: 'platform' };
     this.subscribeToEvents();
   }
 
@@ -47,7 +43,8 @@ export class DashboardComponent implements OnInit {
       createdAt: dashboard.createdAt,
       id: dashboard.dashId,
       instance: dashboard.instance,
-      charts: dashboard.charts, };
+      charts: dashboard.charts,
+    };
     return newdash;
   }
 
@@ -65,19 +62,19 @@ export class DashboardComponent implements OnInit {
 
   createDashboard(newDashboard: Dashboard) {
     this.dashboardsService.create(newDashboard)
-    .subscribe(
-      (res: Response) => {
-        console.log(res);
-        const item: DashboardMenuItem = this.transformToMenuItem(newDashboard);
-        this.dashboardMenuitems.splice(this.dashboardMenuitems.length - 1, 0, item);
-        this.loading = false;
-        this.toastrService.success('Added new dashboard'); },
-      error => {
-        console.log(`Error: ${error}`);
-        this.loading = false;
-        this.toastrService.error(`Error ocured status: ${error}`);
-      });
-    }
+      .subscribe(
+        (res: Response) => {
+          console.log(res);
+          const item: DashboardMenuItem = this.transformToMenuItem(newDashboard);
+          this.dashboardMenuitems.splice(this.dashboardMenuitems.length - 1, 0, item);
+          this.loading = false;
+          this.toastrService.success('Added new dashboard');
+        },
+        error => {
+          this.loading = false;
+          this.toastrService.error(`Error ocured status: ${error}`);
+        });
+  }
 
   updateDashboard(editTitle: string) {
     const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
@@ -90,12 +87,12 @@ export class DashboardComponent implements OnInit {
           console.log(res);
           this.dashboardMenuitems[index].label = payload.title;
           this.loading = false;
-          this.toastrService.success('Updated dashboard'); },
+          this.toastrService.success('Updated dashboard');
+        },
         error => {
-          console.log(`Error: ${error}`);
           this.loading = false;
           this.toastrService.success(`Error ocured status: ${error}`);
-         });
+        });
   }
 
   deleteDashboard(dashboard: DashboardMenuItem) {
@@ -105,34 +102,40 @@ export class DashboardComponent implements OnInit {
         const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
         this.dashboardMenuitems.splice(index, 1);
 
-        if (this.dashboardMenuitems.length >= 1 ) {
+        if (this.dashboardMenuitems.length >= 1) {
           this.activeDashboardItem = this.dashboardMenuitems[0];
         } else {
-            this.activeDashboardItem = null; }
+          this.activeDashboardItem = null;
+        }
 
         this.loading = false;
-        this.toastrService.success('Deleted dashboard'); },
+        this.toastrService.success('Deleted dashboard');
+      },
         error => {
-          console.log(`Error: ${error}`);
           this.loading = false;
-          this.toastrService.error(`Error occured status: ${error}`); }); }
+          this.toastrService.error(`Error occured status: ${error}`);
+        });
+  }
 
   async delete() {
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
       this.loading = true;
-      this.deleteDashboard(this.activeDashboardItem); }}
+      this.deleteDashboard(this.activeDashboardItem);
+    }
+  }
 
   configureDashboards() {
-      this.dashboardsService.getAllByInstance(this.instance.id).subscribe(
-    (data: Dashboard[]) => {
-      this.dashboardMenuitems = data.map(
-        dash => this.transformToMenuItem(dash));
-      this.loading = false;
-      this.toastrService.success('Succesfully got info from server'); },
-    error => {
-      console.log(`Error: ${error}`);
-      this.loading = false;
-      this.toastrService.error(`Error occured status: ${error}`); } );
+    this.dashboardsService.getAllByInstance(this.instance.id).subscribe(
+      (data: Dashboard[]) => {
+        this.dashboardMenuitems = data.map(
+          dash => this.transformToMenuItem(dash));
+        this.loading = false;
+        this.toastrService.success('Succesfully got info from server');
+      },
+      error => {
+        this.loading = false;
+        this.toastrService.error(`Error occured status: ${error}`);
+      });
   }
 
   showCreatePopup(creation: boolean) {
@@ -145,13 +148,14 @@ export class DashboardComponent implements OnInit {
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
-      const newdash: Dashboard = {title: title, createdAt: new Date(), instance: this.instance };
+      const newdash: Dashboard = { title: title, createdAt: new Date(), instance: this.instance };
       this.createDashboard(newdash);
-    let index = 0;
-    // switching to new tab
-    if (this.dashboardMenuitems.length >= 2 ) {
-      index = this.dashboardMenuitems.length - 2;
-      this.activeDashboardItem = this.dashboardMenuitems[index]; }
+      let index = 0;
+      // switching to new tab
+      if (this.dashboardMenuitems.length >= 2) {
+        index = this.dashboardMenuitems.length - 2;
+        this.activeDashboardItem = this.dashboardMenuitems[index];
+      }
     } else {
       this.updateDashboard(title);
     }
@@ -177,15 +181,16 @@ export class DashboardComponent implements OnInit {
         };
 
         this.dashboardMenuitems[index] = x;
-        this.activeDashboardItem = this.dashboardMenuitems[index]; }
+        this.activeDashboardItem = this.dashboardMenuitems[index];
+      }
     }
-      this.creation = false;
-      this.displayEditDashboard = false;
+    this.creation = false;
+    this.displayEditDashboard = false;
   }
 
   private subscribeToEvents(): void {
     this.notificationsService.connectionEstablished.subscribe(() => {
-        console.log('Connected from dashboard');
+      console.log('Connected from dashboard');
     });
 
     this.notificationsService.sampleReceived.subscribe((sample: SampleDto) => {
@@ -197,15 +202,17 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-     this.loading = true;
-     this.configureDashboards();
+    this.loading = true;
+    this.configureDashboards();
 
     const lastItem: DashboardMenuItem = {
       label: 'Add new',
       icon: 'fa fa-plus',
-      command: (onlick) =>  {
-        this.showCreatePopup(true); },
-      id: 'lastTab' };
+      command: (onlick) => {
+        this.showCreatePopup(true);
+      },
+      id: 'lastTab'
+    };
 
     this.dashboardMenuitems.push(lastItem);
     this.activeDashboardItem = this.dashboardMenuitems[0];
