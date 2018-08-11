@@ -26,6 +26,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { ShellModule } from './shell/shell.module';
+import { FeedbackComponent } from './feedback/feedback.component';
 import { NotificationsModule } from './notifications/notifications.module';
 
 @NgModule({
