@@ -19,10 +19,7 @@ export class OrganizationProfileComponent implements OnInit {
     private fb: FormBuilder,
     private organizationService: OrganizationService,
     private authService: AuthService,
-    private toastrService: ToastrService) {
-      // TODO: Delete this after testing. Its need only to show how it works.
-      this.editable = true;
-  }
+    private toastrService: ToastrService) { }
 
   editable: boolean;
   canUpdate: boolean;

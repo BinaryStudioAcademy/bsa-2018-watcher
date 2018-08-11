@@ -4,6 +4,7 @@ namespace Watcher.Core.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -76,28 +77,33 @@ namespace Watcher.Core.Services
             }
 
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
-            var organization = new Organization()
+
+            var defaultOrganization = new Organization()
             {
-                Name = request.CompanyName,
-                Instances = new List<Instance>(),
-                Notifications = new List<Notification>(),
-                // CreatedByUser = entity // TODO: circular dependency
+                Name = request.CompanyName ?? "Default",
+                IsActive = true,
+                Theme = new Theme { Name = "Default" },
+                CreatedByUserId = entity.Id
             };
-            entity.LastPickedOrganization = organization;
-            entity.UserOrganizations = new List<UserOrganization>
-                                           {
-                                               new UserOrganization
-                                                   {
-                                                       Organization = organization,
-                                                       User = entity
-                                                   }
-                                           };
-
-
-            entity = await _uow.UsersRepository.CreateAsync(entity);
-            
+                  
             entity.NotificationSettings = CreateNotificationSetting();
+
+            entity.UserOrganizations.Add(
+               new UserOrganization
+               {
+                   Organization = defaultOrganization,
+                   UserId = entity.Id
+               });
+
+            var createdUser = await _uow.UsersRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
+
+            if (result)
+            {
+                createdUser.LastPickedOrganization = defaultOrganization;
+                result &= await _uow.SaveAsync();
+            }
+
             if (!result)
             {
                 return null;

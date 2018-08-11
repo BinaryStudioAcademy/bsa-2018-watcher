@@ -42,12 +42,12 @@
 		<div class="ui-g-12 ui-lg-4">
 			<div class="ui-inputgroup">
 				<span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-				<input type="text" formControlName="secondName" pInputText placeholder="Last name">   
+				<input type="text" formControlName="lastName" pInputText placeholder="Last name">   
 			</div>
 		</div>
 	</div>
 
-	<div class="invalid" *ngIf="userForm.get('secondName').errors && userForm.get('secondName').dirty">
+	<div class="invalid" *ngIf="userForm.get('lastName').errors && userForm.get('lastName').dirty">
 			Last Name is required.
 	</div>
 

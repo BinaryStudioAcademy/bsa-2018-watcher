@@ -24,7 +24,7 @@ export class UserProfileComponent implements OnInit {
   public userForm = this.fb.group({
     displayName: new FormControl({ value: '', disabled: true }, Validators.required),
     firstName: new FormControl({ value: '', disabled: true  }, Validators.required),
-    secondName: new FormControl({ value: '', disabled: true  }, Validators.required),
+    lastName: new FormControl({ value: '', disabled: true  }, Validators.required),
     bio: new FormControl({ value: '', disabled: true })
   });
 

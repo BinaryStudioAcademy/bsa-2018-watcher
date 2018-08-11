@@ -13,7 +13,7 @@ export interface User  {
    id: string;
    displayName: string;
    firstName: string;
-   secondName: string;
+   lastName: string;
    bio: string;
    email: string;
    isActive: boolean;
