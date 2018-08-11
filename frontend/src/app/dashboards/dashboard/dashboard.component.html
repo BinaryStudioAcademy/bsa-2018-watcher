@@ -4,8 +4,8 @@
     <div class="title">
         Dashboards
     </div>
-    <p-tabMenu [model]="menuItems" [activeItem]="activeItem"> </p-tabMenu>
-
+    <p-tabMenu [model]="menuItems" [activeItem]="activeItem"></p-tabMenu>
+    <p-progressSpinner *ngIf="loading" [style]="{ margin: '10% 45%', width: '10%', height: '10%'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
     <div class="workspace" *ngIf="activeDashboard">
         <h3>{{activeDashboard.title}} chart
             <button pButton type="button " label="Delete " class="btnedit ui-button-danger ui-button-raised " (click)="delete() "></button>

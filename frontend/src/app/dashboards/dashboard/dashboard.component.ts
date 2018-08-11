@@ -12,7 +12,6 @@ import { ToastrService } from '../../core/services/toastr.service';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.sass'],
-
   providers: [ToastrService, ConfirmationService, DashboardService, MessageService]
 })
 
@@ -28,6 +27,7 @@ export class DashboardComponent implements OnInit {
   editTitle: string;
 
   creation: boolean;
+  loading = false;
   displayEditDashboard = false;
 
   constructor(private dashboardsService: DashboardService, private toastrService: ToastrService,
@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
     this.activeItem = {};
 
     this.dashboards = [];
-    this.instance = {address: 'adress', platform: 'platform'};
+    this.instance = {id: 1, address: 'adress', platform: 'platform'};
     this.subscribeToEvents();
   }
 
@@ -68,6 +68,13 @@ export class DashboardComponent implements OnInit {
     this.menuItems.splice(index, 1);
     this.dashboards.splice(index, 1);
 
+     if (this.menuItems.length >= 1 ) {
+      this.activeDashboard = this.dashboards[0];
+      this.activeItem = this.menuItems[0];
+    } else {
+      this.activeDashboard = null;
+    }
+
     this.dashboardsService.delete(dashboard.id)
       .subscribe((res: Response) => {console.log(res); });
   }
@@ -78,12 +85,15 @@ export class DashboardComponent implements OnInit {
 
   configureDashboards() {
       this.dashboardsService.getAllByInstance(this.instance.id).subscribe((data: Dashboard[]) => {
-      this.dashboards = data; });
+      this.dashboards = data;
+
       this.dashboards.forEach(dash => {
-      this.menuItems.push({
-        label: dash.title,
-        command: (onclick) => {
-          this.activeDashboard = dash; }}); });
+        this.menuItems.push({
+          label: dash.title,
+          command: (onclick) => {
+            this.activeDashboard = dash; }}); });
+
+      this.loading = false; });
   }
 
   showCreatePopup(creation: boolean) {
