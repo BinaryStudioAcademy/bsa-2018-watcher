@@ -103,6 +103,11 @@ export class HeaderComponent implements OnInit {
         routerLink: ['/user/settings']
       },
       {
+        label: 'Feedback',
+        icon: 'fa fa-fw fa-retweet',
+        routerLink: ['/user/feedback']
+      },
+      {
         label: 'Logout',
         icon: 'fa fa-fw fa-sign-out',
         command: (onclick) => {
