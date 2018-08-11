@@ -1,10 +1,12 @@
 import {EventEmitter, Injectable} from '@angular/core';
 
-import {HubConnection} from '@aspnet/signalr';
+import {HttpClient, HubConnection} from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import {environment} from '../../../environments/environment';
-import {SampleDto} from '../models/sample-dto.model';
-import {SampleRequest} from '../models/sample-request.model';
+import {SampleDto} from '../../shared/models/sample-dto.model';
+import {SampleRequest} from '../../shared/models/sample-request.model';
+import {ApiService} from './api.service';
+import {AuthService} from './auth.service';
 
 
 @Injectable({
@@ -17,7 +19,10 @@ export class NotificationsService {
   sampleReceived = new EventEmitter<SampleDto>();
   connectionEstablished = new EventEmitter<Boolean>();
 
-  constructor() {
+  constructor(private authService: AuthService) {
+  }
+
+  connectToSignalR() {
     this.createConnection();
     this.registerOnServerEvents();
     this.startHubConnection();
@@ -55,9 +60,12 @@ export class NotificationsService {
   }
 
   private createConnection(): void {
-    const connPath = environment.server_url + '/notifications';
+    const firebaseToken = this.authService.getFirebaseToken();
+    const watcherToken = this.authService.getWatcherToken();
+    const connPath = `${environment.server_url}/notifications?Authorization=${firebaseToken}&WatcherAuthorize=${watcherToken}`;
+
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(connPath)
+      .withUrl(connPath, ) // {accessTokenFactory: () => firebaseToken}
       .configureLogging(signalR.LogLevel.Information)
       .build();
   }
@@ -107,7 +115,6 @@ export class NotificationsService {
       .then(() => {
         console.log('CONNECTION STARTED!!!');
         this.connectionIsEstablished = true;
-        console.log('Hub connection started');
         this.connectionEstablished.emit(true);
       })
       .catch(function (err) {

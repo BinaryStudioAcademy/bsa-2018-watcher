@@ -2,8 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Dashboard } from '../../shared/models/dashboard.model';
 import { environment } from '../../../environments/environment';
+<<<<<<< HEAD
 import { Observable, throwError } from '../../../../node_modules/rxjs';
 import { retry, catchError } from '../../../../node_modules/rxjs/operators';
+=======
+import { Observable } from 'rxjs';
+>>>>>>> dev
 
 @Injectable({
   providedIn: 'root'

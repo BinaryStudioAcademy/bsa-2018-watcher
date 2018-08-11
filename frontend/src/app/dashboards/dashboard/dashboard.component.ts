@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, ConfirmationService } from 'primeng/primeng';
-import {NotificationsService} from '../../shared/services/notifications.service';
 import {SampleDto} from '../../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard.model';
 import { Instance } from '../../shared/models/instance.model';
 import { ToastrService } from '../../core/services/toastr.service';
+<<<<<<< HEAD
 import { DashboardMenuItem } from '../models/dashboard-menuitem.model';
 
+=======
+import { Observable } from '../../../../node_modules/rxjs';
+import { NotificationsService } from '../../core/services/notifications.service';
+>>>>>>> dev
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',

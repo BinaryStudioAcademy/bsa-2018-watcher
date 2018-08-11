@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuItem, Message} from 'primeng/api';
-import {NotificationsService} from '../shared/services/notifications.service';
+import {NotificationsService} from '../core/services/notifications.service';
 import {SampleRequest} from '../shared/models/sample-request.model';
 import {SampleEnum} from '../shared/models/sample-enum.enum';
 import {SampleDto} from '../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
-import {HttpClient} from '@angular/common/http';
 import {AuthService} from '../core/services/auth.service';
 
 @Component({
@@ -21,6 +20,8 @@ export class HeaderComponent implements OnInit {
   notificationsNumber = 0;
   messagesNumber = 2;
 
+  displayName: string;
+
   userItems: MenuItem[];
   cogItems: MenuItem[];
   mailItems: MenuItem[];
@@ -28,21 +29,9 @@ export class HeaderComponent implements OnInit {
   orgItems: MenuItem[];
 
   constructor(private notificationsService: NotificationsService,
-              private authService: AuthService,
               private messageService: MessageService,
-              private http: HttpClient) {
+              private authService: AuthService) {
     this.subscribeToEvents();
-  }
-
-  createSample() {
-    const req: SampleRequest = {
-      name: 'Test',
-      count: 12,
-      dateOfCreation: new Date(2017, 1, 1),
-      sampleField: SampleEnum.FirstItem
-    };
-
-    this.notificationsService.createSample(req);
   }
 
   showAllSamples() {
@@ -74,6 +63,30 @@ export class HeaderComponent implements OnInit {
           Sample Field: ${sample.sampleField.toString()}, Date of creation: ${sample.dateOfCreation}, Count: ${sample.count}, `
       });
     });
+  }
+
+  // TODO: methods for SignalR Tests
+  createSample() {
+    const req: SampleRequest = {
+      name: 'Test',
+      count: 12,
+      dateOfCreation: new Date(2017, 1, 1),
+      sampleField: SampleEnum.FirstItem
+    };
+
+    this.notificationsService.createSample(req);
+  }
+
+  echoToServer() {
+    this.notificationsService.echo();
+  }
+
+  sendMess() {
+    this.notificationsService.send('userId', 'message');
+  }
+
+  connectToServer() {
+    this.notificationsService.connectToSignalR();
   }
 
   ngOnInit() {
@@ -149,5 +162,10 @@ export class HeaderComponent implements OnInit {
         icon: 'fa fa-fw fa-building',
       }
     ];
+    const currUser = this.authService.getCurrentUser();
+    if (currUser != null) {
+      this.displayName = currUser.displayName;
+    }
+
   }
 }

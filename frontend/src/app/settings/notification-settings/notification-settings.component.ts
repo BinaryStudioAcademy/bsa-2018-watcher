@@ -25,8 +25,13 @@ export class NotificationSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.userId = 'f7baf1d1-39e0-494f-90d6-5f5787f1b72f';
-    this.userId = this.authService.getCurrentUser().id;
+    const user = this.authService.getCurrentUser();
+    if (user == null) {
+      return;
+    } else {
+      this.userId = this.authService.getCurrentUser().id;
+    }
+    console.log(`user = ${user.id}`);
     this.service.getByUserId(this.userId).subscribe((entitys) => {
       this.notificationSettings = entitys;
       if (this.notificationSettings) {
@@ -44,7 +49,8 @@ export class NotificationSettingsComponent implements OnInit {
 
   onSave() {
     if (this.selectedNotificationSetting && this.selectedNotificationSetting.isDisable) {
-      this.toastrService.confirm('Are you sure you want to disable all notifications?').then((value) => {
+      this.toastrService.confirm(`Are you sure you want to disable all notifications
+       ${NotificationType[this.selectedNotificationSetting.type]} type?`).then((value) => {
         if (value) {
           this.updateSetting();
         }

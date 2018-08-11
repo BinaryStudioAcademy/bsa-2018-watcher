@@ -6,6 +6,9 @@ namespace Watcher.Common.Enums
     public enum NotificationType
     {
         System,
+        Info,
+        Warning,
+        Error,
         Chat
     }
 }

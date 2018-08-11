@@ -14,7 +14,7 @@ namespace Watcher.Controllers
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
     using Watcher.Hubs;
-
+    
     /// <summary>   
     /// Controller to Manage Samples
     /// </summary>

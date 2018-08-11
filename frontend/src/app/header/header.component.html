@@ -1,11 +1,21 @@
 <div class="header">
-  <a href="" class="logo">Watcher</a>
+  <a routerLink="/user" class="logo">Watcher</a>
   <p-growl [(value)]="msgs"></p-growl>
 
   <div class="ui-toolbar-group-right">
-    <div class="toolbar-item">
-      <button type="button" pButton label="Create sample" class="ui-button-info" (click)="createSample()"></button>
-    </div>
+    <!--TODO: methods for SignalR Tests-->
+    <!--<div class="toolbar-item">-->
+    <!--<button type="button" pButton label="Connect" class="ui-button-info" (click)="connectToServer()"></button>-->
+    <!--</div>-->
+    <!--<div class="toolbar-item">-->
+    <!--<button type="button" pButton label="Send" class="ui-button-info" (click)="sendMess()"></button>-->
+    <!--</div>-->
+    <!--<div class="toolbar-item">-->
+    <!--<button type="button" pButton label="Echo" class="ui-button-info" (click)="echoToServer()"></button>-->
+    <!--</div>-->
+    <!--<div class="toolbar-item">-->
+    <!--<button type="button" pButton label="Create" class="ui-button-info" (click)="createSample()"></button>-->
+    <!--</div>-->
 
     <p-tieredMenu #bell [model]="bellItems" [popup]="true"></p-tieredMenu>
     <div class="toolbar-item">
@@ -27,8 +37,9 @@
 
     <p-tieredMenu #user [model]="userItems" [popup]="true"></p-tieredMenu>
     <a class="user-info" (click)="user.toggle($event)">
-      <span>Pavlo Paitak</span>
-      <img src="https://avatars0.githubusercontent.com/u/38991419?s=460&v=4" class="user-photo" alt="">
+      <span>{{displayName}}</span>
+      <img src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-4/256/User-blue-icon.png"
+           class="user-photo" alt="">
       <i class="fa fa-sort-desc"></i>
     </a>
   </div>
