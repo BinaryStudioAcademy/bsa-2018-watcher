@@ -14,7 +14,7 @@
 
         public string FirstName { get; set; }
 
-        public string SecondName { get; set; }
+        public string LastName { get; set; }
 
         [Required]
         public string DisplayName { get; set; }
@@ -32,7 +32,7 @@
 
         public int RoleId { get; set; }
         public Role Role { get; set; }
-
+        
         public int? LastPickedOrganizationId { get; set; }
         public Organization LastPickedOrganization { get; set; }
         
@@ -49,5 +49,7 @@
         public IList<Message> Messages { get; set; }
 
         public IList<Chat> CreatedChats { get; set; }
+
+        public IList<Organization> CreatedOrganizations { get; set; }
     }
 }

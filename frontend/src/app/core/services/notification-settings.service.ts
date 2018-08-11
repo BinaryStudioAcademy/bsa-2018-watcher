@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from '../../../../node_modules/rxjs';
-import { ApiService } from '../../shared/services/api.service';
+import { Observable } from 'rxjs';
 import { NotificationSetting } from '../../shared/models/notification-setting.model';
+import {ApiService} from './api.service';
 
 @Injectable({
   providedIn: 'root'

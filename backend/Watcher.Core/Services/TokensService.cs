@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
+    using System.Net;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@
     using Microsoft.IdentityModel.Tokens;
 
     using Watcher.Common.Dtos;
+    using Watcher.Common.Errors;
     using Watcher.Common.Options;
     using Watcher.Common.Requests;
     using Watcher.Core.Auth;
@@ -30,12 +32,12 @@
         public async Task<TokenDto> CreateTokenAsync(UserLoginRequest request, ClaimsPrincipal principal)
         {
             // TODO: Parse token claim to get user email
-            var userDto = await _usersService.GetEntityByIdAsync(request.Uid);
+            var userDto = await _usersService.GetEntityByEmailAsync(request.Email);
 
             // TODO: Add logic about registration purpose
             if (userDto == null)
             {
-                return null;
+                throw new HttpStatusCodeException(HttpStatusCode.BadRequest, "User with such Uid not registered yet!");
             }
 
             return CreateTokenDto(userDto);
@@ -46,7 +48,7 @@
             var claims = new List<Claim>
                              {
                                  new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
+                                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
                              };
 
             var claimsIdentity = TokenUtil.CreateDefaultClaimsIdentity(claims);

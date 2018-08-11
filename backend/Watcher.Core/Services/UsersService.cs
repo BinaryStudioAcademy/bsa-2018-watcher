@@ -2,13 +2,17 @@
 
 namespace Watcher.Core.Services
 {
+    using System;
     using System.Collections.Generic;
-    using System.Security.Claims;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
 
+    using Microsoft.EntityFrameworkCore;
+
     using Watcher.Common.Dtos;
+    using Watcher.Common.Enums;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Interfaces;
@@ -33,9 +37,28 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<UserDto> GetEntityByEmailAsync(string email)
+        {
+            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Email == email,
+                             include: users => users.Include(u => u.Role)
+                                 .Include(u => u.LastPickedOrganization)
+                                 .Include(u => u.UserOrganizations)
+                                 .ThenInclude(uo => uo.Organization));
+
+            if (sample == null) return null;
+
+            var dto = _mapper.Map<User, UserDto>(sample);
+
+            return dto;
+        }
+
         public async Task<UserDto> GetEntityByIdAsync(string id)
         {
-            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id);
+            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id,
+                             include: users => users.Include(u => u.Role)
+                                                    .Include(u => u.LastPickedOrganization)
+                                                    .Include(u => u.UserOrganizations)
+                                                            .ThenInclude(uo => uo.Organization));
 
             if (sample == null) return null;
 
@@ -46,17 +69,45 @@ namespace Watcher.Core.Services
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
+            var user = await GetEntityByIdAsync(request.Email);
+
+            if (user != null)
+            {
+                return user;
+            }
+
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
 
-            entity = await _uow.UsersRepository.CreateAsync(entity);
-            
+            var defaultOrganization = new Organization()
+            {
+                Name = request.CompanyName ?? "Default",
+                IsActive = true,
+                Theme = new Theme { Name = "Default" },
+                CreatedByUserId = entity.Id
+            };
+                  
+            entity.NotificationSettings = CreateNotificationSetting();
+
+            entity.UserOrganizations.Add(
+               new UserOrganization
+               {
+                   Organization = defaultOrganization,
+                   UserId = entity.Id
+               });
+
+            var createdUser = await _uow.UsersRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
+
+            if (result)
+            {
+                createdUser.LastPickedOrganization = defaultOrganization;
+                result &= await _uow.SaveAsync();
+            }
+
             if (!result)
             {
                 return null;
             }
-
-            if (entity == null) return null;
 
             var dto = _mapper.Map<User, UserDto>(entity);
 
@@ -84,22 +135,20 @@ namespace Watcher.Core.Services
             return result;
         }
 
-        public async Task<UserDto> CreateEntityAsync(ClaimsPrincipal request)
+        private IList<NotificationSetting> CreateNotificationSetting()
         {
-            var entity = _mapper.Map<ClaimsPrincipal, User>(request);
-
-            entity = await _uow.UsersRepository.CreateAsync(entity);
-            var result = await _uow.SaveAsync();
-            if (!result)
+            var notificationSettings = new List<NotificationSetting>();
+            foreach (NotificationType suit in (NotificationType[])Enum.GetValues(typeof(NotificationType)))
             {
-                return null;
+                notificationSettings.Add(new NotificationSetting
+                {
+                    Type = suit,
+                    IsDisable = false,
+                    IsMute = false,
+                    IsEmailable = true
+                });
             }
-
-            if (entity == null) return null;
-
-            var dto = _mapper.Map<User, UserDto>(entity);
-
-            return dto;
+            return notificationSettings;
         }
     }
 }

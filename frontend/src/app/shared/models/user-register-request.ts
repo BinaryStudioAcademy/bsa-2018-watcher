@@ -5,4 +5,7 @@ export interface UserRegisterRequest {
   photoURL: string;
   refreshToken: string;
   isNewUser: boolean;
+  companyName: string;
+  lastName: string;
+  firstName: string;
 }

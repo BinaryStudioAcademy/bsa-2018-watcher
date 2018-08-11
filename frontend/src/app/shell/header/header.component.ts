@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuItem, Message} from 'primeng/api';
-import {NotificationsService} from '../../shared/services/notifications.service';
+import {NotificationsService} from '../../core/services/notifications.service';
 import {SampleRequest} from '../../shared/models/sample-request.model';
 import {SampleEnum} from '../../shared/models/sample-enum.enum';
 import {SampleDto} from '../../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
-import {HttpClient} from '@angular/common/http';
 import {AuthService} from '../../core/services/auth.service';
 
 @Component({
@@ -21,6 +20,8 @@ export class HeaderComponent implements OnInit {
   notificationsNumber = 0;
   messagesNumber = 2;
 
+  displayName: string;
+
   userItems: MenuItem[];
   cogItems: MenuItem[];
   mailItems: MenuItem[];
@@ -28,9 +29,8 @@ export class HeaderComponent implements OnInit {
   orgItems: MenuItem[];
 
   constructor(private notificationsService: NotificationsService,
-              private authService: AuthService,
               private messageService: MessageService,
-              private http: HttpClient) {
+              private authService: AuthService) {
     this.subscribeToEvents();
   }
 
@@ -149,5 +149,10 @@ export class HeaderComponent implements OnInit {
         icon: 'fa fa-fw fa-building',
       }
     ];
+    const currUser = this.authService.getCurrentUser();
+    if (currUser != null) {
+      this.displayName = currUser.displayName;
+    }
+
   }
 }

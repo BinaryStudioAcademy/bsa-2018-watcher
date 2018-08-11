@@ -1,36 +1,34 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { ApiService } from './api.service';
 import { Organization } from '../../shared/models/organization.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrganizationService {
+  private readonly ctrlUrl = 'organizations';
 
-  URL = environment.server_url + '/organizations';
-
-  constructor(private http: HttpClient) {
+  constructor(private apiService: ApiService) {
   }
 
   getAll(): Observable<Organization[]> {
-    return this.http.get<Organization[]>(this.URL);
+    return this.apiService.get(`/${this.ctrlUrl}`);
   }
 
   get(id: number): Observable<Organization> {
-    return this.http.get<Organization>(`${this.URL}/${id}`);
+    return this.apiService.get(`/${this.ctrlUrl}/${id}`);
   }
 
   create(organization: Organization) {
-    return this.http.post<Organization>(this.URL, organization);
+    return this.apiService.post(`/${this.ctrlUrl}`, organization);
   }
 
   update(id: number, organization: Organization) {
-    return this.http.put<Organization>(`${this.URL}/${id}`, organization);
+    return this.apiService.put(`/${this.ctrlUrl}/${id}`, organization);
   }
 
   delete(id: number): Observable<Organization> {
-    return this.http.delete<Organization>(`${this.URL}/${id}`);
+    return this.apiService.delete(`/${this.ctrlUrl}/${id}`);
   }
 }

@@ -75,7 +75,7 @@
             services.AddTransient<ITokensService, TokensService>();
             services.AddTransient<IDashboardsService, DashboardsService>();
             services.AddTransient<ITransientService, TransientService>();
-            services.AddTransient<IOrganizationService, OrganizationService>();  
+            services.AddTransient<IOrganizationService, OrganizationService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
             
@@ -141,7 +141,7 @@
             app.UseHttpStatusCodeExceptionMiddleware();
 
             UpdateDatabase(app);
-            
+
             app.UseCors("CorsPolicy");
 
             app.UseHsts();
@@ -204,7 +204,7 @@
                     cfg.AddProfile<DashboardsProfile>();
 
                     cfg.AddProfile<OrganizationProfile>();
-                    
+                    cfg.AddProfile<NotificationSettingsProfile>();
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 
