@@ -27,7 +27,7 @@ export class AuthService {
       (user) => {
         if (user) {
           this.userDetails = user;
-          console.log(this.userDetails);
+          // console.log(this.userDetails);
         } else {
           this.userDetails = null;
         }
@@ -94,7 +94,7 @@ export class AuthService {
         if (err.status === 400) {
           throw err;
         }
-        console.log(err);
+        console.error(err);
         return false;
       });
   }
@@ -111,7 +111,7 @@ export class AuthService {
           if (err.status === 400) {
             throw err;
           }
-          console.log(err);
+          console.error(err);
           return false;
       });
   }
@@ -128,7 +128,7 @@ export class AuthService {
         if (err.status === 400) {
           throw err;
         }
-        console.log(err);
+        console.error(err);
         return false;
       });
   }
