@@ -13,6 +13,7 @@ import {
   MessageModule,
   GrowlModule
 } from 'primeng/primeng';
+import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 
 @NgModule({
   imports: [
@@ -26,6 +27,6 @@ import {
     MessagesModule,
     MessageModule
   ],
-  declarations: [ ShellComponent, HeaderComponent ]
+  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent ]
 })
 export class ShellModule { }
