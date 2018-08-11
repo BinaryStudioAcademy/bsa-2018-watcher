@@ -4,7 +4,7 @@ export interface UserDto {
     id: string;
     displayName: string;
     firstName: string;
-    secondName: string;
+    lastName: string;
     email: string;
     isActive: boolean;
     createdAt: Date;

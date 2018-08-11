@@ -48,7 +48,7 @@
             CreateMap<UserOrganization, UserDto>()
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.User.Id))
                 .ForMember(d => d.FirstName, o => o.MapFrom(s => s.User.FirstName))
-                .ForMember(d => d.SecondName, o => o.MapFrom(s => s.User.SecondName))
+                .ForMember(d => d.LastName, o => o.MapFrom(s => s.User.LastName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.User.Email))
                 .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
@@ -61,8 +61,9 @@
                 .ForMember(d => d.CreatedAt, o => o.UseValue(DateTime.UtcNow))
                 .ForMember(d => d.IsActive, o => o.UseValue(true))
                 .ForMember(d => d.RoleId, o => o.UseValue(2))
-                .ForMember(d => d.SecondName, o => o.MapFrom(s => s.LastName));
-
+                .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
+                .ForMember(d => d.UserOrganizations, o => o.UseValue(new List<UserOrganization>()));
+                
             CreateMap<ClaimsPrincipal, User>().ForMember(d => d.Id, o => o.UseValue(0))
                 .ForMember(d => d.RoleId, o => o.UseValue(2));
 
