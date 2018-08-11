@@ -34,17 +34,6 @@ export class HeaderComponent implements OnInit {
     this.subscribeToEvents();
   }
 
-  createSample() {
-    const req: SampleRequest = {
-      name: 'Test',
-      count: 12,
-      dateOfCreation: new Date(2017, 1, 1),
-      sampleField: SampleEnum.FirstItem
-    };
-
-    this.notificationsService.createSample(req);
-  }
-
   showAllSamples() {
     this.msgs = [];
     const newMessages: Message[] = this.samples.map(s => {
@@ -74,6 +63,30 @@ export class HeaderComponent implements OnInit {
           Sample Field: ${sample.sampleField.toString()}, Date of creation: ${sample.dateOfCreation}, Count: ${sample.count}, `
       });
     });
+  }
+
+  // TODO: methods for SignalR Tests
+  createSample() {
+    const req: SampleRequest = {
+      name: 'Test',
+      count: 12,
+      dateOfCreation: new Date(2017, 1, 1),
+      sampleField: SampleEnum.FirstItem
+    };
+
+    this.notificationsService.createSample(req);
+  }
+
+  echoToServer() {
+    this.notificationsService.echo();
+  }
+
+  sendMess() {
+    this.notificationsService.send('userId', 'message');
+  }
+
+  connectToServer() {
+    this.notificationsService.connectToSignalR();
   }
 
   ngOnInit() {
