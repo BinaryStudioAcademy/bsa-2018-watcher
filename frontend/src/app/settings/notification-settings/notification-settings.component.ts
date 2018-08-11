@@ -49,7 +49,8 @@ export class NotificationSettingsComponent implements OnInit {
 
   onSave() {
     if (this.selectedNotificationSetting && this.selectedNotificationSetting.isDisable) {
-      this.toastrService.confirm('Are you sure you want to disable all notifications?').then((value) => {
+      this.toastrService.confirm(`Are you sure you want to disable all notifications
+       ${NotificationType[this.selectedNotificationSetting.type]} type?`).then((value) => {
         if (value) {
           this.updateSetting();
         }

@@ -3,7 +3,7 @@
 
 
 <p-dialog class="authorization-dialog" (onHide)="closeDialog()" [showHeader]="false" appendTo="body" [closable]=false [(visible)]="display" [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="999">
-    <span class="close" (click)="closeDialog()"> </span>    
+    <span *ngIf="!isSuccessSignUp" class="close" (click)="closeDialog()"> </span>    
     <div class="auth-form-header">
         <h1>WATCHER</h1>
     </div>
@@ -20,7 +20,7 @@
             <p>Already registered? <a (click)="showSignIn()">Sign In</a></p>
         </div>
         <div class="auth-futer" *ngIf="!isSignIn && isSuccessSignUp">
-            <p>Back to <a (click)="showSignUp()">Sign Up</a></p>
+            
         </div>
     </div>
 </p-dialog>
@@ -103,10 +103,10 @@
         </div>
         <div class="auth-buttons">
             <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" [disabled]="cName?.invalid || fName?.invalid || lName?.invalid" value="Save" />
+            <input type="button" pButton class="auth-button auth-btn-save" (click)="onContinueLaterClick()"[disabled]="!cName?.invalid && !fName?.invalid && !lName?.invalid"  value="Continue Later" />
         </div>
     </div>
 </ng-template>
-
 
 <ng-template #notRegisteredSignInTemplate>
         <span class="close" (click)="closeDialog()"> </span>    

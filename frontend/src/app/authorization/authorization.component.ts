@@ -135,6 +135,14 @@ export class AuthorizationComponent implements OnInit {
       });
   }
 
+  onContinueLaterClick() {
+    // default data
+    this.companyName = 'your company';
+    this.firstName = 'your first name';
+    this.lastName = 'your last name';
+    this.saveUserDetails();
+  }
+
   signInPostProcessing(result: boolean): Promise<boolean> {
     if (result) {
       return this.router.navigate(['/user/dashboards']);
