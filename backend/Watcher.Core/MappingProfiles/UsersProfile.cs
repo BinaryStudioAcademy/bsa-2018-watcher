@@ -19,14 +19,7 @@
                 o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
 
             CreateMap<User, UserDto>()
-                .ForMember(d => d.Role, o => o.MapFrom(s => s.RoleId == 1 ? new Role(s.RoleId, "Admin") : new Role(s.RoleId, "User")))
-                .ForMember(d => d.UserOrganizations, o => o.UseValue(new List<UserOrganizationDto>()))
-                .ForMember(d => d.CreatedChats, o => o.UseValue(new List<ChartDto>()))
-                .ForMember(d => d.Feedbacks, o => o.UseValue(new List<FeedbackDto>()))
-                .ForMember(d => d.Messages, o => o.UseValue(new List<MessageDto>()))
-                .ForMember(d => d.NotificationSettings, o => o.UseValue(new List<NotificationSettingDto>()))
-                .ForMember(d => d.Notifications, o => o.UseValue(new List<NotificationDto>()))
-                .ForMember(d => d.Responses, o => o.UseValue(new List<ResponseDto>()));
+                .ForMember(d => d.Role, o => o.MapFrom(s => s.RoleId == 1 ? new Role(s.RoleId, "Admin") : new Role(s.RoleId, "User")));
 
 
 
