@@ -36,7 +36,7 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
-        public async Task<UserDto> GetEntityByIdEmail(string email)
+        public async Task<UserDto> GetEntityByEmailAsync(string email)
         {
             var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Email == email,
                              include: users => users.Include(u => u.Role)
@@ -68,7 +68,7 @@ namespace Watcher.Core.Services
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
-            var user = await GetEntityByIdEmail(request.Email);
+            var user = await GetEntityByIdAsync(request.Email);
 
             if (user != null)
             {

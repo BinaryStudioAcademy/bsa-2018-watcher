@@ -19,6 +19,6 @@
 
         Task<bool> DeleteEntityByIdAsync(string id);
 
-        Task<UserDto> GetEntityByIdEmail(string email);
+        Task<UserDto> GetEntityByEmailAsync(string email);
     }
 }

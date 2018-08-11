@@ -88,13 +88,14 @@ export class AuthorizationComponent implements OnInit {
       });
   }
 
-  async signInWithFacebook(): Promise<any> {
+  async signInWithFacebook(): Promise<void> {
     await this.authService.signInWithFacebook()
       .then(result => {
         this.closeDialog();
         this.signInPostProcessing(result);
       })
       .catch(err => {
+        console.log(err);
         if (err) {
           if (err.status === 400) {
             this.isSignIn = false;

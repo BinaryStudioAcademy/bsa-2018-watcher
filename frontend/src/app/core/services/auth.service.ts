@@ -48,7 +48,7 @@ export class AuthService {
       lastName: ''
     };
 
-    if (provider === 'Facebook' || provider === 'GitHub') {
+    if (!this.userRegisterRequest.email) {
       this.userRegisterRequest.email = (<UserInfoProfile>credential.additionalUserInfo.profile).email;
     }
 
@@ -83,7 +83,7 @@ export class AuthService {
   }
 
   signInWithGoogle(): Promise<boolean> {
-    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider().addScope('email'))
       .then(res => {
         return this.login(res, 'Google');
       })
@@ -91,19 +91,16 @@ export class AuthService {
         return true;
       })
       .catch(err => {
-        if (err) {
-          if (err.status === 400) {
-            throw err;
-          }
-        } else {
-          console.log(err);
-          return false;
+        if (err.status === 400) {
+          throw err;
         }
+        console.log(err);
+        return false;
       });
   }
 
   signInWithFacebook(): Promise<boolean> {
-    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider().addScope('email'))
       .then(res => {
         return this.login(res, 'Facebook');
       })
@@ -111,19 +108,16 @@ export class AuthService {
         return true;
       })
       .catch(err => {
-        if (err) {
           if (err.status === 400) {
             throw err;
           }
-        } else {
           console.log(err);
           return false;
-        }
       });
   }
 
   signInWithGitHub(): Promise<boolean> {
-    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider())
+    return this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider().addScope('email'))
       .then(res => {
         return this.login(res, 'GitHub');
       })
@@ -131,14 +125,11 @@ export class AuthService {
         return true;
       })
       .catch(err => {
-        if (err) {
-          if (err.status === 400) {
-            throw err;
-          }
-        } else {
-          console.log(err);
-          return false;
+        if (err.status === 400) {
+          throw err;
         }
+        console.log(err);
+        return false;
       });
   }
 
