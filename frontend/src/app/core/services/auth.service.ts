@@ -13,7 +13,6 @@ import {UserInfoProfile} from '../../shared/models/user-info-profile';
   providedIn: 'root'
 })
 export class AuthService {
-  // public currentUser: Observable<UserDto>;
 
   private user: Observable<firebase.User>;
   private userDetails: firebase.User = null;
@@ -33,6 +32,14 @@ export class AuthService {
         }
       }
     );
+  }
+
+  public isAuthorized(): boolean {
+    if (localStorage.getItem('watcherToken') != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async login(credential: firebase.auth.UserCredential, provider: string): Promise<void> {

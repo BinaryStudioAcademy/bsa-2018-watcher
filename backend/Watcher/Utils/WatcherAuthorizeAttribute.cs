@@ -9,11 +9,12 @@
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
-
     using Watcher.Common.Options;
     using Watcher.Core.Auth;
-    using Watcher.Core.Services;
 
+    /// <summary>
+    /// Found a better more flexible way
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class WatcherAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
