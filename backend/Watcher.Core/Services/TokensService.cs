@@ -47,8 +47,9 @@
         {
             var claims = new List<Claim>
                              {
-                                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
+                                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id),
+                                 new Claim(ClaimTypes.Email, user.Email),
+                                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name),
                              };
 
             var claimsIdentity = TokenUtil.CreateDefaultClaimsIdentity(claims);
