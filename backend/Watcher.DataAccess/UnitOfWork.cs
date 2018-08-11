@@ -60,6 +60,7 @@
 
                 return _dashboardsRepository;
             }
+
         }
 
         public IOrganizationRepository OrganizationRepository

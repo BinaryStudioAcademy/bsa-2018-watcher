@@ -26,6 +26,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from './core/services/auth.service';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
+import { ShellModule } from './shell/shell.module';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,7 @@ import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdia
 
     CoreModule,
     NotificationsModule,
-    UserModule,
+    ShellModule,
     AdminModule,
 
     AppRoutingModule

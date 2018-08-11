@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuItem, Message} from 'primeng/api';
-import {NotificationsService} from '../shared/services/notifications.service';
-import {SampleRequest} from '../shared/models/sample-request.model';
-import {SampleEnum} from '../shared/models/sample-enum.enum';
-import {SampleDto} from '../shared/models/sample-dto.model';
+import {NotificationsService} from '../../shared/services/notifications.service';
+import {SampleRequest} from '../../shared/models/sample-request.model';
+import {SampleEnum} from '../../shared/models/sample-enum.enum';
+import {SampleDto} from '../../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
 import {HttpClient} from '@angular/common/http';
-import {AuthService} from '../core/services/auth.service';
+import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
