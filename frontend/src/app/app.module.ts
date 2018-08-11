@@ -16,7 +16,6 @@ import { LandingComponent } from './landing/landing.component';
 import { CoreModule } from './core/core.module';
 import { AuthorizationComponent } from './authorization/authorization.component';
 import { AdminModule } from './admin/admin.module';
-import { UserModule } from './user/user.module';
 import { NotificationsModule } from './notifications/notifications.module';
 
 import { AngularFireModule } from 'angularfire2';

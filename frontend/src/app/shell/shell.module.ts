@@ -14,8 +14,6 @@ import {
   GrowlModule
 } from 'primeng/primeng';
 
-import { UserModule } from '../user/user.module';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -26,9 +24,7 @@ import { UserModule } from '../user/user.module';
     ButtonModule,
     GrowlModule,
     MessagesModule,
-    MessageModule,
-
-    UserModule
+    MessageModule
   ],
   declarations: [ ShellComponent, HeaderComponent ]
 })
