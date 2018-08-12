@@ -75,8 +75,10 @@ export class AuthorizationComponent implements OnInit {
   async signInWithGoogle(): Promise<void> {
     await this.authService.signInWithGoogle()
       .then(result => {
-        this.closeDialog();
-        this.signInPostProcessing(result);
+         if (result) {
+          this.closeDialog();
+          this.signInPostProcessing(result);
+         }
       })
       .catch(err => {
         if (err) {
@@ -91,8 +93,10 @@ export class AuthorizationComponent implements OnInit {
   async signInWithFacebook(): Promise<void> {
     await this.authService.signInWithFacebook()
       .then(result => {
+        if (result) {
         this.closeDialog();
         this.signInPostProcessing(result);
+        }
       })
       .catch(err => {
         console.log(err);
@@ -108,8 +112,10 @@ export class AuthorizationComponent implements OnInit {
   async signInWithGitHub(): Promise<any> {
     await this.authService.signInWithGitHub()
       .then(result => {
+        if (result) {
         this.closeDialog();
         this.signInPostProcessing(result);
+        }
       })
       .catch(err => {
         if (err) {
