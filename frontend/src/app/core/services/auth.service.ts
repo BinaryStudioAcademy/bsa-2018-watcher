@@ -167,6 +167,11 @@ export class AuthService {
     return userDto;
   }
 
+  updateCurrentUser(user: User) {
+    localStorage.setItem('currentUser', JSON.stringify(user));
+  }
+
+
   getFirebaseToken(): string | null {
     return localStorage.getItem('firebaseToken');
   }

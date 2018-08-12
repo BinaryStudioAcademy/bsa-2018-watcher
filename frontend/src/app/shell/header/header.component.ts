@@ -176,27 +176,24 @@ export class HeaderComponent implements OnInit {
         disabled: (element.id === this.user.lastPickedOrganizationId)
       });
     });
-
-
-    // this.orgItems.push
   }
 
   private chengeLastPicOrganizations(item: Organization) {
-    // tslint:disable-next-line:no-debugger updateLastPickedOrganization
-    debugger;
     // update user in beckend
     this.userService.updateLastPickedOrganization(this.user.id, item.id)
     .subscribe(value => {
+      // update user in frontend
+
       this.user.lastPickedOrganizationId = item.id;
       this.user.lastPickedOrganization = item;
+      this.authService.updateCurrentUser(this.user); // update user in localStorage
       this.fillOrganizations();
+      // notify user about changes
       this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
     },
     err => {
       this.toastrService.error('Organization by defaul was not updated.');
     });
-
-    // update user in frontend
-    // notify user about changes
   }
+
 }
