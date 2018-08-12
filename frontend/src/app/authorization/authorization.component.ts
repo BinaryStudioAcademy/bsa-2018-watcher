@@ -19,6 +19,7 @@ export class AuthorizationComponent implements OnInit {
   isSignIn = true;
   isSuccessSignUp = false;
   isNotRegisteredSignIn = false;
+  isFetching = false;
 
   companyName = '';
   lastName = '';
@@ -73,12 +74,14 @@ export class AuthorizationComponent implements OnInit {
   }
 
   async signInWithGoogle(): Promise<void> {
+    this.isFetching = true;
     await this.authService.signInWithGoogle()
       .then(result => {
          if (result) {
           this.closeDialog();
           this.signInPostProcessing(result);
          }
+         this.isFetching = false;
       })
       .catch(err => {
         if (err) {
@@ -87,16 +90,19 @@ export class AuthorizationComponent implements OnInit {
             this.isSuccessSignUp = true;
           }
         }
+        this.isFetching = false;
       });
   }
 
   async signInWithFacebook(): Promise<void> {
+    this.isFetching = true;
     await this.authService.signInWithFacebook()
       .then(result => {
         if (result) {
         this.closeDialog();
         this.signInPostProcessing(result);
         }
+        this.isFetching = false;
       })
       .catch(err => {
         console.log(err);
@@ -106,16 +112,19 @@ export class AuthorizationComponent implements OnInit {
             this.isSuccessSignUp = true;
           }
         }
+        this.isFetching = false;
       });
   }
 
   async signInWithGitHub(): Promise<any> {
+    this.isFetching = true;
     await this.authService.signInWithGitHub()
       .then(result => {
         if (result) {
         this.closeDialog();
         this.signInPostProcessing(result);
         }
+        this.isFetching = false;
       })
       .catch(err => {
         if (err) {
@@ -124,6 +133,7 @@ export class AuthorizationComponent implements OnInit {
             this.isSuccessSignUp = true;
           }
         }
+        this.isFetching = false;
       });
   }
 
