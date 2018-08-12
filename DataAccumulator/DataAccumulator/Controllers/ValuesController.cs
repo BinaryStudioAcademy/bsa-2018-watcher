@@ -11,9 +11,9 @@ namespace DataAccumulator.Controllers
     [Route("api/v1/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IDataAccumulatorRepository _repository;
+        private readonly IDataAccumulatorRepository<CollectedData> _repository;
 
-        public ValuesController(IDataAccumulatorRepository repository)
+        public ValuesController(IDataAccumulatorRepository<CollectedData> repository)
         {
             _repository = repository;
         }
@@ -31,7 +31,7 @@ namespace DataAccumulator.Controllers
 
                     await _repository.AddEntity(new CollectedData()
                     {
-                        Id = "1",
+                        Id = Guid.NewGuid(),
                         ProcessesCount = 2,
                         CpuUsagePercent = 3,
                         RamUsagePercent = 4,
@@ -55,7 +55,7 @@ namespace DataAccumulator.Controllers
 
                     await _repository.AddEntity(new CollectedData()
                     {
-                        Id = "2",
+                        Id = Guid.NewGuid(),
                         ProcessesCount = 5,
                         CpuUsagePercent = 6,
                         RamUsagePercent = 9,
