@@ -8,6 +8,8 @@ import {MessageService} from 'primeng/api';
 import {AuthService} from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
 import { UserService } from '../../core/services/user.service';
+import { User } from '../../shared/models/user.model';
+import { ToastrService } from '../../core/services/toastr.service';
 
 @Component({
   selector: 'app-header',
@@ -22,9 +24,7 @@ export class HeaderComponent implements OnInit {
   notificationsNumber = 0;
   messagesNumber = 2;
 
-  displayName: string;
-  lastPickedOrganizationId: number;
-  organizations: Organization[];
+  user: User;
 
   userItems: MenuItem[];
   cogItems: MenuItem[];
@@ -35,9 +35,9 @@ export class HeaderComponent implements OnInit {
   constructor(private notificationsService: NotificationsService,
               private messageService: MessageService,
               private userService: UserService,
+              private toastrService: ToastrService,
               private authService: AuthService) {
     this.subscribeToEvents();
-    this.organizations = new Array<Organization>();
   }
 
   showAllSamples() {
@@ -155,27 +155,25 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    const currUser = this.authService.getCurrentUser();
-    if (currUser != null) {
-      this.displayName = currUser.displayName;
-      this.lastPickedOrganizationId = currUser.lastPickedOrganizationId;
-      if (currUser.organizations.length > 0) {
-        this.organizations = currUser.organizations;
+    this.user = this.authService.getCurrentUser();
+    if (this.user != null) {
+      if (this.user.organizations.length > 0) {
         this.fillOrganizations();
       }
     }
   }
 
-  fillOrganizations() {
+  private fillOrganizations() {
     this.orgItems = new Array<MenuItem>();
-    this.organizations.forEach(element => {
+
+    this.user.organizations.forEach(element => {
       this.orgItems.push({
         label: element.name,
         id: element.id.toString(),
         icon: 'fa fa-fw fa-building',
         command: (onclick) => { this.chengeLastPicOrganizations(element); },
-        styleClass: (element.id === this.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
-        disabled: (element.id === this.lastPickedOrganizationId)
+        styleClass: (element.id === this.user.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
+        disabled: (element.id === this.user.lastPickedOrganizationId)
       });
     });
 
@@ -183,10 +181,21 @@ export class HeaderComponent implements OnInit {
     // this.orgItems.push
   }
 
-  chengeLastPicOrganizations(item: Organization) {
-    // tslint:disable-next-line:no-debugger
+  private chengeLastPicOrganizations(item: Organization) {
+    // tslint:disable-next-line:no-debugger updateLastPickedOrganization
     debugger;
     // update user in beckend
+    this.userService.updateLastPickedOrganization(this.user.id, item.id)
+    .subscribe(value => {
+      this.user.lastPickedOrganizationId = item.id;
+      this.user.lastPickedOrganization = item;
+      this.fillOrganizations();
+      this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
+    },
+    err => {
+      this.toastrService.error('Organization by defaul was not updated.');
+    });
+
     // update user in frontend
     // notify user about changes
   }

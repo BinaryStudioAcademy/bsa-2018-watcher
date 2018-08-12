@@ -159,5 +159,28 @@ namespace Watcher.Core.Services
             }
             return notificationSettings;
         }
+
+        public async Task<bool> UpdateLastPickedOrganizationAsync(string userId, int organizationId)
+        {
+            var organization = await _uow.OrganizationRepository.GetFirstOrDefaultAsync(x => x.Id == organizationId,
+                include: entity => entity.Include(u => u.UserOrganizations));
+
+            if (organization == null) return false;
+
+            if (organization.UserOrganizations.Any(x => x.UserId == userId) == false)
+                return false;
+
+            var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(x => x.Id == userId);
+
+            if (user == null) return false;
+
+            user.LastPickedOrganizationId = organizationId;
+
+            // In returns updated entity, you could do smth with it or just leave as it is
+            var updated = await _uow.UsersRepository.UpdateAsync(user);
+            var result = await _uow.SaveAsync();
+
+            return result;
+        }
     }
 }

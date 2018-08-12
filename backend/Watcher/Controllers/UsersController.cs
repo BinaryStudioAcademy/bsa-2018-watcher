@@ -178,5 +178,36 @@ namespace Watcher.Controllers
 
             return NoContent();
         }
+
+
+        /// <summary>
+        /// Update Sample
+        /// </summary>
+        /// <param name="userId">Sample identifier</param>
+        /// <param name="organizationId">Sample update request</param>
+        /// <returns>
+        /// Action Result
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Sample not found</response>
+        /// <response code="403">You don`t have permission to update Sample</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
+        [HttpPut("UpdateLastPickedOrganization/{userId}/{organizationId}")]
+        public virtual async Task<ActionResult> UpdateLastPickedOrganization([FromRoute] string userId, [FromRoute] int organizationId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _usersService.UpdateLastPickedOrganizationAsync(userId, organizationId);
+            if (!result)
+            {
+                return StatusCode(500);
+            }
+
+            return NoContent();
+        }
     }
 }
