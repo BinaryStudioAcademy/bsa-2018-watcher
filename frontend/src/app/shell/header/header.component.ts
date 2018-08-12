@@ -186,7 +186,8 @@ export class HeaderComponent implements OnInit {
   chengeLastPicOrganizations(item: Organization) {
     // tslint:disable-next-line:no-debugger
     debugger;
-    // update user
+    // update user in beckend
+    // update user in frontend
     // notify user about changes
   }
 }

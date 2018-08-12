@@ -4,10 +4,10 @@ import {AngularFireAuth} from 'angularfire2/auth';
 import {Observable} from 'rxjs';
 import {UserRegisterRequest} from '../../shared/models/user-register-request';
 import {TokenService} from './token.service';
-import {UserDto} from '../../shared/models/user-dto';
 import {UserLoginRequest} from '../../shared/models/user-login-request';
 import * as firebase from 'firebase';
 import {UserInfoProfile} from '../../shared/models/user-info-profile';
+import { User } from '../../shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -161,9 +161,9 @@ export class AuthService {
     }
   }
 
-  getCurrentUser(): UserDto | null {
+  getCurrentUser(): User | null {
     const userStr = localStorage.getItem('currentUser');
-    const userDto = (<UserDto>JSON.parse(userStr));
+    const userDto = (<User>JSON.parse(userStr));
     return userDto;
   }
 
