@@ -1,4 +1,4 @@
-<button pButton type="button" label="Sign In" class="btnsign-in ui-button-secondary ui-button-raised" (click)="showDialogSignIn()"></button>
+<button pButton type="button" label="Sign In" class="btnsign-in ui-button-secondary ui-button-raised" (click)="display = true;"></button>
 <button pButton type="button" label="Sign Up" class="btnsign-up ui-button-primary ui-button-raised" (click)="showDialogSignUp()"></button>
 
 
@@ -47,15 +47,15 @@
 
 <ng-template #signUpTemplate>
     <div class="auth-buttons">
-        <button (click)="signUpWithGoogle()" class="auth-button auth-btn-google">
+        <button (click)="signInWithGoogle()" class="auth-button auth-btn-google">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span>
             <span class="firebaseui-idp-text">Sign Up with Google</span>
         </button>
-        <button (click)="signUpWithGitHub()" class="auth-button auth-btn-githum">
+        <button (click)="signInWithGitHub()" class="auth-button auth-btn-githum">
                 <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg"></span>
                 <span class="firebaseui-idp-text">Sign Up with Github</span>
             </button>
-        <button (click)="signUpWithFacebook()" class="auth-button auth-btn-facebook">
+        <button (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
             <span class="firebaseui-idp-text">Sign Up with Facebook</span>
         </button>
@@ -115,7 +115,7 @@
             <h2>Would you like to register?</h2>
         </div>
         <div class="auth-buttons">
-            <button pButton type="button" label="Yes" class="btnsign-in ui-button-primary ui-button-raised" (click)="signUpWithGoogle()"></button>
+            <button pButton type="button" label="Yes" class="btnsign-in ui-button-primary ui-button-raised" (click)="signInWithGoogle()"></button>
             <button pButton type="button" label="No"  class="btnsign-up ui-button-primary ui-button-raised" (click)="noRegistration()"></button>
         </div>
 </ng-template>

@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Hubs
 {
     using System;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -59,6 +60,7 @@
         /// <summary>
         /// Send message to caller of this method(to connection that invoked this method)
         /// </summary>
+        [Authorize]
         public void Echo()
         {
             Clients.Client(Context.ConnectionId).SendAsync("Echo", " (echo from server)");
@@ -70,6 +72,7 @@
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Task</returns>
+        [Authorize(Roles = "Admin")]
         public async Task CreateSample(SampleRequest request)
         {
             // TODO: validate model using Fluent Validator
@@ -77,24 +80,12 @@
             await Clients.Client(Context.ConnectionId).SendAsync("AddSample", dto, "Second Parameter", 3);
         }
 
+        [Authorize(Roles = "User")]
         public void Send(string userId, string message)
         {
             // We don't have authorization yet so message wont be sent to anyone
-            Clients.User(userId).SendAsync("BroadcastMessage", $"{Context.ConnectionId } sent you message: {message}");
-        }
-
-        /// <summary>
-        /// As well as in Controller we can restrict for unauthorized
-        /// user to invoke certain methods of our hub
-        /// This works with Roles restrictions as well
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="message"></param>
-        // [Authorize]
-        // [Authorize(Roles = "Admin")]
-        public void SendAuthorized(string userId, string message)
-        {
-            // Clients.User(userId).SendAsync("BroadcastMessage", message);
+            var senderCurrentUserId = Context.User.FindFirstValue("unique_name");
+            Clients.User(userId).SendAsync("BroadcastMessage", $"User with Id {senderCurrentUserId} sent you message: {message}");
         }
     }
 }

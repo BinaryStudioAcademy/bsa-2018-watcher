@@ -12,11 +12,38 @@
         background-color: #518c2a
 
 .title
-    padding-bottom: 10px
-    font-size: 1.4em
-    font-weight: 600
-    letter-spacing: 1px
+    height: 60px
+    display: flex
+    padding: 0
+    h3
+        height: 100%
+        margin: 0
+        padding: 17px 0px 
+        font-size: 25px
+        font-weight: bold
+        width: 200px
+        display: block
+    /deep/.ui-progress-spinner
+        display: block
+        margin-top: 10px
+        margin-left: 5%
+        width: 40px
+        height: 40px
 
+    @keyframes ui-progress-spinner-color
+        100%,
+        0%
+            stroke: #d62d20
+
+        40%
+            stroke: #0057e7
+
+        66%
+            stroke: #008744
+
+        80%,
+        90%
+            stroke: #ffa700
 .workspace
     h3
         display: flexbox
@@ -24,7 +51,8 @@
         float: right
         margin-left: 10px
         width: 70px
-    
+
+
 
 
 

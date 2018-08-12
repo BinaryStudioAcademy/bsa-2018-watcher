@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuItem, Message} from 'primeng/api';
-import {NotificationsService} from '../core/services/notifications.service';
-import {SampleRequest} from '../shared/models/sample-request.model';
-import {SampleEnum} from '../shared/models/sample-enum.enum';
-import {SampleDto} from '../shared/models/sample-dto.model';
+import {NotificationsService} from '../../core/services/notifications.service';
+import {SampleRequest} from '../../shared/models/sample-request.model';
+import {SampleEnum} from '../../shared/models/sample-enum.enum';
+import {SampleDto} from '../../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
-import {AuthService} from '../core/services/auth.service';
+import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -32,17 +32,6 @@ export class HeaderComponent implements OnInit {
               private messageService: MessageService,
               private authService: AuthService) {
     this.subscribeToEvents();
-  }
-
-  createSample() {
-    const req: SampleRequest = {
-      name: 'Test',
-      count: 12,
-      dateOfCreation: new Date(2017, 1, 1),
-      sampleField: SampleEnum.FirstItem
-    };
-
-    this.notificationsService.createSample(req);
   }
 
   showAllSamples() {
@@ -74,6 +63,30 @@ export class HeaderComponent implements OnInit {
           Sample Field: ${sample.sampleField.toString()}, Date of creation: ${sample.dateOfCreation}, Count: ${sample.count}, `
       });
     });
+  }
+
+  // TODO: methods for SignalR Tests
+  createSample() {
+    const req: SampleRequest = {
+      name: 'Test',
+      count: 12,
+      dateOfCreation: new Date(2017, 1, 1),
+      sampleField: SampleEnum.FirstItem
+    };
+
+    this.notificationsService.createSample(req);
+  }
+
+  echoToServer() {
+    this.notificationsService.echo();
+  }
+
+  sendMess() {
+    this.notificationsService.send('ri3bE0PElDT8gLU35sonvnMzbEq2', 'From Sdadadafsd message');
+  }
+
+  connectToServer() {
+    this.notificationsService.connectToSignalR();
   }
 
   ngOnInit() {

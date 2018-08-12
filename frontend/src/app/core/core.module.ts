@@ -9,6 +9,7 @@ import { ToastrService } from './services/toastr.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import {ApiService} from './services/api.service';
 import {NotificationsService} from './services/notifications.service';
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import {NotificationsService} from './services/notifications.service';
     ToastrService,
     ConfirmationService,
     MessageService,
-    { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },
+    AuthGuard
   ],
 
   declarations: []

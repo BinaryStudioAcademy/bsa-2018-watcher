@@ -23,7 +23,7 @@
         public string CreatedByUserId { get; set; }
         public User CreatedByUser { get; set; }
 
-        public int? ThemeId { get; set; }
+        public int ThemeId { get; set; }
         public Theme Theme { get; set; }
 
         public Chat Chat { get; set; }

@@ -29,7 +29,7 @@
             var userFaker = new Faker<User>()
                 .RuleFor(o => o.Id, f => Guid.NewGuid().ToString())
                 .RuleFor(o => o.FirstName, f => f.Name.FirstName())
-                .RuleFor(o => o.SecondName, f => f.Name.LastName())
+                .RuleFor(o => o.LastName, f => f.Name.LastName())
                 .RuleFor(o => o.DisplayName, f => f.Name.FirstName())
                 .RuleFor(o => o.Email, f => f.Internet.Email())
                 .RuleFor(o => o.IsActive, true)
