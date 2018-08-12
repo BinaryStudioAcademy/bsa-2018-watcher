@@ -8,9 +8,7 @@ namespace Watcher.Core.Services
     using System.Threading.Tasks;
 
     using AutoMapper;
-
     using Microsoft.EntityFrameworkCore;
-
     using Watcher.Common.Dtos;
     using Watcher.Common.Enums;
     using Watcher.Common.Requests;
@@ -41,9 +39,15 @@ namespace Watcher.Core.Services
         {
             var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Email == email,
                              include: users => users.Include(u => u.Role)
-                                 .Include(u => u.LastPickedOrganization)
-                                 .Include(u => u.UserOrganizations)
-                                 .ThenInclude(uo => uo.Organization));
+                                .Include(u => u.CreatedChats)
+                                .Include(u => u.Feedbacks)
+                                .Include(u => u.Responses)
+                                .Include(u => u.Messages)
+                                .Include(u => u.Notifications)
+                                .Include(u => u.NotificationSettings)
+                                .Include(u => u.LastPickedOrganization)
+                                .Include(u => u.UserOrganizations)
+                                .ThenInclude(uo => uo.Organization));
 
             if (sample == null) return null;
 
@@ -55,7 +59,13 @@ namespace Watcher.Core.Services
         public async Task<UserDto> GetEntityByIdAsync(string id)
         {
             var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id,
-                             include: users => users.Include(u => u.Role)
+                include: users => users.Include(u => u.Role)
+                                                    .Include(u => u.CreatedChats)
+                                                    .Include(u => u.Feedbacks)
+                                                    .Include(u => u.Responses)
+                                                    .Include(u => u.Messages)
+                                                    .Include(u => u.Notifications)
+                                                    .Include(u => u.NotificationSettings)
                                                     .Include(u => u.LastPickedOrganization)
                                                     .Include(u => u.UserOrganizations)
                                                             .ThenInclude(uo => uo.Organization));
@@ -148,6 +158,29 @@ namespace Watcher.Core.Services
                 });
             }
             return notificationSettings;
+        }
+
+        public async Task<bool> UpdateLastPickedOrganizationAsync(string userId, int organizationId)
+        {
+            var organization = await _uow.OrganizationRepository.GetFirstOrDefaultAsync(x => x.Id == organizationId,
+                include: entity => entity.Include(u => u.UserOrganizations));
+
+            if (organization == null) return false;
+
+            if (organization.UserOrganizations.Any(x => x.UserId == userId) == false)
+                return false;
+
+            var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(x => x.Id == userId);
+
+            if (user == null) return false;
+
+            user.LastPickedOrganizationId = organizationId;
+
+            // In returns updated entity, you could do smth with it or just leave as it is
+            var updated = await _uow.UsersRepository.UpdateAsync(user);
+            var result = await _uow.SaveAsync();
+
+            return result;
         }
     }
 }
