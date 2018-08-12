@@ -164,6 +164,8 @@ export class HeaderComponent implements OnInit {
     ];
     const currUser = this.authService.getCurrentUser();
     if (currUser != null) {
+      // tslint:disable-next-line:no-debugger
+      debugger;
       this.displayName = currUser.displayName;
     }
 

@@ -39,9 +39,15 @@ namespace Watcher.Core.Services
         {
             var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Email == email,
                              include: users => users.Include(u => u.Role)
-                                 .Include(u => u.LastPickedOrganization)
-                                 .Include(u => u.UserOrganizations)
-                                 .ThenInclude(uo => uo.Organization));
+                                .Include(u => u.CreatedChats)
+                                .Include(u => u.Feedbacks)
+                                .Include(u => u.Responses)
+                                .Include(u => u.Messages)
+                                .Include(u => u.Notifications)
+                                .Include(u => u.NotificationSettings)
+                                .Include(u => u.LastPickedOrganization)
+                                .Include(u => u.UserOrganizations)
+                                .ThenInclude(uo => uo.Organization));
 
             if (sample == null) return null;
 
