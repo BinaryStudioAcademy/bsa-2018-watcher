@@ -19,6 +19,7 @@
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseSetting("detailedErrors", "true")
                 .ConfigureAppConfiguration((hostingContext, config) =>
                     {
                         var env = hostingContext.HostingEnvironment;
@@ -27,6 +28,7 @@
                         config.AddEnvironmentVariables();
                     })
                 .UseIISIntegration()
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .CaptureStartupErrors(true);
     }
 }

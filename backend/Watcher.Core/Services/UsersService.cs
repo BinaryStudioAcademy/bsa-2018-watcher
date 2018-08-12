@@ -92,7 +92,6 @@ namespace Watcher.Core.Services
             {
                 Name = request.CompanyName ?? "Default",
                 IsActive = true,
-                Theme = new Theme { Name = "Default" },
                 CreatedByUserId = entity.Id
             };
                   
