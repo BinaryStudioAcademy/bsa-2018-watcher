@@ -26,15 +26,15 @@
 </p-dialog>
 <ng-template #signInTemplate>
     <div class="auth-buttons">
-        <button (click)="signInWithGoogle()" class="auth-button auth-btn-google">
+        <button *ngIf="!isFetching" (click)="signInWithGoogle()" class="auth-button auth-btn-google">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span>
             <span class="firebaseui-idp-text">Sign In with Google</span>
         </button>
-        <button (click)="signInWithGitHub()" class="auth-button auth-btn-githum">
+        <button *ngIf="!isFetching" (click)="signInWithGitHub()" class="auth-button auth-btn-githum">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg"></span>
             <span class="firebaseui-idp-text">Sign In with Github</span>
         </button>
-        <button (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
+        <button *ngIf="!isFetching" (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
             <span class="firebaseui-idp-text">Sign In with Facebook</span>
         </button>
@@ -42,20 +42,21 @@
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
             <span class="firebaseui-idp-text">Sign In with Twitter</span>
         </button> -->
+        <p-progressSpinner *ngIf="isFetching"></p-progressSpinner>
     </div>
 </ng-template>
 
 <ng-template #signUpTemplate>
     <div class="auth-buttons">
-        <button (click)="signInWithGoogle()" class="auth-button auth-btn-google">
+        <button *ngIf="!isFetching" (click)="signInWithGoogle()" class="auth-button auth-btn-google">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span>
             <span class="firebaseui-idp-text">Sign Up with Google</span>
         </button>
-        <button (click)="signInWithGitHub()" class="auth-button auth-btn-githum">
+        <button *ngIf="!isFetching" (click)="signInWithGitHub()" class="auth-button auth-btn-githum">
                 <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg"></span>
                 <span class="firebaseui-idp-text">Sign Up with Github</span>
             </button>
-        <button (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
+        <button *ngIf="!isFetching" (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
             <span class="firebaseui-idp-text">Sign Up with Facebook</span>
         </button>
@@ -63,6 +64,7 @@
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
             <span class="firebaseui-idp-text">Sign Up with Twitter</span>
         </button> -->
+        <p-progressSpinner *ngIf="isFetching"></p-progressSpinner>
     </div>
 </ng-template>
 
