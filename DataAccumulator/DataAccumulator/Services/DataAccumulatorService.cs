@@ -59,12 +59,14 @@ namespace DataAccumulator.Services
 
         public async Task<CollectedDataDto> UpdateEntityAsync(CollectedDataDto collectedDataDto)
         {
-            if (!await _repository.EntityExistsAsync(collectedDataDto.Id))
+            var entity = await _repository.GetEntity(collectedDataDto.Id);
+            if (entity == null)
             {
                 throw new NotFoundException();
             }
 
             var mappedEntity = _mapper.Map<CollectedDataDto, CollectedData>(collectedDataDto);
+            mappedEntity.InternalId = entity.InternalId;
             await _repository.UpdateEntity(mappedEntity);
 
             return collectedDataDto;
