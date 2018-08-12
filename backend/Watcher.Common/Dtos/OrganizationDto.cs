@@ -22,7 +22,7 @@ namespace Watcher.Common.Dtos
 
         public bool IsActive { get; set; }
 
-        public int ThemeId { get; set; }
+        public int? ThemeId { get; set; }
 
         public ThemeDto Theme { get; set; }
 
