@@ -19,7 +19,7 @@ export class OrganizationProfileComponent implements OnInit {
     private fb: FormBuilder,
     private organizationService: OrganizationService,
     private authService: AuthService,
-    private toastrService: ToastrService) { this.editable = true; }
+    private toastrService: ToastrService) { }
 
   editable: boolean;
   canUpdate: boolean;
