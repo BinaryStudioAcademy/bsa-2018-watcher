@@ -11,7 +11,7 @@ using DataAccumulator.Models;
 
 namespace DataAccumulator.Repositories
 {
-    public class DataAccumulatorRepository : IDataAccumulatorRepository
+    public class DataAccumulatorRepository : IDataAccumulatorRepository<CollectedData>
     {
         private readonly DataAccumulatorContext _context = null;
 
@@ -33,7 +33,7 @@ namespace DataAccumulator.Repositories
             }
         }
 
-        public async Task<CollectedData> GetEntity(string id)
+        public async Task<CollectedData> GetEntity(Guid id)
         {
             try
             {
@@ -80,18 +80,12 @@ namespace DataAccumulator.Repositories
             }
         }
 
-        public async Task<bool> UpdateEntity(string id, CollectedDataDto collectedDataDto)
+        public async Task<bool> UpdateEntity(CollectedData collectedData)
         {
             try
             {
-                // todo
-                var collectedData = new CollectedData()
-                {
-                    Id = collectedDataDto.Id
-                };
-
                 ReplaceOneResult actionResult = await _context.Datasets
-                    .ReplaceOneAsync(data => data.Id.Equals(id), collectedData, new UpdateOptions { IsUpsert = true });
+                    .ReplaceOneAsync(data => data.Id.Equals(collectedData.Id), collectedData, new UpdateOptions { IsUpsert = true });
 
                 return actionResult.IsAcknowledged && actionResult.ModifiedCount > 0;
             }
@@ -102,7 +96,7 @@ namespace DataAccumulator.Repositories
             }
         }
 
-        public async Task<bool> RemoveEntity(string id)
+        public async Task<bool> RemoveEntity(Guid id)
         {
             try
             {
@@ -135,6 +129,11 @@ namespace DataAccumulator.Repositories
             }
         }
 
+        public Task<bool> EntityExistsAsync(Guid id)
+        {
+            return _context.Datasets.Find(entity => entity.Id == id).AnyAsync();
+        }
+
         // It creates a sample compound index 
         // MongoDb automatically detects if the index already exists - in this case it just returns the index details
         public async Task<string> CreateIndex()
@@ -158,9 +157,9 @@ namespace DataAccumulator.Repositories
         }
 
         // Try to convert the Id to a BSonId value
-        private ObjectId GetInternalId(string id)
+        private ObjectId GetInternalId(Guid id)
         {
-            if (!ObjectId.TryParse(id, out ObjectId internalId))
+            if (!ObjectId.TryParse(id.ToString(), out ObjectId internalId))
                 internalId = ObjectId.Empty;
 
             return internalId;
