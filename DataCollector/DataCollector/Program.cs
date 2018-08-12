@@ -33,7 +33,7 @@ namespace DataCollector
                 Console.WriteLine($"{DateTime.Now}         Avarage counted\n");
                 sendDataItem /= count;
                 Console.WriteLine($"{DateTime.Now}         Avarage:\n{sendDataItem.ToString()}");
-                s.Send(sendDataItem,"localhost");
+                s.Send(sendDataItem, "http://localhost:46059/api/v1/dataaccumulator");
                 Console.WriteLine($"{DateTime.Now}         Data was send");
                 //rs.Receive();
             }
