@@ -77,9 +77,11 @@ export class AuthorizationComponent implements OnInit {
     this.isFetching = true;
     await this.authService.signInWithGoogle()
       .then(result => {
-        this.closeDialog();
-        this.signInPostProcessing(result);
-        this.isFetching = false;
+         if (result) {
+          this.closeDialog();
+          this.signInPostProcessing(result);
+         }
+         this.isFetching = false;
       })
       .catch(err => {
         if (err) {
@@ -96,8 +98,10 @@ export class AuthorizationComponent implements OnInit {
     this.isFetching = true;
     await this.authService.signInWithFacebook()
       .then(result => {
+        if (result) {
         this.closeDialog();
         this.signInPostProcessing(result);
+        }
         this.isFetching = false;
       })
       .catch(err => {
@@ -116,8 +120,10 @@ export class AuthorizationComponent implements OnInit {
     this.isFetching = true;
     await this.authService.signInWithGitHub()
       .then(result => {
+        if (result) {
         this.closeDialog();
         this.signInPostProcessing(result);
+        }
         this.isFetching = false;
       })
       .catch(err => {

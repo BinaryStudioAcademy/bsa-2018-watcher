@@ -20,5 +20,7 @@
         Task<bool> DeleteEntityByIdAsync(string id);
 
         Task<UserDto> GetEntityByEmailAsync(string email);
+
+        Task<bool> UpdateLastPickedOrganizationAsync(string userId, int organizationId);
     }
 }

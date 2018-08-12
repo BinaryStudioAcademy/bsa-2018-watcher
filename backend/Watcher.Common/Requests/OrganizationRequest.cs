@@ -1,7 +1,8 @@
 ﻿namespace Watcher.Common.Requests
 {
     using System.Collections.Generic;
-    
+    using Watcher.Common.Dtos;
+
     public class OrganizationRequest
     {
         public OrganizationRequest() { }
@@ -18,7 +19,9 @@
 
         public bool IsActive { get; set; }
 
-        public int ThemeId { get; set; }
+        public int? ThemeId { get; set; }
+
+        public ThemeDto Theme { get; set; }
 
         public int? ChatId { get; set; }
 
@@ -28,6 +31,6 @@
 
         public IList<int> InstancesId { get; set; }
 
-        public IList<int> NotificationsId { get; set; }
+        public IList<NotificationDto> Notifications { get; set; }
     }
 }

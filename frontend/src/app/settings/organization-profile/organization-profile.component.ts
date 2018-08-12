@@ -25,11 +25,14 @@ export class OrganizationProfileComponent implements OnInit {
   canUpdate: boolean;
   organization: Organization;
 
+  private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
+  private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
+
   organizationForm = this.fb.group({
     name: new FormControl({ value: '', disabled: true }, Validators.required),
-    email: new FormControl({ value: '', disabled: true }),
-    contactNumber: new FormControl({ value: '', disabled: true }),
-    webSite: new FormControl({ value: '', disabled: true }),
+    email: new FormControl({ value: '', disabled: true }, Validators.email),
+    contactNumber: new FormControl({ value: '', disabled: true }, Validators.pattern(this.phoneRegex)),
+    webSite: new FormControl({ value: '', disabled: true }, Validators.pattern(this.urlRegex)),
     description: new FormControl({ value: '', disabled: true })
   });
 
@@ -78,6 +81,8 @@ export class OrganizationProfileComponent implements OnInit {
         }
       );
     } else {
+      this.toastrService.error('Form was filled incorrectly');
+
       Object.keys(this.organizationForm.controls).forEach(field => {
         const control = this.organizationForm.get(field);
         control.markAsDirty({ onlySelf: true });
