@@ -4,9 +4,12 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
+using DataAccumulator.Entities;
 using DataAccumulator.Interfaces;
 using DataAccumulator.Models;
 using DataAccumulator.Repositories;
+using DataAccumulator.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -46,7 +49,11 @@ namespace DataAccumulator
                 options.Database = Configuration.GetSection("MongoConnection:Database").Value;
             });
 
-            services.AddTransient<IDataAccumulatorRepository, DataAccumulatorRepository>();
+            services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
+            services.AddScoped<IService<CollectedDataDto>, DataAccumulatorService>();
+
+            var mapper = MapperConfiguration().CreateMapper();
+            services.AddTransient(_ => mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +67,18 @@ namespace DataAccumulator
             }
 
             app.UseMvc();
+        }
+
+        public MapperConfiguration MapperConfiguration()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<CollectedData, CollectedDataDto>();
+                cfg.CreateMap<CollectedDataDto, CollectedData>();
+                cfg.CreateMap<CollectedData, CollectedData>();
+            });
+
+            return config;
         }
     }
 }
