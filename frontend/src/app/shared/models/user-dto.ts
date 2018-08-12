@@ -1,7 +1,6 @@
 
 import { Role } from './role.model';
 import { NotificationSetting } from './notification-setting.model';
-import { UserOrganization } from './user-organization.model';
 import { Notification } from './notification.model';
 import { Feedback } from './feedback.model';
 import { Response } from './response.model';
@@ -21,7 +20,7 @@ export interface UserDto {
     lastPickedOrganizationId: number;
     lastPickedOrganization: Organization;
     notificationSettings: NotificationSetting[];
-    userOrganizations: UserOrganization[];
+    organizations: Organization[];
     notifications: Notification[];
     feedbacks: Feedback[];
     responses: Response[];

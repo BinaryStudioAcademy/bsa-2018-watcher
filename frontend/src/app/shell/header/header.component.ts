@@ -6,6 +6,8 @@ import {SampleEnum} from '../../shared/models/sample-enum.enum';
 import {SampleDto} from '../../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
 import {AuthService} from '../../core/services/auth.service';
+import { Organization } from '../../shared/models/organization.model';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -21,6 +23,8 @@ export class HeaderComponent implements OnInit {
   messagesNumber = 2;
 
   displayName: string;
+  lastPickedOrganizationId: number;
+  organizations: Organization[];
 
   userItems: MenuItem[];
   cogItems: MenuItem[];
@@ -30,8 +34,10 @@ export class HeaderComponent implements OnInit {
 
   constructor(private notificationsService: NotificationsService,
               private messageService: MessageService,
+              private userService: UserService,
               private authService: AuthService) {
     this.subscribeToEvents();
+    this.organizations = new Array<Organization>();
   }
 
   showAllSamples() {
@@ -149,25 +155,38 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.orgItems = [{
-      label: 'Organization1',
-      icon: 'fa fa-fw fa-building',
-    },
-      {
-        label: 'Organization2',
-        icon: 'fa fa-fw fa-building',
-      },
-      {
-        label: 'Organization3',
-        icon: 'fa fa-fw fa-building',
-      }
-    ];
     const currUser = this.authService.getCurrentUser();
     if (currUser != null) {
-      // tslint:disable-next-line:no-debugger
-      debugger;
       this.displayName = currUser.displayName;
+      this.lastPickedOrganizationId = currUser.lastPickedOrganizationId;
+      if (currUser.organizations.length > 0) {
+        this.organizations = currUser.organizations;
+        this.fillOrganizations();
+      }
     }
+  }
 
+  fillOrganizations() {
+    this.orgItems = new Array<MenuItem>();
+    this.organizations.forEach(element => {
+      this.orgItems.push({
+        label: element.name,
+        id: element.id.toString(),
+        icon: 'fa fa-fw fa-building',
+        command: (onclick) => { this.chengeLastPicOrganizations(element); },
+        styleClass: (element.id === this.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
+        disabled: (element.id === this.lastPickedOrganizationId)
+      });
+    });
+
+
+    // this.orgItems.push
+  }
+
+  chengeLastPicOrganizations(item: Organization) {
+    // tslint:disable-next-line:no-debugger
+    debugger;
+    // update user
+    // notify user about changes
   }
 }
