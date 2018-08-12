@@ -10,6 +10,7 @@ import { Organization } from '../../shared/models/organization.model';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
+import { THIS_EXPR } from '../../../../node_modules/@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-header',
@@ -25,6 +26,7 @@ export class HeaderComponent implements OnInit {
   messagesNumber = 2;
 
   user: User;
+  displayName: string;
 
   userItems: MenuItem[];
   cogItems: MenuItem[];
@@ -157,6 +159,7 @@ export class HeaderComponent implements OnInit {
 
     this.user = this.authService.getCurrentUser();
     if (this.user != null) {
+      this.displayName = this.user.displayName;
       if (this.user.organizations.length > 0) {
         this.fillOrganizations();
       }
