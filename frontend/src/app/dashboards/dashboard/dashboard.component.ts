@@ -148,7 +148,7 @@ export class DashboardComponent implements OnInit {
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
-      const newdash: Dashboard = { title: title, createdAt: new Date(), instance: this.instance };
+      const newdash: Dashboard = {id: 123, title: title, createdAt: new Date(), instance: this.instance, charts: null };
       this.createDashboard(newdash);
       let index = 0;
       // switching to new tab

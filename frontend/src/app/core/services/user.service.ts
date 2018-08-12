@@ -18,4 +18,8 @@ export class UserService {
   public get(id: string): Observable<User> {
     return this.apiService.get(`/${this.ctrlUrl}/${id}`) as Observable<User>;
   }
+
+  public updateLastPickedOrganization(userId: string, organizationId: number): Observable<Object> {
+    return this.apiService.put(`/${this.ctrlUrl}/UpdateLastPickedOrganization/${userId}/${organizationId}`);
+  }
 }

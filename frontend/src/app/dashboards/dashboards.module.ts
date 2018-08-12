@@ -6,7 +6,7 @@ import { InstanceListComponent } from './instance-list/instance-list.component';
 import { TabViewModule, PanelMenuModule, DialogModule, ButtonModule, TabMenuModule, ProgressSpinnerModule } from 'primeng/primeng';
 import { EditDashboardComponent } from './editDashboard/editDashboard.component';
 import { FormsModule } from '@angular/forms';
-import { ToastModule } from '../../../node_modules/primeng/toast';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   imports: [
