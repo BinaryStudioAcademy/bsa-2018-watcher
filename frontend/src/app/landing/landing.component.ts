@@ -18,7 +18,7 @@ export class LandingComponent implements OnInit, OnDestroy {
       document.getElementById('header').style.background = 'rgba(0,0,0,0.2)';
     } else { document.getElementById('header').style.background = 'rgba(0,0,0,0.8)'; }}
 
-  scrollTo(id: string) {
+  scrollTo(id: string): void {
     const element = document.getElementById(id);
     element.scrollIntoView( {block: 'start', behavior: 'smooth'});
     const menu = document.getElementById('nav');
@@ -26,13 +26,13 @@ export class LandingComponent implements OnInit, OnDestroy {
       this.show();
     }
   }
-  show() {
+  show(): void {
     const menu = document.getElementById('nav');
     if (menu.style.visibility === 'visible') {
       menu.style.visibility = 'hidden'; } else { menu.style.visibility = 'visible'; }
   }
 
-  resize() {
+  resize(): void {
     if (window.innerWidth > 730) {document.getElementById('nav').style.visibility = 'visible'; }
   }
   ngOnInit() {

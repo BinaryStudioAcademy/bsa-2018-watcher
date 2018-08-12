@@ -16,12 +16,12 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   @Input() dashboardTitle: string;
   constructor() { }
 
-  closeDialog() {
+  closeDialog(): void {
     this.closed.emit();
     this.dashboardTitle = '';
   }
 
-  edit() {
+  edit(): void {
     this.edited.emit(this.title);
   }
 
