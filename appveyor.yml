@@ -29,7 +29,7 @@ test_script:
 artifacts:
  - path: '\backend\Watcher\bin\Release\netcoreapp2.1\publish'
    name: api
-artifacts:
+
  - path: '\DataCollector\DataCollector\bin\Release\netcoreapp2.1\publish'
    name: datacollector
 notifications:
