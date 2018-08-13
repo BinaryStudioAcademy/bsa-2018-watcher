@@ -1,28 +1,32 @@
 <div class="ui-g ui-fluid container">
   <div class="ui-g-12 ui-lg-6">
-
     <h3> Feedback </h3>
     <hr>
     <div>Thank you for taking the time to fill in our online feedback form. By providing us your feedback, you are helping us
       understand what we do well and what improvements we need to implement. </div>
-    <div>
-      <p>Would you use Watcher in the future?</p>
-      <input type="radio" value="yes" name="use" ngModel> Yes
-      <input type="radio" value="maybe" name="use" ngModel> Maybe
-      <input type="radio" value="no" name="use" ngModel> No
-    </div>
-    <div class="label">Feel free to add any other comments or suggestions:</div>
-    <div class="ui-g ui-fluid">
-      <div class="ui-g-12 ui-lg-6">
-        <textarea rows="5" [(ngModel)]="feedback.text" pInputTextarea></textarea>
- </div>
-    </div>
-    <div class="btn-panel">
-      <button pButton type="submit" label="Submit feedback" (click)="onSubmit()"></button>
-    </div>
   </div>
 </div>
-<!--      <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
+
+<div class="label">Would you use Watcher in the future?</div>
+<div class="ui-g ui-fluid container">
+  <div class="ui-g-12 ui-lg-6">
+    <input type="radio" value="yes" name="use" ngModel> Yes
+    <input type="radio" value="maybe" name="use" ngModel> Maybe
+    <input type="radio" value="no" name="use" ngModel> No
+  </div>
+</div>
+
+<div class="label">Feel free to add any other comments or suggestions:</div>
+<div class="ui-g ui-fluid">
+  <div class="ui-g-12 ui-lg-6">
+    <textarea rows="5" pInputTextarea></textarea>
+  </div>
+</div>
+<div class="btn-panel">
+  <button pButton type="submit" label="Submit feedback" (click)="onSubmit()" class="ui-button-raised ui-button-success"></button>
+</div>
+
+<!-- [(ngModel)]="feedback.text"     <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
   formControlName="suggestions" 
   <div class="btn-panel">
     <button pButton type="submit" label="Submit feedback" class="ui-button-raised ui-button-success"></button>
