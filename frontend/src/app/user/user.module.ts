@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
 import { DashboardsModule } from '../dashboards/dashboards.module';
+import {FeedbackComponent} from '../feedback/feedback.component';
 
 @NgModule({
   imports: [
@@ -11,6 +12,6 @@ import { DashboardsModule } from '../dashboards/dashboards.module';
     UserRoutingModule,
     DashboardsModule
   ],
-  declarations: [ UserComponent ]
+  declarations: [ UserComponent, FeedbackComponent ]
 })
 export class UserModule { }

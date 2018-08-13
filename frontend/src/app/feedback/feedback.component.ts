@@ -4,6 +4,8 @@ import { FeedbackService } from '../core/services/feedback.service';
 import { AuthService } from '../core/services/auth.service';
 import { ToastrService } from '../core/services/toastr.service';
 import { Feedback } from '../shared/models/feedback.model';
+import { UserService } from '../core/services/user.service';
+import { User } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-feedback',
@@ -13,36 +15,45 @@ import { Feedback } from '../shared/models/feedback.model';
     // ToastrService
   ]
 })
+
 export class FeedbackComponent implements OnInit {
 
   feedback: Feedback;
   feedbacks: Feedback[];
+  user: User;
+  // private suggestions: string;
 
   constructor(
     // private fb: FormBuilder,
     private authService: AuthService,
     private feedbackService: FeedbackService,
+    private userService: UserService,
     private toastrService: ToastrService) { }
 
   // organizationForm = this.fb.group({
-  //   suggestions: new FormControl({ value: '', disabled: false })
+  //  suggestions: new FormControl({ value: '', disabled: false })
   // });
 
   ngOnInit() {
-    const user = this.authService.getCurrentUser();
-    this.feedback.user = user;
-    if (user == null) {
+    this.user = this.authService.getCurrentUser();
+    if (this.user == null) {
       return;
     }
     this.feedbackService.getAll().subscribe((value: Feedback[]) => this.feedbacks = value);
   }
 
-  onSubmit() {
-    // const c = Date.UTC().toUTCString();
-    // const now = new Date(c);
-    // this.feedback.createdAt = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-    //  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-    this.feedbackService.create(this.feedback);
+  onSubmit() {// suggestions: string) {
+    const newfeedback: Feedback = { id: 0, createdAt: new Date(), user: this.user, text: this.suggestions, response: null };
+    console.log(newfeedback);
+    this.feedbackService.create(newfeedback).
+      subscribe(
+        value => {
+          this.toastrService.success('Added new feedback');
+        },
+        error => {
+          this.toastrService.success(`Error ocured status: ${error}`);
+      });
+      // subscribe((data: Feedback) => this.feedbacks.push(data));
     this.toastrService.confirm('Would you want to type one more feedback');
   }
 
