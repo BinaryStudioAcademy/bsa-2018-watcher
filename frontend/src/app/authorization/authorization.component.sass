@@ -5,7 +5,7 @@
     width: 30px
     height: 30px
     cursor: pointer
-    border: 3px solid #838385
+    border: 0 solid #838385
     border-radius: 50%
     z-index: 1000
 
@@ -16,8 +16,8 @@
     top: 10px
     left: 2px
     width: 20px
-    height: 4px
-    background: #838385
+    height: 3px
+    background: #c7c7c7
 
 .close:before 
     webkit-transform: rotate(45deg)
@@ -28,11 +28,13 @@
     transform: rotate(-45deg)
 
 .close:hover
-    border-color: #007ad9
-    box-shadow: 0 6px 8px 0 rgba(0,0,0,.25), 0 8px 1px -5px rgba(0,0,0,.3), 0 6px 8px 0 rgba(0,0,0,.24)
+    &:before
+        background: #545556
+    &:after
+        background: #545556
+
 .close:active
         box-shadow: 0 0 0 rgba(0, 0, 0, 0)
-
 
 .btnsign-in,
 .btnsign-up
