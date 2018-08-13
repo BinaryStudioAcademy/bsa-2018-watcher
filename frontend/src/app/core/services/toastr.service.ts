@@ -8,7 +8,7 @@ export class ToastrService {
 
   constructor(private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
-  private message(severity: string, summary: string, detail: string) {
+  private message(severity: string, summary: string, detail: string): void {
     this.messageService.add({
       severity,
       summary,
@@ -16,19 +16,19 @@ export class ToastrService {
     });
   }
 
-  success(message: string) {
+  success(message: string): void {
     this.message('success', 'Success', message);
   }
 
-  info(message: string) {
+  info(message: string): void {
     this.message('info', 'Info', message);
   }
 
-  warning(message: string) {
+  warning(message: string): void {
     this.message('warn', 'Warn', message);
   }
 
-  error(message: string) {
+  error(message: string): void {
     this.message('error', 'Error', message);
   }
 

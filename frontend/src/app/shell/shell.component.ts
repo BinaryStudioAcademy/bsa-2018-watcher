@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../core/services/auth.service';
 
 @Component({
   selector: 'app-shell',
@@ -6,10 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./shell.component.sass']
 })
 export class ShellComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private authService: AuthService) {
   }
 
+  async ngOnInit() {
+    await this.authService.populate();
+  }
 }

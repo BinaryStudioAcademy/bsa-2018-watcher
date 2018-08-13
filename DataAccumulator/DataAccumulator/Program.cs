@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
 
@@ -20,7 +15,7 @@ namespace DataAccumulator
             try
             {
                 logger.Debug("init main");
-                BuildWebHost(args).Run();
+                CreateWebHostBuilder(args).Run();
             }
             catch (Exception ex)
             {
@@ -35,15 +30,15 @@ namespace DataAccumulator
             }
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHost CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Error);
-                })
-                .UseNLog()  // NLog: setup NLog for Dependency injection
-                .Build();
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.SetMinimumLevel(LogLevel.Trace);
+            })
+            .UseNLog()
+            .Build();
     }
 }

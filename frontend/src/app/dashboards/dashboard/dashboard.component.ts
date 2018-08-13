@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
     return item;
   }
 
-  createDashboard(newDashboard: Dashboard) {
+  createDashboard(newDashboard: Dashboard): void {
     this.dashboardsService.create(newDashboard)
       .subscribe(
         (res: Response) => {
@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit {
         });
   }
 
-  updateDashboard(editTitle: string) {
+  updateDashboard(editTitle: string): void {
     const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
     const payload: Dashboard = this.transformToDashboard(this.dashboardMenuitems[index]);
     payload.title = editTitle;
@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit {
         });
   }
 
-  deleteDashboard(dashboard: DashboardMenuItem) {
+  deleteDashboard(dashboard: DashboardMenuItem): void {
     this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
         console.log(res);
@@ -117,20 +117,22 @@ export class DashboardComponent implements OnInit {
         });
   }
 
-  async delete() {
+  async delete(): Promise<void> {
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
       this.loading = true;
       this.deleteDashboard(this.activeDashboardItem);
     }
   }
 
-  configureDashboards() {
+  configureDashboards(): void {
     this.dashboardsService.getAllByInstance(this.instance.id).subscribe(
       (data: Dashboard[]) => {
-        this.dashboardMenuitems = data.map(
-          dash => this.transformToMenuItem(dash));
-        this.loading = false;
-        this.toastrService.success('Succesfully got info from server');
+        if (data) {
+          this.dashboardMenuitems = data.map(
+            dash => this.transformToMenuItem(dash));
+          this.loading = false;
+          this.toastrService.success('Succesfully got info from server');
+        }
       },
       error => {
         this.loading = false;
@@ -138,7 +140,7 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  showCreatePopup(creation: boolean) {
+  showCreatePopup(creation: boolean): void {
     this.creation = creation;
     // if we are adding new textbox needs to be clear
     this.editTitle = creation ? '' : this.activeDashboardItem.label;

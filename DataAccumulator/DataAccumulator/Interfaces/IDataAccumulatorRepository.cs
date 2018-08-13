@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DataAccumulator.Entities;
-using DataAccumulator.Models;
 
 namespace DataAccumulator.Interfaces
 {
