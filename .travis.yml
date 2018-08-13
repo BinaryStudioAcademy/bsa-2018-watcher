@@ -6,7 +6,7 @@ branches:
   - dev
 notifications:
   slack: academy2018:BWktvMWEA8awF8T3vWkm6sIx
-    on_succes: change
+    on_success: change
     on_failure: always
 before_script:
 - cd frontend
