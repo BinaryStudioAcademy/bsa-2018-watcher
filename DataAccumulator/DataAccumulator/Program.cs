@@ -11,11 +11,11 @@ namespace DataAccumulator
         public static void Main(string[] args)
         {
             // NLog: setup the logger first to catch all errors
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             try
             {
                 logger.Debug("init main");
-                CreateWebHostBuilder(args).Build().Run();
+                CreateWebHostBuilder(args).Run();
             }
             catch (Exception ex)
             {
@@ -30,7 +30,7 @@ namespace DataAccumulator
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHost CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
             .ConfigureLogging(logging =>
@@ -38,6 +38,7 @@ namespace DataAccumulator
                 logging.ClearProviders();
                 logging.SetMinimumLevel(LogLevel.Trace);
             })
-            .UseNLog();
+            .UseNLog()
+            .Build();
     }
 }
