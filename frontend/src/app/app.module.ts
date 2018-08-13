@@ -4,7 +4,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AccordionModule, TabViewModule } from 'primeng/primeng';
+import { AccordionModule, TabViewModule, ProgressSpinnerModule } from 'primeng/primeng';
 import { PanelModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
 import { RadioButtonModule } from 'primeng/primeng';
@@ -16,8 +16,6 @@ import { LandingComponent } from './landing/landing.component';
 import { CoreModule } from './core/core.module';
 import { AuthorizationComponent } from './authorization/authorization.component';
 import { AdminModule } from './admin/admin.module';
-import { UserModule } from './user/user.module';
-import {NotificationsModule} from './notifications/notifications.module';
 
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
@@ -26,6 +24,8 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthService } from './core/services/auth.service';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
+import { ShellModule } from './shell/shell.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @NgModule({
   declarations: [
@@ -46,17 +46,18 @@ import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdia
     TabViewModule,
     ToastModule,
     ConfirmDialogModule,
+    ProgressSpinnerModule,
 
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
 
     CoreModule,
-    NotificationsModule,
-    UserModule,
     AdminModule,
 
-    AppRoutingModule
+    AppRoutingModule,
+    NotificationsModule,
+    ShellModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

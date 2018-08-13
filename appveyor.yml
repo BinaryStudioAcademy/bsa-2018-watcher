@@ -9,11 +9,17 @@ init:
   # Good practise, because Windows
   - git config --global core.autocrlf true
 before_build:
-  # Display minimal restore text
+  # Resote backend solution
   - cmd: cd backend
   - cmd: dotnet restore --verbosity m
+  # Resote DataCollector solution
+  - cmd: cd ../DataCollector
+  - cmd: dotnet restore --verbosity m
 build_script:
+  # output will be in ./DataCollector/DataCollector/bin/Release/netcoreapp2.1/publish/
+  - cmd: dotnet publish -c Release
   # output will be in ./backend/Watcher/bin/Release/netcoreapp2.1/publish/
+  - cmd: cd ../backend
   - cmd: dotnet publish -c Release
 test_script:
  # tests in here
@@ -23,13 +29,18 @@ test_script:
 artifacts:
  - path: '\backend\Watcher\bin\Release\netcoreapp2.1\publish'
    name: api
+
+ - path: '\DataCollector\DataCollector\bin\Release\netcoreapp2.1\publish'
+   name: datacollector
 notifications:
   - provider: Slack
     incoming_webhook:
       secure: om6ZaQPG70gvmoGaTQ2IfnTM8LQFROsCT1l23SGjLCVtLIufhCl+gDK1+K4UjfZNLmZJj/bjuNFuiVargaYtl64Ul4IslvGflpz7I6sSqc8=
-    on_build_success: true
+    on_build_success: false
     on_build_failure: true
+    on_build_status_changed: true
     # on_build_status_changed: false
+# Deploy backend solution
 deploy:
   - provider: WebDeploy
     server:
@@ -43,3 +54,17 @@ deploy:
     remove_files: true
     app_offline: true
     artifact: api
+# Deploy DataCollector
+
+  - provider: WebDeploy
+    server:
+      secure: GCqb1Ka4XlvY8MkxWTFIEIbEk+yFC8EXfdVwDNqEzVAKxUe4AXjWiaf6HXj1PkmX8gezwqZvHjyu/bh+eJR1SGdotpyJOQPeGe6eDUXBvVCkj3KI6FQ7I7KnTCOANcDBlnURqjtXg29Jq2r4ASNIWw==
+    website:
+      secure: IV137Y6THFxLzDZI7AZjGwfYLIdFENA5kcKpZ4OEpXg=
+    username:
+      secure: 4bOILnGvJX90az4zPepc6/kJeQCoGki4hxZm8BnSC0U=
+    password:
+      secure: caHBnqUecWjsXS5qn2KuUtvXtvhsgI1I84Ufl1Iffoad30jRzQvJimFYikaWN9jzBnKN56KJhKQpL4wZ/2v8nA==
+    remove_files: true
+    app_offline: true
+    artifact: datacollector

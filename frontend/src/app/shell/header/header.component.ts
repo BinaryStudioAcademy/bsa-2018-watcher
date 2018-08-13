@@ -1,12 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuItem, Message} from 'primeng/api';
-import {NotificationsService} from '../core/services/notifications.service';
-import {SampleRequest} from '../shared/models/sample-request.model';
-import {SampleEnum} from '../shared/models/sample-enum.enum';
-import {SampleDto} from '../shared/models/sample-dto.model';
+import {NotificationsService} from '../../core/services/notifications.service';
+import {SampleRequest} from '../../shared/models/sample-request.model';
+import {SampleEnum} from '../../shared/models/sample-enum.enum';
+import {SampleDto} from '../../shared/models/sample-dto.model';
 import {MessageService} from 'primeng/api';
-import {HttpClient} from '@angular/common/http';
-import {AuthService} from '../core/services/auth.service';
+import {AuthService} from '../../core/services/auth.service';
+import { Organization } from '../../shared/models/organization.model';
+import { UserService } from '../../core/services/user.service';
+import { User } from '../../shared/models/user.model';
+import { ToastrService } from '../../core/services/toastr.service';
+import { THIS_EXPR } from '../../../../node_modules/@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-header',
@@ -21,6 +25,9 @@ export class HeaderComponent implements OnInit {
   notificationsNumber = 0;
   messagesNumber = 2;
 
+  user: User;
+  displayName: string;
+
   userItems: MenuItem[];
   cogItems: MenuItem[];
   mailItems: MenuItem[];
@@ -28,21 +35,11 @@ export class HeaderComponent implements OnInit {
   orgItems: MenuItem[];
 
   constructor(private notificationsService: NotificationsService,
-              private authService: AuthService,
               private messageService: MessageService,
-              private http: HttpClient) {
+              private userService: UserService,
+              private toastrService: ToastrService,
+              private authService: AuthService) {
     this.subscribeToEvents();
-  }
-
-  createSample() {
-    const req: SampleRequest = {
-      name: 'Test',
-      count: 12,
-      dateOfCreation: new Date(2017, 1, 1),
-      sampleField: SampleEnum.FirstItem
-    };
-
-    this.notificationsService.createSample(req);
   }
 
   showAllSamples() {
@@ -74,6 +71,30 @@ export class HeaderComponent implements OnInit {
           Sample Field: ${sample.sampleField.toString()}, Date of creation: ${sample.dateOfCreation}, Count: ${sample.count}, `
       });
     });
+  }
+
+  // TODO: methods for SignalR Tests
+  createSample() {
+    const req: SampleRequest = {
+      name: 'Test',
+      count: 12,
+      dateOfCreation: new Date(2017, 1, 1),
+      sampleField: SampleEnum.FirstItem
+    };
+
+    this.notificationsService.createSample(req);
+  }
+
+  echoToServer() {
+    this.notificationsService.echo();
+  }
+
+  sendMess() {
+    this.notificationsService.send('ri3bE0PElDT8gLU35sonvnMzbEq2', 'From Sdadadafsd message');
+  }
+
+  connectToServer() {
+    this.notificationsService.connectToSignalR();
   }
 
   ngOnInit() {
@@ -136,18 +157,46 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.orgItems = [{
-      label: 'Organization1',
-      icon: 'fa fa-fw fa-building',
-    },
-      {
-        label: 'Organization2',
-        icon: 'fa fa-fw fa-building',
-      },
-      {
-        label: 'Organization3',
-        icon: 'fa fa-fw fa-building',
+    this.user = this.authService.getCurrentUser();
+    if (this.user != null) {
+      this.displayName = this.user.displayName;
+      if (this.user.organizations.length > 0) {
+        this.fillOrganizations();
       }
-    ];
+    }
   }
+
+  private fillOrganizations() {
+    this.orgItems = new Array<MenuItem>();
+
+    this.user.organizations.forEach(element => {
+      this.orgItems.push({
+        label: element.name,
+        id: element.id.toString(),
+        icon: 'fa fa-fw fa-building',
+        command: (onclick) => { this.chengeLastPicOrganizations(element); },
+        styleClass: (element.id === this.user.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
+        disabled: (element.id === this.user.lastPickedOrganizationId)
+      });
+    });
+  }
+
+  private chengeLastPicOrganizations(item: Organization) {
+    // update user in beckend
+    this.userService.updateLastPickedOrganization(this.user.id, item.id)
+    .subscribe(value => {
+      // update user in frontend
+
+      this.user.lastPickedOrganizationId = item.id;
+      this.user.lastPickedOrganization = item;
+      this.authService.updateCurrentUser(this.user); // update user in localStorage
+      this.fillOrganizations();
+      // notify user about changes
+      this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
+    },
+    err => {
+      this.toastrService.error('Organization by defaul was not updated.');
+    });
+  }
+
 }

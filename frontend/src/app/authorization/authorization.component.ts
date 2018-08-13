@@ -2,7 +2,6 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from '../core/services/auth.service';
 import {Router} from '@angular/router';
 import {TokenService} from '../core/services/token.service';
-import {UserDto} from '../shared/models/user-dto';
 
 @Component({
   selector: 'app-authorization',
@@ -20,6 +19,7 @@ export class AuthorizationComponent implements OnInit {
   isSignIn = true;
   isSuccessSignUp = false;
   isNotRegisteredSignIn = false;
+  isFetching = false;
 
   companyName = '';
   lastName = '';
@@ -33,15 +33,6 @@ export class AuthorizationComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  showDialogSignIn(): void {
-    this.display = true;
-  }
-
-  showDialogSignUp(): void {
-    this.display = true;
-    this.isSignIn = false;
   }
 
   loadTemplate() {
@@ -66,93 +57,9 @@ export class AuthorizationComponent implements OnInit {
     this.isSuccessSignUp = false;
   }
 
-  showNotRegisteredSignIn(): void {
+  showDialogSignUp(): void {
     this.display = true;
     this.isSignIn = false;
-    this.isNotRegisteredSignIn = true;
-  }
-
-  async signUpWithGoogle(): Promise<void> {
-    await this.authService.signInWithGoogle()
-      .then(res => {
-        this.closeDialog();
-        this.signInPostProcessing(res);
-      })
-      .catch(err => {
-        if (err) {
-          if (err.status === 400) {
-            // TODO: Close providers window, open details
-            console.log('User not Registered, opening User Details dialog');
-
-            this.isSignIn = false;
-            this.isSuccessSignUp = true;
-          }
-        }
-      });
-    // this.currentUserCheck(result);
-  }
-
-  // TODO: change this to In
-  async signInWithGoogle(): Promise<void> {
-    await this.authService.signInWithGoogle()
-      .then(res => {
-        this.closeDialog();
-        this.signInPostProcessing(res);
-      })
-      .catch(err => {
-        if (err) {
-          if (err.status === 400) {
-            // TODO: Close providers window, open details
-            console.log('User not Registered, opening User Details dialog');
-
-            this.isSignIn = false;
-            this.isSuccessSignUp = true;
-          }
-        }
-      });
-  }
-
-  async signUpWithGitHub(): Promise<void> {
-    const result = await this.authService.signUpWithGitHub();
-    this.closeDialog();
-
-    this.signInPostProcessing(result);
-  }
-
-  async signUpWithFacebook(): Promise<void> {
-    const result = await this.authService.signUpWithFacebook();
-    this.closeDialog();
-
-    this.signInPostProcessing(result);
-  }
-
-  async signUpWithTwitter(): Promise<void> {
-    const result = await this.authService.signUpWithTwitter();
-    this.closeDialog();
-
-    this.signInPostProcessing(result);
-  }
-
-  async signInWithFacebook(): Promise<void> {
-    const result = await this.authService.signInWithFacebook();
-
-    this.currentUserCheck(result);
-  }
-
-  async signInWithTwitter(): Promise<void> {
-    const result = await this.authService.signInWithTwitter();
-
-    this.currentUserCheck(result);
-  }
-
-  async signInWithGitHub(): Promise<void> {
-    const result = await this.authService.signInWithGitHub();
-
-    this.currentUserCheck(result);
-  }
-
-  backToSignUp(): void {
-    this.showSignUp();
   }
 
   closeDialog(): void {
@@ -161,42 +68,102 @@ export class AuthorizationComponent implements OnInit {
     this.display = false;
   }
 
-  currentUserCheck(result: boolean): void {
-    const currentUser: UserDto = this.authService.getCurrentUser();
-
-    if (currentUser == null) {
-      this.showNotRegisteredSignIn();
-    } else {
-      this.closeDialog();
-      this.signInPostProcessing(result);
-    }
-  }
-
   noRegistration(): void {
     this.display = false;
     this.router.navigate(['/']);
   }
 
+  async signInWithGoogle(): Promise<void> {
+    this.isFetching = true;
+    await this.authService.signInWithGoogle()
+      .then(result => {
+         if (result) {
+          this.closeDialog();
+          this.signInPostProcessing(result);
+         }
+         this.isFetching = false;
+      })
+      .catch(err => {
+        if (err) {
+          if (err.status === 400) {
+            this.isSignIn = false;
+            this.isSuccessSignUp = true;
+          }
+        }
+        this.isFetching = false;
+      });
+  }
+
+  async signInWithFacebook(): Promise<void> {
+    this.isFetching = true;
+    await this.authService.signInWithFacebook()
+      .then(result => {
+        if (result) {
+        this.closeDialog();
+        this.signInPostProcessing(result);
+        }
+        this.isFetching = false;
+      })
+      .catch(err => {
+        console.log(err);
+        if (err) {
+          if (err.status === 400) {
+            this.isSignIn = false;
+            this.isSuccessSignUp = true;
+          }
+        }
+        this.isFetching = false;
+      });
+  }
+
+  async signInWithGitHub(): Promise<any> {
+    this.isFetching = true;
+    await this.authService.signInWithGitHub()
+      .then(result => {
+        if (result) {
+        this.closeDialog();
+        this.signInPostProcessing(result);
+        }
+        this.isFetching = false;
+      })
+      .catch(err => {
+        if (err) {
+          if (err.status === 400) {
+            this.isSignIn = false;
+            this.isSuccessSignUp = true;
+          }
+        }
+        this.isFetching = false;
+      });
+  }
+
   async saveUserDetails(): Promise<void> {
-    await this.authService.signUpWithGoogle(this.companyName, this.lastName, this.firstName)
+    await this.authService.signUpWithProvider(this.companyName, this.lastName, this.firstName)
       .then(res => {
         this.closeDialog();
         this.signInPostProcessing(true);
       })
       .catch(err => {
         if (err) {
+          this.closeDialog();
           console.log(err);
         }
       });
-    this.closeDialog();
+  }
+
+  onContinueLaterClick() {
+    // default data
+    this.companyName = 'your company';
+    this.firstName = 'your first name';
+    this.lastName = 'your last name';
+    this.saveUserDetails();
   }
 
   signInPostProcessing(result: boolean): Promise<boolean> {
     if (result) {
-      return this.router.navigate(['/user/dashboards']);
+      return this.router.navigate(['/user']);
     } else {
       return this.router.navigate(['/']);
     }
   }
-
 }

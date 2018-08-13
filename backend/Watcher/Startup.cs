@@ -1,6 +1,10 @@
 ﻿namespace Watcher
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
 
     using AutoMapper;
 
@@ -9,16 +13,19 @@
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
+    using Watcher.Core.Auth;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
     using Watcher.Core.Providers;
@@ -78,7 +85,7 @@
             services.AddTransient<IOrganizationService, OrganizationService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
-            
+
             ConfigureFileStorage(services, Configuration);
 
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
@@ -96,6 +103,25 @@
                     })
                     .AddJwtBearer(options =>
                     {
+                        options.Events = new JwtBearerEvents()
+                        {
+                            OnMessageReceived = delegate (MessageReceivedContext context)
+                              {
+                                  if (!context.Request.Path.Value.Contains("/notifications")
+                                      || !context.Request.Query.ContainsKey("Authorization")
+                                      || !context.Request.Query.ContainsKey("WatcherAuthorize"))
+                                      return Task.CompletedTask;
+                                  
+                                  // context.Token = context.Request.Query["Authorization"];
+                                  var watcherToken = context.Request.Query["WatcherAuthorize"];
+                                  var firebaseToken = $"Bearer {context.Request.Query["Authorization"]}";
+                                  context.Request.Headers.TryAdd("Authorization", firebaseToken);
+                                  context.Request.Headers.TryAdd("WatcherAuthorize", watcherToken);
+
+                                  return Task.CompletedTask;
+                              }
+                        };
+
                         options.Authority = "https://securetoken.google.com/watcherapp-2984b";
                         options.TokenValidationParameters =
                             new TokenValidationParameters
@@ -108,6 +134,22 @@
                                 ValidateLifetime = true
                             };
                     });
+
+            services.AddAuthorization(o =>
+                {
+                    // TODO: create Pilicies
+
+                    o.AddPolicy("SomePolicy", b =>
+                        {
+                            b.RequireAuthenticatedUser();
+                        });
+                    o.AddPolicy("AdminPolicy", b =>
+                        {
+                            b.RequireAuthenticatedUser();
+                            b.RequireClaim(ClaimTypes.Role, "Admin");
+                            b.AuthenticationSchemes = new List<string> { JwtBearerDefaults.AuthenticationScheme };
+                        });
+                });
 
             var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
 
@@ -150,6 +192,9 @@
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseAuthentication();
+
+            app.UseWatcherAuth();
+
             app.UseMvc();
             app.UseFileServer();
 
@@ -179,14 +224,14 @@
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
                 {
-                    services.AddSingleton<IFileStorageProvider, FileStorageProvider>
-                        (prov => new FileStorageProvider(fileStorageString));
+                    services.AddSingleton<IFileStorageProvider, FileStorageProvider>(
+                        prov => new FileStorageProvider(fileStorageString));
                 }
             }
             else
             {
-                services.AddSingleton<IFileStorageProvider, LocalFileStorageProvider>
-                        (prov => new LocalFileStorageProvider());
+                services.AddSingleton<IFileStorageProvider, LocalFileStorageProvider>(
+                    prov => new LocalFileStorageProvider());
             }
         }
 

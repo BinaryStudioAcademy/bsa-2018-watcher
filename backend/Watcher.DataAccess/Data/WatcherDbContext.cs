@@ -26,41 +26,40 @@
                 .HasForeignKey<Feedback>(r => r.ResponseId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Response>()
-                .HasOne(r => r.User)
-                .WithMany(u => u.Responses)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Feedback>()
-                .HasOne(r => r.User)
-                .WithMany(u => u.Feedbacks)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Message>()
-                .HasOne(m => m.User)
-                .WithMany(u => u.Messages)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<NotificationSetting>()
                 .HasMany(ns => ns.Notifications)
-                .WithOne(n => n.NotificationSetting)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithOne(n => n.NotificationSetting);
 
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.CreatedBy)
                 .WithMany(u => u.CreatedChats)
-                .HasForeignKey(c => c.CreatedById);
+                .HasForeignKey(c => c.CreatedById)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<NotificationSetting>()
+                .HasOne(ns => ns.User)
+                .WithMany(u => u.NotificationSettings)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<User>()
-                .HasMany(u => u.CreatedChats)
-                .WithOne(c => c.CreatedBy);
-
-
+                .HasMany(u => u.Messages)
+                .WithOne(m => m.User)
+                .OnDelete(DeleteBehavior.Cascade);
+            
             modelBuilder.Entity<User>()
-                .HasMany(u => u.NotificationSettings)
+                .HasMany(u => u.Notifications)
                 .WithOne(n => n.User)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Responses)
+                .WithOne(u => u.User)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Feedbacks)
+                .WithOne(f => f.User)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.Organization)
@@ -68,9 +67,9 @@
 
             modelBuilder.Entity<Organization>()
                 .HasOne(u => u.CreatedByUser)
-                .WithMany()
+                .WithMany(o => o.CreatedOrganizations)
                 .HasForeignKey(x => x.CreatedByUserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Seed();
         }

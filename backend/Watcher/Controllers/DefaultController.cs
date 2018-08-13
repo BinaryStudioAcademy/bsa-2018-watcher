@@ -6,21 +6,24 @@ namespace Watcher.Controllers
 {
     using System.Net;
 
+    using Microsoft.AspNetCore.Authorization;
+
     using Watcher.Common.Errors;
-    using Watcher.Utils;
 
     [Route("[controller]")]
     [ApiController]
     public class DefaultController : ControllerBase
     {
-        [WatcherAuthorize("Admin")]
+        // [WatcherAuthorize("Admin")]
+        [Authorize(Roles = "User")]
         [HttpGet]
         public IEnumerable<string> Get()
         {
             var a = User;
             return new string[] { "value1", "value2" };
         }
-        
+
+        [Authorize(Roles = "Admin")]
         [HttpGet("Admin")]
         public string Getdmin(int id)
         {

@@ -32,7 +32,7 @@
         public async Task<TokenDto> CreateTokenAsync(UserLoginRequest request, ClaimsPrincipal principal)
         {
             // TODO: Parse token claim to get user email
-            var userDto = await _usersService.GetEntityByIdAsync(request.Uid);
+            var userDto = await _usersService.GetEntityByEmailAsync(request.Email);
 
             // TODO: Add logic about registration purpose
             if (userDto == null)
@@ -47,8 +47,9 @@
         {
             var claims = new List<Claim>
                              {
-                                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
+                                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id),
+                                 new Claim(ClaimTypes.Email, user.Email),
+                                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name),
                              };
 
             var claimsIdentity = TokenUtil.CreateDefaultClaimsIdentity(claims);

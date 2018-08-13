@@ -8,6 +8,8 @@ using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
+    using System;
+
     public class EmailProvider : IEmailProvider
     {
         private readonly IConfiguration _configuration;
@@ -29,11 +31,11 @@ namespace Watcher.Core.Providers
             var response = await client.SendEmailAsync(msg);
         }
 
-        public async Task SendMessageOneToOne(string from,string subject, string recepient, string message, string messageHtml)
+        public async Task SendMessageOneToOne(string from, string subject, string recepient, string message, string messageHtml)
         {
-            await SendMessage(from, subject, new List<string>(){recepient}, message, messageHtml);
+            await SendMessage(from, subject, new List<string>() { recepient }, message, messageHtml);
         }
-
+        
         public async Task SendMessageOneToMany(string from, string subject, List<string> recepients, string message, string messageHtml)
         {
             await SendMessage(from, subject, recepients, message, messageHtml);

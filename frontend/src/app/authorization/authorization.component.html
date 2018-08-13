@@ -1,9 +1,9 @@
-<button pButton type="button" label="Sign In" class="btnsign-in ui-button-secondary ui-button-raised" (click)="showDialogSignIn()"></button>
+<button pButton type="button" label="Sign In" class="btnsign-in ui-button-secondary ui-button-raised" (click)="display = true;"></button>
 <button pButton type="button" label="Sign Up" class="btnsign-up ui-button-primary ui-button-raised" (click)="showDialogSignUp()"></button>
 
 
 <p-dialog class="authorization-dialog" (onHide)="closeDialog()" [showHeader]="false" appendTo="body" [closable]=false [(visible)]="display" [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="999">
-    <span class="close" (click)="closeDialog()"> </span>    
+    <span *ngIf="!isSuccessSignUp" class="close" (click)="closeDialog()"> </span>    
     <div class="auth-form-header">
         <h1>WATCHER</h1>
     </div>
@@ -20,21 +20,21 @@
             <p>Already registered? <a (click)="showSignIn()">Sign In</a></p>
         </div>
         <div class="auth-futer" *ngIf="!isSignIn && isSuccessSignUp">
-            <p>Back to <a (click)="backToSignUp()">Sign Up</a></p>
+            
         </div>
     </div>
 </p-dialog>
 <ng-template #signInTemplate>
     <div class="auth-buttons">
-        <button (click)="signInWithGoogle()" class="auth-button auth-btn-google">
+        <button *ngIf="!isFetching" (click)="signInWithGoogle()" class="auth-button auth-btn-google">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span>
             <span class="firebaseui-idp-text">Sign In with Google</span>
         </button>
-        <button (click)="signInWithGitHub()" class="auth-button auth-btn-githum">
+        <button *ngIf="!isFetching" (click)="signInWithGitHub()" class="auth-button auth-btn-githum">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg"></span>
             <span class="firebaseui-idp-text">Sign In with Github</span>
         </button>
-        <button (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
+        <button *ngIf="!isFetching" (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
             <span class="firebaseui-idp-text">Sign In with Facebook</span>
         </button>
@@ -42,20 +42,21 @@
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
             <span class="firebaseui-idp-text">Sign In with Twitter</span>
         </button> -->
+        <p-progressSpinner *ngIf="isFetching"></p-progressSpinner>
     </div>
 </ng-template>
 
 <ng-template #signUpTemplate>
     <div class="auth-buttons">
-        <button (click)="signUpWithGoogle()" class="auth-button auth-btn-google">
+        <button *ngIf="!isFetching" (click)="signInWithGoogle()" class="auth-button auth-btn-google">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span>
             <span class="firebaseui-idp-text">Sign Up with Google</span>
         </button>
-        <button (click)="signUpWithGitHub()" class="auth-button auth-btn-githum">
+        <button *ngIf="!isFetching" (click)="signInWithGitHub()" class="auth-button auth-btn-githum">
                 <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg"></span>
                 <span class="firebaseui-idp-text">Sign Up with Github</span>
             </button>
-        <button (click)="signUpWithFacebook()" class="auth-button auth-btn-facebook">
+        <button *ngIf="!isFetching" (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
             <span class="firebaseui-idp-text">Sign Up with Facebook</span>
         </button>
@@ -63,6 +64,7 @@
             <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
             <span class="firebaseui-idp-text">Sign Up with Twitter</span>
         </button> -->
+        <p-progressSpinner *ngIf="isFetching"></p-progressSpinner>
     </div>
 </ng-template>
 
@@ -103,10 +105,10 @@
         </div>
         <div class="auth-buttons">
             <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" [disabled]="cName?.invalid || fName?.invalid || lName?.invalid" value="Save" />
+            <input type="button" pButton class="auth-button auth-btn-save" (click)="onContinueLaterClick()"[disabled]="!cName?.invalid && !fName?.invalid && !lName?.invalid"  value="Continue Later" />
         </div>
     </div>
 </ng-template>
-
 
 <ng-template #notRegisteredSignInTemplate>
         <span class="close" (click)="closeDialog()"> </span>    
@@ -115,7 +117,7 @@
             <h2>Would you like to register?</h2>
         </div>
         <div class="auth-buttons">
-            <button pButton type="button" label="Yes" class="btnsign-in ui-button-primary ui-button-raised" (click)="signUpWithGoogle()"></button>
+            <button pButton type="button" label="Yes" class="btnsign-in ui-button-primary ui-button-raised" (click)="signInWithGoogle()"></button>
             <button pButton type="button" label="No"  class="btnsign-up ui-button-primary ui-button-raised" (click)="noRegistration()"></button>
         </div>
 </ng-template>
