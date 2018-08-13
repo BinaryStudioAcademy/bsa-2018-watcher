@@ -26,7 +26,12 @@
         private IDashboardsRepository _dashboardsRepository;
 
         private IOrganizationRepository _organizationRepository;
+
         private INotificationSettingsRepository _notificationSettingsRepository;
+
+        private IChatsRepository _chatsRepository;
+
+        private IMessagesRepository _messagesRepository;
         
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
@@ -86,6 +91,32 @@
                 }
 
                 return _notificationSettingsRepository;
+            }
+        }
+
+        public IChatsRepository ChatsRepository
+        {
+            get
+            {
+                if (_chatsRepository == null)
+                {
+                    _chatsRepository = new ChatsRepository(_context, _mapper);
+                }
+
+                return _chatsRepository;
+            }
+        }
+
+        public IMessagesRepository MessagesRepository
+        {
+            get
+            {
+                if (_messagesRepository == null)
+                {
+                    _messagesRepository = new MessagesRepository(_context, _mapper);
+                }
+
+                return _messagesRepository;
             }
         }
 

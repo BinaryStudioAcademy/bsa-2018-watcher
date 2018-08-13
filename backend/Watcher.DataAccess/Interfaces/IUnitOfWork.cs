@@ -17,6 +17,10 @@
 
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 
+        IChatsRepository ChatsRepository { get; }
+
+        IMessagesRepository MessagesRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }
