@@ -11,7 +11,6 @@ import {ApiService} from './services/api.service';
 import {NotificationsService} from './services/notifications.service';
 import { AuthGuard } from './guards/auth.guard';
 import { FeedbackService } from './services/feedback.service';
-import { FeedbackService } from './services/feedback.service';
 
 @NgModule({
   imports: [
