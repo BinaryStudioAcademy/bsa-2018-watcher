@@ -22,7 +22,7 @@ export class NotificationsService {
   constructor(private authService: AuthService) {
   }
 
-  connectToSignalR() {
+  connectToSignalR(): void {
     this.createConnection();
     this.registerOnServerEvents();
     this.startHubConnection();

@@ -13,10 +13,10 @@ export class NotificationComponent implements OnInit {
   ngOnInit() {
   }
 
-  send() {
+  send(): void {
     this.notificationsService.send('someUserId', 'Message');
   }
-  sendMessage() {
+  sendMessage(): void {
     this.notificationsService.sendMessage('Qew');
   }
 }

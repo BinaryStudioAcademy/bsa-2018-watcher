@@ -41,7 +41,7 @@ export class NotificationSettingsComponent implements OnInit {
     });
   }
 
-  private fillDropdown() {
+  private fillDropdown(): void {
     this.notificationSettings.forEach(element => {
       this.dropdown.push({label: NotificationType[element.type], value: element});
     });
@@ -60,7 +60,7 @@ export class NotificationSettingsComponent implements OnInit {
     }
   }
 
-  private updateSetting() {
+  private updateSetting(): void {
     this.service.update(this.selectedNotificationSetting.id, this.selectedNotificationSetting)
     .subscribe(value => {
       this.toastrService.success('Notification setting was updated.');
