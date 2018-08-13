@@ -1,3 +1,11 @@
-<p>
-  left-side-menu works!
-</p>
+<div class="menu">
+  <div *ngIf="isSearching" class="input-group stylish-input-group">
+    <div class="search">
+      <input type="text" placeholder="Search">
+      <i class="fa fa-search"></i>
+    </div>
+  </div>
+  <div class="panelMenuContainer">
+    <p-panelMenu [multiple]="false" [model]="menuItems"></p-panelMenu>
+  </div>
+</div>

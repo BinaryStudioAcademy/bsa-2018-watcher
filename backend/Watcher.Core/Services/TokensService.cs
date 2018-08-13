@@ -12,6 +12,7 @@
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Errors;
+    using Watcher.Common.Helpers.Extensions;
     using Watcher.Common.Options;
     using Watcher.Common.Requests;
     using Watcher.Core.Auth;
@@ -29,7 +30,18 @@
             _tokenOptions = tokenOptions;
         }
 
-        public async Task<TokenDto> CreateTokenAsync(UserLoginRequest request, ClaimsPrincipal principal)
+
+        public Task<TokenDto> CreateTokenAsync(ClaimsPrincipal user)
+        {
+            var uid = user.GetUserName();
+            var email = user.GetUserEmail();
+
+            var loginRequest = new UserLoginRequest(uid, email);
+
+            return CreateTokenAsync(loginRequest);
+        }
+
+        public async Task<TokenDto> CreateTokenAsync(UserLoginRequest request)
         {
             // TODO: Parse token claim to get user email
             var userDto = await _usersService.GetEntityByEmailAsync(request.Email);

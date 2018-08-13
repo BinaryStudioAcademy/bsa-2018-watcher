@@ -105,14 +105,14 @@
                               {
                                   if (!context.Request.Path.Value.Contains("/notifications")
                                       || !context.Request.Query.ContainsKey("Authorization")
-                                      || !context.Request.Query.ContainsKey("WatcherAuthorize"))
+                                      || !context.Request.Query.ContainsKey("WatcherAuthorization"))
                                       return Task.CompletedTask;
                                   
                                   // context.Token = context.Request.Query["Authorization"];
-                                  var watcherToken = context.Request.Query["WatcherAuthorize"];
+                                  var watcherToken = context.Request.Query["WatcherAuthorization"];
                                   var firebaseToken = $"Bearer {context.Request.Query["Authorization"]}";
                                   context.Request.Headers.TryAdd("Authorization", firebaseToken);
-                                  context.Request.Headers.TryAdd("WatcherAuthorize", watcherToken);
+                                  context.Request.Headers.TryAdd("WatcherAuthorization", watcherToken);
 
                                   return Task.CompletedTask;
                               }

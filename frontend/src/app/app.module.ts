@@ -4,7 +4,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AccordionModule, TabViewModule } from 'primeng/primeng';
+import { AccordionModule, TabViewModule, ProgressSpinnerModule } from 'primeng/primeng';
 import { PanelModule } from 'primeng/primeng';
 import { ButtonModule } from 'primeng/components/button/button';
 import { RadioButtonModule } from 'primeng/primeng';
@@ -46,6 +46,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     TabViewModule,
     ToastModule,
     ConfirmDialogModule,
+    ProgressSpinnerModule,
 
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,
