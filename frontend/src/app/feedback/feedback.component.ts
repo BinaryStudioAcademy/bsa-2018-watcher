@@ -24,15 +24,15 @@ export class FeedbackComponent implements OnInit {
   // private suggestions: string;
 
   constructor(
-    // private fb: FormBuilder,
+    private fb: FormBuilder,
     private authService: AuthService,
     private feedbackService: FeedbackService,
     private userService: UserService,
     private toastrService: ToastrService) { }
 
-  // organizationForm = this.fb.group({
-  //  suggestions: new FormControl({ value: '', disabled: false })
-  // });
+  feedbackForm = this.fb.group({
+   suggestions: new FormControl({ value: '' })
+  });
 
   ngOnInit() {
     this.user = this.authService.getCurrentUser();
@@ -42,10 +42,17 @@ export class FeedbackComponent implements OnInit {
     this.feedbackService.getAll().subscribe((value: Feedback[]) => this.feedbacks = value);
   }
 
-  onSubmit() {// suggestions: string) {
-    const newfeedback: Feedback = { id: 0, createdAt: new Date(), user: this.user, text: this.suggestions, response: null };
-    console.log(newfeedback);
-    this.feedbackService.create(newfeedback).
+  onSubmit() {
+    debugger;
+    const newFeedback: Feedback = {
+      id: 0,
+      createdAt: new Date(),
+      user: this.user,
+      text: this.feedbackForm.get('suggestions').value,
+      response: null
+    };
+    console.log(newFeedback);
+    this.feedbackService.create(newFeedback).
       subscribe(
         value => {
           this.toastrService.success('Added new feedback');
