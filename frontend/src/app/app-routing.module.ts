@@ -7,10 +7,6 @@ import { AuthGuard } from './core/guards/auth.guard';
 const routes: Routes = [{
   path: '',
   component: LandingComponent,
-  }, {
-  path: '**',
-  redirectTo: 'user/dashboards',
-  canActivate: [AuthGuard]
   }
 ];
 
