@@ -2,16 +2,15 @@ import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {LandingComponent} from './landing/landing.component';
 import { ShellComponent } from './shell/shell.component';
-import { AuthGuard } from './core/guards/auth.guard';
+import { HomeGuard } from './core/guards/home.guard';
 
-const routes: Routes = [{
-  path: '',
+
+const routes: Routes = [
+{ path: '',
   component: LandingComponent,
-  }, {
-  path: '**',
-  redirectTo: 'user/dashboards',
-  canActivate: [AuthGuard]
-  }
+  canActivate: [HomeGuard] },
+{ path: 'user/dashboards', component: ShellComponent},
+{ path: '**',  redirectTo: ''}
 ];
 
 @NgModule({
