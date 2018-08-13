@@ -29,11 +29,24 @@ export class UserProfileComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.userId = this.authService.getCurrentUser().id;
-    this.userService.get(this.userId).subscribe((value) => {
-      this.user = value;
-      this.setUserData();
-    });
+    // this.user = this.authService.getCurrentUserLS();
+    // if (this.user != null) {
+    //   this.userId = this.user.id;
+    // }
+
+    // this.userId = this.authService.getCurrentUser().id;
+    // this.userService.get(this.userId).subscribe((value) => {
+    //   this.user = value;
+    //   this.setUserData();
+    // });
+
+    this.authService.currentUser.subscribe(
+      (userData) => {
+        this.user =  { ...userData };
+        this.userId = userData.id;
+        this.setUserData();
+      }
+    );
   }
 
   setUserData() {
@@ -61,6 +74,7 @@ export class UserProfileComponent implements OnInit {
   onSubmit() {
     if (this.userForm.valid) {
       this.userService.update(this.userId, this.user).subscribe(value => {
+        this.authService.updateCurrentUser(this.user);
         this.toastrService.success('Profile was updated');
         this.enableEditing();
       },

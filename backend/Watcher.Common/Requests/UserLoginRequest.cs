@@ -6,6 +6,12 @@
     {
         public UserLoginRequest() { }
 
+        public UserLoginRequest(string uid, string email)
+        {
+            Uid = uid;
+            Email = email;
+        }
+
         [Required]
         public string Uid { get; set; }
 

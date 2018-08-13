@@ -34,7 +34,7 @@
         {
             var tokenOptions = context.RequestServices.GetService<IOptions<WatcherTokenOptions>>();
 
-            var watcherToken = context.Request.Headers["WatcherAuthorize"];
+            var watcherToken = context.Request.Headers["WatcherAuthorization"];
 
             if (string.IsNullOrWhiteSpace(watcherToken))
             {

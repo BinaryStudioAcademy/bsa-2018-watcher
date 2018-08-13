@@ -10,7 +10,6 @@ import { Organization } from '../../shared/models/organization.model';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
-import { THIS_EXPR } from '../../../../node_modules/@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-header',
@@ -25,8 +24,7 @@ export class HeaderComponent implements OnInit {
   notificationsNumber = 0;
   messagesNumber = 2;
 
-  user: User;
-  displayName: string;
+  currentUser: User;
 
   userItems: MenuItem[];
   cogItems: MenuItem[];
@@ -157,39 +155,47 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.user = this.authService.getCurrentUser();
-    if (this.user != null) {
-      this.displayName = this.user.displayName;
-      if (this.user.organizations.length > 0) {
+    this.currentUser = this.authService.getCurrentUser();
+    if (this.currentUser != null) {
+      if (this.currentUser.organizations.length > 0) {
         this.fillOrganizations();
       }
     }
+
+    this.authService.currentUser.subscribe(
+      (userData) => {
+        this.currentUser = userData;
+        if (this.currentUser && this.currentUser.organizations && this.currentUser.organizations.length > 0) {
+          this.fillOrganizations();
+        }
+      }
+    );
   }
 
   private fillOrganizations() {
     this.orgItems = new Array<MenuItem>();
 
-    this.user.organizations.forEach(element => {
+    this.currentUser.organizations.forEach(element => {
       this.orgItems.push({
         label: element.name,
         id: element.id.toString(),
         icon: 'fa fa-fw fa-building',
         command: (onclick) => { this.chengeLastPicOrganizations(element); },
-        styleClass: (element.id === this.user.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
-        disabled: (element.id === this.user.lastPickedOrganizationId)
+        styleClass: (element.id === this.currentUser.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
+        disabled: (element.id === this.currentUser.lastPickedOrganizationId)
       });
     });
   }
 
   private chengeLastPicOrganizations(item: Organization) {
     // update user in beckend
-    this.userService.updateLastPickedOrganization(this.user.id, item.id)
+    this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
     .subscribe(value => {
       // update user in frontend
 
-      this.user.lastPickedOrganizationId = item.id;
-      this.user.lastPickedOrganization = item;
-      this.authService.updateCurrentUser(this.user); // update user in localStorage
+      this.currentUser.lastPickedOrganizationId = item.id;
+      this.currentUser.lastPickedOrganization = item;
+      this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
       this.fillOrganizations();
       // notify user about changes
       this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);

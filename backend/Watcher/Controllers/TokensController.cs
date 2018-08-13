@@ -7,6 +7,7 @@
 
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
+    using Watcher.Utils;
 
     [Route("[controller]")]
     [Produces("application/json")]
@@ -23,6 +24,24 @@
         }
 
         [Authorize]
+        [HttpGet("User")]
+        public async Task<IActionResult> GetUserByTokens()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var tokenResponse = await _tokensService.CreateTokenAsync(User);
+            if (tokenResponse == null)
+            {
+                return BadRequest("User with such Uid not registered yet!");
+            }
+
+            return Ok(tokenResponse);
+        }
+
+        [Authorize]
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
@@ -33,7 +52,7 @@
                 return BadRequest(ModelState);
             }
 
-            var tokenResponse = await _tokensService.CreateTokenAsync(request, User);
+            var tokenResponse = await _tokensService.CreateTokenAsync(request);
             if (tokenResponse == null)
             {
                 return BadRequest("User with such Uid not registered yet!");
