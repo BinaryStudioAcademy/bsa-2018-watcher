@@ -5,7 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
 import { DashboardsModule } from '../dashboards/dashboards.module';
-import {FeedbackComponent} from '../feedback/feedback.component';
+import { InputTextModule, ButtonModule, RadioButtonModule, InputTextareaModule } from 'primeng/primeng';
+import { FeedbackComponent } from '../feedback/feedback.component';
 
 @NgModule({
   imports: [
@@ -13,7 +14,11 @@ import {FeedbackComponent} from '../feedback/feedback.component';
     UserRoutingModule,
     DashboardsModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputTextareaModule,
+    ButtonModule,
+    RadioButtonModule,
+    InputTextModule
   ],
   declarations: [ UserComponent, FeedbackComponent ]
 })
