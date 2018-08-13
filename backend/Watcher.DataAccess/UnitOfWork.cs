@@ -26,6 +26,9 @@
         private IDashboardsRepository _dashboardsRepository;
 
         private IOrganizationRepository _organizationRepository;
+
+        private IFeedbackRepository _feedbackRepository;
+
         private INotificationSettingsRepository _notificationSettingsRepository;
         private IInstanceRepository _instanceRepository;
         private IChartRepository _chartRepository;
@@ -74,6 +77,19 @@
                 }
 
                 return _organizationRepository;
+            }
+        }
+
+        public IFeedbackRepository FeedbackRepository
+        {
+            get
+            {
+                if (_feedbackRepository == null)
+                {
+                    _feedbackRepository = new FeedbackRepository(_context, _mapper);
+                }
+
+                return _feedbackRepository;
             }
         }
 

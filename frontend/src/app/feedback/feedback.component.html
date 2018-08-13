@@ -14,11 +14,11 @@
     <div class="label">Feel free to add any other comments or suggestions:</div>
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-lg-6">
-        <textarea rows="5" name="suggestions" pInputTextarea></textarea>
+        <textarea rows="5" [(ngModel)]="feedback.text" pInputTextarea></textarea>
  </div>
     </div>
     <div class="btn-panel">
-      <button pButton type="submit" label="Submit feedback" (click)="conf()"></button>
+      <button pButton type="submit" label="Submit feedback" (click)="onSubmit()"></button>
     </div>
   </div>
 </div>
