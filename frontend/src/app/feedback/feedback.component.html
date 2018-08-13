@@ -7,16 +7,17 @@
   </div>
 </div>
 
-<form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
-  <div class="label">Would you use Watcher in the future?</div>
-  <div class="ui-g ui-fluid container">
-    <div class="ui-g-12 ui-lg-6">
-      <input type="radio" value="yes" name="use" ngModel> Yes
-      <input type="radio" value="maybe" name="use" ngModel> Maybe
-      <input type="radio" value="no" name="use" ngModel> No
-    </div>
-  </div>
 
+<div class="label">Would you use Watcher in the future?</div>
+<div class="ui-g ui-fluid container">
+  <div class="ui-g-12 ui-lg-6">
+    <input type="radio" value="yes" name="use" ngModel> Yes
+    <input type="radio" value="maybe" name="use" ngModel> Maybe
+    <input type="radio" value="no" name="use" ngModel> No
+  </div>
+</div>
+
+<form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
   <div class="label">Feel free to add any other comments or suggestions:</div>
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
