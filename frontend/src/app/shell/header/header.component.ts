@@ -154,8 +154,8 @@ export class HeaderComponent implements OnInit {
         icon: 'fa fa-fw fa-bell-o',
       }
     ];
-    debugger;
-    this.currentUser = this.authService.getCurrentUserLS();
+
+    this.currentUser = this.authService.getCurrentUser();
     if (this.currentUser != null) {
       if (this.currentUser.organizations.length > 0) {
         this.fillOrganizations();
@@ -164,8 +164,10 @@ export class HeaderComponent implements OnInit {
 
     this.authService.currentUser.subscribe(
       (userData) => {
-        debugger;
         this.currentUser = userData;
+        if (this.currentUser.organizations.length > 0) {
+          this.fillOrganizations();
+        }
       }
     );
   }

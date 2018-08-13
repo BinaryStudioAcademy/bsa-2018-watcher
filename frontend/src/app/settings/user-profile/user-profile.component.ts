@@ -29,22 +29,25 @@ export class UserProfileComponent implements OnInit {
   });
 
   ngOnInit() {
-    debugger;
-    this.user = this.authService.getCurrentUserLS();
-    if (this.user != null) {
-      this.userId = this.user.id;
-    }
+    // debugger;
+    // this.user = this.authService.getCurrentUserLS();
+    // if (this.user != null) {
+    //   this.userId = this.user.id;
+    // }
 
-    this.authService.currentUser.subscribe(
-      (userData) => {
-        this.user = userData;
-      }
-    );
     // this.userId = this.authService.getCurrentUser().id;
     // this.userService.get(this.userId).subscribe((value) => {
     //   this.user = value;
     //   this.setUserData();
     // });
+
+    this.authService.currentUser.subscribe(
+      (userData) => {
+        this.user = userData;
+        this.userId = userData.id;
+        this.setUserData();
+      }
+    );
   }
 
   setUserData() {

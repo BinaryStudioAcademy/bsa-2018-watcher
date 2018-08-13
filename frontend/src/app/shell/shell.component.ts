@@ -8,10 +8,10 @@ import {AuthService} from '../core/services/auth.service';
 })
 export class ShellComponent implements OnInit {
   constructor (private authService: AuthService) {
+    this.authService.populate().then(value => this.authService.currentUser.subscribe());
   }
 
-  async ngOnInit() {
-    await this.authService.populate();
-    this.authService.currentUser.subscribe();
+   ngOnInit() {
+    // await this.authService.populate();
   }
 }

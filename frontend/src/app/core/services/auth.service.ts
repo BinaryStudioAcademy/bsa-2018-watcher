@@ -15,7 +15,7 @@ import {Token} from '../../shared/models/token.model';
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<User>({} as User);
+  private currentUserSubject = new BehaviorSubject<User>(this.getCurrentUserLS());
   public currentUser: Observable<User> = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
 
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
@@ -33,7 +33,6 @@ export class AuthService {
       (user) => {
         if (user) {
           this.userDetails = user;
-          // console.log(this.userDetails);
         } else {
           this.userDetails = null;
         }
