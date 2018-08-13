@@ -7,7 +7,7 @@
 
     public class ChatRequest
     {
-        public int Id { get; set; }
+        public ChatRequest() { }
 
         public string Name { get; set; }
 

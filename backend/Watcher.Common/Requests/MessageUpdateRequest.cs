@@ -4,9 +4,9 @@
 
     public class MessageUpdateRequest
     {
-        public string Text { get; set; }
+        public MessageUpdateRequest() { }
 
-        public DateTime CreatedAt { get; set; }
+        public string Text { get; set; }
 
         public bool WasRead { get; set; }
     }
