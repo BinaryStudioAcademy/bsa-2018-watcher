@@ -165,7 +165,7 @@ export class HeaderComponent implements OnInit {
     this.authService.currentUser.subscribe(
       (userData) => {
         this.currentUser = userData;
-        if (this.currentUser.organizations.length > 0) {
+        if (this.currentUser && this.currentUser.organizations && this.currentUser.organizations.length > 0) {
           this.fillOrganizations();
         }
       }

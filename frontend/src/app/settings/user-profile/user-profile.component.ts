@@ -29,7 +29,6 @@ export class UserProfileComponent implements OnInit {
   });
 
   ngOnInit() {
-    // debugger;
     // this.user = this.authService.getCurrentUserLS();
     // if (this.user != null) {
     //   this.userId = this.user.id;
@@ -43,7 +42,7 @@ export class UserProfileComponent implements OnInit {
 
     this.authService.currentUser.subscribe(
       (userData) => {
-        this.user = userData;
+        this.user =  { ...userData };
         this.userId = userData.id;
         this.setUserData();
       }

@@ -127,10 +127,12 @@ export class DashboardComponent implements OnInit {
   configureDashboards() {
     this.dashboardsService.getAllByInstance(this.instance.id).subscribe(
       (data: Dashboard[]) => {
-        this.dashboardMenuitems = data.map(
-          dash => this.transformToMenuItem(dash));
-        this.loading = false;
-        this.toastrService.success('Succesfully got info from server');
+        if (data) {
+          this.dashboardMenuitems = data.map(
+            dash => this.transformToMenuItem(dash));
+          this.loading = false;
+          this.toastrService.success('Succesfully got info from server');
+        }
       },
       error => {
         this.loading = false;
