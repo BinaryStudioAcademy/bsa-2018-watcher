@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -13,19 +12,16 @@
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
-    using Watcher.Core.Auth;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
     using Watcher.Core.Providers;
@@ -52,6 +48,13 @@
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            //var logger = new LoggerConfiguration()
+            //    .ReadFrom.Configuration(Configuration)
+            //    .CreateLogger();
+
+            //Log.Logger = logger;
+            //// or: services.AddSingleton<Serilog.ILogger>(logger);
+
             services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
                 {
                     builder.AllowAnyOrigin()
@@ -111,7 +114,7 @@
                                       || !context.Request.Query.ContainsKey("Authorization")
                                       || !context.Request.Query.ContainsKey("WatcherAuthorization"))
                                       return Task.CompletedTask;
-                                  
+
                                   // context.Token = context.Request.Query["Authorization"];
                                   var watcherToken = context.Request.Query["WatcherAuthorization"];
                                   var firebaseToken = $"Bearer {context.Request.Query["Authorization"]}";
@@ -177,8 +180,8 @@
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
 
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
 
             app.UseHttpStatusCodeExceptionMiddleware();
 

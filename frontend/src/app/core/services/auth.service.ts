@@ -50,14 +50,15 @@ export class AuthService {
 
   // Verify JWT in localstorage with server & load user's info.
   // This runs once on application startup.
-  async populate(): Promise<any> {
+  populate(): Promise<any> {
     // If JWT detected, attempt to get & store user's info
     const fToken = this.getFirebaseToken();
     const wToken = this.getWatcherToken();
     if (fToken && wToken) {
-      return await this.tokenService.getUserByTokens().toPromise()
+      return this.tokenService.getUserByTokens().toPromise()
         .then(currUser => {
           this.setAuth(currUser);
+          return currUser;
         })
         .catch(err => {
           console.log(err);
