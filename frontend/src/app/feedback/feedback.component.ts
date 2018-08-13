@@ -31,7 +31,7 @@ export class FeedbackComponent implements OnInit {
     private toastrService: ToastrService) { }
 
   feedbackForm = this.fb.group({
-   suggestions: new FormControl({ value: '' })
+   suggestions: new FormControl({ value: ' ', disabled: false })
   });
 
   ngOnInit() {
@@ -43,7 +43,6 @@ export class FeedbackComponent implements OnInit {
   }
 
   onSubmit() {
-    debugger;
     const newFeedback: Feedback = {
       id: 0,
       createdAt: new Date(),
@@ -58,7 +57,7 @@ export class FeedbackComponent implements OnInit {
           this.toastrService.success('Added new feedback');
         },
         error => {
-          this.toastrService.success(`Error ocured status: ${error}`);
+          this.toastrService.error(`Error ocured status: ${error}`);
       });
       // subscribe((data: Feedback) => this.feedbacks.push(data));
     this.toastrService.confirm('Would you want to type one more feedback');
