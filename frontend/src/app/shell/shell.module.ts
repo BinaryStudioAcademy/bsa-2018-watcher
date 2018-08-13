@@ -11,7 +11,8 @@ import {
   ButtonModule,
   MessagesModule,
   MessageModule,
-  GrowlModule
+  GrowlModule,
+  PanelMenuModule
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 
@@ -25,7 +26,8 @@ import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component
     ButtonModule,
     GrowlModule,
     MessagesModule,
-    MessageModule
+    MessageModule,
+    PanelMenuModule
   ],
   declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent ]
 })
