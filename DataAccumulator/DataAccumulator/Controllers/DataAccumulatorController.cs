@@ -35,11 +35,11 @@ namespace DataAccumulator.Controllers
             {
                 return NotFound();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return StatusCode(500);
-            }
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //    return StatusCode(500);
+            //}
         }
 
         // GET: api/v1/dataaccumulator/5
