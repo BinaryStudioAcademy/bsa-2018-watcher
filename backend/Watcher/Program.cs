@@ -27,6 +27,12 @@
                 .ReadFrom.Configuration(Configuration)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
+                .WriteTo.File(
+                    $@"D:\home\LogFiles\Application\bsa-SeriLogs-{DateTime.UtcNow:yyyy-dd-M}.txt", // Standart path for Azure Logs
+                    fileSizeLimitBytes: 1_000_000,
+                    rollOnFileSizeLimit: true,
+                    shared: true,
+                    flushToDiskInterval: TimeSpan.FromSeconds(1))
                 // .WriteTo.AzureTableStorage(storageAccount, LogEventLevel.Debug, storageTableName: "SerilogLogs")
                 .CreateLogger();
 
