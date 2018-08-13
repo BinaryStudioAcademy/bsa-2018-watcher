@@ -7,7 +7,7 @@ namespace Watcher.Common.Requests
 {
     public class FeedbackRequest
     {
-        FeedbackRequest() { }
+        public FeedbackRequest() { }
 
         public string Text { get; set; }
 
