@@ -18,7 +18,6 @@
         public ChatType Type { get; set; }
 
         public string CreatedById { get; set; }
-
         public User CreatedBy { get; set; }
 
         public int? OrganizationId { get; set; }
