@@ -55,7 +55,7 @@ deploy:
     app_offline: true
     artifact: api
 # Deploy DataCollector
-deploy:
+
   - provider: WebDeploy
     server:
       secure: GCqb1Ka4XlvY8MkxWTFIEIbEk+yFC8EXfdVwDNqEzVAKxUe4AXjWiaf6HXj1PkmX8gezwqZvHjyu/bh+eJR1SGdotpyJOQPeGe6eDUXBvVCkj3KI6FQ7I7KnTCOANcDBlnURqjtXg29Jq2r4ASNIWw==
