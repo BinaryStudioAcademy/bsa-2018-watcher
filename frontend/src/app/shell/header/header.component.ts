@@ -32,6 +32,8 @@ export class HeaderComponent implements OnInit {
   bellItems: MenuItem[];
   orgItems: MenuItem[];
 
+  nofeedback: true;
+
   constructor(private notificationsService: NotificationsService,
               private messageService: MessageService,
               private userService: UserService,

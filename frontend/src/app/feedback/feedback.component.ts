@@ -6,6 +6,7 @@ import { ToastrService } from '../core/services/toastr.service';
 import { Feedback } from '../shared/models/feedback.model';
 import { UserService } from '../core/services/user.service';
 import { User } from '../shared/models/user.model';
+import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-feedback',
@@ -21,17 +22,18 @@ export class FeedbackComponent implements OnInit {
   feedback: Feedback;
   feedbacks: Feedback[];
   user: User;
-  // private suggestions: string;
+  private regexDashboardUrl = /\/user(\/dashboards)?/;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private feedbackService: FeedbackService,
     private userService: UserService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private router: Router) { }
 
   feedbackForm = this.fb.group({
-   suggestions: new FormControl({ value: ' ', disabled: false })
+    suggestions: new FormControl({ value: ' ', disabled: false })
   });
 
   ngOnInit() {
@@ -42,7 +44,11 @@ export class FeedbackComponent implements OnInit {
     this.feedbackService.getAll().subscribe((value: Feedback[]) => this.feedbacks = value);
   }
 
-  onSubmit() {
+  async onSubmit() {
+    if (this.feedbackForm.get('suggestions').value === '') {
+      this.toastrService.warning('All fields are empty.');
+      return;
+    }
     const newFeedback: Feedback = {
       id: 0,
       createdAt: new Date(),
@@ -58,9 +64,12 @@ export class FeedbackComponent implements OnInit {
         },
         error => {
           this.toastrService.error(`Error ocured status: ${error}`);
-      });
-      // subscribe((data: Feedback) => this.feedbacks.push(data));
-    this.toastrService.confirm('Would you want to type one more feedback');
+        });
+    if (await this.toastrService.confirm('Would you want to type one more feedback')) {
+      this.feedbackForm.reset();
+    } else {
+      this.router.navigate(['/user']);
+    }
   }
 
 }
