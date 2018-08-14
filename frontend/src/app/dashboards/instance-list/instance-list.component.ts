@@ -21,7 +21,11 @@ export class InstanceListComponent implements OnInit {
       },
       {
         label: 'Instance1',
-        icon: 'fa fa-fw fa-hdd-o'
+        icon: 'fa fa-fw fa-hdd-o',
+        items: [
+          {label: 'New', icon: 'fa fa-plus'},
+          {label: 'Open', icon: 'fa fa-download'}
+      ]
       },
       {
         label: 'Instance2',
