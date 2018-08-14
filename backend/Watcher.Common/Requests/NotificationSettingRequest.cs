@@ -1,6 +1,4 @@
-﻿
-
-namespace Watcher.Common.Requests
+﻿namespace Watcher.Common.Requests
 {
     using Watcher.Common.Enums;
 

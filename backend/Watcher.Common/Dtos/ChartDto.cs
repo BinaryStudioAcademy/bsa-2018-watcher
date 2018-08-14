@@ -19,7 +19,5 @@ namespace Watcher.Common.Dtos
         public int Threshold { get; set; }
 
         public string MostLoaded { get; set; }
-
-        public DashboardDto Dashboard { get; set; } // TODO: Remove this field as it is useless because Chart can't exists without dashboard and can be showed just with Dashboard
     }
 }
