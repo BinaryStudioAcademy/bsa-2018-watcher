@@ -151,11 +151,11 @@ export class AuthorizationComponent implements OnInit {
       });
   }
 
-  onContinueLaterClick() {
+  onContinueLaterClick(): void {
     // default data
-    this.companyName = 'your company';
-    this.firstName = 'your first name';
-    this.lastName = 'your last name';
+    this.companyName = 'MyCompany';
+    this.firstName = 'MyFirstName';
+    this.lastName = 'MyLastName';
     this.saveUserDetails();
   }
 

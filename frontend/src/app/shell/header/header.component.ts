@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit {
     this.subscribeToEvents();
   }
 
-  showAllSamples() {
+  showAllSamples(): void {
     this.msgs = [];
     const newMessages: Message[] = this.samples.map(s => {
       const mess: Message = {
@@ -72,7 +72,7 @@ export class HeaderComponent implements OnInit {
   }
 
   // TODO: methods for SignalR Tests
-  createSample() {
+  createSample(): void {
     const req: SampleRequest = {
       name: 'Test',
       count: 12,
@@ -172,7 +172,7 @@ export class HeaderComponent implements OnInit {
     );
   }
 
-  private fillOrganizations() {
+  private fillOrganizations(): void {
     this.orgItems = new Array<MenuItem>();
 
     this.currentUser.organizations.forEach(element => {
@@ -187,7 +187,7 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  private chengeLastPicOrganizations(item: Organization) {
+  private chengeLastPicOrganizations(item: Organization): void {
     // update user in beckend
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
     .subscribe(value => {

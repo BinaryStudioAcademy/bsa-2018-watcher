@@ -8,8 +8,6 @@ using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
-    using System;
-
     public class EmailProvider : IEmailProvider
     {
         private readonly IConfiguration _configuration;

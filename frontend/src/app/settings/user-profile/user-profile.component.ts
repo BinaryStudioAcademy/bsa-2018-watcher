@@ -49,7 +49,7 @@ export class UserProfileComponent implements OnInit {
     );
   }
 
-  setUserData() {
+  setUserData(): void {
     Object.keys(this.userForm.controls).forEach(field => {
       const control = this.userForm.get(field);
       control.setValue(this.user[field]);
@@ -62,7 +62,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  enableEditing() {
+  enableEditing(): void {
     Object.keys(this.userForm.controls).forEach(field => {
       const control = this.userForm.get(field);
       control.enabled ? control.disable() : control.enable();

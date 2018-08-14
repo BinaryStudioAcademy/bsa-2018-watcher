@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Watcher.Common.Requests
 {
@@ -9,5 +10,7 @@ namespace Watcher.Common.Requests
         public DateTime CreatedAt { get; set; }
 
         public int InstanceId { get; set; }
+
+        public List<int> ChartsId { get; set; }
     }
 }

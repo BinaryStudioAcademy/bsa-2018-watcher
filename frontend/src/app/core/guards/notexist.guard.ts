@@ -5,8 +5,7 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
-
+export class NotexistGuard implements CanActivate {
   constructor(public authService: AuthService, public router: Router) {}
 
   canActivate(): boolean {
@@ -17,5 +16,5 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-  }
+    }
 }

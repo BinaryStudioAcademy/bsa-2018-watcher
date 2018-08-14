@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
     private messageService: MessageService) {
     this.activeDashboardItem = {};
     this.dashboardMenuitems = [];
-    this.instance = { id: 1, address: 'adress', platform: 'platform' };
+    this.instance = { id: 86, address: 'adress', platform: 'platform' };
     this.subscribeToEvents();
   }
 
@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
     return item;
   }
 
-  createDashboard(newDashboard: Dashboard) {
+  createDashboard(newDashboard: Dashboard): void {
     this.dashboardsService.create(newDashboard)
       .subscribe(
         (res: Response) => {
@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit {
         });
   }
 
-  updateDashboard(editTitle: string) {
+  updateDashboard(editTitle: string): void {
     const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
     const payload: Dashboard = this.transformToDashboard(this.dashboardMenuitems[index]);
     payload.title = editTitle;
@@ -91,11 +91,11 @@ export class DashboardComponent implements OnInit {
         },
         error => {
           this.loading = false;
-          this.toastrService.success(`Error ocured status: ${error}`);
+          this.toastrService.error(`Error ocured status: ${error}`);
         });
   }
 
-  deleteDashboard(dashboard: DashboardMenuItem) {
+  deleteDashboard(dashboard: DashboardMenuItem): void {
     this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
         console.log(res);
@@ -117,22 +117,23 @@ export class DashboardComponent implements OnInit {
         });
   }
 
-  async delete() {
+  async delete(): Promise<void> {
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
       this.loading = true;
       this.deleteDashboard(this.activeDashboardItem);
     }
   }
 
-  configureDashboards() {
+  configureDashboards(): void {
     this.dashboardsService.getAllByInstance(this.instance.id).subscribe(
       (data: Dashboard[]) => {
-        if (data) {
+          if (data) {
           this.dashboardMenuitems = data.map(
             dash => this.transformToMenuItem(dash));
+            this.activeDashboardItem = this.dashboardMenuitems[0];
+          }
           this.loading = false;
           this.toastrService.success('Succesfully got info from server');
-        }
       },
       error => {
         this.loading = false;
@@ -140,7 +141,7 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  showCreatePopup(creation: boolean) {
+  showCreatePopup(creation: boolean): void {
     this.creation = creation;
     // if we are adding new textbox needs to be clear
     this.editTitle = creation ? '' : this.activeDashboardItem.label;
@@ -208,7 +209,6 @@ export class DashboardComponent implements OnInit {
     this.configureDashboards();
 
     const lastItem: DashboardMenuItem = {
-      label: 'Add new',
       icon: 'fa fa-plus',
       command: (onlick) => {
         this.showCreatePopup(true);
@@ -217,6 +217,5 @@ export class DashboardComponent implements OnInit {
     };
 
     this.dashboardMenuitems.push(lastItem);
-    this.activeDashboardItem = this.dashboardMenuitems[0];
   }
 }
