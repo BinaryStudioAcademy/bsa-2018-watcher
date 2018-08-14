@@ -13,7 +13,6 @@ export class HomeGuard implements CanActivate {
 
     if ((this.authService.isAuthorized())) {
         this.router.navigate(['/user/dashboards']);
-        console.log(this.authService.isAuthorized());
         return false;
       } else {
         return true;
