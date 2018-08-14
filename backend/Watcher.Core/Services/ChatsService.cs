@@ -1,4 +1,6 @@
-﻿namespace Watcher.Core.Services
+﻿using System.Linq;
+
+namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -36,7 +38,8 @@
             var sample = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
                 include: chats => chats.Include(c => c.CreatedBy)
                                                         .Include(c => c.Messages)
-                                                        .Include(c => c.Organization));
+                                                        .Include(c => c.Organization)
+                                                        .Include(c => c.UserChats));
 
             if (sample == null) return null;
 

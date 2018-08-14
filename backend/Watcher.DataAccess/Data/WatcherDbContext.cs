@@ -20,6 +20,9 @@
             modelBuilder.Entity<UserOrganization>()
                 .HasKey(uo => new { uo.UserId, uo.OrganizationId });
 
+            modelBuilder.Entity<UserChat>()
+                .HasKey(uc => new { uc.UserId, uc.ChatId });
+
             modelBuilder.Entity<Feedback>()
                 .HasOne(f => f.Response)
                 .WithOne(r => r.Feedback)
