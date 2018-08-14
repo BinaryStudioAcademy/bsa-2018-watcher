@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,14 +50,12 @@ namespace Watcher.Core.Services
             return dto;
         }
 
-        public async Task<DashboardDto> CreateDashboardAsync(DashboardRequest dashbordRequest)
+        public async Task<DashboardDto> CreateDashboardAsync(DashboardRequest request)
         {
-            var entity = _mapper.Map<DashboardRequest, Dashboard>(dashbordRequest);
-            entity.Instance = await _uow.InstanceRepository
-                .GetFirstOrDefaultAsync(o => o.Id == dashbordRequest.InstanceId);
-
+            var entity = _mapper.Map<DashboardRequest, Dashboard>(request);
+            
             entity = await _uow.DashboardsRepository.CreateAsync(entity);
-            entity.Charts.Add(await )
+
             var result = await _uow.SaveAsync();
             if (!result)
             {

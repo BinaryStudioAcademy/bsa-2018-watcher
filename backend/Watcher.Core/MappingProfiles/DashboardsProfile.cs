@@ -9,7 +9,7 @@ namespace Watcher.Core.MappingProfiles
     {
         public DashboardsProfile()
         {
-            CreateMap<Dashboard, Dashboard>()
+            CreateMap<DashboardDto, Dashboard>()
                 .ForMember(d => d.Id, o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
                 
             CreateMap<Dashboard, DashboardDto>();

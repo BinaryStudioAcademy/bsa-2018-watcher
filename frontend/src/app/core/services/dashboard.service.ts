@@ -15,6 +15,16 @@ export class DashboardService {
   constructor(private http: HttpClient) {
   }
 
+  createRequestEntity(dashboard: Dashboard) {
+    const request = {
+      title : dashboard.title,
+      createdAt: dashboard.createdAt,
+      instanceId: dashboard.instance,
+      chartsId: dashboard.charts ? dashboard.charts.map(chart => chart.id) : null
+    };
+    return request;
+  }
+
   getAllByInstance(id: number): Observable<Object> {
       return this.http.get(`${this.url}/${id}`).pipe(
         retry(2),
@@ -25,13 +35,13 @@ export class DashboardService {
   create(dashboard: Dashboard): Observable<Object> {
     console.log('from service');
     console.log(dashboard);
-    return this.http.post(this.url, dashboard).pipe(
+    return this.http.post(this.url, this.createRequestEntity(dashboard)).pipe(
       retry(2),
       catchError(this.handleError));
   }
 
   update(dashboard: Dashboard): Observable<Object> {
-      return this.http.put(`${this.url}/${dashboard.id}`, dashboard).pipe(
+    return this.http.put(`${this.url}/${dashboard.id}`, this.createRequestEntity(dashboard)).pipe(
         retry(2),
         catchError(this.handleError));
   }

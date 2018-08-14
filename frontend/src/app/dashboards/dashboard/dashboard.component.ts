@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
     private messageService: MessageService) {
     this.activeDashboardItem = {};
     this.dashboardMenuitems = [];
-    this.instance = { id: 1, address: 'adress', platform: 'platform' };
+    this.instance = { id: 86, address: 'adress', platform: 'platform' };
     this.subscribeToEvents();
   }
 
