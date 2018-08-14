@@ -6,9 +6,7 @@ namespace Watcher.Controllers
 {
     using System.Linq;
     using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authorization;
-
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
@@ -20,7 +18,7 @@ namespace Watcher.Controllers
     [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
-    public class InstanseController : ControllerBase
+    public class InstanceController : ControllerBase
     {
         /// <summary>
         /// The Samples Service service
@@ -36,7 +34,7 @@ namespace Watcher.Controllers
         /// <param name="service">
         /// Samples service
 
-        public InstanseController(IInstanceService service)
+        public InstanceController(IInstanceService service)
         {
             _instanceService = service;
         }
@@ -116,7 +114,7 @@ namespace Watcher.Controllers
                 return StatusCode(500);
             }
 
-            return Ok();
+            return Ok(dto);
         }
 
         /// <summary>

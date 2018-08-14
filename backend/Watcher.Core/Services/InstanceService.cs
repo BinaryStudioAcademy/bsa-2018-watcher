@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,6 +66,9 @@ namespace Watcher.Core.Services
         public async Task<InstanceDto> CreateEntityAsync(InstanceRequest request)
         {
             var entity = _mapper.Map<InstanceRequest, Instance>(request);
+            entity.GuidId = Guid.NewGuid();
+            entity.Organization = await _uow.OrganizationRepository.GetFirstOrDefaultAsync(
+                predicate: o => o.Id == entity.OrganizationId);
 
             entity = await _uow.InstanceRepository.CreateAsync(entity);
 
