@@ -45,7 +45,7 @@ export class FeedbackComponent implements OnInit {
 
   async onSubmit() {
     const text =  this.feedbackForm.get('suggestions').value;
-    if (!(typeof text !== 'undefined' && text)) {
+    if (!text || text === ' ') {
       this.toastrService.warning('All fields are empty.');
       return;
     }
@@ -61,7 +61,7 @@ export class FeedbackComponent implements OnInit {
       subscribe(
         value => {
           this.toastrService.success('Added new feedback');
-          if (!(typeof this.user.email !== 'undefined' && this.user.email)) {
+          if (!this.user.email) {
             this.toastrService.info('If you want to receive emails, fill out the email field in Settings.');
           }
         },
