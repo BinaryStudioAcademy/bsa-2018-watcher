@@ -72,11 +72,13 @@ export class LeftSideMenuComponent implements OnInit {
     if (this.activeUrl.match(this.regexSettingsUrl)) {
       this.menuItems = this.settingsItems;
       this.isSearching = false;
+      this.isFeedback = false;
     } else if (this.activeUrl.match(this.regexFeedbackUrl)) {
       this.isFeedback = true;
     } else if (this.activeUrl.match(this.regexDashboardUrl)) {
       this.menuItems = this.dashboardItems;
       this.isSearching = true;
+      this.isFeedback = false;
     }
   }
 
