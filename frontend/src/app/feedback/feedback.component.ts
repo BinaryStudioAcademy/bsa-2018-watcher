@@ -6,6 +6,8 @@ import { ToastrService } from '../core/services/toastr.service';
 import { Feedback } from '../shared/models/feedback.model';
 import { UserService } from '../core/services/user.service';
 import { User } from '../shared/models/user.model';
+import { LongAnswerType } from '../shared/models/long-answer-type.enum';
+import { ShortAnswerType } from '../shared/models/short-answer-type.enum';
 import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -32,7 +34,11 @@ export class FeedbackComponent implements OnInit {
     private router: Router) { }
 
   feedbackForm = this.fb.group({
-    suggestions: new FormControl({ value: ' ', disabled: false })
+    suggestions: new FormControl({ value: ' ', disabled: false }),
+    willUse: new FormControl({ value: ShortAnswerType, disabled: false }),
+    informatively: new FormControl({ value: LongAnswerType, disabled: false }),
+    friendliness: new FormControl({ value: LongAnswerType, disabled: false }),
+    quickness: new FormControl({ value: LongAnswerType, disabled: false })
   });
 
   ngOnInit() {
@@ -45,7 +51,12 @@ export class FeedbackComponent implements OnInit {
 
   async onSubmit() {
     const text =  this.feedbackForm.get('suggestions').value;
-    if (!text || text === ' ') {
+    const willUse = this.feedbackForm.get('willUse').value;
+    const informatively = this.feedbackForm.get('informatively').value;
+    const friendliness = this.feedbackForm.get('friendliness').value;
+    const quickness = this.feedbackForm.get('quickness').value;
+    console.log(willUse + ' ' + informatively + ' ' + friendliness + ' ' + quickness);
+    if (!willUse && !informatively && !friendliness && !quickness && (!text || text === ' ')) {
       this.toastrService.warning('All fields are empty.');
       return;
     }

@@ -1,4 +1,4 @@
-<div class="ui-g ui-fluid container">
+<div class="ui-g ui-fluid">
   <div class="ui-g-12 ui-lg-6">
     <h3> Feedback </h3>
     <hr>
@@ -7,17 +7,84 @@
   </div>
 </div>
 
-
-<div class="label">Would you use Watcher in the future?</div>
 <div class="ui-g ui-fluid container">
-  <div class="ui-g-12 ui-lg-6">
-    <input type="radio" value="yes" name="use" ngModel> Yes
-    <input type="radio" value="maybe" name="use" ngModel> Maybe
-    <input type="radio" value="no" name="use" ngModel> No
+  <div class="ui-lg-6">
+    <div class="ui-g-3 ">
+    </div>
+    <div class="ui-g-3 ">
+      Unsatisfied
+    </div>
+    <div class="ui-g-3 ">
+      Neutral
+    </div>
+    <div class="ui-g-3 ">
+      Satisfied
+    </div>
   </div>
 </div>
 
 <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
+  <div class="ui-g ui-fluid container">
+    <div class="ui-g-12 ui-lg-6">
+      <div class="ui-g-3 ">
+        Informatively
+      </div>
+      <div class="ui-g-3 ">
+        <input type="radio" value="Unsatisfied" formControlName="informatively" ngModel>
+      </div>
+      <div class="ui-g-3 ">
+        <input type="radio" value="Neutral" formControlName="informatively" ngModel>
+      </div>
+      <div class="ui-g-3 ">
+        <input type="radio" value="Satisfied" formControlName="informatively" ngModel>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-g ui-fluid container">
+    <div class="ui-g-12 ui-lg-6">
+      <div class="ui-g-3" >
+        Friendliness
+      </div>
+      <div class="ui-g-3 ">
+        <input type="radio" value="Unsatisfied" formControlName="friendliness" ngModel>
+      </div>
+      <div class="ui-g-3 ">
+        <input type="radio" value="Neutral" formControlName="friendliness" ngModel>
+      </div>
+      <div class="ui-g-3 ">
+        <input type="radio" value="Satisfied" formControlName="friendliness" ngModel>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-g ui-fluid container">
+    <div class="ui-g-12 ui-lg-6">
+      <div class="ui-g-3 ">
+        Quickness
+      </div>
+      <div class="ui-g-3 ">
+        <input type="radio" value="Unsatisfied" formControlName="quickness" ngModel>
+      </div>
+      <div class="ui-g-3 ">
+        <input type="radio" value="Neutral" formControlName="quickness" ngModel>
+      </div>
+      <div class="ui-g-3 ">
+        <input type="radio" value="Satisfied" formControlName="quickness" ngModel>
+      </div>
+    </div>
+  </div>
+
+  <div class="label">Would you use Watcher in the future?</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-6">
+      <p><input type="radio" value="yes" formControlName="willUse" ngModel> Yes</p>
+      <p><input type="radio" value="maybe" formControlName="willUse" ngModel> Maybe</p>
+      <p><input type="radio" value="no" formControlName="willUse" ngModel> No</p>
+    </div>
+  </div>
+
+
   <div class="label">Feel free to add any other comments or suggestions:</div>
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
