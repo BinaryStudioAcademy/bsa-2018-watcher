@@ -12,6 +12,8 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
+    using Serilog.Context;
+
     using Watcher.Common.Errors;
     using Watcher.Common.Options;
     using Watcher.Core.Auth;
@@ -52,7 +54,11 @@
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(new EventId(4003, "Watcher Token is Invalid"), e, $"Watcher Token was not validated: {e.Message}");
+                    var eventId = new EventId(403);
+                    using (LogContext.PushProperty("LogEventId", eventId.Id))
+                    {
+                        _logger.LogError(eventId, e, $"Watcher Token was not validated: {e.Message}");
+                    }
                     throw new HttpStatusCodeException(HttpStatusCode.Forbidden, "Watcher Token was not validated");
                 }
 
