@@ -154,14 +154,7 @@ export class HeaderComponent implements OnInit {
         icon: 'fa fa-fw fa-bell-o',
       }
     ];
-
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser != null) {
-      if (this.currentUser.organizations.length > 0) {
-        this.fillOrganizations();
-      }
-    }
-
+    
     this.authService.currentUser.subscribe(
       (userData) => {
         this.currentUser = userData;
