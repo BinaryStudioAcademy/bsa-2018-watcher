@@ -1,5 +1,6 @@
 ﻿namespace Watcher.DataAccess.Entities
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -14,6 +15,8 @@
 
         [Required]
         public string Platform { get; set; }
+
+        public Guid GuidId { get; set; }
 
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }

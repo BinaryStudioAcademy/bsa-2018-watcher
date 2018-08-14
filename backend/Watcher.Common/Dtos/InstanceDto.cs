@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Watcher.Common.Interfaces.Entities;
 using Watcher.Common.MoveToFrontend;
 
@@ -12,6 +13,8 @@ namespace Watcher.Common.Dtos
         public string Address { get; set; }
 
         public string Platform { get; set; }
+
+        public Guid GuidId { get; set; }
 
         public OrganizationDto Organization { get; set; }
         
