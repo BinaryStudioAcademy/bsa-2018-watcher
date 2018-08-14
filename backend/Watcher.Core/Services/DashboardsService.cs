@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,16 +25,23 @@ namespace Watcher.Core.Services
 
         public async Task<IEnumerable<DashboardDto>> GetInstanceDashboards(int id)
         {
-            var dashboards = (await _uow.DashboardsRepository.GetRangeAsync()).Where(dash => dash.InstanceId == id).ToList();
+            var entities = (await _uow.DashboardsRepository.GetRangeAsync(include: x => x
+                .Include(o => o.Instance)
+                .Include(o => o.Charts))).Where(dash => dash.InstanceId == id).ToList();
 
-            var dtos = _mapper.Map<List<Dashboard>, List<DashboardDto>>(dashboards);
+            if (entities == null) return null;
+
+            var dtos = _mapper.Map<List<Dashboard>, List<DashboardDto>>(entities);
 
             return dtos;
         }
 
         public async Task<DashboardDto> GetDashboardByIdAsync(int id)
         {
-            var dashboard = await _uow.DashboardsRepository.GetFirstOrDefaultAsync(s => s.Id == id);
+            var dashboard = await _uow.DashboardsRepository.GetFirstOrDefaultAsync(
+                predicate: s => s.Id == id,
+                include: x => x.Include(o => o.Instance)
+                               .Include(o => o.Charts));
 
             if (dashboard == null) return null;
 
@@ -41,11 +50,12 @@ namespace Watcher.Core.Services
             return dto;
         }
 
-        public async Task<DashboardDto> CreateDashboardAsync(DashboardRequest dashbordRequest)
+        public async Task<DashboardDto> CreateDashboardAsync(DashboardRequest request)
         {
-            var entity = _mapper.Map<DashboardRequest, Dashboard>(dashbordRequest);
-
+            var entity = _mapper.Map<DashboardRequest, Dashboard>(request);
+            
             entity = await _uow.DashboardsRepository.CreateAsync(entity);
+
             var result = await _uow.SaveAsync();
             if (!result)
             {

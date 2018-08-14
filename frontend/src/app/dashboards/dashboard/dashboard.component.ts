@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
     private messageService: MessageService) {
     this.activeDashboardItem = {};
     this.dashboardMenuitems = [];
-    this.instance = { id: 1, address: 'adress', platform: 'platform' };
+    this.instance = { id: 86, address: 'adress', platform: 'platform' };
     this.subscribeToEvents();
   }
 
@@ -91,7 +91,7 @@ export class DashboardComponent implements OnInit {
         },
         error => {
           this.loading = false;
-          this.toastrService.success(`Error ocured status: ${error}`);
+          this.toastrService.error(`Error ocured status: ${error}`);
         });
   }
 
