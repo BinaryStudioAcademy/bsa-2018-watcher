@@ -7,6 +7,6 @@
 
     public interface IChatsRepository : IRepository<Chat, int>
     {
-        Task<IEnumerable<Chat>> GetChatsByUserId(string id);
+        Task<List<Chat>> GetChatsByUserId(string id);
     }
 }

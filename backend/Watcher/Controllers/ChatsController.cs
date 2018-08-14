@@ -47,6 +47,19 @@ namespace Watcher.Controllers
             return Ok(dto);
         }
 
+        // GET: /chats/user/:id
+        [Route("chats/user/{id}")]
+        public virtual async Task<ActionResult<ChatDto>> GetByUserId(int id)
+        {
+            var dto = await _chatsService.GetEntityByIdAsync(id);
+            if (dto == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(dto);
+        }
+
         // POST: /chats
         [HttpPost]
         public virtual async Task<ActionResult<ChatDto>> Create([FromBody] ChatRequest request)

@@ -10,6 +10,8 @@
     {
         Task<IEnumerable<MessageDto>> GetAllEntitiesAsync();
 
+        Task<IEnumerable<MessageDto>> GetEntitiesByChatIdAsync(int id);
+
         Task<MessageDto> GetEntityByIdAsync(int id);
 
         Task<MessageDto> CreateEntityAsync(MessageRequest request);

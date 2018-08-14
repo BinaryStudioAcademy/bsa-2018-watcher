@@ -18,7 +18,7 @@
         {
         }
 
-        public async Task<IEnumerable<Chat>> GetChatsByUserId(string id)
+        public async Task<List<Chat>> GetChatsByUserId(string id)
         {
             IQueryable<Chat> chats = Context.UserChats.Where(uc => uc.UserId == id).Select(uc => uc.Chat);
 

@@ -33,6 +33,19 @@ namespace Watcher.Controllers
             return Ok(dtos);
         }
 
+        // GET: /messages/chat/:id
+        [Route("messages/chat/{id}")]
+        public virtual async Task<ActionResult<IEnumerable<MessageDto>>> GetByChatId(int id)
+        {
+            var dtos = await _messagesService.GetEntitiesByChatIdAsync(id);
+            if (!dtos.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(dtos);
+        }
+
         // GET: /messages/:id
         [HttpGet("{id}")]
         public virtual async Task<ActionResult<ChatDto>> GetById(int id)

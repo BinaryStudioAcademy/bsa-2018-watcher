@@ -1,4 +1,6 @@
-﻿namespace Watcher.Core.Services
+﻿using System.Linq;
+
+namespace Watcher.Core.Services
 {
     using AutoMapper;
     using System.Collections.Generic;
@@ -25,6 +27,17 @@
         public async Task<IEnumerable<MessageDto>> GetAllEntitiesAsync()
         {
             var samples = await _uow.MessagesRepository.GetRangeAsync();
+
+            var dtos = _mapper.Map<List<Message>, List<MessageDto>>(samples);
+
+            return dtos;
+        }
+
+        public async Task<IEnumerable<MessageDto>> GetEntitiesByChatIdAsync(int id)
+        {
+            var samples = await _uow.MessagesRepository.GetRangeAsync();
+
+            samples = samples.Where(m => m.ChatId == id).ToList();
 
             var dtos = _mapper.Map<List<Message>, List<MessageDto>>(samples);
 

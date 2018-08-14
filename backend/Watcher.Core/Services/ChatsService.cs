@@ -33,6 +33,15 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<IEnumerable<ChatDto>> GetEntitiesByUserIdAsync(string id)
+        {
+            var chats = await _uow.ChatsRepository.GetChatsByUserId(id);
+
+            var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats);
+
+            return dtos;
+        }
+
         public async Task<ChatDto> GetEntityByIdAsync(int id)
         {
             var sample = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
