@@ -91,7 +91,7 @@ export class DashboardComponent implements OnInit {
         },
         error => {
           this.loading = false;
-          this.toastrService.success(`Error ocured status: ${error}`);
+          this.toastrService.error(`Error ocured status: ${error}`);
         });
   }
 

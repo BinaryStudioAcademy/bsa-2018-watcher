@@ -17,6 +17,8 @@
 
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 
+        IInstanceRepository InstanceRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }

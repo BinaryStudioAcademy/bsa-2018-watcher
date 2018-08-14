@@ -23,6 +23,8 @@ export class DashboardService {
   }
 
   create(dashboard: Dashboard): Observable<Object> {
+    console.log('from service');
+    console.log(dashboard);
     return this.http.post(this.url, dashboard).pipe(
       retry(2),
       catchError(this.handleError));

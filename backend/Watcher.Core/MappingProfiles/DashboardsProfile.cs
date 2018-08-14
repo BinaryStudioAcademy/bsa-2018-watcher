@@ -15,7 +15,7 @@ namespace Watcher.Core.MappingProfiles
             CreateMap<Dashboard, DashboardDto>();
 
             CreateMap<DashboardRequest, Dashboard>()
-                .ForMember(d => d.Id, o => o.UseValue(0));
+                .ForMember(d => d.Id, o => o.Ignore());
 
         }
     }

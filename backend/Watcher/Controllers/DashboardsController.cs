@@ -37,7 +37,7 @@ namespace Watcher.Controllers
 
         // POST: /dashboards
         [HttpPost]
-        public virtual async Task<ActionResult<DashboardDto>> Create([FromBody] DashboardRequest request)
+        public virtual async Task<ActionResult<DashboardDto>> Create([FromBody]DashboardRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -50,7 +50,7 @@ namespace Watcher.Controllers
                 return StatusCode(500);
             }
 
-            return CreatedAtAction("GetById", new { id = dto.Id }, dto);
+            return Ok(dto);
         }
 
         // PUT: /dashboards/:id
