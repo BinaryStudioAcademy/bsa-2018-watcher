@@ -11,7 +11,7 @@
     using Watcher.DataAccess.Entities;
     using Microsoft.EntityFrameworkCore;
 
-    public class MessagesService : IMessageService
+    public class MessagesService : IMessagesService
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
