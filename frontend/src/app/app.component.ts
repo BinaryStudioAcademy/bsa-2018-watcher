@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if (this.authService.isAuthorized()) {
+    if (!this.authService.isAuthorized()) {
     await this.authService.populate();
     }
 
