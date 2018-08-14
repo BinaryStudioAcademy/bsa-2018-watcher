@@ -7,38 +7,48 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.WindowsAzure.Storage;
-    using Microsoft.WindowsAzure.Storage.Auth;
 
     using Serilog;
     using Serilog.Events;
 
     public class Program
     {
-        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-            .AddEnvironmentVariables()
-            .Build();
+        public static IConfiguration Configuration { get; private set; }
 
         public static int Main(string[] args)
         {
+            var configurationBuilder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+                .AddEnvironmentVariables();
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Development)
+            {
+                configurationBuilder.AddUserSecrets<Program>(false);
+            }
+
+            Configuration = configurationBuilder.Build();
+            var outputTemplate = "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{properties}{NewLine}";
+
+            var connectionString = Configuration.GetConnectionString("LogsConnection");
+            var storageAccount = CloudStorageAccount.Parse(connectionString);
+
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
                 .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .WriteTo.File(
-                    $@"D:\home\LogFiles\Application\bsa-SeriLogs-{DateTime.UtcNow:yyyy-dd-M}.txt", // Standart path for Azure Logs
-                    fileSizeLimitBytes: 1_000_000,
-                    rollOnFileSizeLimit: true,
-                    shared: true,
-                    flushToDiskInterval: TimeSpan.FromSeconds(1))
-                // .WriteTo.AzureTableStorage(storageAccount, LogEventLevel.Debug, storageTableName: "SerilogLogs")
+                .WriteTo.Console(outputTemplate: outputTemplate)
+                //.WriteTo.File(
+                //    $@"D:\home\LogFiles\Application\bsa-api-SeriLogs-{DateTime.UtcNow:yyyy-dd-M}.txt", // Standart path for Azure Logs
+                //    fileSizeLimitBytes: 1_000_000,
+                //    rollOnFileSizeLimit: true,
+                //    shared: true,
+                //    flushToDiskInterval: TimeSpan.FromSeconds(1))
+                .WriteTo.AzureTableStorage(storageAccount, LogEventLevel.Debug, storageTableName: "logs-table")
                 .CreateLogger();
 
             try
             {
-                Log.Information("Getting the motors running...");
+                Log.Information("Starting BSA Watcher Web App...");
 
                 var host = CreateWebHostBuilder(args).Build();
                 host.Run();

@@ -4,6 +4,7 @@ import { OrganizationService } from '../../core/services/organization.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
+import {usesServiceWorker} from '../../../../node_modules/@angular-devkit/build-angular/src/angular-cli-files/utilities/service-worker';
 
 @Component({
   selector: 'app-organization-profile',
@@ -41,6 +42,8 @@ export class OrganizationProfileComponent implements OnInit {
     if (user == null || user.lastPickedOrganizationId == null) {
       return;
     }
+
+    if (user.lastPickedOrganization == null && user.lastPickedOrganizationId !== 0) {
     this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => {
       this.organization = value;
       this.subscribeOrganizationFormToData();
@@ -50,6 +53,13 @@ export class OrganizationProfileComponent implements OnInit {
         this.editable = true;
       }
     });
+    } else {
+      this.organization = user.lastPickedOrganization;
+      this.subscribeOrganizationFormToData();
+      if (this.organization.createdByUserId === user.id) {
+        this.editable = true;
+      }
+    }
   }
 
   enableEditing() {
@@ -74,6 +84,8 @@ export class OrganizationProfileComponent implements OnInit {
     if (this.organizationForm.valid && this.editable) {
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
+          const user = this.authService.getCurrentUser();
+          user.lastPickedOrganization = this.organization;
           this.toastrService.success('Organization was updated');
         },
         err => {

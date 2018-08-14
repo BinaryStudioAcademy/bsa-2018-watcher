@@ -155,12 +155,12 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser != null) {
-      if (this.currentUser.organizations.length > 0) {
-        this.fillOrganizations();
-      }
-    }
+    // this.currentUser = this.authService.getCurrentUser();
+    // if (this.currentUser != null) {
+    //   if (this.currentUser.organizations.length > 0) {
+    //     this.fillOrganizations();
+    //   }
+    // }
 
     this.authService.currentUser.subscribe(
       (userData) => {

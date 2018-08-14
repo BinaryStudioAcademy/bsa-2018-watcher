@@ -16,7 +16,7 @@
             var handler = new JwtSecurityTokenHandler();
             if (!handler.CanReadToken(jwt))
             {
-                throw new HttpStatusCodeException(HttpStatusCode.Unauthorized, "Can't Read JSON Web Token!");
+                throw new HttpStatusCodeException(HttpStatusCode.Forbidden, "Can't Read Watcher JSON Web Token!");
             }
 
             handler.ValidateToken(jwt, validationParameters, out var token);
