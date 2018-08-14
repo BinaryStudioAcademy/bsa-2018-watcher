@@ -52,10 +52,8 @@ export class DashboardComponent implements OnInit {
 
   createDashboard(newDashboard: DashboardRequest): void {
     this.dashboardsService.create(newDashboard)
-      .subscribe(
-        (res: Response) => {
-          console.log(res);
-          const item: DashboardMenuItem = this.transformToMenuItem(newDashboard);
+      .subscribe((dto) => {
+          const item: DashboardMenuItem = this.transformToMenuItem(dto);
           this.dashboardMenuitems.splice(this.dashboardMenuitems.length - 1, 0, item);
           this.loading = false;
           this.toastrService.success('Added new dashboard');
@@ -68,14 +66,16 @@ export class DashboardComponent implements OnInit {
 
   updateDashboard(editTitle: string): void {
     const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
-    const payload: Dashboard = this.transformToDashboard(this.dashboardMenuitems[index]);
-    payload.title = editTitle;
+    const request: DashboardRequest = {
+      title: editTitle,
+      instanceId: this.dashboardMenuitems[index].instance.id
+    };
 
-    this.dashboardsService.update(payload)
+    this.dashboardsService.update(this.dashboardMenuitems[index].dashId, request)
       .subscribe(
         (res: Response) => {
           console.log(res);
-          this.dashboardMenuitems[index].label = payload.title;
+          this.dashboardMenuitems[index].label = editTitle;
           this.loading = false;
           this.toastrService.success('Updated dashboard');
         },
@@ -89,6 +89,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
           console.log(res);
+          // Search and delete selected Item
           const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
           this.dashboardMenuitems.splice(index, 1);
 
@@ -116,8 +117,8 @@ export class DashboardComponent implements OnInit {
 
   configureDashboards(): void {
     this.dashboardsService.getAllByInstance(this.instance.id).subscribe(
-      (data: Dashboard[]) => {
-        if (data) {
+      (data) => {
+        if (data && data.length > 0) {
           // Fill Dashboard Menu Items
           this.dashboardMenuitems = data.map(dash => this.transformToMenuItem(dash));
           this.activeDashboardItem = this.dashboardMenuitems[0];
@@ -179,17 +180,6 @@ export class DashboardComponent implements OnInit {
     }
     this.creation = false;
     this.displayEditDashboard = false;
-  }
-
-  transformToDashboard(dashboard: DashboardMenuItem): Dashboard {
-    const newdash: Dashboard = {
-      title: dashboard.label,
-      id: dashboard.dashId,
-      createdAt: dashboard.createdAt,
-      instance: dashboard.instance,
-      charts: dashboard.charts,
-    };
-    return newdash;
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {

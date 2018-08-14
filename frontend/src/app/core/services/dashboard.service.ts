@@ -13,7 +13,7 @@ export class DashboardService {
   constructor(private apiService: ApiService) {
   }
 
-  getAllByInstance(id: number): Observable<Object> {
+  getAllByInstance(id: number): Observable<Dashboard[]> {
       return this.apiService.get(`/${this.ctrlUrl}/${id}`);
   }
 
