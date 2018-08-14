@@ -16,11 +16,13 @@ export class LeftSideMenuComponent implements OnInit {
   private dashboardItems: MenuItem[];
 
   private regexSettingsUrl = /\/user\/settings/;
+  private regexFeedbackUrl = /\/user\/feedback/;
   private regexDashboardUrl = /\/user(\/dashboards)?/;
 
   isSearching: boolean;
+  isFeedback: boolean;
   menuItems: MenuItem[];
-  
+
   ngOnInit() {
     this.activeUrl = this.router.url;
     this.initMenuItems();
@@ -70,6 +72,8 @@ export class LeftSideMenuComponent implements OnInit {
     if (this.activeUrl.match(this.regexSettingsUrl)) {
       this.menuItems = this.settingsItems;
       this.isSearching = false;
+    } else if (this.activeUrl.match(this.regexFeedbackUrl)) {
+      this.isFeedback = true;
     } else if (this.activeUrl.match(this.regexDashboardUrl)) {
       this.menuItems = this.dashboardItems;
       this.isSearching = true;
