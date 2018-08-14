@@ -12,6 +12,9 @@
     {
         public InstanceProfile()
         {
+            CreateMap<Instance, Instance>()
+                .ForMember(d => d.Id, o => o.Ignore());
+
             CreateMap<Instance, InstanceDto>();
 
             CreateMap<InstanceDto, Instance>()
