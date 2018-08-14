@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using AutoMapper;
+
 using Microsoft.EntityFrameworkCore;
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Watcher.Common.Dtos;
 using Watcher.Common.Requests;
 using Watcher.Core.Interfaces;
@@ -11,6 +13,8 @@ using Watcher.DataAccess.Interfaces;
 
 namespace Watcher.Core.Services
 {
+    using System;
+
     public class DashboardsService : IDashboardsService
     {
         private readonly IUnitOfWork _uow;
@@ -26,8 +30,7 @@ namespace Watcher.Core.Services
         {
             var entities = await _uow.DashboardsRepository.GetRangeAsync(
                                filter: d => d.InstanceId == id,
-                               include: x => x.Include(o => o.Instance)
-                                              .Include(o => o.Charts));
+                               include: x => x.Include(o => o.Charts));
 
             if (entities == null) return null;
 
@@ -40,8 +43,7 @@ namespace Watcher.Core.Services
         {
             var dashboard = await _uow.DashboardsRepository.GetFirstOrDefaultAsync(
                 predicate: s => s.Id == id,
-                include: x => x.Include(o => o.Instance)
-                               .Include(o => o.Charts));
+                include: x => x.Include(o => o.Charts));
 
             if (dashboard == null) return null;
 
@@ -53,7 +55,8 @@ namespace Watcher.Core.Services
         public async Task<DashboardDto> CreateDashboardAsync(DashboardRequest request)
         {
             var entity = _mapper.Map<DashboardRequest, Dashboard>(request);
-            
+            entity.CreatedAt = DateTime.UtcNow;
+
             entity = await _uow.DashboardsRepository.CreateAsync(entity);
 
             var result = await _uow.SaveAsync();
