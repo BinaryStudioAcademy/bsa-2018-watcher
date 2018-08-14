@@ -20,7 +20,7 @@ export class LeftSideMenuComponent implements OnInit {
 
   isSearching: boolean;
   menuItems: MenuItem[];
-
+  
   ngOnInit() {
     this.activeUrl = this.router.url;
     this.initMenuItems();

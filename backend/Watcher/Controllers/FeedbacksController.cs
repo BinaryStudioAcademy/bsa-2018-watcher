@@ -106,7 +106,7 @@
             {
                 return BadRequest(ModelState);
             }
-
+            /*
             var dto = await _feedbackService.CreateEntityAsync(request);
             if (dto == null)
             {
@@ -121,7 +121,7 @@
                     "Thank you for taking the time to type feedback. " +
                     "Best regards, Watcher.");
             }
-
+            */
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
     }
