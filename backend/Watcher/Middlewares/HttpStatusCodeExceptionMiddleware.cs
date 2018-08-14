@@ -7,6 +7,8 @@
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 
+    using Serilog.Context;
+
     using Watcher.Common.Errors;
 
     public class HttpStatusCodeExceptionMiddleware
@@ -40,7 +42,11 @@
                 if (context.Response.HasStarted)
                 {
                     var name = "response has already started";
-                    _logger.LogError(new EventId(5009, name), "Error: the {name}, the http status code middleware will not be executed.", name);
+                    var eventId = new EventId(5009, name);
+                    using (LogContext.PushProperty("LogEventId", eventId.Id))
+                    {
+                        _logger.LogError(eventId, "Error: the {name}, the http status code middleware will not be executed.", name);
+                    }
                     throw;
                 }
 
@@ -48,7 +54,11 @@
 
                 if (ex is HttpStatusCodeException httpException)
                 {
-                    _logger.LogError((int)httpException.StatusCode, httpException, "Http Exception was thrown in application");
+                    var eventId = new EventId((int)httpException.StatusCode);
+                    using (LogContext.PushProperty("LogEventId", eventId.Id))
+                    {
+                        _logger.LogError(eventId, httpException, "Http Exception was thrown in application");
+                    }
 
                     // TODO: uncomment in case we need to deserialize error objects on the client
                     //if (httpException.StatusCode == HttpStatusCode.BadRequest)
@@ -67,7 +77,11 @@
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json; charset=utf-8";
 
-                    _logger.LogError(new EventId(5000, "An unhandled exception"), ex, "An unhandled exception has occurred: " + ex.Message);
+                    var eventId = new EventId(500, "An unhandled exception");
+                    using (LogContext.PushProperty("LogEventId", eventId.Id))
+                    {
+                        _logger.LogError(eventId, ex, "An unhandled exception has occurred: " + ex.Message);
+                    }
                 }
 
                 context.Response.Headers.Add("Access-Control-Allow-Origin", "*");

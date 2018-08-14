@@ -215,7 +215,7 @@
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (enviroment == "Production")
+            if (enviroment == EnvironmentName.Production)
             {
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
@@ -257,7 +257,7 @@
         {
             // Use SQL Database if in Azure, otherwise, use Local DB
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (env == "Production")
+            if (env == EnvironmentName.Production)
             {
                 var azureConnStr = Configuration.GetConnectionString("AzureDbConnection");
                 if (!string.IsNullOrWhiteSpace(azureConnStr))
