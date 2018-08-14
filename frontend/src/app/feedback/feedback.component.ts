@@ -22,7 +22,6 @@ export class FeedbackComponent implements OnInit {
   feedback: Feedback;
   feedbacks: Feedback[];
   user: User;
-  private regexDashboardUrl = /\/user(\/dashboards)?/;
 
   constructor(
     private fb: FormBuilder,
@@ -45,7 +44,8 @@ export class FeedbackComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (this.feedbackForm.get('suggestions').value === '') {
+    const text =  this.feedbackForm.get('suggestions').value;
+    if (!(typeof text !== 'undefined' && text)) {
       this.toastrService.warning('All fields are empty.');
       return;
     }
@@ -56,16 +56,19 @@ export class FeedbackComponent implements OnInit {
       text: this.feedbackForm.get('suggestions').value,
       response: null
     };
-    console.log(newFeedback);
+    // console.log(newFeedback);
     this.feedbackService.create(newFeedback).
       subscribe(
         value => {
           this.toastrService.success('Added new feedback');
+          if (!(typeof this.user.email !== 'undefined' && this.user.email)) {
+            this.toastrService.info('If you want to receive emails, fill out the email field in Settings.');
+          }
         },
         error => {
           this.toastrService.error(`Error ocured status: ${error}`);
         });
-    if (await this.toastrService.confirm('Would you want to type one more feedback')) {
+    if (await this.toastrService.confirm('Would you want to enter one more feedback?')) {
       this.feedbackForm.reset();
     } else {
       this.router.navigate(['/user']);

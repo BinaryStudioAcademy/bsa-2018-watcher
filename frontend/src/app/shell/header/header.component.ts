@@ -32,8 +32,6 @@ export class HeaderComponent implements OnInit {
   bellItems: MenuItem[];
   orgItems: MenuItem[];
 
-  nofeedback: true;
-
   constructor(private notificationsService: NotificationsService,
               private messageService: MessageService,
               private userService: UserService,
@@ -102,12 +100,12 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Settings',
         icon: 'fa fa-fw fa-cog',
-        routerLink: ['/user/settings']
+        routerLink: ['/user/settings'],
       },
       {
         label: 'Feedback',
         icon: 'fa fa-fw fa-retweet',
-        routerLink: ['/user/feedback']
+        routerLink: ['/user/feedback'],
       },
       {
         label: 'Logout',
