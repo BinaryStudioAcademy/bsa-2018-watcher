@@ -6,7 +6,7 @@
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
 
-    public interface IMessageService
+    public interface IMessagesService
     {
         Task<IEnumerable<MessageDto>> GetAllEntitiesAsync();
 
