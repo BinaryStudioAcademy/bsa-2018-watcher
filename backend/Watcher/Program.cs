@@ -43,7 +43,7 @@
                 //    rollOnFileSizeLimit: true,
                 //    shared: true,
                 //    flushToDiskInterval: TimeSpan.FromSeconds(1))
-                .WriteTo.AzureTableStorage(storageAccount, LogEventLevel.Debug, storageTableName: "logs-table")
+                .WriteTo.AzureTableStorage(storageAccount, LogEventLevel.Warning, storageTableName: "logs-table")
                 .CreateLogger();
 
             try
