@@ -13,9 +13,9 @@
 
     public class Program
     {
-        public static IConfiguration Configuration { get; private set; }
+        public static IConfiguration Configuration { get; } = GetConfigurationRoot();
 
-        public static int Main(string[] args)
+        private static IConfigurationRoot GetConfigurationRoot()
         {
             var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -27,7 +27,11 @@
                 configurationBuilder.AddUserSecrets<Program>(false);
             }
 
-            Configuration = configurationBuilder.Build();
+            return configurationBuilder.Build();
+        }
+
+        public static int Main(string[] args)
+        {
             var outputTemplate = "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{properties}{NewLine}";
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Production)
@@ -65,8 +69,7 @@
             {
                 Log.Information("Starting BSA Watcher Web App...");
 
-                var host = CreateWebHostBuilder(args).Build();
-                host.Run();
+                BuildWebHost(args).Run();
 
                 return 0;
             }
@@ -81,7 +84,7 @@
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
@@ -90,6 +93,7 @@
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseSerilog()
-                .CaptureStartupErrors(true);
+                .CaptureStartupErrors(true)
+                .Build();
     }
 }
