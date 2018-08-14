@@ -3,10 +3,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    
+
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
@@ -24,6 +24,7 @@
         /// The Feedbacks Service service
         /// </summary>
         private readonly IFeedbackService _feedbackService;
+        private readonly IEmailProvider _emailProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FeedbacksController"/> class. 
@@ -31,9 +32,10 @@
         /// <param name="service">
         /// Feedbacks service
         /// </param>
-        public FeedbacksController(IFeedbackService service)
+        public FeedbacksController(IFeedbackService service, IEmailProvider provider)
         {
             _feedbackService = service;
+            _emailProvider = provider;
         }
 
         /// <summary>
@@ -109,6 +111,15 @@
             if (dto == null)
             {
                 return StatusCode(500);
+            }
+
+            if (!string.IsNullOrEmpty(request.User.Email))
+            {
+                await _emailProvider.SendMessageOneToOne("watcher@net.com", "Thanks for feedback", request.User.Email,
+                    "",
+                    "Hello, " + request.User.DisplayName +
+                    "Thank you for taking the time to type feedback. " +
+                    "Best regards, Watcher.");
             }
 
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
