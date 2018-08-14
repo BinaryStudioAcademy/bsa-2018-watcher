@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {AuthService} from '../core/services/auth.service';
-import {Router} from '@angular/router';
-import {TokenService} from '../core/services/token.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AuthService } from '../core/services/auth.service';
+import { Router } from '@angular/router';
+import { TokenService } from '../core/services/token.service';
 
 @Component({
   selector: 'app-authorization',
@@ -24,6 +24,7 @@ export class AuthorizationComponent implements OnInit {
   companyName = '';
   lastName = '';
   firstName = '';
+  email: string;
 
   constructor(
     private authService: AuthService,
@@ -39,6 +40,9 @@ export class AuthorizationComponent implements OnInit {
     if (this.isSignIn) {
       return this.signInTemplate;
     } else if (this.isSuccessSignUp) {
+      this.firstName = this.authService.userRegisterRequest.firstName;
+      this.lastName = this.authService.userRegisterRequest.lastName;
+      this.email = this.authService.userRegisterRequest.email;
       return this.userDetailsTemplate;
     } else if (this.isNotRegisteredSignIn) {
       return this.notRegisteredSignInTemplate;
@@ -77,11 +81,11 @@ export class AuthorizationComponent implements OnInit {
     this.isFetching = true;
     await this.authService.signInWithGoogle()
       .then(result => {
-         if (result) {
+        if (result) {
           this.closeDialog();
           this.signInPostProcessing(result);
-         }
-         this.isFetching = false;
+        }
+        this.isFetching = false;
       })
       .catch(err => {
         if (err) {
@@ -99,8 +103,8 @@ export class AuthorizationComponent implements OnInit {
     await this.authService.signInWithFacebook()
       .then(result => {
         if (result) {
-        this.closeDialog();
-        this.signInPostProcessing(result);
+          this.closeDialog();
+          this.signInPostProcessing(result);
         }
         this.isFetching = false;
       })
@@ -121,8 +125,8 @@ export class AuthorizationComponent implements OnInit {
     await this.authService.signInWithGitHub()
       .then(result => {
         if (result) {
-        this.closeDialog();
-        this.signInPostProcessing(result);
+          this.closeDialog();
+          this.signInPostProcessing(result);
         }
         this.isFetching = false;
       })
@@ -138,7 +142,7 @@ export class AuthorizationComponent implements OnInit {
   }
 
   async saveUserDetails(): Promise<void> {
-    await this.authService.signUpWithProvider(this.companyName, this.lastName, this.firstName)
+    await this.authService.signUpWithProvider(this.companyName, this.firstName, this.lastName)
       .then(res => {
         this.closeDialog();
         this.signInPostProcessing(true);
@@ -154,8 +158,12 @@ export class AuthorizationComponent implements OnInit {
   onContinueLaterClick(): void {
     // default data
     this.companyName = 'MyCompany';
-    this.firstName = 'MyFirstName';
-    this.lastName = 'MyLastName';
+    if (this.firstName === '') {
+      this.firstName = 'MyFirstName';
+    }
+    if (this.lastName === '') {
+      this.lastName = 'MyLastName';
+    }
     this.saveUserDetails();
   }
 

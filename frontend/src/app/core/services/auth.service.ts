@@ -23,7 +23,7 @@ export class AuthService {
 
   private user: Observable<firebase.User>;
   private userDetails: firebase.User = null;
-  private userRegisterRequest: UserRegisterRequest = null;
+  public userRegisterRequest: UserRegisterRequest = null;
 
   constructor(private _firebaseAuth: AngularFireAuth,
               private tokenService: TokenService,
@@ -92,6 +92,26 @@ export class AuthService {
   }
 
   async login(credential: firebase.auth.UserCredential, provider: string): Promise<void> {
+    let firstName;
+    let lastName;
+    switch (provider) {
+      case "Google": {
+        firstName = credential.additionalUserInfo.profile.given_name;
+        lastName = credential.additionalUserInfo.profile.family_name;
+        break;
+      }
+      case "Facebook": {
+        firstName = credential.additionalUserInfo.profile.first_name;
+        lastName = credential.additionalUserInfo.profile.last_name;
+        break;
+      }
+       case "GitHub": {
+        firstName = '';
+        lastName = '';
+        break;
+      }
+    }
+    
     this.userRegisterRequest = {
       uid: credential.user.uid,
       email: credential.user.email,
@@ -100,8 +120,8 @@ export class AuthService {
       photoURL: credential.user.photoURL,
       isNewUser: credential.additionalUserInfo.isNewUser,
       companyName: '',
-      firstName: '',
-      lastName: ''
+      firstName: firstName,
+      lastName: lastName
     };
 
     if (!this.userRegisterRequest.email) {
