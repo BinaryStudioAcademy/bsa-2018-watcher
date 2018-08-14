@@ -30,21 +30,36 @@
             Configuration = configurationBuilder.Build();
             var outputTemplate = "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{properties}{NewLine}";
 
-            var connectionString = Configuration.GetConnectionString("LogsConnection");
-            var storageAccount = CloudStorageAccount.Parse(connectionString);
-
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
-                .Enrich.FromLogContext()
-                .WriteTo.Console(outputTemplate: outputTemplate)
-                //.WriteTo.File(
-                //    $@"D:\home\LogFiles\Application\bsa-api-SeriLogs-{DateTime.UtcNow:yyyy-dd-M}.txt", // Standart path for Azure Logs
-                //    fileSizeLimitBytes: 1_000_000,
-                //    rollOnFileSizeLimit: true,
-                //    shared: true,
-                //    flushToDiskInterval: TimeSpan.FromSeconds(1))
-                .WriteTo.AzureTableStorage(storageAccount, LogEventLevel.Warning, storageTableName: "logs-table")
-                .CreateLogger();
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Production)
+            {
+                var connectionString = Configuration.GetConnectionString("LogsConnection");
+                var storageAccount = CloudStorageAccount.Parse(connectionString);
+                Log.Logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(Configuration)
+                    .Enrich.FromLogContext()
+                    .WriteTo.Console(outputTemplate: outputTemplate)
+                    //.WriteTo.File(
+                    //    $@"D:\home\LogFiles\Application\bsa-api-SeriLogs-{DateTime.UtcNow:yyyy-dd-M}.txt", // Standart path for Azure Logs
+                    //    fileSizeLimitBytes: 1_000_000,
+                    //    rollOnFileSizeLimit: true,
+                    //    shared: true,
+                    //    flushToDiskInterval: TimeSpan.FromSeconds(1))
+                    .WriteTo.AzureTableStorageWithProperties(storageAccount,
+                        LogEventLevel.Warning,
+                        storageTableName: "logs-table",
+                        writeInBatches: true,
+                        batchPostingLimit: 100,
+                        period: new TimeSpan(0, 0, 3),
+                        propertyColumns: new[] { "LogEventId" }).CreateLogger();
+            }
+            else
+            {
+                Log.Logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(Configuration)
+                    .Enrich.FromLogContext()
+                    .WriteTo.Console(outputTemplate: outputTemplate)
+                    .CreateLogger();
+            }
 
             try
             {

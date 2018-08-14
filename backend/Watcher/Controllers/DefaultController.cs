@@ -10,6 +10,7 @@ namespace Watcher.Controllers
     using Microsoft.Extensions.Logging;
 
     using Serilog;
+    using Serilog.Context;
 
     using Watcher.Common.Errors;
 
@@ -39,7 +40,7 @@ namespace Watcher.Controllers
             var a = User;
             return "value";
         }
-        
+
         [HttpGet("Get")]
         public string Get(int id)
         {
@@ -89,6 +90,18 @@ namespace Watcher.Controllers
             _logger.LogWarning(warnE, "Warning");
             _logger.LogError(errE, "Error");
             _logger.LogCritical(critE, "Crit");
+            return new[] { "value1", "value2" };
+        }
+
+        [HttpGet("AllWithScope")]
+        public IEnumerable<string> AllWithScope()
+        {
+            var warnE = new EventId(300, "Warning Event 1");
+
+            using (LogContext.PushProperty("LogEventId", warnE.Id))
+            {
+                _logger.LogWarning(warnE, "Warning with warning event id ");
+            }
 
             return new[] { "value1", "value2" };
         }
