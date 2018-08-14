@@ -1,7 +1,9 @@
 ﻿namespace Watcher.Middlewares
 {
     using System;
+    using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
+    using System.Net;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -10,6 +12,7 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
+    using Watcher.Common.Errors;
     using Watcher.Common.Options;
     using Watcher.Core.Auth;
 
@@ -42,7 +45,16 @@
             }
             else
             {
-                var jwt = TokenUtil.GetDecodedJwt(watcherToken, tokenOptions.Value.GetAccessTokenValidationParameters);
+                JwtSecurityToken jwt = null;
+                try
+                {
+                    jwt = TokenUtil.GetDecodedJwt(watcherToken, tokenOptions.Value.GetAccessTokenValidationParameters);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(new EventId(4003, "Watcher Token is Invalid"), e, $"Watcher Token was not validated: {e.Message}");
+                    throw new HttpStatusCodeException(HttpStatusCode.Forbidden, "Watcher Token was not validated");
+                }
 
                 var role = jwt.Claims.Any(c => c.Type == "role");
                 var name = jwt.Claims.Any(c => c.Type == "unique_name");
