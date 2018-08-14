@@ -12,7 +12,12 @@ const routes: Routes = [{
     path: '',
     loadChildren: '../user/user.module#UserModule'
   }]
-}];
+  }, {
+  path: '**',
+  redirectTo: 'user/dashboards',
+  canActivate: [AuthGuard]
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
