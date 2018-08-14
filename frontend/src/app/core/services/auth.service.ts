@@ -200,7 +200,7 @@ export class AuthService {
   }
 
   isAuthorized(): boolean {
-    const user = this.getCurrentUser();
+    const user = this.getCurrentUserLS();
 
     if (user != null) {
       return true;
