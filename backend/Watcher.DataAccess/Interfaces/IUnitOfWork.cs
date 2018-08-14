@@ -17,6 +17,9 @@
 
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 
+        IInstanceRepository InstanceRepository { get; }
+
+        IChartRepository ChartRepository { get;  }
         Task<bool> SaveAsync();
     }
 }
