@@ -48,13 +48,6 @@
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //var logger = new LoggerConfiguration()
-            //    .ReadFrom.Configuration(Configuration)
-            //    .CreateLogger();
-
-            //Log.Logger = logger;
-            //// or: services.AddSingleton<Serilog.ILogger>(logger);
-
             services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
                 {
                     builder.AllowAnyOrigin()

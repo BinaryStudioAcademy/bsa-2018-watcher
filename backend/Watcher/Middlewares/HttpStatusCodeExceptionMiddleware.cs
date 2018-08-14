@@ -39,8 +39,8 @@
             {
                 if (context.Response.HasStarted)
                 {
-                    _logger.LogWarning(
-                        "The response has already started, the http status code middleware will not be executed.");
+                    var name = "response has already started";
+                    _logger.LogError(new EventId(5009, name), "Error: the {name}, the http status code middleware will not be executed.", name);
                     throw;
                 }
 
@@ -48,6 +48,8 @@
 
                 if (ex is HttpStatusCodeException httpException)
                 {
+                    _logger.LogError((int)httpException.StatusCode, httpException, "Http Exception was thrown in application");
+
                     // TODO: uncomment in case we need to deserialize error objects on the client
                     //if (httpException.StatusCode == HttpStatusCode.BadRequest)
                     //{
@@ -65,7 +67,7 @@
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json; charset=utf-8";
 
-                    _logger.LogError(0, ex, "An unhandled exception has occurred: " + ex.Message);
+                    _logger.LogError(new EventId(5000, "An unhandled exception"), ex, "An unhandled exception has occurred: " + ex.Message);
                 }
 
                 context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
