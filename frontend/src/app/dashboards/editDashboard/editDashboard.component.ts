@@ -7,7 +7,6 @@ import { EventEmitter } from '@angular/core';
   styleUrls: ['./editDashboard.component.sass']
 })
 export class EditDashboardComponent implements OnInit, OnChanges {
-
   title = '';
 
   @Output() edited = new EventEmitter<string>();

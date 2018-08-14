@@ -7,8 +7,6 @@ namespace Watcher.Common.Requests
     {
         public string Title { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-
         public int InstanceId { get; set; }
 
         public List<int> ChartsId { get; set; }

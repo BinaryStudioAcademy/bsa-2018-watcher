@@ -20,6 +20,6 @@ namespace Watcher.Common.Dtos
 
         public string MostLoaded { get; set; }
 
-        public DashboardDto Dashboard { get; set; }
+        public DashboardDto Dashboard { get; set; } // TODO: Remove this field as it is useless because Chart can't exists without dashboard and can be showed just with Dashboard
     }
 }

@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Watcher.Common.Dtos;
 using Watcher.Common.Requests;
@@ -25,9 +24,10 @@ namespace Watcher.Core.Services
 
         public async Task<IEnumerable<DashboardDto>> GetInstanceDashboards(int id)
         {
-            var entities = (await _uow.DashboardsRepository.GetRangeAsync(include: x => x
-                .Include(o => o.Instance)
-                .Include(o => o.Charts))).Where(dash => dash.InstanceId == id).ToList();
+            var entities = await _uow.DashboardsRepository.GetRangeAsync(
+                               filter: d => d.InstanceId == id,
+                               include: x => x.Include(o => o.Instance)
+                                              .Include(o => o.Charts));
 
             if (entities == null) return null;
 

@@ -1,5 +1,4 @@
-﻿
-import { Instance } from './instance.model';
+﻿import { Instance } from './instance.model';
 import { Chart } from './chart.model';
 
 export interface Dashboard  {
