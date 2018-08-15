@@ -3,6 +3,7 @@ import { Dashboard } from '../../shared/models/dashboard.model';
 import { Observable } from 'rxjs';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {ApiService} from './api.service';
+import {Instance} from '../../shared/models/instance.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,10 @@ export class DashboardService {
 
   getAllByInstance(id: number): Observable<Dashboard[]> {
       return this.apiService.get(`/${this.ctrlUrl}/${id}`);
+  }
+
+  getDefaultInstance(): Observable<Instance> {
+    return this.apiService.get(`/${this.ctrlUrl}/FirstInstance`);
   }
 
   create(request: DashboardRequest): Observable<Dashboard> {

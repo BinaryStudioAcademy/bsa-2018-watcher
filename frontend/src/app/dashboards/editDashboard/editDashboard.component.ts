@@ -13,6 +13,8 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardTitle: string;
+  @Input() dashboardDescription: string;
+
   constructor() { }
 
   closeDialog(): void {

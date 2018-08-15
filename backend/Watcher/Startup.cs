@@ -241,11 +241,11 @@
                     cfg.AddProfile<SamplesProfile>();
 
                     cfg.AddProfile<UsersProfile>();
-
                     cfg.AddProfile<DashboardsProfile>();
-
                     cfg.AddProfile<OrganizationProfile>();
                     cfg.AddProfile<NotificationSettingsProfile>();
+                    cfg.AddProfile<InstancesProfile>();
+
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 

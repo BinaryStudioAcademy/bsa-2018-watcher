@@ -26,6 +26,20 @@ namespace Watcher.Core.Services
             _mapper = mapper;
         }
 
+        public async Task<InstanceDto> GetFirstInstanceAsync()
+        {
+            var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(
+                               include: x => x.Include(o => o.Organization)
+                                              .Include(o => o.Dashboards)
+                                                    .ThenInclude(d => d.Charts));
+
+            if (instance == null) return null;
+
+            var dto = _mapper.Map<Instance, InstanceDto>(instance);
+
+            return dto;
+        }
+
         public async Task<IEnumerable<DashboardDto>> GetInstanceDashboards(int id)
         {
             var entities = await _uow.DashboardsRepository.GetRangeAsync(
