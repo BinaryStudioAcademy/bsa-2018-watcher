@@ -54,20 +54,7 @@ export class LeftSideMenuComponent implements OnInit {
       items: [{
         label: 'Update',
         icon: 'fa fa-refresh',
-        routerLink: ['user/dashboards/edit-instance']
-      }, {
-        label: 'Delete',
-        icon: 'fa fa-close'
-      }, {
-        label: 'Download app',
-        icon: 'fa fa-download'
-      }]
-    }, {
-      label: 'Instance1',
-      icon: 'fa fa-fw fa-hdd-o',
-      items: [{
-        label: 'Update',
-        icon: 'fa fa-refresh'
+        routerLink: ['edit-instance/123']
       }, {
         label: 'Delete',
         icon: 'fa fa-close'

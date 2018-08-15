@@ -5,12 +5,11 @@ import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 
 
 const dashboardRoutes: Routes = [{
-  path: '',
-  component: DashboardComponent,
-  children: [{
-    path: 'edit-instance',
+  path: 'dashboards',
+  component: DashboardComponent},
+  {
+    path: 'edit-instance/:id',
     component: EditInstanceComponent
-  }]
 }];
 
 @NgModule({

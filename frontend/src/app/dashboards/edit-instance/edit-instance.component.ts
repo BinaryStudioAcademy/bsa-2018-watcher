@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '../../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-edit-instance',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditInstanceComponent implements OnInit {
 
-  constructor() { }
+  id: number;
+  constructor(private activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    this.activateRoute.params.subscribe(params => this.id = params['id']);
   }
 
 }
