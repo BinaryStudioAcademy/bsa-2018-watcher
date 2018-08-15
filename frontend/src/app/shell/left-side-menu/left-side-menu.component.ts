@@ -14,10 +14,12 @@ export class LeftSideMenuComponent implements OnInit {
   private activeUrl: String;
   private settingsItems: MenuItem[];
   private dashboardItems: MenuItem[];
+  private adminItems: MenuItem[];
 
   private regexSettingsUrl = /\/user\/settings/;
   private regexFeedbackUrl = /\/user\/feedback/;
   private regexDashboardUrl = /\/user(\/dashboards)?/;
+  private regexAdminUrl = /\/admin/;
 
   isSearching: boolean;
   isFeedback: boolean;
@@ -57,15 +59,29 @@ export class LeftSideMenuComponent implements OnInit {
       label: 'Instance2',
       icon: 'fa fa-fw fa-hdd-o'
     }];
+
+    this.adminItems = [{
+      label: 'Organizations',
+      icon: 'fa fa-fw fa-list'
+      // routerLink: ['/user/settings/user-profile']
+    }, {
+      label: 'Users',
+      icon: 'fa fa-fw fa-group'
+      // routerLink: ['/user/settings/organization-profile']
+    }, {
+      label: 'Feedbacks',
+      icon: 'fa fa-fw fa-bullhorn',
+      routerLink: ['/admin/feedback-list']
+    }];
   }
 
   subscribeRouteChanges() {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event.url) {
-          this.activeUrl = event.url;
-          this.changeMenu();
+        this.activeUrl = event.url;
+        this.changeMenu();
       }
-  });
+    });
   }
 
   changeMenu() {
@@ -78,6 +94,10 @@ export class LeftSideMenuComponent implements OnInit {
     } else if (this.activeUrl.match(this.regexDashboardUrl)) {
       this.menuItems = this.dashboardItems;
       this.isSearching = true;
+      this.isFeedback = false;
+    } else if (this.activeUrl.match(this.regexAdminUrl)) {
+      this.menuItems = this.adminItems;
+      this.isSearching = false;
       this.isFeedback = false;
     }
   }

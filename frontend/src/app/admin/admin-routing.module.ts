@@ -8,7 +8,8 @@ const routes: Routes = [{
   children: [{
     path: '',
     children: [
-      { path: '', component: AdminPageComponent }
+      { path: '', component: AdminPageComponent },
+      { path: 'feedback-list', component: FeedbackListComponent }
     ]
   }]
 }];
