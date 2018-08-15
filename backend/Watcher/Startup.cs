@@ -82,6 +82,7 @@
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IFeedbackService, FeedbackService>();
+            services.AddTransient<IResponseService, ResponseService>();
 
             ConfigureFileStorage(services, Configuration);
 
@@ -248,6 +249,7 @@
                     cfg.AddProfile<OrganizationProfile>();
                     cfg.AddProfile<NotificationSettingsProfile>();
                     cfg.AddProfile<FeedbackProfile>();
+                    cfg.AddProfile<ResponseProfile>();
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 

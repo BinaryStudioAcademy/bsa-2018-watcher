@@ -32,7 +32,6 @@ import { NotificationsModule } from './notifications/notifications.module';
     AppComponent,
     LandingComponent,
     AuthorizationComponent,
-
   ],
   imports: [
     BrowserModule,

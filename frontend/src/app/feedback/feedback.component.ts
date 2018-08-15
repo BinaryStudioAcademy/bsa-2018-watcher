@@ -15,7 +15,6 @@ import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.sass'],
   providers: [
-    // ToastrService
   ]
 })
 
