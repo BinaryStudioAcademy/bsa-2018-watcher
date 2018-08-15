@@ -1,56 +1,36 @@
 .site-wrap
-    margin: 20px
+  margin: 20px
 
-/deep/.ui-tabmenuitem
-    #lastTab
-        background-color: #58a339
-        /deep/.ui-menuitem-text
-            color: white
-        /deep/.ui-menuitem-icon
-            color: white
-    #lastTab:hover
-        background-color: #518c2a
+.add-button
+  color: #3b5998
+
+
+/deep/ .ui-tabmenuitem
+  #lastTab
+    /deep/ .ui-state-active
+      background-color: red !important
+    /deep/ .ui-menuitem-text
+      color: #007ad9
+    /deep/ .ui-menuitem-icon
+      color: #007ad9
+      margin-left: 11px
+  #lastTab a:active
+    color: red !important
+    ///deep/ .ui-menuitem-icon
+      // color: #F8FAFC
 
 .title
-    height: 60px
-    display: flex
-    padding: 0
-    h3
-        height: 100%
-        margin: 0
-        padding: 17px 0px 
-        font-size: 25px
-        font-weight: bold
-        width: 200px
-        display: block
-    /deep/.ui-progress-spinner
-        display: block
-        margin-top: 10px
-        margin-left: 5%
-        width: 40px
-        height: 40px
+  padding-bottom: 10px
+  font-size: 22px
+  font-weight: normal
 
-    @keyframes ui-progress-spinner-color
-        100%,
-        0%
-            stroke: #d62d20
-
-        40%
-            stroke: #0057e7
-
-        66%
-            stroke: #008744
-
-        80%,
-        90%
-            stroke: #ffa700
 .workspace
-    h3
-        display: flexbox
-    .btnedit
-        float: right
-        margin-left: 10px
-        width: 70px
+  h3
+    display: flexbox
+  .btnedit
+    float: right
+    margin-left: 10px
+    width: 70px
 
 
 

@@ -19,7 +19,5 @@ namespace Watcher.Common.Dtos
         public int Threshold { get; set; }
 
         public string MostLoaded { get; set; }
-
-        public DashboardDto Dashboard { get; set; }
     }
 }
