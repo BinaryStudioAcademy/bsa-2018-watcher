@@ -1,4 +1,6 @@
-﻿namespace Watcher.DataAccess.Entities
+﻿using Watcher.Common.Enums;
+
+namespace Watcher.DataAccess.Entities
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -9,6 +11,11 @@
 
         [Required]
         public string Text { get; set; }
+
+        public ShortAnswerType WillUse { get; set; }
+        public LongAnswerType Informatively { get; set; }
+        public LongAnswerType Friendliness { get; set; }
+        public LongAnswerType Quickness { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }

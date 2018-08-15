@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Watcher.Common.Dtos;
 using Watcher.Common.Enums;
-using Watcher.Common.Interfaces.Entities;
-using Watcher.Common.MoveToFrontend;
 
-namespace Watcher.Common.Dtos
+namespace Watcher.Common.Requests
 {
-    [ExportClassToTypescript] 
-    public class FeedbackDto : IEntity<int>
+    public class FeedbackRequest
     {
-        public int Id { get; set; }
+        public FeedbackRequest() { }
 
         public string Text { get; set; }
 
@@ -21,7 +21,7 @@ namespace Watcher.Common.Dtos
         public LongAnswerType Quickness { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        
+
         public UserDto User { get; set; }
 
         public ResponseDto Response { get; set; }
