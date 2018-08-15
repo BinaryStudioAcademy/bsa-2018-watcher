@@ -10,6 +10,7 @@ import { Organization } from '../../shared/models/organization.model';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
+import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -28,7 +29,6 @@ export class HeaderComponent implements OnInit {
 
   userItems: MenuItem[];
   cogItems: MenuItem[];
-  mailItems: MenuItem[];
   bellItems: MenuItem[];
   orgItems: MenuItem[];
 
@@ -36,23 +36,13 @@ export class HeaderComponent implements OnInit {
               private messageService: MessageService,
               private userService: UserService,
               private toastrService: ToastrService,
+              private router: Router,
               private authService: AuthService) {
     this.subscribeToEvents();
   }
 
-  showAllSamples(): void {
-    this.msgs = [];
-    const newMessages: Message[] = this.samples.map(s => {
-      const mess: Message = {
-        severity: 'info',
-        summary: s.name,
-        detail: `Name: ${s.name}, Id: ${s.id}, Sample Field: ${s.sampleField.toString()}, Date of creation: ${s.dateOfCreation},
-        Count: ${s.count}`
-      };
-      return mess;
-    });
-    this.msgs.push(...newMessages);
-   // this.messageService.addAll(newMessages);
+  onFeedback(): void {
+    this.router.navigate(['/user/feedback']);
   }
 
   private subscribeToEvents(): void {
@@ -135,20 +125,6 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.mailItems = [{
-      label: 'Item',
-      icon: 'fa fa-fw fa-envelope-o',
-    },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-envelope-o',
-      },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-envelope-o',
-      }
-    ];
-
     this.bellItems = [{
       label: 'Item',
       icon: 'fa fa-fw fa-bell-o',
@@ -162,7 +138,7 @@ export class HeaderComponent implements OnInit {
         icon: 'fa fa-fw fa-bell-o',
       }
     ];
-    
+
     this.authService.currentUser.subscribe(
       (userData) => {
         this.currentUser = userData;
