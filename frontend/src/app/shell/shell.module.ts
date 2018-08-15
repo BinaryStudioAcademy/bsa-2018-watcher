@@ -15,6 +15,7 @@ import {
   PanelMenuModule
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
+import { TestSignalRComponent } from './test-signal-r/test-signal-r.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,6 @@ import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component
     MessageModule,
     PanelMenuModule
   ],
-  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent ]
+  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent, TestSignalRComponent ]
 })
 export class ShellModule { }

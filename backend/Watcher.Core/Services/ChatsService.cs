@@ -13,7 +13,7 @@ namespace Watcher.Core.Services
     using Watcher.DataAccess.Interfaces;
     using Watcher.DataAccess.Entities;
 
-    class ChatsService : IChatsService
+    public class ChatsService : IChatsService
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;

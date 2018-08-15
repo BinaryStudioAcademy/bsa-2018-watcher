@@ -83,6 +83,8 @@
             services.AddTransient<IDashboardsService, DashboardsService>();
             services.AddTransient<ITransientService, TransientService>();
             services.AddTransient<IOrganizationService, OrganizationService>();
+            services.AddTransient<IChatsService, ChatsService>();
+            services.AddTransient<IMessagesService, MessagesService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
 
@@ -210,6 +212,7 @@
                 app.UseSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
 
@@ -249,7 +252,12 @@
                     cfg.AddProfile<DashboardsProfile>();
 
                     cfg.AddProfile<OrganizationProfile>();
+
                     cfg.AddProfile<NotificationSettingsProfile>();
+
+                    cfg.AddProfile<ChatProfile>();
+
+                    cfg.AddProfile<MessageProfile>();
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 
