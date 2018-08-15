@@ -1,0 +1,49 @@
+<div class="chat-list-panel">
+  <p-panelMenu [model]="chatPanel"></p-panelMenu>
+</div>
+
+<div class="conversation-panel" [hidden]="!isChatChoosed">
+  <p-accordion [activeIndex]="0">
+    <p-accordionTab>
+      <p-header>
+        {{choosedChat.name}}
+        <i class="chat-close fa fa-close" (click)="closeConversation()"></i>
+      </p-header>
+      <div class="conversation-panel-content ui-fluid">
+        <div class="conversation-message-panel">
+          <p-card *ngFor="let message of choosedChat.messages">
+            <div class="ui-g">
+              <div class="ui-g-2 ui-g-nopad">
+                <i class="fa fa-2x fa-user"></i>
+              </div>
+              <div class="ui-g-10 ui-g-nopad">
+                <strong>UserName</strong>
+                <div class="">{{message.text}}</div>
+              </div>
+            </div>
+          </p-card>
+        </div>
+        <div class="ui-inputgroup">
+          <input type="text" pInputText [(ngModel)]="message" placeholder="Write message">
+          <button pButton icon="fa fa-send" (click)="sendMessage()"></button>
+        </div>
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<div class="new-chat-panel">
+  <p-accordion>
+    <p-accordionTab>
+      <p-header>
+        New Conversation
+      </p-header>
+      <div class="ui-g ui-fluid">
+        <input pInputText type="text" placeholder="Enter user email">
+      </div>
+      <div class="ui-g ui-fluid">
+        <input pInputText type="text" placeholder="Write message">
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</div>
