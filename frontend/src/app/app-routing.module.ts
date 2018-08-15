@@ -11,7 +11,7 @@ const routes: Routes = [
     component: LandingComponent,
     canActivate: [HomeGuard]
   }, {
-    path: 'user/dashboards',
+    path: 'user/',
     component: ShellComponent,
     canActivate: [NotexistGuard]
   }

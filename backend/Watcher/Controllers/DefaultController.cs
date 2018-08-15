@@ -10,6 +10,7 @@ namespace Watcher.Controllers
     using Microsoft.Extensions.Logging;
 
     using Serilog;
+    using Serilog.Context;
 
     using Watcher.Common.Errors;
 
@@ -39,7 +40,7 @@ namespace Watcher.Controllers
             var a = User;
             return "value";
         }
-        
+
         [HttpGet("Get")]
         public string Get(int id)
         {
@@ -74,22 +75,35 @@ namespace Watcher.Controllers
             return new[] { "value1", "value2" };
         }
 
-        [HttpGet("Post")]
-        public void Post([FromBody] string value)
+        [HttpGet("AllInOrder")]
+        public IEnumerable<string> LogAllInOrder()
         {
-           
+            var bgubE = new EventId(100, "Debug Event 1");
+            var intoE = new EventId(200, "Information Event 1");
+            var warnE = new EventId(300, "Warning Event 1");
+            var errE = new EventId(400, "Error Event 1");
+            var critE = new EventId(500, "Crit Event 1");
+
+
+            _logger.LogDebug(bgubE, "Debug");
+            _logger.LogInformation(intoE, "Information");
+            _logger.LogWarning(warnE, "Warning");
+            _logger.LogError(errE, "Error");
+            _logger.LogCritical(critE, "Crit");
+            return new[] { "value1", "value2" };
         }
 
-        // PUT: api/Default/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpGet("AllWithScope")]
+        public IEnumerable<string> AllWithScope()
         {
-        }
+            var warnE = new EventId(300, "Warning Event 1");
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            using (LogContext.PushProperty("LogEventId", warnE.Id))
+            {
+                _logger.LogWarning(warnE, "Warning with warning event id ");
+            }
+
+            return new[] { "value1", "value2" };
         }
     }
 }

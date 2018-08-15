@@ -127,12 +127,13 @@ export class DashboardComponent implements OnInit {
   configureDashboards(): void {
     this.dashboardsService.getAllByInstance(this.instance.id).subscribe(
       (data: Dashboard[]) => {
-        if (data) {
+          if (data) {
           this.dashboardMenuitems = data.map(
             dash => this.transformToMenuItem(dash));
+            this.activeDashboardItem = this.dashboardMenuitems[0];
+          }
           this.loading = false;
           this.toastrService.success('Succesfully got info from server');
-        }
       },
       error => {
         this.loading = false;
@@ -208,7 +209,6 @@ export class DashboardComponent implements OnInit {
     this.configureDashboards();
 
     const lastItem: DashboardMenuItem = {
-      label: 'Add new',
       icon: 'fa fa-plus',
       command: (onlick) => {
         this.showCreatePopup(true);
@@ -217,6 +217,5 @@ export class DashboardComponent implements OnInit {
     };
 
     this.dashboardMenuitems.push(lastItem);
-    this.activeDashboardItem = this.dashboardMenuitems[0];
   }
 }

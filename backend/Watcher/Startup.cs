@@ -48,13 +48,6 @@
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //var logger = new LoggerConfiguration()
-            //    .ReadFrom.Configuration(Configuration)
-            //    .CreateLogger();
-
-            //Log.Logger = logger;
-            //// or: services.AddSingleton<Serilog.ILogger>(logger);
-
             services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
                 {
                     builder.AllowAnyOrigin()
@@ -88,6 +81,7 @@
             services.AddTransient<IOrganizationService, OrganizationService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
+            services.AddTransient<IFeedbackService, FeedbackService>();
 
             ConfigureFileStorage(services, Configuration);
 
@@ -222,7 +216,7 @@
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (enviroment == "Production")
+            if (enviroment == EnvironmentName.Production)
             {
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
@@ -253,6 +247,7 @@
 
                     cfg.AddProfile<OrganizationProfile>();
                     cfg.AddProfile<NotificationSettingsProfile>();
+                    cfg.AddProfile<FeedbackProfile>();
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 
@@ -264,7 +259,7 @@
         {
             // Use SQL Database if in Azure, otherwise, use Local DB
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (env == "Production")
+            if (env == EnvironmentName.Production)
             {
                 var azureConnStr = Configuration.GetConnectionString("AzureDbConnection");
                 if (!string.IsNullOrWhiteSpace(azureConnStr))
