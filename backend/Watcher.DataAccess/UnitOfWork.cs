@@ -32,6 +32,9 @@
         private INotificationSettingsRepository _notificationSettingsRepository;
         private IInstanceRepository _instanceRepository;
         private IChartRepository _chartRepository;
+
+        private IOrganizationInvitesRepository _organizationInvitesRepository;
+
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -130,6 +133,19 @@
                 return _chartRepository;
             }
         }
+
+        public IOrganizationInvitesRepository OrganizationInvitesRepository
+        {
+            get
+            {
+                if (_organizationInvitesRepository == null)
+                {
+                    _organizationInvitesRepository = new OrganizationInvitesRepository(_context, _mapper);
+                }
+                return _organizationInvitesRepository;
+            }
+        }
+
         public async Task<bool> SaveAsync()
         {
             try

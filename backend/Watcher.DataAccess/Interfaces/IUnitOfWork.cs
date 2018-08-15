@@ -22,6 +22,9 @@
         IInstanceRepository InstanceRepository { get; }
 
         IChartRepository ChartRepository { get;  }
+
+        IOrganizationInvitesRepository OrganizationInvitesRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }
