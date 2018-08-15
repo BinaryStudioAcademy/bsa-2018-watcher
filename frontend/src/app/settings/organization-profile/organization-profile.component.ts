@@ -4,7 +4,7 @@ import { OrganizationService } from '../../core/services/organization.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
-import {usesServiceWorker} from '../../../../node_modules/@angular-devkit/build-angular/src/angular-cli-files/utilities/service-worker';
+import { usesServiceWorker } from '../../../../node_modules/@angular-devkit/build-angular/src/angular-cli-files/utilities/service-worker';
 
 @Component({
   selector: 'app-organization-profile',
@@ -23,7 +23,6 @@ export class OrganizationProfileComponent implements OnInit {
     private toastrService: ToastrService) { }
 
   editable: boolean;
-  canUpdate: boolean;
   organization: Organization;
 
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
@@ -44,15 +43,15 @@ export class OrganizationProfileComponent implements OnInit {
     }
 
     if (user.lastPickedOrganization == null && user.lastPickedOrganizationId !== 0) {
-    this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => {
-      this.organization = value;
-      this.subscribeOrganizationFormToData();
+      this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => {
+        this.organization = value;
+        this.subscribeOrganizationFormToData();
 
-    // Only user who create organozation can edit it
-      if (this.organization.createdByUserId === user.id) {
-        this.editable = true;
-      }
-    });
+        // Only user who create organozation can edit it
+        if (this.organization.createdByUserId === user.id) {
+          this.editable = true;
+        }
+      });
     } else {
       this.organization = user.lastPickedOrganization;
       this.subscribeOrganizationFormToData();
@@ -60,14 +59,11 @@ export class OrganizationProfileComponent implements OnInit {
         this.editable = true;
       }
     }
-  }
 
-  enableEditing() {
     Object.keys(this.organizationForm.controls).forEach(field => {
       const control = this.organizationForm.get(field);
-      control.enabled ? control.disable() : control.enable();
+      control.enable();
     });
-    this.canUpdate ? this.canUpdate = false : this.canUpdate = true;
   }
 
   subscribeOrganizationFormToData() {
