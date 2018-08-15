@@ -23,10 +23,9 @@
       <span class="topbar-badge">{{ notificationsNumber }}</span>
     </div>
 
-    <p-tieredMenu #envelop [model]="mailItems" [popup]="true"></p-tieredMenu>
+  
     <div class="toolbar-item">
-      <button #btn type="button" pButton icon="fa fa-fw fa-envelope-o" (click)="showAllSamples()"></button>
-      <span class="topbar-badge">{{ messagesNumber }}</span>
+      <button #btn type="button" pButton icon="fa fa-fw fa-bullhorn" (click)="onFeedback()"></button>
     </div>
 
     <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
