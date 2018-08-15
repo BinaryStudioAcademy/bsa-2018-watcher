@@ -8,7 +8,7 @@
 .conversation-panel
 	position: fixed
 	bottom: 0
-	right: 240px
+	right: 190px
 	width: 250px
 
 	.conversation-panel-content
@@ -18,23 +18,26 @@
 
 	.conversation-message-panel
 		display: grid
-		grid-auto-rows: minmax(min-content, max-content)
+		grid-template-rows: minmax(min-content, max-content)
 		padding: 10px
 		grid-gap: 10px
 		overflow-y: auto
+	
+	/deep/.ui-card
+		background-color: #f2f6fc
 
 .chat-list-panel
 	position: fixed
 	bottom: 0
 	right: 20px
-	width: 200px	
+	width: 150px	
 
 /deep/.ui-panelmenu-header-link
 	height: 38px
 	padding: 7px 14px !important
 
 /deep/.ui-panelmenu-content
-	height: 299px
+	height: 300px
 	
 
 .new-chat-panel
