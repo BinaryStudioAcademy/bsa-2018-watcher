@@ -55,7 +55,7 @@ export class FeedbackComponent implements OnInit {
     const informatively = this.feedbackForm.get('informatively').value;
     const friendliness = this.feedbackForm.get('friendliness').value;
     const quickness = this.feedbackForm.get('quickness').value;
-    // console.log(willUse + ' ' + informatively + ' ' + friendliness + ' ' + quickness);
+    console.log(willUse + ' ' + informatively + ' ' + friendliness + ' ' + quickness);
     if (!willUse && !informatively && !friendliness && !quickness && (!text || text === ' ')) {
       this.toastrService.warning('All fields are empty.');
       return;
