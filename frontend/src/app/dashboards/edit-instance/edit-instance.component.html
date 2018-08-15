@@ -1,3 +1,54 @@
-<p>
-  edit-instance works! {{id}}
-</p>
+<div class = "site-wrapper">
+<div class="ui-g ui-fluid">
+  <div class="ui-g-12 ui-lg-6">
+      <h3>Editing instance</h3>
+    <hr>
+  </div>
+</div>
+
+<form [formGroup]="instanceForm" (ngSubmit)="onSubmit()">
+  <div class="field">
+  <div class="label">Title</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-mg-6 ui-lg-6">
+      <div class="ui-inputgroup">
+        <span class="ui-inputgroup-addon">
+          <i class="fa fa-header"></i>
+        </span>
+        <input type="text" formControlName="title" pInputText placeholder="Title">
+        <p-message  *ngIf="instanceForm.get('title').errors && instanceForm.get('title').touched" severity="error" text="Title is required."></p-message>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="field">
+  <div class="label">Platform</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-mg-6 ui-lg-6">
+      <div class="ui-inputgroup">
+        <span class="ui-inputgroup-addon">
+          <i class="fa fa-server"></i>
+        </span>
+        <input type="text" formControlName="platform" pInputText placeholder="Platform">
+        <p-message  *ngIf="instanceForm.get('platform').errors && instanceForm.get('platform').touched" severity="error" text="Platform is required."></p-message>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="field">
+  <div class="label">Address</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-mg-6 ui-lg-6">
+      <div class="ui-inputgroup">
+        <span class="ui-inputgroup-addon">
+          <i class="fa fa-building"></i>
+        </span>
+        <input type="text" formControlName="address" pInputText placeholder="Address">
+        <p-message  *ngIf="instanceForm.get('address').invalid && (instanceForm.get('address').touched || instanceForm.get('address').dirty)" severity="error" text="Address is required."></p-message>
+      </div>
+    </div>
+  </div>
+</div>
+  <button pButton type="submit" label="Save" class="ui-button-raised ui-button-success"></button>
+</form>
+</div>

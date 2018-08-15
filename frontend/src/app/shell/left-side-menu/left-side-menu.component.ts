@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
+import { InstanceService } from '../../core/services/instance.service';
+import { Instance } from '../../shared/models/instance.model';
+import { ToastrService } from '../../core/services/toastr.service';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -9,7 +12,9 @@ import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 })
 export class LeftSideMenuComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private instanceService: InstanceService,
+              private toastrService: ToastrService) { }
 
   private activeUrl: String;
   private settingsItems: MenuItem[];
@@ -20,6 +25,18 @@ export class LeftSideMenuComponent implements OnInit {
 
   isSearching: boolean;
   menuItems: MenuItem[];
+
+  configureInstances(organizationId: number) {
+    let instances: Instance[];
+    this.instanceService.getAllByOrganization(organizationId).subscribe( (data: Instance[]) => {
+      if (data) {
+        instances = data;
+        this.toastrService.success('Success');
+      } else {
+        this.toastrService.error('Error is occured');
+      }
+    });
+  }
 
   ngOnInit() {
     this.activeUrl = this.router.url;

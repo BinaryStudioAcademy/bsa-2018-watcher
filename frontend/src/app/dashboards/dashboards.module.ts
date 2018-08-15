@@ -4,10 +4,11 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TabViewModule, PanelMenuModule, DialogModule, ButtonModule, TabMenuModule, ProgressSpinnerModule } from 'primeng/primeng';
 import { EditDashboardComponent } from './editDashboard/editDashboard.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 import { DashboardRoutingModule } from './dashboards-routing.module';
+import {MessageModule} from 'primeng/message';
 
 @NgModule({
   imports: [
@@ -17,11 +18,13 @@ import { DashboardRoutingModule } from './dashboards-routing.module';
     ButtonModule,
     DialogModule,
     FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     TabMenuModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
     ToastModule,
+    MessageModule,
     
     DashboardRoutingModule
   ],
