@@ -15,6 +15,7 @@ import {
   PanelMenuModule
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
+import { ChatModule } from '../chat/chat.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component
     GrowlModule,
     MessagesModule,
     MessageModule,
-    PanelMenuModule
+    PanelMenuModule,
+    ChatModule
   ],
   declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent ]
 })
