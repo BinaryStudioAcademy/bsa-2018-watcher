@@ -90,7 +90,7 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Admin',
         icon: 'fa fa-fw fa-user',
-        routerLink: ['/admin-page'],
+        routerLink: ['/user/admin/feedback-list'],
       },
       {
         label: 'Logout',

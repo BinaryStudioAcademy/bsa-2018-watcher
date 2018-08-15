@@ -24,7 +24,7 @@ export class AdminPageComponent implements OnInit {
       }, {
         label: 'Feedbacks',
         icon: 'fa fa-fw fa-bullhorn',
-        routerLink: ['/user/admin-page/feedback-list']
+        routerLink: ['/user/admin/feedback-list']
       }];
   }
 }
