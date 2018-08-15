@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {MenuItem, Message} from 'primeng/api';
-import {NotificationsService} from '../../core/services/notifications.service';
-import {SampleRequest} from '../../shared/models/sample-request.model';
-import {SampleEnum} from '../../shared/models/sample-enum.enum';
-import {SampleDto} from '../../shared/models/sample-dto.model';
-import {MessageService} from 'primeng/api';
-import {AuthService} from '../../core/services/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { MenuItem, Message } from 'primeng/api';
+import { NotificationsService } from '../../core/services/notifications.service';
+import { SampleRequest } from '../../shared/models/sample-request.model';
+import { SampleEnum } from '../../shared/models/sample-enum.enum';
+import { SampleDto } from '../../shared/models/sample-dto.model';
+import { MessageService } from 'primeng/api';
+import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
@@ -33,11 +33,11 @@ export class HeaderComponent implements OnInit {
   orgItems: MenuItem[];
 
   constructor(private notificationsService: NotificationsService,
-              private messageService: MessageService,
-              private userService: UserService,
-              private toastrService: ToastrService,
-              private router: Router,
-              private authService: AuthService) {
+    private messageService: MessageService,
+    private userService: UserService,
+    private toastrService: ToastrService,
+    private router: Router,
+    private authService: AuthService) {
     this.subscribeToEvents();
   }
 
@@ -88,11 +88,6 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.userItems = [
       {
-        label: 'Settings',
-        icon: 'fa fa-fw fa-cog',
-        routerLink: ['/user/settings'],
-      },
-      {
         label: 'Feedback',
         icon: 'fa fa-fw fa-retweet',
         routerLink: ['/user/feedback'],
@@ -109,31 +104,34 @@ export class HeaderComponent implements OnInit {
     ];
 
     this.cogItems = [{
-      label: 'Item',
+      label: 'User profile',
       icon: 'fa fa-fw fa-cog',
+      routerLink: ['/user/settings/user-profile'],
     },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-cog',
-      },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-cog',
-      }
+    {
+      label: 'Organization',
+      icon: 'fa fa-fw fa-cog',
+      routerLink: ['/user/settings/organization-profile'],
+    },
+    {
+      label: 'Notifications',
+      icon: 'fa fa-fw fa-cog',
+      routerLink: ['/user/settings/notification-settings'],
+    }
     ];
 
     this.bellItems = [{
       label: 'Item',
       icon: 'fa fa-fw fa-bell-o',
     },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-bell-o',
-      },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-bell-o',
-      }
+    {
+      label: 'Item',
+      icon: 'fa fa-fw fa-bell-o',
+    },
+    {
+      label: 'Item',
+      icon: 'fa fa-fw fa-bell-o',
+    }
     ];
 
     this.authService.currentUser.subscribe(
@@ -164,19 +162,18 @@ export class HeaderComponent implements OnInit {
   private chengeLastPicOrganizations(item: Organization): void {
     // update user in beckend
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
-    .subscribe(value => {
-      // update user in frontend
+      .subscribe(value => {
+        // update user in frontend
 
-      this.currentUser.lastPickedOrganizationId = item.id;
-      this.currentUser.lastPickedOrganization = item;
-      this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
-      this.fillOrganizations();
-      // notify user about changes
-      this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
-    },
-    err => {
-      this.toastrService.error('Organization by defaul was not updated.');
-    });
+        this.currentUser.lastPickedOrganizationId = item.id;
+        this.currentUser.lastPickedOrganization = item;
+        this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
+        this.fillOrganizations();
+        // notify user about changes
+        this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
+      },
+        err => {
+          this.toastrService.error('Organization by defaul was not updated.');
+        });
   }
-
 }
