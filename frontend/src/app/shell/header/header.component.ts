@@ -88,9 +88,9 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.userItems = [
       {
-        label: 'Feedback',
-        icon: 'fa fa-fw fa-retweet',
-        routerLink: ['/user/feedback'],
+        label: 'Admin',
+        icon: 'fa fa-fw fa-user',
+        routerLink: ['/admin-page'],
       },
       {
         label: 'Logout',
