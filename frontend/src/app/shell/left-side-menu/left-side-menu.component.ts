@@ -50,10 +50,31 @@ export class LeftSideMenuComponent implements OnInit {
       icon: 'pi pi-pw pi-plus',
     }, {
       label: 'Instance1',
-      icon: 'fa fa-fw fa-hdd-o'
+      icon: 'fa fa-fw fa-hdd-o',
+      items: [{
+        label: 'Update',
+        icon: 'fa fa-refresh',
+        routerLink: ['user/dashboards/edit-instance']
+      }, {
+        label: 'Delete',
+        icon: 'fa fa-close'
+      }, {
+        label: 'Download app',
+        icon: 'fa fa-download'
+      }]
     }, {
-      label: 'Instance2',
-      icon: 'fa fa-fw fa-hdd-o'
+      label: 'Instance1',
+      icon: 'fa fa-fw fa-hdd-o',
+      items: [{
+        label: 'Update',
+        icon: 'fa fa-refresh'
+      }, {
+        label: 'Delete',
+        icon: 'fa fa-close'
+      }, {
+        label: 'Download app',
+        icon: 'fa fa-download'
+      }]
     }];
   }
 

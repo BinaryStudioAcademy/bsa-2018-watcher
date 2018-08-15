@@ -6,6 +6,8 @@ import { TabViewModule, PanelMenuModule, DialogModule, ButtonModule, TabMenuModu
 import { EditDashboardComponent } from './editDashboard/editDashboard.component';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
+import { EditInstanceComponent } from './edit-instance/edit-instance.component';
+import { DashboardRoutingModule } from './dashboards-routing.module';
 
 @NgModule({
   imports: [
@@ -19,9 +21,11 @@ import { ToastModule } from 'primeng/toast';
     TabMenuModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
-    ToastModule
+    ToastModule,
+    
+    DashboardRoutingModule
   ],
-  declarations: [DashboardComponent, EditDashboardComponent],
+  declarations: [DashboardComponent, EditDashboardComponent, EditInstanceComponent],
   exports: [ DashboardComponent ]
 })
 export class DashboardsModule { }
