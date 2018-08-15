@@ -32,6 +32,9 @@
     <None Update="MoveToFrontend\instance.model.ts">
       <CustomToolNamespace>Dtos\InstanceDto.cs</CustomToolNamespace>
     </None>
+    <None Update="MoveToFrontend\long-answer-type.enum.ts">
+      <CustomToolNamespace>Enums\LongAnswerType.cs</CustomToolNamespace>
+    </None>
     <None Update="MoveToFrontend\message.model.ts">
       <CustomToolNamespace>Dtos\MessageDto.cs</CustomToolNamespace>
     </None>
@@ -52,6 +55,9 @@
     </None>
     <None Update="MoveToFrontend\role.model.ts">
       <CustomToolNamespace>Dtos\RoleDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\short-answer-type.enum.ts">
+      <CustomToolNamespace>Enums\ShortAnswerType.cs</CustomToolNamespace>
     </None>
     <None Update="MoveToFrontend\theme.model.ts">
       <CustomToolNamespace>Dtos\Theme.cs</CustomToolNamespace>

@@ -1,9 +1,6 @@
 <div class="ui-g ui-fluid">
 	<div class="ui-g-12 ui-lg-6">
-			<h3> User profile </h3>
-			<a class="btn-edit" (click)="enableEditing()">
-				<i class="fa fa-edit"></i>
-			</a>
+		<div class="title">User profile</div>
 		<hr>
 	</div>
 </div>
@@ -11,30 +8,30 @@
 <form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
 	<div class="label">Display Name*:</div>
 	<div class="ui-g ui-fluid">
-			<div class="ui-g-12 ui-lg-4">
-				<div class="ui-inputgroup">
-					<span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-					<input type="text" formControlName="displayName" pInputText placeholder="Display name">    
-				</div>
+		<div class="ui-g-12 ui-lg-4">
+			<div class="ui-inputgroup">
+				<span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+				<input type="text" formControlName="displayName" pInputText placeholder="Display name">
 			</div>
 		</div>
+	</div>
 
 	<div class="invalid" *ngIf="userForm.get('displayName').errors && userForm.get('displayName').dirty">
-			Display Name is required.
+		Display Name is required.
 	</div>
-	
+
 	<div class="label">First Name*:</div>
 	<div class="ui-g ui-fluid">
 		<div class="ui-g-12 ui-lg-4">
 			<div class="ui-inputgroup">
 				<span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-				<input type="text" formControlName="firstName" pInputText placeholder="First name">   
+				<input type="text" formControlName="firstName" pInputText placeholder="First name">
 			</div>
 		</div>
 	</div>
 
 	<div class="invalid" *ngIf="userForm.get('firstName').errors && userForm.get('firstName').dirty">
-			Fisrt Name is required.
+		Fisrt Name is required.
 	</div>
 
 	<div class="label">Last Name*:</div>
@@ -42,23 +39,23 @@
 		<div class="ui-g-12 ui-lg-4">
 			<div class="ui-inputgroup">
 				<span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-				<input type="text" formControlName="lastName" pInputText placeholder="Last name">   
+				<input type="text" formControlName="lastName" pInputText placeholder="Last name">
 			</div>
 		</div>
 	</div>
 
 	<div class="invalid" *ngIf="userForm.get('lastName').errors && userForm.get('lastName').dirty">
-			Last Name is required.
+		Last Name is required.
 	</div>
 
 	<div class="label">Bio:</div>
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-lg-6">
-      <textarea rows="5" formControlName="bio" pInputTextarea></textarea>
-    </div>
-  </div>
-	
-	<div [hidden]="!canUpdate" class="btn-panel">
-			<button pButton type="submit" [disabled]="!userForm.valid" label="Update" class="ui-button-raised ui-button-success"></button>
-	</div>  
+	<div class="ui-g ui-fluid">
+		<div class="ui-g-12 ui-lg-6">
+			<textarea rows="5" formControlName="bio" pInputTextarea></textarea>
+		</div>
+	</div>
+
+	<div class="btn-panel">
+		<button pButton type="submit" [disabled]="!userForm.valid" label="Update" class="ui-button-raised ui-button-success"></button>
+	</div>
 </form>
