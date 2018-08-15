@@ -54,7 +54,6 @@ import { NotificationsModule } from './notifications/notifications.module';
     AngularFireAuthModule,
 
     CoreModule,
-    AdminModule,
 
     AppRoutingModule,
     NotificationsModule,

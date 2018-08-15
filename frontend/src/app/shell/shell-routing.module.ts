@@ -12,8 +12,15 @@ const routes: Routes = [{
     loadChildren: '../user/user.module#UserModule'
   }]
   }, {
-  path: '**',
-  redirectTo: 'user/dashboards'
+    path: 'admin',
+    component: ShellComponent,
+    children: [{
+      path: '',
+      loadChildren: '../admin/admin.module#AdminModule'
+    }]
+  }, {
+    path: '**',
+    redirectTo: 'user/dashboards'
   }
 ];
 
