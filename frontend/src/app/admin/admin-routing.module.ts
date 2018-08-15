@@ -4,15 +4,15 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
 import { FeedbackListComponent } from './feedback-list/feedback-list.component';
 
 const routes: Routes = [{
-  path:  '', // 'admin',
+  path:  'admin',
   component: AdminPageComponent,
-  children: [{
+ /* children: [{
     path: '',
     redirectTo: 'feedback-list'
   }, {
     path: 'feedback-list',
     component: FeedbackListComponent
-  }]
+  }]*/
 }];
 
 @NgModule({
