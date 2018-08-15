@@ -11,6 +11,9 @@
         public override int Id { get; set; }
 
         [Required]
+        public string Title { get; set; }
+
+        [Required]
         public string Address { get; set; }
 
         [Required]
