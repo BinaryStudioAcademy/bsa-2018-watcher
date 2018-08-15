@@ -49,10 +49,6 @@
             </span>
             <span class="firebaseui-idp-text">Sign In with Facebook</span>
         </button>
-        <!-- <button (click)="signInWithTwitter()" class="auth-button auth-btn-twitter">
-            <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
-            <span class="firebaseui-idp-text">Sign In with Twitter</span>
-        </button> -->
         <p-progressSpinner [style]="{width: '40px', height: '40px'}" *ngIf="isFetching"></p-progressSpinner>
     </div>
 </ng-template>
@@ -77,10 +73,6 @@
             </span>
             <span class="firebaseui-idp-text">Sign Up with Facebook</span>
         </button>
-        <!-- <button (click)="signUpWithTwitter()" class="auth-button auth-btn-twitter">
-            <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
-            <span class="firebaseui-idp-text">Sign Up with Twitter</span>
-        </button> -->
         <p-progressSpinner [style]="{width: '40px', height: '40px'}" *ngIf="isFetching"></p-progressSpinner>
     </div>
 </ng-template>
@@ -88,15 +80,15 @@
 <ng-template #userDetailsTemplate>
     <div class="auth-inputs">
         <div class="auth-input">
-            <input placeholder="Email" [disabled]="email" pInputText type="email" class="form-control" id="eName" required #eName="ngModel"
-                [(ngModel)]="email" />
+            <input placeholder="Email" email type="email" [disabled]="emailExists" class="form-control" id="eName" required #eName="ngModel"
+                [(ngModel)]="userEmail" />
             <div *ngIf="eName?.invalid && (eName?.dirty || eName?.touched)" class="alert alert-danger">
                 <div *ngIf="eName.errors.required">
                     Email is required.
                 </div>
-                <!-- <div *ngIf="eName.errors.minlength">
+                <div *ngIf="eName?.value">
                     Email should have valid format.
-                </div> -->
+                </div>
             </div>
         </div>
         <div class="auth-input">
@@ -136,22 +128,10 @@
             </div>
         </div>
         <div class="auth-buttons">
-            <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" [disabled]="cName?.invalid || fName?.invalid || lName?.invalid"
+            <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" [disabled]="eName?.invalid || cName?.invalid || fName?.invalid || lName?.invalid"
                 value="Save" />
-            <input type="button" pButton class="auth-button auth-btn-save" (click)="onContinueLaterClick()" [disabled]="!cName?.invalid && !fName?.invalid && !lName?.invalid"
+            <input type="button" pButton class="auth-button auth-btn-save" (click)="onContinueLaterClick()" [disabled]="eName?.invalid || cName?.valid && fName?.valid && lName?.valid"
                 value="Continue Later" />
         </div>
-    </div>
-</ng-template>
-
-<ng-template #notRegisteredSignInTemplate>
-    <span class="close" (click)="closeDialog()"> </span>
-    <div class="auth-form-header">
-        <h2>Seems, you are new here</h2>
-        <h2>Would you like to register?</h2>
-    </div>
-    <div class="auth-buttons">
-        <button pButton type="button" label="Yes" class="btnsign-in ui-button-primary ui-button-raised" (click)="signInWithGoogle()"></button>
-        <button pButton type="button" label="No" class="btnsign-up ui-button-primary ui-button-raised" (click)="noRegistration()"></button>
     </div>
 </ng-template>

@@ -20,11 +20,12 @@ export class AuthorizationComponent implements OnInit {
   isSuccessSignUp = false;
   isNotRegisteredSignIn = false;
   isFetching = false;
+  emailExists = false;
 
   companyName = '';
   lastName = '';
   firstName = '';
-  email: string;
+  userEmail = '';
 
   constructor(
     private authService: AuthService,
@@ -40,9 +41,6 @@ export class AuthorizationComponent implements OnInit {
     if (this.isSignIn) {
       return this.signInTemplate;
     } else if (this.isSuccessSignUp) {
-      this.firstName = this.authService.userRegisterRequest.firstName;
-      this.lastName = this.authService.userRegisterRequest.lastName;
-      this.email = this.authService.userRegisterRequest.email;
       return this.userDetailsTemplate;
     } else if (this.isNotRegisteredSignIn) {
       return this.notRegisteredSignInTemplate;
@@ -86,6 +84,7 @@ export class AuthorizationComponent implements OnInit {
           this.signInPostProcessing(result);
         }
         this.isFetching = false;
+        this.fetchExistingData();
       })
       .catch(err => {
         if (err) {
@@ -95,6 +94,7 @@ export class AuthorizationComponent implements OnInit {
           }
         }
         this.isFetching = false;
+        this.fetchExistingData();
       });
   }
 
@@ -107,6 +107,7 @@ export class AuthorizationComponent implements OnInit {
           this.signInPostProcessing(result);
         }
         this.isFetching = false;
+        this.fetchExistingData();
       })
       .catch(err => {
         console.log(err);
@@ -117,6 +118,7 @@ export class AuthorizationComponent implements OnInit {
           }
         }
         this.isFetching = false;
+        this.fetchExistingData();
       });
   }
 
@@ -129,6 +131,7 @@ export class AuthorizationComponent implements OnInit {
           this.signInPostProcessing(result);
         }
         this.isFetching = false;
+        this.fetchExistingData();
       })
       .catch(err => {
         if (err) {
@@ -138,11 +141,12 @@ export class AuthorizationComponent implements OnInit {
           }
         }
         this.isFetching = false;
+        this.fetchExistingData();
       });
   }
 
   async saveUserDetails(): Promise<void> {
-    await this.authService.signUpWithProvider(this.companyName, this.firstName, this.lastName)
+    await this.authService.signUpWithProvider(this.companyName, this.firstName, this.lastName, this.userEmail)
       .then(res => {
         this.closeDialog();
         this.signInPostProcessing(true);
@@ -172,6 +176,15 @@ export class AuthorizationComponent implements OnInit {
       return this.router.navigate(['/user']);
     } else {
       return this.router.navigate(['/']);
+    }
+  }
+
+  fetchExistingData() {
+    this.firstName = this.authService.userRegisterRequest.firstName;
+    this.lastName = this.authService.userRegisterRequest.lastName;
+    this.userEmail = this.authService.userRegisterRequest.email;
+    if (this.userEmail !== null){
+      this.emailExists = true;
     }
   }
 }
