@@ -26,12 +26,14 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
 import { ShellModule } from './shell/shell.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingComponent,
-    AuthorizationComponent
+    AuthorizationComponent,
+    EditInstanceComponent
   ],
   imports: [
     BrowserModule,
