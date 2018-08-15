@@ -4,7 +4,6 @@
 .add-button
   color: #3b5998
 
-
 /deep/ .ui-tabmenuitem
   #lastTab
     /deep/ .ui-state-active
@@ -16,8 +15,12 @@
       margin-left: 11px
   #lastTab a:active
     color: red !important
-    ///deep/ .ui-menuitem-icon
-      // color: #F8FAFC
+  ///deep/ .ui-menuitem-icon
+// color: #F8FAFC
+nav
+  ul
+    li:last-child
+      color: red !important
 
 .title
   padding-bottom: 10px
@@ -25,12 +28,8 @@
   font-weight: normal
 
 .workspace
-  h3
-    display: flexbox
-  .btnedit
-    float: right
-    margin-left: 10px
-    width: 70px
+  .dashboard-options
+    justify-content: right
 
 
 

@@ -2,7 +2,7 @@
 
 namespace Watcher.DataAccess.Interfaces.Repositories
 {
-    public interface IChartRepository : IRepository<Chart, int>
+    public interface IChartsRepository : IRepository<Chart, int>
     {
     }
 }

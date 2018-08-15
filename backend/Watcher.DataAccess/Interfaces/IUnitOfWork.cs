@@ -21,7 +21,7 @@
 
         IInstanceRepository InstanceRepository { get; }
 
-        IChartRepository ChartRepository { get;  }
+        IChartsRepository ChartsRepository { get;  }
         Task<bool> SaveAsync();
     }
 }

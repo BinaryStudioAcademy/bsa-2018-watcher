@@ -7,9 +7,6 @@ namespace Watcher.DataAccess.Repositories
 {
     public class DashboardsRepository: Repository<Dashboard, int>, IDashboardsRepository
     {
-        public DashboardsRepository(WatcherDbContext context, IMapper mapper) : base(context, mapper)
-        {
-
-        }
+        public DashboardsRepository(WatcherDbContext context, IMapper mapper) : base(context, mapper) { }
     }
 }

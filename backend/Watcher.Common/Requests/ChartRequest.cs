@@ -1,15 +1,11 @@
-﻿namespace Watcher.DataAccess.Entities
+﻿namespace Watcher.Common.Requests
 {
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
 
-    using Common.Enums;
-    
-    public class Chart : Entity<int>
+    using Watcher.Common.Enums;
+
+    public class ChartRequest
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public override int Id { get; set; }
-
         [Required]
         public ChartType Type { get; set; }
 
@@ -18,11 +14,11 @@
 
         public string ShowCommon { get; set; }
 
+        [Required]
         public int Threshold { get; set; }
 
         public string MostLoaded { get; set; }
 
         public int DashboardId { get; set; }
-        public Dashboard Dashboard { get; set; }
     }
 }

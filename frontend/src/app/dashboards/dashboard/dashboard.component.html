@@ -12,7 +12,7 @@
   <!--</div>-->
   <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem"></p-tabMenu>
   <div class="workspace" *ngIf="activeDashboardItem">
-    <h3>
+    <div class="dashboard-options">
       <button pButton type="button"
               label="Delete "
               class="btnedit ui-button-danger ui-button-raised "
@@ -23,8 +23,24 @@
               class="btnedit ui-button-primary ui-button-raised "
               [disabled]="activeDashboardItem == null"
               (click)="showCreatePopup(false) "></button>
-    </h3>
-    <img src="https://www.excel-easy.com/smi/examples/line-chart.png " alt=" ">
+      <button pButton type="button"
+              label="Add Item"
+              class="btnedit ui-button-success ui-button-raised "
+              [disabled]="activeDashboardItem == null"
+              (click)="showCreatePopup(false) "></button>
+    </div>
+    <div class="dashboard-item">
+      <img src="https://www.excel-easy.com/smi/examples/line-chart.png " alt=" ">
+    </div>
+    <div class="dashboard-item">
+      <img src="https://www.excel-easy.com/smi/examples/line-chart.png " alt=" ">
+    </div>
+    <div class="dashboard-item">
+      <img src="https://www.excel-easy.com/smi/examples/line-chart.png " alt=" ">
+    </div>
+    <div class="dashboard-item">
+      <img src="https://www.excel-easy.com/smi/examples/line-chart.png " alt=" ">
+    </div>
   </div>
 </div>
 
