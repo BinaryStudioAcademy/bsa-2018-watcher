@@ -62,10 +62,10 @@ export class LeftSideMenuComponent implements OnInit {
   subscribeRouteChanges() {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event.url) {
-          this.activeUrl = event.url;
-          this.changeMenu();
+        this.activeUrl = event.url;
+        this.changeMenu();
       }
-  });
+    });
   }
 
   changeMenu() {
