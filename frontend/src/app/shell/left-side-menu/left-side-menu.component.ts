@@ -1,19 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, AfterContentInit, AfterContentChecked, AfterViewInit, 
+  AfterViewChecked, OnDestroy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
+import { NavigationStart, Router, RouterEvent } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-left-side-menu',
   templateUrl: './left-side-menu.component.html',
   styleUrls: ['./left-side-menu.component.sass']
 })
-export class LeftSideMenuComponent implements OnInit {
 
-  constructor(private router: Router) { }
+export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterContentChecked, 
+  AfterViewInit, AfterViewChecked, OnDestroy {
+
+  constructor(private router: Router) {
+    router.events.forEach((event) => {
+      if (event instanceof NavigationStart ) {
+        this.clearCurrentSetting();
+      }
+    });
+   }
 
   private activeUrl: String;
   private settingsItems: MenuItem[];
   private dashboardItems: MenuItem[];
+
+  private navigationSub: Subscription;
 
   private regexSettingsUrl = /\/user\/settings/;
   private regexFeedbackUrl = /\/user\/feedback/;
@@ -30,7 +42,51 @@ export class LeftSideMenuComponent implements OnInit {
     this.changeMenu();
 
     this.subscribeRouteChanges();
+
+
+
   }
+
+  ngAfterContentInit()  {
+    //const elementList = document.querySelector(`a[href="${this.activeUrl}"]`);
+    // const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
+    
+    // if ( element !== null) {
+    //   // debugger;
+    // }
+  }
+
+  ngAfterContentChecked()  {
+    // const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
+    
+    // // const element = document.querySelectorAll(`[href="${this.activeUrl}"]`)[0];
+    // if ( element !== null) {
+    //    debugger;
+    //   element.classList.add('ui-state-active');
+    //   element.parentElement.classList.add('ui-state-active');
+    // }
+  }
+
+  ngAfterViewInit () {
+    const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
+    
+    if ( element !== null && element !== undefined) {
+       debugger;
+      element.classList.add('ui-state-active');
+      element.parentElement.classList.add('ui-state-active');
+    }
+  }
+
+  ngAfterViewChecked()  {
+    const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
+
+    if ( element !== null && element !== undefined) {
+      //debugger;
+      element.classList.add('ui-state-active');
+      element.parentElement.classList.add('ui-state-active');
+    }
+  }
+
 
   initMenuItems() {
     this.settingsItems = [{
@@ -79,6 +135,15 @@ export class LeftSideMenuComponent implements OnInit {
       this.menuItems = this.dashboardItems;
       this.isSearching = true;
       this.isFeedback = false;
+    }
+  }
+
+  private clearCurrentSetting() {
+    const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
+    if ( element !== null) {
+      debugger;
+      element.classList.remove('ui-state-active');
+      element.parentElement.classList.remove('ui-state-active');
     }
   }
 
