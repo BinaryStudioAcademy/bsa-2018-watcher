@@ -13,17 +13,18 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardTitle: string;
-  @Input() dashboardDescription: string;
 
   constructor() { }
 
   closeDialog(): void {
     this.closed.emit();
-    this.dashboardTitle = '';
+    this.title = '';
+    // this.dashboardTitle = '';
   }
 
   edit(): void {
     this.edited.emit(this.title);
+    this.title = '';
   }
 
   ngOnChanges(changes) {

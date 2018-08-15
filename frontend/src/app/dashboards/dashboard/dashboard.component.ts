@@ -37,13 +37,13 @@ export class DashboardComponent implements OnInit {
     this.dashboardsService.getDefaultInstance()
       .subscribe(value => {
         this.instance = value;
-          if (this.instance.dashboards && this.instance.dashboards.length > 0) {
-            // Fill Dashboard Menu Items
-            this.dashboardMenuitems.unshift(...this.instance.dashboards.map(dash => this.transformToMenuItem(dash)));
-            this.activeDashboardItem = this.dashboardMenuitems[0];
-          }
-          this.loading = false;
-          this.toastrService.success('Successfully got instance info from server');
+        if (this.instance.dashboards && this.instance.dashboards.length > 0) {
+          // Fill Dashboard Menu Items
+          this.dashboardMenuitems.unshift(...this.instance.dashboards.map(dash => this.transformToMenuItem(dash)));
+          this.activeDashboardItem = this.dashboardMenuitems[0];
+        }
+        this.loading = false;
+        this.toastrService.success('Successfully got instance info from server');
       }, error => this.toastrService.error(error.toString()));
 
     const lastItem: DashboardMenuItem = {
@@ -135,7 +135,7 @@ export class DashboardComponent implements OnInit {
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
-      const newdash: DashboardRequest = { title: title, instanceId: this.instance.id};
+      const newdash: DashboardRequest = {title: title, instanceId: this.instance.id};
       this.createDashboard(newdash);
       let index = 0;
       // switching to new tab

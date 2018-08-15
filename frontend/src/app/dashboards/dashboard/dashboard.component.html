@@ -1,21 +1,24 @@
-<!-- <app-instance-list></app-instance-list> -->
 <app-edit-dashboard (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard"
                     [dashboardTitle]="editTitle"></app-edit-dashboard>
 <div class="site-wrap">
-  <div class="title">
-    <h3>Dashboards</h3>
-    <!-- <p-progressSpinner *ngIf="loading" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner> -->
-    <!--<button pButton type="submit" label="Submit feedback" class="ui-button-raised ui-button-success" (click)="suc()"></button>
-    --></div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-6">
+      <div class="title">DASHBOARDS</div>
+      <hr>
+    </div>
+  </div>
+  <!--<div class="title">-->
+    <!--<h3>Dashboards</h3>-->
+  <!--</div>-->
   <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem"></p-tabMenu>
   <div class="workspace" *ngIf="activeDashboardItem">
-    <h3>{{activeDashboardItem.label}} chart
-      <button pButton type="button "
+    <h3>
+      <button pButton type="button"
               label="Delete "
               class="btnedit ui-button-danger ui-button-raised "
               [disabled]="activeDashboardItem == null"
               (click)="delete() "></button>
-      <button pButton type="button "
+      <button pButton type="button"
               label="Edit "
               class="btnedit ui-button-primary ui-button-raised "
               [disabled]="activeDashboardItem == null"
