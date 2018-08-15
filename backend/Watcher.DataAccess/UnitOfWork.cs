@@ -26,7 +26,7 @@
         private IFeedbackRepository _feedbackRepository;
         private INotificationSettingsRepository _notificationSettingsRepository;
         private IInstanceRepository _instanceRepository;
-        private IChartRepository _chartRepository;
+        private IChartsRepository chartsRepository;
 
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
@@ -48,7 +48,7 @@
 
         public IInstanceRepository InstanceRepository => _instanceRepository ?? (_instanceRepository = new InstanceRepository(_context, _mapper));
 
-        public IChartRepository ChartRepository => _chartRepository ?? (_chartRepository = new ChartsRepository(_context, _mapper));
+        public IChartsRepository ChartsRepository => chartsRepository ?? (chartsRepository = new ChartsRepository(_context, _mapper));
 
         public async Task<bool> SaveAsync()
         {
