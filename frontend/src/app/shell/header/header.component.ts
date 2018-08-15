@@ -119,16 +119,19 @@ export class HeaderComponent implements OnInit {
     ];
 
     this.cogItems = [{
-      label: 'Item',
+      label: 'User profile',
       icon: 'fa fa-fw fa-cog',
+      routerLink: ['/user/settings/user-profile'],
     },
       {
-        label: 'Item',
+        label: 'Organization',
         icon: 'fa fa-fw fa-cog',
+        routerLink: ['/user/settings/organization-profile'],
       },
       {
-        label: 'Item',
+        label: 'Notifications',
         icon: 'fa fa-fw fa-cog',
+        routerLink: ['/user/settings/notification-settings'],
       }
     ];
 
