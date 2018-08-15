@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 import { InstanceService } from '../../core/services/instance.service';
@@ -13,37 +13,75 @@ import { ToastrService } from '../../core/services/toastr.service';
 export class LeftSideMenuComponent implements OnInit {
 
   constructor(private router: Router,
-              private instanceService: InstanceService,
-              private toastrService: ToastrService) { }
+    private instanceService: InstanceService,
+    private toastrService: ToastrService) { this.organisationId = 77; }
 
   private activeUrl: String;
   private settingsItems: MenuItem[];
-  private dashboardItems: MenuItem[];
+  private instanceItems: MenuItem[];
+  private organisationId: number;
 
   private regexSettingsUrl = /\/user\/settings/;
   private regexDashboardUrl = /\/user(\/dashboards)?/;
+
+  @Output() activeInstance: Instance;
 
   isSearching: boolean;
   menuItems: MenuItem[];
 
   configureInstances(organizationId: number) {
-    let instances: Instance[];
-    this.instanceService.getAllByOrganization(organizationId).subscribe( (data: Instance[]) => {
+    this.instanceService.getAllByOrganization(organizationId).subscribe((data: Instance[]) => {
       if (data) {
-        instances = data;
-        this.toastrService.success('Success');
-      } else {
-        this.toastrService.error('Error is occured');
+        console.log(data);
+        const items = data.map(inst => this.instanceToMenuItem(inst));
+        items.forEach(inst => this.instanceItems.push(inst));
+        console.log(this.instanceItems);
+        this.toastrService.success('Get instances from server');
       }
     });
+  }
+
+  instanceToMenuItem(instance: Instance) {
+    const item: MenuItem = {
+      label: instance.title,
+      title: instance.id.toString(),
+      command: () => this.activeInstance = instance,
+      items: [{
+        label: 'Update',
+        icon: 'fa fa-refresh',
+        routerLink: [`edit-instance/${instance.id}`],
+        styleClass: 'instance-options'
+      }, {
+        label: 'Delete',
+        icon: 'fa fa-close',
+        command: () => {
+          const index = this.instanceItems.findIndex(i => i === item);
+          this.deleteInstance(instance.id, index);
+        },
+        styleClass: 'instance-options'
+      }, {
+        label: 'Download app',
+        icon: 'fa fa-download',
+        styleClass: 'instance-options'
+      }]
+    };
+    return item;
+  }
+
+  async deleteInstance(id: number, index: number) {
+    if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
+      this.instanceService.delete(id).subscribe((res: Response) => {
+        this.toastrService.success('Deleted instance');
+        this.instanceItems.splice(index, 1);
+      });
+    }
   }
 
   ngOnInit() {
     this.activeUrl = this.router.url;
     this.initMenuItems();
-
+    this.configureInstances(this.organisationId);
     this.changeMenu();
-
     this.subscribeRouteChanges();
   }
 
@@ -62,34 +100,20 @@ export class LeftSideMenuComponent implements OnInit {
       routerLink: ['/user/settings/notification-settings']
     }];
 
-    this.dashboardItems = [{
+    this.instanceItems = [{
       label: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
       routerLink: ['edit-instance']
-    }, {
-      label: 'Instance1',
-      icon: 'fa fa-fw fa-hdd-o',
-      items: [{
-        label: 'Update',
-        icon: 'fa fa-refresh',
-        routerLink: ['edit-instance/123'],
-      }, {
-        label: 'Delete',
-        icon: 'fa fa-close'
-      }, {
-        label: 'Download app',
-        icon: 'fa fa-download'
-      }]
     }];
   }
 
   subscribeRouteChanges() {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event.url) {
-          this.activeUrl = event.url;
-          this.changeMenu();
+        this.activeUrl = event.url;
+        this.changeMenu();
       }
-  });
+    });
   }
 
   changeMenu() {
@@ -97,7 +121,7 @@ export class LeftSideMenuComponent implements OnInit {
       this.menuItems = this.settingsItems;
       this.isSearching = false;
     } else if (this.activeUrl.match(this.regexDashboardUrl)) {
-      this.menuItems = this.dashboardItems;
+      this.menuItems = this.instanceItems;
       this.isSearching = true;
     }
   }
