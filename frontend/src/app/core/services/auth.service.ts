@@ -40,14 +40,6 @@ export class AuthService {
     );
   }
 
-  public isAuthorized(): boolean {
-    if (localStorage.getItem('watcherToken') != null) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   // Verify JWT in localstorage with server & load user's info.
   // This runs once on application startup.
   populate(): Promise<any> {
@@ -228,11 +220,21 @@ export class AuthService {
     }
   }
 
+  isAuthorized(): boolean {
+    const user = this.getCurrentUserLS();
+
+    if (user != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
 
-  getCurrentUserLS() {
+  getCurrentUserLS(): User {
     const userStr = localStorage.getItem('currentUser');
     const userDto = (<User>JSON.parse(userStr));
     return userDto;

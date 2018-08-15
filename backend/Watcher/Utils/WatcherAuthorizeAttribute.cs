@@ -44,7 +44,7 @@
 
             if (!context.HttpContext.Request.Headers.TryGetValue("WatcherAuthorization", out var values))
             {
-                context.Result = new StatusCodeResult((int)HttpStatusCode.Unauthorized);
+                context.Result = new StatusCodeResult((int)HttpStatusCode.Forbidden);
                 return;
             }
 
