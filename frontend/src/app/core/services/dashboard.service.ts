@@ -1,62 +1,37 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Dashboard } from '../../shared/models/dashboard.model';
-import { environment } from '../../../environments/environment';
-import { Observable, throwError } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import {DashboardRequest} from '../../shared/models/dashboard-request.model';
+import {ApiService} from './api.service';
+import {Instance} from '../../shared/models/instance.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
+  private ctrlUrl = 'Dashboards';
 
-  private url = environment.server_url + '/dashboards';
-
-  constructor(private http: HttpClient) {
+  constructor(private apiService: ApiService) {
   }
 
-  createRequestEntity(dashboard: Dashboard) {
-    const request = {
-      title : dashboard.title,
-      createdAt: dashboard.createdAt,
-      instanceId: dashboard.instance,
-      chartsId: dashboard.charts ? dashboard.charts.map(chart => chart.id) : null
-    };
-    return request;
+  getAllByInstance(id: number): Observable<Dashboard[]> {
+      return this.apiService.get(`/${this.ctrlUrl}/${id}`);
   }
 
-  getAllByInstance(id: number): Observable<Object> {
-      return this.http.get(`${this.url}/${id}`).pipe(
-        retry(2),
-        catchError(this.handleError)
-      );
+  getDefaultInstance(): Observable<Instance> {
+    return this.apiService.get(`/${this.ctrlUrl}/FirstInstance`);
   }
 
-  create(dashboard: Dashboard): Observable<Object> {
-    console.log('from service');
-    console.log(dashboard);
-    return this.http.post(this.url, this.createRequestEntity(dashboard)).pipe(
-      retry(2),
-      catchError(this.handleError));
+  create(request: DashboardRequest): Observable<Dashboard> {
+    return this.apiService.post(`/${this.ctrlUrl}`, request);
   }
 
-  update(dashboard: Dashboard): Observable<Object> {
-    return this.http.put(`${this.url}/${dashboard.id}`, this.createRequestEntity(dashboard)).pipe(
-        retry(2),
-        catchError(this.handleError));
+  update(id: number, request: DashboardRequest): Observable<Object> {
+    return this.apiService.put(`/${this.ctrlUrl}/${id}`, request);
   }
 
   delete(id: number): Observable<Object> {
-      return this.http.delete(`${this.url}/${id}`).pipe(
-        retry(2),
-        catchError(this.handleError));
-  }
-
-  handleError(error: HttpErrorResponse) {
-    console.error(
-      `Backend returned code ${error.status}, ` +
-      `body was: ${error.error}`);
-    return throwError(error.status);
+    return this.apiService.delete(`/${this.ctrlUrl}/${id}`);
   }
 }
 
