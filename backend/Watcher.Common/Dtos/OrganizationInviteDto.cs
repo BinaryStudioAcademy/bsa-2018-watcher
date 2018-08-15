@@ -7,7 +7,7 @@ namespace Watcher.Common.Dtos
     using Watcher.Common.MoveToFrontend;
 
     [ExportClassToTypescript]
-    public class OrganizationInvitesDto : IEntity<int>
+    public class OrganizationInviteDto : IEntity<int>
     {
         public int Id { get; set; }
 
