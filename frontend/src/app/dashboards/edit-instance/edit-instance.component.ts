@@ -9,10 +9,16 @@ import { ActivatedRoute } from '../../../../node_modules/@angular/router';
 export class EditInstanceComponent implements OnInit {
 
   id: number;
+  creation: boolean;
+
   constructor(private activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.activateRoute.params.subscribe(params => this.id = params['id']);
+    const x = this.activateRoute.params.subscribe(params => {
+      this.id = params['id'];
+      if (this.id) {this.creation = false; } else {
+        this.creation = true; }
+      console.log(this.creation); } );
   }
 
 }

@@ -48,13 +48,14 @@ export class LeftSideMenuComponent implements OnInit {
     this.dashboardItems = [{
       label: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
+      routerLink: ['edit-instance']
     }, {
       label: 'Instance1',
       icon: 'fa fa-fw fa-hdd-o',
       items: [{
         label: 'Update',
         icon: 'fa fa-refresh',
-        routerLink: ['edit-instance/123']
+        routerLink: ['edit-instance/123'],
       }, {
         label: 'Delete',
         icon: 'fa fa-close'

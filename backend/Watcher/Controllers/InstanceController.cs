@@ -18,7 +18,7 @@ namespace Watcher.Controllers
     [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
-    public class InstanceController : ControllerBase
+    public class InstancesController : ControllerBase
     {
         /// <summary>
         /// The Samples Service service
@@ -34,7 +34,7 @@ namespace Watcher.Controllers
         /// <param name="service">
         /// Samples service
 
-        public InstanceController(IInstanceService service)
+        public InstancesController(IInstanceService service)
         {
             _instanceService = service;
         }
@@ -63,12 +63,38 @@ namespace Watcher.Controllers
             return Ok(dtos);
         }
 
+
         /// <summary>
-        /// Get Sample by id
+        /// Get Instance by id
         /// </summary>
-        /// <param name="id">Sample identifier</param>
+        /// <param name="id">Instance identifier</param>
         /// <returns>
-        /// Dto of Sample
+        /// Dto of Instance
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Samples not found</response>
+        /// <response code="403">You don`t have permission to create watch Sample</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
+        [HttpGet("single/{id}")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<IEnumerable<InstanceDto>>> GetById(int id)
+        {
+            var dto = await _instanceService.GetEntityByIdAsync(id);
+            if (dto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
+        }
+
+        /// <summary>
+        /// Get Instance by organization id
+        /// </summary>
+        /// <param name="id">Instance identifier</param>
+        /// <returns>
+        /// Dto of Instance
         /// </returns>
         /// <response code="500">Internal error on server</response>
         /// <response code="404">Samples not found</response>

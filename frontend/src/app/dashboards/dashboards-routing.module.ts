@@ -10,6 +10,9 @@ const dashboardRoutes: Routes = [{
   {
     path: 'edit-instance/:id',
     component: EditInstanceComponent
+},{
+    path: 'edit-instance',
+    component: EditInstanceComponent
 }];
 
 @NgModule({
