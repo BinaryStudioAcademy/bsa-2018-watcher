@@ -51,9 +51,11 @@ namespace Watcher.Core.Services
  
         public async Task<IEnumerable<InstanceDto>> GetEntitiesByOrganizationIdAsync(int id)
         {
-            var entities = (await _uow.InstanceRepository.GetRangeAsync(include: x => x
+            var entities = (await _uow.InstanceRepository.GetRangeAsync(count: await _uow.InstanceRepository.CountAsync(o => o.Id >= 0),
+                include: x => x
                .Include(o => o.Organization)
-               .Include(o => o.Dashboards)))
+               .Include(o => o.Dashboards)));
+            entities = entities
                .Where(o => o.OrganizationId == id)
                .ToList();
 
