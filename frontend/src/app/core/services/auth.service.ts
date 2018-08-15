@@ -10,6 +10,7 @@ import { UserInfoProfile } from '../../shared/models/user-info-profile';
 import { User } from '../../shared/models/user.model';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { Token } from '../../shared/models/token.model';
+import {UserProfile} from '../../shared/models/user-profile';
 
 @Injectable({
   providedIn: 'root'
@@ -86,18 +87,19 @@ export class AuthService {
   async login(credential: firebase.auth.UserCredential, provider: string): Promise<void> {
     let firstName;
     let lastName;
+    const profile: UserProfile = (<UserProfile>credential.additionalUserInfo.profile);
     switch (provider) {
-      case "Google": {
-        firstName = credential.additionalUserInfo.profile.given_name;
-        lastName = credential.additionalUserInfo.profile.family_name;
+      case 'Google': {
+        firstName = profile.given_name;
+        lastName = profile.family_name;
         break;
       }
-      case "Facebook": {
-        firstName = credential.additionalUserInfo.profile.first_name;
-        lastName = credential.additionalUserInfo.profile.last_name;
+      case 'Facebook': {
+        firstName = profile.first_name;
+        lastName = profile.last_name;
         break;
       }
-      case "GitHub": {
+      case 'GitHub': {
         firstName = '';
         lastName = '';
         break;
