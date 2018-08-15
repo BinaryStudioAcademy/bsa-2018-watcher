@@ -1,9 +1,6 @@
 <div class="ui-g ui-fluid">
   <div class="ui-g-12 ui-lg-6">
-      <h3> Organization profile </h3>
-      <a [hidden]="!editable" class="btn-edit" (click)="enableEditing()">
-        <i class="fa fa-edit"></i>
-      </a>
+    <div class="title">Organization profile</div>
     <hr>
   </div>
 </div>
@@ -79,7 +76,7 @@
       <textarea rows="5" formControlName="description" pInputTextarea></textarea>
     </div>
   </div>
-  <div [hidden]="!canUpdate" class="btn-panel">
+  <div class="btn-panel">
     <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success"></button>
-</div>
+  </div>
 </form>
