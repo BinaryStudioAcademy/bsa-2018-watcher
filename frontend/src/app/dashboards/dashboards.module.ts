@@ -25,7 +25,7 @@ import {MessageModule} from 'primeng/message';
     ProgressSpinnerModule,
     ToastModule,
     MessageModule,
-    
+
     DashboardRoutingModule
   ],
   declarations: [DashboardComponent, EditDashboardComponent, EditInstanceComponent],

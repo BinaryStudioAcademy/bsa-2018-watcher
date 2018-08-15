@@ -3,8 +3,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import { Instance } from '../../shared/models/instance.model';
 import { ToastrService } from './toastr.service';
+import { InstanceRequest } from '../../dashboards/models/instance-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +15,6 @@ export class InstanceService {
 
   constructor(private http: HttpClient,
               private toastrService: ToastrService) {
-  }
-
-  createRequestEntity(instance: Instance) {
-    const request = {
-      title : instance.title,
-      address: instance.address,
-      platform: instance.platform,
-      organizationId: instance.organization.id
-    };
-    return request;
   }
 
   getOne(id: number): Observable<Object> {
@@ -41,16 +31,16 @@ export class InstanceService {
       );
   }
 
-  create(instance: Instance): Observable<Object> {
+  create(instance: InstanceRequest): Observable<Object> {
     console.log('from service');
     console.log(instance);
-    return this.http.post(this.url, this.createRequestEntity(instance)).pipe(
+    return this.http.post(this.url, instance).pipe(
       retry(1),
       catchError(this.handleError));
   }
 
-  update(instance: Instance): Observable<Object> {
-    return this.http.put(`${this.url}/${instance.id}`, this.createRequestEntity(instance)).pipe(
+  update(instance: InstanceRequest, id: number): Observable<Object> {
+    return this.http.put(`${this.url}/${id}`, instance).pipe(
         retry(1),
         catchError(this.handleError));
   }

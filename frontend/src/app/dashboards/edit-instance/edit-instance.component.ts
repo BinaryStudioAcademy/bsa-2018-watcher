@@ -4,7 +4,8 @@ import { FormBuilder, FormControl, Validators, FormGroup } from '../../../../nod
 import { ToastrService } from '../../core/services/toastr.service';
 import { InstanceService } from '../../core/services/instance.service';
 import { AuthService } from '../../core/services/auth.service';
-import { Organization } from '../../shared/models/organization.model';
+import { Instance } from '../../shared/models/instance.model';
+import { InstanceRequest } from '../models/instance-request.model';
 
 @Component({
   selector: 'app-edit-instance',
@@ -22,7 +23,9 @@ export class EditInstanceComponent implements OnInit {
     private fb: FormBuilder,
     private toastrService: ToastrService,
     private instanceService: InstanceService,
-    private authService: AuthService) { }
+    private authService: AuthService) {
+      this.organizationId = 77;
+     }
 
   getInstanceForm(creation: boolean) {
     let form: FormGroup;
@@ -42,8 +45,29 @@ export class EditInstanceComponent implements OnInit {
     return form;
   }
 
+  getNewInstance() {
+    const newInstance: InstanceRequest = {
+      title: this.instanceForm.controls.title.value,
+      address: this.instanceForm.controls.address.value,
+      platform: this.instanceForm.controls.platform.value,
+      organizationId: this.organizationId
+    };
+    return newInstance;
+  }
+
   onSubmit() {
-    if (this.instanceForm.valid) {this.toastrService.success('Valid form'); } else {
+    if (this.instanceForm.valid) {
+      const instance: InstanceRequest = this.getNewInstance();
+      if (this.id) {
+        this.instanceService.update(instance, this.id).subscribe((res: Response) => {
+            this.toastrService.success('updated instance');
+        });
+      } else {
+        this.instanceService.create(instance).subscribe((res: Response) => {
+            this.toastrService.success('created instance');
+        });
+      }
+    } else {
       this.toastrService.error('Invalid form');
     }
   }
