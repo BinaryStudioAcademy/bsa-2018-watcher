@@ -22,6 +22,11 @@
         IInstanceRepository InstanceRepository { get; }
 
         IChartRepository ChartRepository { get;  }
+
+        IChatsRepository ChatsRepository { get; }
+
+        IMessagesRepository MessagesRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }

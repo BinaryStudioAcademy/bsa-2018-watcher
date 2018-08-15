@@ -30,8 +30,15 @@
         private IFeedbackRepository _feedbackRepository;
 
         private INotificationSettingsRepository _notificationSettingsRepository;
+
         private IInstanceRepository _instanceRepository;
+
         private IChartRepository _chartRepository;
+
+        private IChatsRepository _chatsRepository;
+
+        private IMessagesRepository _messagesRepository;
+        
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -130,6 +137,33 @@
                 return _chartRepository;
             }
         }
+
+        public IChatsRepository ChatsRepository
+        {
+            get
+            {
+                if (_chatsRepository == null)
+                {
+                    _chatsRepository = new ChatsRepository(_context, _mapper);
+                }
+
+                return _chatsRepository;
+            }
+        }
+
+        public IMessagesRepository MessagesRepository
+        {
+            get
+            {
+                if (_messagesRepository == null)
+                {
+                    _messagesRepository = new MessagesRepository(_context, _mapper);
+                }
+
+                return _messagesRepository;
+            }
+        }
+
         public async Task<bool> SaveAsync()
         {
             try

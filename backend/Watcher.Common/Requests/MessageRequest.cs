@@ -1,13 +1,11 @@
-﻿using System;
-using Watcher.Common.Interfaces.Entities;
-using Watcher.Common.MoveToFrontend;
-
-namespace Watcher.Common.Dtos
+﻿namespace Watcher.Common.Requests
 {
-    [ExportClassToTypescript]
-    public class MessageDto : IEntity<int>
+    using System;
+    using Watcher.Common.Dtos;
+
+    public class MessageRequest
     {
-        public int Id { get; set; }
+        public MessageRequest() { }
 
         public string Text { get; set; }
 

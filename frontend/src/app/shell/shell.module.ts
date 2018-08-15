@@ -16,6 +16,8 @@ import {
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
+import { TestSignalRComponent } from './test-signal-r/test-signal-r.component';
+
 
 @NgModule({
   imports: [
@@ -31,6 +33,6 @@ import { ChatModule } from '../chat/chat.module';
     PanelMenuModule,
     ChatModule
   ],
-  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent ]
+  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent, TestSignalRComponent ]
 })
 export class ShellModule { }
