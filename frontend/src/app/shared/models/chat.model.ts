@@ -11,6 +11,3 @@ export interface Chat  {
    organization: Organization;
    messages: Message[];
 }
-
-
-
