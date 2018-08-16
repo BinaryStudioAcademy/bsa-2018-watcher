@@ -58,7 +58,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
       items: [{
         label: 'Update',
         icon: 'fa fa-refresh',
-        routerLink: [`edit-instance/${instance.id}`],
+        routerLink: [`instance/${instance.id}/edit`],
         styleClass: 'instance-options'
       }, {
         label: 'Delete',
@@ -71,6 +71,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
       }, {
         label: 'Download app',
         icon: 'fa fa-download',
+        routerLink: [`instance/${instance.id}/download`],
         styleClass: 'instance-options'
       }]
     };
@@ -134,7 +135,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
     this.instanceItems = [{
       label: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
-      routerLink: ['edit-instance']
+      routerLink: ['instance/create']
     }];
   }
 
