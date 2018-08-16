@@ -4,6 +4,7 @@ import { MenuItem } from 'primeng/api';
 import { ChatHubService } from '../core/services/chat-hub.service';
 import { AuthService } from '../core/services/auth.service';
 import { UserService } from '../core/services/user.service';
+import { ChatService } from '../core/services/chat.service';
 import { ToastrService } from '../core/services/toastr.service';
 
 import { Chat } from '../shared/models/chat.model';
@@ -25,11 +26,13 @@ export class ChatComponent implements OnInit {
     private chatHub: ChatHubService,
     private authService: AuthService,
     private userService: UserService,
+    private chatService: ChatService,
     private toastrService: ToastrService) { }
 
   currentUserId: string;
   chatPanel: MenuItem[] = [];
   chats: Chat[] = [];
+
   textMessage: string;
   wanteduser: string;
 
@@ -39,6 +42,7 @@ export class ChatComponent implements OnInit {
 
 
   ngOnInit() {
+    this.subscribeToChatCreated();
     this.currentUserId = this.authService.getCurrentUser().id;
     this.userService.get(this.currentUserId).subscribe(
       value => {
@@ -55,13 +59,12 @@ export class ChatComponent implements OnInit {
         this.toastrService.error('Can`t get user`s chats');
       }
     );
-
-
   }
 
-  private subscribeToReceivingMessage() {
-    this.chatHub.messageReceived.subscribe((message: Message) => {
-      this.choosedChat.messages.push(message);
+  private subscribeToChatCreated() {
+    this.chatHub.chatCreated.subscribe((value: Chat) => {
+      this.chats.push(value);
+      this.choosedChat = value;
     });
   }
 
@@ -69,15 +72,25 @@ export class ChatComponent implements OnInit {
     this.isNewChatChoosed ? this.isNewChatChoosed = false : this.isNewChatChoosed = true;
   }
 
-  openConversation(chat: Chat) {
-    debugger;
-    this.choosedChat = chat;
-    this.subscribeToReceivingMessage();
+  openConversation(chatId: number) {
+    this.chatService.get(chatId).subscribe((value: Chat) => {
+      this.choosedChat = value;
+    });
+
     this.isChatChoosed = true;
+
+    this.chatHub.messageReceived.subscribe((message: Message) => {
+      this.choosedChat.messages.push(message);
+    },
+    err => {
+      this.toastrService.error('Can`t get message history');
+    });
   }
 
   closeConversation() {
     this.isChatChoosed = false;
+    this.choosedChat = null;
+    this.chatHub.messageReceived.unsubscribe();
   }
 
   createNewChat() {
@@ -86,9 +99,8 @@ export class ChatComponent implements OnInit {
     const newChat: ChatRequest = {
       name: 'New chat',
       createdById: this.currentUserId,
-      chatType: ChatType.BetweenUsers,
-      organizationId: null
-    };
+      chatType: ChatType.BetweenUsers
+    } as ChatRequest;
 
     this.chatHub.initializeChat(newChat, this.currentUserId);
   }
@@ -108,10 +120,10 @@ export class ChatComponent implements OnInit {
     const newMessage: MessageRequest = {
       text: this.textMessage,
       userId: this.currentUserId,
-      chatId: this.choosedChat.id
-    } as Message;
+      chatId: this.choosedChat.id,
+      createdAt: new Date(Date.now())
+    } as MessageRequest;
 
-    debugger;
     this.chatHub.sendMessage(newMessage);
   }
 
@@ -126,7 +138,7 @@ export class ChatComponent implements OnInit {
       items.push({
         label: chat.name,
         icon: 'pi pi-fw pi-users',
-        command: () => this.openConversation(chat)
+        command: () => this.openConversation(chat.id)
       });
     });
 
