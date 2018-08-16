@@ -2,8 +2,9 @@
 
 
 export enum LongAnswerType {
-    Satisfied = 0,
-    Neutral = 1,
-    Unsatisfied = 2
+    Null = 0,
+    Satisfied = 1,
+    Neutral = 2,
+    Unsatisfied = 3
 }
 

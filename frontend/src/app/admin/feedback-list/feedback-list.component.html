@@ -19,14 +19,15 @@
       <div class="ui-g-2">FRIENDLINESS</div>
       <div class="ui-g-1">QUICKNESS</div> -->
   </div>
-  <div *ngFor="let feedback of feedbacks; let i = index" class="ui-g ui-fluid">
+  <div *ngFor="let feedback of lstFeedbacks; let i = index" class="ui-g ui-fluid">
 
-      <div class="ui-g-1">{{feedback?.createdAt | date:'shortDate'}}</div>
-      <div class="ui-g-2">{{feedback?.user?.displayName}}</div>
-      <div class="ui-g-3">{{feedback?.text}}</div>
-      <div class="ui-g-1">{{feedback?.willUse}}</div>
-      <div class="ui-g-4">{{feedback?.informatively}} | {{feedback?.friendliness}} | {{feedback?.quickness}}</div>
-      <!-- <div class="ui-g-2">{{feedback?.informatively}}</div>
+      <div class="ui-g-1">{{feedback?.main.createdAt | date:'shortDate'}}</div>
+      <div class="ui-g-2">{{feedback?.main.user?.displayName}}</div>
+      <div class="ui-g-3">{{feedback?.main.text}}</div>
+      <div class="ui-g-1">{{feedback?.willuse}}</div>
+      <div class="ui-g-4">{{feedback?.info}} | {{feedback?.friendliness}} | {{feedback?.quickness}}</div>     
+      
+      <!-- <div class="ui-g-2">{{feedback?.informatively}} </div>
       <div class="ui-g-2">{{feedback?.friendliness}}</div>
       <div class="ui-g-1">{{feedback?.quickness}}</div> -->
       <div class="ui-g-1">
