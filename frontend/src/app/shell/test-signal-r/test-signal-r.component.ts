@@ -25,7 +25,7 @@ export class TestSignalRComponent implements OnInit {
     const connPath = `${environment.server_url}/chatsHub?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(connPath, ) // {accessTokenFactory: () => firebaseToken}
+      .withUrl(connPath) // {accessTokenFactory: () => firebaseToken}
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
