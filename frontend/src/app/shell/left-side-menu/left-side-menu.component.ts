@@ -1,29 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, AfterViewChecked} from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
+import { NavigationStart, Router, RouterEvent } from '@angular/router';
 
 @Component({
   selector: 'app-left-side-menu',
   templateUrl: './left-side-menu.component.html',
   styleUrls: ['./left-side-menu.component.sass']
 })
-export class LeftSideMenuComponent implements OnInit {
 
-  constructor(private router: Router) { }
+export class LeftSideMenuComponent implements OnInit, AfterContentChecked , AfterViewChecked {
 
-  private activeUrl: String;
+  constructor(private router: Router) {
+    router.events.forEach((event) => {
+      if (event instanceof NavigationStart ) {
+        this.clearSettings(this.activeUrl);
+      }
+    });
+   }
+
+  private activeUrl: string;
+  private previousSettingUrl: string;
   private settingsItems: MenuItem[];
   private dashboardItems: MenuItem[];
 
-  private regexSettingsUrl = /\/user\/settings/;
-  private regexFeedbackUrl = /\/user\/feedback/;
-  private regexDashboardUrl = /\/user(\/dashboards)?/;
+  private regexSettingsUrl: RegExp = /\/user\/settings/;
+  private regexFeedbackUrl: RegExp = /\/user\/feedback/;
+  private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
 
   isSearching: boolean;
   isFeedback: boolean;
   menuItems: MenuItem[];
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activeUrl = this.router.url;
     this.initMenuItems();
 
@@ -32,7 +40,11 @@ export class LeftSideMenuComponent implements OnInit {
     this.subscribeRouteChanges();
   }
 
-  initMenuItems() {
+  ngAfterContentChecked(): void { this.highlightCurrentSetting(); }
+
+  ngAfterViewChecked(): void { this.highlightCurrentSetting(); }
+
+  private initMenuItems(): void {
     this.settingsItems = [{
       label: 'User Profile',
       icon: 'fa fa-fw fa-user',
@@ -59,16 +71,16 @@ export class LeftSideMenuComponent implements OnInit {
     }];
   }
 
-  subscribeRouteChanges() {
+  private subscribeRouteChanges(): void {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event.url) {
-          this.activeUrl = event.url;
-          this.changeMenu();
+        this.activeUrl = event.url;
+        this.changeMenu();
       }
-  });
+    });
   }
 
-  changeMenu() {
+  private changeMenu(): void {
     if (this.activeUrl.match(this.regexSettingsUrl)) {
       this.menuItems = this.settingsItems;
       this.isSearching = false;
@@ -82,4 +94,31 @@ export class LeftSideMenuComponent implements OnInit {
     }
   }
 
+  private clearSettings(url: string): void {
+    if (this.activeUrl !== this.previousSettingUrl) {
+
+      const setting = this.getSettingByUrl(url);
+
+      if ( setting !== null ) {
+        setting.classList.remove('ui-state-active');
+        setting.parentElement.classList.remove('ui-state-active');
+        this.previousSettingUrl = this.activeUrl;
+      }
+    }
+  }
+
+  private highlightCurrentSetting(): void {
+    const setting = this.getSettingByUrl(this.activeUrl);
+
+    if ( setting !== null ) {
+      this.clearSettings(this.previousSettingUrl);
+
+      setting.classList.add('ui-state-active');
+      setting.parentElement.classList.add('ui-state-active');
+    }
+  }
+
+  private getSettingByUrl(url: string): Element {
+    return document.querySelector(`div.ui-panelmenu-header a[href="${url}"]`);
+  }
 }

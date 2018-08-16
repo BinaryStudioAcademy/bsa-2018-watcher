@@ -15,11 +15,7 @@
 
             CreateMap<Message, MessageDto>();
 
-            CreateMap<MessageRequest, Message>()
-                .ForMember(d => d.UserId, o => o.MapFrom(s => s.User.Id))
-                .ForMember(d => d.User, o => o.Ignore())
-                .ForMember(d => d.ChatId, o => o.MapFrom(s => s.Chat.Id))
-                .ForMember(d => d.Chat, o => o.Ignore());
+            CreateMap<MessageRequest, Message>();
 
             CreateMap<MessageUpdateRequest, Message>()
                 .ForMember(d => d.UserId, o => o.Ignore())

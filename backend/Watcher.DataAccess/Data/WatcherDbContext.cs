@@ -97,7 +97,7 @@
 
         public DbSet<Chat> Chats { get; set; }
 
-        public DbSet<UserChat> UserChats { get; set; }
+        public DbSet<UserChat> UserChat { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
 

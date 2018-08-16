@@ -25,6 +25,8 @@
                 d => d.Id,
                 o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
 
+            CreateMap<UserDto, User>();
+
             CreateMap<User, UserDto>()
                 .ForMember(d => d.Role, o => o.MapFrom(s => s.RoleId == 1 ? new Role(s.RoleId, "Admin") : new Role(s.RoleId, "User")))
                 .ForMember(d => d.Organizations, o => o.MapFrom(s => s.UserOrganizations))

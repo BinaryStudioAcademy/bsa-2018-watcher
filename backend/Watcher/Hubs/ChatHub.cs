@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Watcher.Common.Dtos;
 
 namespace Watcher.Hubs
 {
@@ -25,26 +26,25 @@ namespace Watcher.Hubs
             _messagesService = messagesService;
         }
 
-        public void Send(string userId, string message)
+        [Authorize]
+        public async Task Send(MessageRequest messageRequest)
         {
-            if (userConnections[userId] == null)
-                return;
+            MessageDto message = await _messagesService.CreateEntityAsync(messageRequest);
 
-            foreach (string connectionId in userConnections[userId])
-                Clients.Client(connectionId).SendAsync("ReceiveMessage", message);
+            IEnumerable<UserDto> users = await _chatsService.GetUsersByChatIdAsync(messageRequest.ChatId);
+
+            foreach (var userDto in users)
+                Clients.User(userDto.Id).SendAsync("ReceiveMessage", message.Text);
         }
 
-        public async Task InitializeChat(ChatRequest chatRequest)
+        public async Task InitializeChat(ChatRequest chatRequest, string userId)
         {
-            await _chatsService.CreateEntityAsync(chatRequest);
-        }
+            ChatDto chatDto = await _chatsService.CreateEntityAsync(chatRequest);
 
-        public void AddUser(string userId)
-        {
-            if (!userConnections.ContainsKey(userId))
-                userConnections.Add(userId, new List<string> { Context.ConnectionId });
-            else
-                userConnections[userId].Add(Context.ConnectionId);
+            if (chatRequest.CreatedBy.Id != userId)
+                await _chatsService.AddUserToChat(chatDto.Id, userId);
+
+            await Clients.User(chatDto.CreatedBy.Id).SendAsync("ChatCreated", chatDto.Id);
         }
 
         public override async Task OnConnectedAsync()

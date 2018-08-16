@@ -19,13 +19,13 @@
 
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 
-        IInstanceRepository InstanceRepository { get; }
-
-        IChartRepository ChartRepository { get;  }
-
         IChatsRepository ChatsRepository { get; }
 
         IMessagesRepository MessagesRepository { get; }
+
+        IInstanceRepository InstanceRepository { get; }
+
+        IChartRepository ChartRepository { get;  }
 
         Task<bool> SaveAsync();
     }

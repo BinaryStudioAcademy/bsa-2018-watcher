@@ -16,7 +16,5 @@
         public UserDto CreatedBy { get; set; }
 
         public OrganizationDto Organization { get; set; }
-
-        public IList<MessageDto> Messages { get; set; }
     }
 }
