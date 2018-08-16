@@ -6,6 +6,8 @@ import { Chat } from '../../shared/models/chat.model';
 import { ChatType } from '../../shared/models/chat-type.enum';
 import { Message } from '../../shared/models/message.model';
 import * as signalR from '@aspnet/signalr';
+import { MessageRequest } from '../../shared/requests/message-request';
+import { ChatRequest } from '../../shared/requests/chat-request';
 
 @Component({
   selector: 'app-test-signal-r',
@@ -29,17 +31,14 @@ export class TestSignalRComponent implements OnInit {
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
-    const chat: Chat = {
-      id: 33,
+    const chat: ChatRequest = {
       name: 'chat',
       createdById: null,
-      type: ChatType.InOrganization,
-      organizationId: 81,
-      messages: null
+      chatType: ChatType.InOrganization,
+      organizationId: 81
     };
 
-    const message: Message = {
-      id: 0,
+    const message: MessageRequest = {
       chatId: 56,
       createdAt: new Date(),
       text: 'message',
