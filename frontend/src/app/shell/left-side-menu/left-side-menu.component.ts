@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, AfterContentInit, AfterContentChecked , AfterViewInit, AfterViewChecked} from '@angular/core';
+import { Component, OnInit, AfterContentChecked, AfterViewChecked} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { NavigationStart, Router, RouterEvent } from '@angular/router';
 
@@ -8,12 +8,12 @@ import { NavigationStart, Router, RouterEvent } from '@angular/router';
   styleUrls: ['./left-side-menu.component.sass']
 })
 
-export class LeftSideMenuComponent implements OnChanges, OnInit, AfterContentInit, AfterContentChecked , AfterViewInit, AfterViewChecked {
+export class LeftSideMenuComponent implements OnInit, AfterContentChecked , AfterViewChecked {
 
   constructor(private router: Router) {
     router.events.forEach((event) => {
       if (event instanceof NavigationStart ) {
-        this.clearCurrentSetting();
+        this.clearSettings(this.activeUrl);
       }
     });
    }
@@ -23,17 +23,15 @@ export class LeftSideMenuComponent implements OnChanges, OnInit, AfterContentIni
   private settingsItems: MenuItem[];
   private dashboardItems: MenuItem[];
 
-  private regexSettingsUrl = /\/user\/settings/;
-  private regexFeedbackUrl = /\/user\/feedback/;
-  private regexDashboardUrl = /\/user(\/dashboards)?/;
+  private regexSettingsUrl: RegExp = /\/user\/settings/;
+  private regexFeedbackUrl: RegExp = /\/user\/feedback/;
+  private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
 
   isSearching: boolean;
   isFeedback: boolean;
   menuItems: MenuItem[];
 
-   ngOnChanges() { debugger; }
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.activeUrl = this.router.url;
     this.initMenuItems();
 
@@ -42,15 +40,11 @@ export class LeftSideMenuComponent implements OnChanges, OnInit, AfterContentIni
     this.subscribeRouteChanges();
   }
 
-  ngAfterContentInit() { debugger; }
+  ngAfterContentChecked(): void { this.highlightCurrentSetting(); }
 
-  ngAfterContentChecked()  { this.highlightCurrentSetting(); }
+  ngAfterViewChecked(): void { this.highlightCurrentSetting(); }
 
-  ngAfterViewInit() { debugger; }
-
-  ngAfterViewChecked() { this.highlightCurrentSetting(); }
-
-  initMenuItems() {
+  private initMenuItems(): void {
     this.settingsItems = [{
       label: 'User Profile',
       icon: 'fa fa-fw fa-user',
@@ -77,7 +71,7 @@ export class LeftSideMenuComponent implements OnChanges, OnInit, AfterContentIni
     }];
   }
 
-  subscribeRouteChanges() {
+  private subscribeRouteChanges(): void {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event.url) {
           this.activeUrl = event.url;
@@ -86,7 +80,7 @@ export class LeftSideMenuComponent implements OnChanges, OnInit, AfterContentIni
     });
   }
 
-  changeMenu() {
+  private changeMenu(): void {
     if (this.activeUrl.match(this.regexSettingsUrl)) {
       this.menuItems = this.settingsItems;
       this.isSearching = false;
@@ -100,36 +94,27 @@ export class LeftSideMenuComponent implements OnChanges, OnInit, AfterContentIni
     }
   }
 
-  private clearCurrentSetting() {
+  private clearSettings(url: string): void {
     if (this.activeUrl !== this.previousSettingUrl) {
-      const element = this.getSettingByUrl(this.activeUrl);
-      if ( element !== null ) {
-        this.clearSettings(element);
+
+      const setting = this.getSettingByUrl(url);
+
+      if ( setting !== null ) {
+        setting.classList.remove('ui-state-active');
+        setting.parentElement.classList.remove('ui-state-active');
         this.previousSettingUrl = this.activeUrl;
       }
     }
   }
 
-  private clearPreviousSetting() {
-    const element = this.getSettingByUrl(this.previousSettingUrl);
-    if ( element !== null && element !== null && this.activeUrl !== this.previousSettingUrl) {
-      this.clearSettings(element);
-    }
-  }
-
-  private clearSettings(element: Element) {
-    element.classList.remove('ui-state-active');
-    element.parentElement.classList.remove('ui-state-active');
-  }
-
   private highlightCurrentSetting(): void {
-    const element = this.getSettingByUrl(this.activeUrl);
+    const setting = this.getSettingByUrl(this.activeUrl);
 
-    if ( element !== null && element !== undefined) {
-      this.clearPreviousSetting();
+    if ( setting !== null ) {
+      this.clearSettings(this.previousSettingUrl);
 
-      element.classList.add('ui-state-active');
-      element.parentElement.classList.add('ui-state-active');
+      setting.classList.add('ui-state-active');
+      setting.parentElement.classList.add('ui-state-active');
     }
   }
 
