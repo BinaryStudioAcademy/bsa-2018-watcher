@@ -23,6 +23,7 @@ export class ChatComponent implements OnInit {
 
   choosedChat: Chat = {} as Chat;
   isChatChoosed: boolean;
+  isNewChatChoosed: boolean;
 
 
   ngOnInit() {
@@ -39,6 +40,10 @@ export class ChatComponent implements OnInit {
     this.chatHub.messageReceived.subscribe((message: Message) => {
       this.choosedChat.messages.push(message);
     });
+  }
+
+  openCloseNewChatWindow() {
+    this.isNewChatChoosed ? this.isNewChatChoosed = false : this.isNewChatChoosed = true;
   }
 
   openConversation(chat: Chat) {
@@ -63,6 +68,7 @@ export class ChatComponent implements OnInit {
     const items: MenuItem[] = [{
       label: 'New chat',
       icon: 'pi pi-fw pi-plus',
+      command: () => this.openCloseNewChatWindow()
     }];
 
     this.chats.forEach(chat => {

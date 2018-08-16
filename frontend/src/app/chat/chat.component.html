@@ -32,14 +32,15 @@
   </p-accordion>
 </div>
 
-<div class="new-chat-panel">
-  <p-accordion>
+<div class="conversation-panel" [hidden]="!isNewChatChoosed">
+  <p-accordion [activeIndex]="0">
     <p-accordionTab>
       <p-header>
         New Conversation
+        <i class="chat-close fa fa-close" (click)="openCloseNewChatWindow()"></i>
       </p-header>
       <div class="ui-g ui-fluid">
-        <input pInputText type="text" placeholder="Enter user email">
+        <input pInputText type="text" placeholder="Enter user email or id">
       </div>
       <div class="ui-g ui-fluid">
         <input pInputText type="text" placeholder="Write message">
