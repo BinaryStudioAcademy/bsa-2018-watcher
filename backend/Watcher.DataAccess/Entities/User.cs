@@ -28,6 +28,8 @@
         [Required]
         public DateTime CreatedAt { get; set; }
 
+        public string PhotoURL { get; set; }
+
         public string Bio { get; set; }
 
         public int RoleId { get; set; }
