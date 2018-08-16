@@ -54,6 +54,7 @@
                 .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
                 .ForMember(d => d.CreatedAt, o => o.MapFrom(s => s.User.CreatedAt))
                 .ForMember(d => d.IsActive, o => o.MapFrom(s => s.User.IsActive))
+                .ForMember(d => d.PhotoURL, o => o.MapFrom(s => s.User.PhotoURL))
                 .ForMember(d => d.Role, o => o.MapFrom(s => s.User.Role))
                 .ForMember(d => d.LastPickedOrganization, o => o.MapFrom(s => s.User.LastPickedOrganization)); // TODO: Include
 
