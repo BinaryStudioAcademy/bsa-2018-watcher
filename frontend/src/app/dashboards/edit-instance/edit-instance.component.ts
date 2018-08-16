@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '../../../../node_modules/@angular/router';
+import { ActivatedRoute, Router } from '../../../../node_modules/@angular/router';
 import { FormBuilder, FormControl, Validators, FormGroup } from '../../../../node_modules/@angular/forms';
 import { ToastrService } from '../../core/services/toastr.service';
 import { InstanceService } from '../../core/services/instance.service';
@@ -23,7 +23,8 @@ export class EditInstanceComponent implements OnInit {
     private fb: FormBuilder,
     private toastrService: ToastrService,
     private instanceService: InstanceService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private router: Router) { }
 
   getInstanceForm(instance: Instance) {
     let form: FormGroup;
@@ -66,11 +67,13 @@ export class EditInstanceComponent implements OnInit {
             platform: instance.platform
           };
           this.instanceService.instanceEdited.emit(instanceEvent);
+          this.router.navigate([`/user/instance/${instanceEvent.id}/dashboards`]);
         });
       } else {
         this.instanceService.create(instance).subscribe((res: Instance) => {
           this.toastrService.success('created instance');
           this.instanceService.instanceAdded.emit(res);
+          this.router.navigate([`/user/instance/${res.id}/dashboards`]);
         });
       }
     } else {
