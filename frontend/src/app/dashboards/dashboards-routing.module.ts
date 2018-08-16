@@ -13,6 +13,10 @@ const dashboardRoutes: Routes = [{
 }, {
     path: 'instance/create',
     component: EditInstanceComponent
+},
+{
+  path: 'instance/:id/dashboards',
+  component: DashboardComponent
 }];
 
 @NgModule({
