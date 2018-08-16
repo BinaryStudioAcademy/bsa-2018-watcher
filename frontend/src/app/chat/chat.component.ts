@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Chat } from '../shared/models/chat';
+import { Chat } from '../shared/models/chat.model';
 import { ChatType } from '../shared/models/chat-type.enum';
 import { Message } from '../shared/models/message.model';
 import { ChatHubService } from '../core/services/chat-hub.service';
@@ -17,108 +17,16 @@ export class ChatComponent implements OnInit {
   constructor(private chatHub: ChatHubService,
     private authService: AuthService) { }
 
-  chatPanel: MenuItem[];
-  fakeChats: Chat[];
+  chatPanel: MenuItem[] = [];
+  chats: Chat[] = [];
   textMessage: string;
 
   choosedChat: Chat = {} as Chat;
   isChatChoosed: boolean;
+  isNewChatChoosed: boolean;
 
 
   ngOnInit() {
-    this.fakeChats = [
-      {
-        id: 1,
-        name: 'chat1',
-        type: ChatType.BetweenUsers,
-        createdBy: null,
-        createdById: null,
-        organization: null,
-        organizationId: null,
-        messages: [{
-          id: 1,
-          text: 'Its a simple message, which is overflow',
-          createdAt: null,
-          wasRead: true,
-          user: null,
-          chatId: 1,
-          chat: null
-        },
-        {
-          id: 1,
-          text: 'message2',
-          createdAt: null,
-          wasRead: true,
-          user: null,
-          chatId: 1,
-          chat: null
-        },
-        {
-          id: 1,
-          text: 'Its a simple message, which is overflow',
-          createdAt: null,
-          wasRead: true,
-          user: null,
-          chatId: 1,
-          chat: null
-        },
-        {
-          id: 1,
-          text: 'Its a simple message, which is overflow',
-          createdAt: null,
-          wasRead: true,
-          user: null,
-          chatId: 1,
-          chat: null
-        },
-        {
-          id: 1,
-          text: 'Its a simple message, which is overflow',
-          createdAt: null,
-          wasRead: true,
-          user: null,
-          chatId: 1,
-          chat: null
-        },
-        {
-          id: 1,
-          text: 'Its a simple message, which is overflow',
-          createdAt: null,
-          wasRead: true,
-          user: null,
-          chatId: 1,
-          chat: null
-        }]
-      },
-      {
-        id: 2,
-        name: 'chat2',
-        type: ChatType.BetweenUsers,
-        createdBy: null,
-        createdById: null,
-        organization: null,
-        organizationId: null,
-        messages: [{
-          id: 1,
-          text: 'message1',
-          createdAt: null,
-          wasRead: true,
-          user: null,
-          chatId: 1,
-          chat: null
-        },
-        {
-          id: 1,
-          text: 'Its a simple message, which is overflow',
-          createdAt: null,
-          wasRead: true,
-          user: null,
-          chatId: 1,
-          chat: null
-        }]
-      }
-    ];
-
     this.chatPanel = [
       {
         label: 'Chats',
@@ -134,6 +42,10 @@ export class ChatComponent implements OnInit {
     });
   }
 
+  openCloseNewChatWindow() {
+    this.isNewChatChoosed ? this.isNewChatChoosed = false : this.isNewChatChoosed = true;
+  }
+
   openConversation(chat: Chat) {
     // Get list of message
     this.choosedChat = chat;
@@ -147,7 +59,7 @@ export class ChatComponent implements OnInit {
   }
 
   sendMessage() {
-    const newMessage: Message = { text: this.textMessage, user: this.authService.getCurrentUser() } as Message;
+    const newMessage: Message = { text: this.textMessage, userId: this.authService.getCurrentUser().id } as Message;
     this.chatHub.sendTextMessage(this.authService.getCurrentUser().id, this.textMessage);
   }
 
@@ -156,13 +68,14 @@ export class ChatComponent implements OnInit {
     const items: MenuItem[] = [{
       label: 'New chat',
       icon: 'pi pi-fw pi-plus',
+      command: () => this.openCloseNewChatWindow()
     }];
 
-    this.fakeChats.forEach(fakeChat => {
+    this.chats.forEach(chat => {
       items.push({
-        label: fakeChat.name,
+        label: chat.name,
         icon: 'pi pi-fw pi-users',
-        command: () => this.openConversation(fakeChat)
+        command: () => this.openConversation(chat)
       });
     });
 

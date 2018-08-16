@@ -8,6 +8,7 @@ import { Feedback } from './feedback.model';
 import { Response } from './response.model';
 import { Message } from './message.model';
 import { Chat } from './chat.model';
+import { Chat } from './chat.model';
 
 export interface User  {
    id: string;
@@ -28,6 +29,7 @@ export interface User  {
    responses: Response[];
    messages: Message[];
    createdChats: Chat[];
+   chats: Chat[];
 }
 
 
