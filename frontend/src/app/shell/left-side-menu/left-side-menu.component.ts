@@ -5,6 +5,7 @@ import { InstanceService } from '../../core/services/instance.service';
 import { Instance } from '../../shared/models/instance.model';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
+import { InstanceRequest } from '../../dashboards/models/instance-request.model';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -78,10 +79,29 @@ export class LeftSideMenuComponent implements OnInit {
       });
     }
   }
-
+  onInstanceAdded(instance: Instance) {
+    console.log('EVENT ADD CALLED');
+    const item: MenuItem = this.instanceToMenuItem(instance);
+    this.instanceItems.push(item);
+  }
+  onInstanceRemoved(id: number) {
+    console.log('EVENT DELETE CALLED');
+    const index: number = this.instanceItems.findIndex(inst => inst.title === id.toString());
+    console.log(`index is ${index}`);
+    this.instanceItems.splice(index, 1);
+  }
+  onInstanceEdited(instance: Instance) {
+    console.log('EVENT UPDATE CALLED');
+    const item: MenuItem = this.instanceToMenuItem(instance);
+    const index: number = this.instanceItems.findIndex(inst => inst.title === instance.id.toString());
+    this.instanceItems[index] = item;
+  }
   ngOnInit() {
     this.activeUrl = this.router.url;
     this.organisationId = this.authService.getCurrentUser().lastPickedOrganizationId;
+    this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
+    this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
+    this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
     this.initMenuItems();
     this.configureInstances(this.organisationId);
     this.changeMenu();

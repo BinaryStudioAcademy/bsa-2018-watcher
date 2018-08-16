@@ -59,10 +59,18 @@ export class EditInstanceComponent implements OnInit {
       if (this.id) {
         this.instanceService.update(instance, this.id).subscribe((res: Response) => {
             this.toastrService.success('updated instance');
+            const instanceEvent: Instance = {
+              title: instance.title,
+              address: instance.address,
+              id: this.id,
+              platform: instance.platform
+            };
+            this.instanceService.instanceEdited.emit(instanceEvent);
         });
       } else {
-        this.instanceService.create(instance).subscribe((res: Response) => {
+        this.instanceService.create(instance).subscribe((res: Instance) => {
             this.toastrService.success('created instance');
+            this.instanceService.instanceAdded.emit(res);
         });
       }
     } else {
@@ -76,8 +84,6 @@ export class EditInstanceComponent implements OnInit {
       if (this.id) {
       this.instanceService.getOne(this.id).subscribe((data: Instance) => {
         if (data) {
-          console.log('data');
-          console.log(data);
           this.instance = data;
           this.instanceForm = this.getInstanceForm(this.instance);
         }
