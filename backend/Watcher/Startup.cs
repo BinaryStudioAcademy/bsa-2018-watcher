@@ -106,8 +106,9 @@
                         {
                             OnMessageReceived = delegate (MessageReceivedContext context)
                               {
-                                  if (!context.Request.Path.Value.Contains("/notifications")
-                                      || !context.Request.Path.Value.Contains("/chatsHub")
+                                  if ((!context.Request.Path.Value.Contains("/notifications")
+                                      && !context.Request.Path.Value.Contains("/chatsHub"))
+                                      
                                       || !context.Request.Query.ContainsKey("Authorization")
                                       || !context.Request.Query.ContainsKey("WatcherAuthorization"))
                                       return Task.CompletedTask;
@@ -203,6 +204,7 @@
                 app.UseAzureSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
             else

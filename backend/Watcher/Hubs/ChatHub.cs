@@ -26,7 +26,7 @@ namespace Watcher.Hubs
             _messagesService = messagesService;
         }
 
-        [Authorize()]
+        [Authorize]
         public async Task Send(string userId, MessageRequest messageRequest)
         {
             MessageDto message = await _messagesService.CreateEntityAsync(messageRequest);
