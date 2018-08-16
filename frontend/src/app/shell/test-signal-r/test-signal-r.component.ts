@@ -5,6 +5,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { Chat } from '../../shared/models/chat.model';
 import { ChatType } from '../../shared/models/chat-type.enum';
 import { Message } from '../../shared/models/message.model';
+import * as signalR from '@aspnet/signalr';
+
 @Component({
   selector: 'app-test-signal-r',
   templateUrl: './test-signal-r.component.html',
@@ -20,10 +22,12 @@ export class TestSignalRComponent implements OnInit {
   ngOnInit() {
     const firebaseToken = this.authService.getFirebaseToken();
     const watcherToken = this.authService.getWatcherToken();
-    const connPath = `/notifications?Authorization=${firebaseToken}&WatcherAuthorize=${watcherToken}`;
+    const connPath = `${environment.server_url}/chatsHub?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
-    this.chatUrl = `${environment.server_url}/chatsHub?Authorization=${firebaseToken}&WatcherAuthorize=${watcherToken}`;
-    this.hubConnection = new HubConnectionBuilder().withUrl(this.chatUrl).build();
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl(connPath, ) // {accessTokenFactory: () => firebaseToken}
+      .configureLogging(signalR.LogLevel.Information)
+      .build();
 
     const chat: Chat = {
       id: 33,
