@@ -32,8 +32,6 @@ export class InstanceService {
   }
 
   create(instance: InstanceRequest): Observable<Object> {
-    console.log('from service');
-    console.log(instance);
     return this.http.post(this.url, instance).pipe(
       retry(1),
       catchError(this.handleError));

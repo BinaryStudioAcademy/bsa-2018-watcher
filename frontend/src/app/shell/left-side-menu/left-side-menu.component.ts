@@ -4,6 +4,7 @@ import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 import { InstanceService } from '../../core/services/instance.service';
 import { Instance } from '../../shared/models/instance.model';
 import { ToastrService } from '../../core/services/toastr.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -14,7 +15,8 @@ export class LeftSideMenuComponent implements OnInit {
 
   constructor(private router: Router,
     private instanceService: InstanceService,
-    private toastrService: ToastrService) { this.organisationId = 77; }
+    private toastrService: ToastrService,
+    private authService: AuthService) { }
 
   private activeUrl: String;
   private settingsItems: MenuItem[];
@@ -79,6 +81,7 @@ export class LeftSideMenuComponent implements OnInit {
 
   ngOnInit() {
     this.activeUrl = this.router.url;
+    this.organisationId = this.authService.getCurrentUser().lastPickedOrganizationId;
     this.initMenuItems();
     this.configureInstances(this.organisationId);
     this.changeMenu();

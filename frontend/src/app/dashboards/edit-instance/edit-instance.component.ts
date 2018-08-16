@@ -15,21 +15,19 @@ import { InstanceRequest } from '../models/instance-request.model';
 export class EditInstanceComponent implements OnInit {
 
   id: number;
-  creation: boolean;
   organizationId: number;
   instanceForm: FormGroup;
+  instance: Instance;
 
   constructor(private activateRoute: ActivatedRoute,
     private fb: FormBuilder,
     private toastrService: ToastrService,
     private instanceService: InstanceService,
-    private authService: AuthService) {
-      this.organizationId = 77;
-     }
+    private authService: AuthService) { }
 
-  getInstanceForm(creation: boolean) {
+  getInstanceForm(instance: Instance) {
     let form: FormGroup;
-    if (creation) {
+    if (instance ===  undefined) {
       form = this.fb.group({
         title: new FormControl({ value: '', disabled: false }, Validators.required),
         platform: new FormControl({ value: '', disabled: false }, Validators.required),
@@ -37,9 +35,9 @@ export class EditInstanceComponent implements OnInit {
       });
     } else {
       form = this.fb.group({
-        title: new FormControl({ value: this.id, disabled: false }, Validators.required),
-        platform: new FormControl({ value: this.id, disabled: false }, Validators.required),
-        address: new FormControl({ value: this.id, disabled: false }, Validators.required)
+        title: new FormControl({ value: instance.title, disabled: false }, Validators.required),
+        platform: new FormControl({ value: instance.platform, disabled: false }, Validators.required),
+        address: new FormControl({ value: instance.address, disabled: false }, Validators.required)
       });
     }
     return form;
@@ -76,14 +74,23 @@ export class EditInstanceComponent implements OnInit {
     const x = this.activateRoute.params.subscribe(params => {
       this.id = params['id'];
       if (this.id) {
-      this.creation = false;
-      console.log(this.creation);
-      const user = this.authService.getCurrentUser();
-      if (user == null || user.lastPickedOrganizationId == null) {
-        this.toastrService.error('User must taking part in organization');
-        return;
-      } else { this.organizationId = user.lastPickedOrganization.id; }
-    }      this.instanceForm = this.getInstanceForm(this.creation);
+      this.instanceService.getOne(this.id).subscribe((data: Instance) => {
+        if (data) {
+          console.log('data');
+          console.log(data);
+          this.instance = data;
+          this.instanceForm = this.getInstanceForm(this.instance);
+        }
+      });
+      console.log(this.instance);
+    }
   });
+  const user = this.authService.getCurrentUser();
+  if (user == null || user.lastPickedOrganizationId == null) {
+    this.toastrService.error('User must taking part in organization');
+    return;
+  } else { this.organizationId = user.lastPickedOrganization.id;       console.log(this.organizationId);
+  }
+  this.instanceForm = this.getInstanceForm(this.instance);
   }
 }
