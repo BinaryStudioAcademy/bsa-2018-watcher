@@ -11,10 +11,17 @@ const routes: Routes = [{
     path: '',
     loadChildren: '../user/user.module#UserModule'
   }]
-  }, {
+}, {
+  path: 'admin',
+  component: ShellComponent,
+  children: [{
+    path: '',
+    loadChildren: '../admin/admin.module#AdminModule'
+  }]
+}, {
   path: '**',
   redirectTo: 'user/dashboards'
-  }
+}
 ];
 
 @NgModule({
