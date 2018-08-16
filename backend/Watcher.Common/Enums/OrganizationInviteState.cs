@@ -6,7 +6,9 @@ namespace Watcher.Common.Enums
     public enum OrganizationInviteState
     {
         Pending,
-        Invited,
-        Expired
+        Accepted,
+        Declined,
+        Overdue,
+        Canceled
     }
 }

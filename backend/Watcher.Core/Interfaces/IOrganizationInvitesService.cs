@@ -9,5 +9,13 @@ namespace Watcher.Core.Interfaces
     public interface IOrganizationInvitesService
     {
 
+        Task<OrganizationInviteDto> GetEntityByLinkAsync(string link);
+
+        Task<OrganizationInviteDto> CreateEntityAsync(OrganizationInviteRequest request);
+
+
+        Task<bool> UpdateEntityByIdAsync(OrganizationInviteRequest request, int id);
+
+
     }
 }
