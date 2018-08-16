@@ -113,13 +113,13 @@
             {
                 return StatusCode(500);
             }
-
+           
             if (!string.IsNullOrEmpty(request.User.Email))
             {
                 await _emailProvider.SendMessageOneToOne("watcher@net.com", "Thanks for feedback", request.Feedback.User.Email,
                     request.Text, "");
             }
-            
+
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
     }

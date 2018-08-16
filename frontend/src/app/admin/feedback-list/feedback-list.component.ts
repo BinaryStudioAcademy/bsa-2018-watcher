@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormBuilder } from '@angular/forms';
 import { FeedbackService } from '../../core/services/feedback.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
+
 import { User } from '../../shared/models/user.model';
 import { Feedback } from '../../shared/models/feedback.model';
 import { Response } from '../../shared/models/response.model';
@@ -28,13 +30,19 @@ export class FeedbackListComponent implements OnInit {
   display: boolean;
 
   constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
     private feedbackService: FeedbackService,
     private toastrService: ToastrService,
     private responseService: ResponseService) {
+
     this.lstFeedbacks = new Array<ForShow>();
     this.display = false;
   }
+
+  responseForm = this.fb.group({
+    text: new FormControl({ value: ' ', disabled: false })
+  });
 
   ngOnInit() {
     this.user = this.authService.getCurrentUser();
@@ -71,12 +79,17 @@ export class FeedbackListComponent implements OnInit {
 
   onSubmit() {
     this.display = false;
+    const text = this.responseForm.get('text').value;
+    if (!text || text === ' ') {
+      this.toastrService.warning('Field is empty.');
+      return;
+    }
     const newResponse: Response = {
       id: 0,
       createdAt: new Date(),
       user: this.user,
       feedback: this.feedback,
-      text: 'dhfgjg'
+      text: text
     };
     this.responseService.create(newResponse).
       subscribe(

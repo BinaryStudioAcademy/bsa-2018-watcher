@@ -1,47 +1,50 @@
 <div class="working-area">
-  
-    <div class="ui-g ui-fluid">
-        <div class="ui-g-12">
+
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
       <div class="title">FEEDBACKS</div>
       <hr>
     </div>
   </div>
 
   <div class="ui-g ui-fluid">
-      <div class="ui-g-1">DATE</div>
-      <div class="ui-g-2">USER NAME</div>
-      <div class="ui-g-3">TEXT</div>
-      <div class="ui-g-1">WILL USE</div>
-      <div class="ui-g-4">INFORMATIVELY | FRIENDLINESS | QUICKNESS</div>
-    
+    <div class="ui-g-1">DATE</div>
+    <div class="ui-g-2">USER NAME</div>
+    <div class="ui-g-3">TEXT</div>
+    <div class="ui-g-1">WILL USE</div>
+    <div class="ui-g-4">INFORMATIVELY | FRIENDLINESS | QUICKNESS</div>
+
   </div>
   <div *ngFor="let feedback of lstFeedbacks; let i = index" class="ui-g ui-fluid">
 
-      <div class="ui-g-1">{{feedback?.main.createdAt | date:'shortDate'}}</div>
-      <div class="ui-g-2">{{feedback?.main.user?.displayName}}</div>
-      <div class="ui-g-3">{{feedback?.main.text}}</div>
-      <div class="ui-g-1">{{feedback?.willuse}}</div>
-      <div class="ui-g-4">{{feedback?.info}} | {{feedback?.friendliness}} | {{feedback?.quickness}}</div>        
-   
-      <div class="ui-g-1">
+    <div class="ui-g-1">{{feedback?.main.createdAt | date:'shortDate'}}</div>
+    <div class="ui-g-2">{{feedback?.main.user?.displayName}}</div>
+    <div class="ui-g-3">{{feedback?.main.text}}</div>
+    <div class="ui-g-1">{{feedback?.willuse}}</div>
+    <div class="ui-g-4">{{feedback?.info}} | {{feedback?.friendliness}} | {{feedback?.quickness}}</div>
+
+    <div class="ui-g-1" *ngIf="feedback.main.user.email">
       <button pButton type="button " label="Response " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(feedback.main)"></button>
-    </div>  
+    </div>
 
   </div>
 </div>
-   <!-- 
+<!-- 
         <div class="ui-g-2">INFORMATIVELY</div>
       <div class="ui-g-2">FRIENDLINESS</div>
       <div class="ui-g-1">QUICKNESS</div>
-        
+         <span>The story begins</span>
         <div class="ui-g-2">{{feedback?.informatively}} </div>
       <div class="ui-g-2">{{feedback?.friendliness}}</div>
       <div class="ui-g-1">{{feedback?.quickness}}</div>-->
-<p-dialog header="Godfather I" [(visible)]="display" [modal]="true" [responsive]="true" [width]="350" [minWidth]="200" [minY]="70" 
-        [maximizable]="true" [baseZIndex]="10000">
-    <span>The story begins</span>
-        <p-footer>
-            <button type="button" pButton icon="pi pi-check" (click)="onSubmit()" label="Save"></button>
-            <button type="button" pButton icon="pi pi-close" (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
-        </p-footer>
+<p-dialog header="Create response" [(visible)]="display" [modal]="true" [responsive]="true" [width]="350" [minWidth]="200"
+  [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+  <p>Text</p>
+  <form [formGroup]="responseForm">
+    <textarea rows="5" [cols]="42" formControlName="text" pInputTextarea></textarea>
+  </form>
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
+    <button type="button" pButton icon="pi pi-close" (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+  </p-footer>
 </p-dialog>
