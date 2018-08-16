@@ -20,8 +20,8 @@
     <div class="ui-g-1">{{feedback?.main.createdAt | date:'shortDate'}}</div>
     <div class="ui-g-2">{{feedback?.main.user?.displayName}}</div>
     <div class="ui-g-3">{{feedback?.main.text}}</div>
-    <div class="ui-g-1">{{feedback?.willuse}}</div>
-    <div class="ui-g-4">{{feedback?.info}} | {{feedback?.friendliness}} | {{feedback?.quickness}}</div>
+    <div class="ui-g-1 center">{{feedback?.willuse}}</div>
+    <div class="ui-g-4 center">{{feedback?.info}} | {{feedback?.friendliness}} | {{feedback?.quickness}}</div>
 
     <div class="ui-g-1" *ngIf="feedback.main.user.email">
       <button pButton type="button " label="Response " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(feedback.main)"></button>
