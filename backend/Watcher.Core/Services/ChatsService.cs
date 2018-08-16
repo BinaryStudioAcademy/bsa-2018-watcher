@@ -42,6 +42,29 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<IEnumerable<UserDto>> GetUsersByChatIdAsync(int id)
+        {
+            var users = await _uow.ChatsRepository.GetUsersByChatId(id);
+
+            var dtos = _mapper.Map<List<User>, List<UserDto>>(users);
+
+            return dtos;
+        }
+
+        public async Task<UserDto> AddUserToChat(int chatId, string userId)
+        {
+            User user = await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == userId);
+            Chat chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(c => c.Id == chatId);
+
+            if (user == null || chat == null) return null;
+
+            UserChat userChat = await _uow.ChatsRepository.AddUserChat(new UserChat() { ChatId = chatId, UserId = userId });
+
+            UserDto userDto = _mapper.Map<User, UserDto>(userChat.User);
+
+            return userDto;
+        }
+
         public async Task<ChatDto> GetEntityByIdAsync(int id)
         {
             var sample = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
@@ -61,6 +84,12 @@ namespace Watcher.Core.Services
         {
             var entity = _mapper.Map<ChatRequest, Chat>(request);
 
+            entity.UserChats.Add(new UserChat
+            {
+                UserId = entity.CreatedById,
+                Chat = entity
+            });
+
             entity = await _uow.ChatsRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
             if (!result)
@@ -71,6 +100,9 @@ namespace Watcher.Core.Services
             if (entity == null) return null;
 
             var dto = _mapper.Map<Chat, ChatDto>(entity);
+
+            dto.CreatedBy = request.CreatedBy;
+            dto.Organization = request.Organization;
 
             return dto;
         }
