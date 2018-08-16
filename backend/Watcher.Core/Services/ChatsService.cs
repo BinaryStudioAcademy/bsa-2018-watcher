@@ -86,13 +86,8 @@ namespace Watcher.Core.Services
         {
             var entity = _mapper.Map<ChatRequest, Chat>(request);
 
-            entity.UserChats.Add(new UserChat
-            {
-                UserId = entity.CreatedById,
-                Chat = entity
-            });
-
             entity = await _uow.ChatsRepository.CreateAsync(entity);
+
             var result = await _uow.SaveAsync();
             if (!result)
             {

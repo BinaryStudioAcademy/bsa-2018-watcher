@@ -32,15 +32,15 @@ export class TestSignalRComponent implements OnInit {
     const chat: Chat = {
       id: 33,
       name: 'chat',
-      createdById: this.authService.getCurrentUser().id,
-      type: ChatType.BetweenUsers,
+      createdById: null,
+      type: ChatType.InOrganization,
       organizationId: 81,
       messages: null
     };
 
     const message: Message = {
       id: 0,
-      chatId: 45,
+      chatId: 56,
       createdAt: new Date(),
       text: 'message',
       userId: this.authService.getCurrentUser().id,

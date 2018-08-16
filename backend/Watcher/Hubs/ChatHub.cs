@@ -22,10 +22,11 @@ namespace Watcher.Hubs
 
         private static Dictionary<string, List<string>> userConnections = new Dictionary<string, List<string>>();
 
-        public ChatHub(IChatsService chatsService, IMessagesService messagesService)
+        public ChatHub(IChatsService chatsService, IMessagesService messagesService, IOrganizationService organizationService)
         {
             _chatsService = chatsService;
             _messagesService = messagesService;
+            _organizationService = organizationService;
         }
 
         public async Task Send(MessageRequest messageRequest)
@@ -43,7 +44,10 @@ namespace Watcher.Hubs
             ChatDto chatDto = await _chatsService.CreateEntityAsync(chatRequest);
 
             if (chatRequest.Type == ChatType.BetweenUsers && chatRequest.CreatedById != userId && userId != null)
+            {
                 await _chatsService.AddUserToChat(chatDto.Id, userId);
+                await _chatsService.AddUserToChat(chatDto.Id, chatRequest.CreatedById);
+            }
             else if (chatRequest.Type == ChatType.InOrganization)
             {
                 OrganizationDto organizationDto = await _organizationService.GetEntityByIdAsync(chatRequest.OrganizationId);
@@ -53,7 +57,7 @@ namespace Watcher.Hubs
 
             }
 
-        await Clients.User(chatDto.CreatedBy.Id).SendAsync("ChatCreated", chatDto);
+            await Clients.User(chatDto.CreatedBy.Id).SendAsync("ChatCreated", chatDto);
         }
 
         public override async Task OnConnectedAsync()
