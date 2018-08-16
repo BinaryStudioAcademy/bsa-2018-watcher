@@ -107,6 +107,7 @@
             var instanceFaker = new Faker<Instance>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.Platform, f => f.PickRandom("Windows", "Linux"))
+                .RuleFor(o => o.Title, f => f.PickRandom("Instance" + f.Random.Number(999)))
                 .RuleFor(o => o.Address, f => f.Internet.Mac())
                 .RuleFor(o => o.OrganizationId, f => f.PickRandom(organizations).Id);
 

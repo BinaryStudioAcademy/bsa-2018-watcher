@@ -78,7 +78,7 @@ export class HeaderComponent implements OnInit {
   }
 
   sendMess() {
-    this.notificationsService.send('ri3bE0PElDT8gLU35sonvnMzbEq2', 'From Sdadadafsd message');
+    this.notificationsService.send('in2Kvey8O0dK1LACXH6HYMaPG102', 'From Sdadadafsd message');
   }
 
   connectToServer() {
@@ -104,18 +104,18 @@ export class HeaderComponent implements OnInit {
     ];
 
     this.cogItems = [{
-      label: 'User profile',
-      icon: 'fa fa-fw fa-cog',
+      label: 'Profile',
+      icon: 'fa fa-fw fa-user',
       routerLink: ['/user/settings/user-profile'],
     },
     {
       label: 'Organization',
-      icon: 'fa fa-fw fa-cog',
+      icon: 'fa fa-fw fa-building',
       routerLink: ['/user/settings/organization-profile'],
     },
     {
       label: 'Notifications',
-      icon: 'fa fa-fw fa-cog',
+      icon: 'fa fa-fw fa-send',
       routerLink: ['/user/settings/notification-settings'],
     }
     ];
