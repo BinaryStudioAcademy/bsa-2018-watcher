@@ -3,27 +3,14 @@
   <p-growl [(value)]="msgs"></p-growl>
 
   <div class="ui-toolbar-group-right">
-    TODO: methods for SignalR Tests
-    <div class="toolbar-item">
-      <button type="button" pButton label="Connect" class="ui-button-info" (click)="connectToServer()"></button>
-    </div>
-    <div class="toolbar-item">
-      <button type="button" pButton label="Send" class="ui-button-info" (click)="sendMess()"></button>
-    </div>
-    <div class="toolbar-item">
-      <button type="button" pButton label="Echo" class="ui-button-info" (click)="echoToServer()"></button>
-    </div>
-    <div class="toolbar-item">
-      <button type="button" pButton label="Create" class="ui-button-info" (click)="createSample()"></button>
-    </div>
-
+    
     <p-tieredMenu #bell [model]="bellItems" [popup]="true"></p-tieredMenu>
+    
     <div class="toolbar-item">
       <button #btn type="button" pButton icon="fa fa-fw fa-bell-o" (click)="bell.toggle($event)"></button>
       <span class="topbar-badge">{{ notificationsNumber }}</span>
     </div>
 
-  
     <div class="toolbar-item">
       <button #btn type="button" pButton icon="fa fa-fw fa-bullhorn" (click)="onFeedback()"></button>
     </div>

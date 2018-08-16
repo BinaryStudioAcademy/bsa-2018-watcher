@@ -186,9 +186,14 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Address")
                         .IsRequired();
 
+                    b.Property<Guid>("GuidId");
+
                     b.Property<int>("OrganizationId");
 
                     b.Property<string>("Platform")
+                        .IsRequired();
+
+                    b.Property<string>("Title")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -198,16 +203,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Instances");
 
                     b.HasData(
-                        new { Id = 81, Address = "fd:8c:4e:fc:cf:bb", OrganizationId = 76, Platform = "Linux" },
-                        new { Id = 82, Address = "5a:13:21:83:16:0f", OrganizationId = 77, Platform = "Windows" },
-                        new { Id = 83, Address = "9a:d8:70:eb:80:78", OrganizationId = 73, Platform = "Linux" },
-                        new { Id = 84, Address = "81:47:9e:bc:6c:53", OrganizationId = 78, Platform = "Windows" },
-                        new { Id = 85, Address = "81:3a:b7:53:69:dd", OrganizationId = 72, Platform = "Windows" },
-                        new { Id = 86, Address = "85:e0:e5:ec:ec:4f", OrganizationId = 74, Platform = "Windows" },
-                        new { Id = 87, Address = "cb:27:a0:45:b4:6f", OrganizationId = 72, Platform = "Windows" },
-                        new { Id = 88, Address = "54:ef:7b:87:1d:cf", OrganizationId = 78, Platform = "Linux" },
-                        new { Id = 89, Address = "5f:b2:02:dc:57:48", OrganizationId = 76, Platform = "Windows" },
-                        new { Id = 90, Address = "a8:46:65:a0:92:4c", OrganizationId = 75, Platform = "Linux" }
+                        new { Id = 81, Address = "4d:9e:24:de:b9:c3", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), OrganizationId = 79, Platform = "Windows", Title = "Instance750" },
+                        new { Id = 82, Address = "72:47:79:8c:1e:7f", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), OrganizationId = 73, Platform = "Windows", Title = "Instance167" },
+                        new { Id = 83, Address = "c0:07:04:25:01:54", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), OrganizationId = 75, Platform = "Linux", Title = "Instance777" },
+                        new { Id = 84, Address = "04:7c:40:3a:3e:72", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), OrganizationId = 72, Platform = "Windows", Title = "Instance478" },
+                        new { Id = 85, Address = "3b:a6:35:ec:36:e3", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), OrganizationId = 72, Platform = "Windows", Title = "Instance815" },
+                        new { Id = 86, Address = "fc:ce:96:80:1a:46", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), OrganizationId = 77, Platform = "Windows", Title = "Instance343" },
+                        new { Id = 87, Address = "4f:b3:f4:4a:f2:f5", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), OrganizationId = 71, Platform = "Linux", Title = "Instance865" },
+                        new { Id = 88, Address = "51:fa:14:09:04:19", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), OrganizationId = 79, Platform = "Windows", Title = "Instance304" },
+                        new { Id = 89, Address = "27:35:ca:77:e3:35", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), OrganizationId = 79, Platform = "Windows", Title = "Instance931" },
+                        new { Id = 90, Address = "d8:2e:5d:6c:6d:88", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), OrganizationId = 77, Platform = "Linux", Title = "Instance127" }
                     );
                 });
 
