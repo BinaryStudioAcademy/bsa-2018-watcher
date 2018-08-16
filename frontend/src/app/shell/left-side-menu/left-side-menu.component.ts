@@ -74,8 +74,8 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
   private subscribeRouteChanges(): void {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event.url) {
-          this.activeUrl = event.url;
-          this.changeMenu();
+        this.activeUrl = event.url;
+        this.changeMenu();
       }
     });
   }
