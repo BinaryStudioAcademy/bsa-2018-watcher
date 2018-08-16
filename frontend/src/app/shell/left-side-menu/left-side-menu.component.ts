@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, AfterContentInit, AfterContentChecked, AfterViewInit, 
+import { Component, OnChanges, OnInit, AfterContentInit, AfterContentChecked, AfterViewInit,
   AfterViewChecked, OnDestroy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { NavigationStart, Router, RouterEvent } from '@angular/router';
@@ -10,8 +10,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./left-side-menu.component.sass']
 })
 
-export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterContentChecked, 
-  AfterViewInit, AfterViewChecked, OnDestroy {
+export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterContentChecked,
+  AfterViewInit, AfterViewChecked {
 
   constructor(private router: Router) {
     router.events.forEach((event) => {
@@ -22,6 +22,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterCon
    }
 
   private activeUrl: String;
+  private previousSettingUrl: String;
   private settingsItems: MenuItem[];
   private dashboardItems: MenuItem[];
 
@@ -48,43 +49,47 @@ export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterCon
   }
 
   ngAfterContentInit()  {
-    //const elementList = document.querySelector(`a[href="${this.activeUrl}"]`);
     // const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
-    
-    // if ( element !== null) {
-    //   // debugger;
-    // }
-  }
 
-  ngAfterContentChecked()  {
-    // const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
-    
-    // // const element = document.querySelectorAll(`[href="${this.activeUrl}"]`)[0];
-    // if ( element !== null) {
-    //    debugger;
+    // if ( element !== null && element !== undefined) {
+    //   this.clearPreviousSetting();
+    //   // debugger;
     //   element.classList.add('ui-state-active');
     //   element.parentElement.classList.add('ui-state-active');
     // }
   }
 
-  ngAfterViewInit () {
+  ngAfterContentChecked()  {
     const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
-    
+
     if ( element !== null && element !== undefined) {
-       debugger;
+      this.clearPreviousSetting();
+      // debugger;
       element.classList.add('ui-state-active');
       element.parentElement.classList.add('ui-state-active');
     }
   }
 
-  ngAfterViewChecked()  {
-    const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
+  ngAfterViewInit () {
+    // const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
 
-    if ( element !== null && element !== undefined) {
-      //debugger;
-      element.classList.add('ui-state-active');
-      element.parentElement.classList.add('ui-state-active');
-    }
+    // if ( element !== null && element !== undefined) {
+    //   this.clearPreviousSetting();
+    //   // debugger;
+    //   element.classList.add('ui-state-active');
+    //   element.parentElement.classList.add('ui-state-active');
+    // }
+  }
+
+  ngAfterViewChecked()  {
+    // const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
+
+    // if ( element !== null && element !== undefined) {
+    //   this.clearPreviousSetting();
+    //   // debugger;
+    //   element.classList.add('ui-state-active');
+    //   element.parentElement.classList.add('ui-state-active');
+    // }
   }
 
 
@@ -142,9 +147,22 @@ export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterCon
     const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
     if ( element !== null) {
       debugger;
-      element.classList.remove('ui-state-active');
-      element.parentElement.classList.remove('ui-state-active');
+      this.previousSettingUrl = this.activeUrl;
+      this.clearSettings(element);
     }
+  }
+
+  private clearPreviousSetting() {
+    const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.previousSettingUrl}"]`);
+    if ( element !== null) {
+      debugger;
+      this.clearSettings(element);
+    }
+  }
+
+  private clearSettings(element: Element) {
+    element.classList.remove('ui-state-active');
+    element.parentElement.classList.remove('ui-state-active');
   }
 
 }
