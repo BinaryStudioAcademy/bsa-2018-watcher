@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, OnChanges, OnInit, AfterContentInit, AfterContentChecked , AfterViewInit, AfterViewChecked} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { NavigationStart, Router, RouterEvent } from '@angular/router';
 
@@ -8,7 +8,7 @@ import { NavigationStart, Router, RouterEvent } from '@angular/router';
   styleUrls: ['./left-side-menu.component.sass']
 })
 
-export class LeftSideMenuComponent implements OnInit, AfterContentChecked {
+export class LeftSideMenuComponent implements OnChanges, OnInit, AfterContentInit, AfterContentChecked , AfterViewInit, AfterViewChecked {
 
   constructor(private router: Router) {
     router.events.forEach((event) => {
@@ -18,8 +18,8 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked {
     });
    }
 
-  private activeUrl: String;
-  private previousSettingUrl: String;
+  private activeUrl: string;
+  private previousSettingUrl: string;
   private settingsItems: MenuItem[];
   private dashboardItems: MenuItem[];
 
@@ -31,6 +31,8 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked {
   isFeedback: boolean;
   menuItems: MenuItem[];
 
+   ngOnChanges() { debugger; }
+
   ngOnInit() {
     this.activeUrl = this.router.url;
     this.initMenuItems();
@@ -40,16 +42,13 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked {
     this.subscribeRouteChanges();
   }
 
-  ngAfterContentChecked()  {
-    const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
+  ngAfterContentInit() { debugger; }
 
-    if ( element !== null && element !== undefined) {
-      this.clearPreviousSetting();
+  ngAfterContentChecked()  { this.highlightCurrentSetting(); }
 
-      element.classList.add('ui-state-active');
-      element.parentElement.classList.add('ui-state-active');
-    }
-  }
+  ngAfterViewInit() { debugger; }
+
+  ngAfterViewChecked() { this.highlightCurrentSetting(); }
 
   initMenuItems() {
     this.settingsItems = [{
@@ -102,16 +101,18 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked {
   }
 
   private clearCurrentSetting() {
-    const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
-    if ( element !== null) {
-      this.previousSettingUrl = this.activeUrl;
-      this.clearSettings(element);
+    if (this.activeUrl !== this.previousSettingUrl) {
+      const element = this.getSettingByUrl(this.activeUrl);
+      if ( element !== null ) {
+        this.clearSettings(element);
+        this.previousSettingUrl = this.activeUrl;
+      }
     }
   }
 
   private clearPreviousSetting() {
-    const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.previousSettingUrl}"]`);
-    if ( element !== null) {
+    const element = this.getSettingByUrl(this.previousSettingUrl);
+    if ( element !== null && element !== null && this.activeUrl !== this.previousSettingUrl) {
       this.clearSettings(element);
     }
   }
@@ -119,5 +120,20 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked {
   private clearSettings(element: Element) {
     element.classList.remove('ui-state-active');
     element.parentElement.classList.remove('ui-state-active');
+  }
+
+  private highlightCurrentSetting(): void {
+    const element = this.getSettingByUrl(this.activeUrl);
+
+    if ( element !== null && element !== undefined) {
+      this.clearPreviousSetting();
+
+      element.classList.add('ui-state-active');
+      element.parentElement.classList.add('ui-state-active');
+    }
+  }
+
+  private getSettingByUrl(url: string): Element {
+    return document.querySelector(`div.ui-panelmenu-header a[href="${url}"]`);
   }
 }
