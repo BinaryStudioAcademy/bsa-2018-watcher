@@ -5,7 +5,6 @@ import { InstanceService } from '../../core/services/instance.service';
 import { Instance } from '../../shared/models/instance.model';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
-import { InstanceRequest } from '../../dashboards/models/instance-request.model';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -27,18 +26,14 @@ export class LeftSideMenuComponent implements OnInit {
   private regexSettingsUrl = /\/user\/settings/;
   private regexDashboardUrl = /\/user(\/dashboards)?/;
 
-  @Output() activeInstance: Instance;
-
   isSearching: boolean;
   menuItems: MenuItem[];
 
   configureInstances(organizationId: number) {
     this.instanceService.getAllByOrganization(organizationId).subscribe((data: Instance[]) => {
       if (data) {
-        console.log(data);
         const items = data.map(inst => this.instanceToMenuItem(inst));
         items.forEach(inst => this.instanceItems.push(inst));
-        console.log(this.instanceItems);
         this.toastrService.success('Get instances from server');
       }
     },
@@ -49,7 +44,7 @@ export class LeftSideMenuComponent implements OnInit {
     const item: MenuItem = {
       label: instance.title,
       title: instance.id.toString(),
-      command: () => this.activeInstance = instance,
+      command: () => this.instanceService.instanceChecked.emit(instance),
       items: [{
         label: 'Update',
         icon: 'fa fa-refresh',
@@ -82,22 +77,20 @@ export class LeftSideMenuComponent implements OnInit {
     }
   }
   onInstanceAdded(instance: Instance) {
-    console.log('EVENT ADD CALLED');
     const item: MenuItem = this.instanceToMenuItem(instance);
     this.instanceItems.push(item);
   }
   onInstanceRemoved(id: number) {
-    console.log('EVENT DELETE CALLED');
     const index: number = this.instanceItems.findIndex(inst => inst.title === id.toString());
     console.log(`index is ${index}`);
     this.instanceItems.splice(index, 1);
   }
   onInstanceEdited(instance: Instance) {
-    console.log('EVENT UPDATE CALLED');
     const item: MenuItem = this.instanceToMenuItem(instance);
     const index: number = this.instanceItems.findIndex(inst => inst.title === instance.id.toString());
     this.instanceItems[index] = item;
   }
+
   ngOnInit() {
     this.activeUrl = this.router.url;
     this.organisationId = this.authService.getCurrentUser().lastPickedOrganizationId;

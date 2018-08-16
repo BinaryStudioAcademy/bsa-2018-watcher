@@ -18,12 +18,14 @@ export class InstanceService {
   public instanceAdded: EventEmitter<Instance>;
   public instanceEdited: EventEmitter<Instance>;
   public instanceRemoved: EventEmitter<number>;
+  public instanceChecked: EventEmitter<Instance>;
 
   constructor(private http: HttpClient,
     private toastrService: ToastrService) {
     this.instanceAdded = new EventEmitter<Instance>();
     this.instanceEdited = new EventEmitter<Instance>();
     this.instanceRemoved = new EventEmitter<number>();
+    this.instanceChecked = new EventEmitter<Instance>();
   }
 
   getOne(id: number): Observable<Object> {
