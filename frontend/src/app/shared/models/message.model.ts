@@ -7,9 +7,6 @@ export interface Message  {
    text: string;
    createdAt: Date;
    wasRead: boolean;
-   userId: string;
-   chatId: number;
+   user: User;
+   chat: Chat;
 }
-
-
-
