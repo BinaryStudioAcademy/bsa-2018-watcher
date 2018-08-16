@@ -16,8 +16,8 @@ export class OrganizationInvitesService {
     return this.apiService.get(`/${this.ctrlUrl}`);
   }
 
-  get(id: number): Observable<OrganizationInvite> {
-    return this.apiService.get(`/${this.ctrlUrl}/${id}`);
+  getByLink(link: string): Observable<OrganizationInvite> {
+    return this.apiService.get(`/${this.ctrlUrl}/${link}`);
   }
 
   create(organizationInvite: OrganizationInvite) {

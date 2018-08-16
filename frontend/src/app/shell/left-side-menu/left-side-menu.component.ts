@@ -25,10 +25,12 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
 
   private regexSettingsUrl: RegExp = /\/user\/settings/;
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
+  private regexInviteUrl: RegExp = /\/user\/invite/;
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
 
   isSearching: boolean;
   isFeedback: boolean;
+  isInvite: boolean;
   menuItems: MenuItem[];
 
   ngOnInit(): void {
@@ -85,12 +87,16 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
       this.menuItems = this.settingsItems;
       this.isSearching = false;
       this.isFeedback = false;
+      this.isInvite = false;
     } else if (this.activeUrl.match(this.regexFeedbackUrl)) {
       this.isFeedback = true;
+    } else if (this.activeUrl.match(this.regexInviteUrl)) {
+      this.isInvite = true;
     } else if (this.activeUrl.match(this.regexDashboardUrl)) {
       this.menuItems = this.dashboardItems;
       this.isSearching = true;
       this.isFeedback = false;
+      this.isInvite = false;
     }
   }
 
