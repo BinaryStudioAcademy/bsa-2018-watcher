@@ -6,7 +6,7 @@ import { Chat } from '../../shared/models/chat.model';
 @Injectable({
   providedIn: 'root'
 })
-export class OrganizationService {
+export class ChatService {
   private readonly ctrlUrl = 'chats';
 
   constructor(private apiService: ApiService) {
