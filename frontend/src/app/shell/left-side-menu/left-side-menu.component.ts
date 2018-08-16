@@ -41,7 +41,8 @@ export class LeftSideMenuComponent implements OnInit {
         console.log(this.instanceItems);
         this.toastrService.success('Get instances from server');
       }
-    });
+    },
+      error => this.toastrService.error(`Error: ${error}`));
   }
 
   instanceToMenuItem(instance: Instance) {
@@ -76,7 +77,8 @@ export class LeftSideMenuComponent implements OnInit {
       this.instanceService.delete(id).subscribe((res: Response) => {
         this.toastrService.success('Deleted instance');
         this.instanceItems.splice(index, 1);
-      });
+      },
+        error => this.toastrService.error(`Error: ${error}`));
     }
   }
   onInstanceAdded(instance: Instance) {

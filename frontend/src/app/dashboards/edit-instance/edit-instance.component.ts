@@ -27,7 +27,7 @@ export class EditInstanceComponent implements OnInit {
 
   getInstanceForm(instance: Instance) {
     let form: FormGroup;
-    if (instance ===  undefined) {
+    if (instance === undefined) {
       form = this.fb.group({
         title: new FormControl({ value: '', disabled: false }, Validators.required),
         platform: new FormControl({ value: '', disabled: false }, Validators.required),
@@ -58,20 +58,22 @@ export class EditInstanceComponent implements OnInit {
       const instance: InstanceRequest = this.getNewInstance();
       if (this.id) {
         this.instanceService.update(instance, this.id).subscribe((res: Response) => {
-            this.toastrService.success('updated instance');
-            const instanceEvent: Instance = {
-              title: instance.title,
-              address: instance.address,
-              id: this.id,
-              platform: instance.platform
-            };
-            this.instanceService.instanceEdited.emit(instanceEvent);
-        });
+          this.toastrService.success('updated instance');
+          const instanceEvent: Instance = {
+            title: instance.title,
+            address: instance.address,
+            id: this.id,
+            platform: instance.platform
+          };
+          this.instanceService.instanceEdited.emit(instanceEvent);
+        },
+          error => this.toastrService.error(`Error: ${error}`));
       } else {
         this.instanceService.create(instance).subscribe((res: Instance) => {
-            this.toastrService.success('created instance');
-            this.instanceService.instanceAdded.emit(res);
-        });
+          this.toastrService.success('created instance');
+          this.instanceService.instanceAdded.emit(res);
+        },
+          error => this.toastrService.error(`Error: ${error}`));
       }
     } else {
       this.toastrService.error('Invalid form');
@@ -82,21 +84,23 @@ export class EditInstanceComponent implements OnInit {
     const x = this.activateRoute.params.subscribe(params => {
       this.id = params['id'];
       if (this.id) {
-      this.instanceService.getOne(this.id).subscribe((data: Instance) => {
-        if (data) {
-          this.instance = data;
-          this.instanceForm = this.getInstanceForm(this.instance);
-        }
-      });
-      console.log(this.instance);
+        this.instanceService.getOne(this.id).subscribe((data: Instance) => {
+          if (data) {
+            this.instance = data;
+            this.instanceForm = this.getInstanceForm(this.instance);
+          }
+        },
+          error => this.toastrService.error(`Error: ${error}`));
+        console.log(this.instance);
+      }
+    });
+    const user = this.authService.getCurrentUser();
+    if (user == null || user.lastPickedOrganizationId == null) {
+      this.toastrService.error('User must taking part in organization');
+      return;
+    } else {
+    this.organizationId = user.lastPickedOrganization.id; console.log(this.organizationId);
     }
-  });
-  const user = this.authService.getCurrentUser();
-  if (user == null || user.lastPickedOrganizationId == null) {
-    this.toastrService.error('User must taking part in organization');
-    return;
-  } else { this.organizationId = user.lastPickedOrganization.id;       console.log(this.organizationId);
-  }
-  this.instanceForm = this.getInstanceForm(this.instance);
+    this.instanceForm = this.getInstanceForm(this.instance);
   }
 }

@@ -9,6 +9,8 @@ import { ToastModule } from 'primeng/toast';
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 import { DashboardRoutingModule } from './dashboards-routing.module';
 import {MessageModule} from 'primeng/message';
+import {InputTextModule} from 'primeng/inputtext';
+
 
 @NgModule({
   imports: [
