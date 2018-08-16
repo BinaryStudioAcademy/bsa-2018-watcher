@@ -1,10 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Chat } from '../shared/models/chat.model';
-import { ChatType } from '../shared/models/chat-type.enum';
-import { Message } from '../shared/models/message.model';
+
 import { ChatHubService } from '../core/services/chat-hub.service';
 import { AuthService } from '../core/services/auth.service';
+import { UserService } from '../core/services/user.service';
+import { ToastrService } from '../core/services/toastr.service';
+
+import { Chat } from '../shared/models/chat.model';
+import { ChatType } from '../shared/models/chat-type.enum';
+import { ChatRequest } from '../shared/requests/chat-request';
+import { MessageRequest } from '../shared/requests/message-request';
+import { Message } from '../shared/models/message.model';
+import { User } from '../shared/models/user.model';
 
 
 @Component({
@@ -14,12 +21,17 @@ import { AuthService } from '../core/services/auth.service';
 })
 export class ChatComponent implements OnInit {
 
-  constructor(private chatHub: ChatHubService,
-    private authService: AuthService) { }
+  constructor(
+    private chatHub: ChatHubService,
+    private authService: AuthService,
+    private userService: UserService,
+    private toastrService: ToastrService) { }
 
+  currentUserId: string;
   chatPanel: MenuItem[] = [];
   chats: Chat[] = [];
   textMessage: string;
+  wanteduser: string;
 
   choosedChat: Chat = {} as Chat;
   isChatChoosed: boolean;
@@ -27,13 +39,24 @@ export class ChatComponent implements OnInit {
 
 
   ngOnInit() {
-    this.chatPanel = [
-      {
-        label: 'Chats',
-        icon: 'fa fa-envelope',
-        items: this.createChatItems()
+    this.currentUserId = this.authService.getCurrentUser().id;
+    this.userService.get(this.currentUserId).subscribe(
+      value => {
+        this.chats = value.chats;
+        this.chatPanel = [
+          {
+            label: 'Chats',
+            icon: 'fa fa-envelope',
+            items: this.createChatItems()
+          }
+        ];
+      },
+      err => {
+        this.toastrService.error('Can`t get user`s chats');
       }
-    ];
+    );
+
+
   }
 
   private subscribeToReceivingMessage() {
@@ -47,28 +70,54 @@ export class ChatComponent implements OnInit {
   }
 
   openConversation(chat: Chat) {
-    // Get list of message
     this.choosedChat = chat;
-    this.isChatChoosed = true;
-    this.chatHub.addUser(this.authService.getCurrentUser().id);
     this.subscribeToReceivingMessage();
+    this.isChatChoosed = true;
   }
 
   closeConversation() {
     this.isChatChoosed = false;
   }
 
-  sendMessage() {
-    const newMessage: Message = { text: this.textMessage, userId: this.authService.getCurrentUser().id } as Message;
-    this.chatHub.sendTextMessage(this.authService.getCurrentUser().id, this.textMessage);
+  createNewChat() {
+    this.isNewChatChoosed = true;
+
+    const newChat: ChatRequest = {
+      name: 'New chat',
+      createdById: this.currentUserId,
+      chatType: ChatType.BetweenUsers,
+      organizationId: null
+    };
+
+    this.chatHub.initializeChat(newChat, this.currentUserId);
   }
 
+  addUserToChat() {
+    this.userService.get(this.wanteduser).subscribe((value: User) => {
+      this.chatHub.addUser(value.id, this.choosedChat.id);
+      this.toastrService.error('User added');
+    },
+      err => {
+        this.toastrService.error('User don`t exist');
+      }
+    );
+  }
+
+  sendMessage() {
+    const newMessage: MessageRequest = {
+      text: this.textMessage,
+      userId: this.currentUserId,
+      chatId: this.choosedChat.id
+    } as Message;
+
+    this.chatHub.sendMessage(newMessage);
+  }
 
   createChatItems(): MenuItem[] {
     const items: MenuItem[] = [{
       label: 'New chat',
       icon: 'pi pi-fw pi-plus',
-      command: () => this.openCloseNewChatWindow()
+      command: () => this.createNewChat()
     }];
 
     this.chats.forEach(chat => {

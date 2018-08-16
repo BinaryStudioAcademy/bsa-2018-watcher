@@ -7,7 +7,7 @@
     <p-accordionTab>
       <p-header>
         {{choosedChat.name}}
-        <i class="chat-close fa fa-close" (click)="closeConversation()"></i>
+        <i class="panel-close-icon fa fa-close" (click)="closeConversation()"></i>
       </p-header>
       <div class="conversation-panel-content ui-fluid">
         <div class="conversation-message-panel">
@@ -37,13 +37,20 @@
     <p-accordionTab>
       <p-header>
         New Conversation
-        <i class="chat-close fa fa-close" (click)="openCloseNewChatWindow()"></i>
+        <i class="panel-close-icon fa fa-close" (click)="openCloseNewChatWindow()"></i>
       </p-header>
-      <div class="ui-g ui-fluid">
-        <input pInputText type="text" placeholder="Enter user email or id">
-      </div>
-      <div class="ui-g ui-fluid">
-        <input pInputText type="text" placeholder="Write message">
+      <div class="conversation-new-panel-content ui-fluid">
+        <div class="ui-inputgroup">
+          <input type="text" pInputText [(ngModel)]="wantedUser" placeholder="Enter user email or id">
+          <button pButton icon="fa fa-plus" (click)="addUserToChat()"></button>
+        </div>
+        <div>
+          User list
+        </div>
+        <div class="ui-inputgroup">
+          <input type="text" pInputText [(ngModel)]="textMessage" placeholder="Write message">
+          <button pButton icon="fa fa-send" (click)="sendMessage()"></button>
+        </div>
       </div>
     </p-accordionTab>
   </p-accordion>

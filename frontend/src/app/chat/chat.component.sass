@@ -5,11 +5,22 @@
 	padding: 0 !important
 	height: 300px
 
+/deep/.ui-inputtext
+	border-radius: 0 !important
+
+/deep/.ui-button
+	border-radius: 0 !important
+
 .conversation-panel
 	position: fixed
 	bottom: 0
 	right: 190px
 	width: 250px
+
+	.conversation-new-panel-content
+		display: grid
+		height: 100%
+		grid-template-rows: auto 1fr auto
 
 	.conversation-panel-content
 		height: 100%
@@ -32,30 +43,19 @@
 	right: 20px
 	width: 150px	
 
-/deep/.ui-panelmenu-header-link
-	height: 38px
-	padding: 7px 14px !important
+/deep/.ui-panelmenu
+	.ui-panelmenu-header-link
+		height: 38px
+		padding: 7px 14px !important
 
-/deep/.ui-panelmenu-content
-	height: 300px
+	.ui-panelmenu-content
+		height: 300px
 	
-
-.new-chat-panel
-	position: fixed
-	bottom: 0
-	right: 510px
-	width: 250px
-
-.chat-close
+.panel-close-icon
     cursor: pointer
-    margin: 5px
+    margin: 3px
     float: right
 
-.chat-close:hover
+.panel-close-icon:hover
     	color: gray
 
-/deep/.ui-inputtext
-	border-radius: 0 !important
-
-/deep/.ui-button
-	border-radius: 0 !important
