@@ -5,13 +5,17 @@ import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
 import { usesServiceWorker } from '../../../../node_modules/@angular-devkit/build-angular/src/angular-cli-files/utilities/service-worker';
+import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
+import { OrganizationInvite } from '../../shared/models/organization-invite.model';
+import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-organization-profile',
   templateUrl: './organization-profile.component.html',
   styleUrls: ['./organization-profile.component.sass'],
   providers: [
-    ToastrService, OrganizationService
+    ToastrService, OrganizationService, OrganizationInvitesService
   ]
 })
 export class OrganizationProfileComponent implements OnInit {
@@ -19,11 +23,14 @@ export class OrganizationProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private organizationService: OrganizationService,
+    private organizationInvitesService: OrganizationInvitesService,
     private authService: AuthService,
     private toastrService: ToastrService) { }
 
   editable: boolean;
   organization: Organization;
+
+  inviteLink: string;
 
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
@@ -99,6 +106,32 @@ export class OrganizationProfileComponent implements OnInit {
   }
 
   onInvite() {
+    const invite: OrganizationInvite = {
+      id: 0,
+      organizationId: this.organization.id,
+      createdByUserId: this.authService.getCurrentUser().id,
+      inviteEmail: 'San7Av1.0@gmail.com',
+
+      createdByUser: null,
+      organization: null,
+      createdDate: null,
+      experationDate: null,
+      link: null,
+      state: OrganizationInviteState.Pending
+    };
+
+    this.organizationInvitesService.create(invite).subscribe(
+      value => {
+        this.toastrService.success('Organization Invite was updated');
+        this.inviteLink = `${environment.server_url}/invite/${value.link}`;
+      },
+      err => {
+        this.toastrService.error('Organization Invite was not updated');
+      }
+    );
+  }
+
+  onCopy() {
 
   }
 }

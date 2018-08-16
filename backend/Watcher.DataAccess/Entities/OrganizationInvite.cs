@@ -19,6 +19,8 @@ namespace Watcher.DataAccess.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime ExperationDate { get; set; }
 
+        public string InviteEmail { get; set; }
+
         public string CreatedByUserId { get; set; }
         public User CreatedByUser { get; set; }
 

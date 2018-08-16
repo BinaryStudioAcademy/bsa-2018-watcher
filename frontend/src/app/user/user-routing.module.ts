@@ -11,7 +11,8 @@ const userRoutes: Routes = [{
       { path: '', redirectTo: 'dashboards', pathMatch: 'full' },
       { path: 'dashboards', component: DashboardComponent },
       { path: 'feedback', component: FeedbackComponent },
-      { path: 'settings', loadChildren: '../settings/settings.module#SettingsModule' }
+      { path: 'settings', loadChildren: '../settings/settings.module#SettingsModule' },
+      { path: 'invite', component: FeedbackComponent }
     ]
   }]
 }];

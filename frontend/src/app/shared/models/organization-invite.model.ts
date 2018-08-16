@@ -3,15 +3,15 @@ import { Organization } from './organization.model';
 import { User } from 'firebase';
 import { OrganizationInviteState } from './organization-invite-state.enum';
 
-export interface OrganizationInvites  {
+export interface OrganizationInvite  {
    id: number;
    link: string;
    organizationId: number;
    organization: Organization;
-   CreatedByUserId: number;
-   CreatedByUser: User;
-   email: string;
-   CreatedDate: string;
-   ExperationDate: string;
-   State: OrganizationInviteState;
+   createdByUserId: string;
+   createdByUser: User;
+   inviteEmail: string;
+   createdDate: string;
+   experationDate: string;
+   state: OrganizationInviteState;
 }

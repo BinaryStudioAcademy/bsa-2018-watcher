@@ -20,6 +20,8 @@ namespace Watcher.Common.Dtos
         public DateTime CreatedDate { get; set; }
         public DateTime ExperationDate { get; set; }
 
+        public string InviteEmail { get; set; }
+
         public string CreatedByUserId { get; set; }
         public UserDto CreatedByUser { get; set; }
 
