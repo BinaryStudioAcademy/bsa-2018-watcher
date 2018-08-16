@@ -6,17 +6,16 @@ import {EditInstanceComponent} from './edit-instance/edit-instance.component';
 
 const dashboardRoutes: Routes = [
   {
-    path: 'dashboards',
-    component: DashboardComponent
-  },
-  {
-    path: 'edit-instance/:id',
+    path: 'instance/:id/edit',
     component: EditInstanceComponent
-  },
-  {
-    path: 'edit-instance',
+}, {
+    path: 'instance/create',
     component: EditInstanceComponent
-  }];
+},
+{
+  path: 'instance/:id/dashboards',
+  component: DashboardComponent
+}];
 
 @NgModule({
   imports: [RouterModule.forChild(dashboardRoutes)],
