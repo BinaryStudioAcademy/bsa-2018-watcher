@@ -1,8 +1,6 @@
-import { Component, OnChanges, OnInit, AfterContentInit, AfterContentChecked, AfterViewInit,
-  AfterViewChecked, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { NavigationStart, Router, RouterEvent } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -10,8 +8,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./left-side-menu.component.sass']
 })
 
-export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterContentChecked,
-  AfterViewInit, AfterViewChecked {
+export class LeftSideMenuComponent implements OnInit, AfterContentChecked {
 
   constructor(private router: Router) {
     router.events.forEach((event) => {
@@ -25,8 +22,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterCon
   private previousSettingUrl: String;
   private settingsItems: MenuItem[];
   private dashboardItems: MenuItem[];
-
-  private navigationSub: Subscription;
 
   private regexSettingsUrl = /\/user\/settings/;
   private regexFeedbackUrl = /\/user\/feedback/;
@@ -43,20 +38,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterCon
     this.changeMenu();
 
     this.subscribeRouteChanges();
-
-
-
-  }
-
-  ngAfterContentInit()  {
-    // const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
-
-    // if ( element !== null && element !== undefined) {
-    //   this.clearPreviousSetting();
-    //   // debugger;
-    //   element.classList.add('ui-state-active');
-    //   element.parentElement.classList.add('ui-state-active');
-    // }
   }
 
   ngAfterContentChecked()  {
@@ -64,34 +45,11 @@ export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterCon
 
     if ( element !== null && element !== undefined) {
       this.clearPreviousSetting();
-      // debugger;
+
       element.classList.add('ui-state-active');
       element.parentElement.classList.add('ui-state-active');
     }
   }
-
-  ngAfterViewInit () {
-    // const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
-
-    // if ( element !== null && element !== undefined) {
-    //   this.clearPreviousSetting();
-    //   // debugger;
-    //   element.classList.add('ui-state-active');
-    //   element.parentElement.classList.add('ui-state-active');
-    // }
-  }
-
-  ngAfterViewChecked()  {
-    // const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
-
-    // if ( element !== null && element !== undefined) {
-    //   this.clearPreviousSetting();
-    //   // debugger;
-    //   element.classList.add('ui-state-active');
-    //   element.parentElement.classList.add('ui-state-active');
-    // }
-  }
-
 
   initMenuItems() {
     this.settingsItems = [{
@@ -126,7 +84,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterCon
           this.activeUrl = event.url;
           this.changeMenu();
       }
-  });
+    });
   }
 
   changeMenu() {
@@ -146,7 +104,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterCon
   private clearCurrentSetting() {
     const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.activeUrl}"]`);
     if ( element !== null) {
-      debugger;
       this.previousSettingUrl = this.activeUrl;
       this.clearSettings(element);
     }
@@ -155,7 +112,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterCon
   private clearPreviousSetting() {
     const element = document.querySelector(`div.ui-panelmenu-header a[href="${this.previousSettingUrl}"]`);
     if ( element !== null) {
-      debugger;
       this.clearSettings(element);
     }
   }
@@ -164,5 +120,4 @@ export class LeftSideMenuComponent implements OnInit, AfterContentInit, AfterCon
     element.classList.remove('ui-state-active');
     element.parentElement.classList.remove('ui-state-active');
   }
-
 }
