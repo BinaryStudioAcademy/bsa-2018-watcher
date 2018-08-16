@@ -1,15 +1,34 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { throwIfAlreadyLoaded } from './guards/module-import.guard';
 import { CommonModule } from '@angular/common';
-import { DefaultService } from './services/default.service';
+import {AuthService} from './services/auth.service';
+import {TokenService} from './services/token.service';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {TokensInterceptor} from './interceptors/tokens-interceptor';
+import { ToastrService } from './services/toastr.service';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import {ApiService} from './services/api.service';
+import {NotificationsService} from './services/notifications.service';
+import { AuthGuard } from './guards/auth.guard';
+import { FeedbackService } from './services/feedback.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   providers: [
-    DefaultService
+    AuthService,
+    TokenService,
+    ApiService,
+    NotificationsService,
+    ToastrService,
+    FeedbackService,
+    ConfirmationService,
+    MessageService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },
+    AuthGuard
   ],
+
   declarations: []
 })
 export class CoreModule {

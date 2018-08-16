@@ -1,0 +1,107 @@
+.header
+    background-color: rgb(0,0,0)
+    box-sizing: border-box
+    display: block
+    padding: 0
+    height: 60px
+    box-sizing: border-box
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    z-index: 9997
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.3)    
+
+.menu-button
+    background-color: #20272a
+    color: #ffffff
+    border: none
+    font-size: 20px
+    margin-left: 20px
+    display: none
+    
+.logo
+    font-size: 1.2em
+    font-weight: 600
+    letter-spacing: 2px
+    color: white
+    margin-left: 45px
+    margin-top: 20px
+    display: inline-block 
+    text-transform: uppercase
+
+.organizations
+    color: white  
+    vertical-align: middle  
+
+.user-info
+    float: right
+    top: 0
+    padding: 17.5px
+    font-weight: 500
+    color: white
+    cursor: pointer
+
+.user-photo
+    height: 25px
+    width: 25px
+    border-radius: 3px
+    vertical-align: middle
+    border: 0 none
+    margin-right: 6px
+
+.user-info
+    span 
+        vertical-align: middle
+        font-size: 14px
+        line-height: 21px
+        text-align: left
+        margin-right: 10px
+        color: #ffffff    
+
+.user-info:hover
+    background-color: #4a4f52    
+
+.user-info::after
+    content: ""
+    clear: both
+    display: table
+
+/deep/ .header
+    .ui-button
+        background-color: #313232
+        border: 1px solid #313232
+        margin: 10px 1px 0 3px
+        font-size: 1.3em
+
+    .ui-button-icon-only
+        width: 2em !important
+        height: 2em
+
+    .ui-tieredmenu-dynamic
+        top: 57px !important
+
+    .ui-tieredmenu        
+        background: #F7F8FA !important
+
+.toolbar-item
+    display: inline-block
+    position: relative 
+
+    .topbar-badge
+        position: absolute
+        right: 0
+        top: 10px
+        background-color: #3eb839
+        color: #ffffff
+        -moz-border-radius: 50%
+        -webkit-border-radius: 50%
+        border-radius: 50%
+        padding: 2px 4px
+        display: block
+        font-size: 12px
+        line-height: 12px       
+        
+.selectedMenuItem
+    color: red
+    font-weight: 900

@@ -1,0 +1,69 @@
+version: '1.0.{build}'
+image: Visual Studio 2017
+skip_branch_with_pr: true
+branches:
+  only:
+  - dev
+clone_depth: 1
+init:
+  # Good practise, because Windows
+  - git config --global core.autocrlf true
+before_build:
+  # Resote backend solution
+  - cmd: cd backend
+  - cmd: dotnet restore --verbosity m
+  # Resote DataAccumulator solution
+  - cmd: cd ../DataAccumulator
+  - cmd: dotnet restore --verbosity m
+build_script:
+  # output will be in ./DataAccumulator/DataAccumulator/bin/Release/netcoreapp2.1/publish/
+  - cmd: dotnet publish -c Release
+  # output will be in ./backend/Watcher/bin/Release/netcoreapp2.1/publish/
+  - cmd: cd ../backend
+  - cmd: dotnet publish -c Release
+test_script:
+ # tests in here
+ # Temporarily disabling tests
+ # - cmd: cd backend\Watcher.Tests
+ # - cmd: dotnet xunit
+artifacts:
+ - path: '\backend\Watcher\bin\Release\netcoreapp2.1\publish'
+   name: api
+
+ - path: '\DataAccumulator\DataAccumulator\bin\Release\netcoreapp2.1\publish'
+   name: dataaccumulator
+notifications:
+  - provider: Slack
+    incoming_webhook:
+      secure: om6ZaQPG70gvmoGaTQ2IfnTM8LQFROsCT1l23SGjLCVtLIufhCl+gDK1+K4UjfZNLmZJj/bjuNFuiVargaYtl64Ul4IslvGflpz7I6sSqc8=
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: true
+    # on_build_status_changed: false
+# Deploy backend solution
+deploy:
+  - provider: WebDeploy
+    server:
+      secure: GCqb1Ka4XlvY8MkxWTFIEKRyPyeJn63fFZmwQZGgGnpzsX/eBLKza5n+7SpMFw4mJ1MLj0/7DAYnYG9QQVaferAktoWyR/lauzzwMw6byK8=
+    website:
+      secure: cDbNO7KXt5Cq0UGJ+GkMLA==
+    username:
+      secure: J8/Xl8QbjGaOqjFDlyc54g==
+    password:
+      secure: oKuycG/m6HKIsIk1D0gcFw+8Q+ChRVaEXSwvxEOQJl6C4ZsvfnfdmGJ/3TcUuu3bNZLk31eX10rFQd//JVybCQ==
+    remove_files: true
+    app_offline: true
+    artifact: api
+# Deploy DataAccumulator
+  - provider: WebDeploy
+    server:
+      secure: GCqb1Ka4XlvY8MkxWTFIEIbEk+yFC8EXfdVwDNqEzVAKxUe4AXjWiaf6HXj1PkmX8gezwqZvHjyu/bh+eJR1SGdotpyJOQPeGe6eDUXBvVCkj3KI6FQ7I7KnTCOANcDBlnURqjtXg29Jq2r4ASNIWw==
+    website:
+      secure: IV137Y6THFxLzDZI7AZjGwfYLIdFENA5kcKpZ4OEpXg=
+    username:
+      secure: 4bOILnGvJX90az4zPepc6/kJeQCoGki4hxZm8BnSC0U=
+    password:
+      secure: caHBnqUecWjsXS5qn2KuUtvXtvhsgI1I84Ufl1Iffoad30jRzQvJimFYikaWN9jzBnKN56KJhKQpL4wZ/2v8nA==
+    remove_files: true
+    app_offline: true
+    artifact: dataaccumulator

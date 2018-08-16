@@ -1,0 +1,30 @@
+<div class="ui-g ui-fluid">
+  <div class="ui-g-12 ui-lg-6">
+    <div class="title">NOTIFICATION SETTINGS</div>
+    <hr>
+  </div>
+</div>
+
+<div *ngIf="selectedNotificationSetting" class="inputs">
+  <div class="grid-container">
+    <div class="grid-item"><span>Type:</span></div>
+    <div class="grid-item">
+      <p-dropdown [options]="dropdown" [(ngModel)]="selectedNotificationSetting"></p-dropdown>
+    </div>
+    <div class="grid-item"><span>Disable:</span></div>
+    <div class="grid-item align-center">
+      <p-inputSwitch [(ngModel)]="selectedNotificationSetting.isDisable"></p-inputSwitch>
+    </div>
+    <div class="grid-item"><span>Mute:</span></div>
+    <div class="grid-item align-center">
+      <p-inputSwitch [disabled]="selectedNotificationSetting.isDisable" [(ngModel)]="selectedNotificationSetting.isMute"></p-inputSwitch>
+    </div>
+    <div class="grid-item"><span>Emailable:</span></div>
+    <div class="grid-item align-center">
+      <p-inputSwitch [disabled]="selectedNotificationSetting.isDisable" [(ngModel)]="selectedNotificationSetting.isEmailable"></p-inputSwitch>
+    </div>
+    <div class="grid-item">
+      <button (click)="onSave()" pButton label="Update" class="ui-button-raised ui-button-success"></button>
+    </div>
+  </div>
+</div>

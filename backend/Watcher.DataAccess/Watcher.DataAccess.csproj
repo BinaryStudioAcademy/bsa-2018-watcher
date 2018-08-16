@@ -1,7 +1,39 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20180809142129_AddBioToUser.cs" />
+    <Compile Remove="Data\Migrations\20180811133056_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811133307_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811133515_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811134014_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811134745_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811134955_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811135447_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811140353_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811140605_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811140831_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811141458_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Data\Migrations\20180811141834_ChangedUserSecondNameToLastName.cs" />
+    <Compile Remove="Migrations\20180809132634_AddedSeed.cs" />
+    <Compile Remove="Migrations\20180809134759_AddedSeed.cs" />
+    <Compile Remove="Migrations\20180809135541_AddedSeed.cs" />
+    <Compile Remove="Migrations\20180809135945_Init.cs" />
+    <Compile Remove="Migrations\20180809140115_AddSeed.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="Bogus" Version="22.3.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Watcher.Common\Watcher.Common.csproj" />
+  </ItemGroup>
 
 </Project>

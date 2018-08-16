@@ -1,0 +1,46 @@
+<div class="header">
+  <a routerLink="/user" class="logo">Watcher</a>
+  <p-growl [(value)]="msgs"></p-growl>
+
+  <div class="ui-toolbar-group-right">
+    TODO: methods for SignalR Tests
+    <div class="toolbar-item">
+      <button type="button" pButton label="Connect" class="ui-button-info" (click)="connectToServer()"></button>
+    </div>
+    <div class="toolbar-item">
+      <button type="button" pButton label="Send" class="ui-button-info" (click)="sendMess()"></button>
+    </div>
+    <div class="toolbar-item">
+      <button type="button" pButton label="Echo" class="ui-button-info" (click)="echoToServer()"></button>
+    </div>
+    <div class="toolbar-item">
+      <button type="button" pButton label="Create" class="ui-button-info" (click)="createSample()"></button>
+    </div>
+
+    <p-tieredMenu #bell [model]="bellItems" [popup]="true"></p-tieredMenu>
+    <div class="toolbar-item">
+      <button #btn type="button" pButton icon="fa fa-fw fa-bell-o" (click)="bell.toggle($event)"></button>
+      <span class="topbar-badge">{{ notificationsNumber }}</span>
+    </div>
+
+  
+    <div class="toolbar-item">
+      <button #btn type="button" pButton icon="fa fa-fw fa-bullhorn" (click)="onFeedback()"></button>
+    </div>
+
+    <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
+    <button #btn type="button" pButton icon="fa fa-fw fa-cog" (click)="cog.toggle($event)"></button>
+
+    <p-tieredMenu #org [model]="orgItems" [popup]="true"></p-tieredMenu>
+    <button #btn type="button" pButton icon="fa fa-sitemap" (click)="org.toggle($event)"></button>
+
+    <p-tieredMenu #user [model]="userItems" [popup]="true"></p-tieredMenu>
+    <a class="user-info" (click)="user.toggle($event)">
+      <span>{{ currentUser?.displayName }}</span>
+      <img src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-4/256/User-blue-icon.png"
+           class="user-photo" alt="">
+      <i class="fa fa-sort-desc"></i>
+    </a>
+  </div>
+</div>
+

@@ -1,0 +1,70 @@
+<div class="ui-g ui-fluid">
+  <div class="ui-g-12 ui-lg-6">
+    <div class="title">ORGANIZATION PROFILE</div>
+    <hr>
+  </div>
+</div>
+
+<form [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
+  <div class="label">Name*:</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-4">
+      <div class="ui-inputgroup">
+        <input type="text" formControlName="name" pInputText placeholder="Name">
+      </div>
+    </div>
+  </div>
+
+  <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
+    <label>Name is required.</label>
+  </div>
+
+  <div class="label">Email:</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-4">
+      <div class="ui-inputgroup">
+        <input type="text" formControlName="email" pInputText placeholder="Email">
+      </div>
+    </div>
+  </div>
+
+  <div class="invalid" *ngIf="organizationForm.get('email').errors && organizationForm.get('email').dirty">
+    <label>Wrong email format.</label>
+  </div>
+
+  <div class="label">Contact number:</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-4">
+      <div class="ui-inputgroup">
+        <input type="text" formControlName="contactNumber" pInputText placeholder="Contact number">
+      </div>
+    </div>
+  </div>
+
+  <div class="invalid" *ngIf="organizationForm.get('contactNumber').errors && organizationForm.get('contactNumber').dirty">
+    <label>Wrong number format.</label>
+  </div>
+
+  <div class="label">Web site:</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-4">
+      <div class="ui-inputgroup">
+        <input type="text" formControlName="webSite" pInputText placeholder="Web site">
+      </div>
+    </div>
+  </div>
+
+  <div class="invalid" *ngIf="organizationForm.get('webSite').errors && organizationForm.get('webSite').dirty">
+    <label>Wrong url format.</label>
+  </div>
+
+  <div class="label">Description:</div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-4">
+      <textarea rows="5" formControlName="description" pInputTextarea></textarea>
+    </div>
+  </div>
+  <div class="btn-panel">
+    <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success"></button>
+  </div>
+</form>

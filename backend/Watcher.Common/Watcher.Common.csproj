@@ -4,4 +4,70 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="7.6.104" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.2.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MoveToFrontend\chart-type.enum.ts">
+      <CustomToolNamespace>Enums\ChartType.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\chart.model.ts">
+      <CustomToolNamespace>Dtos\ChartDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\chat-type.enum.ts">
+      <CustomToolNamespace>Enums\ChatType.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\chat.model.ts">
+      <CustomToolNamespace>Dtos\ChatDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\dashboard.model.ts">
+      <CustomToolNamespace>Dtos\DashboardDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\feedback.model.ts">
+      <CustomToolNamespace>Dtos\FeedbackDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\instance.model.ts">
+      <CustomToolNamespace>Dtos\InstanceDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\long-answer-type.enum.ts">
+      <CustomToolNamespace>Enums\LongAnswerType.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\message.model.ts">
+      <CustomToolNamespace>Dtos\MessageDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\notification-setting.model.ts">
+      <CustomToolNamespace>Dtos\NotificationSettingDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\notification-type.enum.ts">
+      <CustomToolNamespace>Enums\NotificationType.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\notification.model.ts">
+      <CustomToolNamespace>Dtos\NotificationDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\organization.model.ts">
+      <CustomToolNamespace>Dtos\OrganizationDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\response.model.ts">
+      <CustomToolNamespace>Dtos\ResponseDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\role.model.ts">
+      <CustomToolNamespace>Dtos\RoleDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\short-answer-type.enum.ts">
+      <CustomToolNamespace>Enums\ShortAnswerType.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\theme.model.ts">
+      <CustomToolNamespace>Dtos\Theme.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\user-organization.model.ts">
+      <CustomToolNamespace>Dtos\UserOrganizationDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\user.model.ts">
+      <CustomToolNamespace>Dtos\UserDto.cs</CustomToolNamespace>
+    </None>
+  </ItemGroup>
+
 </Project>
