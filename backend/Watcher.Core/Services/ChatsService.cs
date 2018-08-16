@@ -101,9 +101,6 @@ namespace Watcher.Core.Services
 
             var dto = _mapper.Map<Chat, ChatDto>(entity);
 
-            dto.CreatedBy = request.CreatedBy;
-            dto.Organization = request.Organization;
-
             return dto;
         }
 
