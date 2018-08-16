@@ -106,7 +106,9 @@
                         {
                             OnMessageReceived = delegate (MessageReceivedContext context)
                               {
-                                  if (!context.Request.Path.Value.Contains("/notifications")
+                                  if ((!context.Request.Path.Value.Contains("/notifications")
+                                      && !context.Request.Path.Value.Contains("/chatsHub"))
+                                      
                                       || !context.Request.Query.ContainsKey("Authorization")
                                       || !context.Request.Query.ContainsKey("WatcherAuthorization"))
                                       return Task.CompletedTask;
@@ -202,6 +204,7 @@
                 app.UseAzureSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
             else
@@ -245,18 +248,19 @@
                     cfg.AddProfile<SamplesProfile>();
 
                     cfg.AddProfile<UsersProfile>();
-
                     cfg.AddProfile<DashboardsProfile>();
-
                     cfg.AddProfile<OrganizationProfile>();
 
                     cfg.AddProfile<NotificationSettingsProfile>();
 
-                    cfg.AddProfile<FeedbackProfile>();
 
                     cfg.AddProfile<ChatProfile>();
 
                     cfg.AddProfile<MessageProfile>();
+
+                    cfg.AddProfile<FeedbackProfile>();
+                    cfg.AddProfile<InstancesProfile>();
+
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 

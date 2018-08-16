@@ -27,7 +27,7 @@ export class OrganizationProfileComponent implements OnInit {
 
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
-
+  
   organizationForm = this.fb.group({
     name: new FormControl({ value: '', disabled: true }, Validators.required),
     email: new FormControl({ value: '', disabled: true }, Validators.email),

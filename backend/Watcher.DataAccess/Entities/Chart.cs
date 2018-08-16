@@ -22,6 +22,8 @@
 
         public string MostLoaded { get; set; }
 
+        
+
         public int DashboardId { get; set; }
         public Dashboard Dashboard { get; set; }
     }

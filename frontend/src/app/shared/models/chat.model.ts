@@ -7,7 +7,6 @@ export interface Chat  {
    id: number;
    name: string;
    type: ChatType;
-   createdById: string;
    createdBy: User;
    organization: Organization;
    messages: Message[];
