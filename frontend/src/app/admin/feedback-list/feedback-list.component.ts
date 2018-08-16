@@ -25,12 +25,15 @@ export class FeedbackListComponent implements OnInit {
   response: Response;
   responses: Response[];
   lstFeedbacks: ForShow[];
+  display: boolean;
+
   constructor(
-        private authService: AuthService,
-        private feedbackService: FeedbackService,
-        private toastrService: ToastrService,
-        private responseService: ResponseService) {
+    private authService: AuthService,
+    private feedbackService: FeedbackService,
+    private toastrService: ToastrService,
+    private responseService: ResponseService) {
     this.lstFeedbacks = new Array<ForShow>();
+    this.display = false;
   }
 
   ngOnInit() {
@@ -40,13 +43,13 @@ export class FeedbackListComponent implements OnInit {
     }
     this.feedbackService.getAll().subscribe((value: Feedback[]) => {
       this.feedbacks = value;
-      this.fillDropdown();
+      this.fillLstFeedbacks();
     });
 
     this.responseService.getAll().subscribe((value: Response[]) => this.responses = value);
   }
 
-  private fillDropdown(): void {
+  private fillLstFeedbacks(): void {
     this.feedbacks.forEach(el => this.lstFeedbacks.push({
       main: el,
       willuse: ShortAnswerType[el.willUse],
@@ -56,12 +59,26 @@ export class FeedbackListComponent implements OnInit {
     }));
   }
 
-  onSubmit(feedback: Feedback) {
-    this.response.id = 0;
-    this.response.createdAt = new Date(),
-      this.response.user = this.user,
-      this.response.feedback = feedback;
-    this.responseService.create(this.response).
+  showPopup(feedback: Feedback) {
+    this.display = true;
+    this.feedback = feedback;
+  }
+
+  onCancel() {
+    this.display = false;
+    this.feedback = null;
+  }
+
+  onSubmit() {
+    this.display = false;
+    const newResponse: Response = {
+      id: 0,
+      createdAt: new Date(),
+      user: this.user,
+      feedback: this.feedback,
+      text: 'dhfgjg'
+    };
+    this.responseService.create(newResponse).
       subscribe(
         value => {
           this.toastrService.success('Added new response');

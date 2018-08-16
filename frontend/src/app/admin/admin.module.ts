@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { FeedbackListComponent } from './feedback-list/feedback-list.component';
+import { DialogModule } from 'primeng/dialog';
 import { TabViewModule, InputTextModule, ButtonModule, ToggleButtonModule, InputTextareaModule } from 'primeng/primeng';
 
 @NgModule({
@@ -14,7 +15,8 @@ import { TabViewModule, InputTextModule, ButtonModule, ToggleButtonModule, Input
     InputTextModule,
     ButtonModule,
     ToggleButtonModule,
-    InputTextareaModule
+    InputTextareaModule,
+    DialogModule
   ],
   declarations: [
     AdminPageComponent,
