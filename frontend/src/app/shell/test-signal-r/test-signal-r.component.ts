@@ -32,15 +32,15 @@ export class TestSignalRComponent implements OnInit {
     const chat: Chat = {
       id: 33,
       name: 'chat',
-      createdBy: this.authService.getCurrentUser(),
+      createdById: this.authService.getCurrentUser().id,
       type: ChatType.BetweenUsers,
-      organization: null,
+      organizationId: 81,
       messages: null
     };
 
     const message: Message = {
       id: 0,
-      chatId: 33,
+      chatId: 45,
       createdAt: new Date(),
       text: 'message',
       userId: this.authService.getCurrentUser().id,
@@ -51,7 +51,8 @@ export class TestSignalRComponent implements OnInit {
       .then(() => {
         console.log('Connection started!');
         // this.hubConnection.invoke('AddUser', this.authService.getCurrentUser().id);
-        this.hubConnection.on('ReceiveMessage', (messageIn) => console.log(messageIn));
+        this.hubConnection.on('ReceiveMessage', (messageIn: Message) => console.log(messageIn.text));
+        // this.hubConnection.invoke('InitializeChat', chat, null);
         this.hubConnection.invoke('Send', message);
         // (message: String) => { console.log(message); });
       })

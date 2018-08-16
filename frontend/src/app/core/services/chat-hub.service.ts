@@ -1,6 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnection } from '@aspnet/signalr';
 import { environment } from '../../../environments/environment';
+
+import * as signalR from '@aspnet/signalr';
+import { AuthService } from './auth.service';
 
 import { Message } from '../../shared/models/message.model';
 import { Chat } from '../../shared/models/chat.model';
@@ -19,9 +22,14 @@ export class ChatHubService {
     public messageReceived = new EventEmitter<Message>();
     public chatCreated = new EventEmitter<Chat>();
 
-    constructor() {
-        this.hubConnection = new HubConnectionBuilder()
-            .withUrl(`${environment.server_url}/${this.hubName}`)
+    constructor(private authService: AuthService) {
+        const firebaseToken = this.authService.getFirebaseToken();
+        const watcherToken = this.authService.getWatcherToken();
+        const connPath = `${environment.server_url}/${this.hubName}?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
+
+        this.hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl(connPath)
+            .configureLogging(signalR.LogLevel.Information)
             .build();
 
         this.startConnection();

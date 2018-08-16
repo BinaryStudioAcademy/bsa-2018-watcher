@@ -12,6 +12,6 @@
             
         public string CreatedById { get; set; }
 
-        public int? OrganizationId { get; set; }
+        public int OrganizationId { get; set; }
     }
 }

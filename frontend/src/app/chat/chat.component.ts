@@ -70,6 +70,7 @@ export class ChatComponent implements OnInit {
   }
 
   openConversation(chat: Chat) {
+    debugger;
     this.choosedChat = chat;
     this.subscribeToReceivingMessage();
     this.isChatChoosed = true;
@@ -110,6 +111,7 @@ export class ChatComponent implements OnInit {
       chatId: this.choosedChat.id
     } as Message;
 
+    debugger;
     this.chatHub.sendMessage(newMessage);
   }
 
