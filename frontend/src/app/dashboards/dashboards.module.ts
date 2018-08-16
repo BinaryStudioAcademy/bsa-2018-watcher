@@ -24,6 +24,7 @@ import {MessageModule} from 'primeng/message';
     ProgressSpinnerModule,
     ToastModule,
     MessageModule,
+    ReactiveFormsModule,
 
     DashboardRoutingModule
   ],

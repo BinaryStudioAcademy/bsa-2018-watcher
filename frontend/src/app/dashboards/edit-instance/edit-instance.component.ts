@@ -66,14 +66,12 @@ export class EditInstanceComponent implements OnInit {
             platform: instance.platform
           };
           this.instanceService.instanceEdited.emit(instanceEvent);
-        },
-          error => this.toastrService.error(`Error: ${error}`));
+        });
       } else {
         this.instanceService.create(instance).subscribe((res: Instance) => {
           this.toastrService.success('created instance');
           this.instanceService.instanceAdded.emit(res);
-        },
-          error => this.toastrService.error(`Error: ${error}`));
+        });
       }
     } else {
       this.toastrService.error('Invalid form');
@@ -89,9 +87,7 @@ export class EditInstanceComponent implements OnInit {
             this.instance = data;
             this.instanceForm = this.getInstanceForm(this.instance);
           }
-        },
-          error => this.toastrService.error(`Error: ${error}`));
-        console.log(this.instance);
+        });
       }
     });
     const user = this.authService.getCurrentUser();
@@ -99,7 +95,7 @@ export class EditInstanceComponent implements OnInit {
       this.toastrService.error('User must taking part in organization');
       return;
     } else {
-    this.organizationId = user.lastPickedOrganization.id; console.log(this.organizationId);
+      this.organizationId = user.lastPickedOrganization.id;
     }
     this.instanceForm = this.getInstanceForm(this.instance);
   }

@@ -64,7 +64,7 @@ export class InstanceService {
   }
 
   handleError(error: HttpErrorResponse) {
-    this.toastrService.error(`Error status ${error}`);
+    this.toastrService.error(`Error status: ${error.status}`);
     return throwError(error.status);
   }
 }
