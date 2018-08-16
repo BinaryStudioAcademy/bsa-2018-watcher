@@ -50,11 +50,16 @@ export class FeedbackListComponent implements OnInit {
       return;
     }
     this.feedbackService.getAll().subscribe((value: Feedback[]) => {
+      this.sortByDueDate(value);
       this.feedbacks = value;
       this.fillLstFeedbacks();
     });
 
     this.responseService.getAll().subscribe((value: Response[]) => this.responses = value);
+  }
+
+  private sortByDueDate(value): void {
+    value.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
   private fillLstFeedbacks(): void {
