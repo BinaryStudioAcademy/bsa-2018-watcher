@@ -5,7 +5,12 @@
 	</div>
 </div>
 
-<user-picture [pictureUrl]="user.displayName"></user-picture>
+<div class="ui-g ui-fluid">
+	<div class="ui-g-12 ui-lg-6">
+		<user-picture [pictureUrl]="user.photoURL"></user-picture>
+	</div>
+</div>
+
 
 <form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
 	<div class="label">Display Name*:</div>

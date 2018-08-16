@@ -32,6 +32,7 @@
                 .ForMember(d => d.CreatedChats, o => o.UseValue(new List<ChartDto>()))
                 .ForMember(d => d.Feedbacks, o => o.UseValue(new List<FeedbackDto>()))
                 .ForMember(d => d.Messages, o => o.UseValue(new List<MessageDto>()))
+                .ForMember(d => d.PhotoURL, o => o.MapFrom(s => s.PhotoURL))
                 .ForMember(d => d.NotificationSettings, o => o.MapFrom(s => s.NotificationSettings))
                 .ForMember(d => d.Notifications, o => o.MapFrom(s => s.Notifications))
                 .ForMember(d => d.Responses, o => o.UseValue(new List<ResponseDto>()));
