@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Security.Claims;
 
     using AutoMapper;
@@ -32,6 +33,7 @@
                 .ForMember(d => d.Organizations, o => o.MapFrom(s => s.UserOrganizations))
                 .ForMember(d => d.LastPickedOrganization, o => o.MapFrom(s => s.LastPickedOrganization))
                 .ForMember(d => d.CreatedChats, o => o.UseValue(new List<ChartDto>()))
+                .ForMember(d => d.Chats, o => o.MapFrom(s => s.UserChats.Select(uc => uc.Chat)))
                 .ForMember(d => d.Feedbacks, o => o.UseValue(new List<FeedbackDto>()))
                 .ForMember(d => d.Messages, o => o.UseValue(new List<MessageDto>()))
                 .ForMember(d => d.NotificationSettings, o => o.MapFrom(s => s.NotificationSettings))
