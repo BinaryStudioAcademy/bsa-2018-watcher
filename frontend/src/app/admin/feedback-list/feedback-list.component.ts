@@ -73,6 +73,7 @@ export class FeedbackListComponent implements OnInit {
   }
 
   showPopup(feedback: Feedback) {
+    this.responseForm.reset();
     this.display = true;
     this.feedback = feedback;
   }
