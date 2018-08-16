@@ -60,6 +60,8 @@ namespace Watcher.Core.Services
 
             UserChat userChat = await _uow.ChatsRepository.AddUserChat(new UserChat() { ChatId = chatId, UserId = userId });
 
+            await _uow.SaveAsync();
+
             UserDto userDto = _mapper.Map<User, UserDto>(userChat.User);
 
             return userDto;
@@ -100,9 +102,6 @@ namespace Watcher.Core.Services
             if (entity == null) return null;
 
             var dto = _mapper.Map<Chat, ChatDto>(entity);
-
-            dto.CreatedBy = request.CreatedBy;
-            dto.Organization = request.Organization;
 
             return dto;
         }

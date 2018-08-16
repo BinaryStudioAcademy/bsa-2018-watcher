@@ -18,10 +18,6 @@
             CreateMap<Chat, ChatDto>();
 
             CreateMap<ChatRequest, Chat>()
-                .ForMember(d => d.CreatedById, o => o.MapFrom(s => s.CreatedBy.Id))
-                .ForMember(d => d.CreatedBy, o => o.Ignore())
-                .ForMember(d => d.OrganizationId, o => o.MapFrom(s => s.Organization.Id))
-                .ForMember(d => d.Organization, o => o.Ignore())
                 .ForMember(d => d.UserChats, o => o.UseValue(new List<UserChat>()));
 
             CreateMap<ChatUpdateRequest, Chat>()

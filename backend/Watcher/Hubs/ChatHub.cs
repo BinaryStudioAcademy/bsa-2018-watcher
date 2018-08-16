@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Watcher.Common.Dtos;
+using Watcher.Common.Enums;
 
 namespace Watcher.Hubs
 {
@@ -17,6 +18,7 @@ namespace Watcher.Hubs
     {
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
+        private readonly IOrganizationService _organizationService;
 
         private static Dictionary<string, List<string>> userConnections = new Dictionary<string, List<string>>();
 
@@ -26,7 +28,6 @@ namespace Watcher.Hubs
             _messagesService = messagesService;
         }
 
-        [Authorize]
         public async Task Send(MessageRequest messageRequest)
         {
             MessageDto message = await _messagesService.CreateEntityAsync(messageRequest);
@@ -34,28 +35,36 @@ namespace Watcher.Hubs
             IEnumerable<UserDto> users = await _chatsService.GetUsersByChatIdAsync(messageRequest.ChatId);
 
             foreach (var userDto in users)
-                Clients.User(userDto.Id).SendAsync("ReceiveMessage", message.Text);
+                await Clients.User(userDto.Id).SendAsync("ReceiveMessage", message);
         }
 
         public async Task InitializeChat(ChatRequest chatRequest, string userId)
         {
             ChatDto chatDto = await _chatsService.CreateEntityAsync(chatRequest);
 
-            if (chatRequest.CreatedBy.Id != userId)
+            if (chatRequest.Type == ChatType.BetweenUsers && chatRequest.CreatedById != userId && userId != null)
                 await _chatsService.AddUserToChat(chatDto.Id, userId);
+            else if (chatRequest.Type == ChatType.InOrganization)
+            {
+                OrganizationDto organizationDto = await _organizationService.GetEntityByIdAsync(chatRequest.OrganizationId);
 
-            await Clients.User(chatDto.CreatedBy.Id).SendAsync("ChatCreated", chatDto.Id);
+                foreach (string id in organizationDto.UsersId)
+                    await _chatsService.AddUserToChat(chatDto.Id, id);
+
+            }
+
+        await Clients.User(chatDto.CreatedBy.Id).SendAsync("ChatCreated", chatDto);
         }
 
         public override async Task OnConnectedAsync()
         {
-            await Clients.All.SendAsync("BroadcastMessage", Context.ConnectionId + "Connected");
+            //await Clients.All.SendAsync("BroadcastMessage", Context.ConnectionId + "Connected");
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            await Clients.All.SendAsync("BroadcastMessage", $"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
+            //await Clients.All.SendAsync("BroadcastMessage", $"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
             await base.OnDisconnectedAsync(exception);
         }
     }

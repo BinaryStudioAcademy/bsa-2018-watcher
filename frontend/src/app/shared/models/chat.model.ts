@@ -7,8 +7,8 @@ export interface Chat  {
    id: number;
    name: string;
    type: ChatType;
-   createdBy: User;
-   organization: Organization;
+   createdById: string;
+   organizationId: number;
    messages: Message[];
 }
 

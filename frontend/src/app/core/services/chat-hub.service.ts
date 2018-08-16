@@ -4,6 +4,9 @@ import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { environment } from '../../../environments/environment';
 
 import { Message } from '../../shared/models/message.model';
+
+import * as signalR from '@aspnet/signalr';
+import { AuthService } from './auth.service';
 import { Chat } from '../../shared/models/chat.model';
 
 @Injectable({
@@ -14,11 +17,18 @@ export class ChatHubService {
     private hubName = 'chatsHub';
 
     public messageReceived = new EventEmitter<Message>();
+    public chatCreated = new EventEmitter<Chat>();
 
-    constructor() {
-        this.hubConnection = new HubConnectionBuilder()
-            .withUrl(`${environment.server_url}/${this.hubName}`)
+    constructor(private authService: AuthService) {
+        const firebaseToken = this.authService.getFirebaseToken();
+        const watcherToken = this.authService.getWatcherToken();
+        const connPath = `${environment.server_url}/${this.hubName}?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
+
+        this.hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl(connPath)
+            .configureLogging(signalR.LogLevel.Information)
             .build();
+
 
         this.startConnection();
         this.registerOnReceivingMessage();
@@ -40,17 +50,17 @@ export class ChatHubService {
         this.hubConnection.on('ReceiveMessage', (data: any) => {
             this.messageReceived.emit(data);
         });
-    }
 
-    public addUser(userId: string) {
-        this.hubConnection.invoke('AddUser', userId);
+        this.hubConnection.on('ChatCreated', (data: any) => {
+            this.chatCreated.emit(data);
+        });
     }
 
     public sendMessage(message: Message) {
-        this.hubConnection.invoke('SendMessage', message);
+        this.hubConnection.invoke('Send', message);
     }
 
-    public sendTextMessage(userId: string, message: string) {
-        this.hubConnection.invoke('Send', userId, message);
+    public initializeChat(chat: Chat, userId: string) {
+        this.hubConnection.invoke('InitializeChat', chat, userId);
     }
 }

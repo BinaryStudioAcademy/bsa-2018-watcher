@@ -13,8 +13,8 @@
 
         public ChatType Type { get; set; }
             
-        public UserDto CreatedBy { get; set; }
+        public string CreatedById { get; set; }
 
-        public OrganizationDto Organization { get; set; }
+        public int OrganizationId { get; set; }
     }
 }
