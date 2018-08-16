@@ -40,11 +40,10 @@ export class TestSignalRComponent implements OnInit {
 
     const message: Message = {
       id: 0,
-      chat: chat,
       chatId: 33,
       createdAt: new Date(),
       text: 'message',
-      user: this.authService.getCurrentUser(),
+      userId: this.authService.getCurrentUser().id,
       wasRead: false
     };
 
@@ -53,7 +52,7 @@ export class TestSignalRComponent implements OnInit {
         console.log('Connection started!');
         // this.hubConnection.invoke('AddUser', this.authService.getCurrentUser().id);
         this.hubConnection.on('ReceiveMessage', (messageIn) => console.log(messageIn));
-        this.hubConnection.invoke('Send', this.authService.getCurrentUser().id, message);
+        this.hubConnection.invoke('Send', message);
         // (message: String) => { console.log(message); });
       })
       .catch(err => console.log('Error while establishing connection :('));

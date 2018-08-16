@@ -27,14 +27,14 @@ namespace Watcher.Hubs
         }
 
         [Authorize]
-        public async Task Send(string userId, MessageRequest messageRequest)
+        public async Task Send(MessageRequest messageRequest)
         {
             MessageDto message = await _messagesService.CreateEntityAsync(messageRequest);
 
-            IEnumerable<UserDto> users = await _chatsService.GetUsersByChatIdAsync(messageRequest.Chat.Id);
+            IEnumerable<UserDto> users = await _chatsService.GetUsersByChatIdAsync(messageRequest.ChatId);
 
-            // foreach (var userDto in users)
-            Clients.User(userId).SendAsync("ReceiveMessage", message.Text);
+            foreach (var userDto in users)
+                Clients.User(userDto.Id).SendAsync("ReceiveMessage", message.Text);
         }
 
         public async Task InitializeChat(ChatRequest chatRequest, string userId)
