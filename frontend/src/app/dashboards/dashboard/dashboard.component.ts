@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
               private toastrService: ToastrService) {
     this.activeDashboardItem = {};
     this.dashboardMenuitems = [];
+    // get instance id and get dashboards by instance id
   }
 
   ngOnInit() {
