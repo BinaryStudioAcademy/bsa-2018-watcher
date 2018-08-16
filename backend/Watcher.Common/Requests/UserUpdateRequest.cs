@@ -16,6 +16,9 @@ namespace Watcher.Common.Requests
         
         public RoleDto Role { get; set; }
 
+        public int? LastPickedOrganizationId { get; set; }
+        public OrganizationDto LastPickedOrganization { get; set; }
+
         public IList<NotificationSettingDto> NotificationSettings { get; set; }
 
         public IList<UserOrganizationDto> UserOrganizations { get; set; }

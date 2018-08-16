@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { NotificationSettingsService } from '../../core/services/notification-settings.service';
-import { SelectItem } from 'primeng/api';
-import { NotificationType } from '../../shared/models/notification-type.enum';
-import { AuthService } from '../../core/services/auth.service';
-import { ToastrService } from '../../core/services/toastr.service';
-import { NotificationSetting } from '../../shared/models/notification-setting.model';
+import {Component, OnInit} from '@angular/core';
+import {NotificationSettingsService} from '../../core/services/notification-settings.service';
+import {SelectItem} from 'primeng/api';
+import {NotificationType} from '../../shared/models/notification-type.enum';
+import {AuthService} from '../../core/services/auth.service';
+import {ToastrService} from '../../core/services/toastr.service';
+import {NotificationSetting} from '../../shared/models/notification-setting.model';
 
 @Component({
   selector: 'app-notification-settings',
@@ -29,19 +29,25 @@ export class NotificationSettingsComponent implements OnInit {
     if (user == null) {
       return;
     } else {
-      this.userId = this.authService.getCurrentUser().id;
+      this.userId = user.id;
     }
-    console.log(`user = ${user.id}`);
-    this.service.getByUserId(this.userId).subscribe((entitys) => {
-      this.notificationSettings = entitys;
-      if (this.notificationSettings) {
-        this.fillDropdown();
-        this.selectedNotificationSetting = this.notificationSettings[0];
-      }
-    });
+
+    if (user.notificationSettings && user.notificationSettings.length === 0) {
+      this.service.getByUserId(this.userId).subscribe((entities) => {
+        this.notificationSettings = entities;
+        if (this.notificationSettings) {
+          this.fillDropdown();
+          this.selectedNotificationSetting = this.notificationSettings[0];
+        }
+      });
+    } else {
+      this.notificationSettings = user.notificationSettings;
+      this.fillDropdown();
+      this.selectedNotificationSetting = this.notificationSettings[0];
+    }
   }
 
-  private fillDropdown() {
+  private fillDropdown(): void {
     this.notificationSettings.forEach(element => {
       this.dropdown.push({label: NotificationType[element.type], value: element});
     });
@@ -60,14 +66,17 @@ export class NotificationSettingsComponent implements OnInit {
     }
   }
 
-  private updateSetting() {
+  private updateSetting(): void {
     this.service.update(this.selectedNotificationSetting.id, this.selectedNotificationSetting)
-    .subscribe(value => {
-      this.toastrService.success('Notification setting was updated.');
-    },
-    err => {
-      this.toastrService.error('Notification setting was not updated.');
-    });
+      .subscribe(value => {
+          const user = this.authService.getCurrentUser();
+          // TODO: Update User 1 Notification setting form array
+          // user.notificationSettings = selectedNotificationSetting;
+          this.toastrService.success('Notification setting was updated.');
+        },
+        err => {
+          this.toastrService.error('Notification setting was not updated.');
+        });
   }
 
 }

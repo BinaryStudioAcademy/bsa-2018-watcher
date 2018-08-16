@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using DataAccumulator.Entities;
 using DataAccumulator.Exceptions;
 using DataAccumulator.Interfaces;
 using DataAccumulator.Models;
-using DataAccumulator.Repositories;
 
 namespace DataAccumulator.Services
 {

@@ -26,13 +26,16 @@
         private IDashboardsRepository _dashboardsRepository;
 
         private IOrganizationRepository _organizationRepository;
+        private IFeedbackRepository _feedbackRepository;
 
         private INotificationSettingsRepository _notificationSettingsRepository;
-
+        private IInstanceRepository _instanceRepository;
+        private IChartRepository _chartRepository;
+        
         private IChatsRepository _chatsRepository;
 
         private IMessagesRepository _messagesRepository;
-        
+
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -81,6 +84,19 @@
             }
         }
 
+        public IFeedbackRepository FeedbackRepository
+        {
+            get
+            {
+                if (_feedbackRepository == null)
+                {
+                    _feedbackRepository = new FeedbackRepository(_context, _mapper);
+                }
+
+                return _feedbackRepository;
+            }
+        }
+
         public INotificationSettingsRepository NotificationSettingsRepository
         {
             get
@@ -93,7 +109,7 @@
                 return _notificationSettingsRepository;
             }
         }
-
+        
         public IChatsRepository ChatsRepository
         {
             get
@@ -117,6 +133,31 @@
                 }
 
                 return _messagesRepository;
+            }
+        }
+
+        public IInstanceRepository InstanceRepository
+        {
+            get
+            {
+                if (_instanceRepository == null)
+                {
+                    _instanceRepository = new InstanceRepository(_context, _mapper);
+                }
+
+                return _instanceRepository;
+            }
+        }
+
+        public IChartRepository ChartRepository
+        {
+            get
+            {
+                if(_chartRepository == null)
+                {
+                    _chartRepository = new ChartsRepository(_context, _mapper);
+                }
+                return _chartRepository;
             }
         }
 

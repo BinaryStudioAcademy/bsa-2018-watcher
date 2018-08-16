@@ -4,7 +4,6 @@ import { ShellComponent } from './shell.component';
 import { AuthGuard } from '../core/guards/auth.guard';
 import { TestSignalRComponent } from './test-signal-r/test-signal-r.component';
 
-
 const routes: Routes = [{
   path: 'user',
   component: ShellComponent,
@@ -16,7 +15,11 @@ const routes: Routes = [{
     path: 'testSignalR',
     component: TestSignalRComponent
   }]
-}];
+  }, {
+  path: '**',
+  redirectTo: 'user/dashboards'
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

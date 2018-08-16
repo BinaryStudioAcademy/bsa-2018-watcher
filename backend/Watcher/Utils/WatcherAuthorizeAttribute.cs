@@ -42,9 +42,9 @@
             var tokenOptions = context.HttpContext.RequestServices.GetService<IOptions<WatcherTokenOptions>>();
             
 
-            if (!context.HttpContext.Request.Headers.TryGetValue("WatcherAuthorize", out var values))
+            if (!context.HttpContext.Request.Headers.TryGetValue("WatcherAuthorization", out var values))
             {
-                context.Result = new StatusCodeResult((int)HttpStatusCode.Unauthorized);
+                context.Result = new StatusCodeResult((int)HttpStatusCode.Forbidden);
                 return;
             }
 

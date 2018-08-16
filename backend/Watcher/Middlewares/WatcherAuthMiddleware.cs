@@ -1,7 +1,9 @@
 ﻿namespace Watcher.Middlewares
 {
     using System;
+    using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
+    using System.Net;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -10,6 +12,9 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
+    using Serilog.Context;
+
+    using Watcher.Common.Errors;
     using Watcher.Common.Options;
     using Watcher.Core.Auth;
 
@@ -34,7 +39,7 @@
         {
             var tokenOptions = context.RequestServices.GetService<IOptions<WatcherTokenOptions>>();
 
-            var watcherToken = context.Request.Headers["WatcherAuthorize"];
+            var watcherToken = context.Request.Headers["WatcherAuthorization"];
 
             if (string.IsNullOrWhiteSpace(watcherToken))
             {
@@ -42,7 +47,20 @@
             }
             else
             {
-                var jwt = TokenUtil.GetDecodedJwt(watcherToken, tokenOptions.Value.GetAccessTokenValidationParameters);
+                JwtSecurityToken jwt = null;
+                try
+                {
+                    jwt = TokenUtil.GetDecodedJwt(watcherToken, tokenOptions.Value.GetAccessTokenValidationParameters);
+                }
+                catch (Exception e)
+                {
+                    var eventId = new EventId(403);
+                    using (LogContext.PushProperty("LogEventId", eventId.Id))
+                    {
+                        _logger.LogError(eventId, e, $"Watcher Token was not validated: {e.Message}");
+                    }
+                    throw new HttpStatusCodeException(HttpStatusCode.Forbidden, "Watcher Token was not validated");
+                }
 
                 var role = jwt.Claims.Any(c => c.Type == "role");
                 var name = jwt.Claims.Any(c => c.Type == "unique_name");

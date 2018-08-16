@@ -1,7 +1,10 @@
-﻿using AutoMapper;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using AutoMapper;
+
+using Microsoft.EntityFrameworkCore;
+
 using Watcher.Common.Dtos;
 using Watcher.Common.Requests;
 using Watcher.Core.Interfaces;
@@ -10,6 +13,8 @@ using Watcher.DataAccess.Interfaces;
 
 namespace Watcher.Core.Services
 {
+    using System;
+
     public class DashboardsService : IDashboardsService
     {
         private readonly IUnitOfWork _uow;
@@ -21,18 +26,38 @@ namespace Watcher.Core.Services
             _mapper = mapper;
         }
 
+        public async Task<InstanceDto> GetFirstInstanceAsync()
+        {
+            var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(
+                               include: x => x.Include(o => o.Organization)
+                                              .Include(o => o.Dashboards)
+                                                    .ThenInclude(d => d.Charts));
+
+            if (instance == null) return null;
+
+            var dto = _mapper.Map<Instance, InstanceDto>(instance);
+
+            return dto;
+        }
+
         public async Task<IEnumerable<DashboardDto>> GetInstanceDashboards(int id)
         {
-            var dashboards = (await _uow.DashboardsRepository.GetRangeAsync()).Where(dash => dash.InstanceId == id).ToList();
+            var entities = await _uow.DashboardsRepository.GetRangeAsync(
+                               filter: d => d.InstanceId == id,
+                               include: x => x.Include(o => o.Charts));
 
-            var dtos = _mapper.Map<List<Dashboard>, List<DashboardDto>>(dashboards);
+            if (entities == null) return null;
+
+            var dtos = _mapper.Map<List<Dashboard>, List<DashboardDto>>(entities);
 
             return dtos;
         }
 
         public async Task<DashboardDto> GetDashboardByIdAsync(int id)
         {
-            var dashboard = await _uow.DashboardsRepository.GetFirstOrDefaultAsync(s => s.Id == id);
+            var dashboard = await _uow.DashboardsRepository.GetFirstOrDefaultAsync(
+                predicate: s => s.Id == id,
+                include: x => x.Include(o => o.Charts));
 
             if (dashboard == null) return null;
 
@@ -41,11 +66,13 @@ namespace Watcher.Core.Services
             return dto;
         }
 
-        public async Task<DashboardDto> CreateDashboardAsync(DashboardRequest dashbordRequest)
+        public async Task<DashboardDto> CreateDashboardAsync(DashboardRequest request)
         {
-            var entity = _mapper.Map<DashboardRequest, Dashboard>(dashbordRequest);
+            var entity = _mapper.Map<DashboardRequest, Dashboard>(request);
+            entity.CreatedAt = DateTime.UtcNow;
 
             entity = await _uow.DashboardsRepository.CreateAsync(entity);
+
             var result = await _uow.SaveAsync();
             if (!result)
             {

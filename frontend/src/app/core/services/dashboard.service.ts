@@ -1,50 +1,37 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Dashboard } from '../../shared/models/dashboard.model';
-import { environment } from '../../../environments/environment';
-import { Observable, throwError } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import {DashboardRequest} from '../../shared/models/dashboard-request.model';
+import {ApiService} from './api.service';
+import {Instance} from '../../shared/models/instance.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
+  private ctrlUrl = 'Dashboards';
 
-  private url = environment.server_url + '/dashboards';
-
-  constructor(private http: HttpClient) {
+  constructor(private apiService: ApiService) {
   }
 
-  getAllByInstance(id: number) {
-      return this.http.get(`${this.url}/${id}`).pipe(
-        retry(2),
-        catchError(this.handleError)
-      );
+  getAllByInstance(id: number): Observable<Dashboard[]> {
+      return this.apiService.get(`/${this.ctrlUrl}/${id}`);
   }
 
-  create(dashboard: Dashboard) {
-    return this.http.post(this.url, dashboard).pipe(
-      retry(2),
-      catchError(this.handleError));
+  getDefaultInstance(): Observable<Instance> {
+    return this.apiService.get(`/${this.ctrlUrl}/FirstInstance`);
   }
 
-  update(dashboard: Dashboard) {
-      return this.http.put(`${this.url}/${dashboard.id}`, dashboard).pipe(
-        retry(2),
-        catchError(this.handleError));
+  create(request: DashboardRequest): Observable<Dashboard> {
+    return this.apiService.post(`/${this.ctrlUrl}`, request);
   }
 
-  delete(id: number) {
-      return this.http.delete(`${this.url}/${id}`).pipe(
-        retry(2),
-        catchError(this.handleError));
+  update(id: number, request: DashboardRequest): Observable<Object> {
+    return this.apiService.put(`/${this.ctrlUrl}/${id}`, request);
   }
 
-  handleError(error: HttpErrorResponse) {
-    console.error(
-      `Backend returned code ${error.status}, ` +
-      `body was: ${error.error}`);
-    return throwError(error.status);
+  delete(id: number): Observable<Object> {
+    return this.apiService.delete(`/${this.ctrlUrl}/${id}`);
   }
 }
 

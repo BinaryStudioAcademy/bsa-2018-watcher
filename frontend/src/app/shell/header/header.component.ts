@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {MenuItem, Message} from 'primeng/api';
-import {NotificationsService} from '../../core/services/notifications.service';
-import {SampleRequest} from '../../shared/models/sample-request.model';
-import {SampleEnum} from '../../shared/models/sample-enum.enum';
-import {SampleDto} from '../../shared/models/sample-dto.model';
-import {MessageService} from 'primeng/api';
-import {AuthService} from '../../core/services/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { MenuItem, Message } from 'primeng/api';
+import { NotificationsService } from '../../core/services/notifications.service';
+import { SampleRequest } from '../../shared/models/sample-request.model';
+import { SampleEnum } from '../../shared/models/sample-enum.enum';
+import { SampleDto } from '../../shared/models/sample-dto.model';
+import { MessageService } from 'primeng/api';
+import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
-import { THIS_EXPR } from '../../../../node_modules/@angular/compiler/src/output/output_ast';
+import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -25,36 +25,24 @@ export class HeaderComponent implements OnInit {
   notificationsNumber = 0;
   messagesNumber = 2;
 
-  user: User;
-  displayName: string;
+  currentUser: User;
 
   userItems: MenuItem[];
   cogItems: MenuItem[];
-  mailItems: MenuItem[];
   bellItems: MenuItem[];
   orgItems: MenuItem[];
 
   constructor(private notificationsService: NotificationsService,
-              private messageService: MessageService,
-              private userService: UserService,
-              private toastrService: ToastrService,
-              private authService: AuthService) {
+    private messageService: MessageService,
+    private userService: UserService,
+    private toastrService: ToastrService,
+    private router: Router,
+    private authService: AuthService) {
     this.subscribeToEvents();
   }
 
-  showAllSamples() {
-    this.msgs = [];
-    const newMessages: Message[] = this.samples.map(s => {
-      const mess: Message = {
-        severity: 'info',
-        summary: s.name,
-        detail: `Name: ${s.name}, Id: ${s.id}, Sample Field: ${s.sampleField.toString()}, Date of creation: ${s.dateOfCreation},
-        Count: ${s.count}`
-      };
-      return mess;
-    });
-    this.msgs.push(...newMessages);
-   // this.messageService.addAll(newMessages);
+  onFeedback(): void {
+    this.router.navigate(['/user/feedback']);
   }
 
   private subscribeToEvents(): void {
@@ -74,7 +62,7 @@ export class HeaderComponent implements OnInit {
   }
 
   // TODO: methods for SignalR Tests
-  createSample() {
+  createSample(): void {
     const req: SampleRequest = {
       name: 'Test',
       count: 12,
@@ -90,7 +78,7 @@ export class HeaderComponent implements OnInit {
   }
 
   sendMess() {
-    this.notificationsService.send('ri3bE0PElDT8gLU35sonvnMzbEq2', 'From Sdadadafsd message');
+    this.notificationsService.send('in2Kvey8O0dK1LACXH6HYMaPG102', 'From Sdadadafsd message');
   }
 
   connectToServer() {
@@ -100,9 +88,9 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.userItems = [
       {
-        label: 'Settings',
-        icon: 'fa fa-fw fa-cog',
-        routerLink: ['/user/settings']
+        label: 'Feedback',
+        icon: 'fa fa-fw fa-retweet',
+        routerLink: ['/user/feedback'],
       },
       {
         label: 'Logout',
@@ -116,87 +104,76 @@ export class HeaderComponent implements OnInit {
     ];
 
     this.cogItems = [{
-      label: 'Item',
-      icon: 'fa fa-fw fa-cog',
+      label: 'Profile',
+      icon: 'fa fa-fw fa-user',
+      routerLink: ['/user/settings/user-profile'],
     },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-cog',
-      },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-cog',
-      }
-    ];
-
-    this.mailItems = [{
-      label: 'Item',
-      icon: 'fa fa-fw fa-envelope-o',
+    {
+      label: 'Organization',
+      icon: 'fa fa-fw fa-building',
+      routerLink: ['/user/settings/organization-profile'],
     },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-envelope-o',
-      },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-envelope-o',
-      }
+    {
+      label: 'Notifications',
+      icon: 'fa fa-fw fa-send',
+      routerLink: ['/user/settings/notification-settings'],
+    }
     ];
 
     this.bellItems = [{
       label: 'Item',
       icon: 'fa fa-fw fa-bell-o',
     },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-bell-o',
-      },
-      {
-        label: 'Item',
-        icon: 'fa fa-fw fa-bell-o',
-      }
+    {
+      label: 'Item',
+      icon: 'fa fa-fw fa-bell-o',
+    },
+    {
+      label: 'Item',
+      icon: 'fa fa-fw fa-bell-o',
+    }
     ];
 
-    this.user = this.authService.getCurrentUser();
-    if (this.user != null) {
-      this.displayName = this.user.displayName;
-      if (this.user.organizations.length > 0) {
-        this.fillOrganizations();
+    this.authService.currentUser.subscribe(
+      (userData) => {
+        this.currentUser = userData;
+        if (this.currentUser && this.currentUser.organizations && this.currentUser.organizations.length > 0) {
+          this.fillOrganizations();
+        }
       }
-    }
+    );
   }
 
-  private fillOrganizations() {
+  private fillOrganizations(): void {
     this.orgItems = new Array<MenuItem>();
 
-    this.user.organizations.forEach(element => {
+    this.currentUser.organizations.forEach(element => {
       this.orgItems.push({
         label: element.name,
         id: element.id.toString(),
         icon: 'fa fa-fw fa-building',
         command: (onclick) => { this.chengeLastPicOrganizations(element); },
-        styleClass: (element.id === this.user.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
-        disabled: (element.id === this.user.lastPickedOrganizationId)
+        styleClass: (element.id === this.currentUser.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
+        disabled: (element.id === this.currentUser.lastPickedOrganizationId)
       });
     });
   }
 
-  private chengeLastPicOrganizations(item: Organization) {
+  private chengeLastPicOrganizations(item: Organization): void {
     // update user in beckend
-    this.userService.updateLastPickedOrganization(this.user.id, item.id)
-    .subscribe(value => {
-      // update user in frontend
+    this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
+      .subscribe(value => {
+        // update user in frontend
 
-      this.user.lastPickedOrganizationId = item.id;
-      this.user.lastPickedOrganization = item;
-      this.authService.updateCurrentUser(this.user); // update user in localStorage
-      this.fillOrganizations();
-      // notify user about changes
-      this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
-    },
-    err => {
-      this.toastrService.error('Organization by defaul was not updated.');
-    });
+        this.currentUser.lastPickedOrganizationId = item.id;
+        this.currentUser.lastPickedOrganization = item;
+        this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
+        this.fillOrganizations();
+        // notify user about changes
+        this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
+      },
+        err => {
+          this.toastrService.error('Organization by defaul was not updated.');
+        });
   }
-
 }

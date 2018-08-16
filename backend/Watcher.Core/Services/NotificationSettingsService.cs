@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using System.Linq;
     using AutoMapper;
 
     using Watcher.Common.Dtos;

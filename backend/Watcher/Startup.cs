@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -13,19 +12,16 @@
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
-    using Watcher.Core.Auth;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
     using Watcher.Core.Providers;
@@ -87,6 +83,7 @@
             services.AddTransient<IMessagesService, MessagesService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
+            services.AddTransient<IFeedbackService, FeedbackService>();
 
             ConfigureFileStorage(services, Configuration);
 
@@ -111,14 +108,14 @@
                               {
                                   if (!context.Request.Path.Value.Contains("/notifications")
                                       || !context.Request.Query.ContainsKey("Authorization")
-                                      || !context.Request.Query.ContainsKey("WatcherAuthorize"))
+                                      || !context.Request.Query.ContainsKey("WatcherAuthorization"))
                                       return Task.CompletedTask;
-                                  
+
                                   // context.Token = context.Request.Query["Authorization"];
-                                  var watcherToken = context.Request.Query["WatcherAuthorize"];
+                                  var watcherToken = context.Request.Query["WatcherAuthorization"];
                                   var firebaseToken = $"Bearer {context.Request.Query["Authorization"]}";
                                   context.Request.Headers.TryAdd("Authorization", firebaseToken);
-                                  context.Request.Headers.TryAdd("WatcherAuthorize", watcherToken);
+                                  context.Request.Headers.TryAdd("WatcherAuthorization", watcherToken);
 
                                   return Task.CompletedTask;
                               }
@@ -179,8 +176,8 @@
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
 
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
 
             app.UseHttpStatusCodeExceptionMiddleware();
 
@@ -222,7 +219,7 @@
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (enviroment == "Production")
+            if (enviroment == EnvironmentName.Production)
             {
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
@@ -248,16 +245,19 @@
                     cfg.AddProfile<SamplesProfile>();
 
                     cfg.AddProfile<UsersProfile>();
-
                     cfg.AddProfile<DashboardsProfile>();
-
                     cfg.AddProfile<OrganizationProfile>();
 
                     cfg.AddProfile<NotificationSettingsProfile>();
 
+
                     cfg.AddProfile<ChatProfile>();
 
                     cfg.AddProfile<MessageProfile>();
+
+                    cfg.AddProfile<FeedbackProfile>();
+                    cfg.AddProfile<InstancesProfile>();
+
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 
@@ -269,7 +269,7 @@
         {
             // Use SQL Database if in Azure, otherwise, use Local DB
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (env == "Production")
+            if (env == EnvironmentName.Production)
             {
                 var azureConnStr = Configuration.GetConnectionString("AzureDbConnection");
                 if (!string.IsNullOrWhiteSpace(azureConnStr))

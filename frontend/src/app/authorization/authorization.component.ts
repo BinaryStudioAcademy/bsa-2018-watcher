@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {AuthService} from '../core/services/auth.service';
-import {Router} from '@angular/router';
-import {TokenService} from '../core/services/token.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AuthService } from '../core/services/auth.service';
+import { Router } from '@angular/router';
+import { TokenService } from '../core/services/token.service';
 
 @Component({
   selector: 'app-authorization',
@@ -20,10 +20,12 @@ export class AuthorizationComponent implements OnInit {
   isSuccessSignUp = false;
   isNotRegisteredSignIn = false;
   isFetching = false;
+  emailExists = false;
 
   companyName = '';
   lastName = '';
   firstName = '';
+  userEmail = '';
 
   constructor(
     private authService: AuthService,
@@ -77,11 +79,12 @@ export class AuthorizationComponent implements OnInit {
     this.isFetching = true;
     await this.authService.signInWithGoogle()
       .then(result => {
-         if (result) {
+        if (result) {
           this.closeDialog();
           this.signInPostProcessing(result);
-         }
-         this.isFetching = false;
+        }
+        this.isFetching = false;
+        this.fetchExistingData();
       })
       .catch(err => {
         if (err) {
@@ -91,6 +94,7 @@ export class AuthorizationComponent implements OnInit {
           }
         }
         this.isFetching = false;
+        this.fetchExistingData();
       });
   }
 
@@ -99,10 +103,11 @@ export class AuthorizationComponent implements OnInit {
     await this.authService.signInWithFacebook()
       .then(result => {
         if (result) {
-        this.closeDialog();
-        this.signInPostProcessing(result);
+          this.closeDialog();
+          this.signInPostProcessing(result);
         }
         this.isFetching = false;
+        this.fetchExistingData();
       })
       .catch(err => {
         console.log(err);
@@ -113,6 +118,7 @@ export class AuthorizationComponent implements OnInit {
           }
         }
         this.isFetching = false;
+        this.fetchExistingData();
       });
   }
 
@@ -121,10 +127,11 @@ export class AuthorizationComponent implements OnInit {
     await this.authService.signInWithGitHub()
       .then(result => {
         if (result) {
-        this.closeDialog();
-        this.signInPostProcessing(result);
+          this.closeDialog();
+          this.signInPostProcessing(result);
         }
         this.isFetching = false;
+        this.fetchExistingData();
       })
       .catch(err => {
         if (err) {
@@ -134,11 +141,12 @@ export class AuthorizationComponent implements OnInit {
           }
         }
         this.isFetching = false;
+        this.fetchExistingData();
       });
   }
 
   async saveUserDetails(): Promise<void> {
-    await this.authService.signUpWithProvider(this.companyName, this.lastName, this.firstName)
+    await this.authService.signUpWithProvider(this.companyName, this.firstName, this.lastName, this.userEmail)
       .then(res => {
         this.closeDialog();
         this.signInPostProcessing(true);
@@ -151,11 +159,15 @@ export class AuthorizationComponent implements OnInit {
       });
   }
 
-  onContinueLaterClick() {
+  onContinueLaterClick(): void {
     // default data
-    this.companyName = 'your company';
-    this.firstName = 'your first name';
-    this.lastName = 'your last name';
+    this.companyName = 'MyCompany';
+    if (this.firstName === '') {
+      this.firstName = 'MyFirstName';
+    }
+    if (this.lastName === '') {
+      this.lastName = 'MyLastName';
+    }
     this.saveUserDetails();
   }
 
@@ -164,6 +176,15 @@ export class AuthorizationComponent implements OnInit {
       return this.router.navigate(['/user']);
     } else {
       return this.router.navigate(['/']);
+    }
+  }
+
+  fetchExistingData() {
+    this.firstName = this.authService.userRegisterRequest.firstName;
+    this.lastName = this.authService.userRegisterRequest.lastName;
+    this.userEmail = this.authService.userRegisterRequest.email;
+    if (this.userEmail !== null){
+      this.emailExists = true;
     }
   }
 }

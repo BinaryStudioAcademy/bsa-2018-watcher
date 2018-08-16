@@ -15,11 +15,17 @@
 
         IOrganizationRepository OrganizationRepository { get; }
 
+        IFeedbackRepository FeedbackRepository { get; }
+
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 
         IChatsRepository ChatsRepository { get; }
 
         IMessagesRepository MessagesRepository { get; }
+
+        IInstanceRepository InstanceRepository { get; }
+
+        IChartRepository ChartRepository { get;  }
 
         Task<bool> SaveAsync();
     }

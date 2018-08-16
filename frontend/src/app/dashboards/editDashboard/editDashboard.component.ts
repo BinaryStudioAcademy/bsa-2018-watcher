@@ -7,22 +7,24 @@ import { EventEmitter } from '@angular/core';
   styleUrls: ['./editDashboard.component.sass']
 })
 export class EditDashboardComponent implements OnInit, OnChanges {
-
   title = '';
 
   @Output() edited = new EventEmitter<string>();
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardTitle: string;
+
   constructor() { }
 
-  closeDialog() {
+  closeDialog(): void {
     this.closed.emit();
-    this.dashboardTitle = '';
+    this.title = '';
+    // this.dashboardTitle = '';
   }
 
-  edit() {
+  edit(): void {
     this.edited.emit(this.title);
+    this.title = '';
   }
 
   ngOnChanges(changes) {
