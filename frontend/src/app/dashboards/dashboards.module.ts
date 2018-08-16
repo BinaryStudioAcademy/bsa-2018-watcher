@@ -7,6 +7,7 @@ import { TabViewModule, PanelMenuModule, DialogModule, ButtonModule, TabMenuModu
 import { EditDashboardComponent } from './editDashboard/editDashboard.component';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
+import {LineChartComponent} from './01_line_chart/line-chart.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,7 @@ import { ToastModule } from 'primeng/toast';
     ProgressSpinnerModule,
     ToastModule
   ],
-  declarations: [DashboardComponent, InstanceListComponent, EditDashboardComponent],
-  exports: [ DashboardComponent, InstanceListComponent ]
+  declarations: [DashboardComponent, InstanceListComponent, EditDashboardComponent, LineChartComponent],
+  exports: [ DashboardComponent, InstanceListComponent, LineChartComponent ]
 })
 export class DashboardsModule { }
