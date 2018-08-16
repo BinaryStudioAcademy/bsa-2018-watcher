@@ -1,10 +1,13 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { environment } from '../../../environments/environment';
 
 import { Message } from '../../shared/models/message.model';
 import { Chat } from '../../shared/models/chat.model';
+
+import { MessageRequest } from '../../shared/requests/message-request';
+import { ChatRequest } from '../../shared/requests/chat-request';
+
 
 @Injectable({
     providedIn: 'root'
@@ -14,6 +17,7 @@ export class ChatHubService {
     private hubName = 'chatsHub';
 
     public messageReceived = new EventEmitter<Message>();
+    public chatCreated = new EventEmitter<Chat>();
 
     constructor() {
         this.hubConnection = new HubConnectionBuilder()
@@ -22,6 +26,7 @@ export class ChatHubService {
 
         this.startConnection();
         this.registerOnReceivingMessage();
+        this.registerOnChatCreated();
     }
 
     private startConnection(): void {
@@ -42,15 +47,21 @@ export class ChatHubService {
         });
     }
 
-    public addUser(userId: string) {
-        this.hubConnection.invoke('AddUser', userId);
+    private registerOnChatCreated(): void {
+        this.hubConnection.on('ChatCreated', (data: any) => {
+            this.chatCreated.emit(data);
+        });
     }
 
-    public sendMessage(message: Message) {
-        this.hubConnection.invoke('SendMessage', message);
+    public initializeChat(chat: ChatRequest, userId: string) {
+        this.hubConnection.invoke('InitializeChat', chat, userId);
     }
 
-    public sendTextMessage(userId: string, message: string) {
-        this.hubConnection.invoke('Send', userId, message);
+    public sendMessage(message: MessageRequest) {
+        this.hubConnection.invoke('Send', message);
+    }
+
+    public addUser(userId: string, chatId: number) {
+        this.hubConnection.invoke('AddUser', userId, chatId);
     }
 }
