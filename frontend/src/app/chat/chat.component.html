@@ -17,14 +17,14 @@
                 <i class="fa fa-2x fa-user"></i>
               </div>
               <div class="ui-g-10 ui-g-nopad">
-                <strong>UserName</strong>
+                <strong>{{message.user?.name}}</strong>
                 <div class="">{{message.text}}</div>
               </div>
             </div>
           </p-card>
         </div>
         <div class="ui-inputgroup">
-          <input type="text" pInputText [(ngModel)]="message" placeholder="Write message">
+          <input type="text" pInputText [(ngModel)]="textMessage" placeholder="Write message">
           <button pButton icon="fa fa-send" (click)="sendMessage()"></button>
         </div>
       </div>

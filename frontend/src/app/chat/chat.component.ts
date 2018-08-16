@@ -3,6 +3,9 @@ import { MenuItem } from 'primeng/api';
 import { Chat } from '../shared/models/chat';
 import { ChatType } from '../shared/models/chat-type.enum';
 import { Message } from '../shared/models/message.model';
+import { ChatHubService } from '../core/services/chat-hub.service';
+import { AuthService } from '../core/services/auth.service';
+
 
 @Component({
   selector: 'app-chat',
@@ -11,11 +14,12 @@ import { Message } from '../shared/models/message.model';
 })
 export class ChatComponent implements OnInit {
 
-  constructor() { }
+  constructor(private chatHub: ChatHubService,
+    private authService: AuthService) { }
 
   chatPanel: MenuItem[];
   fakeChats: Chat[];
-  message: string;
+  textMessage: string;
 
   choosedChat: Chat = {} as Chat;
   isChatChoosed: boolean;
@@ -124,18 +128,29 @@ export class ChatComponent implements OnInit {
     ];
   }
 
-  sendMessage() {
-  }
-
-  closeConversation() {
-    this.isChatChoosed = false;
+  private subscribeToReceivingMessage() {
+    this.chatHub.messageReceived.subscribe((message: Message) => {
+      this.choosedChat.messages.push(message);
+    });
   }
 
   openConversation(chat: Chat) {
     // Get list of message
     this.choosedChat = chat;
     this.isChatChoosed = true;
+    this.chatHub.addUser(this.authService.getCurrentUser().id);
+    this.subscribeToReceivingMessage();
   }
+
+  closeConversation() {
+    this.isChatChoosed = false;
+  }
+
+  sendMessage() {
+    const newMessage: Message = { text: this.textMessage, user: this.authService.getCurrentUser() } as Message;
+    this.chatHub.sendTextMessage(this.authService.getCurrentUser().id, this.textMessage);
+  }
+
 
   createChatItems(): MenuItem[] {
     const items: MenuItem[] = [{
