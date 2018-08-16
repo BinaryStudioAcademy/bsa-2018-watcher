@@ -2,8 +2,9 @@
 <button pButton type="button" label="Sign Up" class="btnsign-up ui-button-primary ui-button-raised" (click)="showDialogSignUp()"></button>
 
 
-<p-dialog class="authorization-dialog" (onHide)="closeDialog()" [showHeader]="false" appendTo="body" [closable]=false [(visible)]="display" [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="999">
-    <span class="close" (click)="closeDialog()"> </span>    
+<p-dialog class="authorization-dialog" (onHide)="closeDialog()" [showHeader]="false" appendTo="body" [closable]=false [(visible)]="display"
+    [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="999">
+    <span class="close" (click)="closeDialog()"> </span>
     <div class="auth-form-header">
         <h1>WATCHER</h1>
     </div>
@@ -11,37 +12,43 @@
     </ng-template>
     <div>
         <div class="auth-futer" *ngIf="isSignIn">
-            <p>Not a member? <a (click)="showSignUp()" a>Sign Up</a></p>
+            <p>Not a member?
+                <a (click)="showSignUp()" a>Sign Up</a>
+            </p>
         </div>
         <div class="auth-futer" *ngIf="isNotRegisteredSignIn">
-            <p></p>    
+            <p></p>
         </div>
         <div class="auth-futer" *ngIf="!isSignIn && !isSuccessSignUp && !isNotRegisteredSignIn">
-            <p>Already registered? <a (click)="showSignIn()">Sign In</a></p>
+            <p>Already registered?
+                <a (click)="showSignIn()">Sign In</a>
+            </p>
         </div>
         <div class="auth-futer" *ngIf="!isSignIn && isSuccessSignUp">
-            
+
         </div>
     </div>
 </p-dialog>
 <ng-template #signInTemplate>
     <div class="auth-buttons">
         <button *ngIf="!isFetching" (click)="signInWithGoogle()" class="auth-button auth-btn-google">
-            <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span>
+            <span>
+                <img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+            </span>
             <span class="firebaseui-idp-text">Sign In with Google</span>
         </button>
         <button *ngIf="!isFetching" (click)="signInWithGitHub()" class="auth-button auth-btn-githum">
-            <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg"></span>
+            <span>
+                <img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg">
+            </span>
             <span class="firebaseui-idp-text">Sign In with Github</span>
         </button>
         <button *ngIf="!isFetching" (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
-            <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
+            <span>
+                <img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg">
+            </span>
             <span class="firebaseui-idp-text">Sign In with Facebook</span>
         </button>
-        <!-- <button (click)="signInWithTwitter()" class="auth-button auth-btn-twitter">
-            <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
-            <span class="firebaseui-idp-text">Sign In with Twitter</span>
-        </button> -->
         <p-progressSpinner [style]="{width: '40px', height: '40px'}" *ngIf="isFetching"></p-progressSpinner>
     </div>
 </ng-template>
@@ -49,21 +56,23 @@
 <ng-template #signUpTemplate>
     <div class="auth-buttons">
         <button *ngIf="!isFetching" (click)="signInWithGoogle()" class="auth-button auth-btn-google">
-            <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span>
+            <span>
+                <img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+            </span>
             <span class="firebaseui-idp-text">Sign Up with Google</span>
         </button>
         <button *ngIf="!isFetching" (click)="signInWithGitHub()" class="auth-button auth-btn-githum">
-                <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg"></span>
-                <span class="firebaseui-idp-text">Sign Up with Github</span>
-            </button>
+            <span>
+                <img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg">
+            </span>
+            <span class="firebaseui-idp-text">Sign Up with Github</span>
+        </button>
         <button *ngIf="!isFetching" (click)="signInWithFacebook()" class="auth-button auth-btn-facebook">
-            <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span>
+            <span>
+                <img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg">
+            </span>
             <span class="firebaseui-idp-text">Sign Up with Facebook</span>
         </button>
-        <!-- <button (click)="signUpWithTwitter()" class="auth-button auth-btn-twitter">
-            <span><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span>
-            <span class="firebaseui-idp-text">Sign Up with Twitter</span>
-        </button> -->
         <p-progressSpinner [style]="{width: '40px', height: '40px'}" *ngIf="isFetching"></p-progressSpinner>
     </div>
 </ng-template>
@@ -71,7 +80,20 @@
 <ng-template #userDetailsTemplate>
     <div class="auth-inputs">
         <div class="auth-input">
-            <input placeholder="Company" pInputText type="text" class="form-control" id="cName" required minlength="4" #cName="ngModel" [(ngModel)]="companyName" />
+            <input placeholder="Email" email type="email" [disabled]="emailExists" class="form-control" id="eName" required #eName="ngModel"
+                [(ngModel)]="userEmail" />
+            <div *ngIf="eName?.invalid && (eName?.dirty || eName?.touched)" class="alert alert-danger">
+                <div *ngIf="eName.errors.required">
+                    Email is required.
+                </div>
+                <div *ngIf="eName?.value">
+                    Email should have valid format.
+                </div>
+            </div>
+        </div>
+        <div class="auth-input">
+            <input placeholder="Company" pInputText type="text" class="form-control" id="cName" required minlength="4" #cName="ngModel"
+                [(ngModel)]="companyName" />
             <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
                 <div *ngIf="cName.errors.required">
                     Company is required.
@@ -82,7 +104,8 @@
             </div>
         </div>
         <div class="auth-input">
-            <input placeholder="First Name" pInputText type="text" class="form-control" id="fName" required minlength="4" #fName="ngModel" [(ngModel)]="firstName" />
+            <input placeholder="First Name" pInputText type="text" class="form-control" id="fName" required minlength="4" #fName="ngModel"
+                [(ngModel)]="firstName" />
             <div *ngIf="fName?.invalid && (fName?.dirty || fName?.touched)" class="alert alert-danger">
                 <div *ngIf="fName.errors.required">
                     First Name is required.
@@ -93,7 +116,8 @@
             </div>
         </div>
         <div class="auth-input">
-            <input placeholder="Last Name" pInputText type="text" class="form-control" id="lName" required minlength="4" #lName="ngModel" [(ngModel)]="lastName" />
+            <input placeholder="Last Name" pInputText type="text" class="form-control" id="lName" required minlength="4" #lName="ngModel"
+                [(ngModel)]="lastName" />
             <div *ngIf="lName?.invalid && (lName?.dirty || lName?.touched)" class="alert alert-danger">
                 <div *ngIf="lName.errors.required">
                     Last Name is required.
@@ -104,20 +128,10 @@
             </div>
         </div>
         <div class="auth-buttons">
-            <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" [disabled]="cName?.invalid || fName?.invalid || lName?.invalid" value="Save" />
-            <input type="button" pButton class="auth-button auth-btn-save" (click)="onContinueLaterClick()"[disabled]="!cName?.invalid && !fName?.invalid && !lName?.invalid"  value="Continue Later" />
+            <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" [disabled]="eName?.invalid || cName?.invalid || fName?.invalid || lName?.invalid"
+                value="Save" />
+            <input type="button" pButton class="auth-button auth-btn-save" (click)="onContinueLaterClick()" [disabled]="eName?.invalid || cName?.valid && fName?.valid && lName?.valid"
+                value="Continue Later" />
         </div>
     </div>
-</ng-template>
-
-<ng-template #notRegisteredSignInTemplate>
-        <span class="close" (click)="closeDialog()"> </span>    
-        <div class="auth-form-header">
-            <h2>Seems, you are new here</h2>
-            <h2>Would you like to register?</h2>
-        </div>
-        <div class="auth-buttons">
-            <button pButton type="button" label="Yes" class="btnsign-in ui-button-primary ui-button-raised" (click)="signInWithGoogle()"></button>
-            <button pButton type="button" label="No"  class="btnsign-up ui-button-primary ui-button-raised" (click)="noRegistration()"></button>
-        </div>
 </ng-template>

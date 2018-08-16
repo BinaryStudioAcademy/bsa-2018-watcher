@@ -13,8 +13,6 @@ namespace Watcher.Common.Dtos
         public string Title { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        
-        public InstanceDto Instance { get; set; }
 
         public IList<ChartDto> Charts { get; set; }
     }

@@ -21,6 +21,20 @@ namespace Watcher.Controllers
             _dashboardsService = service;
         }
 
+        // GET: /dashboards/FirstInstance
+        [HttpGet("FirstInstance")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<IEnumerable<DashboardDto>>> GetFirstInstance()
+        {
+            var instanceDto = await _dashboardsService.GetFirstInstanceAsync();
+            if (instanceDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(instanceDto);
+        }
+
         // GET: /dashboards
         [HttpGet("{id}")]
         [AllowAnonymous]

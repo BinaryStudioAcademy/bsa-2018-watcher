@@ -31,8 +31,9 @@ import { NotificationsModule } from './notifications/notifications.module';
   declarations: [
     AppComponent,
     LandingComponent,
-    AuthorizationComponent
-    ],
+    AuthorizationComponent,
+
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,

@@ -1,15 +1,16 @@
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {AngularFireAuth} from 'angularfire2/auth';
-import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {UserRegisterRequest} from '../../shared/models/user-register-request';
-import {TokenService} from './token.service';
-import {UserLoginRequest} from '../../shared/models/user-login-request';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { UserRegisterRequest } from '../../shared/models/user-register-request';
+import { TokenService } from './token.service';
+import { UserLoginRequest } from '../../shared/models/user-login-request';
 import * as firebase from 'firebase';
-import {UserInfoProfile} from '../../shared/models/user-info-profile';
+import { UserInfoProfile } from '../../shared/models/user-info-profile';
 import { User } from '../../shared/models/user.model';
-import {distinctUntilChanged} from 'rxjs/operators';
-import {Token} from '../../shared/models/token.model';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { Token } from '../../shared/models/token.model';
+import {UserProfile} from '../../shared/models/user-profile';
 
 @Injectable({
   providedIn: 'root'
@@ -19,15 +20,15 @@ export class AuthService {
   public currentUser: Observable<User> = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
 
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
-  public isAuthenticated: Observable<boolean>  = this.isAuthenticatedSubject.asObservable();
+  public isAuthenticated: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
 
   private user: Observable<firebase.User>;
   private userDetails: firebase.User = null;
-  private userRegisterRequest: UserRegisterRequest = null;
+  public userRegisterRequest: UserRegisterRequest = null;
 
   constructor(private _firebaseAuth: AngularFireAuth,
-              private tokenService: TokenService,
-              private router: Router) {
+    private tokenService: TokenService,
+    private router: Router) {
     this.user = _firebaseAuth.authState;
     this.user.subscribe(
       (user) => {
@@ -38,14 +39,6 @@ export class AuthService {
         }
       }
     );
-  }
-
-  public isAuthorized(): boolean {
-    if (localStorage.getItem('watcherToken') != null) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   // Verify JWT in localstorage with server & load user's info.
@@ -92,6 +85,27 @@ export class AuthService {
   }
 
   async login(credential: firebase.auth.UserCredential, provider: string): Promise<void> {
+    let firstName;
+    let lastName;
+    const profile: UserProfile = (<UserProfile>credential.additionalUserInfo.profile);
+    switch (provider) {
+      case 'Google': {
+        firstName = profile.given_name;
+        lastName = profile.family_name;
+        break;
+      }
+      case 'Facebook': {
+        firstName = profile.first_name;
+        lastName = profile.last_name;
+        break;
+      }
+      case 'GitHub': {
+        firstName = '';
+        lastName = '';
+        break;
+      }
+    }
+
     this.userRegisterRequest = {
       uid: credential.user.uid,
       email: credential.user.email,
@@ -100,8 +114,8 @@ export class AuthService {
       photoURL: credential.user.photoURL,
       isNewUser: credential.additionalUserInfo.isNewUser,
       companyName: '',
-      firstName: '',
-      lastName: ''
+      firstName: firstName,
+      lastName: lastName
     };
 
     if (!this.userRegisterRequest.email) {
@@ -186,10 +200,11 @@ export class AuthService {
       });
   }
 
-  async signUpWithProvider(companyName: string, firstName: string, lastName: string): Promise<void> {
+  async signUpWithProvider(companyName: string, firstName: string, lastName: string, email: string): Promise<void> {
     this.userRegisterRequest.companyName = companyName;
     this.userRegisterRequest.firstName = firstName;
     this.userRegisterRequest.lastName = lastName;
+    this.userRegisterRequest.email = email;
 
     await this.register()
       .then(() => {
@@ -207,11 +222,21 @@ export class AuthService {
     }
   }
 
+  isAuthorized(): boolean {
+    const user = this.getCurrentUserLS();
+
+    if (user != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
 
-  getCurrentUserLS() {
+  getCurrentUserLS(): User {
     const userStr = localStorage.getItem('currentUser');
     const userDto = (<User>JSON.parse(userStr));
     return userDto;
@@ -222,7 +247,6 @@ export class AuthService {
     // Set current user data into observable
     this.currentUserSubject.next(user);
   }
-
 
   getFirebaseToken(): string | null {
     return localStorage.getItem('firebaseToken');
