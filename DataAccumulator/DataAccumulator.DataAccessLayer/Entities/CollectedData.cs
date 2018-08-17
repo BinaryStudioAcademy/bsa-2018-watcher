@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataAccumulator.Interfaces;
+using DataAccumulator.DataAccessLayer.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 
-namespace DataAccumulator.Entities
+namespace DataAccumulator.DataAccessLayer.Entities
 {
     public class CollectedData : IEntity
     {

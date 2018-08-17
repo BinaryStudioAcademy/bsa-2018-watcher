@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DataAccumulator.Entities;
+using DataAccumulator.DataAccessLayer.Entities;
 
-namespace DataAccumulator.Interfaces
+namespace DataAccumulator.DataAccessLayer.Interfaces
 {
     public interface IDataAccumulatorRepository<TEntity> where TEntity : IEntity
     {

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataAccumulator.DataAccessLayer.Data;
+using DataAccumulator.DataAccessLayer.Entities;
+using DataAccumulator.DataAccessLayer.Interfaces;
+using DataAccumulator.Shared.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using DataAccumulator.Data;
-using DataAccumulator.Entities;
-using DataAccumulator.Interfaces;
-using DataAccumulator.Models;
 
-namespace DataAccumulator.Repositories
+namespace DataAccumulator.DataAccessLayer.Repositories
 {
     public class DataAccumulatorRepository : IDataAccumulatorRepository<CollectedData>
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataAccumulator.Interfaces;
+using DataAccumulator.Shared.Interfaces;
 
-namespace DataAccumulator.Models
+namespace DataAccumulator.Shared.Models
 {
     public class CollectedDataDto : ICollectedDataDto
     {

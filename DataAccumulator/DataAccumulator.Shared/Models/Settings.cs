@@ -1,4 +1,4 @@
-﻿namespace DataAccumulator.Models
+﻿namespace DataAccumulator.Shared.Models
 {
     public class Settings
     {

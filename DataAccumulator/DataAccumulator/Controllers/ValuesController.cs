@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataAccumulator.DataAccessLayer.Entities;
+using DataAccumulator.DataAccessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using DataAccumulator.Entities;
 using DataAccumulator.Interfaces;
 
 namespace DataAccumulator.Controllers

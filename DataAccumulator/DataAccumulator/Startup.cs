@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
-using DataAccumulator.Entities;
+using DataAccumulator.BusinessLayer.Interfaces;
+using DataAccumulator.BusinessLayer.Services;
+using DataAccumulator.DataAccessLayer.Entities;
+using DataAccumulator.DataAccessLayer.Interfaces;
+using DataAccumulator.DataAccessLayer.Repositories;
 using DataAccumulator.Interfaces;
-using DataAccumulator.Models;
 using DataAccumulator.Providers;
-using DataAccumulator.Repositories;
-using DataAccumulator.Services;
+using DataAccumulator.Shared.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

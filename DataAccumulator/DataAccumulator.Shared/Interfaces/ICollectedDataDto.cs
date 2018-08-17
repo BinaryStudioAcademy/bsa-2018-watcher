@@ -1,4 +1,4 @@
-﻿namespace DataAccumulator.Interfaces
+﻿namespace DataAccumulator.Shared.Interfaces
 {
     public interface ICollectedDataDto
     {

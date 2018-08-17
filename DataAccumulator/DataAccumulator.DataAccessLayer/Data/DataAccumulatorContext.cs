@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Options;
+﻿using DataAccumulator.DataAccessLayer.Entities;
+using DataAccumulator.Shared.Models;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using DataAccumulator.Entities;
-using DataAccumulator.Models;
 
-namespace DataAccumulator.Data
+namespace DataAccumulator.DataAccessLayer.Data
 {
     public class DataAccumulatorContext
     {

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataAccumulator.Shared.Interfaces;
 
-namespace DataAccumulator.Interfaces
+namespace DataAccumulator.BusinessLayer.Interfaces
 {
     public interface IService<TEntity> where TEntity : ICollectedDataDto
     {

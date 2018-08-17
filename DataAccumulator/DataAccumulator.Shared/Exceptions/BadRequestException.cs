@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataAccumulator.Exceptions
+namespace DataAccumulator.Shared.Exceptions
 {
     public class BadRequestException : Exception
     {

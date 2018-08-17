@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using DataAccumulator.Entities;
-using DataAccumulator.Exceptions;
-using DataAccumulator.Interfaces;
-using DataAccumulator.Models;
+using DataAccumulator.BusinessLayer.Interfaces;
+using DataAccumulator.DataAccessLayer.Entities;
+using DataAccumulator.DataAccessLayer.Interfaces;
+using DataAccumulator.Shared.Exceptions;
+using DataAccumulator.Shared.Models;
 
-namespace DataAccumulator.Services
+namespace DataAccumulator.BusinessLayer.Services
 {
     public class DataAccumulatorService : IService<CollectedDataDto>
     {

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DataAccumulator.BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using DataAccumulator.Exceptions;
 using DataAccumulator.Interfaces;
-using DataAccumulator.Models;
+using DataAccumulator.Shared;
+using DataAccumulator.Shared.Exceptions;
+using DataAccumulator.Shared.Models;
 
 namespace DataAccumulator.Controllers
 {
