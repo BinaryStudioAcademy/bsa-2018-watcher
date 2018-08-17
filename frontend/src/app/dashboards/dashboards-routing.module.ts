@@ -3,19 +3,24 @@ import {Routes, RouterModule} from '@angular/router';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {EditInstanceComponent} from './edit-instance/edit-instance.component';
 
-
 const dashboardRoutes: Routes = [
   {
-    path: 'instance/:id/edit',
+    path: '',
+    component: DashboardComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: ':insId/edit',
     component: EditInstanceComponent
-}, {
-    path: 'instance/create',
+  },
+  {
+    path: 'create',
     component: EditInstanceComponent
-},
-{
-  path: 'instance/:id/dashboards',
-  component: DashboardComponent
-}];
+  },
+  {
+    path: ':insId/dashboards',
+    component: DashboardComponent
+  }];
 
 @NgModule({
   imports: [RouterModule.forChild(dashboardRoutes)],

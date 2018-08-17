@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '../../../../node_modules/@angular/router';
-import { FormBuilder, FormControl, Validators, FormGroup } from '../../../../node_modules/@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
 import { ToastrService } from '../../core/services/toastr.service';
 import { InstanceService } from '../../core/services/instance.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -67,13 +67,13 @@ export class EditInstanceComponent implements OnInit {
             platform: instance.platform
           };
           this.instanceService.instanceEdited.emit(instanceEvent);
-          this.router.navigate([`/user/instance/${instanceEvent.id}/dashboards`]);
+          this.router.navigate([`/user/instances/${instanceEvent.id}/dashboards`]);
         });
       } else {
         this.instanceService.create(instance).subscribe((res: Instance) => {
           this.toastrService.success('created instance');
           this.instanceService.instanceAdded.emit(res);
-          this.router.navigate([`/user/instance/${res.id}/dashboards`]);
+          this.router.navigate([`/user/instances/${res.id}/dashboards`]);
         });
       }
     } else {
@@ -83,7 +83,7 @@ export class EditInstanceComponent implements OnInit {
 
   ngOnInit() {
     const x = this.activateRoute.params.subscribe(params => {
-      this.id = params['id'];
+      this.id = params['insId'];
       if (this.id) {
         this.instanceService.getOne(this.id).subscribe((data: Instance) => {
           if (data) {

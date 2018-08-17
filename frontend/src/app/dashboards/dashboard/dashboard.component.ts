@@ -7,6 +7,8 @@ import {Instance} from '../../shared/models/instance.model';
 import {ToastrService} from '../../core/services/toastr.service';
 import {DashboardMenuItem} from '../models/dashboard-menuitem.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
+import {ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,10 +18,13 @@ import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 })
 
 export class DashboardComponent implements OnInit {
-  instance: Instance;
+ // instance: Instance;
+  private instanceId: number;
+  private subscription: Subscription;
 
-  dashboardMenuitems: DashboardMenuItem[];
-  activeDashboardItem: DashboardMenuItem;
+  dashboards: Dashboard[] = [];
+  dashboardMenuitems: DashboardMenuItem[] = [];
+  activeDashboardItem: DashboardMenuItem = {};
 
   editTitle: string;
   creation: boolean;
@@ -27,35 +32,46 @@ export class DashboardComponent implements OnInit {
   displayEditDashboard = false;
 
   constructor(private dashboardsService: DashboardService,
-              private toastrService: ToastrService) {
-    this.activeDashboardItem = {};
-    this.dashboardMenuitems = [];
+              private toastrService: ToastrService,
+              private activateRoute: ActivatedRoute) {
+    this.subscription = activateRoute.params.subscribe(params => {
+      this.instanceId = params['insId'];
+      this.dashboardMenuitems = [];
+      this.getDashboards();
+    });
     // get instance id and get dashboards by instance id
   }
 
   ngOnInit() {
-    this.loading = true;
-    this.dashboardsService.getDefaultInstance()
-      .subscribe(value => {
-        this.instance = value;
-        if (this.instance.dashboards && this.instance.dashboards.length > 0) {
-          // Fill Dashboard Menu Items
-          this.dashboardMenuitems.unshift(...this.instance.dashboards.map(dash => this.transformToMenuItem(dash)));
-          this.activeDashboardItem = this.dashboardMenuitems[0];
-        }
-        this.loading = false;
-        this.toastrService.success('Successfully got instance info from server');
-      }, error => this.toastrService.error(error.toString()));
+    // this.getDashboards();
+  }
 
-    const lastItem: DashboardMenuItem = {
-      icon: 'fa fa-plus',
-      command: (onlick) => {
-        this.showCreatePopup(true);
-      },
-      id: 'lastTab'
-    };
+  getDashboards() {
+    this.loading = true;
+
+    console.log(this.instanceId);
+    if (this.instanceId && this.instanceId !== 0) {
+      const lastItem: DashboardMenuItem = {
+        icon: 'fa fa-plus',
+        command: (onlick) => {
+          this.showCreatePopup(true);
+        },
+        id: 'lastTab'
+      };
+      this.dashboardMenuitems.push(lastItem);
+      this.dashboardsService.getAllByInstance(this.instanceId)
+        .subscribe(value => {
+          this.dashboards = value;
+          if (this.dashboards && this.dashboards.length > 0) {
+            // Fill Dashboard Menu Items
+            this.dashboardMenuitems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
+            this.activeDashboardItem = this.dashboardMenuitems[0];
+          }
+          this.loading = false;
+          this.toastrService.success('Successfully got instance info from server');
+        }, error => this.toastrService.error(error.toString()));
+    }
     this.loading = false;
-    this.dashboardMenuitems.push(lastItem);
   }
 
   createDashboard(newDashboard: DashboardRequest): void {
@@ -78,7 +94,7 @@ export class DashboardComponent implements OnInit {
     const index = this.dashboardMenuitems.findIndex(d => d === this.activeDashboardItem);
     const request: DashboardRequest = {
       title: editTitle,
-      instanceId: this.instance.id
+      instanceId: this.instanceId
     };
 
     this.dashboardsService.update(this.dashboardMenuitems[index].dashId, request)
@@ -136,7 +152,7 @@ export class DashboardComponent implements OnInit {
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
-      const newdash: DashboardRequest = {title: title, instanceId: this.instance.id};
+      const newdash: DashboardRequest = {title: title, instanceId: this.instanceId};
       this.createDashboard(newdash);
       let index = 0;
       // switching to new tab
