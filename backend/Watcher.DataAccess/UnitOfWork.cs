@@ -4,7 +4,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using System.Transactions;
     using AutoMapper;
 
     using Microsoft.EntityFrameworkCore;
@@ -39,6 +39,13 @@
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public TransactionScope BeginTransactionScope()
+        {
+            return new TransactionScope(
+                TransactionScopeOption.Required,
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
         }
 
         public ISamplesRepository SamplesRepository
