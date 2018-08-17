@@ -173,7 +173,7 @@ export class AuthorizationComponent implements OnInit {
 
   signInPostProcessing(result: boolean): Promise<boolean> {
     if (result) {
-      return this.router.navigate(['/user']);
+      return this.router.navigate(['/user/instances']);
     } else {
       return this.router.navigate(['/']);
     }
