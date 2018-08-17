@@ -29,9 +29,7 @@ import {MessageModule} from 'primeng/message';
 
     DashboardRoutingModule
   ],
-  declarations: [DashboardComponent, InstanceListComponent, EditDashboardComponent, LineChartComponent],
-  exports: [ DashboardComponent, InstanceListComponent, LineChartComponent ]
-  declarations: [DashboardComponent, EditDashboardComponent, EditInstanceComponent],
-  exports: [ DashboardComponent ]
+  declarations: [DashboardComponent, EditDashboardComponent, EditInstanceComponent, LineChartComponent],
+  exports: []
 })
 export class DashboardsModule { }

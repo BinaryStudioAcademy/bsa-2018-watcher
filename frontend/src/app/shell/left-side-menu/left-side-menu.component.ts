@@ -147,6 +147,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
         this.instanceService.instanceRemoved.emit(id);
         this.toastrService.success('Deleted instance');
         this.instanceItems.splice(index, 1);
+        this.router.navigate([`instances`]);
       });
     }
   }
