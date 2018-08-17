@@ -53,5 +53,7 @@
         public IList<Chat> CreatedChats { get; set; }
 
         public IList<Organization> CreatedOrganizations { get; set; }
+
+        public IList<OrganizationInvite> OrganizationInvites { get; set; }
     }
 }
