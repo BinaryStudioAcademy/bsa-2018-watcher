@@ -41,12 +41,20 @@
             _mapper = mapper;
         }
 
-        public TransactionScope BeginTransactionScope()
+        public async Task BeginTransaction()
         {
-            return new TransactionScope(
-                TransactionScopeOption.Required,
-                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+            await _context.Database.BeginTransactionAsync();
+           
+            //return new TransactionScope(
+            //    TransactionScopeOption.Required,
+            //    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
         }
+
+        public void CommitTransaction()
+        {
+            _context.Database.CommitTransaction();
+        }
+
 
         public ISamplesRepository SamplesRepository
         {
