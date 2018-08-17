@@ -14,15 +14,19 @@ namespace DataCollector
         //static Dictionary<string, string> counters;
         static void Main(string[] args)
         {
+            Guid clientIdentifier = Guid.NewGuid();
+
             //DataReceiver rs = new DataReceiver(9050, IPAddress.Loopback);
             DataSender s = new DataSender();
             var collector = new Collector();
             collector.Start();
-            while(true)
+            while (true)
             {
                 Thread.Sleep(10000);
                 var tempDataItem = new CollectedData();
                 var sendDataItem = new CollectedData();
+                sendDataItem.Id = clientIdentifier;
+
                 int count = 0;
                 while (!collector.data.IsEmpty)
                 {
@@ -30,6 +34,7 @@ namespace DataCollector
                     sendDataItem += tempDataItem;
                     count++;
                 }
+
                 Console.WriteLine($"{DateTime.Now}         Avarage counted\n");
                 sendDataItem /= count;
                 Console.WriteLine($"{DateTime.Now}         Avarage:\n{sendDataItem.ToString()}");

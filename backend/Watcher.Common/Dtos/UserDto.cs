@@ -24,6 +24,8 @@ namespace Watcher.Common.Dtos
 
         public bool IsActive { get; set; }
 
+        public string PhotoURL { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public RoleDto Role { get; set; }

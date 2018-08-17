@@ -1,58 +1,69 @@
-<div class="ui-g ui-fluid">
-	<div class="ui-g-12 ui-lg-6">
-		<div class="title">USER PROFILE</div>
-		<hr>
+<div class="container">
+	<div class="ui-g ui-fluid">
+		<div class="ui-g-12 ui-lg-6">
+			<div class="title">USER PROFILE</div>
+			<hr>
+		</div>
 	</div>
+
+	<form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+		<div class="ui-g">
+			<div class="ui-g-12 ui-md-8 ui-lg-4">
+				<div class="label">Display Name</div>
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12">
+						<div class="ui-inputgroup">
+							<input type="text" formControlName="displayName" pInputText placeholder="Display name">
+						</div>
+					</div>
+				</div>
+				<div class="invalid" *ngIf="userForm.get('displayName').errors && userForm.get('displayName').dirty">
+					Display Name is required.
+				</div>
+
+				<div class="label">First Name</div>
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12">
+						<div class="ui-inputgroup">
+							<input type="text" formControlName="firstName" pInputText placeholder="First name">
+						</div>
+					</div>
+				</div>
+
+				<div class="invalid" *ngIf="userForm.get('firstName').errors && userForm.get('firstName').dirty">
+					Fisrt Name is required.
+				</div>
+
+				<div class="label">Last Name</div>
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12">
+						<div class="ui-inputgroup">
+							<input type="text" formControlName="lastName" pInputText placeholder="Last name">
+						</div>
+					</div>
+				</div>
+
+				<div class="invalid" *ngIf="userForm.get('lastName').errors && userForm.get('lastName').dirty">
+					Last Name is required.
+				</div>
+
+				<div class="label">Bio</div>
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12">
+						<textarea rows="5" formControlName="bio" pInputTextarea></textarea>
+					</div>
+				</div>
+			</div>
+
+			<div class="ui-g-12 ui-md-8 ui-lg-2">
+				<div class="label">Profile photo</div>
+				<user-picture [pictureUrl]="user.photoURL"></user-picture>
+			</div>
+		</div>
+
+		<div class="btn-panel">
+			<button pButton type="submit" [disabled]="!userForm.valid" label="Update" class="ui-button-raised ui-button-success"></button>
+		</div>
+	</form>
+
 </div>
-
-<form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-	<div class="label">Display Name*:</div>
-	<div class="ui-g ui-fluid">
-		<div class="ui-g-12 ui-lg-4">
-			<div class="ui-inputgroup">
-				<input type="text" formControlName="displayName" pInputText placeholder="Display name">
-			</div>
-		</div>
-	</div>
-
-	<div class="invalid" *ngIf="userForm.get('displayName').errors && userForm.get('displayName').dirty">
-		Display Name is required.
-	</div>
-
-	<div class="label">First Name*:</div>
-	<div class="ui-g ui-fluid">
-		<div class="ui-g-12 ui-lg-4">
-			<div class="ui-inputgroup">
-				<input type="text" formControlName="firstName" pInputText placeholder="First name">
-			</div>
-		</div>
-	</div>
-
-	<div class="invalid" *ngIf="userForm.get('firstName').errors && userForm.get('firstName').dirty">
-		Fisrt Name is required.
-	</div>
-
-	<div class="label">Last Name*:</div>
-	<div class="ui-g ui-fluid">
-		<div class="ui-g-12 ui-lg-4">
-			<div class="ui-inputgroup">
-				<input type="text" formControlName="lastName" pInputText placeholder="Last name">
-			</div>
-		</div>
-	</div>
-
-	<div class="invalid" *ngIf="userForm.get('lastName').errors && userForm.get('lastName').dirty">
-		Last Name is required.
-	</div>
-
-	<div class="label">Bio:</div>
-	<div class="ui-g ui-fluid">
-		<div class="ui-g-12 ui-lg-4">
-			<textarea rows="5" formControlName="bio" pInputTextarea></textarea>
-		</div>
-	</div>
-
-	<div class="btn-panel">
-		<button pButton type="submit" [disabled]="!userForm.valid" label="Update" class="ui-button-raised ui-button-success"></button>
-	</div>
-</form>
