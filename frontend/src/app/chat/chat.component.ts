@@ -34,14 +34,17 @@ export class ChatComponent implements OnInit {
   chats: Chat[] = [];
 
   textMessage: string;
-  wanteduser: string;
+  wantedUser: string;
 
   choosedChat: Chat = {} as Chat;
+  newChat: ChatRequest = {} as ChatRequest;
+  userList: string[] = [];
   isChatChoosed: boolean;
   isNewChatChoosed: boolean;
 
 
   ngOnInit() {
+    this.newChat.users = [];
     this.subscribeToChatCreated();
     this.currentUserId = this.authService.getCurrentUser().id;
     this.userService.get(this.currentUserId).subscribe(
@@ -65,6 +68,7 @@ export class ChatComponent implements OnInit {
     this.chatHub.chatCreated.subscribe((value: Chat) => {
       this.chats.push(value);
       this.choosedChat = value;
+      console.log('chat created');
     });
   }
 
@@ -81,39 +85,44 @@ export class ChatComponent implements OnInit {
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
       this.choosedChat.messages.push(message);
-    },
-    err => {
-      this.toastrService.error('Can`t get message history');
+      console.log('message received');
     });
   }
 
   closeConversation() {
     this.isChatChoosed = false;
-    this.choosedChat = null;
-    this.chatHub.messageReceived.unsubscribe();
   }
 
   createNewChat() {
     this.isNewChatChoosed = true;
 
-    const newChat: ChatRequest = {
-      name: 'New chat',
-      createdById: this.currentUserId,
-      chatType: ChatType.BetweenUsers
-    } as ChatRequest;
-
-    this.chatHub.initializeChat(newChat, this.currentUserId);
+    this.newChat.createdById = this.currentUserId;
+    this.chatHub.initializeChat(this.newChat, this.currentUserId);
   }
 
   addUserToChat() {
-    this.userService.get(this.wanteduser).subscribe((value: User) => {
-      this.chatHub.addUser(value.id, this.choosedChat.id);
-      this.toastrService.error('User added');
+    this.userService.get(this.wantedUser).subscribe((value: User) => {
+      this.chatHub.addUserToChat(value.id, this.choosedChat.id);
+      this.toastrService.success('User added');
     },
       err => {
         this.toastrService.error('User don`t exist');
       }
     );
+  }
+
+  addUser() {
+    if (!this.newChat.users.some(u => u.id === this.wantedUser)) {
+      this.userService.get(this.wantedUser).subscribe((value: User) => {
+        this.newChat.users.push(value);
+      },
+        err => {
+          this.toastrService.error('User don`t exist');
+        }
+      );
+    } else {
+      this.toastrService.error('User already added');
+    }
   }
 
   sendMessage() {
@@ -131,7 +140,7 @@ export class ChatComponent implements OnInit {
     const items: MenuItem[] = [{
       label: 'New chat',
       icon: 'pi pi-fw pi-plus',
-      command: () => this.createNewChat()
+      command: () => this.openCloseNewChatWindow()
     }];
 
     this.chats.forEach(chat => {
