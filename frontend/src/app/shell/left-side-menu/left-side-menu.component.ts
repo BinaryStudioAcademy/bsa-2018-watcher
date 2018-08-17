@@ -142,12 +142,12 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
 
     this.adminItems = [{
       label: 'Organizations',
-      icon: 'fa fa-fw fa-list'
-      // routerLink: ['/user/settings/user-profile']
+      icon: 'fa fa-fw fa-list',
+      routerLink: ['/admin/organization-list']
     }, {
       label: 'Users',
-      icon: 'fa fa-fw fa-group'
-      // routerLink: ['/user/settings/organization-profile']
+      icon: 'fa fa-fw fa-group',
+      routerLink: ['/admin/user-list']
     }, {
       label: 'Feedbacks',
       icon: 'fa fa-fw fa-bullhorn',
@@ -171,13 +171,13 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
       this.isFeedback = false;
     } else if (this.activeUrl.match(this.regexFeedbackUrl)) {
       this.isFeedback = true;
-    } else if (this.activeUrl.match(this.regexDashboardUrl)) {
-      this.menuItems = this.instanceItems;
-      this.isSearching = true;
-      this.isFeedback = false;
     } else if (this.activeUrl.match(this.regexAdminUrl)) {
       this.menuItems = this.adminItems;
       this.isSearching = false;
+      this.isFeedback = false;
+    } else if (this.activeUrl.match(this.regexDashboardUrl)) {
+      this.menuItems = this.instanceItems;
+      this.isSearching = true;
       this.isFeedback = false;
     }
   }
