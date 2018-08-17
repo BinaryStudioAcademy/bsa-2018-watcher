@@ -1,8 +1,7 @@
-﻿using System.Linq;
-
-namespace Watcher.Core.Services
+﻿namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
@@ -12,6 +11,7 @@ namespace Watcher.Core.Services
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Interfaces;
     using Watcher.DataAccess.Entities;
+    using Watcher.Common.Enums;
 
     public class ChatsService : IChatsService
     {
@@ -72,8 +72,11 @@ namespace Watcher.Core.Services
             var sample = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
                 include: chats => chats.Include(c => c.CreatedBy)
                                                         .Include(c => c.Messages)
+                                                            .ThenInclude(c => c.User)
                                                         .Include(c => c.Organization)
-                                                        .Include(c => c.UserChats));
+                                                        .Include(c => c.CreatedBy)
+                                                        .Include(c => c.UserChats)
+                                                            .ThenInclude(uc => uc.User));
 
             if (sample == null) return null;
 
@@ -85,6 +88,23 @@ namespace Watcher.Core.Services
         public async Task<ChatDto> CreateEntityAsync(ChatRequest request)
         {
             var entity = _mapper.Map<ChatRequest, Chat>(request);
+            if(entity.Type == ChatType.BetweenUsers)
+            {
+                entity.UserChats.Add(new UserChat
+                {
+                    UserId = entity.CreatedById,
+                    Chat = entity
+                });
+
+                foreach (var user in request.Users)
+                {
+                    entity.UserChats.Add(new UserChat
+                    {
+                        UserId = user.Id,
+                        Chat = entity
+                    });
+                }
+            }
 
             entity = await _uow.ChatsRepository.CreateAsync(entity);
 
