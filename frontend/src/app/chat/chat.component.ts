@@ -95,8 +95,7 @@ export class ChatComponent implements OnInit {
 
   createNewChat() {
     this.isNewChatChoosed = true;
-    debugger;
-    this.newChat.name = this.newChat.name || 'DefaultChat';
+    this.newChat.name = this.newChat.name || 'NewChat';
 
     this.newChat.createdById = this.currentUserId;
     this.chatHub.initializeChat(this.newChat, this.currentUserId);
@@ -131,6 +130,7 @@ export class ChatComponent implements OnInit {
     } as Message;
     this.choosedChat.messages.push(fakeMessage);
     this.chatHub.sendMessage(newMessage);
+    this.textMessage = '';
   }
 
   createChatItems(): MenuItem[] {
