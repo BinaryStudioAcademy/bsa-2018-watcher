@@ -16,7 +16,7 @@ import {
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
-import { TestSignalRComponent } from './test-signal-r/test-signal-r.component';
+import { query } from '@angular/core/src/render3/query';
 
 
 @NgModule({
@@ -33,6 +33,6 @@ import { TestSignalRComponent } from './test-signal-r/test-signal-r.component';
     PanelMenuModule,
     ChatModule
   ],
-  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent, TestSignalRComponent ]
+  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent ]
 })
 export class ShellModule { }
