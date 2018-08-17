@@ -22,6 +22,9 @@ namespace Watcher.Common.Dtos
 
         public string InviteEmail { get; set; }
 
+        public string InvitedUserId { get; set; }
+        public UserDto InvitedUser { get; set; }
+
         public string CreatedByUserId { get; set; }
         public UserDto CreatedByUser { get; set; }
 

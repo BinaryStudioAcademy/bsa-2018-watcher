@@ -111,7 +111,7 @@ export class OrganizationProfileComponent implements OnInit {
       organizationId: this.organization.id,
       createdByUserId: this.authService.getCurrentUser().id,
       inviteEmail: 'San7Av1.0@gmail.com',
-
+      invitedUserId: null,
       createdByUser: null,
       organization: null,
       createdDate: null,
@@ -122,16 +122,26 @@ export class OrganizationProfileComponent implements OnInit {
 
     this.organizationInvitesService.create(invite).subscribe(
       value => {
-        this.toastrService.success('Organization Invite was updated');
+        this.toastrService.success('Organization Invite was created');
         this.inviteLink = `${environment.server_url}/user/invite/${value.link}`;
       },
       err => {
-        this.toastrService.error('Organization Invite was not updated');
+        this.toastrService.error('Organization Invite was not created');
       }
     );
   }
 
   onCopy() {
-
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = this.inviteLink;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 }

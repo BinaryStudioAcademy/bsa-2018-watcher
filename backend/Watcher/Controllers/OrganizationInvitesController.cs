@@ -89,8 +89,8 @@ namespace Watcher.Controllers
         /// <response code="403">You don`t have permission to create watch OrganizationInvite</response>
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
-        [HttpPut("{id}/{userId}")]
-        public virtual async Task<ActionResult> Update([FromRoute] int id, [FromRoute] string userId, [FromBody] OrganizationInviteRequest request)
+        [HttpPut("{id}")]
+        public virtual async Task<ActionResult> Update([FromRoute] int id, [FromBody] OrganizationInviteRequest request)
         {
             if (!ModelState.IsValid)
             {

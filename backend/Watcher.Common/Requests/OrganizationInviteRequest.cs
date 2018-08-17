@@ -14,6 +14,8 @@
 
         public string InviteEmail { get; set; }
 
+        public string InvitedUserId { get; set; }
+
         public string CreatedByUserId { get; set; }
 
         public OrganizationInviteState State { get; set; }
