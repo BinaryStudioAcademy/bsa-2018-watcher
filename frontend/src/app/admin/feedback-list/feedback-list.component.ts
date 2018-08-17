@@ -28,6 +28,7 @@ export class FeedbackListComponent implements OnInit {
   responses: Response[];
   lstFeedbacks: ForShow[];
   display: boolean;
+  email: string;
 
   constructor(
     private fb: FormBuilder,
@@ -76,6 +77,7 @@ export class FeedbackListComponent implements OnInit {
     this.responseForm.reset();
     this.display = true;
     this.feedback = feedback;
+    this.email = feedback.user.email;
   }
 
   onCancel() {
