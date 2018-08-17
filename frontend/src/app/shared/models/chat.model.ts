@@ -10,4 +10,5 @@ export interface Chat  {
    createdBy: User;
    organization: Organization;
    messages: Message[];
+   users: User[];
 }

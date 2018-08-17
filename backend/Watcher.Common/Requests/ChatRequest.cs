@@ -1,5 +1,8 @@
 ﻿namespace Watcher.Common.Requests
 {
+    using System.Collections.Generic;
+
+    using Watcher.Common.Dtos;
     using Watcher.Common.Enums;
 
     public class ChatRequest
@@ -12,6 +15,8 @@
             
         public string CreatedById { get; set; }
 
-        public int OrganizationId { get; set; }
+        public int? OrganizationId { get; set; }
+
+        public IList<UserDto> Users { get; set; }
     }
 }
