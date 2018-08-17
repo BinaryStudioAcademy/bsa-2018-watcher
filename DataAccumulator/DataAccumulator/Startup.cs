@@ -2,6 +2,7 @@
 using DataAccumulator.Entities;
 using DataAccumulator.Interfaces;
 using DataAccumulator.Models;
+using DataAccumulator.Providers;
 using DataAccumulator.Repositories;
 using DataAccumulator.Services;
 using Microsoft.AspNetCore.Builder;
@@ -41,6 +42,7 @@ namespace DataAccumulator
             });
 
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
+            services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
             services.AddScoped<IService<CollectedDataDto>, DataAccumulatorService>();
 
             var mapper = MapperConfiguration().CreateMapper();
