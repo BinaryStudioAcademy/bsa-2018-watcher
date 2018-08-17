@@ -29,17 +29,26 @@
 
     <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuitems.length > 1">
       <div class="dashboard-item">
-        <img src="https://www.excel-easy.com/smi/examples/line-chart.png " alt=" ">
-      </div>
-      <div class="dashboard-item">
         <app-line-chart></app-line-chart>
       </div>
       <div class="dashboard-item">
-        <img src="https://www.excel-easy.com/smi/examples/line-chart.png " alt=" ">
+        <app-multi-series-line-chart></app-multi-series-line-chart>
       </div>
       <div class="dashboard-item">
-        <img src="https://www.excel-easy.com/smi/examples/line-chart.png " alt=" ">
+        <app-bar-chart></app-bar-chart>
       </div>
+      <div class="dashboard-item">
+        <app-stacked-bar-chart></app-stacked-bar-chart>
+      </div>
+      <div class="dashboard-item">
+        <app-brush-zoom></app-brush-zoom>
+      </div>
+      <!--<div class="dashboard-item">-->
+        <!--<app-pie-chart></app-pie-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+        <!--<app-donut-chart></app-donut-chart>-->
+      <!--</div>-->
     </div>
   </div>
 </div>

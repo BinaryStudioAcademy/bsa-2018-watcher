@@ -70,8 +70,8 @@ export class BrushZoomComponent implements OnInit {
     }
 
     private initMargins() {
-        this.margin = {top: 20, right: 20, bottom: 110, left: 40};
-        this.margin2 = {top: 430, right: 20, bottom: 30, left: 40};
+        this.margin = {top: 13, right: 20, bottom: 74, left: 40};
+        this.margin2 = {top: 288, right: 13, bottom: 20, left: 40};
     }
 
     private parseData(data: any[]): Stock[] {
@@ -79,7 +79,7 @@ export class BrushZoomComponent implements OnInit {
     }
 
     private initSvg() {
-        this.svg = d3.select('svg');
+      this.svg = d3.select('div.brush-zoom').select('svg');
 
         this.width = +this.svg.attr('width') - this.margin.left - this.margin.right;
         this.height = +this.svg.attr('height') - this.margin.top - this.margin.bottom;

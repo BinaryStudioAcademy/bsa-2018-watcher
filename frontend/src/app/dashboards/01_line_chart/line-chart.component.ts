@@ -27,8 +27,8 @@ export class LineChartComponent implements OnInit {
     private line: d3Shape.Line<[number, number]>;
 
     constructor() {
-        this.width = 450 - this.margin.left - this.margin.right;
-        this.height = 250 - this.margin.top - this.margin.bottom;
+        this.width = 643 - this.margin.left - this.margin.right;
+        this.height = 335 - this.margin.top - this.margin.bottom;
     }
 
     ngOnInit() {
@@ -39,7 +39,7 @@ export class LineChartComponent implements OnInit {
     }
 
     private initSvg() {
-        this.svg = d3.select('svg')
+      this.svg = d3.select('div.d3-line-chart').select('svg')
             .append('g')
             .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
     }
