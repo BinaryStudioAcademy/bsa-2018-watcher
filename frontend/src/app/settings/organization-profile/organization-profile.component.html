@@ -1,85 +1,89 @@
-<div class="ui-g ui-fluid">
-  <div class="ui-g-12 ui-lg-6">
-      <h3> Organization profile </h3>
-      <a [hidden]="!editable" class="btn-edit" (click)="enableEditing()">
-        <i class="fa fa-edit"></i>
-      </a>
-    <hr>
-  </div>
-</div>
+<div class="container">
 
-<form [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
-  <div class="label">Name*:</div>
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-lg-4">
-      <div class="ui-inputgroup">
-        <span class="ui-inputgroup-addon">
-          <i class="fa fa-user"></i>
-        </span>
-        <input type="text" formControlName="name" pInputText placeholder="Name">
-      </div>
-    </div>
-  </div>
-
-  <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
-    <label>Name is required.</label>
-  </div>
-
-  <div class="label">Email:</div>
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-lg-4">
-      <div class="ui-inputgroup">
-        <span class="ui-inputgroup-addon">
-          <i class="fa fa-envelope"></i>
-        </span>
-        <input type="text" formControlName="email" pInputText placeholder="Email">
-      </div>
-    </div>
-  </div>
-
-  <div class="invalid" *ngIf="organizationForm.get('email').errors && organizationForm.get('email').dirty">
-    <label>Wrong email format.</label>
-  </div>
-
-  <div class="label">Contact number:</div>
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-lg-4">
-      <div class="ui-inputgroup">
-        <span class="ui-inputgroup-addon">
-          <i class="fa fa-phone"></i>
-        </span>
-        <input type="text" formControlName="contactNumber" pInputText placeholder="Contact number">
-      </div>
-    </div>
-  </div>
-
-  <div class="invalid" *ngIf="organizationForm.get('contactNumber').errors && organizationForm.get('contactNumber').dirty">
-    <label>Wrong number format.</label>
-  </div>
-
-  <div class="label">Web site:</div>
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-lg-4">
-      <div class="ui-inputgroup">
-        <span class="ui-inputgroup-addon">
-          <i class="fa fa-internet-explorer"></i>
-        </span>
-        <input type="text" formControlName="webSite" pInputText placeholder="Web site">
-      </div>
-    </div>
-  </div>
-
-  <div class="invalid" *ngIf="organizationForm.get('webSite').errors && organizationForm.get('webSite').dirty">
-    <label>Wrong url format.</label>
-  </div>
-
-  <div class="label">Description:</div>
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
-      <textarea rows="5" formControlName="description" pInputTextarea></textarea>
+      <div class="title">ORGANIZATION PROFILE</div>
+      <hr>
     </div>
   </div>
-  <div [hidden]="!canUpdate" class="btn-panel">
+
+  <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()" >
+    <div class="ui-g">
+      <div class="ui-g-12 ui-md-8 ui-lg-4">
+      <div class="label">Name</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <div class="ui-inputgroup">
+            <input type="text" formControlName="name" pInputText placeholder="Name">
+          </div>
+        </div>
+      </div>
+
+    <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
+      <label>Name is required.</label>
+    </div>
+
+    <div class="label">Email</div>
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12">
+        <div class="ui-inputgroup">
+          <input type="text" formControlName="email" pInputText placeholder="Email">
+        </div>
+      </div>
+    </div>
+
+    <div class="invalid" *ngIf="organizationForm.get('email').errors && organizationForm.get('email').dirty">
+      <label>Wrong email format.</label>
+    </div>
+
+    <div class="label">Contact number</div>
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12">
+        <div class="ui-inputgroup">
+          <input type="text" formControlName="contactNumber" pInputText placeholder="Contact number">
+        </div>
+      </div>
+    </div>
+
+    <div class="invalid" *ngIf="organizationForm.get('contactNumber').errors && organizationForm.get('contactNumber').dirty">
+      <label>Wrong number format.</label>
+    </div>
+
+    <div class="label">Web site</div>
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12">
+        <div class="ui-inputgroup">
+          <input type="text" formControlName="webSite" pInputText placeholder="Web site">
+        </div>
+      </div>
+    </div>
+
+    <div class="invalid" *ngIf="organizationForm.get('webSite').errors && organizationForm.get('webSite').dirty">
+      <label>Wrong url format.</label>
+    </div>
+
+    <div class="label">Description</div>
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12">
+        <textarea rows="5" formControlName="description" pInputTextarea></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="btn-panel">
     <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success"></button>
-</div>
+  </div>
+  </div>
 </form>
+
+<div class="btn-panel">
+  <button (click)="onInvite()" pButton label="Invite" class="ui-button-raised ui-button-success"></button>
+</div>
+
+<div class="label">Invite link:</div>
+<div class="ui-g ui-fluid">
+  <div class="ui-g-12 ui-lg-4">
+    <input rows="5" [(ngModel)]="inviteLink" pInput/>
+    <button pButton label="Copy link" (click)="onCopy()"></button>
+  </div>
+</div>
+</div>

@@ -15,6 +15,7 @@ export interface User  {
    lastName: string;
    bio: string;
    email: string;
+   photoURL: string;
    isActive: boolean;
    createdAt: Date;
    role: Role;
@@ -27,5 +28,6 @@ export interface User  {
    responses: Response[];
    messages: Message[];
    createdChats: Chat[];
+   chats: Chat[];
 }
 

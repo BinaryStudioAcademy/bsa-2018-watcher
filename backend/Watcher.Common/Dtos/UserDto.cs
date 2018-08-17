@@ -24,6 +24,8 @@ namespace Watcher.Common.Dtos
 
         public bool IsActive { get; set; }
 
+        public string PhotoURL { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public RoleDto Role { get; set; }
@@ -44,5 +46,7 @@ namespace Watcher.Common.Dtos
         public IList<MessageDto> Messages { get; set; }
 
         public IList<ChatDto> CreatedChats { get; set; }
+
+        public IList<ChatDto> Chats { get; set; }
     }
 }

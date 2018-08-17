@@ -65,5 +65,26 @@ namespace Watcher.Core.Services
 
             return dto;
         }
+
+        public async Task<bool> UpdateEntityByIdAsync(FeedbackDto request, int id)
+        {
+            var entity = _mapper.Map<FeedbackDto, Feedback>(request);
+            entity.Id = id;
+
+            // In returns updated entity, you could do smth with it or just leave as it is
+            var updated = await _uow.FeedbackRepository.UpdateAsync(entity);
+            var result = await _uow.SaveAsync();
+
+            return result;
+        }
+
+        public async Task<bool> DeleteEntityByIdAsync(int id)
+        {
+            await _uow.FeedbackRepository.DeleteAsync(id);
+
+            var result = await _uow.SaveAsync();
+
+            return result;
+        }
     }
 }

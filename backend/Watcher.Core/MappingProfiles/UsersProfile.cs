@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Security.Claims;
 
     using AutoMapper;
@@ -25,13 +26,17 @@
                 d => d.Id,
                 o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
 
+            CreateMap<UserDto, User>();
+
             CreateMap<User, UserDto>()
                 .ForMember(d => d.Role, o => o.MapFrom(s => s.RoleId == 1 ? new Role(s.RoleId, "Admin") : new Role(s.RoleId, "User")))
                 .ForMember(d => d.Organizations, o => o.MapFrom(s => s.UserOrganizations))
                 .ForMember(d => d.LastPickedOrganization, o => o.MapFrom(s => s.LastPickedOrganization))
                 .ForMember(d => d.CreatedChats, o => o.UseValue(new List<ChartDto>()))
+                .ForMember(d => d.Chats, o => o.MapFrom(s => s.UserChats.Select(uc => uc.Chat)))
                 .ForMember(d => d.Feedbacks, o => o.UseValue(new List<FeedbackDto>()))
                 .ForMember(d => d.Messages, o => o.UseValue(new List<MessageDto>()))
+                .ForMember(d => d.PhotoURL, o => o.MapFrom(s => s.PhotoURL))
                 .ForMember(d => d.NotificationSettings, o => o.MapFrom(s => s.NotificationSettings))
                 .ForMember(d => d.Notifications, o => o.MapFrom(s => s.Notifications))
                 .ForMember(d => d.Responses, o => o.UseValue(new List<ResponseDto>()));
@@ -54,6 +59,7 @@
                 .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
                 .ForMember(d => d.CreatedAt, o => o.MapFrom(s => s.User.CreatedAt))
                 .ForMember(d => d.IsActive, o => o.MapFrom(s => s.User.IsActive))
+                .ForMember(d => d.PhotoURL, o => o.MapFrom(s => s.User.PhotoURL))
                 .ForMember(d => d.Role, o => o.MapFrom(s => s.User.Role))
                 .ForMember(d => d.LastPickedOrganization, o => o.MapFrom(s => s.User.LastPickedOrganization)); // TODO: Include
 

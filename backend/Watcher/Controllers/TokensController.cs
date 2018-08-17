@@ -74,7 +74,7 @@
             var token = _tokensService.CreateTokenDto(userDto);
             if (token == null)
             {
-                return StatusCode(500, "Internal Servcer Error");
+                return StatusCode(500, "Internal Server Error");
             }
 
             return Ok(token);

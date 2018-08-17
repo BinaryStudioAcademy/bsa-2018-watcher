@@ -4,14 +4,18 @@ import { OrganizationService } from '../../core/services/organization.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
-import {usesServiceWorker} from '../../../../node_modules/@angular-devkit/build-angular/src/angular-cli-files/utilities/service-worker';
+import { usesServiceWorker } from '../../../../node_modules/@angular-devkit/build-angular/src/angular-cli-files/utilities/service-worker';
+import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
+import { OrganizationInvite } from '../../shared/models/organization-invite.model';
+import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-organization-profile',
   templateUrl: './organization-profile.component.html',
   styleUrls: ['./organization-profile.component.sass'],
   providers: [
-    ToastrService, OrganizationService
+    ToastrService, OrganizationService, OrganizationInvitesService
   ]
 })
 export class OrganizationProfileComponent implements OnInit {
@@ -19,12 +23,14 @@ export class OrganizationProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private organizationService: OrganizationService,
+    private organizationInvitesService: OrganizationInvitesService,
     private authService: AuthService,
     private toastrService: ToastrService) { }
 
   editable: boolean;
-  canUpdate: boolean;
   organization: Organization;
+
+  inviteLink: string;
 
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
@@ -44,15 +50,15 @@ export class OrganizationProfileComponent implements OnInit {
     }
 
     if (user.lastPickedOrganization == null && user.lastPickedOrganizationId !== 0) {
-    this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => {
-      this.organization = value;
-      this.subscribeOrganizationFormToData();
+      this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => {
+        this.organization = value;
+        this.subscribeOrganizationFormToData();
 
-    // Only user who create organozation can edit it
-      if (this.organization.createdByUserId === user.id) {
-        this.editable = true;
-      }
-    });
+        // Only user who create organozation can edit it
+        if (this.organization.createdByUserId === user.id) {
+          this.editable = true;
+        }
+      });
     } else {
       this.organization = user.lastPickedOrganization;
       this.subscribeOrganizationFormToData();
@@ -60,14 +66,11 @@ export class OrganizationProfileComponent implements OnInit {
         this.editable = true;
       }
     }
-  }
 
-  enableEditing() {
     Object.keys(this.organizationForm.controls).forEach(field => {
       const control = this.organizationForm.get(field);
-      control.enabled ? control.disable() : control.enable();
+      control.enable();
     });
-    this.canUpdate ? this.canUpdate = false : this.canUpdate = true;
   }
 
   subscribeOrganizationFormToData() {
@@ -100,5 +103,45 @@ export class OrganizationProfileComponent implements OnInit {
         control.markAsDirty({ onlySelf: true });
       });
     }
+  }
+
+  onInvite() {
+    const invite: OrganizationInvite = {
+      id: 0,
+      organizationId: this.organization.id,
+      createdByUserId: this.authService.getCurrentUser().id,
+      inviteEmail: 'San7Av1.0@gmail.com',
+      invitedUserId: null,
+      createdByUser: null,
+      organization: null,
+      createdDate: null,
+      experationDate: null,
+      link: null,
+      state: OrganizationInviteState.Pending
+    };
+
+    this.organizationInvitesService.create(invite).subscribe(
+      value => {
+        this.toastrService.success('Organization Invite was created');
+        this.inviteLink = `${environment.client_url}/user/invite/${value.link}`;
+      },
+      err => {
+        this.toastrService.error('Organization Invite was not created');
+      }
+    );
+  }
+
+  onCopy() {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = this.inviteLink;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 }

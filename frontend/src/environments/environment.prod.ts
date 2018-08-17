@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   server_url: 'https://bsa-watcher.azurewebsites.net/api',
+  client_url: 'https://bsa-watcher.azurewebsites.net',
   firebase: {
     apiKey: 'AIzaSyDkG6cWbERooMWbAn9sRBbYiRkXm81WP8U',
     authDomain: 'watcherapp-2984b.firebaseapp.com',

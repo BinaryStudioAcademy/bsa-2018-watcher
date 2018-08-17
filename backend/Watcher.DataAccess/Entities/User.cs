@@ -28,6 +28,8 @@
         [Required]
         public DateTime CreatedAt { get; set; }
 
+        public string PhotoURL { get; set; }
+
         public string Bio { get; set; }
 
         public int RoleId { get; set; }
@@ -48,8 +50,12 @@
 
         public IList<Message> Messages { get; set; }
 
+        public IList<UserChat> UserChats { get; set; }
+
         public IList<Chat> CreatedChats { get; set; }
 
         public IList<Organization> CreatedOrganizations { get; set; }
+
+        public IList<OrganizationInvite> OrganizationInvites { get; set; }
     }
 }

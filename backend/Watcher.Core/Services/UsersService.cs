@@ -28,16 +28,16 @@ namespace Watcher.Core.Services
 
         public async Task<IEnumerable<UserDto>> GetAllEntitiesAsync()
         {
-            var samples = await _uow.UsersRepository.GetRangeAsync();
+            var users = await _uow.UsersRepository.GetRangeAsync();
 
-            var dtos = _mapper.Map<List<User>, List<UserDto>>(samples);
+            var dtos = _mapper.Map<List<User>, List<UserDto>>(users);
 
             return dtos;
         }
 
         public async Task<UserDto> GetEntityByEmailAsync(string email)
         {
-            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Email == email,
+            var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Email == email,
                              include: users => users.Include(u => u.Role)
                                 .Include(u => u.CreatedChats)
                                 .Include(u => u.Feedbacks)
@@ -47,18 +47,20 @@ namespace Watcher.Core.Services
                                 .Include(u => u.NotificationSettings)
                                 .Include(u => u.LastPickedOrganization)
                                 .Include(u => u.UserOrganizations)
-                                .ThenInclude(uo => uo.Organization));
+                                    .ThenInclude(uo => uo.Organization)
+                                .Include(u => u.UserChats)
+                                    .ThenInclude(uc => uc.Chat));
 
-            if (sample == null) return null;
+            if (user == null) return null;
 
-            var dto = _mapper.Map<User, UserDto>(sample);
+            var dto = _mapper.Map<User, UserDto>(user);
 
             return dto;
         }
 
         public async Task<UserDto> GetEntityByIdAsync(string id)
         {
-            var sample = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id,
+            var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id,
                 include: users => users.Include(u => u.Role)
                                                     .Include(u => u.CreatedChats)
                                                     .Include(u => u.Feedbacks)
@@ -68,11 +70,13 @@ namespace Watcher.Core.Services
                                                     .Include(u => u.NotificationSettings)
                                                     .Include(u => u.LastPickedOrganization)
                                                     .Include(u => u.UserOrganizations)
-                                                            .ThenInclude(uo => uo.Organization));
+                                                        .ThenInclude(uo => uo.Organization)
+                                                    .Include(u => u.UserChats)
+                                                        .ThenInclude(uc => uc.Chat));
 
-            if (sample == null) return null;
+            if (user == null) return null;
 
-            var dto = _mapper.Map<User, UserDto>(sample);
+            var dto = _mapper.Map<User, UserDto>(user);
 
             return dto;
         }

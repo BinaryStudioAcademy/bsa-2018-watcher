@@ -14,12 +14,12 @@ namespace Watcher.Common.Dtos
 
         public ChatType Type { get; set; }
 
-        public string CreatedById { get; set; }
-
         public UserDto CreatedBy { get; set; }
         
         public OrganizationDto Organization { get; set; }
 
         public IList<MessageDto> Messages { get; set; }
+
+        public IList<UserDto> Users { get; set; }
     }
 }
