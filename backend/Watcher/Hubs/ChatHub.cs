@@ -32,31 +32,49 @@ namespace Watcher.Hubs
         public async Task Send(MessageRequest messageRequest)
         {
             MessageDto message = await _messagesService.CreateEntityAsync(messageRequest);
+            var createdMessage = await _messagesService.GetEntityByIdAsync(message.Id);
 
-            IEnumerable<UserDto> users = await _chatsService.GetUsersByChatIdAsync(messageRequest.ChatId);
+            var usersInChat = await _chatsService.GetUsersByChatIdAsync(createdMessage.Chat.Id);
 
-            foreach (var userDto in users)
-                await Clients.User(userDto.Id).SendAsync("ReceiveMessage", message);
+            foreach (var userDto in usersInChat)
+            {
+                //if(userDto.Id != createdMessage.User.Id)
+                {
+                    await Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
+                }
+            }
         }
 
         public async Task InitializeChat(ChatRequest chatRequest, string userId)
         {
             ChatDto chatDto = await _chatsService.CreateEntityAsync(chatRequest);
+            var createdChat = await _chatsService.GetEntityByIdAsync(chatDto.Id);
 
-            if (chatRequest.Type == ChatType.BetweenUsers && chatRequest.CreatedById != userId && userId != null)
+            if(createdChat.Type == ChatType.BetweenUsers)
             {
-                await _chatsService.AddUserToChat(chatDto.Id, userId);
-                await _chatsService.AddUserToChat(chatDto.Id, chatRequest.CreatedById);
+                foreach (var user in createdChat.Users)
+                {
+                    await Clients.User(user.Id).SendAsync("ChatCreated", createdChat);
+                }
             }
-            else if (chatRequest.Type == ChatType.InOrganization)
+            else if (createdChat.Type == ChatType.InOrganization)
             {
-                OrganizationDto organizationDto = await _organizationService.GetEntityByIdAsync(chatRequest.OrganizationId);
-
-                foreach (string id in organizationDto.UsersId)
-                    await _chatsService.AddUserToChat(chatDto.Id, id);
+                // TODO: Create chat for organization if haven`t created yet.
             }
+        }
 
-            await Clients.User(chatDto.CreatedBy.Id).SendAsync("ChatCreated", chatDto);
+        public async Task AddUserToChat(int chatId, string userid)
+        {
+            var users = await _chatsService.GetUsersByChatIdAsync(chatId);
+
+            var userDto = await _chatsService.AddUserToChat(chatId, userid);
+
+            if (userDto == null) return;
+
+            foreach (var user in users)
+            {
+                await Clients.User(userDto.Id).SendAsync("UserAdded");
+            }
         }
 
         public override async Task OnConnectedAsync()
