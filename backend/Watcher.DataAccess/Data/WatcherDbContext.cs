@@ -55,21 +55,44 @@
                 .HasMany(u => u.Responses)
                 .WithOne(u => u.User)
                 .OnDelete(DeleteBehavior.Cascade);
+            
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Feedbacks)
                 .WithOne(f => f.User)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.OrganizationInvites)
+                .WithOne(f => f.CreatedByUser)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.Organization)
                 .WithOne(o => o.Chat);
+
+            modelBuilder.Entity<OrganizationInvite>()
+                .HasOne(u => u.Organization)
+                .WithMany(o => o.OrganizationInvites)
+                .HasForeignKey(x => x.OrganizationId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<OrganizationInvite>()
+                .HasOne(u => u.CreatedByUser)
+                .WithMany(o => o.OrganizationInvites)
+                .HasForeignKey(x => x.CreatedByUserId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Organization>()
                 .HasOne(u => u.CreatedByUser)
                 .WithMany(o => o.CreatedOrganizations)
                 .HasForeignKey(x => x.CreatedByUserId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Organization>()
+               .HasMany(u => u.OrganizationInvites)
+               .WithOne(f => f.Organization)
+               .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Seed();
         }
@@ -103,5 +126,7 @@
         public DbSet<Response> Responses { get; set; }
 
         public DbSet<Theme> Themes { get; set; }
+
+        public DbSet<OrganizationInvite> OrganizationInvites { get; set; }
     }
 }

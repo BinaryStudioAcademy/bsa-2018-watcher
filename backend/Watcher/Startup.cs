@@ -85,6 +85,7 @@
             services.AddTransient<IFeedbackService, FeedbackService>();
             services.AddTransient<IResponseService, ResponseService>();
             services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
+            services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
 
             ConfigureFileStorage(services, Configuration);
 
@@ -251,6 +252,7 @@
                     cfg.AddProfile<FeedbackProfile>();
                     cfg.AddProfile<ResponseProfile>();
                     cfg.AddProfile<InstancesProfile>();
+                    cfg.AddProfile<OrganizationInvitesProfile>();
 
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
