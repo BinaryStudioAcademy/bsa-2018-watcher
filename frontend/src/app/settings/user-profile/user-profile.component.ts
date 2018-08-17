@@ -17,7 +17,7 @@ export class UserProfileComponent implements OnInit {
     private authService: AuthService,
     private toastrService: ToastrService) { }
 
-  private user: User;
+  public user: User;
   private userId: string;
 
   public userForm = this.fb.group({
