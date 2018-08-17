@@ -7,6 +7,10 @@
 
     public interface IUnitOfWork : IDisposable
     {
+        Task BeginTransaction();
+
+        void CommitTransaction();
+
         ISamplesRepository SamplesRepository { get; }
 
         IUsersRepository UsersRepository { get; }
@@ -27,7 +31,9 @@
 
         IInstanceRepository InstanceRepository { get; }
 
-        IChartRepository ChartRepository { get; }
+        IChartRepository ChartRepository { get;  }
+
+        IOrganizationInvitesRepository OrganizationInvitesRepository { get; }
 
         Task<bool> SaveAsync();
     }
