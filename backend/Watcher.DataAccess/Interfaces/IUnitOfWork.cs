@@ -8,7 +8,7 @@
     public interface IUnitOfWork : IDisposable
     {
         ISamplesRepository SamplesRepository { get; }
-        
+
         IUsersRepository UsersRepository { get; }
 
         IDashboardsRepository DashboardsRepository { get; }
@@ -16,6 +16,8 @@
         IOrganizationRepository OrganizationRepository { get; }
 
         IFeedbackRepository FeedbackRepository { get; }
+
+        IResponseRepository ResponseRepository { get; }
 
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 

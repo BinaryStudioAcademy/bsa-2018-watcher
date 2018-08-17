@@ -11,6 +11,7 @@ import {ApiService} from './services/api.service';
 import {NotificationsService} from './services/notifications.service';
 import { AuthGuard } from './guards/auth.guard';
 import { FeedbackService } from './services/feedback.service';
+import { ResponseService } from './services/response.service';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { FeedbackService } from './services/feedback.service';
     NotificationsService,
     ToastrService,
     FeedbackService,
+    ResponseService,
     ConfirmationService,
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },

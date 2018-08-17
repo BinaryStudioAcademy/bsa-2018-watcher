@@ -24,6 +24,8 @@
         private IDashboardsRepository _dashboardsRepository;
         private IOrganizationRepository _organizationRepository;
         private IFeedbackRepository _feedbackRepository;
+        private IResponseRepository _responseRepository;
+
         private INotificationSettingsRepository _notificationSettingsRepository;
         private IInstanceRepository _instanceRepository;
         private IChartsRepository chartsRepository;
@@ -50,6 +52,60 @@
 
         public IChartsRepository ChartsRepository => chartsRepository ?? (chartsRepository = new ChartsRepository(_context, _mapper));
 
+                return _feedbackRepository;
+            }
+        }
+
+        public IResponseRepository ResponseRepository
+        {
+            get
+            {
+                if (_responseRepository == null)
+                {
+                    _responseRepository = new ResponseRepository(_context, _mapper);
+                }
+
+                return _responseRepository;
+            }
+        }
+
+        public INotificationSettingsRepository NotificationSettingsRepository
+        {
+            get
+            {
+                if (_notificationSettingsRepository == null)
+                {
+                    _notificationSettingsRepository = new NotificationSettingsRepository(_context, _mapper);
+                }
+
+                return _notificationSettingsRepository;
+            }
+        }
+
+        public IInstanceRepository InstanceRepository
+        {
+            get
+            {
+                if (_instanceRepository == null)
+                {
+                    _instanceRepository = new InstanceRepository(_context, _mapper);
+                }
+
+                return _instanceRepository;
+            }
+        }
+
+        public IChartRepository ChartRepository
+        {
+            get
+            {
+                if(_chartRepository == null)
+                {
+                    _chartRepository = new ChartsRepository(_context, _mapper);
+                }
+                return _chartRepository;
+            }
+        }
         public async Task<bool> SaveAsync()
         {
             try
