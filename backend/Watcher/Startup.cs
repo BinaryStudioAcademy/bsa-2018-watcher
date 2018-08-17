@@ -79,6 +79,8 @@
             services.AddTransient<IDashboardsService, DashboardsService>();
             services.AddTransient<ITransientService, TransientService>();
             services.AddTransient<IOrganizationService, OrganizationService>();
+            services.AddTransient<IChatsService, ChatsService>();
+            services.AddTransient<IMessagesService, MessagesService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IInstanceService, InstanceService>();
@@ -86,6 +88,7 @@
             services.AddTransient<IChartsService, ChartsService>();
             services.AddTransient<IResponseService, ResponseService>();
             services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
+            services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
 
 
             ConfigureFileStorage(services, Configuration);
@@ -109,7 +112,9 @@
                         {
                             OnMessageReceived = delegate (MessageReceivedContext context)
                               {
-                                  if (!context.Request.Path.Value.Contains("/notifications")
+                                  if ((!context.Request.Path.Value.Contains("/notifications")
+                                      && !context.Request.Path.Value.Contains("/chatsHub"))
+                                      
                                       || !context.Request.Query.ContainsKey("Authorization")
                                       || !context.Request.Query.ContainsKey("WatcherAuthorization"))
                                       return Task.CompletedTask;
@@ -205,6 +210,7 @@
                 app.UseAzureSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
             else
@@ -212,6 +218,7 @@
                 app.UseSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
 
@@ -249,10 +256,19 @@
                     cfg.AddProfile<UsersProfile>();
                     cfg.AddProfile<DashboardsProfile>();
                     cfg.AddProfile<OrganizationProfile>();
+
                     cfg.AddProfile<NotificationSettingsProfile>();
+
+
+                    cfg.AddProfile<ChatProfile>();
+
+                    cfg.AddProfile<MessageProfile>();
+
                     cfg.AddProfile<FeedbackProfile>();
                     cfg.AddProfile<ResponseProfile>();
                     cfg.AddProfile<InstancesProfile>();
+                    cfg.AddProfile<OrganizationInvitesProfile>();
+
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
 

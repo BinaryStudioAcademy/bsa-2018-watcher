@@ -111,7 +111,7 @@ export class AuthService {
       email: credential.user.email,
       displayName: credential.user.displayName,
       refreshToken: credential.user.refreshToken,
-      photoURL: credential.user.photoURL,
+      photoUrl: credential.user.photoURL,
       isNewUser: credential.additionalUserInfo.isNewUser,
       companyName: '',
       firstName: firstName,

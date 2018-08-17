@@ -18,12 +18,13 @@
         public ChatType Type { get; set; }
 
         public string CreatedById { get; set; }
-
         public User CreatedBy { get; set; }
 
         public int? OrganizationId { get; set; }
         public Organization Organization { get; set; }
 
         public IList<Message> Messages { get; set; }
+
+        public IList<UserChat> UserChats { get; set; }
     }
 }

@@ -24,11 +24,14 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   private regexSettingsUrl: RegExp = /\/user\/settings/;
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
-  private regexDashboardUrl: RegExp = /\/user(\/instances)?/;
+  private regexInviteUrl: RegExp = /\/user\/invite/;
+  private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
+  private regexInstancesUrl: RegExp = /\/user(\/instances)?/;
   private regexAdminUrl = /\/admin/;
 
   isSearching: boolean;
   isFeedback: boolean;
+  isInvite: boolean;
   menuItems: MenuItem[];
 
   constructor(private router: Router,
@@ -85,12 +88,12 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
     this.adminItems = [{
       label: 'Organizations',
-      icon: 'fa fa-fw fa-list'
-      // routerLink: ['/user/settings/user-profile']
+      icon: 'fa fa-fw fa-list',
+      routerLink: ['/admin/organization-list']
     }, {
       label: 'Users',
-      icon: 'fa fa-fw fa-group'
-      // routerLink: ['/user/settings/organization-profile']
+      icon: 'fa fa-fw fa-group',
+      routerLink: ['/admin/user-list']
     }, {
       label: 'Feedbacks',
       icon: 'fa fa-fw fa-bullhorn',
@@ -183,15 +186,19 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       this.menuItems = this.settingsItems;
       this.isSearching = false;
       this.isFeedback = false;
+      this.isInvite = false;
     } else if (this.activeUrl.match(this.regexFeedbackUrl)) {
       this.isFeedback = true;
-    } else if (this.activeUrl.match(this.regexDashboardUrl)) {
-      this.menuItems = this.instanceItems;
-      this.isSearching = true;
-      this.isFeedback = false;
+    } else if (this.activeUrl.match(this.regexInviteUrl)) {
+      this.isInvite = true;
+      this.isInvite = false;
     } else if (this.activeUrl.match(this.regexAdminUrl)) {
       this.menuItems = this.adminItems;
       this.isSearching = false;
+      this.isFeedback = false;
+    } else if (this.activeUrl.match(this.regexDashboardUrl)) {
+      this.menuItems = this.instanceItems;
+      this.isSearching = true;
       this.isFeedback = false;
     }
   }

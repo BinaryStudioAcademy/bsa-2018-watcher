@@ -24,16 +24,38 @@
         private IDashboardsRepository _dashboardsRepository;
         private IOrganizationRepository _organizationRepository;
         private IFeedbackRepository _feedbackRepository;
+
         private IResponseRepository _responseRepository;
 
         private INotificationSettingsRepository _notificationSettingsRepository;
+
         private IInstanceRepository _instanceRepository;
         private IChartsRepository chartsRepository;
+
+        private IChatsRepository _chatsRepository;
+
+        private IMessagesRepository _messagesRepository;
+
+        private IOrganizationInvitesRepository _organizationInvitesRepository;
 
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task BeginTransaction()
+        {
+            await _context.Database.BeginTransactionAsync();
+
+            //return new TransactionScope(
+            //    TransactionScopeOption.Required,
+            //    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+        }
+
+        public void CommitTransaction()
+        {
+            _context.Database.CommitTransaction();
         }
 
         public ISamplesRepository SamplesRepository => _samplesRepository ?? (_samplesRepository = new SamplesRepository(_context, _mapper));
@@ -53,6 +75,14 @@
         public IChartsRepository ChartsRepository => chartsRepository ?? (chartsRepository = new ChartsRepository(_context, _mapper));
 
         public IResponseRepository ResponseRepository => _responseRepository ?? (_responseRepository = new ResponseRepository(_context, _mapper));
+
+        public IChatsRepository ChatsRepository => _chatsRepository ?? (_chatsRepository = new ChatsRepository(_context, _mapper));
+
+        public IMessagesRepository MessagesRepository => _messagesRepository ?? (_messagesRepository = new MessagesRepository(_context, _mapper));
+
+        public IOrganizationInvitesRepository OrganizationInvitesRepository =>
+            _organizationInvitesRepository
+            ?? (_organizationInvitesRepository = new OrganizationInvitesRepository(_context, _mapper));
 
         public async Task<bool> SaveAsync()
         {
