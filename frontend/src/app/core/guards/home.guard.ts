@@ -11,7 +11,7 @@ export class HomeGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if ((this.authService.isAuthorized())) {
-        this.router.navigate(['/user/dashboards']);
+        this.router.navigate(['/user/instances']);
         return false;
       } else {
         return true;

@@ -83,6 +83,8 @@
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IInstanceService, InstanceService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
+            services.AddTransient<IResponseService, ResponseService>();
+            services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
 
             ConfigureFileStorage(services, Configuration);
 
@@ -247,6 +249,7 @@
                     cfg.AddProfile<OrganizationProfile>();
                     cfg.AddProfile<NotificationSettingsProfile>();
                     cfg.AddProfile<FeedbackProfile>();
+                    cfg.AddProfile<ResponseProfile>();
                     cfg.AddProfile<InstancesProfile>();
 
                 }); // Scoped Lifetime!

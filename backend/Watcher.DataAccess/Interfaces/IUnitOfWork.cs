@@ -8,7 +8,7 @@
     public interface IUnitOfWork : IDisposable
     {
         ISamplesRepository SamplesRepository { get; }
-        
+
         IUsersRepository UsersRepository { get; }
 
         IDashboardsRepository DashboardsRepository { get; }
@@ -17,11 +17,13 @@
 
         IFeedbackRepository FeedbackRepository { get; }
 
+        IResponseRepository ResponseRepository { get; }
+
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 
         IInstanceRepository InstanceRepository { get; }
 
-        IChartRepository ChartRepository { get;  }
+        IChartRepository ChartRepository { get; }
         Task<bool> SaveAsync();
     }
 }
