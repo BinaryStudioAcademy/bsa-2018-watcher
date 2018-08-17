@@ -88,12 +88,12 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
     this.adminItems = [{
       label: 'Organizations',
-      icon: 'fa fa-fw fa-list'
-      // routerLink: ['/user/settings/user-profile']
+      icon: 'fa fa-fw fa-list',
+      routerLink: ['/admin/organization-list']
     }, {
       label: 'Users',
-      icon: 'fa fa-fw fa-group'
-      // routerLink: ['/user/settings/organization-profile']
+      icon: 'fa fa-fw fa-group',
+      routerLink: ['/admin/user-list']
     }, {
       label: 'Feedbacks',
       icon: 'fa fa-fw fa-bullhorn',
