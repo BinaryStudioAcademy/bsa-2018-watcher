@@ -30,12 +30,14 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
   private previousSettingUrl: string;
   private settingsItems: MenuItem[];
   private instanceItems: MenuItem[];
+  private adminItems: MenuItem[];
   private organisationId: number;
 
   private regexSettingsUrl: RegExp = /\/user\/settings/;
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
   private regexInviteUrl: RegExp = /\/user\/invite/;
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
+  private regexAdminUrl = /\/admin/;
 
   isSearching: boolean;
   isFeedback: boolean;
@@ -139,6 +141,20 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
       icon: 'pi pi-pw pi-plus',
       routerLink: ['instance/create']
     }];
+
+    this.adminItems = [{
+      label: 'Organizations',
+      icon: 'fa fa-fw fa-list'
+      // routerLink: ['/user/settings/user-profile']
+    }, {
+      label: 'Users',
+      icon: 'fa fa-fw fa-group'
+      // routerLink: ['/user/settings/organization-profile']
+    }, {
+      label: 'Feedbacks',
+      icon: 'fa fa-fw fa-bullhorn',
+      routerLink: ['/admin/feedback-list']
+    }];
   }
 
   private subscribeRouteChanges(): void {
@@ -165,6 +181,10 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked , Afte
       this.isSearching = true;
       this.isFeedback = false;
       this.isInvite = false;
+    } else if (this.activeUrl.match(this.regexAdminUrl)) {
+      this.menuItems = this.adminItems;
+      this.isSearching = false;
+      this.isFeedback = false;
     }
   }
 

@@ -2,8 +2,9 @@
 
 
 export enum ShortAnswerType {
-    Yes = 0,
-    Maybe = 1,
-    No = 2
+    Null = 0,
+    Yes = 1,
+    Maybe = 2,
+    No = 3
 }
 

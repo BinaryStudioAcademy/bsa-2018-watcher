@@ -12,5 +12,9 @@ namespace Watcher.Core.Interfaces
         Task<FeedbackDto> GetEntityByIdAsync(int id);
 
         Task<FeedbackDto> CreateEntityAsync(FeedbackRequest request);
+
+        Task<bool> UpdateEntityByIdAsync(FeedbackDto request, int id);
+
+        Task<bool> DeleteEntityByIdAsync(int id);
     }
 }
