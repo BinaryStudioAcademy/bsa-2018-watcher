@@ -5,13 +5,17 @@ import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
 import { usesServiceWorker } from '../../../../node_modules/@angular-devkit/build-angular/src/angular-cli-files/utilities/service-worker';
+import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
+import { OrganizationInvite } from '../../shared/models/organization-invite.model';
+import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-organization-profile',
   templateUrl: './organization-profile.component.html',
   styleUrls: ['./organization-profile.component.sass'],
   providers: [
-    ToastrService, OrganizationService
+    ToastrService, OrganizationService, OrganizationInvitesService
   ]
 })
 export class OrganizationProfileComponent implements OnInit {
@@ -19,15 +23,18 @@ export class OrganizationProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private organizationService: OrganizationService,
+    private organizationInvitesService: OrganizationInvitesService,
     private authService: AuthService,
     private toastrService: ToastrService) { }
 
   editable: boolean;
   organization: Organization;
 
+  inviteLink: string;
+
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
-  
+
   organizationForm = this.fb.group({
     name: new FormControl({ value: '', disabled: true }, Validators.required),
     email: new FormControl({ value: '', disabled: true }, Validators.email),
@@ -96,5 +103,45 @@ export class OrganizationProfileComponent implements OnInit {
         control.markAsDirty({ onlySelf: true });
       });
     }
+  }
+
+  onInvite() {
+    const invite: OrganizationInvite = {
+      id: 0,
+      organizationId: this.organization.id,
+      createdByUserId: this.authService.getCurrentUser().id,
+      inviteEmail: 'San7Av1.0@gmail.com',
+      invitedUserId: null,
+      createdByUser: null,
+      organization: null,
+      createdDate: null,
+      experationDate: null,
+      link: null,
+      state: OrganizationInviteState.Pending
+    };
+
+    this.organizationInvitesService.create(invite).subscribe(
+      value => {
+        this.toastrService.success('Organization Invite was created');
+        this.inviteLink = `${environment.server_url}/user/invite/${value.link}`;
+      },
+      err => {
+        this.toastrService.error('Organization Invite was not created');
+      }
+    );
+  }
+
+  onCopy() {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = this.inviteLink;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 }

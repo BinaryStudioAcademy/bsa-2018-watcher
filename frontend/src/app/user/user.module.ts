@@ -6,6 +6,7 @@ import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
 import { InputTextModule, ButtonModule, RadioButtonModule, InputTextareaModule } from 'primeng/primeng';
 import { FeedbackComponent } from '../feedback/feedback.component';
+import { InviteComponent } from '../invite/invite.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { FeedbackComponent } from '../feedback/feedback.component';
     RadioButtonModule,
     InputTextModule
   ],
-  declarations: [ UserComponent, FeedbackComponent ]
+  declarations: [ UserComponent, FeedbackComponent, InviteComponent ]
 })
 export class UserModule { }

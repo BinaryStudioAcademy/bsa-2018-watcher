@@ -4,7 +4,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using System.Transactions;
     using AutoMapper;
 
     using Microsoft.EntityFrameworkCore;
@@ -26,7 +26,9 @@
         private IDashboardsRepository _dashboardsRepository;
 
         private IOrganizationRepository _organizationRepository;
+
         private IFeedbackRepository _feedbackRepository;
+
         private IResponseRepository _responseRepository;
 
         private INotificationSettingsRepository _notificationSettingsRepository;
@@ -39,11 +41,28 @@
 
         private IMessagesRepository _messagesRepository;
 
+        private IOrganizationInvitesRepository _organizationInvitesRepository;
+
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
+
+        public async Task BeginTransaction()
+        {
+            await _context.Database.BeginTransactionAsync();
+           
+            //return new TransactionScope(
+            //    TransactionScopeOption.Required,
+            //    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
+        }
+
+        public void CommitTransaction()
+        {
+            _context.Database.CommitTransaction();
+        }
+
 
         public ISamplesRepository SamplesRepository
         {
@@ -174,6 +193,18 @@
                     _chartRepository = new ChartsRepository(_context, _mapper);
                 }
                 return _chartRepository;
+            }
+        }
+
+        public IOrganizationInvitesRepository OrganizationInvitesRepository
+        {
+            get
+            {
+                if (_organizationInvitesRepository == null)
+                {
+                    _organizationInvitesRepository = new OrganizationInvitesRepository(_context, _mapper);
+                }
+                return _organizationInvitesRepository;
             }
         }
 
