@@ -100,17 +100,6 @@ export class ChatComponent implements OnInit {
     this.chatHub.initializeChat(this.newChat, this.currentUserId);
   }
 
-  addUserToChat() {
-    this.userService.get(this.wantedUser).subscribe((value: User) => {
-      this.chatHub.addUserToChat(value.id, this.choosedChat.id);
-      this.toastrService.success('User added');
-    },
-      err => {
-        this.toastrService.error('User don`t exist');
-      }
-    );
-  }
-
   addUser() {
     if (!this.newChat.users.some(u => u.id === this.wantedUser)) {
       this.userService.get(this.wantedUser).subscribe((value: User) => {
@@ -133,6 +122,12 @@ export class ChatComponent implements OnInit {
       createdAt: new Date(Date.now())
     } as MessageRequest;
 
+    const fakeMessage: Message = {
+      text: this.textMessage,
+      user: this.authService.getCurrentUser(),
+      createdAt: new Date(Date.now())
+    } as Message;
+    this.choosedChat.messages.push(fakeMessage);
     this.chatHub.sendMessage(newMessage);
   }
 
