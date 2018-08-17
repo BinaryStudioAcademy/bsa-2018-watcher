@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Watcher.DataAccess.Data;
 
 namespace Watcher.DataAccess.Data.Migrations
 {
     [DbContext(typeof(WatcherDbContext))]
-    partial class WatcherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180816142022_AddedPhotoUrlToUser")]
+    partial class AddedPhotoUrlToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -377,40 +379,6 @@ namespace Watcher.DataAccess.Data.Migrations
                     );
                 });
 
-            modelBuilder.Entity("Watcher.DataAccess.Entities.OrganizationInvite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CreatedByUserId");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<DateTime>("ExperationDate");
-
-                    b.Property<string>("InviteEmail");
-
-                    b.Property<string>("InvitedUserId");
-
-                    b.Property<string>("Link")
-                        .IsRequired();
-
-                    b.Property<int>("OrganizationId");
-
-                    b.Property<int>("State");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("InvitedUserId");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("OrganizationInvites");
-                });
-
             modelBuilder.Entity("Watcher.DataAccess.Entities.Response", b =>
                 {
                     b.Property<int>("Id")
@@ -687,23 +655,6 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasOne("Watcher.DataAccess.Entities.Theme", "Theme")
                         .WithMany()
                         .HasForeignKey("ThemeId");
-                });
-
-            modelBuilder.Entity("Watcher.DataAccess.Entities.OrganizationInvite", b =>
-                {
-                    b.HasOne("Watcher.DataAccess.Entities.User", "CreatedByUser")
-                        .WithMany("OrganizationInvites")
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Watcher.DataAccess.Entities.User", "InvitedUser")
-                        .WithMany()
-                        .HasForeignKey("InvitedUserId");
-
-                    b.HasOne("Watcher.DataAccess.Entities.Organization", "Organization")
-                        .WithMany("OrganizationInvites")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Response", b =>

@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
-import { DashboardsModule } from '../dashboards/dashboards.module';
 import { InputTextModule, ButtonModule, RadioButtonModule, InputTextareaModule } from 'primeng/primeng';
 import { FeedbackComponent } from '../feedback/feedback.component';
 import { InviteComponent } from '../invite/invite.component';
@@ -13,7 +12,6 @@ import { InviteComponent } from '../invite/invite.component';
   imports: [
     CommonModule,
     UserRoutingModule,
-    DashboardsModule,
     FormsModule,
     ReactiveFormsModule,
     InputTextareaModule,
