@@ -12,9 +12,10 @@ namespace DataCollector
             ProcessesCPU = new Dictionary<string, float>();
             ProcessesRAM = new Dictionary<string, float>();
         }
+        public Guid Id { get; set; }
         public int ProcessesCount { get; set; }
-        public Dictionary<string,float> ProcessesCPU { get; set; }
-        public Dictionary<string,float> ProcessesRAM { get; set; }
+        public Dictionary<string, float> ProcessesCPU { get; set; }
+        public Dictionary<string, float> ProcessesRAM { get; set; }
         #region Percentage
         public float CpuUsagePercent { get; set; }
         public float RamUsagePercent { get; set; }
@@ -61,10 +62,10 @@ namespace DataCollector
             };
         }
 
-        public static CollectedData operator/ (CollectedData item, int scalar)
+        public static CollectedData operator /(CollectedData item, int scalar)
         {
             var processCPU = new Dictionary<string, float>();
-            foreach(var cpu in item.ProcessesCPU)
+            foreach (var cpu in item.ProcessesCPU)
             {
                 processCPU.Add(cpu.Key, cpu.Value / (float)scalar);
             }
