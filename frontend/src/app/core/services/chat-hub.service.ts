@@ -33,8 +33,6 @@ export class ChatHubService {
             .build();
 
         this.startConnection();
-        this.registerOnReceivingMessage();
-        this.registerOnChatCreated();
     }
 
     private startConnection(): void {
@@ -42,6 +40,7 @@ export class ChatHubService {
             .start()
             .then(() => {
                 console.log('Hub connection started');
+                this.registerOnEvents();
             })
             .catch(err => {
                 console.log('Error while establishing connection, retrying...');
@@ -49,15 +48,18 @@ export class ChatHubService {
             });
     }
 
-    private registerOnReceivingMessage(): void {
+    private registerOnEvents(): void {
         this.hubConnection.on('ReceiveMessage', (data: any) => {
             this.messageReceived.emit(data);
         });
-    }
 
-    private registerOnChatCreated(): void {
         this.hubConnection.on('ChatCreated', (data: any) => {
             this.chatCreated.emit(data);
+            console.log('ChatCreated');
+        });
+
+        this.hubConnection.on('UserAdded', (data: any) => {
+            console.log('UserAdded');
         });
     }
 
@@ -69,7 +71,7 @@ export class ChatHubService {
         this.hubConnection.invoke('Send', message);
     }
 
-    public addUser(userId: string, chatId: number) {
-        this.hubConnection.invoke('AddUser', userId, chatId);
+    public addUserToChat(userId: string, chatId: number) {
+        this.hubConnection.invoke('AddUserToChat', userId, chatId);
     }
 }
