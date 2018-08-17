@@ -28,5 +28,6 @@ export interface User  {
    responses: Response[];
    messages: Message[];
    createdChats: Chat[];
+   chats: Chat[];
 }
 

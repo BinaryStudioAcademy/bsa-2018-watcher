@@ -20,6 +20,9 @@
             modelBuilder.Entity<UserOrganization>()
                 .HasKey(uo => new { uo.UserId, uo.OrganizationId });
 
+            modelBuilder.Entity<UserChat>()
+                .HasKey(uc => new { uc.UserId, uc.ChatId });
+
             modelBuilder.Entity<Feedback>()
                 .HasOne(f => f.Response)
                 .WithOne(r => r.Feedback)
@@ -116,6 +119,8 @@
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<Chat> Chats { get; set; }
+
+        public DbSet<UserChat> UserChat { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
 

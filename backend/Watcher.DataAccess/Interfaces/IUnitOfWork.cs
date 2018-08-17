@@ -25,6 +25,10 @@
 
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 
+        IChatsRepository ChatsRepository { get; }
+
+        IMessagesRepository MessagesRepository { get; }
+
         IInstanceRepository InstanceRepository { get; }
 
         IChartRepository ChartRepository { get;  }

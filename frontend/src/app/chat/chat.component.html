@@ -1,0 +1,66 @@
+<div class="chat-list-panel">
+  <p-panelMenu [model]="chatPanel"></p-panelMenu>
+</div>
+
+<div class="conversation-panel" [hidden]="!isChatChoosed">
+  <p-accordion [activeIndex]="0">
+    <p-accordionTab>
+      <p-header>
+        {{choosedChat.name}}
+        <i class="panel-close-icon fa fa-close" (click)="closeConversation()"></i>
+      </p-header>
+      <div class="conversation-panel-content ui-fluid">
+        <div class="conversation-message-list">
+          <p-card *ngFor="let message of choosedChat.messages">
+            <div class="ui-g">
+              <div class="ui-g-2 ui-g-nopad">
+                <i class="fa fa-2x fa-user"></i>
+              </div>
+              <div class="ui-g-10 ui-g-nopad">
+                <strong>{{message.user.displayName}}</strong>
+                <div class="">{{message.text}}</div>
+              </div>
+            </div>
+          </p-card>
+        </div>
+        <div class="ui-inputgroup">
+          <input type="text" pInputText [(ngModel)]="textMessage" placeholder="Write message">
+          <button pButton icon="fa fa-send" (click)="sendMessage()"></button>
+        </div>
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<div class="conversation-panel" [hidden]="!isNewChatChoosed">
+  <p-accordion [activeIndex]="0">
+    <p-accordionTab>
+      <p-header>
+        New Conversation
+        <i class="panel-close-icon fa fa-close" (click)="openCloseNewChatWindow()"></i>
+      </p-header>
+      <div class="conversation-new-panel-content ui-fluid">
+        <input type="text" pInputText [(ngModel)]="newChat.name" placeholder="Enter chat name">
+        <div class="ui-inputgroup">
+          <input type="text" pInputText [(ngModel)]="wantedUser" placeholder="Enter user id">
+          <button pButton icon="fa fa-plus" (click)="addUser()"></button>
+        </div>
+
+        <div>
+          <div *ngFor="let user of newChat.users">
+            <div class="ui-g">
+              <div class="ui-g-10 ui-g-nopad">
+                <strong>{{user.displayName}}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ui-inputgroup">
+          <input type="text" pInputText [(ngModel)]="textMessage" placeholder="Write message">
+          <button pButton icon="fa fa-send" (click)="createNewChat()"></button>
+        </div>
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</div>

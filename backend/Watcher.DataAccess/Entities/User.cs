@@ -50,6 +50,8 @@
 
         public IList<Message> Messages { get; set; }
 
+        public IList<UserChat> UserChats { get; set; }
+
         public IList<Chat> CreatedChats { get; set; }
 
         public IList<Organization> CreatedOrganizations { get; set; }

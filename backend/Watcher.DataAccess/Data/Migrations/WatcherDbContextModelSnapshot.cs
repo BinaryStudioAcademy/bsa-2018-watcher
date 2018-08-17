@@ -222,7 +222,7 @@ namespace Watcher.DataAccess.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ChatId");
+                    b.Property<int>("ChatId");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -565,6 +565,19 @@ namespace Watcher.DataAccess.Data.Migrations
                     );
                 });
 
+            modelBuilder.Entity("Watcher.DataAccess.Entities.UserChat", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<int>("ChatId");
+
+                    b.HasKey("UserId", "ChatId");
+
+                    b.HasIndex("ChatId");
+
+                    b.ToTable("UserChat");
+                });
+
             modelBuilder.Entity("Watcher.DataAccess.Entities.UserOrganization", b =>
                 {
                     b.Property<string>("UserId");
@@ -644,7 +657,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 {
                     b.HasOne("Watcher.DataAccess.Entities.Chat", "Chat")
                         .WithMany("Messages")
-                        .HasForeignKey("ChatId");
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Watcher.DataAccess.Entities.User", "User")
                         .WithMany("Messages")
@@ -723,6 +737,19 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.HasOne("Watcher.DataAccess.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Watcher.DataAccess.Entities.UserChat", b =>
+                {
+                    b.HasOne("Watcher.DataAccess.Entities.Chat", "Chat")
+                        .WithMany("UserChats")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Watcher.DataAccess.Entities.User", "User")
+                        .WithMany("UserChats")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

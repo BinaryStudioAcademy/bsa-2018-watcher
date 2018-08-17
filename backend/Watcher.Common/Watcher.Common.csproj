@@ -47,6 +47,12 @@
     <None Update="MoveToFrontend\notification.model.ts">
       <CustomToolNamespace>Dtos\NotificationDto.cs</CustomToolNamespace>
     </None>
+    <None Update="MoveToFrontend\organization-invite-state.enum.ts">
+      <CustomToolNamespace>Enums\OrganizationInviteState.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\organization-invite.model.ts">
+      <CustomToolNamespace>Dtos\OrganizationInviteDto.cs</CustomToolNamespace>
+    </None>
     <None Update="MoveToFrontend\organization.model.ts">
       <CustomToolNamespace>Dtos\OrganizationDto.cs</CustomToolNamespace>
     </None>
