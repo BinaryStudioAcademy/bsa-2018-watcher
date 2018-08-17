@@ -26,7 +26,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
   private regexInviteUrl: RegExp = /\/user\/invite/;
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
-  private regexDashboardUrl: RegExp = /\/user(\/instances)?/;
+  private regexInstancesUrl: RegExp = /\/user(\/instances)?/;
   private regexAdminUrl = /\/admin/;
 
   isSearching: boolean;
