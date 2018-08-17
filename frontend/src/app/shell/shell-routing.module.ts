@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ShellComponent } from './shell.component';
-import { AuthGuard } from '../core/guards/auth.guard';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
+import {ShellComponent} from './shell.component';
+import {AuthGuard} from '../core/guards/auth.guard';
 
 const routes: Routes = [{
   path: 'user',
@@ -21,7 +21,7 @@ const routes: Routes = [{
 }, {
 
   path: '**',
-  redirectTo: 'user/dashboards'
+  redirectTo: 'user'
 }
 ];
 
@@ -29,4 +29,5 @@ const routes: Routes = [{
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ShellRoutingModule { }
+export class ShellRoutingModule {
+}

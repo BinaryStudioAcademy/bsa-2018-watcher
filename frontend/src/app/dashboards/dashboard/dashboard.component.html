@@ -7,11 +7,8 @@
       <hr>
     </div>
   </div>
-  <!--<div class="title">-->
-    <!--<h3>Dashboards</h3>-->
-  <!--</div>-->
   <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem"></p-tabMenu>
-  <div class="workspace" *ngIf="activeDashboardItem">
+  <div class="workspace" *ngIf="activeDashboardItem && dashboardMenuitems.length > 1">
     <h3>
       <button pButton type="button"
               label="Delete "
