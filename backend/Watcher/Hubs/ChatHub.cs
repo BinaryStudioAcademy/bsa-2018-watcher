@@ -38,10 +38,8 @@ namespace Watcher.Hubs
 
             foreach (var userDto in usersInChat)
             {
-                //if(userDto.Id != createdMessage.User.Id)
-                {
-                    await Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
-                }
+                var userId = Context.User.FindFirstValue("unique_name");
+                Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
             }
         }
 

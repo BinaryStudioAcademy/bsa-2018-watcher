@@ -40,6 +40,10 @@ export class ChatHubService {
             .start()
             .then(() => {
                 console.log('Hub connection started');
+                // this.hubConnection.invoke('Send', 'hKcyi0sCJKhEeR4eJSzlSOb2Fmh1', 'Message');
+                // this.hubConnection.on('ReceiveMessage', (data: any) => {
+                //     console.log(data);
+                // });
                 this.registerOnEvents();
             })
             .catch(err => {
@@ -50,7 +54,9 @@ export class ChatHubService {
 
     private registerOnEvents(): void {
         this.hubConnection.on('ReceiveMessage', (data: any) => {
-            this.messageReceived.emit(data);
+            debugger;
+            // this.messageReceived.emit(data);
+            console.log(data);
         });
 
         this.hubConnection.on('ChatCreated', (data: any) => {
