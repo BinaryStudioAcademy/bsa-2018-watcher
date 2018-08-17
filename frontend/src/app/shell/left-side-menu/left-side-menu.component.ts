@@ -25,7 +25,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private regexSettingsUrl: RegExp = /\/user\/settings/;
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
   private regexDashboardUrl: RegExp = /\/user(\/instances)?/;
-  private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
   private regexAdminUrl = /\/admin/;
 
   isSearching: boolean;
@@ -83,6 +82,20 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       icon: 'pi pi-pw pi-plus',
       routerLink: ['instances/create']
     }];
+
+    this.adminItems = [{
+      label: 'Organizations',
+      icon: 'fa fa-fw fa-list'
+      // routerLink: ['/user/settings/user-profile']
+    }, {
+      label: 'Users',
+      icon: 'fa fa-fw fa-group'
+      // routerLink: ['/user/settings/organization-profile']
+    }, {
+      label: 'Feedbacks',
+      icon: 'fa fa-fw fa-bullhorn',
+      routerLink: ['/admin/feedback-list']
+    }];
   }
 
   configureInstances(organizationId: number) {
@@ -131,6 +144,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   async deleteInstance(id: number, index: number) {
     if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
       this.instanceService.delete(id).subscribe((res: Response) => {
+        this.instanceService.instanceRemoved.emit(id);
         this.toastrService.success('Deleted instance');
         this.instanceItems.splice(index, 1);
       });
@@ -143,67 +157,15 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   }
 
   onInstanceRemoved(id: number) {
-    const index: number = this.instanceItems.findIndex(inst => inst.title === id.toString());
-    console.log(`index is ${index}`);
-    this.instanceItems.splice(index, 1);
+    // console.log(`id is ${id}`);
+    // const index: number = this.instanceItems.findIndex(inst => inst.title === id.toString());
+    // console.log(`index is ${index}`);
   }
 
   onInstanceEdited(instance: Instance) {
     const item: MenuItem = this.instanceToMenuItem(instance);
     const index: number = this.instanceItems.findIndex(inst => inst.title === instance.id.toString());
     this.instanceItems[index] = item;
-  }
-
-  ngOnInit(): void {
-    this.activeUrl = this.router.url;
-    this.organisationId = this.authService.getCurrentUser().lastPickedOrganizationId;
-    this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
-    this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-    this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
-    this.initMenuItems();
-    this.configureInstances(this.organisationId);
-    this.changeMenu();
-    this.subscribeRouteChanges();
-  }
-
-  ngAfterContentChecked(): void { this.highlightCurrentSetting(); }
-
-  ngAfterViewChecked(): void { this.highlightCurrentSetting(); }
-
-  private initMenuItems(): void {
-    this.settingsItems = [{
-      label: 'User Profile',
-      icon: 'fa fa-fw fa-user',
-      routerLink: ['/user/settings/user-profile']
-    }, {
-      label: 'Organization Profile',
-      icon: 'fa fa-fw fa-building',
-      routerLink: ['/user/settings/organization-profile']
-    }, {
-      label: 'Notification Settings',
-      icon: 'fa fa-fw fa-send',
-      routerLink: ['/user/settings/notification-settings']
-    }];
-
-    this.instanceItems = [{
-      label: 'Create Instance',
-      icon: 'pi pi-pw pi-plus',
-      routerLink: ['instance/create']
-    }];
-
-    this.adminItems = [{
-      label: 'Organizations',
-      icon: 'fa fa-fw fa-list'
-      // routerLink: ['/user/settings/user-profile']
-    }, {
-      label: 'Users',
-      icon: 'fa fa-fw fa-group'
-      // routerLink: ['/user/settings/organization-profile']
-    }, {
-      label: 'Feedbacks',
-      icon: 'fa fa-fw fa-bullhorn',
-      routerLink: ['/admin/feedback-list']
-    }];
   }
 
   private subscribeRouteChanges(): void {

@@ -9,6 +9,7 @@ import {DashboardMenuItem} from '../models/dashboard-menuitem.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
+import {InstanceService} from '../../core/services/instance.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,6 @@ import {Subscription} from 'rxjs';
 })
 
 export class DashboardComponent implements OnInit {
- // instance: Instance;
   private instanceId: number;
   private subscription: Subscription;
 
@@ -32,6 +32,7 @@ export class DashboardComponent implements OnInit {
   displayEditDashboard = false;
 
   constructor(private dashboardsService: DashboardService,
+              private instanceService: InstanceService,
               private toastrService: ToastrService,
               private activateRoute: ActivatedRoute) {
     this.subscription = activateRoute.params.subscribe(params => {
@@ -39,11 +40,18 @@ export class DashboardComponent implements OnInit {
       this.dashboardMenuitems = [];
       this.getDashboards();
     });
-    // get instance id and get dashboards by instance id
+
+    this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
   }
 
   ngOnInit() {
-    // this.getDashboards();
+  }
+
+  onInstanceRemoved(id: number) {
+    this.instanceId = 0;
+    this.dashboards = [];
+    this.dashboardMenuitems = []; // no +
+    this.activeDashboardItem = null;
   }
 
   getDashboards() {
