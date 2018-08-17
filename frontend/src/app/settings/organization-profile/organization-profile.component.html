@@ -7,17 +7,17 @@
     </div>
   </div>
 
-  <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()">
-      <div class="ui-g">
-          <div class="ui-g-12 ui-md-8 ui-lg-4">
-    <div class="label">Name</div>
-    <div class="ui-g ui-fluid">
-      <div class="ui-g-12">
-        <div class="ui-inputgroup">
-          <input type="text" formControlName="name" pInputText placeholder="Name">
+  <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()" >
+    <div class="ui-g">
+      <div class="ui-g-12 ui-md-8 ui-lg-4">
+      <div class="label">Name</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <div class="ui-inputgroup">
+            <input type="text" formControlName="name" pInputText placeholder="Name">
+          </div>
         </div>
       </div>
-    </div>
 
     <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
       <label>Name is required.</label>
@@ -71,6 +71,7 @@
   </div>
   <div class="btn-panel">
     <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success"></button>
+  </div>
   </div>
 </form>
 
