@@ -87,6 +87,8 @@ namespace Watcher.Core.Services
                 var invitedUser = await _uow.UsersRepository.GetFirstOrDefaultAsync(x => x.Id == entity.InvitedUserId);
                 await _uow.BeginTransaction();
 
+                if (invitedUser.UserOrganizations == null) invitedUser.UserOrganizations = new List<UserOrganization>();
+
                 invitedUser.UserOrganizations.Add(new UserOrganization
                 {
                     UserId = invitedUser.Id,
