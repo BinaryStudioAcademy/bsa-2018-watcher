@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using DataAccumulator.Interfaces;
 
-namespace DataAccumulator.Controllers
+namespace DataAccumulator.WebAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     public class ValuesController : Controller

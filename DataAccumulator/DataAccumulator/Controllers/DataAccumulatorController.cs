@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DataAccumulator.BusinessLayer.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using DataAccumulator.Interfaces;
-using DataAccumulator.Shared;
 using DataAccumulator.Shared.Exceptions;
 using DataAccumulator.Shared.Models;
+using Microsoft.AspNetCore.Mvc;
 
-namespace DataAccumulator.Controllers
+namespace DataAccumulator.WebAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/dataaccumulator")]
