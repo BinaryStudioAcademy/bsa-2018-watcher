@@ -37,6 +37,8 @@ namespace Watcher.Core.Services
 
             if (entity == null) return null;
 
+            if (entity.State != OrganizationInviteState.Pending) return null;
+
             var dto = _mapper.Map<OrganizationInvite, OrganizationInviteDto>(entity);
 
             return dto;
@@ -69,13 +71,34 @@ namespace Watcher.Core.Services
 
         public async Task<bool> UpdateEntityByIdAsync(OrganizationInviteRequest request, int id)
         {
+            bool result = false;
+            
+            if (request.CreatedByUserId == request.InvitedUserId) return false;
+
             var entity = _mapper.Map<OrganizationInviteRequest, OrganizationInvite>(request);
             entity.Id = id;
 
-            // In returns updated entity, you could do smth with it or just leave as it is
-            var updated = await _uow.OrganizationInvitesRepository.UpdateAsync(entity);
-            var result = await _uow.SaveAsync();
+            var inviteFromDb = await _uow.OrganizationInvitesRepository.GetFirstOrDefaultAsync(x => x.Id == entity.Id);
+            if (inviteFromDb == null) return false;
+            if (inviteFromDb.State != OrganizationInviteState.Pending) return false;
 
+            if (entity.State == OrganizationInviteState.Accepted)
+            {
+                var invitedUser = await _uow.UsersRepository.GetFirstOrDefaultAsync(x => x.Id == entity.InvitedUserId);
+                await _uow.BeginTransaction();
+
+                invitedUser.UserOrganizations.Add(new UserOrganization
+                {
+                    UserId = invitedUser.Id,
+                    OrganizationId = entity.OrganizationId
+                });
+
+                await _uow.UsersRepository.UpdateAsync(invitedUser);
+
+                var updated = await _uow.OrganizationInvitesRepository.UpdateAsync(entity);
+                 result = await _uow.SaveAsync();
+                _uow.CommitTransaction();
+            }
             return result;
         }
 

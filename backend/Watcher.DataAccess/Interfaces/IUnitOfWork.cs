@@ -7,6 +7,10 @@
 
     public interface IUnitOfWork : IDisposable
     {
+        Task BeginTransaction();
+
+        void CommitTransaction();
+
         ISamplesRepository SamplesRepository { get; }
         
         IUsersRepository UsersRepository { get; }
