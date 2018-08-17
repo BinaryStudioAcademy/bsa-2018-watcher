@@ -21,7 +21,14 @@ namespace Watcher.Core.MappingProfiles
             CreateMap<FeedbackRequest, Feedback>()
                 .ForMember(f => f.Id, o => o.Ignore())
                 .ForMember(d => d.UserId, o => o.MapFrom(s => s.User.Id))
-                .ForMember(d => d.User, o => o.Ignore());
+                .ForMember(d => d.User, o => o.Ignore())
+                .ForMember(d => d.ResponseId, o => o.MapFrom(s => s.Response.Id))
+                .ForMember(d => d.Response, o => o.Ignore());
+
+            CreateMap<FeedbackRequest, FeedbackDto>()
+                .ForMember(f => f.Id, o => o.Ignore())
+                .ForMember(d => d.User, o => o.MapFrom(s => s.User))
+                .ForMember(d => d.Response, o => o.MapFrom(s => s.Response));
 
             CreateMap<Feedback, FeedbackDto>()
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Id));

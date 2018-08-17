@@ -28,6 +28,7 @@
         private IOrganizationRepository _organizationRepository;
 
         private IFeedbackRepository _feedbackRepository;
+        private IResponseRepository _responseRepository;
 
         private INotificationSettingsRepository _notificationSettingsRepository;
         private IInstanceRepository _instanceRepository;
@@ -90,6 +91,19 @@
                 }
 
                 return _feedbackRepository;
+            }
+        }
+
+        public IResponseRepository ResponseRepository
+        {
+            get
+            {
+                if (_responseRepository == null)
+                {
+                    _responseRepository = new ResponseRepository(_context, _mapper);
+                }
+
+                return _responseRepository;
             }
         }
 
