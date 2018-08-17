@@ -31,10 +31,9 @@
 
         IInstanceRepository InstanceRepository { get; }
 
-        IChartRepository ChartRepository { get;  }
-
         IOrganizationInvitesRepository OrganizationInvitesRepository { get; }
 
+        IChartsRepository ChartsRepository { get;  }
         Task<bool> SaveAsync();
     }
 }

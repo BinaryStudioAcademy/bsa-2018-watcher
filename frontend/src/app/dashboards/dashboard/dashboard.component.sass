@@ -21,21 +21,35 @@ hr
       margin-left: 11px
   #lastTab a:active
     color: red !important
-    ///deep/ .ui-menuitem-icon
-      // color: #F8FAFC
+  ///deep/ .ui-menuitem-icon
+// color: #F8FAFC
+nav
+  ul
+    li:last-child
+      color: red !important
 
 .title
   padding-bottom: 10px
   font-size: 22px
   font-weight: normal
 
+.dashboard-options
+    display: flex
+    justify-content: flex-end
+    button
+      margin-left: 5px
+      margin-right: 5px
+
 .workspace
-  h3
-    display: flexbox
-  .btnedit
-    float: right
-    margin-left: 10px
-    width: 70px
+    display: flex
+    flex-direction: column
+    padding: 10px
+    .charts-area
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      .dashboard-item
+        margin: 10px
 
 
 

@@ -157,6 +157,9 @@ export class DashboardComponent implements OnInit {
     this.displayEditDashboard = true;
   }
 
+  showAddItemPopup(): void {
+  }
+
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {

@@ -85,9 +85,11 @@
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IInstanceService, InstanceService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
+            services.AddTransient<IChartsService, ChartsService>();
             services.AddTransient<IResponseService, ResponseService>();
             services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
+
 
             ConfigureFileStorage(services, Configuration);
 

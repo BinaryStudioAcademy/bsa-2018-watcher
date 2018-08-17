@@ -4,7 +4,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Transactions;
+
     using AutoMapper;
 
     using Microsoft.EntityFrameworkCore;
@@ -20,13 +20,9 @@
         private readonly IMapper _mapper;
 
         private ISamplesRepository _samplesRepository;
-
         private IUsersRepository _usersRepository;
-        
         private IDashboardsRepository _dashboardsRepository;
-
         private IOrganizationRepository _organizationRepository;
-
         private IFeedbackRepository _feedbackRepository;
 
         private IResponseRepository _responseRepository;
@@ -34,9 +30,8 @@
         private INotificationSettingsRepository _notificationSettingsRepository;
 
         private IInstanceRepository _instanceRepository;
+        private IChartsRepository chartsRepository;
 
-        private IChartRepository _chartRepository;
-        
         private IChatsRepository _chatsRepository;
 
         private IMessagesRepository _messagesRepository;
@@ -52,7 +47,7 @@
         public async Task BeginTransaction()
         {
             await _context.Database.BeginTransactionAsync();
-           
+
             //return new TransactionScope(
             //    TransactionScopeOption.Required,
             //    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted });
@@ -63,150 +58,31 @@
             _context.Database.CommitTransaction();
         }
 
-
-        public ISamplesRepository SamplesRepository
-        {
-            get
-            {
-                if (_samplesRepository == null)
-                {
-                    _samplesRepository = new SamplesRepository(_context, _mapper);
-                }
-
-                return _samplesRepository;
-            }
-        }
+        public ISamplesRepository SamplesRepository => _samplesRepository ?? (_samplesRepository = new SamplesRepository(_context, _mapper));
 
         public IUsersRepository UsersRepository => _usersRepository ?? (_usersRepository = new UsersRepository(_context, _mapper));
 
-        public IDashboardsRepository DashboardsRepository
-        {
-            get
-            {
-                if (_dashboardsRepository == null)
-                {
-                    _dashboardsRepository = new DashboardsRepository(_context, _mapper);
-                }
+        public IDashboardsRepository DashboardsRepository => _dashboardsRepository ?? (_dashboardsRepository = new DashboardsRepository(_context, _mapper));
 
-                return _dashboardsRepository;
-            }
+        public IOrganizationRepository OrganizationRepository => _organizationRepository ?? (_organizationRepository = new OrganizationRepository(_context, _mapper));
 
-        }
+        public IFeedbackRepository FeedbackRepository => _feedbackRepository ?? (_feedbackRepository = new FeedbackRepository(_context, _mapper));
 
-        public IOrganizationRepository OrganizationRepository
-        {
-            get
-            {
-                if (_organizationRepository == null)
-                {
-                    _organizationRepository = new OrganizationRepository(_context, _mapper);
-                }
+        public INotificationSettingsRepository NotificationSettingsRepository => _notificationSettingsRepository ?? (_notificationSettingsRepository = new NotificationSettingsRepository(_context, _mapper));
 
-                return _organizationRepository;
-            }
-        }
+        public IInstanceRepository InstanceRepository => _instanceRepository ?? (_instanceRepository = new InstanceRepository(_context, _mapper));
 
-        public IFeedbackRepository FeedbackRepository
-        {
-            get
-            {
-                if (_feedbackRepository == null)
-                {
-                    _feedbackRepository = new FeedbackRepository(_context, _mapper);
-                }
+        public IChartsRepository ChartsRepository => chartsRepository ?? (chartsRepository = new ChartsRepository(_context, _mapper));
 
-                return _feedbackRepository;
-            }
-        }
+        public IResponseRepository ResponseRepository => _responseRepository ?? (_responseRepository = new ResponseRepository(_context, _mapper));
 
-        public IResponseRepository ResponseRepository
-        {
-            get
-            {
-                if (_responseRepository == null)
-                {
-                    _responseRepository = new ResponseRepository(_context, _mapper);
-                }
+        public IChatsRepository ChatsRepository => _chatsRepository ?? (_chatsRepository = new ChatsRepository(_context, _mapper));
 
-                return _responseRepository;
-            }
-        }
+        public IMessagesRepository MessagesRepository => _messagesRepository ?? (_messagesRepository = new MessagesRepository(_context, _mapper));
 
-        public INotificationSettingsRepository NotificationSettingsRepository
-        {
-            get
-            {
-                if (_notificationSettingsRepository == null)
-                {
-                    _notificationSettingsRepository = new NotificationSettingsRepository(_context, _mapper);
-                }
-
-                return _notificationSettingsRepository;
-            }
-        }
-        
-        public IChatsRepository ChatsRepository
-        {
-            get
-            {
-                if (_chatsRepository == null)
-                {
-                    _chatsRepository = new ChatsRepository(_context, _mapper);
-                }
-
-                return _chatsRepository;
-            }
-        }
-
-        public IMessagesRepository MessagesRepository
-        {
-            get
-            {
-                if (_messagesRepository == null)
-                {
-                    _messagesRepository = new MessagesRepository(_context, _mapper);
-                }
-
-                return _messagesRepository;
-            }
-        }
-
-        public IInstanceRepository InstanceRepository
-        {
-            get
-            {
-                if (_instanceRepository == null)
-                {
-                    _instanceRepository = new InstanceRepository(_context, _mapper);
-                }
-
-                return _instanceRepository;
-            }
-        }
-
-        public IChartRepository ChartRepository
-        {
-            get
-            {
-                if(_chartRepository == null)
-                {
-                    _chartRepository = new ChartsRepository(_context, _mapper);
-                }
-                return _chartRepository;
-            }
-        }
-
-        public IOrganizationInvitesRepository OrganizationInvitesRepository
-        {
-            get
-            {
-                if (_organizationInvitesRepository == null)
-                {
-                    _organizationInvitesRepository = new OrganizationInvitesRepository(_context, _mapper);
-                }
-                return _organizationInvitesRepository;
-            }
-        }
+        public IOrganizationInvitesRepository OrganizationInvitesRepository =>
+            _organizationInvitesRepository
+            ?? (_organizationInvitesRepository = new OrganizationInvitesRepository(_context, _mapper));
 
         public async Task<bool> SaveAsync()
         {

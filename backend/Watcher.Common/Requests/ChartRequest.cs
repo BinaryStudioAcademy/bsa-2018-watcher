@@ -1,13 +1,10 @@
-﻿namespace Watcher.Common.Dtos
+﻿namespace Watcher.Common.Requests
 {
     using Watcher.Common.Enums;
-    using Watcher.Common.Interfaces.Entities;
-    using Watcher.Common.MoveToFrontend;
 
-    [ExportClassToTypescript]
-    public class ChartDto : IEntity<int>
+    public class ChartRequest
     {
-        public int Id { get; set; }
+        public ChartRequest() { }
 
         public ChartType Type { get; set; }
 
@@ -18,5 +15,7 @@
         public int Threshold { get; set; }
 
         public string MostLoaded { get; set; }
+
+        public int DashboardId { get; set; }
     }
 }

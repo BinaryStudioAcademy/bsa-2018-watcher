@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, Output, Input } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+import {NgModel} from '@angular/forms';
 
 @Component({
   selector: 'app-edit-dashboard',
@@ -22,9 +23,10 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     // this.dashboardTitle = '';
   }
 
-  edit(): void {
+  edit(model: NgModel): void {
     this.edited.emit(this.title);
     this.title = '';
+    model.reset();
   }
 
   ngOnChanges(changes) {
