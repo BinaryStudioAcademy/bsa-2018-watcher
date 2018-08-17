@@ -74,9 +74,11 @@ export class ChatComponent implements OnInit {
 
   openCloseNewChatWindow() {
     this.isNewChatChoosed ? this.isNewChatChoosed = false : this.isNewChatChoosed = true;
+    this.isChatChoosed = false;
   }
 
   openConversation(chatId: number) {
+    this.isNewChatChoosed = false;
     this.chatService.get(chatId).subscribe((value: Chat) => {
       this.choosedChat = value;
     });
