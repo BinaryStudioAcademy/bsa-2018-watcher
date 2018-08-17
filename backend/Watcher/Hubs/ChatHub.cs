@@ -34,7 +34,7 @@ namespace Watcher.Hubs
             MessageDto message = await _messagesService.CreateEntityAsync(messageRequest);
             var createdMessage = await _messagesService.GetEntityByIdAsync(message.Id);
 
-            var usersInChat = await _chatsService.GetUsersByChatIdAsync(createdMessage.Chat.Id);
+            var usersInChat = await _chatsService.GetUsersByChatIdAsync(createdMessage.ChatId);
 
             foreach (var userDto in usersInChat)
             {

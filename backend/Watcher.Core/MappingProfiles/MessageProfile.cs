@@ -15,9 +15,7 @@ namespace Watcher.Core.MappingProfiles
             CreateMap<Message, Message>()
                 .ForMember(d => d.Id, o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
 
-            CreateMap<Message, MessageDto>()
-                .ForPath(d => d.Chat.Messages, o => o.MapFrom(s => new List<MessageDto>()));
-                // .ForMember(d => d.Chat.Messages, o => o.Ignore());
+            CreateMap<Message, MessageDto>();
 
             CreateMap<MessageRequest, Message>();
 
