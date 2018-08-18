@@ -3,7 +3,7 @@ import { HubConnection } from '@aspnet/signalr';
 import { environment } from '../../../environments/environment';
 
 import * as signalR from '@aspnet/signalr';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 import { Message } from '../../shared/models/message.model';
 import { Chat } from '../../shared/models/chat.model';
@@ -44,27 +44,28 @@ export class ChatHubService {
             })
             .catch(err => {
                 console.log('Error while establishing connection, retrying...');
-                setTimeout(this.startConnection(), 5000);
+                setTimeout(this.startConnection(), 10000);
             });
     }
 
     private registerOnEvents(): void {
         this.hubConnection.on('ReceiveMessage', (data: any) => {
+            console.log(data);
             this.messageReceived.emit(data);
         });
 
         this.hubConnection.on('ChatCreated', (data: any) => {
+            console.log(data);
             this.chatCreated.emit(data);
-            console.log('ChatCreated');
         });
 
         this.hubConnection.on('UserAdded', (data: any) => {
-            console.log('UserAdded');
+            console.log(data);
         });
     }
 
-    public initializeChat(chat: ChatRequest, userId: string) {
-        this.hubConnection.invoke('InitializeChat', chat, userId);
+    public createNewChat(chat: ChatRequest) {
+        this.hubConnection.invoke('InitializeChat', chat);
     }
 
     public sendMessage(message: MessageRequest) {
