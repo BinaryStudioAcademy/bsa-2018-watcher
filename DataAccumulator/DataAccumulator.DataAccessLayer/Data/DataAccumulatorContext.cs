@@ -1,6 +1,4 @@
 ﻿using DataAccumulator.DataAccessLayer.Entities;
-using DataAccumulator.Shared.Models;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace DataAccumulator.DataAccessLayer.Data
