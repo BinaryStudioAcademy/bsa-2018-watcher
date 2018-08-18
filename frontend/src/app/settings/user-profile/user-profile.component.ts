@@ -51,6 +51,15 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  onImageSelected(files: FileList) {
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.user.photoURL = event.target.result;
+    };
+
+    reader.readAsDataURL(files.item(0));
+  }
+
   onSubmit() {
     if (this.userForm.valid) {
       this.userService.update(this.userId, this.user).subscribe(value => {
