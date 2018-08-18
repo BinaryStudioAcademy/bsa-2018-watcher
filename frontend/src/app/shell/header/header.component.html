@@ -24,7 +24,7 @@
     <p-tieredMenu #user [model]="userItems" [popup]="true"></p-tieredMenu>
     <a class="user-info" (click)="user.toggle($event)">
       <span>{{ currentUser?.displayName }}</span>
-      <img src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-4/256/User-blue-icon.png"
+      <img src="{{currentUser?.photoURL}}"
            class="user-photo" alt="">
       <i class="fa fa-sort-desc"></i>
     </a>
