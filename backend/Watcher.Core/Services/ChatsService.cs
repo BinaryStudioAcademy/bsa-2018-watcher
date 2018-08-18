@@ -26,9 +26,9 @@
 
         public async Task<IEnumerable<ChatDto>> GetAllEntitiesAsync()
         {
-            var samples = await _uow.ChatsRepository.GetRangeAsync();
+            var chats = await _uow.ChatsRepository.GetRangeAsync();
 
-            var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(samples);
+            var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats);
 
             return dtos;
         }
@@ -62,14 +62,13 @@
 
             await _uow.SaveAsync();
 
-            UserDto userDto = _mapper.Map<User, UserDto>(userChat.User);
-
+            var userDto = _mapper.Map<User, UserDto>(userChat.User);
             return userDto;
         }
 
         public async Task<ChatDto> GetEntityByIdAsync(int id)
         {
-            var sample = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
+            var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
                 include: chats => chats.Include(c => c.CreatedBy)
                                                         .Include(c => c.Messages)
                                                             .ThenInclude(c => c.User)
@@ -78,9 +77,9 @@
                                                         .Include(c => c.UserChats)
                                                             .ThenInclude(uc => uc.User));
 
-            if (sample == null) return null;
+            if (chat == null) return null;
 
-            var dto = _mapper.Map<Chat, ChatDto>(sample);
+            var dto = _mapper.Map<Chat, ChatDto>(chat);
 
             return dto;
         }

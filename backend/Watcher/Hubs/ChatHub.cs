@@ -31,28 +31,31 @@ namespace Watcher.Hubs
 
         public async Task Send(MessageRequest messageRequest)
         {
-            MessageDto message = await _messagesService.CreateEntityAsync(messageRequest);
-            var createdMessage = await _messagesService.GetEntityByIdAsync(message.Id);
+            var message = await _messagesService.CreateEntityAsync(messageRequest);
+            if (message == null) return;
 
-            var usersInChat = await _chatsService.GetUsersByChatIdAsync(createdMessage.Chat.Id);
+            var createdMessage = await _messagesService.GetEntityByIdAsync(message.Id);
+            var usersInChat = await _chatsService.GetUsersByChatIdAsync(createdMessage.ChatId);
 
             foreach (var userDto in usersInChat)
             {
                 //if(userDto.Id != createdMessage.User.Id)
                 {
-                    await Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
+                   Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
                 }
             }
         }
 
-        public async Task InitializeChat(ChatRequest chatRequest, string userId)
+        public async Task InitializeChat(ChatRequest chatRequest)
         {
-            ChatDto chatDto = await _chatsService.CreateEntityAsync(chatRequest);
-            var createdChat = await _chatsService.GetEntityByIdAsync(chatDto.Id);
+            var createdChat = await _chatsService.CreateEntityAsync(chatRequest);
+            if (createdChat == null) return;
 
-            if(createdChat.Type == ChatType.BetweenUsers)
+            var usersInChat = await _chatsService.GetUsersByChatIdAsync(createdChat.Id);
+            
+            if (createdChat.Type == ChatType.BetweenUsers)
             {
-                foreach (var user in createdChat.Users)
+                foreach (var user in usersInChat)
                 {
                     await Clients.User(user.Id).SendAsync("ChatCreated", createdChat);
                 }
