@@ -1,5 +1,21 @@
 <div class="chat-list-panel">
-  <p-panelMenu [model]="chatPanel"></p-panelMenu>
+  <p-accordion>
+    <p-accordionTab>
+      <p-header>
+        Chats
+        <i class="panel-close-icon fa fa-cog"></i>
+        <i class="panel-close-icon fa fa-plus"></i>
+      </p-header>
+      <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="selectChat()">
+        <ng-template let-chat pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <i class="pi pi-fw pi-users"></i>
+            <span> {{chat.value.name}}</span>
+          </div>
+        </ng-template>
+      </p-listbox>
+    </p-accordionTab>
+  </p-accordion>
 </div>
 
 <div class="conversation-panel" [hidden]="!isChatChoosed">
@@ -8,6 +24,7 @@
       <p-header>
         {{choosedChat.name}}
         <i class="panel-close-icon fa fa-close" (click)="closeConversation()"></i>
+        <i class="panel-close-icon fa fa-cog"></i>
       </p-header>
       <div class="conversation-panel-content ui-fluid">
         <div class="conversation-message-list">

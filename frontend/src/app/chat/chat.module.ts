@@ -5,6 +5,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { InputTextModule, ButtonModule } from 'primeng/primeng';
 import { CardModule } from 'primeng/card';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { ListboxModule } from 'primeng/listbox';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { ChatComponent } from './chat.component';
@@ -19,7 +20,8 @@ import { ChatComponent } from './chat.component';
     ReactiveFormsModule,
     FormsModule,
     ButtonModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    ListboxModule
   ],
   declarations: [ ChatComponent ],
   exports: [ ChatComponent ]

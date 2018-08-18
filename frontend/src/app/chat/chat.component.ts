@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { Dropdown, SelectItem} from 'primeng/primeng';
 
-import { ChatHubService } from '../core/services/chat-hub.service';
+import { ChatHubService } from '../core/hubs/chat.hub';
 import { AuthService } from '../core/services/auth.service';
 import { UserService } from '../core/services/user.service';
 import { ChatService } from '../core/services/chat.service';
@@ -30,8 +30,10 @@ export class ChatComponent implements OnInit {
     private toastrService: ToastrService) { }
 
   currentUserId: string;
-  chatPanel: MenuItem[] = [];
   chats: Chat[] = [];
+
+  chatList: SelectItem[] = [];
+  selectedChat: Chat;
 
   textMessage: string;
   wantedUser: string;
@@ -39,24 +41,20 @@ export class ChatComponent implements OnInit {
   choosedChat: Chat = {} as Chat;
   newChat: ChatRequest = {} as ChatRequest;
   userList: string[] = [];
+
   isChatChoosed: boolean;
   isNewChatChoosed: boolean;
 
 
   ngOnInit() {
     this.newChat.users = [];
-    this.subscribeToChatCreated();
+    this.subscribeToEvents();
     this.currentUserId = this.authService.getCurrentUser().id;
-    this.userService.get(this.currentUserId).subscribe(
-      value => {
-        this.chats = value.chats;
-        this.chatPanel = [
-          {
-            label: 'Chats',
-            icon: 'fa fa-envelope',
-            items: this.createChatItems()
-          }
-        ];
+    this.chatService.getByUserId(this.currentUserId).subscribe(
+      chats => {
+        chats.forEach(chat => {
+          this.chatList.push({ label: chat.name, icon: 'pi pi-fw pi-users', value: chat });
+        });
       },
       err => {
         this.toastrService.error('Can`t get user`s chats');
@@ -64,11 +62,16 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  private subscribeToChatCreated() {
+  private subscribeToEvents() {
     this.chatHub.chatCreated.subscribe((value: Chat) => {
+      console.log('chat created');
       this.chats.push(value);
       this.choosedChat = value;
-      console.log('chat created');
+    });
+
+    this.chatHub.messageReceived.subscribe((value: Message) => {
+      console.log('received message');
+      this.choosedChat.messages.push(value);
     });
   }
 
@@ -81,13 +84,7 @@ export class ChatComponent implements OnInit {
     this.isNewChatChoosed = false;
     this.chatService.get(chatId).subscribe((value: Chat) => {
       this.choosedChat = value;
-    });
-
-    this.isChatChoosed = true;
-
-    this.chatHub.messageReceived.subscribe((message: Message) => {
-      this.choosedChat.messages.push(message);
-      console.log('message received');
+      this.isChatChoosed = true;
     });
   }
 
@@ -98,9 +95,9 @@ export class ChatComponent implements OnInit {
   createNewChat() {
     this.isNewChatChoosed = true;
     this.newChat.name = this.newChat.name || 'NewChat';
-
     this.newChat.createdById = this.currentUserId;
-    this.chatHub.initializeChat(this.newChat, this.currentUserId);
+
+    this.chatHub.createNewChat(this.newChat);
   }
 
   addUser() {
@@ -117,6 +114,13 @@ export class ChatComponent implements OnInit {
     }
   }
 
+  selectChat() {
+    console.log('selected chat');
+    console.log(this.selectedChat);
+
+    this.openConversation(this.selectedChat.id);
+  }
+
   sendMessage() {
     const newMessage: MessageRequest = {
       text: this.textMessage,
@@ -125,31 +129,7 @@ export class ChatComponent implements OnInit {
       createdAt: new Date(Date.now())
     } as MessageRequest;
 
-    const fakeMessage: Message = {
-      text: this.textMessage,
-      user: this.authService.getCurrentUser(),
-      createdAt: new Date(Date.now())
-    } as Message;
-    this.choosedChat.messages.push(fakeMessage);
     this.chatHub.sendMessage(newMessage);
     this.textMessage = '';
-  }
-
-  createChatItems(): MenuItem[] {
-    const items: MenuItem[] = [{
-      label: 'New chat',
-      icon: 'pi pi-fw pi-plus',
-      command: () => this.openCloseNewChatWindow()
-    }];
-
-    this.chats.forEach(chat => {
-      items.push({
-        label: chat.name,
-        icon: 'pi pi-fw pi-users',
-        command: () => this.openConversation(chat.id)
-      });
-    });
-
-    return items;
   }
 }
