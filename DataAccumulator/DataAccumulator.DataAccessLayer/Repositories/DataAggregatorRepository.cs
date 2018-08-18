@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using DataAccumulator.DataAccessLayer.Data;
 using DataAccumulator.DataAccessLayer.Entities;
@@ -11,11 +12,11 @@ using MongoDB.Driver;
 
 namespace DataAccumulator.DataAccessLayer.Repositories
 {
-    public class DataAccumulatorRepository : IDataAccumulatorRepository<CollectedData>
+    public class DataAggregatorRepository : IDataAccumulatorRepository<CollectedData>
     {
         private readonly DataAccumulatorContext _context = null;
 
-        public DataAccumulatorRepository(IOptions<Settings> settings)
+        public DataAggregatorRepository(IOptions<Settings> settings)
         {
             _context = new DataAccumulatorContext(settings);
         }
@@ -24,7 +25,8 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                return await _context.Datasets.Find(_ => true).ToListAsync();
+                return await _context.AggregatedCollectedData
+                    .Find(_ => true).ToListAsync();
             }
             catch (Exception e)
             {
@@ -39,7 +41,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             {
                 ObjectId internalId = GetInternalId(id);
 
-                return await _context.Datasets
+                return await _context.AggregatedCollectedData
                     .Find(data => data.Id == id || data.InternalId == internalId)
                     .FirstOrDefaultAsync();
             }
@@ -55,7 +57,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                var query = _context.Datasets
+                var query = _context.AggregatedCollectedData
                     .Find(data => data.Time >= timeFrom && data.Time <= timeTo);
 
                 return await query.ToListAsync();
@@ -71,7 +73,8 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                await _context.Datasets.InsertOneAsync(item);
+                await _context.AggregatedCollectedData
+                    .InsertOneAsync(item);
             }
             catch (Exception e)
             {
@@ -84,7 +87,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                ReplaceOneResult actionResult = await _context.Datasets
+                ReplaceOneResult actionResult = await _context.AggregatedCollectedData
                     .ReplaceOneAsync(data => data.Id.Equals(collectedData.Id), collectedData, new UpdateOptions { IsUpsert = true });
 
                 return actionResult.IsAcknowledged && actionResult.ModifiedCount > 0;
@@ -101,7 +104,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             try
             {
                 DeleteResult actionResult =
-                    await _context.Datasets
+                    await _context.AggregatedCollectedData
                         .DeleteOneAsync(Builders<CollectedData>.Filter.Eq("Id", id));
 
                 return actionResult.IsAcknowledged && actionResult.DeletedCount > 0;
@@ -117,7 +120,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                DeleteResult actionResult = await _context.Datasets
+                DeleteResult actionResult = await _context.AggregatedCollectedData
                     .DeleteManyAsync(new BsonDocument());
 
                 return actionResult.IsAcknowledged && actionResult.DeletedCount > 0;
@@ -131,7 +134,8 @@ namespace DataAccumulator.DataAccessLayer.Repositories
 
         public Task<bool> EntityExistsAsync(Guid id)
         {
-            return _context.Datasets.Find(entity => entity.Id == id).AnyAsync();
+            return _context.AggregatedCollectedData
+                .Find(entity => entity.Id == id).AnyAsync();
         }
 
         // It creates a sample compound index 
@@ -145,7 +149,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
                     .Ascending(item => item.ProcessesCount)
                     .Ascending(item => item.Time);
 
-                return await _context.Datasets
+                return await _context.AggregatedCollectedData
                     .Indexes
                     .CreateOneAsync(new CreateIndexModel<CollectedData>(keys));
             }

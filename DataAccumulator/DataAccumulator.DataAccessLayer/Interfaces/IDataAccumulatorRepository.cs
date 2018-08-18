@@ -12,7 +12,7 @@ namespace DataAccumulator.DataAccessLayer.Interfaces
         Task<CollectedData> GetEntity(Guid id);
 
         // query after multiple parameters
-        Task<IEnumerable<CollectedData>> GetEntity(DateTime time);
+        Task<IEnumerable<CollectedData>> GetEntities(DateTime timeFrom, DateTime timeTo);
 
         // add new entity
         Task AddEntity(CollectedData item);

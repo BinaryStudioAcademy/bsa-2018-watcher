@@ -4,6 +4,7 @@ using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
+using DataAccumulator.DataAggregator.Services;
 using DataAccumulator.Interfaces;
 using DataAccumulator.Providers;
 using DataAccumulator.Shared.Models;
@@ -44,8 +45,11 @@ namespace DataAccumulator
             });
 
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
+            services.AddTransient<DataAggregatorRepository>();
             services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
             services.AddScoped<IService<CollectedDataDto>, DataAccumulatorService>();
+            services.AddScoped<DataAggregatorService>();
+            services.AddScoped<AggregatorService>();
 
             var mapper = MapperConfiguration().CreateMapper();
             services.AddTransient(_ => mapper);
