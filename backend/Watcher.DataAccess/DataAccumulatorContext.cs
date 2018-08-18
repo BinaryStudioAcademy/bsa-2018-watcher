@@ -1,9 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Driver;
-using DataAccumulator.Entities;
-using DataAccumulator.Models;
+﻿using MongoDB.Driver;
+using Watcher.DataAccess.Entities;
 
-namespace DataAccumulator.Data
+namespace Watcher.DataAccess
 {
     public class DataAccumulatorContext
     {
