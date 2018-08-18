@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  server_url: 'http://localhost:29878',
-
+  server_url: 'http://localhost:10756',
+  client_url: 'http://localhost:4200',
   firebase: {
     apiKey: 'AIzaSyDkG6cWbERooMWbAn9sRBbYiRkXm81WP8U',
     authDomain: 'watcherapp-2984b.firebaseapp.com',

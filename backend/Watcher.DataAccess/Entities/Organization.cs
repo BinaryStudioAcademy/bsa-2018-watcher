@@ -33,5 +33,7 @@
         public IList<Instance> Instances { get; set; }
 
         public IList<Notification> Notifications { get; set; }
+
+        public IList<OrganizationInvite> OrganizationInvites { get; set; }
     }
 }
