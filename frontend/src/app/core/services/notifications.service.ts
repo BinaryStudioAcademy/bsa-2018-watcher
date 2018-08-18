@@ -7,6 +7,10 @@ import {SampleDto} from '../../shared/models/sample-dto.model';
 import {SampleRequest} from '../../shared/models/sample-request.model';
 import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
+import {MarketPrice} from '../../dashboards/models/market-price';
+import {from, Observable, Subject} from 'rxjs';
+import {User} from '../../shared/models/user.model';
+import {catchError, map} from 'rxjs/operators';
 
 
 @Injectable({
@@ -15,12 +19,35 @@ import {AuthService} from './auth.service';
 export class NotificationsService {
   private connectionIsEstablished = false;
   private hubConnection: HubConnection | undefined;
+  private marketSub = new Subject<MarketPrice>();
+  public marketSubObservable = from(this.marketSub);
 
   sampleReceived = new EventEmitter<SampleDto>();
   connectionEstablished = new EventEmitter<Boolean>();
 
-  constructor(private authService: AuthService) {
+  constructor(private apiService: ApiService,
+              private authService: AuthService) {
   }
+
+  public getInitialMarketStatus(): Observable<MarketPrice[]> {
+    // const url = `${environment.server_url}`;
+    // return this.http.get(url, {params})
+    //   .pipe(map(this.extractData),
+    //     catchError(this.handleError));
+    return this.apiService.get(`/Samples/MarketData`) as Observable<MarketPrice[]>;
+  }
+
+  // getUpdates() {
+    // let socket = socketio(this.baseUrl);
+    // let marketSub = new Subject<MarketPrice>();
+    // let marketSubObservable = from(marketSub);
+
+    // socket.on('market', (marketStatus: MarketPrice) => {
+    //   marketSub.next(marketStatus);
+    // });
+
+    // return marketSubObservable;
+  // }
 
   connectToSignalR(): void {
     this.createConnection();
@@ -28,10 +55,17 @@ export class NotificationsService {
     this.startHubConnection();
   }
 
+  subscribeToMarketDataFeed() {
+    if (this.hubConnection) {
+      this.hubConnection.invoke('SubscribeToMarketDataFeed')
+        .catch(err => console.error(err));
+    }
+  }
+
   send(userId: string, item: string): string {
     if (this.hubConnection) {
       this.hubConnection.invoke('Send', userId, item)
-                         .catch(err => console.error(err));
+        .catch(err => console.error(err));
     }
     return item;
   }
@@ -39,7 +73,7 @@ export class NotificationsService {
   createSample(request: SampleRequest): SampleRequest {
     if (this.hubConnection) {
       this.hubConnection.invoke('CreateSample', request)
-                         .catch(err => console.error(err));
+        .catch(err => console.error(err));
     }
     return request;
   }
@@ -47,7 +81,7 @@ export class NotificationsService {
   sendMessage(mess: string): string {
     if (this.hubConnection) {
       this.hubConnection.invoke('BroadcastMessage', mess)
-                         .catch(err => console.error(err));
+        .catch(err => console.error(err));
     }
     return mess;
   }
@@ -55,7 +89,7 @@ export class NotificationsService {
   echo(): void {
     if (this.hubConnection) {
       this.hubConnection.invoke('Echo')
-                         .catch(err => console.error(err));
+        .catch(err => console.error(err));
     }
   }
 
@@ -65,12 +99,17 @@ export class NotificationsService {
     const connPath = `${environment.server_url}/notifications?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(connPath, ) // {accessTokenFactory: () => firebaseToken}
+      .withUrl(connPath) // {accessTokenFactory: () => firebaseToken}
       .configureLogging(signalR.LogLevel.Information)
       .build();
   }
 
   private registerOnServerEvents(): void {
+    this.hubConnection.on('MarketTick', (marketStatus: MarketPrice) => {
+        this.marketSub.next(marketStatus);
+      }
+    );
+
     this.hubConnection.on('Send', (data: any) => {
       console.log('Data received:' + data);
       this.sampleReceived.emit(data);

@@ -28,6 +28,7 @@
         /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous connect.</returns>
         public override Task OnConnectedAsync()
         {
+            Groups.AddToGroupAsync(Context.ConnectionId, "Market Data Feed");
             Clients.All.SendAsync("BroadcastMessage", Context.ConnectionId + "Connected");
             return base.OnConnectedAsync();
         }
@@ -41,10 +42,21 @@
         /// <returns>
         /// A <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous disconnect.
         /// </returns>
-        public override Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
-            Clients.All.SendAsync("BroadcastMessage", $"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
-            return base.OnConnectedAsync();
+            await Clients.All.SendAsync("BroadcastMessage", $"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Market Data Feed");
+            await base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
+        }
+
+        /// <summary>
+        /// Subscribes to Marker Data Feed
+        /// </summary>
+        [Authorize]
+        public Task SubscribeToMarketDataFeed()
+        {
+            return Groups.AddToGroupAsync(Context.ConnectionId, "Market Data Feed");
+            // Clients.All.SendAsync("BroadcastMessage", message);
         }
 
         /// <summary>

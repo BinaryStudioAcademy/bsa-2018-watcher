@@ -9,6 +9,7 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
+    using Watcher.Common.Dtos;
     using Watcher.Core.Interfaces;
     using Watcher.Hubs;
     using Watcher.Utils;
@@ -81,21 +82,25 @@
             {
                 try
                 {
-                    var sample = await _service.GenerateRandomSampleDtoAsync();
+                    MarketPrice.UpdateMarket();
+                    var mp = MarketPrice.MarketPositions[0];
+                     // await _hubContext.Clients.Group("Market Data Feed").SendAsync("MarketTick", mp);
+                    // var sample = await _service.GenerateRandomSampleDtoAsync();
 
-                    _logger.LogInformation($"Sending generated sample id: {sample.Id}.");
+                    // _logger.LogInformation($"Sending generated sample id: {sample.Id}.");
 
                     // Method Name on Angular Client: "DataFeedTick",
                     // Single argument of that method is SampleDto
-                    await _hubContext.Clients.All.SendAsync("DataFeedTick", sample, cancellationToken: stoppingToken);
+                    await _hubContext.Clients.All.SendAsync("MarketTick", mp, cancellationToken: stoppingToken);
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e.Message);
                 }
-                
+
                 // Repeat this message feed every period seconds
-                await Task.Delay(TimeSpan.FromMilliseconds(_options.Value.Period), stoppingToken);
+                // await Task.Delay(TimeSpan.FromMilliseconds(_options.Value.Period), stoppingToken);
+                await Task.Delay(5000, stoppingToken);
             }
 
             _logger.LogError("Watcher Service stopped! Unexpected error occurred!");

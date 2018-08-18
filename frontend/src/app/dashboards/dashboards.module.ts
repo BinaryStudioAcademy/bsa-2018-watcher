@@ -16,6 +16,8 @@ import {StackedBarChartComponent} from './04_stacked_bar_chart/stacked-bar-chart
 import {BrushZoomComponent} from './05_brush_zoom/brush-zoom.component';
 import {PieChartComponent} from './06_pie_chart/pie-chart.component';
 import {DonutChartComponent} from './07_donut_chart/donut-chart.component';
+import {MarketChartComponent} from './08_market_chart/market-chart.component';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 
 @NgModule({
@@ -32,6 +34,7 @@ import {DonutChartComponent} from './07_donut_chart/donut-chart.component';
     ToastModule,
     MessageModule,
     ReactiveFormsModule,
+    NgxChartsModule,
 
     DashboardRoutingModule
   ],
@@ -45,7 +48,9 @@ import {DonutChartComponent} from './07_donut_chart/donut-chart.component';
     StackedBarChartComponent,
     BrushZoomComponent,
     PieChartComponent,
-    DonutChartComponent],
+    DonutChartComponent,
+    MarketChartComponent
+  ],
   exports: []
 })
 export class DashboardsModule {

@@ -8,8 +8,13 @@
     </div>
   </div>
   <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem"></p-tabMenu>
-  <div class="workspace">
+  <div class="workspace" *ngIf="activeDashboardItem && dashboardMenuitems.length > 1">
     <div class="dashboard-options">
+      <button pButton type="button"
+              label="Market"
+              class="btnedit ui-button-success ui-button-raised "
+              [disabled]="activeDashboardItem == null"
+              (click)="subscribeToMarket()"></button>
       <button pButton type="button"
               label="Add Item"
               class="btnedit ui-button-success ui-button-raised "
@@ -42,6 +47,9 @@
       </div>
       <div class="dashboard-item">
         <app-brush-zoom></app-brush-zoom>
+      </div>
+      <div class="dashboard-item">
+        <app-market-chart [marketStatus]="marketStatusToPlot"></app-market-chart>
       </div>
       <!--<div class="dashboard-item">-->
         <!--<app-pie-chart></app-pie-chart>-->

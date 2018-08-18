@@ -3,13 +3,14 @@ import {ConfirmationService} from 'primeng/primeng';
 import {MessageService} from 'primeng/api';
 import {DashboardService} from '../../core/services/dashboard.service';
 import {Dashboard} from '../../shared/models/dashboard.model';
-import {Instance} from '../../shared/models/instance.model';
 import {ToastrService} from '../../core/services/toastr.service';
-import {DashboardMenuItem} from '../models/dashboard-menuitem.model';
+import {DashboardMenuItem} from '../models';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
+import {MarketPrice} from '../models/market-price';
+import {NotificationsService} from '../../core/services/notifications.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,10 +32,25 @@ export class DashboardComponent implements OnInit {
   loading = false;
   displayEditDashboard = false;
 
+  marketStatus: MarketPrice[];
+  marketStatusToPlot: MarketPrice[];
+
+  set MarketStatus(status: MarketPrice[]) {
+    this.marketStatus = status;
+    this.marketStatusToPlot = this.marketStatus.slice(0, 20);
+  }
+
   constructor(private dashboardsService: DashboardService,
               private instanceService: InstanceService,
+              private notificationsService: NotificationsService,
               private toastrService: ToastrService,
               private activateRoute: ActivatedRoute) {
+    this.notificationsService.getInitialMarketStatus()
+      .subscribe(prices => {
+        debugger;
+        this.MarketStatus = prices;
+      });
+
     this.subscription = activateRoute.params.subscribe(params => {
       this.instanceId = params['insId'];
       this.dashboardMenuitems = [];
@@ -158,6 +174,16 @@ export class DashboardComponent implements OnInit {
   }
 
   showAddItemPopup(): void {
+  }
+
+  subscribeToMarket(): void {
+    this.notificationsService.connectToSignalR();
+    this.notificationsService.subscribeToMarketDataFeed();
+    // const marketUpdateObservable =  this.marketStatusSvc.getUpdates();  // 1
+    this.notificationsService.marketSubObservable.subscribe((latestStatus: MarketPrice) => {  // 2
+      console.log(latestStatus);
+      this.MarketStatus = [latestStatus].concat(this.marketStatus);  // 3
+    });  // 4
   }
 
   onEdited(title: string) {

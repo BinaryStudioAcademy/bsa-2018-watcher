@@ -31,6 +31,7 @@
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
     using Watcher.Hubs;
+    using Watcher.Services;
     using Watcher.Utils;
 
     public class Startup
@@ -94,7 +95,7 @@
             ConfigureFileStorage(services, Configuration);
 
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
-            // services.AddHostedService<WatcherService>();
+            services.AddHostedService<WatcherService>();
 
 
             InitializeAutomapper(services);
