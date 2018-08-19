@@ -39,10 +39,7 @@ namespace Watcher.Hubs
 
             foreach (var userDto in usersInChat)
             {
-                //if(userDto.Id != createdMessage.User.Id)
-                {
-                   Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
-                }
+                await Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
             }
         }
 
@@ -52,43 +49,59 @@ namespace Watcher.Hubs
             if (createdChat == null) return;
 
             var usersInChat = await _chatsService.GetUsersByChatIdAsync(createdChat.Id);
-            
-            if (createdChat.Type == ChatType.BetweenUsers)
+
+            foreach (var user in usersInChat)
             {
-                foreach (var user in usersInChat)
-                {
-                    await Clients.User(user.Id).SendAsync("ChatCreated", createdChat);
-                }
-            }
-            else if (createdChat.Type == ChatType.InOrganization)
-            {
-                // TODO: Create chat for organization if haven`t created yet.
+                await Clients.User(user.Id).SendAsync("ChatCreated", createdChat);
             }
         }
 
-        public async Task AddUserToChat(int chatId, string userid)
+        public async Task UpdateChat(ChatUpdateRequest chat, int chatId)
         {
-            var users = await _chatsService.GetUsersByChatIdAsync(chatId);
+            var result = await _chatsService.UpdateEntityByIdAsync(chat, chatId);
+            if (!result) return;
 
-            var userDto = await _chatsService.AddUserToChat(chatId, userid);
+            var changedChat = await _chatsService.GetEntityByIdAsync(chatId);
 
-            if (userDto == null) return;
-
-            foreach (var user in users)
+            foreach (var user in changedChat.Users)
             {
-                await Clients.User(userDto.Id).SendAsync("UserAdded");
+                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+            }
+        }
+
+        public async Task AddUserToChat(int chatId, string userId)
+        {
+            var result = await _chatsService.AddUserToChat(chatId, userId);
+            if (!result) return;
+
+            var changedChat = await _chatsService.GetEntityByIdAsync(chatId);
+
+            foreach (var user in changedChat.Users)
+            {
+                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+            }
+        }
+
+        public async Task DeleteUserFromChat(int chatId, string userId)
+        {
+            var result = await _chatsService.DeleteUserFromChat(chatId, userId);
+            if (!result) return;
+
+            var changedChat = await _chatsService.GetEntityByIdAsync(chatId);
+
+            foreach (var user in changedChat.Users)
+            {
+                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
             }
         }
 
         public override async Task OnConnectedAsync()
         {
-            //await Clients.All.SendAsync("BroadcastMessage", Context.ConnectionId + "Connected");
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            //await Clients.All.SendAsync("BroadcastMessage", $"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
             await base.OnDisconnectedAsync(exception);
         }
     }
