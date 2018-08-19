@@ -20,6 +20,8 @@
 
         Task<ChatDto> GetEntityByIdAsync(int id);
 
+        Task<ChatDto> GetLightEntityByIdAsync(int id);
+
         Task<ChatDto> CreateEntityAsync(ChatRequest request);
 
         Task<bool> UpdateEntityByIdAsync(ChatUpdateRequest request, int id);

@@ -35,13 +35,24 @@
         public async Task<ChatDto> GetEntityByIdAsync(int id)
         {
             var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
-                include: chats => chats.Include(c => c.CreatedBy)
+                                include: chats => chats.Include(c => c.CreatedBy)
                                                         .Include(c => c.Messages)
                                                             .ThenInclude(c => c.User)
                                                         .Include(c => c.Organization)
                                                         .Include(c => c.CreatedBy)
                                                         .Include(c => c.UserChats)
                                                             .ThenInclude(uc => uc.User));
+
+            if (chat == null) return null;
+
+            var dto = _mapper.Map<Chat, ChatDto>(chat);
+
+            return dto;
+        }
+
+        public async Task<ChatDto> GetLightEntityByIdAsync(int id)
+        {
+            var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id);
 
             if (chat == null) return null;
 
@@ -79,7 +90,7 @@
 
         public async Task<bool> DeleteUserFromChat(int chatId, string userId)
         {
-             await _uow.ChatsRepository.DeleteUserChat(new UserChat() { ChatId = chatId, UserId = userId });
+            await _uow.ChatsRepository.DeleteUserChat(new UserChat() { ChatId = chatId, UserId = userId });
 
             var result = await _uow.SaveAsync();
 
