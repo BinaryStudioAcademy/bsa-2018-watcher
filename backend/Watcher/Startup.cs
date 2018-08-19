@@ -98,12 +98,7 @@
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
             services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-             var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
-            if (!string.IsNullOrWhiteSpace(fileStorageString))
-            {
-                services.AddSingleton<IFileStorageProvider, FileStorageProvider>(
-                    prov => new FileStorageProvider(fileStorageString));
-            }
+            
             InitializeAutomapper(services);
 
             ConfigureDatabase(services, Configuration);

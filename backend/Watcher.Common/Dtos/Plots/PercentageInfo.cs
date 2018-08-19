@@ -1,7 +1,7 @@
 ﻿using System;
 using Watcher.Common.Interfaces.Entities;
 
-namespace Watcher.Common.Dtos.PlotsDtos
+namespace Watcher.Common.Dtos.Plots
 {
     public class PercentageInfo: ICollectedData
     {

@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using DataAccumulator.DataAccessLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Watcher.Common.Dtos;
-using Watcher.DataAccess.Entities;
+using Watcher.Common.Dtos.Plots;
 
 namespace Watcher.Core.MappingProfiles
 {
@@ -15,6 +11,14 @@ namespace Watcher.Core.MappingProfiles
             CreateMap<CollectedData, CollectedData>();
 
             CreateMap<CollectedData, CollectedDataDto>();
+
+            CreateMap<CollectedData, MemoryInfo>();
+
+            CreateMap<CollectedData, PercentageInfo>();
+
+            CreateMap<CollectedData, ProcessesCpuInfo>();
+
+            CreateMap<CollectedData, ProcessesRamInfo>();
         }
     }
 }
