@@ -8,9 +8,8 @@ import {
   DialogModule,
   CardModule,
   ListboxModule,
-  AccordionModule,
-SplitButtonModule,
-OrderListModule } from 'primeng/primeng';
+  AccordionModule
+} from 'primeng/primeng';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 
 import { ChatComponent } from './chat.component';
@@ -26,11 +25,9 @@ import { ChatComponent } from './chat.component';
     ButtonModule,
     ScrollPanelModule,
     ListboxModule,
-    DialogModule,
-    SplitButtonModule,
-    OrderListModule
+    DialogModule
   ],
-  declarations: [ ChatComponent ],
-  exports: [ ChatComponent ]
+  declarations: [ChatComponent],
+  exports: [ChatComponent]
 })
 export class ChatModule { }

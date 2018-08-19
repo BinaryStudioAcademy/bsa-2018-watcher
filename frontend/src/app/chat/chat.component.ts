@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Dropdown, SelectItem } from 'primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 
-import { ChatHubService } from '../core/hubs/chat.hub';
+import { ChatHub } from '../core/hubs/chat.hub';
 import { AuthService } from '../core/services/auth.service';
 import { UserService } from '../core/services/user.service';
 import { ChatService } from '../core/services/chat.service';
@@ -11,6 +11,7 @@ import { ToastrService } from '../core/services/toastr.service';
 import { Chat } from '../shared/models/chat.model';
 import { ChatType } from '../shared/models/chat-type.enum';
 import { ChatRequest } from '../shared/requests/chat-request';
+import { ChatUpdateRequest } from '../shared/requests/chat-update-request';
 import { MessageRequest } from '../shared/requests/message-request';
 import { Message } from '../shared/models/message.model';
 import { User } from '../shared/models/user.model';
@@ -25,28 +26,27 @@ export class ChatComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private chatHub: ChatHubService,
+    private chatHub: ChatHub,
     private authService: AuthService,
     private userService: UserService,
     private chatService: ChatService,
     private toastrService: ToastrService) { }
 
-
+  chatSettingsForm: FormGroup;
   chatList: SelectItem[] = [];
   selectedChat: Chat;
 
   addedUsers: User[] = [];
   currentUser: User;
 
-  displayCreateChat: boolean;
-  displayConversation: boolean;
+  displayCreatingChat: boolean;
+  displayChatSettings: boolean;
+  displayChat: boolean;
 
   textMessage: string;
-  newChatForm: FormGroup;
-
 
   ngOnInit() {
-    this.newChatForm = this.fb.group({
+    this.chatSettingsForm = this.fb.group({
       'name': new FormControl('', Validators.required),
       'email': new FormControl('', Validators.email)
     });
@@ -84,43 +84,72 @@ export class ChatComponent implements OnInit {
     if (this.selectedChat != null) {
       this.chatService.get(this.selectedChat.id).subscribe((value: Chat) => {
         this.selectedChat = value;
-        this.displayConversation = true;
+        this.displayChat = true;
       });
     }
   }
 
   createNewChat() {
-    if (this.newChatForm.valid) {
+    if (this.chatSettingsForm.valid) {
       const newChat: ChatRequest = {
-        name: this.newChatForm.get('name').value,
+        name: this.chatSettingsForm.get('name').value,
         createdById: this.currentUser.id,
         users: this.addedUsers
       } as ChatRequest;
 
       this.chatHub.createNewChat(newChat);
+      this.displayCreatingChat = false;
       this.addedUsers = [];
-      this.displayCreateChat = false;
+      this.chatSettingsForm.reset();
     } else {
       this.toastrService.error('Form was filled incorrectly');
     }
   }
 
+  openChatSettings() {
+    this.chatSettingsForm.controls['name'].setValue(this.selectedChat.name);
+    this.displayChatSettings = true;
+  }
+
   addUser() {
-    const email = this.newChatForm.get('email').value;
+    const email = this.chatSettingsForm.get('email').value;
+    this.chatSettingsForm.get('email').reset();
+
     if (this.currentUser.email === email) {
       this.toastrService.error('Сan`t add yourself to chat');
       return;
-    } else if (this.addedUsers.some(u => u.email === email)) {
+    } else if (this.selectedChat.users.some(u => u.email === email)) {
       this.toastrService.error('User already added');
     } else {
       this.userService.getByEmail(email).subscribe((value: User) => {
-        this.addedUsers.push(value);
+        this.selectedChat.users.push(value);
+        this.chatHub.addUserToChat(value.id, this.selectedChat.id);
       },
         err => {
           this.toastrService.error('User don`t exist');
         }
       );
     }
+  }
+
+  deleteUser(id: string) {
+    if (id !== this.currentUser.id) {
+      this.chatHub.deleteUserFromChat(id, this.selectedChat.id);
+    }
+  }
+
+  updateChat() {
+    if (!this.chatSettingsForm.valid) {
+      this.toastrService.error('Form was filled incorrectly');
+      return;
+    }
+
+    const updatedChat: ChatUpdateRequest = {
+      name: this.chatSettingsForm.get('name').value
+    };
+
+    this.chatHub.updateChat(updatedChat, this.selectedChat.id);
+    this.displayChatSettings = false;
   }
 
   sendMessage() {

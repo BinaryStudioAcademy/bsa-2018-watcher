@@ -3,31 +3,29 @@
     <p-accordionTab>
       <p-header>
         Chats
-        <i class="panel-icon fa fa-plus" (click)="displayCreateChat=true"></i>
+        <i class="icon icon-right fa fa-plus" (click)="displayCreatingChat=true"></i>
       </p-header>
       <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="openChat()">
         <ng-template let-chat pTemplate="item">
-          <div class="ui-helper-clearfix">
             <i class="pi pi-fw pi-users"></i>
-            <span> {{chat.value.name}}</span>
-          </div>
+            <span class="chat-name"> {{chat.value.name}}</span>
         </ng-template>
       </p-listbox>
     </p-accordionTab>
   </p-accordion>
 </div>
 
-<div class="conversation-panel" [hidden]="!displayConversation">
-  <p-accordion [activeIndex]="0">
-    <p-accordionTab>
+<div class="conversation-panel" [hidden]="!displayChat">
+  <p-accordion>
+    <p-accordionTab [selected]="true">
       <p-header>
-        {{selectedChat?.name}}
-        <i class="panel-icon fa fa-close" (click)="displayConversation=false"></i>
-        <i class="panel-icon fa fa-cog"></i>
+        <i class="icon icon-right fa fa-close" (click)="displayChat=false"></i>
+        <i class="icon icon-right fa fa-cog" (click)="openChatSettings()"></i>
+        <div class="title">{{selectedChat?.name}}</div>
       </p-header>
       <div class="conversation-panel-content ui-fluid">
         <div class="conversation-message-list">
-          <p-card *ngFor="let message of selectedChat?.messages">
+          <div *ngFor="let message of selectedChat?.messages" class="message" [ngClass]="{'received-message': message.user.id != currentUser.id}">
             <div class="ui-g">
               <div class="ui-g-2 ui-g-nopad">
                 <i class="fa fa-2x fa-user"></i>
@@ -37,7 +35,7 @@
                 <div class="">{{message.text}}</div>
               </div>
             </div>
-          </p-card>
+          </div>
         </div>
         <div class="ui-inputgroup">
           <input type="text" pInputText [(ngModel)]="textMessage" placeholder="Write message">
@@ -48,16 +46,16 @@
   </p-accordion>
 </div>
 
-<p-dialog [(visible)]="displayCreateChat" [modal]="true" [responsive]="true" [width]="350" [baseZIndex]="10000">
+<p-dialog [(visible)]="displayCreatingChat" [modal]="true" [responsive]="true" [width]="350" [baseZIndex]="10000">
   <p-header>
     New chat
   </p-header>
-  <form [formGroup]="newChatForm">
+  <form [formGroup]="chatSettingsForm">
     <div class="ui-fluid">
       <p class="field">Name*:</p>
-      <input type="text" pInputText formControlName="name" placeholder="Enter chat name" ng-required="true">
+      <input type="text" pInputText formControlName="name" placeholder="Enter chat name">
 
-      <p class="field">Add users:</p>
+      <p class="field">Add user:</p>
       <div class="ui-inputgroup">
         <input type="email" pInputText formControlName="email" placeholder="Enter email">
         <button pButton icon="fa fa-plus" (click)="addUser()"></button>
@@ -70,6 +68,32 @@
   </form>
 
   <p-footer>
-    <button type="button" pButton (click)="createNewChat()" label="Create" [disabled]="!newChatForm.valid"></button>
+    <button type="button" pButton (click)="createNewChat()" label="Create" [disabled]="!chatSettingsForm.valid"></button>
+  </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="displayChatSettings" [modal]="true" [responsive]="true" [width]="350" [baseZIndex]="10000">
+  <p-header>
+    Chat settings
+  </p-header>
+  <form [formGroup]="chatSettingsForm">
+    <div class="ui-fluid">
+      <p class="field">Name*:</p>
+      <input type="text" pInputText formControlName="name" placeholder="Enter chat name">
+      <p class="field">Add user:</p>
+      <div class="ui-inputgroup">
+        <input type="email" pInputText formControlName="email" placeholder="Enter email">
+        <button pButton icon="fa fa-plus" (click)="addUser()"></button>
+      </div>
+      <p class="field">Members:</p>
+      <div *ngFor="let user of selectedChat?.users" class="member-list">
+        <span class="field member-item">{{user.displayName}} ({{user.email}})</span>
+        <i *ngIf="user.id != currentUser.id" class="icon fa fa-close" (click)="deleteUser(user.id)"></i>
+      </div>
+    </div>
+  </form>
+
+  <p-footer>
+    <button type="button" pButton (click)="updateChat()" label="Update" [disabled]="!chatSettingsForm.valid"></button>
   </p-footer>
 </p-dialog>
