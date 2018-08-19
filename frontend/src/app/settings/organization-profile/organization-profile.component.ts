@@ -32,6 +32,7 @@ export class OrganizationProfileComponent implements OnInit {
 
   inviteLink = '';
   inviteEmail: string;
+  invite: OrganizationInvite;
 
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
@@ -111,7 +112,7 @@ export class OrganizationProfileComponent implements OnInit {
       id: 0,
       organizationId: this.organization.id,
       createdByUserId: this.authService.getCurrentUser().id,
-      inviteEmail: 'San7Av1.0@gmail.com',
+      inviteEmail: null,
       invitedUserId: null,
       createdByUser: null,
       organization: null,
@@ -124,12 +125,25 @@ export class OrganizationProfileComponent implements OnInit {
     this.organizationInvitesService.create(invite).subscribe(
       value => {
         this.toastrService.success('Organization Invite was created');
+        this.invite = value;
         this.inviteLink = `${environment.client_url}/user/invite/${value.link}`;
       },
       err => {
         this.toastrService.error('Organization Invite was not created');
-      }
-    );
+      });
+  }
+
+  onSentInviteToEmail() {
+    // OrganizationInvite
+    if (this.inviteEmail === null) { return; }
+    this.invite.inviteEmail = this.inviteEmail;
+    this.organizationInvitesService.update(this.invite.id, this.invite).subscribe(
+    value => {
+      this.toastrService.success('Organization Invite was updated and sends to email.');
+    },
+    err => {
+      this.toastrService.error('Organization Invite was not updated');
+    });
   }
 
   onCopy() {
