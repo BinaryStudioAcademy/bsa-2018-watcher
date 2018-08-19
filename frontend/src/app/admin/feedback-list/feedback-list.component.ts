@@ -3,8 +3,11 @@ import { FormControl, FormBuilder } from '@angular/forms';
 import { FeedbackService } from '../../core/services/feedback.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
+
 import { NotificationsService } from '../../core/services/notifications.service';
 import { HubConnection } from '@aspnet/signalr';
+import * as signalR from '@aspnet/signalr';
+import { environment } from '../../../environments/environment';
 
 import { User } from '../../shared/models/user.model';
 import { Feedback } from '../../shared/models/feedback.model';
@@ -34,6 +37,7 @@ export class FeedbackListComponent implements OnInit {
   totalRecords: number;
   private hubConnection: HubConnection;
   public responseCreated = new EventEmitter<Response>();
+  private hubName = 'responcesHub';
 
   constructor(
     private fb: FormBuilder,
@@ -45,6 +49,11 @@ export class FeedbackListComponent implements OnInit {
 
     this.lstFeedbacks = new Array<ForShow>();
     this.display = false;
+
+    const firebaseToken = this.authService.getFirebaseToken();
+    const watcherToken = this.authService.getWatcherToken();
+    const connPath = `${environment.server_url}/${this.hubName}?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
+    this.hubConnection = new signalR.HubConnectionBuilder().withUrl('connPath').configureLogging(signalR.LogLevel.Information).build();
   }
 
   responseForm = this.fb.group({
@@ -112,7 +121,7 @@ export class FeedbackListComponent implements OnInit {
       subscribe(
         value => {
           this.toastrService.success('Added new response');
-          this.responseCreated.subscribe((Dto: Response) => );
+          this.responseCreated.subscribe((Dto: Response) => console.log('response created'));
           // this.notificationsService.connectToSignalR();
           // this.notificationsService.send(this.feedback.id.toString(), 'The response to your feedback has been sent to your email.');
         },
