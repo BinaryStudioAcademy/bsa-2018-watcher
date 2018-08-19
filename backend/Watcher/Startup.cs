@@ -98,7 +98,6 @@
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
             services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-                options => new DataAccumulatorRepository("mongodb://testinstancedata:gUBqXsCpWXn9LQ2eXLeLECStm5Rbrf4QeGnBjcHkOFNkRRoHnh4fsi2UsaIjM3icJWblxhrugQVbJApCekXQMg==@testinstancedata.documents.azure.com:10255/?ssl=true&replicaSet=globaldb", "DataAccumulatorDb"));
              var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
             if (!string.IsNullOrWhiteSpace(fileStorageString))
             {

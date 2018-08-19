@@ -20,4 +20,10 @@
     <ProjectReference Include="..\Watcher.DataAccess\Watcher.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="DataAccumulator.DataAccessLayer">
+      <HintPath>..\..\DataAccumulator\DataAccumulator.DataAccessLayer\bin\Debug\netcoreapp2.1\DataAccumulator.DataAccessLayer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
