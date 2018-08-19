@@ -30,7 +30,8 @@ export class OrganizationProfileComponent implements OnInit {
   editable: boolean;
   organization: Organization;
 
-  inviteLink: string;
+  inviteLink = '';
+  inviteEmail: string;
 
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
