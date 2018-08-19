@@ -1,19 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { AccordionModule } from 'primeng/accordion';
-import { InputTextModule, ButtonModule } from 'primeng/primeng';
-import { CardModule } from 'primeng/card';
-import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { ListboxModule } from 'primeng/listbox';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import {
+  InputTextModule,
+  ButtonModule,
+  DialogModule,
+  CardModule,
+  ListboxModule,
+  AccordionModule,
+SplitButtonModule,
+OrderListModule } from 'primeng/primeng';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+
 import { ChatComponent } from './chat.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    PanelMenuModule,
     AccordionModule,
     InputTextModule,
     CardModule,
@@ -21,7 +25,10 @@ import { ChatComponent } from './chat.component';
     FormsModule,
     ButtonModule,
     ScrollPanelModule,
-    ListboxModule
+    ListboxModule,
+    DialogModule,
+    SplitButtonModule,
+    OrderListModule
   ],
   declarations: [ ChatComponent ],
   exports: [ ChatComponent ]

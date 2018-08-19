@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Dropdown, SelectItem} from 'primeng/primeng';
+import { Dropdown, SelectItem } from 'primeng/primeng';
+import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 
 import { ChatHubService } from '../core/hubs/chat.hub';
 import { AuthService } from '../core/services/auth.service';
@@ -23,38 +24,41 @@ import { User } from '../shared/models/user.model';
 export class ChatComponent implements OnInit {
 
   constructor(
+    private fb: FormBuilder,
     private chatHub: ChatHubService,
     private authService: AuthService,
     private userService: UserService,
     private chatService: ChatService,
     private toastrService: ToastrService) { }
 
-  currentUserId: string;
-  chats: Chat[] = [];
 
   chatList: SelectItem[] = [];
   selectedChat: Chat;
 
+  addedUsers: User[] = [];
+  currentUser: User;
+
+  displayCreateChat: boolean;
+  displayConversation: boolean;
+
   textMessage: string;
-  wantedUser: string;
-
-  choosedChat: Chat = {} as Chat;
-  newChat: ChatRequest = {} as ChatRequest;
-  userList: string[] = [];
-
-  isChatChoosed: boolean;
-  isNewChatChoosed: boolean;
+  newChatForm: FormGroup;
 
 
   ngOnInit() {
-    this.newChat.users = [];
-    this.subscribeToEvents();
-    this.currentUserId = this.authService.getCurrentUser().id;
-    this.chatService.getByUserId(this.currentUserId).subscribe(
+    this.newChatForm = this.fb.group({
+      'name': new FormControl('', Validators.required),
+      'email': new FormControl('', Validators.email)
+    });
+
+    this.currentUser = this.authService.getCurrentUser();
+    this.chatService.getByUserId(this.currentUser.id).subscribe(
       chats => {
+        chats.reverse();
         chats.forEach(chat => {
-          this.chatList.push({ label: chat.name, icon: 'pi pi-fw pi-users', value: chat });
+          this.chatList.push({ value: chat });
         });
+        this.subscribeToEvents();
       },
       err => {
         this.toastrService.error('Can`t get user`s chats');
@@ -62,70 +66,68 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  private subscribeToEvents() {
-    this.chatHub.chatCreated.subscribe((value: Chat) => {
+  subscribeToEvents() {
+    this.chatHub.chatCreated.subscribe((chat: Chat) => {
       console.log('chat created');
-      this.chats.push(value);
-      this.choosedChat = value;
+      this.chatList.unshift({ value: chat });
+      this.selectedChat = chat;
+      this.openChat();
     });
 
-    this.chatHub.messageReceived.subscribe((value: Message) => {
+    this.chatHub.messageReceived.subscribe((message: Message) => {
       console.log('received message');
-      this.choosedChat.messages.push(value);
+      this.selectedChat.messages.push(message);
     });
   }
 
-  openCloseNewChatWindow() {
-    this.isNewChatChoosed ? this.isNewChatChoosed = false : this.isNewChatChoosed = true;
-    this.isChatChoosed = false;
-  }
-
-  openConversation(chatId: number) {
-    this.isNewChatChoosed = false;
-    this.chatService.get(chatId).subscribe((value: Chat) => {
-      this.choosedChat = value;
-      this.isChatChoosed = true;
-    });
-  }
-
-  closeConversation() {
-    this.isChatChoosed = false;
+  openChat() {
+    if (this.selectedChat != null) {
+      this.chatService.get(this.selectedChat.id).subscribe((value: Chat) => {
+        this.selectedChat = value;
+        this.displayConversation = true;
+      });
+    }
   }
 
   createNewChat() {
-    this.isNewChatChoosed = true;
-    this.newChat.name = this.newChat.name || 'NewChat';
-    this.newChat.createdById = this.currentUserId;
+    if (this.newChatForm.valid) {
+      const newChat: ChatRequest = {
+        name: this.newChatForm.get('name').value,
+        createdById: this.currentUser.id,
+        users: this.addedUsers
+      } as ChatRequest;
 
-    this.chatHub.createNewChat(this.newChat);
+      this.chatHub.createNewChat(newChat);
+      this.addedUsers = [];
+      this.displayCreateChat = false;
+    } else {
+      this.toastrService.error('Form was filled incorrectly');
+    }
   }
 
   addUser() {
-    if (!this.newChat.users.some(u => u.id === this.wantedUser)) {
-      this.userService.get(this.wantedUser).subscribe((value: User) => {
-        this.newChat.users.push(value);
+    const email = this.newChatForm.get('email').value;
+    if (this.currentUser.email === email) {
+      this.toastrService.error('Сan`t add yourself to chat');
+      return;
+    } else if (this.addedUsers.some(u => u.email === email)) {
+      this.toastrService.error('User already added');
+    } else {
+      this.userService.getByEmail(email).subscribe((value: User) => {
+        this.addedUsers.push(value);
       },
         err => {
           this.toastrService.error('User don`t exist');
         }
       );
-    } else {
-      this.toastrService.error('User already added');
     }
-  }
-
-  selectChat() {
-    console.log('selected chat');
-    console.log(this.selectedChat);
-
-    this.openConversation(this.selectedChat.id);
   }
 
   sendMessage() {
     const newMessage: MessageRequest = {
       text: this.textMessage,
-      userId: this.currentUserId,
-      chatId: this.choosedChat.id,
+      userId: this.currentUser.id,
+      chatId: this.selectedChat.id,
       createdAt: new Date(Date.now())
     } as MessageRequest;
 

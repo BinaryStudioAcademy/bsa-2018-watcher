@@ -3,10 +3,9 @@
     <p-accordionTab>
       <p-header>
         Chats
-        <i class="panel-close-icon fa fa-cog"></i>
-        <i class="panel-close-icon fa fa-plus"></i>
+        <i class="panel-icon fa fa-plus" (click)="displayCreateChat=true"></i>
       </p-header>
-      <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="selectChat()">
+      <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="openChat()">
         <ng-template let-chat pTemplate="item">
           <div class="ui-helper-clearfix">
             <i class="pi pi-fw pi-users"></i>
@@ -18,17 +17,17 @@
   </p-accordion>
 </div>
 
-<div class="conversation-panel" [hidden]="!isChatChoosed">
+<div class="conversation-panel" [hidden]="!displayConversation">
   <p-accordion [activeIndex]="0">
     <p-accordionTab>
       <p-header>
-        {{choosedChat.name}}
-        <i class="panel-close-icon fa fa-close" (click)="closeConversation()"></i>
-        <i class="panel-close-icon fa fa-cog"></i>
+        {{selectedChat?.name}}
+        <i class="panel-icon fa fa-close" (click)="displayConversation=false"></i>
+        <i class="panel-icon fa fa-cog"></i>
       </p-header>
       <div class="conversation-panel-content ui-fluid">
         <div class="conversation-message-list">
-          <p-card *ngFor="let message of choosedChat.messages">
+          <p-card *ngFor="let message of selectedChat?.messages">
             <div class="ui-g">
               <div class="ui-g-2 ui-g-nopad">
                 <i class="fa fa-2x fa-user"></i>
@@ -49,35 +48,28 @@
   </p-accordion>
 </div>
 
-<div class="conversation-panel" [hidden]="!isNewChatChoosed">
-  <p-accordion [activeIndex]="0">
-    <p-accordionTab>
-      <p-header>
-        New Conversation
-        <i class="panel-close-icon fa fa-close" (click)="openCloseNewChatWindow()"></i>
-      </p-header>
-      <div class="conversation-new-panel-content ui-fluid">
-        <input type="text" pInputText [(ngModel)]="newChat.name" placeholder="Enter chat name">
-        <div class="ui-inputgroup">
-          <input type="text" pInputText [(ngModel)]="wantedUser" placeholder="Enter user id">
-          <button pButton icon="fa fa-plus" (click)="addUser()"></button>
-        </div>
+<p-dialog [(visible)]="displayCreateChat" [modal]="true" [responsive]="true" [width]="350" [baseZIndex]="10000">
+  <p-header>
+    New chat
+  </p-header>
+  <form [formGroup]="newChatForm">
+    <div class="ui-fluid">
+      <p class="field">Name*:</p>
+      <input type="text" pInputText formControlName="name" placeholder="Enter chat name" ng-required="true">
 
-        <div>
-          <div *ngFor="let user of newChat.users">
-            <div class="ui-g">
-              <div class="ui-g-10 ui-g-nopad">
-                <strong>{{user.displayName}}</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="ui-inputgroup">
-          <input type="text" pInputText [(ngModel)]="textMessage" placeholder="Write message">
-          <button pButton icon="fa fa-send" (click)="createNewChat()"></button>
-        </div>
+      <p class="field">Add users:</p>
+      <div class="ui-inputgroup">
+        <input type="email" pInputText formControlName="email" placeholder="Enter email">
+        <button pButton icon="fa fa-plus" (click)="addUser()"></button>
       </div>
-    </p-accordionTab>
-  </p-accordion>
-</div>
+
+      <div *ngFor="let user of addedUsers">
+        <p class="field">{{user.displayName}} ({{user.email}})</p>
+      </div>
+    </div>
+  </form>
+
+  <p-footer>
+    <button type="button" pButton (click)="createNewChat()" label="Create" [disabled]="!newChatForm.valid"></button>
+  </p-footer>
+</p-dialog>
