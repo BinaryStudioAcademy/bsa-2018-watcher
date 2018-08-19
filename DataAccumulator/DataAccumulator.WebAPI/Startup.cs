@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace DataAccumulator
 {
@@ -37,15 +38,11 @@ namespace DataAccumulator
 
             services.AddMvc();
 
-            services.Configure<Settings>(options =>
-            {
-                options.ConnectionString = Configuration.GetSection("MongoConnection:ConnectionString").Value;
-                options.Database = Configuration.GetSection("MongoConnection:Database").Value;
-            });
-
-            services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
             services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
             services.AddScoped<IService<CollectedDataDto>, DataAccumulatorService>();
+
+            // repo initialization localhost while development env, azure in prod
+            ConfigureCosmosDb(services, Configuration);
 
             var mapper = MapperConfiguration().CreateMapper();
             services.AddTransient(_ => mapper);
@@ -63,7 +60,25 @@ namespace DataAccumulator
 
             app.UseMvc();
         }
-
+        public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
+        {
+            var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (enviroment == EnvironmentName.Production)
+            {
+                var cosmosDbString = Configuration.GetConnectionString("AzureCosmosDbConnection");
+                if (!string.IsNullOrWhiteSpace(cosmosDbString))
+                {
+                    services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(cosmosDbString, "DataAccumulatorDb"));
+                }
+            }
+            else
+            {
+                var mongoDbString = Configuration.GetConnectionString("MongoDbConnection");
+                services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(mongoDbString, "DataAccumulatorDb"));
+            }
+        }
         public MapperConfiguration MapperConfiguration()
         {
             var config = new MapperConfiguration(cfg =>
