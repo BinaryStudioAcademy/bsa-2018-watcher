@@ -38,9 +38,10 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             {
                 ObjectId internalId = GetInternalId(id);
 
-                return await _context.Datasets
+                var list =  await _context.Datasets
                     .Find(data => data.Id == id || data.InternalId == internalId)
-                    .FirstOrDefaultAsync();
+                    .ToListAsync();
+                return list[list.Count - 1];
             }
             catch (Exception e)
             {
