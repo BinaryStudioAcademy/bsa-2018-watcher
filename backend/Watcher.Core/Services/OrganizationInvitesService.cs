@@ -19,11 +19,13 @@ namespace Watcher.Core.Services
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly IEmailProvider _emailProvider;
 
-        public OrganizationInvitesService(IUnitOfWork uow, IMapper mapper)
+        public OrganizationInvitesService(IUnitOfWork uow, IMapper mapper, IEmailProvider emailProvider)
         {
             _uow = uow;
             _mapper = mapper;
+            _emailProvider = emailProvider;
         }
 
         public async Task<OrganizationInviteDto> GetEntityByLinkAsync(string link)
@@ -54,14 +56,10 @@ namespace Watcher.Core.Services
 
             entity = await _uow.OrganizationInvitesRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
-            if (!result)
-            {
-                return null;
-            }
+
+            if (!result)return null;
 
             if (entity == null) return null;
-
-            // TODO If Email != "" Send Email
 
             var dto = _mapper.Map<OrganizationInvite, OrganizationInviteDto>(entity);
 
@@ -98,8 +96,20 @@ namespace Watcher.Core.Services
                 await _uow.UsersRepository.UpdateAsync(invitedUser);
 
                 var updated = await _uow.OrganizationInvitesRepository.UpdateAsync(entity);
-                 result = await _uow.SaveAsync();
+                result = await _uow.SaveAsync();
                 _uow.CommitTransaction();
+            }
+            else
+            {
+                if (entity.State == OrganizationInviteState.Pending)
+                {
+                    if (String.IsNullOrWhiteSpace(entity.InviteEmail) != true) // send Email
+                    {
+                        await _emailProvider.SendMessageOneToOne("5avel@hotmail.com", "Test Invite", entity.InviteEmail, "Test Body", "");
+                    }
+                }
+                var updated = await _uow.OrganizationInvitesRepository.UpdateAsync(entity);
+                result = await _uow.SaveAsync();
             }
             return result;
         }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
 import { TokenService } from '../core/services/token.service';
@@ -15,7 +15,9 @@ export class AuthorizationComponent implements OnInit {
   @ViewChild('userDetailsTemplate') userDetailsTemplate;
   @ViewChild('notRegisteredSignInTemplate') notRegisteredSignInTemplate;
 
-  display = false;
+  @Input() display = false;
+  @Input() redirectTo: string;
+  @Input() showSignInOutBtn = true;
   isSignIn = true;
   isSuccessSignUp = false;
   isNotRegisteredSignIn = false;
@@ -183,7 +185,7 @@ export class AuthorizationComponent implements OnInit {
     this.firstName = this.authService.userRegisterRequest.firstName;
     this.lastName = this.authService.userRegisterRequest.lastName;
     this.userEmail = this.authService.userRegisterRequest.email;
-    if (this.userEmail !== null){
+    if (this.userEmail !== null) {
       this.emailExists = true;
     }
   }
