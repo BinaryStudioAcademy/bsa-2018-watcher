@@ -134,7 +134,6 @@ export class OrganizationProfileComponent implements OnInit {
   }
 
   onSentInviteToEmail() {
-    // OrganizationInvite
     if (this.inviteEmail === null) { return; }
     this.invite.inviteEmail = this.inviteEmail;
     this.organizationInvitesService.update(this.invite.id, this.invite).subscribe(

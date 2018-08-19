@@ -99,12 +99,17 @@ namespace Watcher.Core.Services
                 result = await _uow.SaveAsync();
                 _uow.CommitTransaction();
             }
-            else if (entity.State == OrganizationInviteState.Pending)
+            else
             {
-                if(String.IsNullOrWhiteSpace(entity.InviteEmail) != true) // send Email
+                if (entity.State == OrganizationInviteState.Pending)
                 {
-                    await _emailProvider.SendMessageOneToOne("5avel@hotmail.com", "Test Invite", entity.InviteEmail, "Test Body", "");
+                    if (String.IsNullOrWhiteSpace(entity.InviteEmail) != true) // send Email
+                    {
+                        await _emailProvider.SendMessageOneToOne("5avel@hotmail.com", "Test Invite", entity.InviteEmail, "Test Body", "");
+                    }
                 }
+                var updated = await _uow.OrganizationInvitesRepository.UpdateAsync(entity);
+                result = await _uow.SaveAsync();
             }
             return result;
         }
