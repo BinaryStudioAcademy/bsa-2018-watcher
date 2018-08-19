@@ -29,6 +29,7 @@ export class FeedbackListComponent implements OnInit {
   lstFeedbacks: ForShow[];
   display: boolean;
   email: string;
+  totalRecords: number;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +53,7 @@ export class FeedbackListComponent implements OnInit {
     }
     this.feedbackService.getAll().subscribe((value: Feedback[]) => {
       this.sortByDueDate(value);
+      this.totalRecords = value.length;
       this.feedbacks = value;
       this.fillLstFeedbacks();
     });
