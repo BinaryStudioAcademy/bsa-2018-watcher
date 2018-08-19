@@ -3,12 +3,12 @@
     <p-accordionTab>
       <p-header>
         Chats
-        <i class="icon icon-right fa fa-plus" (click)="displayCreatingChat=true"></i>
+        <i class="icon icon-right fa fa-plus" (click)="openChatCreating()"></i>
       </p-header>
       <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="openChat()">
         <ng-template let-chat pTemplate="item">
-            <i class="pi pi-fw pi-users"></i>
-            <span class="chat-name"> {{chat.value.name}}</span>
+          <i class="pi pi-fw pi-users"></i>
+          <span class="chat-name"> {{chat.value.name}}</span>
         </ng-template>
       </p-listbox>
     </p-accordionTab>
@@ -25,20 +25,20 @@
       </p-header>
       <div class="conversation-panel-content ui-fluid">
         <div class="conversation-message-list">
-          <div *ngFor="let message of selectedChat?.messages" class="message" [ngClass]="{'received-message': message.user.id != currentUser.id}">
+          <div *ngFor="let message of selectedChat?.messages" class="message" [ngClass]="{'received-message': message?.user?.id != currentUser?.id}">
             <div class="ui-g">
               <div class="ui-g-2 ui-g-nopad">
                 <i class="fa fa-2x fa-user"></i>
               </div>
               <div class="ui-g-10 ui-g-nopad">
-                <strong>{{message.user.displayName}}</strong>
-                <div class="">{{message.text}}</div>
+                <strong>{{message?.user?.displayName}}</strong>
+                <div class="">{{message?.text}}</div>
               </div>
             </div>
           </div>
         </div>
         <div class="ui-inputgroup">
-          <input type="text" pInputText [(ngModel)]="textMessage" placeholder="Write message">
+          <input type="text" pInputText [(ngModel)]="textMessage" (keyup.enter)="sendMessage" placeholder="Write message">
           <button pButton icon="fa fa-send" (click)="sendMessage()"></button>
         </div>
       </div>
@@ -54,19 +54,16 @@
     <div class="ui-fluid">
       <p class="field">Name*:</p>
       <input type="text" pInputText formControlName="name" placeholder="Enter chat name">
-
       <p class="field">Add user:</p>
       <div class="ui-inputgroup">
         <input type="email" pInputText formControlName="email" placeholder="Enter email">
-        <button pButton icon="fa fa-plus" (click)="addUser()"></button>
+        <button pButton icon="fa fa-plus" (click)="addToLocalList()"></button>
       </div>
-
-      <div *ngFor="let user of addedUsers">
-        <p class="field">{{user.displayName}} ({{user.email}})</p>
+      <div *ngFor="let user of addedUsers" class="member-list">
+        <span class="field member-item">{{user.displayName}} ({{user.email}})</span>
       </div>
     </div>
   </form>
-
   <p-footer>
     <button type="button" pButton (click)="createNewChat()" label="Create" [disabled]="!chatSettingsForm.valid"></button>
   </p-footer>
@@ -87,12 +84,11 @@
       </div>
       <p class="field">Members:</p>
       <div *ngFor="let user of selectedChat?.users" class="member-list">
-        <span class="field member-item">{{user.displayName}} ({{user.email}})</span>
-        <i *ngIf="user.id != currentUser.id" class="icon fa fa-close" (click)="deleteUser(user.id)"></i>
+        <span class="field member-item">{{user?.displayName}} ({{user?.email}})</span>
+        <i *ngIf="user?.id != currentUser.id" class="icon fa fa-close" (click)="deleteUser(user.id)"></i>
       </div>
     </div>
   </form>
-
   <p-footer>
     <button type="button" pButton (click)="updateChat()" label="Update" [disabled]="!chatSettingsForm.valid"></button>
   </p-footer>
