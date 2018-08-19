@@ -1,4 +1,7 @@
-﻿namespace Watcher.Controllers
+﻿using Microsoft.AspNetCore.SignalR;
+using Watcher.Hubs;
+
+namespace Watcher.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -27,16 +30,22 @@
         private readonly IEmailProvider _emailProvider;
 
         /// <summary>
+        /// Notifications Hub Context
+        /// </summary>
+        private readonly IHubContext<NotificationsHub> _notificationsHubContext;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ResponsesController"/> class. 
         /// </summary>
         /// <param name="service">
         /// Responses service
         /// </param>
         /// <param name="provider"></param>
-        public ResponsesController(IResponseService service, IEmailProvider provider)
+        public ResponsesController(IResponseService service, IEmailProvider provider, IHubContext<NotificationsHub> hubContext)
         {
             _responseService = service;
             _emailProvider = provider;
+            _notificationsHubContext = hubContext;
         }
 
         /// <summary>
@@ -120,6 +129,7 @@
                     request.Text, "");
             }
 
+            await _notificationsHubContext.Clients.All.SendAsync("ResponseCreated", dto);
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
     }
