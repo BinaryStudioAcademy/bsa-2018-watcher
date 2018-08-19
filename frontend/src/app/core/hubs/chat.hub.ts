@@ -50,17 +50,14 @@ export class ChatHub {
 
     private registerOnEvents(): void {
         this.hubConnection.on('ReceiveMessage', (data: any) => {
-            console.log(data);
             this.messageReceived.emit(data);
         });
 
         this.hubConnection.on('ChatCreated', (data: any) => {
-            console.log(data);
             this.chatCreated.emit(data);
         });
 
         this.hubConnection.on('ChatChanged', (data: any) => {
-            console.log(data);
             this.chatChanged.emit(data);
         });
     }

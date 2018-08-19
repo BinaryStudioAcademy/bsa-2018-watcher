@@ -68,25 +68,40 @@ export class ChatComponent implements OnInit {
 
   subscribeToEvents() {
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
-      console.log('chat created');
       this.chatList.unshift({ value: chat });
       this.selectedChat = chat;
       this.openChat();
     });
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
-      console.log('received message');
       this.selectedChat.messages.push(message);
+    });
+
+    this.chatHub.chatChanged.subscribe((chat: Chat) => {
+      const index = this.chatList.findIndex(x => x.value.id === chat.id);
+      this.chatList.splice(index, 1, { value: chat });
+      this.selectedChat = chat;
     });
   }
 
   openChat() {
     if (this.selectedChat != null) {
-      this.chatService.get(this.selectedChat.id).subscribe((value: Chat) => {
-        this.selectedChat = value;
+      this.chatService.get(this.selectedChat.id).subscribe((chat: Chat) => {
+        this.selectedChat = chat;
         this.displayChat = true;
       });
     }
+  }
+
+  openChatCreating() {
+    this.displayCreatingChat = true;
+    this.addedUsers = [];
+    this.chatSettingsForm.reset();
+  }
+
+  openChatSettings() {
+    this.chatSettingsForm.controls['name'].setValue(this.selectedChat.name);
+    this.displayChatSettings = true;
   }
 
   createNewChat() {
@@ -99,16 +114,9 @@ export class ChatComponent implements OnInit {
 
       this.chatHub.createNewChat(newChat);
       this.displayCreatingChat = false;
-      this.addedUsers = [];
-      this.chatSettingsForm.reset();
     } else {
       this.toastrService.error('Form was filled incorrectly');
     }
-  }
-
-  openChatSettings() {
-    this.chatSettingsForm.controls['name'].setValue(this.selectedChat.name);
-    this.displayChatSettings = true;
   }
 
   addUser() {
@@ -118,18 +126,40 @@ export class ChatComponent implements OnInit {
     if (this.currentUser.email === email) {
       this.toastrService.error('Сan`t add yourself to chat');
       return;
-    } else if (this.selectedChat.users.some(u => u.email === email)) {
-      this.toastrService.error('User already added');
-    } else {
-      this.userService.getByEmail(email).subscribe((value: User) => {
-        this.selectedChat.users.push(value);
-        this.chatHub.addUserToChat(value.id, this.selectedChat.id);
-      },
-        err => {
-          this.toastrService.error('User don`t exist');
-        }
-      );
     }
+    if (this.selectedChat.users.some(u => u.email === email)) {
+      this.toastrService.error('User already added');
+      return;
+    }
+    this.userService.getByEmail(email).subscribe((value: User) => {
+      this.selectedChat.users.push(value);
+      this.chatHub.addUserToChat(value.id, this.selectedChat.id);
+    },
+      err => {
+        this.toastrService.error('User don`t exist');
+      }
+    );
+  }
+
+  addToLocalList() {
+    const email = this.chatSettingsForm.get('email').value;
+    this.chatSettingsForm.get('email').reset();
+
+    if (this.currentUser.email === email) {
+      this.toastrService.error('Сan`t add yourself to chat');
+      return;
+    }
+    if (this.addedUsers.some(u => u.email === email)) {
+      this.toastrService.error('User already added');
+      return;
+    }
+    this.userService.getByEmail(email).subscribe((value: User) => {
+      this.addedUsers.push(value);
+    },
+      err => {
+        this.toastrService.error('User don`t exist');
+      }
+    );
   }
 
   deleteUser(id: string) {
