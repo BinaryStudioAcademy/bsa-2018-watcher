@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
-using System.Net.Sockets;
-using System.Xml.Serialization;
-using System.Net;
 
 namespace DataCollector
 {
@@ -37,7 +31,7 @@ namespace DataCollector
                 sendDataItem /= count;
                 Console.WriteLine($"{DateTime.Now}         Avarage:\n{sendDataItem.ToString()}");
                 sendDataItem.Id = clientIdentifier;
-                s.Send(sendDataItem, "http://localhost:52106/api/v1/dataaccumulator");
+                s.Send(sendDataItem, "http://localhost:5387/api/v1/dataaccumulator");
                 Console.WriteLine($"{DateTime.Now}         Data was send");
             }
             Console.ReadKey();

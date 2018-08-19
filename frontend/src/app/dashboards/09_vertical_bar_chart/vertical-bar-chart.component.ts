@@ -37,6 +37,10 @@ export class VerticalBarChartComponent implements OnInit {
       'name': 'Mexico',
       'series': [
         {
+          'value': 1111,
+          'name': '2016-09-24T22:03:52.377Z'
+        },
+        {
           'value': 2277,
           'name': '2016-09-22T22:03:52.377Z'
         },
@@ -61,6 +65,10 @@ export class VerticalBarChartComponent implements OnInit {
     {
       'name': 'Chile',
       'series': [
+        {
+          'value': 5001,
+          'name': '2016-09-24T22:03:52.377Z'
+        },
         {
           'value': 6054,
           'name': '2016-09-22T22:03:52.377Z'
@@ -87,6 +95,10 @@ export class VerticalBarChartComponent implements OnInit {
       'name': 'Morocco',
       'series': [
         {
+          'value': 2000,
+          'name': '2016-09-24T22:03:52.377Z'
+        },
+        {
           'value': 2603,
           'name': '2016-09-22T22:03:52.377Z'
         },
@@ -112,6 +124,10 @@ export class VerticalBarChartComponent implements OnInit {
       'name': 'Myanmar',
       'series': [
         {
+          'value': 4000,
+          'name': '2016-09-24T22:03:52.377Z'
+        },
+        {
           'value': 5987,
           'name': '2016-09-22T22:03:52.377Z'
         },
@@ -136,6 +152,10 @@ export class VerticalBarChartComponent implements OnInit {
     {
       'name': 'Malta',
       'series': [
+        {
+          'value': 3000,
+          'name': '2016-09-24T22:03:52.377Z'
+        },
         {
           'value': 6024,
           'name': '2016-09-22T22:03:52.377Z'

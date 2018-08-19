@@ -47,7 +47,6 @@ export class DashboardComponent implements OnInit {
               private activateRoute: ActivatedRoute) {
     this.notificationsService.getInitialMarketStatus()
       .subscribe(prices => {
-        debugger;
         this.MarketStatus = prices;
       });
 
