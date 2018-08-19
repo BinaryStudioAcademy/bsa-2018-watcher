@@ -94,11 +94,9 @@
             services.AddTransient<ICollectedDataService, CollectedDataService>();
 
             ConfigureFileStorage(services, Configuration);
-
+            ConfigureCosmosDb(services, Configuration);
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
-            services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-
             InitializeAutomapper(services);
 
             ConfigureDatabase(services, Configuration);
@@ -225,6 +223,26 @@
             }
 
             app.UseMvc();
+        }
+
+        public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
+        {
+            var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (enviroment == EnvironmentName.Production)
+            {
+                var cosmosDbString = Configuration.GetConnectionString("AzureCosmosDbConnection");
+                if (!string.IsNullOrWhiteSpace(cosmosDbString))
+                {
+                    services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(cosmosDbString, "DataAccumulatorDb"));
+                }
+            }
+            else
+            {
+                var mongoDbString = Configuration.GetConnectionString("MongoDbConnection");
+                services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(mongoDbString, "DataAccumulatorDb"));
+            }
         }
 
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
