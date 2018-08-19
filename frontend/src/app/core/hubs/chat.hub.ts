@@ -1,26 +1,26 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { HubConnection } from '@aspnet/signalr';
 import { environment } from '../../../environments/environment';
-
+import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import { AuthService } from '../services/auth.service';
 
 import { Message } from '../../shared/models/message.model';
 import { Chat } from '../../shared/models/chat.model';
-
 import { MessageRequest } from '../../shared/requests/message-request';
 import { ChatRequest } from '../../shared/requests/chat-request';
+import { ChatUpdateRequest } from '../../shared/requests/chat-update-request';
 
 
 @Injectable({
     providedIn: 'root'
 })
-export class ChatHubService {
+export class ChatHub {
     private hubConnection: HubConnection;
     private hubName = 'chatsHub';
 
     public messageReceived = new EventEmitter<Message>();
     public chatCreated = new EventEmitter<Chat>();
+    public chatChanged = new EventEmitter<Chat>();
 
     constructor(private authService: AuthService) {
         const firebaseToken = this.authService.getFirebaseToken();
@@ -59,8 +59,9 @@ export class ChatHubService {
             this.chatCreated.emit(data);
         });
 
-        this.hubConnection.on('UserAdded', (data: any) => {
+        this.hubConnection.on('ChatChanged', (data: any) => {
             console.log(data);
+            this.chatChanged.emit(data);
         });
     }
 
@@ -68,11 +69,19 @@ export class ChatHubService {
         this.hubConnection.invoke('InitializeChat', chat);
     }
 
+    public updateChat(chat: ChatUpdateRequest, chatId: number) {
+        this.hubConnection.invoke('UpdateChat', chat, chatId);
+    }
+
     public sendMessage(message: MessageRequest) {
         this.hubConnection.invoke('Send', message);
     }
 
     public addUserToChat(userId: string, chatId: number) {
-        this.hubConnection.invoke('AddUserToChat', userId, chatId);
+        this.hubConnection.invoke('AddUserToChat', chatId, userId);
+    }
+
+    public deleteUserFromChat(userId: string, chatId: number) {
+        this.hubConnection.invoke('DeleteUserFromChat', chatId, userId);
     }
 }
