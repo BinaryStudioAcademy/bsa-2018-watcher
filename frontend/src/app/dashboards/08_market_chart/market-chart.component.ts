@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, ViewChild} from '@angular/core';
 import * as d3 from 'd3';
-import {MarketPrice} from '../models/market-price';
+import {MarketPrice} from '../models';
 
 @Component({
   selector: 'app-market-chart',
@@ -42,7 +42,6 @@ export class MarketChartComponent implements OnChanges {
   }
 
   updateChart() {
-    const _this = this;
     this.formatDate();
 
     // Scale the range of the data again
