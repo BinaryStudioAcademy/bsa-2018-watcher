@@ -43,8 +43,7 @@ export class ChatHub {
                 this.registerOnEvents();
             })
             .catch(err => {
-                console.log('Error while establishing connection, retrying...');
-                setTimeout(this.startConnection(), 10000);
+                console.log('Error while establishing connection');
             });
     }
 
