@@ -40,5 +40,15 @@ namespace Watcher.DataAccess.Repositories
 
             return entityEntry.Entity;
         }
+
+        public async Task DeleteUserChat(UserChat userChat)
+        {
+            if (Context.Entry(userChat).State == EntityState.Detached)
+            {
+                Context.UserChat.Attach(userChat);
+            }
+
+            Context.UserChat.Remove(userChat);
+        }
     }
 }

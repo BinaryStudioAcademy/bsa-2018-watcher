@@ -14,9 +14,13 @@
 
         Task<IEnumerable<UserDto>> GetUsersByChatIdAsync(int id);
 
-        Task<UserDto> AddUserToChat(int chatId, string userId);
+        Task<bool> AddUserToChat(int chatId, string userId);
+
+        Task<bool> DeleteUserFromChat(int chatId, string userId);
 
         Task<ChatDto> GetEntityByIdAsync(int id);
+
+        Task<ChatDto> GetLightEntityByIdAsync(int id);
 
         Task<ChatDto> CreateEntityAsync(ChatRequest request);
 

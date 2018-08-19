@@ -47,8 +47,8 @@ namespace Watcher.Core.Services
         public async Task<MessageDto> GetEntityByIdAsync(int id)
         {
             var sample = await _uow.MessagesRepository.GetFirstOrDefaultAsync(s => s.Id == id,
-                include: messages => messages.Include(m => m.User)
-                    .Include(m => m.Chat));
+                include: x => x
+                    .Include(m => m.User));
 
             if (sample == null) return null;
 

@@ -3,7 +3,7 @@ import { User } from '../models/user.model';
 
 export interface ChatRequest {
   name: string;
-  chatType: ChatType;
+  type: ChatType;
   createdById: string;
   organizationId: number;
   users: User[];
