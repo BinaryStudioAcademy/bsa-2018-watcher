@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
+import { ImageCropperComponent, CropperSettings, ImageCropper } from 'ngx-img-cropper';
+
 
 @Component({
   selector: 'app-user-profile',
@@ -11,11 +13,33 @@ import { ToastrService } from '../../core/services/toastr.service';
   styleUrls: ['./user-profile.component.sass']
 })
 export class UserProfileComponent implements OnInit {
+  data: any;
+
+  @ViewChild('cropper', undefined)
+  cropper: ImageCropperComponent;
+
+  cropperSettings: CropperSettings;
+  display: Boolean = false;
 
   constructor(private fb: FormBuilder,
     private userService: UserService,
     private authService: AuthService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService) {
+
+    this.cropperSettings = new CropperSettings();
+    this.cropperSettings.width = 200;
+    this.cropperSettings.height = 200;
+    this.cropperSettings.minWidth = 100;
+    this.cropperSettings.minHeight = 100;
+    this.cropperSettings.croppedWidth = 70;
+    this.cropperSettings.croppedHeight = 70;
+    this.cropperSettings.canvasWidth = 400;
+    this.cropperSettings.canvasHeight = 400;
+    this.cropperSettings.noFileInput = true;
+    this.cropperSettings.minWithRelativeToResolution = true;
+
+    this.data = {};
+    }
 
   public user: User;
   private userId: string;
@@ -52,12 +76,21 @@ export class UserProfileComponent implements OnInit {
   }
 
   onImageSelected(files: FileList) {
-    const reader = new FileReader();
-    reader.onload = (event: any) => {
-      this.user.photoURL = event.target.result;
+    const image: any = new Image();
+    const reader: FileReader = new FileReader();
+    const that = this;
+    reader.onloadend = (event: any) => {
+      image.src = event.target.result;
+      that.cropper.setImage(image);
+      this.display = true;
     };
 
     reader.readAsDataURL(files.item(0));
+  }
+
+  onCropSave() {
+    this.user.photoURL = this.data.image;
+    this.display = false;
   }
 
   onSubmit() {
