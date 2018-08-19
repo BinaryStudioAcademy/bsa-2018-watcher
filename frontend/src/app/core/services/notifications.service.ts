@@ -1,16 +1,13 @@
 import {EventEmitter, Injectable} from '@angular/core';
-
-import {HttpClient, HubConnection} from '@aspnet/signalr';
+import { HubConnection} from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import {environment} from '../../../environments/environment';
 import {SampleDto} from '../../shared/models/sample-dto.model';
 import {SampleRequest} from '../../shared/models/sample-request.model';
 import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
-import {MarketPrice} from '../../dashboards/models/market-price';
+import {MarketPrice, MarketPriceDate} from '../../dashboards/models';
 import {from, Observable, Subject} from 'rxjs';
-import {User} from '../../shared/models/user.model';
-import {catchError, map} from 'rxjs/operators';
 
 
 @Injectable({
@@ -19,7 +16,7 @@ import {catchError, map} from 'rxjs/operators';
 export class NotificationsService {
   private connectionIsEstablished = false;
   private hubConnection: HubConnection | undefined;
-  private marketSub = new Subject<MarketPrice>();
+  private marketSub = new Subject<MarketPriceDate>();
   public marketSubObservable = from(this.marketSub);
 
   sampleReceived = new EventEmitter<SampleDto>();
@@ -29,25 +26,13 @@ export class NotificationsService {
               private authService: AuthService) {
   }
 
-  public getInitialMarketStatus(): Observable<MarketPrice[]> {
-    // const url = `${environment.server_url}`;
-    // return this.http.get(url, {params})
-    //   .pipe(map(this.extractData),
-    //     catchError(this.handleError));
+  public getInitialMarketStatusOld(): Observable<MarketPrice[]> {
     return this.apiService.get(`/Samples/MarketData`) as Observable<MarketPrice[]>;
   }
 
-  // getUpdates() {
-    // let socket = socketio(this.baseUrl);
-    // let marketSub = new Subject<MarketPrice>();
-    // let marketSubObservable = from(marketSub);
-
-    // socket.on('market', (marketStatus: MarketPrice) => {
-    //   marketSub.next(marketStatus);
-    // });
-
-    // return marketSubObservable;
-  // }
+  public getInitialMarketStatus(): Observable<MarketPriceDate[]> {
+    return this.apiService.get(`/Samples/MarketData`) as Observable<MarketPriceDate[]>;
+  }
 
   connectToSignalR(): void {
     this.createConnection();
