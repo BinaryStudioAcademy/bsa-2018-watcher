@@ -38,7 +38,7 @@
           </div>
         </div>
         <div class="ui-inputgroup">
-          <input type="text" pInputText [(ngModel)]="textMessage" (keyup.enter)="sendMessage" placeholder="Write message">
+          <input type="text" pInputText [(ngModel)]="textMessage" (keyup.enter)="sendMessage()" placeholder="Write message">
           <button pButton icon="fa fa-send" (click)="sendMessage()"></button>
         </div>
       </div>

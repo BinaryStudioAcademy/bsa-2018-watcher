@@ -39,7 +39,7 @@ export class ChatHub {
         this.hubConnection
             .start()
             .then(() => {
-                console.log('Hub connection started');
+                console.log('ChatHub connected');
                 this.registerOnEvents();
             })
             .catch(err => {

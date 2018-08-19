@@ -74,13 +74,14 @@ export class ChatComponent implements OnInit {
     });
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
-      this.selectedChat.messages.push(message);
+      if (this.selectedChat && this.selectedChat.id === message.chatId) {
+        this.selectedChat.messages.push(message);
+      }
     });
 
     this.chatHub.chatChanged.subscribe((chat: Chat) => {
       const index = this.chatList.findIndex(x => x.value.id === chat.id);
       this.chatList.splice(index, 1, { value: chat });
-      this.selectedChat = chat;
     });
   }
 
