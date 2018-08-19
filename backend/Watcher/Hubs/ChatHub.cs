@@ -61,9 +61,10 @@ namespace Watcher.Hubs
             var result = await _chatsService.UpdateEntityByIdAsync(chat, chatId);
             if (!result) return;
 
-            var changedChat = await _chatsService.GetEntityByIdAsync(chatId);
+            var changedChat = await _chatsService.GetLightEntityByIdAsync(chatId);
+            var usersInChat = await _chatsService.GetUsersByChatIdAsync(chatId);
 
-            foreach (var user in changedChat.Users)
+            foreach (var user in usersInChat)
             {
                 await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
             }
@@ -74,11 +75,11 @@ namespace Watcher.Hubs
             var result = await _chatsService.AddUserToChat(chatId, userId);
             if (!result) return;
 
-            var changedChat = await _chatsService.GetEntityByIdAsync(chatId);
+            var usersInChat = await _chatsService.GetUsersByChatIdAsync(chatId);
 
-            foreach (var user in changedChat.Users)
+            foreach (var user in usersInChat)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+                await Clients.User(user.Id).SendAsync("ChatChanged");
             }
         }
 
@@ -87,11 +88,11 @@ namespace Watcher.Hubs
             var result = await _chatsService.DeleteUserFromChat(chatId, userId);
             if (!result) return;
 
-            var changedChat = await _chatsService.GetEntityByIdAsync(chatId);
+            var usersInChat = await _chatsService.GetUsersByChatIdAsync(chatId);
 
-            foreach (var user in changedChat.Users)
+            foreach (var user in usersInChat)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+                await Clients.User(user.Id).SendAsync("ChatChanged");
             }
         }
 
