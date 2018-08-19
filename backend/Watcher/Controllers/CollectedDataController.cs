@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Watcher.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Watcher.Common.Dtos;
+    using Watcher.Common.Dtos.Plots;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
     
@@ -61,6 +63,58 @@ namespace Watcher.Controllers
             }
 
             return Ok(dtos);
+        }
+
+        [HttpGet("memory/{id}")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<MemoryInfo>> GetInstanceMemoryInfo(Guid id)
+        {
+            var dto = await _collectedDataService.GetInstanceMemoryInfo(id);
+            if (dto == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(dto);
+        }
+
+        [HttpGet("percentage/{id}")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<PercentageInfo>> GetInstancePercentageInfo(Guid id)
+        {
+            var dto = await _collectedDataService.GetInstancePercentageInfo(id);
+            if (dto == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(dto);
+        }
+
+        [HttpGet("processes/cpu/{id}")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<ProcessesCpuInfo>> GetProcessesCpuInfo(Guid id)
+        {
+            var dto = await _collectedDataService.GetInstanceProcessCpuInfo(id);
+            if (dto == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(dto);
+        }
+
+        [HttpGet("processes/ram/{id}")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<ProcessesRamInfo>> GetProcessesRamInfo(Guid id)
+        {
+            var dto = await _collectedDataService.GetInstanceProcessRamInfo(id);
+            if (dto == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(dto);
         }
     }
 }

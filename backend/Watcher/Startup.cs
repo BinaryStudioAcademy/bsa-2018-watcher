@@ -98,7 +98,7 @@
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
             services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-            
+
             InitializeAutomapper(services);
 
             ConfigureDatabase(services, Configuration);
