@@ -2,8 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.Timers;
 
 namespace DataCollector
 {
@@ -13,7 +11,7 @@ namespace DataCollector
         private Dictionary<string, PerformanceCounter> systemCounters;
         private Dictionary<string, PerformanceCounter> processCpuCounters;
         private Dictionary<string, PerformanceCounter> processRamCounters;
-        Timer tm;
+
         public Collector()
         {
             data = new ConcurrentBag<CollectedData>();
@@ -29,17 +27,8 @@ namespace DataCollector
             systemCounters.Add("LocalDisk", new PerformanceCounter("LogicalDisk", "% Free Space", "_Total"));
         }
 
-        public void Start()
+        public void Collect()
         {
-            tm = new Timer(500);
-            tm.Elapsed += this.Collect;
-            tm.AutoReset = false;
-            tm.Enabled = true;
-        }
-
-        public void Collect(object obj, ElapsedEventArgs args)
-        {
-            Console.WriteLine($"{DateTime.Now}          Data collecting started");
             var dataItem = new CollectedData();
             dataItem.AvaliableRamBytes = systemCounters["FreeRam"].NextValue();
             dataItem.InterruptsPerSeconds = systemCounters["Interrupts"].NextValue();
@@ -51,11 +40,8 @@ namespace DataCollector
             dataItem.ProcessesCPU = GetProcessesCPU(out int processes);
             dataItem.ProcessesRAM = GetProcessesRAM();
             dataItem.ProcessesCount = processes;
-            dataItem.Time=DateTime.Now;
+            dataItem.Time = DateTime.Now;
             data.Add(dataItem);
-            Console.WriteLine($"{DateTime.Now}          Data collecting finished");
-            Console.WriteLine($"{DateTime.Now}          Collected data:\n{dataItem.ToString()}");
-            tm.Start();
         }
 
         private Dictionary<string,float> GetProcessesCPU(out int processesCount)

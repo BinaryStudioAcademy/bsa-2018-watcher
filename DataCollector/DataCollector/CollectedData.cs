@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace DataCollector
 {
@@ -12,6 +13,7 @@ namespace DataCollector
             ProcessesCPU = new Dictionary<string, float>();
             ProcessesRAM = new Dictionary<string, float>();
         }
+
         public Guid Id { get; set; }
         public int ProcessesCount { get; set; }
         public Dictionary<string, float> ProcessesCPU { get; set; }
@@ -26,25 +28,19 @@ namespace DataCollector
         public float InterruptsPerSeconds { get; set; }
         public float LocalDiskFreeMBytes { get; set; }
         public DateTime Time { get; set; }
+
+
         public static CollectedData operator +(CollectedData firstItem, CollectedData secondItem)
         {
             var processesCPU = firstItem.ProcessesCPU;
-            foreach (var item in secondItem.ProcessesCPU)
-            {
-                if (processesCPU.ContainsKey(item.Key))
-                    processesCPU[item.Key] += secondItem.ProcessesCPU[item.Key];
-                else
-                    processesCPU.Add(item.Key, item.Value);
-            }
+
+            secondItem.ProcessesCPU.ToList()
+                .ForEach(item => ConcatProcessInfo(processesCPU, item));
 
             var processesRAM = firstItem.ProcessesRAM;
-            foreach (var item in secondItem.ProcessesCPU)
-            {
-                if (processesRAM.ContainsKey(item.Key))
-                    processesRAM[item.Key] += secondItem.ProcessesRAM[item.Key];
-                else
-                    processesRAM.Add(item.Key, item.Value);
-            }
+
+            secondItem.ProcessesRAM.ToList()
+                .ForEach(item => ConcatProcessInfo(processesRAM, item));
 
             return new CollectedData()
             {
@@ -62,19 +58,26 @@ namespace DataCollector
             };
         }
 
+        public static void ConcatProcessInfo(
+            Dictionary<string, float> processInfo,
+            KeyValuePair<string, float> item)
+        {
+            if (processInfo.ContainsKey(item.Key))
+                processInfo[item.Key] += item.Value;
+            else
+                processInfo.Add(item.Key, item.Value);
+        }
+
         public static CollectedData operator /(CollectedData item, int scalar)
         {
             var processCPU = new Dictionary<string, float>();
-            foreach (var cpu in item.ProcessesCPU)
-            {
-                processCPU.Add(cpu.Key, cpu.Value / (float)scalar);
-            }
-
             var processRAM = new Dictionary<string, float>();
-            foreach (var ram in item.ProcessesRAM)
-            {
-                processRAM.Add(ram.Key, ram.Value / (float)scalar);
-            }
+
+            item.ProcessesCPU.ToList()
+                .ForEach(cpu => processCPU.Add(cpu.Key, cpu.Value / scalar));
+
+            item.ProcessesRAM.ToList()
+                .ForEach(ram => processRAM.Add(ram.Key, ram.Value / scalar));
 
             return new CollectedData()
             {
@@ -99,7 +102,7 @@ namespace DataCollector
             str.Append($"CPU usage: {this.CpuUsagePercent}%\n");
             str.Append($"Ram avalaible: {this.AvaliableRamBytes} bytes\n");
             str.Append($"Ram usage: {this.RamUsagePercent}%\n");
-            str.Append($"Local dist avalaible: {this.LocalDiskFreeMBytes} MB\n");
+            str.Append($"Local disk avalaible: {this.LocalDiskFreeMBytes} MB\n");
             return str.ToString();
         }
     }
