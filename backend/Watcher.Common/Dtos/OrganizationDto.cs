@@ -32,7 +32,7 @@ namespace Watcher.Common.Dtos
 
         public IList<string> UsersId { get; set; }
 
-        public IList<int> InstancesId { get; set; }
+        public IList<InstanceDto> Instances { get; set; }
 
         public IList<NotificationDto> Notifications { get; set; }
     }

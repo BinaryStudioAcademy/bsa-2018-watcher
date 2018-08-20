@@ -6,6 +6,7 @@ import { Feedback } from '../../shared/models/feedback.model';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
+import { Instance } from '../../shared/models/instance.model';
 
 @Component({
   selector: 'app-organization-list',
@@ -19,7 +20,7 @@ export class OrganizationListComponent implements OnInit {
   user: User;
   display: boolean;
   totalRecords: number;
-  lstInstances: number[];
+  lstInstances: Instance[];
 
   constructor(
               private fb: FormBuilder,
@@ -72,7 +73,7 @@ export class OrganizationListComponent implements OnInit {
     this.organization = organization;
     this.subscribeOrganizationFormToData();
     this.display = true;
-    this.lstInstances = organization.instancesId;
+    this.lstInstances = organization.instances;
   }
 
   onCancel() {
