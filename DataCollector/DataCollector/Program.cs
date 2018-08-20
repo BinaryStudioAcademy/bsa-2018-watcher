@@ -1,81 +1,138 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
+using System.Net.Http;
 using System.Threading;
-using System.Net.Sockets;
-using System.Xml.Serialization;
-using System.Net;
 
 namespace DataCollector
 {
     class Program
     {
-        //static Dictionary<string, string> counters;
+        public static Guid clientIdentifier;
+        public static IConfiguration Configuration { get; set; }
+        public static Timer _timerItem;
+        //event for exiting by pressing ctrl+c
+        private static readonly AutoResetEvent _closing = new AutoResetEvent(false);
+
         static void Main(string[] args)
         {
-            Guid clientIdentifier = Guid.NewGuid();
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+            Configuration = builder.Build();
 
-            //DataReceiver rs = new DataReceiver(9050, IPAddress.Loopback);
-            DataSender s = new DataSender();
-            var collector = new Collector();
-            collector.Start();
-            while (true)
+            var uri = Configuration.GetConnectionString("DataAccumulator");
+            int.TryParse(Configuration.GetSection("Delay").Value, out int delay);
+    
+            clientIdentifier = ConfigureClientIdentifier();
+            if(clientIdentifier == Guid.Empty)
             {
-                Thread.Sleep(10000);
-                var tempDataItem = new CollectedData();
-                var sendDataItem = new CollectedData();
-                sendDataItem.Id = clientIdentifier;
-
-                int count = 0;
-                while (!collector.data.IsEmpty)
+                while(true)
                 {
-                    collector.data.TryTake(out tempDataItem);
-                    sendDataItem += tempDataItem;
-                    count++;
+                    try
+                    {
+                        Console.WriteLine("Enter valid instance id that you got from site");
+                        var id = Guid.Parse(Console.ReadLine());
+                        clientIdentifier = id;
+                        break;
+                    }
+                    catch(Exception)
+                    {
+                        Console.WriteLine("Please, enter valid value");
+                        Thread.Sleep(100);
+                        Console.Clear();
+                    }
                 }
-
-                Console.WriteLine($"{DateTime.Now}         Avarage counted\n");
-                sendDataItem /= count;
-                Console.WriteLine($"{DateTime.Now}         Avarage:\n{sendDataItem.ToString()}");
-                s.Send(sendDataItem, "http://localhost:46059/api/v1/dataaccumulator");
-                Console.WriteLine($"{DateTime.Now}         Data was send");
-                //rs.Receive();
             }
-            /*
-            counters = new Dictionary<string, string>();
-            counters.Add("Processes", "System");
-            counters.Add("% Committed Bytes In Use", "Memory");
-            counters.Add("Available MBytes", "Memory");
-            counters.Add("% Processor Time", "Processor Information");
-            counters.Add("Interrupts/sec", "Processor");
-            counters.Add("% Interrupt Time", "Processor");
-            counters.Add("% Free Space", "LogicalDisk");
-            counters.Add("Free Megabytes", "LogicalDisk");
-            foreach (var item in counters)
-            {
-                var dataElement = GetDataElement(item.Value, item.Key);
-                Console.WriteLine($"Category: {dataElement.CategoryName}, Counter: {dataElement.CounterName}, Value: {dataElement.Value}");
-            }
+            Console.Clear();
+            Console.WriteLine("Initializating...");
+            // sender and collector for timer
+            var payload = (
+                new DataSender(new HttpClient(), uri), 
+                Collector.Instance);
 
-    */
+            // setting timer for collecting proccess
+            _timerItem = new Timer(timercallback, payload, 0, delay);
 
-            Console.ReadKey();
+
+            //two events for exit 
+            Console.CancelKeyPress += (object sender, ConsoleCancelEventArgs e) => {
+                Console.WriteLine("Exiting...");
+                SaveGuid();
+                _closing.Set();
+                Environment.Exit(0);
+            };
+            AppDomain.CurrentDomain.ProcessExit += (object sender, EventArgs e) => SaveGuid();
+            _closing.WaitOne();
         }
 
-        //static VmData GetDataElement(string categoryName, string counterName)
-        //{
-        //    PerformanceCounter counter;
+        protected static void SaveGuid()
+        {
+            var currentDir = Directory.GetCurrentDirectory();
+            if (clientIdentifier != Guid.Empty)
+            {
+                using (StreamWriter writer = new StreamWriter($@"{currentDir}\\guid.txt"))
+                {
+                    writer.Write(clientIdentifier.ToString());
+                }
+            }
+        }
 
-        //    if(!categoryName.Contains("Processor") && categoryName!="LogicalDisk")
-        //        counter = new PerformanceCounter(categoryName, counterName);
-        //    else
-        //        counter = new PerformanceCounter(categoryName, counterName, "_Total");
-        //    var result = new VmData(counter.CategoryName, counter.CounterName);
-        //    result.Value = counter.NextValue();
-        //    Thread.Sleep(500);
-        //    result.Value = counter.NextValue();
-        //    return result;
-        //}
+        protected static Guid ConfigureClientIdentifier()
+        {
+            var currentDir = Directory.GetCurrentDirectory();
+            var fileInfo = new FileInfo($@"{currentDir}\\guid.txt");
+            var guidId = Guid.Empty;
+            if (!fileInfo.Exists) return Guid.Empty;
+            using (StreamReader reader = new StreamReader(fileInfo.OpenRead()))
+            {
+                var guidString = reader.ReadToEnd();
+                if (!Guid.TryParse(guidString, out guidId))
+                    return Guid.Empty;  
+            }
+            return guidId;
+        }
+
+        public static async void timercallback(object payload)
+        {
+            Console.WriteLine($"Current instance: {clientIdentifier}");
+
+            var turple = (ValueTuple<DataSender, Collector>)payload;
+
+            var sender = turple.Item1;
+            var collector = turple.Item2;
+
+            var tempDataItem = new CollectedData();
+            var sendDataItem = new CollectedData();
+
+            int count = 1;
+            while (!collector.data.IsEmpty)
+                {
+                  collector.data.TryTake(out tempDataItem);
+                  sendDataItem += tempDataItem;
+                count++;
+                }
+            sendDataItem /= count;
+            sendDataItem.Id = clientIdentifier;
+
+            Console.Clear();
+            Console.WriteLine($"{DateTime.Now}\n Average info:\n{sendDataItem.ToString()}");
+            try
+            {
+                if (await sender.SendAsync(sendDataItem))
+                {
+                    Console.WriteLine($"{DateTime.Now}\t Data was sent successfully");
+                }
+                else
+                {
+                    Console.WriteLine($"{DateTime.Now}\t Data wasn`t sent successfully");
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"{DateTime.Now}\t Data wasn`t sent successfully");
+            }
+            Console.WriteLine("Press ctr+c for exit");
+        }
     }
 }
