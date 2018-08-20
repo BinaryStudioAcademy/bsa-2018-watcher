@@ -19,13 +19,13 @@ export class OrganizationListComponent implements OnInit {
   user: User;
   display: boolean;
   totalRecords: number;
+  lstInstances: number[];
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private organizationService: OrganizationService,
-    private toastrService: ToastrService
-  ) {
+              private fb: FormBuilder,
+              private authService: AuthService,
+              private organizationService: OrganizationService,
+              private toastrService: ToastrService) {
     this.display = false;
   }
 
@@ -37,7 +37,8 @@ export class OrganizationListComponent implements OnInit {
     email: new FormControl({ value: '', disabled: false }, Validators.email),
     contactNumber: new FormControl({ value: '', disabled: false }, Validators.pattern(this.phoneRegex)),
     webSite: new FormControl({ value: '', disabled: false }, Validators.pattern(this.urlRegex)),
-    description: new FormControl({ value: '', disabled: false })
+    description: new FormControl({ value: '', disabled: false }),
+    isActive: new FormControl({ value: true, disabled: false })
   });
 
   ngOnInit() {
@@ -68,10 +69,10 @@ export class OrganizationListComponent implements OnInit {
   }
 
   showPopup(organization: Organization) {
-    this.organizationForm.reset();
     this.organization = organization;
     this.subscribeOrganizationFormToData();
     this.display = true;
+    this.lstInstances = organization.instancesId;
   }
 
   onCancel() {
