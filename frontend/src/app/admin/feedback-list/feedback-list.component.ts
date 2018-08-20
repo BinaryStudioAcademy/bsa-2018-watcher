@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormControl, FormBuilder } from '@angular/forms';
 import { FeedbackService } from '../../core/services/feedback.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -29,6 +29,7 @@ export class FeedbackListComponent implements OnInit {
   lstFeedbacks: ForShow[];
   display: boolean;
   email: string;
+  totalRecords: number;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +53,7 @@ export class FeedbackListComponent implements OnInit {
     }
     this.feedbackService.getAll().subscribe((value: Feedback[]) => {
       this.sortByDueDate(value);
+      this.totalRecords = value.length;
       this.feedbacks = value;
       this.fillLstFeedbacks();
     });
@@ -103,6 +105,8 @@ export class FeedbackListComponent implements OnInit {
       subscribe(
         value => {
           this.toastrService.success('Added new response');
+          // this.notificationsService.connectToSignalR();
+          // this.notificationsService.send(this.feedback.id.toString(), 'The response to your feedback has been sent to your email.');
         },
         error => {
           this.toastrService.error(`Error ocured status: ${error}`);
