@@ -7,8 +7,14 @@
     <p-tieredMenu #bell [model]="bellItems" [popup]="true"></p-tieredMenu>
     
     <div class="toolbar-item">
-      <button #btn type="button" pButton icon="fa fa-fw fa-bell-o" (click)="bell.toggle($event)"></button>
+      <button #btn type="button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
       <span class="topbar-badge">{{ notificationsNumber }}</span>
+    </div>
+
+    <div class="notifications-block" *ngIf="isNotificationShow">
+      <div class="notification-card" *ngFor="let bellItem of bellItems">
+        <div class="notification-text">{{bellItem.label}}</div>
+      </div>
     </div>
 
     <div class="toolbar-item">

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
+using Watcher.Core.Hubs;
 
 namespace Watcher.Controllers
 {

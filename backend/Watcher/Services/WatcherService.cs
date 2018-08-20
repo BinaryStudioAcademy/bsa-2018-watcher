@@ -1,4 +1,6 @@
-﻿namespace Watcher.Services
+﻿using Watcher.Core.Hubs;
+
+namespace Watcher.Services
 {
     using System;
     using System.Threading;

@@ -1,4 +1,6 @@
-﻿namespace Watcher.Core.MappingProfiles
+﻿using System.Collections.Generic;
+
+namespace Watcher.Core.MappingProfiles
 {
     using AutoMapper;
 
