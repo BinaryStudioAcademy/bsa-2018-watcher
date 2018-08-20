@@ -61,10 +61,13 @@
 				<img src="{{photoUrl}}" alt="profile photo">
 				
 				<input type="file" (change)="onImageSelected($event.target.files)" accept="image/*"/>
-				<p-dialog  [(visible)]="display">
-					<img-cropper #cropper [image]="data" [settings]="cropperSettings" >
-					</img-cropper>
-					<button (click)="onCropSave($event)">Save</button>
+				<p-dialog  [(visible)]="display" [showHeader]="false" appendTo="body" [closable]=false
+				[modal]="true" [responsive]="true" [draggable]="false">
+					<img-cropper #cropper [image]="data" [settings]="cropperSettings" ></img-cropper>
+				
+						<div class="btn-panel centered-text">
+					<button pButton class="ui-button-raised ui-button-success" (click)="onCropSave($event)" label="Save"></button>
+				</div>
 				</p-dialog>
 			</div>
 		</div>
