@@ -4,11 +4,6 @@ import { FeedbackService } from '../../core/services/feedback.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
 
-import { NotificationsService } from '../../core/services/notifications.service';
-import { HubConnection } from '@aspnet/signalr';
-import * as signalR from '@aspnet/signalr';
-import { environment } from '../../../environments/environment';
-
 import { User } from '../../shared/models/user.model';
 import { Feedback } from '../../shared/models/feedback.model';
 import { Response } from '../../shared/models/response.model';
@@ -35,25 +30,16 @@ export class FeedbackListComponent implements OnInit {
   display: boolean;
   email: string;
   totalRecords: number;
-  private hubConnection: HubConnection;
-  public responseCreated = new EventEmitter<Response>();
-  private hubName = 'responcesHub';
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private feedbackService: FeedbackService,
     private toastrService: ToastrService,
-    private notificationsService: NotificationsService,
     private responseService: ResponseService) {
 
     this.lstFeedbacks = new Array<ForShow>();
     this.display = false;
-
-    const firebaseToken = this.authService.getFirebaseToken();
-    const watcherToken = this.authService.getWatcherToken();
-    const connPath = `${environment.server_url}/${this.hubName}?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
-    this.hubConnection = new signalR.HubConnectionBuilder().withUrl('connPath').configureLogging(signalR.LogLevel.Information).build();
   }
 
   responseForm = this.fb.group({
@@ -71,8 +57,6 @@ export class FeedbackListComponent implements OnInit {
       this.feedbacks = value;
       this.fillLstFeedbacks();
     });
-
-    this.registerOnEvents();
 
     this.responseService.getAll().subscribe((value: Response[]) => this.responses = value);
   }
@@ -121,20 +105,11 @@ export class FeedbackListComponent implements OnInit {
       subscribe(
         value => {
           this.toastrService.success('Added new response');
-          this.responseCreated.subscribe((Dto: Response) => console.log('response created'));
           // this.notificationsService.connectToSignalR();
           // this.notificationsService.send(this.feedback.id.toString(), 'The response to your feedback has been sent to your email.');
         },
         error => {
           this.toastrService.error(`Error ocured status: ${error}`);
         });
-  }
-
-  private registerOnEvents(): void {
-    this.hubConnection.on('ResponseCreated', (Dto: Response, secondParam: string, thirdParam: number) => {
-      console.log(`secondParam: ${secondParam}, thirdParam: ${thirdParam}`);
-      console.log('Created Dto: ' + JSON.stringify(Dto) + Dto);
-      this.responseCreated.emit(Dto);
-    });
   }
 }
