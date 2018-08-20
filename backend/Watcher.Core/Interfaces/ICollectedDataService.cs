@@ -17,5 +17,7 @@ namespace Watcher.Core.Interfaces
 
         Task<PercentageInfo> GetInstancePercentageInfo(Guid id);
 
+        Task<CollectedDataDto> GetFakeData();
+
     }
 }

@@ -61,7 +61,7 @@ namespace Watcher.Controllers
             {
                 return NoContent();
             }
-
+            var kek = await _collectedDataService.GetFakeData();
             return Ok(dtos);
         }
 
