@@ -68,7 +68,7 @@ export class UserProfileComponent implements OnInit {
       const control = this.userForm.get(field);
       control.setValue(this.user[field]);
       control.enable();
-      this.photoUrl = `${environment.server_url}/${this.user.photoURL}`;
+      this.photoUrl = this.convertToUrl(this.user.photoURL)
     });
 
     this.userForm.valueChanges.subscribe(value => {
@@ -76,6 +76,14 @@ export class UserProfileComponent implements OnInit {
         this.user[field] = this.userForm.get(field).value;
       });
     });
+  }
+
+  convertToUrl(filePath: string): string {
+    const firstSymbols = filePath.slice(0, 7)
+    if (firstSymbols === 'images/') {
+      filePath = `${environment.server_url}/${filePath}`;
+    }
+    return filePath;
   }
 
   onImageSelected(upload) {
@@ -93,6 +101,7 @@ export class UserProfileComponent implements OnInit {
 
   onCropSave() {
     this.user.photoURL = this.data.image;
+    this.photoUrl = this.data.image;
     this.display = false;
   }
 
