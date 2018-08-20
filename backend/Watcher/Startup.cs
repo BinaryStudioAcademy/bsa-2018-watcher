@@ -199,10 +199,14 @@
             app.UseConfiguredSwagger();
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
+
+            string imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+            Directory.CreateDirectory(imageFolder);
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")),
+                FileProvider = new PhysicalFileProvider(imageFolder),
             });
+
             app.UseAuthentication();
 
             app.UseWatcherAuth();
