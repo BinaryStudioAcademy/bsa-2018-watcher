@@ -8,10 +8,4 @@
     <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Microsoft.Extensions.Options">
-      <HintPath>C:\Users\Alexander\.nuget\packages\microsoft.extensions.options\2.1.1\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
