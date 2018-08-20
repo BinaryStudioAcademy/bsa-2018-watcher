@@ -59,12 +59,16 @@
 				</div>
 			</form>
 		</div>
-		<div class="ui-g-12 ui-md-8 ui-lg-2">
+		<div class="ui-g-12 ui-md-8 ui-lg-5">
 			<!-- <user-picture [pictureUrl]="user.photoURL"></user-picture> -->
 			<div class="label">Profile photo</div>
 			<img src="{{photoUrl}}" alt="profile photo">
 			
-			<input type="file" (change)="onImageSelected($event.target.files)" accept="image/*"/>
+			<!-- <input type="file" (change)="onImageSelected($event.target.files)" accept="image/*"/> -->
+
+			<!-- <p-fileUpload mode="basic" accept="image/*" (onUpload)="onImageSelected($event)" url="./upload.php" auto="true"></p-fileUpload> -->
+			<p-fileUpload name="myfile[]" (uploadHandler)="onImageSelected($event.files)" customUpload="true" ></p-fileUpload>
+
 			<p-dialog  [(visible)]="display" [showHeader]="false" appendTo="body" [closable]=false
 			[modal]="true" [responsive]="true" [draggable]="false">
 				<img-cropper #cropper [image]="data" [settings]="cropperSettings" ></img-cropper>

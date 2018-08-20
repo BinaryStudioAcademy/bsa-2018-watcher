@@ -78,17 +78,17 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  onImageSelected(files: FileList) {
+  onImageSelected(upload) {
     const image: any = new Image();
     const reader: FileReader = new FileReader();
     const that = this;
-    reader.onloadend = (event: any) => {
-      image.src = event.target.result;
+    reader.onloadend = (eventLoad: any) => {
+      image.src = eventLoad.target.result;
       that.cropper.setImage(image);
       this.display = true;
     };
 
-    reader.readAsDataURL(files.item(0));
+    reader.readAsDataURL(upload[0]);
   }
 
   onCropSave() {
@@ -99,6 +99,7 @@ export class UserProfileComponent implements OnInit {
   onSubmit() {
     if (this.userForm.valid) {
       this.userService.update(this.userId, this.user).subscribe(value => {
+
         this.authService.updateCurrentUser(this.user);
         this.toastrService.success('Profile was updated');
       },

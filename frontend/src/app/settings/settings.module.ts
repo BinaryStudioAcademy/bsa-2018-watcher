@@ -13,6 +13,7 @@ import { SettingsRoutingModule } from './settings-routing.module';
 import { UserPictureComponent } from './user-picture/user-picture.component';
 import { ImageCropperModule } from 'ngx-img-cropper';
 import { DialogModule } from 'primeng/dialog';
+import { FileUploadModule } from 'primeng/fileupload';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { DialogModule } from 'primeng/dialog';
     SettingsRoutingModule,
     ToggleButtonModule,
     ImageCropperModule,
-    DialogModule
+    DialogModule,
+    FileUploadModule
   ],
   declarations: [
     SettingsComponent,
