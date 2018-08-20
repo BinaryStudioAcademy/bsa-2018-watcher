@@ -103,7 +103,7 @@ namespace Watcher.Controllers
                 return StatusCode(500);
             }
 
-            return NoContent();
+            return Ok(result);
         }
 
 

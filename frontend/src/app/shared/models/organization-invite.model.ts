@@ -1,7 +1,8 @@
 
 import { Organization } from './organization.model';
-import { User } from 'firebase';
+
 import { OrganizationInviteState } from './organization-invite-state.enum';
+import { User } from './user.model';
 
 export interface OrganizationInvite  {
    id: number;
