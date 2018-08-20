@@ -101,7 +101,7 @@ namespace DataCollector
             str.Append($"Instance id: {this.Id}\n");
             str.Append($"Processes count: {this.ProcessesCount}\n");
             str.Append($"CPU usage: {this.CpuUsagePercent}%\n");
-            str.Append($"Ram avalaible: {this.AvaliableRamBytes} bytes\n");
+            str.Append($"Ram avalaible: {this.AvaliableRamBytes} MB\n");
             str.Append($"Ram usage: {this.RamUsagePercent}%\n");
             str.Append($"Local disk avalaible: {this.LocalDiskFreeMBytes} MB\n");
             return str.ToString();
