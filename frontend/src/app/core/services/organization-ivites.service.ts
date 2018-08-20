@@ -20,15 +20,15 @@ export class OrganizationInvitesService {
     return this.apiService.get(`/${this.ctrlUrl}/${link}`);
   }
 
-  create(organizationInvite: OrganizationInvite) {
+  create(organizationInvite: OrganizationInvite): Observable<OrganizationInvite> {
     return this.apiService.post(`/${this.ctrlUrl}`, organizationInvite);
   }
 
-  update(id: number, organization: OrganizationInvite) {
+  update(id: number, organization: OrganizationInvite): Observable<boolean> {
     return this.apiService.put(`/${this.ctrlUrl}/${id}`, organization);
   }
 
-  delete(id: number): Observable<OrganizationInvite> {
+/*   delete(id: number): Observable<boolean> {
     return this.apiService.delete(`/${this.ctrlUrl}/${id}`);
-  }
+  } */
 }
