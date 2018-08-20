@@ -11,19 +11,23 @@ namespace Watcher.Core.Services
     using Microsoft.EntityFrameworkCore;
     using Watcher.Common.Dtos;
     using Watcher.Common.Enums;
+    using Watcher.Common.Helpers.Utils;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
+    using Watcher.Core.Providers;
     using Watcher.DataAccess.Interfaces;
 
     public class UsersService : IUsersService
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly IFileStorageProvider _fileStorageProvider;
 
-        public UsersService(IUnitOfWork uow, IMapper mapper)
+        public UsersService(IUnitOfWork uow, IMapper mapper, IFileStorageProvider fileStorageProvider)
         {
             _uow = uow;
             _mapper = mapper;
+            _fileStorageProvider = fileStorageProvider;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllEntitiesAsync()
@@ -107,6 +111,11 @@ namespace Watcher.Core.Services
                    Organization = defaultOrganization,
                    UserId = entity.Id
                });
+
+            string photoPath = FileHelpers.DownloadImageFromUrl(entity.PhotoURL);
+            string containerName = "watcher";
+            string newPhotoUrl = await _fileStorageProvider.UploadFileAsync(photoPath, containerName);
+            entity.PhotoURL = newPhotoUrl;
 
             var createdUser = await _uow.UsersRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
