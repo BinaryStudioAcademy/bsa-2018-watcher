@@ -68,6 +68,7 @@ export class OrganizationListComponent implements OnInit {
   }
 
   showPopup(organization: Organization) {
+    this.organizationForm.reset();
     this.organization = organization;
     this.subscribeOrganizationFormToData();
     this.display = true;
@@ -81,6 +82,7 @@ export class OrganizationListComponent implements OnInit {
   onSubmit() {
     this.display = false;
     if (this.organizationForm.valid) {
+      this.organization.theme = null;
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
           this.toastrService.success('Organization was updated');

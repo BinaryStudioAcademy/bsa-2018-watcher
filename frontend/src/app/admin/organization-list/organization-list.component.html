@@ -16,7 +16,7 @@
         <th style="width:14%">WEBSITE</th>
         <th>CONTACT NUMBER</th>
         <th style="width:7%">IS ACTIVE</th>
-        <th style="width:10%">THEME NAME</th>
+        <th style="width:10%">THEME ID</th>
         <th style="width:7%">EDIT</th>
       </tr>
     </ng-template>
@@ -33,7 +33,7 @@
           <i *ngIf="organization.isActive" class="fa fa-check-circle-o" style="font-size: 25px"></i>
           <i *ngIf="!organization.isActive" class="fa fa-times-circle-o" style="font-size: 25px"></i>
         </td>
-        <td class="center">{{organization.theme.name}}</td>
+        <td class="center">{{organization.themeId}}</td>
         <td>
           <div class="center">
             <button pButton type="button " label="Edit " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(organization)"></button>
