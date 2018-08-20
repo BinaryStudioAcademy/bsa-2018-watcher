@@ -43,6 +43,8 @@
 
         private IOrganizationInvitesRepository _organizationInvitesRepository;
 
+        private INotificationsRepository _notificationsRepository;
+
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -205,6 +207,18 @@
                     _organizationInvitesRepository = new OrganizationInvitesRepository(_context, _mapper);
                 }
                 return _organizationInvitesRepository;
+            }
+        }
+
+        public INotificationsRepository NotificationsRepository
+        {
+            get
+            {
+                if (_notificationsRepository == null)
+                {
+                    _notificationsRepository = new NotificationRepository(_context, _mapper);
+                }
+                return _notificationsRepository;
             }
         }
 

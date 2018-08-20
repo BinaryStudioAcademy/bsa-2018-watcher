@@ -35,6 +35,8 @@
 
         IOrganizationInvitesRepository OrganizationInvitesRepository { get; }
 
+        INotificationsRepository NotificationsRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }
