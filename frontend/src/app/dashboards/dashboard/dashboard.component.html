@@ -34,26 +34,32 @@
 
     <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuitems.length > 1">
       <div class="dashboard-item">
-        <app-line-chart></app-line-chart>
+        <app-percentage-bar-chart></app-percentage-bar-chart>
       </div>
       <div class="dashboard-item">
-        <app-multi-series-line-chart></app-multi-series-line-chart>
-      </div>
-      <div class="dashboard-item">
-        <app-bar-chart></app-bar-chart>
-      </div>
-      <div class="dashboard-item">
-        <app-stacked-bar-chart></app-stacked-bar-chart>
-      </div>
-      <div class="dashboard-item">
-        <app-brush-zoom></app-brush-zoom>
-      </div>
-      <div class="dashboard-item">
-        <app-market-chart [marketStatus]="marketStatusToPlot"></app-market-chart>
+        <app-percentage-line-chart></app-percentage-line-chart>
       </div>
       <div class="dashboard-item">
         <app-vertical-bar-chart></app-vertical-bar-chart>
       </div>
+      <!--<div class="dashboard-item">-->
+        <!--<app-market-chart [marketStatus]="marketStatusToPlot"></app-market-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+      <!--<app-line-chart></app-line-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+      <!--<app-multi-series-line-chart></app-multi-series-line-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+      <!--<app-bar-chart></app-bar-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+      <!--<app-stacked-bar-chart></app-stacked-bar-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+      <!--<app-brush-zoom></app-brush-zoom>-->
+      <!--</div>-->
       <!--<div class="dashboard-item">-->
         <!--<app-pie-chart></app-pie-chart>-->
       <!--</div>-->

@@ -20,6 +20,7 @@ import {MarketChartComponent} from './08_market_chart/market-chart.component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import { VerticalBarChartComponent } from './09_vertical_bar_chart/vertical-bar-chart.component';
 import { PercentageBarChartComponent } from './10_percentage-bar-chart/percentage-bar-chart.component';
+import { PercentageLineChartComponent } from './11_percentage-line-chart/percentage-line-chart.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { PercentageBarChartComponent } from './10_percentage-bar-chart/percentag
     DonutChartComponent,
     MarketChartComponent,
     VerticalBarChartComponent,
-    PercentageBarChartComponent
+    PercentageBarChartComponent,
+    PercentageLineChartComponent
   ],
   exports: []
 })

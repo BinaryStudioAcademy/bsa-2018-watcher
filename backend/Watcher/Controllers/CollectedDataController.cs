@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.AspNetCore.Mvc;
-
-namespace Watcher.Controllers
+﻿namespace Watcher.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
     using Watcher.Common.Dtos;
     using Watcher.Common.Dtos.Plots;
-    using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
-    
+
     /// <summary>   
     /// Controller to Manage Samples
     /// </summary>
@@ -20,7 +19,7 @@ namespace Watcher.Controllers
     [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
-    public class CollectedDataController: ControllerBase
+    public class CollectedDataController : ControllerBase
     {
         /// <summary>
         /// The Samples Service service
@@ -28,14 +27,11 @@ namespace Watcher.Controllers
         private readonly ICollectedDataService _collectedDataService;
 
         /// <summary>
-        /// Notifications Hub Context
-        /// </summary>
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SamplesController"/> class. 
+        /// Initializes a new instance of the <see cref="CollectedDataController"/> class. 
         /// </summary>
         /// <param name="service">
-        /// Samples service
-
+        /// The service.
+        /// </param>
         public CollectedDataController(ICollectedDataService service)
         {
             _collectedDataService = service;
@@ -65,7 +61,7 @@ namespace Watcher.Controllers
             return Ok(dtos);
         }
 
-        [HttpGet("memory/{id}")]
+        [HttpGet("Memory/{id}")]
         [AllowAnonymous]
         public virtual async Task<ActionResult<MemoryInfo>> GetInstanceMemoryInfo(Guid id)
         {
@@ -78,11 +74,11 @@ namespace Watcher.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("percentage/{id}")]
+        [HttpGet("Percentage/{id}")]
         [AllowAnonymous]
-        public virtual async Task<ActionResult<PercentageInfo>> GetInstancePercentageInfo(Guid id)
+        public virtual async Task<ActionResult<PercentageInfo>> GetInstancePercentageInfo([FromRoute] Guid id, [FromQuery] int count)
         {
-            var dto = await _collectedDataService.GetInstancePercentageInfo(id);
+            var dto = await _collectedDataService.GetInstancePercentageInfo(id, count);
             if (dto == null)
             {
                 return NoContent();

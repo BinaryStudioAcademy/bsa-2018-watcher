@@ -1,11 +1,8 @@
 ﻿namespace Watcher.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-
-    using AutoMapper;
 
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.DataAccessLayer.Interfaces;
@@ -19,6 +16,7 @@
     using Watcher.Common.Dtos;
     using Watcher.Common.Dtos.Plots;
     using Watcher.Core.Interfaces;
+    using Watcher.Core.Services;
     using Watcher.Hubs;
     using Watcher.Utils;
 
@@ -38,11 +36,6 @@
         /// The logger.
         /// </summary>
         private readonly ILogger<WatcherService> _logger;
-
-        /// <summary>
-        /// The Mapper.
-        /// </summary>
-        private readonly IMapper _mappler;
 
         /// <summary>
         /// Configurations for watcher service
@@ -69,13 +62,14 @@
         /// <param name="options">
         /// Options
         /// </param>
-        /// <param name="scopeFactory"></param>
+        /// <param name="scopeFactory">
+        /// Scope Factory
+        /// </param>
         public WatcherService(IHubContext<NotificationsHub> hubContext, 
                               ITransientService service, 
                               ILogger<WatcherService> logger,
                               IOptions<TimeServiceConfiguration> options,
-                              IServiceScopeFactory scopeFactory,
-                              IMapper mapper)
+                              IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
             _hubContext = hubContext;
@@ -108,55 +102,68 @@
                     using (var scope = _scopeFactory.CreateScope())
                     {
                         var repo = scope.ServiceProvider.GetRequiredService<IDataAccumulatorRepository<CollectedData>>();
-                        data = new CollectedData
-                                       {
-                                           Id = Guid.NewGuid(),
-                                           AvaliableRamBytes = 2505.33325195312f,
-                                           CpuUsagePercent = 69.68777465820312f,
-                                           InterruptsPerSeconds = 24424.375f,
-                                           InterruptsTimePercent = 24426.060546875f,
-                                           LocalDiskFreeMBytes = 883704,
-                                           ProcessesCount = 123,
-                                           Time = DateTime.UtcNow,
-                                           LocalDiskFreeSpacePercent = 79.61161041259766f,
-                                           ProcessesCPU = new Dictionary<string, float>
-                                                              {
-                                                                  {"Idle", 121.80587005615234f },
-                                                                  {"121.80587005615234", 8.40002727508545f },
-                                                                  {"lsass", 2.516136407852173f },
-                                                                  {"NotePad", 80.80587005615234f },
-                                                                  {"VS Code", 220.80587005615234f }
-                                                              },
-                                           ProcessesRAM = new Dictionary<string, float>
-                                                              {
-                                                                  {"Idle", 57.23391342163086f },
-                                                                  {"System", 1813.6470947265625f },
-                                                                  {"Secure System", 25586.666015625f },
-                                                                  { "Registry", 9269.3330078125f },
-                                                                  { "NotePad", 3269.3330078125f }
-                                                              },
-                                           RamUsagePercent = 76.6187973022461f
-                                       };
+
+                        data = CollectedDataService.GetFakeData();
+
+                        //data = new CollectedData
+                        //               {
+                        //                   Id = Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"),
+                        //                   CpuUsagePercent = 69.68777465820312f,
+                        //                   RamUsagePercent = 76.6187973022461f,
+                        //                   LocalDiskFreeSpacePercent = 79.61161041259766f,
+                        //                   InterruptsTimePercent = 26.060546875f,
+                        //                   AvaliableRamBytes = 2505.33325195312f,
+                        //                   LocalDiskFreeMBytes = 883704,
+                        //                   InterruptsPerSeconds = 24424.375f,
+                        //                   ProcessesCount = 123,
+                        //                   Time = DateTime.UtcNow,
+                        //                   ProcessesCPU = new Dictionary<string, float>
+                        //                                      {
+                        //                                          {"Idle", 121.80587005615234f },
+                        //                                          {"121.80587005615234", 8.40002727508545f },
+                        //                                          {"lsass", 2.516136407852173f },
+                        //                                          {"NotePad", 80.80587005615234f },
+                        //                                          {"VS Code", 220.80587005615234f }
+                        //                                      },
+                        //                   ProcessesRAM = new Dictionary<string, float>
+                        //                                      {
+                        //                                          {"Idle", 57.23391342163086f },
+                        //                                          {"System", 1813.6470947265625f },
+                        //                                          {"Secure System", 25586.666015625f },
+                        //                                          { "Registry", 9269.3330078125f },
+                        //                                          { "NotePad", 3269.3330078125f }
+                        //                                      }
+                        //               };
+
                         await repo.AddEntity(data);
 
                         data = await repo.GetEntity(data.InternalId);
                     }
 
-                    var info = _mappler.Map<CollectedData, MemoryInfo>(data);
+                    var info = new PercentageInfo()
+                                   {
+                                       Id = data.Id,
+                                       Time = data.Time,
+                                       RamUsagePercent = data.RamUsagePercent,
+                                       InterruptsTimePercent = data.InterruptsTimePercent,
+                                       LocalDiskFreeSpacePercent = data.LocalDiskFreeSpacePercent,
+                                       CpuUsagePercent = data.CpuUsagePercent
+                    };
+                    MarketPrice.UpdateMarket();
+                    var mp = MarketPrice.MarketPositions[0];
 
-                    await _hubContext.Clients.All.SendAsync("CollectedMemoryInfoTick", info, cancellationToken: stoppingToken);
+                    await _hubContext.Clients.All.SendAsync("CollectedPercentageInfoTick", info, cancellationToken: stoppingToken);
 
-                    // MarketPrice.UpdateMarket();
-                    // var mp = MarketPrice.MarketPositions[0];
+                    await _hubContext.Clients.All.SendAsync("MarketTick", mp, cancellationToken: stoppingToken);
 
-                     // await _hubContext.Clients.Group("Market Data Feed").SendAsync("MarketTick", mp);
+                    // await _hubContext.Clients.Group("Market Data Feed").SendAsync("MarketTick", mp);
+
                     // var sample = await _service.GenerateRandomSampleDtoAsync();
 
                     // _logger.LogInformation($"Sending generated sample id: {sample.Id}.");
 
                     // Method Name on Angular Client: "DataFeedTick",
                     // Single argument of that method is SampleDto
-                    // await _hubContext.Clients.All.SendAsync("MarketTick", mp, cancellationToken: stoppingToken);
                 }
                 catch (Exception e)
                 {

@@ -8,7 +8,7 @@ import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
 import {MarketPrice, MarketPriceDate} from '../../dashboards/models';
 import {from, Observable, Subject} from 'rxjs';
-import {MemoryInfo} from '../../dashboards/models/memory-info';
+import {PercentageInfo} from '../../dashboards/models/percentage-info';
 
 
 @Injectable({
@@ -20,8 +20,8 @@ export class NotificationsService {
   private marketSub = new Subject<MarketPriceDate>();
   public marketSubObservable = from(this.marketSub);
 
-  private infoSub = new Subject<MemoryInfo>();
-  public infoSubObservable = from(this.marketSub);
+  private infoSub = new Subject<PercentageInfo>();
+  public infoSubObservable = from(this.infoSub);
 
   sampleReceived = new EventEmitter<SampleDto>();
   connectionEstablished = new EventEmitter<Boolean>();
@@ -36,6 +36,12 @@ export class NotificationsService {
 
   public getInitialMarketStatus(): Observable<MarketPriceDate[]> {
     return this.apiService.get(`/Samples/MarketData`) as Observable<MarketPriceDate[]>;
+  }
+
+  public getInitialPercentageInfo(): Observable<PercentageInfo[]> { // TODO: For Line Chart
+    // Get first instance
+    const iId = '7FE193DE-B3DC-4DF5-8646-A81EDBE047E2'; // this.authService.getCurrentUser().lastPickedOrganization.instancesId[0];
+    return this.apiService.get(`/CollectedData/Percentage/${iId}?count=50`) as Observable<PercentageInfo[]>;
   }
 
   connectToSignalR(): void {
@@ -100,7 +106,7 @@ export class NotificationsService {
       }
     );
 
-    this.hubConnection.on('CollectedMemoryInfoTick', (info: MemoryInfo) => {
+    this.hubConnection.on('CollectedPercentageInfoTick', (info: PercentageInfo) => {
         this.infoSub.next(info);
       }
     );

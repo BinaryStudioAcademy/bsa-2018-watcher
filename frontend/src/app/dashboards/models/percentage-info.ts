@@ -1,8 +1,8 @@
 export interface PercentageInfo {
-  Id: string;
-  Time: Date;
-  CpuUsagePercent: number;
-  RamUsagePercent: number;
-  InterruptsTimePercent: number;
-  LocalDiskFreeSpacePercent: number;
+  id: string;
+  time: Date;
+  cpuUsagePercent: number;
+  ramUsagePercent: number;
+  interruptsTimePercent: number;
+  localDiskFreeSpacePercent: number;
 }

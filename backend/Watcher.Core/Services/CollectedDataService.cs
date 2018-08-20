@@ -1,15 +1,18 @@
-﻿using AutoMapper;
-using DataAccumulator.DataAccessLayer.Entities;
-using DataAccumulator.DataAccessLayer.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using AutoMapper;
+
+using DataAccumulator.DataAccessLayer.Entities;
+using DataAccumulator.DataAccessLayer.Interfaces;
+
 using Watcher.Common.Dtos.Plots;
 using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Services
 {
-    public class CollectedDataService: ICollectedDataService
+    public class CollectedDataService : ICollectedDataService
     {
         private IDataAccumulatorRepository<CollectedData> _repository;
         private IMapper _mapper;
@@ -38,14 +41,14 @@ namespace Watcher.Core.Services
             return info;
         }
 
-        public async Task<PercentageInfo> GetInstancePercentageInfo(Guid id)
+        public async Task<List<PercentageInfo>> GetInstancePercentageInfo(Guid id, int count)
         {
-            var entity = await _repository.GetEntity(id);
+            var entity = await _repository.GetPercentageInfoByEntityIdAsync(id, count);
             if (entity == null)
             {
                 return null;
             }
-            var info = _mapper.Map<CollectedData, PercentageInfo>(entity);
+            var info = _mapper.Map<List<CollectedData>, List<PercentageInfo>>(entity);
             return info;
         }
 
@@ -104,7 +107,7 @@ namespace Watcher.Core.Services
             return await _repository.RemoveEntity(id);
         }
 
-        public static CollectedDataDto GetFakeData()
+        public static CollectedData GetFakeData()
         {
             var processNames = new List<string>()
             {
@@ -127,9 +130,9 @@ namespace Watcher.Core.Services
                 ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
                 ProcessesRAM.Add(processNames[i], (float)random.NextDouble() * 1000);
             }
-            var data = new CollectedDataDto()
+            var data = new CollectedData()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"),
                 Time = DateTime.UtcNow,
                 CpuUsagePercent = (float)random.NextDouble() * 100,
                 RamUsagePercent = (float)random.NextDouble() * 100,
@@ -139,8 +142,10 @@ namespace Watcher.Core.Services
                 InterruptsPerSeconds = random.Next(0, 100),
                 LocalDiskFreeMBytes = random.Next(0, 1000000000),
                 ProcessesCPU = ProcessesCPU,
-                ProcessesRAM = ProcessesRAM
+                ProcessesRAM = ProcessesRAM,
+                ProcessesCount = random.Next(0, 300)
             };
+
             return data;
         }
     }

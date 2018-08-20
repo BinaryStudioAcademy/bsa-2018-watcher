@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using DataAccumulator.DataAccessLayer.Data;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
-using DataAccumulator.Shared.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -147,6 +146,23 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         public Task<bool> EntityExistsAsync(Guid id)
         {
             return _context.Datasets.Find(entity => entity.Id == id).AnyAsync();
+        }
+
+        public Task<List<CollectedData>> GetPercentageInfoByEntityIdAsync(Guid id, int count)
+        {
+            try
+            {
+                return _context.Datasets.Find(data => data.Id == id)
+                                        .SortByDescending(cd => cd.Time)
+                                        .Limit(count)
+                                        .ToListAsync();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         // It creates a sample compound index 

@@ -1,5 +1,4 @@
-﻿
-namespace Watcher.Controllers
+﻿namespace Watcher.Controllers
 {
     using System.Threading.Tasks;
 
@@ -105,9 +104,5 @@ namespace Watcher.Controllers
 
             return NoContent();
         }
-
-
-
-
     }
 }
