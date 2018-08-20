@@ -67,7 +67,7 @@
 			<!-- <input type="file" (change)="onImageSelected($event.target.files)" accept="image/*"/> -->
 
 			<!-- <p-fileUpload mode="basic" accept="image/*" (onUpload)="onImageSelected($event)" url="./upload.php" auto="true"></p-fileUpload> -->
-			<p-fileUpload name="myfile[]" (uploadHandler)="onImageSelected($event.files)" customUpload="true" ></p-fileUpload>
+			<p-fileUpload name="myfile[]" accept="image/*" (uploadHandler)="onImageSelected($event.files)" customUpload="true" maxFileSize="2000000"></p-fileUpload>
 
 			<p-dialog  [(visible)]="display" [showHeader]="false" appendTo="body" [closable]=false
 			[modal]="true" [responsive]="true" [draggable]="false">
