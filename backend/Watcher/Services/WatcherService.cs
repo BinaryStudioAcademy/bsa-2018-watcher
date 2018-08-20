@@ -146,8 +146,8 @@
 
                     await _hubContext.Clients.All.SendAsync("CollectedMemoryInfoTick", info, cancellationToken: stoppingToken);
 
-                    //MarketPrice.UpdateMarket();
-                    //var mp = MarketPrice.MarketPositions[0];
+                    // MarketPrice.UpdateMarket();
+                    // var mp = MarketPrice.MarketPositions[0];
 
                      // await _hubContext.Clients.Group("Market Data Feed").SendAsync("MarketTick", mp);
                     // var sample = await _service.GenerateRandomSampleDtoAsync();

@@ -26,7 +26,7 @@ export class PercentageBarChartComponent implements OnInit {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
 
-  marketData: any[] = [
+  data: any[] = [
     {
       name: 'Market Data Open',
       series: [
@@ -55,10 +55,10 @@ export class PercentageBarChartComponent implements OnInit {
         const openData = prices.map(p => this.toSeriesData(p, true));
         const closeData = prices.map(p => this.toSeriesData(p, false));
 
-        this.marketData[0].series.push(...openData);
-        this.marketData[1].series.push(...closeData);
+        this.data[0].series.push(...openData);
+        this.data[1].series.push(...closeData);
 
-        this.marketData = [...this.marketData];
+        this.data = [...this.data];
         this.subscribeToMarket();
       });
   }
@@ -84,11 +84,11 @@ export class PercentageBarChartComponent implements OnInit {
     this.notificationsService.subscribeToMarketDataFeed();
     this.notificationsService.marketSubObservable.subscribe((latestStatus: MarketPriceDate) => {
       console.log(latestStatus);
-      this.marketData[0].series.push({ name: new Date(latestStatus.date), value: latestStatus.open });
-      this.marketData[1].series.push({ name: new Date(latestStatus.date), value: latestStatus.close });
-      this.marketData[0].series.shift();
-      this.marketData[1].series.shift();
-      this.marketData = [...this.marketData];
+      this.data[0].series.push({ name: new Date(latestStatus.date), value: latestStatus.open });
+      this.data[1].series.push({ name: new Date(latestStatus.date), value: latestStatus.close });
+      this.data[0].series.shift();
+      this.data[1].series.shift();
+      this.data = [...this.data];
     });
   }
 
