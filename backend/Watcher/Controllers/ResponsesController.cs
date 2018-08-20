@@ -28,12 +28,7 @@ namespace Watcher.Controllers
         /// </summary>
         private readonly IResponseService _responseService;
         private readonly IEmailProvider _emailProvider;
-
-        /// <summary>
-        /// Notifications Hub Context
-        /// </summary>
-        private readonly IHubContext<NotificationsHub> _notificationsHubContext;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ResponsesController"/> class. 
         /// </summary>
@@ -41,11 +36,10 @@ namespace Watcher.Controllers
         /// Responses service
         /// </param>
         /// <param name="provider"></param>
-        public ResponsesController(IResponseService service, IEmailProvider provider, IHubContext<NotificationsHub> hubContext)
+        public ResponsesController(IResponseService service, IEmailProvider provider)
         {
             _responseService = service;
             _emailProvider = provider;
-            _notificationsHubContext = hubContext;
         }
 
         /// <summary>
@@ -128,8 +122,7 @@ namespace Watcher.Controllers
                 await _emailProvider.SendMessageOneToOne("watcher@net.com", "Thanks for feedback", request.Feedback.User.Email,
                     request.Text, "");
             }
-
-            await _notificationsHubContext.Clients.All.SendAsync("ResponseCreated", dto);
+            
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
     }
