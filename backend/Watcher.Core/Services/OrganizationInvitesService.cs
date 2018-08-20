@@ -13,6 +13,7 @@ namespace Watcher.Core.Services
     using Watcher.DataAccess.Interfaces;
     using System.Text;
     using System;
+    using System.Linq;
     using Watcher.Common.Enums;
 
     public class OrganizationInvitesService: IOrganizationInvitesService
@@ -105,7 +106,13 @@ namespace Watcher.Core.Services
                 {
                     if (String.IsNullOrWhiteSpace(entity.InviteEmail) != true) // send Email
                     {
-                        await _emailProvider.SendMessageOneToOne("5avel@hotmail.com", "Test Invite", entity.InviteEmail, "Test Body", "");
+                        OrganizationInvite inviteFromBd = await _uow.OrganizationInvitesRepository.GetFirstOrDefaultAsync(x => x.Id == entity.Id,
+                                                                include: invite => invite.Include(i => i.Organization)
+                                                                                         .Include(i => i.CreatedByUser));
+
+                        string body = $"User {inviteFromBd.CreatedByUser.DisplayName} granted you access to the organization {inviteFromBd.Organization.Name}. \n ";
+                        body += $"Your invite link: https://bsa-watcher.azurewebsites.net/user/invite/{entity.Link}";
+                        await _emailProvider.SendMessageOneToOne("invite@watcher.com", "WATCHER Invite", entity.InviteEmail, body, "");
                     }
                 }
                 var updated = await _uow.OrganizationInvitesRepository.UpdateAsync(entity);
