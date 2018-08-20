@@ -4,6 +4,7 @@ namespace Watcher.Core.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -139,6 +140,15 @@ namespace Watcher.Core.Services
         {
             var entity = _mapper.Map<UserUpdateRequest, User>(request);
             entity.Id = id;
+
+            var existingEntity = await GetEntityByIdAsync(id);
+
+            if (!existingEntity.PhotoURL.Equals(entity.PhotoURL))
+            {
+                string containerName = "watcher";
+                string newPhotoUrl = await _fileStorageProvider.UploadFileBase64Async(entity.PhotoURL, containerName);
+                entity.PhotoURL = newPhotoUrl;
+            }
 
             // In returns updated entity, you could do smth with it or just leave as it is
             var updated = await _uow.UsersRepository.UpdateAsync(entity);

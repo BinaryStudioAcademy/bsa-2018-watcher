@@ -7,7 +7,7 @@ using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
-    public class FileStorageProvider:IFileStorageProvider
+    public class FileStorageProvider : IFileStorageProvider
     {
         private CloudStorageAccount StorageAccount;
 
@@ -53,6 +53,11 @@ namespace Watcher.Core.Providers
                 PublicAccess = BlobContainerPublicAccessType.Blob
             };
             await container.SetPermissionsAsync(permissions);
+        }
+
+        public Task<string> UploadFileBase64Async(string path, string containerName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Watcher.Common.Requests
         public DateTime CreatedAt { get; set; }
         public string DisplayName { get; set; }
         public string Bio { get; set; }
+        public string PhotoURL { get; set; }
         
         public RoleDto Role { get; set; }
 
