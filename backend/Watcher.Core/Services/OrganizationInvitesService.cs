@@ -94,6 +94,8 @@ namespace Watcher.Core.Services
                     OrganizationId = entity.OrganizationId
                 });
 
+                invitedUser.LastPickedOrganizationId = entity.OrganizationId;
+
                 await _uow.UsersRepository.UpdateAsync(invitedUser);
 
                 var updated = await _uow.OrganizationInvitesRepository.UpdateAsync(entity);
