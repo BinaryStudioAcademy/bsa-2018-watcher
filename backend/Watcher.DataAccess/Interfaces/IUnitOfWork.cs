@@ -34,6 +34,7 @@
         IOrganizationInvitesRepository OrganizationInvitesRepository { get; }
 
         IChartsRepository ChartsRepository { get;  }
+
         Task<bool> SaveAsync();
     }
 }

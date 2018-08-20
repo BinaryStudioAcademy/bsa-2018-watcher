@@ -1,9 +1,14 @@
 /deep/.ui-accordion-header
 	margin: 0 !important
+	a
+		padding: 4px !important
+	
 
 /deep/.ui-accordion-content
 	padding: 0 !important
+	border-top: 0
 	height: 300px
+	overflow-x: hidden !important
 
 /deep/.ui-inputtext
 	border-radius: 0 !important
@@ -16,44 +21,65 @@
 	bottom: 0
 	right: 190px
 	width: 250px
-
-	.conversation-new-panel-content
-		display: grid
-		height: 100%
-		grid-template-rows: auto auto 1fr auto
-
 	.conversation-panel-content
 		height: 100%
 		display: grid
 		grid-template-rows: 1fr auto
-
 	.conversation-message-list
-		overflow-y: auto	
-	
-	/deep/.ui-card
-		background-color: #f2f6fc
-		margin: 10px 5px 
+		overflow-y: auto
+		.message
+			float: right
+			margin: 2px 5px
+			padding: 5px
+			border-radius: 5px
+			word-wrap: break-word
+			font-size: 0.9em
+			width: 70%
+            font-size: 0.9em
+            word-wrap: break-word
+			background-color: #E3E3E3
+		.received-message
+			float: left
+			border: 3px solid #E3E3E3
+			background-color: #FFF
+
 
 .chat-list-panel
 	position: fixed
 	bottom: 0
 	right: 20px
-	width: 150px	
+	width: 150px
+	/deep/.ui-listbox
+		border: 0
+	/deep/.ui-listbox-item
+		display: inline-flex !important
+		width: 100%
 
-/deep/.ui-panelmenu
-	.ui-panelmenu-header-link
-		height: 38px
-		padding: 7px 14px !important
-
-	.ui-panelmenu-content
-		height: 300px
-		overflow-y: auto
-	
-.panel-close-icon
+.icon
     cursor: pointer
-    margin: 3px
-    float: right
+    margin: 4px
 
-.panel-close-icon:hover
-    	color: gray
+.icon:hover
+    color: gray
 
+.icon-right
+	float: right
+
+.field
+    margin: 3px 0
+
+.title
+	float: right
+	width: 70%
+	overflow: hidden
+	white-space: nowrap
+	text-overflow: ellipsis
+
+.member-list
+	justify-content: center
+	display: flex
+	.member-item
+		max-width: 95%
+		overflow: hidden
+		white-space: nowrap
+		text-overflow: ellipsis

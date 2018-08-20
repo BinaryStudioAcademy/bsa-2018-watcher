@@ -1,26 +1,26 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { HubConnection } from '@aspnet/signalr';
 import { environment } from '../../../environments/environment';
-
+import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 import { Message } from '../../shared/models/message.model';
 import { Chat } from '../../shared/models/chat.model';
-
 import { MessageRequest } from '../../shared/requests/message-request';
 import { ChatRequest } from '../../shared/requests/chat-request';
+import { ChatUpdateRequest } from '../../shared/requests/chat-update-request';
 
 
 @Injectable({
     providedIn: 'root'
 })
-export class ChatHubService {
+export class ChatHub {
     private hubConnection: HubConnection;
     private hubName = 'chatsHub';
 
     public messageReceived = new EventEmitter<Message>();
     public chatCreated = new EventEmitter<Chat>();
+    public chatChanged = new EventEmitter<Chat>();
 
     constructor(private authService: AuthService) {
         const firebaseToken = this.authService.getFirebaseToken();
@@ -39,12 +39,11 @@ export class ChatHubService {
         this.hubConnection
             .start()
             .then(() => {
-                console.log('Hub connection started');
+                console.log('ChatHub connected');
                 this.registerOnEvents();
             })
             .catch(err => {
-                console.log('Error while establishing connection, retrying...');
-                setTimeout(this.startConnection(), 5000);
+                console.log('Error while establishing connection');
             });
     }
 
@@ -55,16 +54,19 @@ export class ChatHubService {
 
         this.hubConnection.on('ChatCreated', (data: any) => {
             this.chatCreated.emit(data);
-            console.log('ChatCreated');
         });
 
-        this.hubConnection.on('UserAdded', (data: any) => {
-            console.log('UserAdded');
+        this.hubConnection.on('ChatChanged', (data: any) => {
+            this.chatChanged.emit(data);
         });
     }
 
-    public initializeChat(chat: ChatRequest, userId: string) {
-        this.hubConnection.invoke('InitializeChat', chat, userId);
+    public createNewChat(chat: ChatRequest) {
+        this.hubConnection.invoke('InitializeChat', chat);
+    }
+
+    public updateChat(chat: ChatUpdateRequest, chatId: number) {
+        this.hubConnection.invoke('UpdateChat', chat, chatId);
     }
 
     public sendMessage(message: MessageRequest) {
@@ -72,6 +74,10 @@ export class ChatHubService {
     }
 
     public addUserToChat(userId: string, chatId: number) {
-        this.hubConnection.invoke('AddUserToChat', userId, chatId);
+        this.hubConnection.invoke('AddUserToChat', chatId, userId);
+    }
+
+    public deleteUserFromChat(userId: string, chatId: number) {
+        this.hubConnection.invoke('DeleteUserFromChat', chatId, userId);
     }
 }
