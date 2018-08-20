@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
 import { ImageCropperComponent, CropperSettings, ImageCropper } from 'ngx-img-cropper';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -14,6 +15,7 @@ import { ImageCropperComponent, CropperSettings, ImageCropper } from 'ngx-img-cr
 })
 export class UserProfileComponent implements OnInit {
   data: any;
+  photoUrl: string;
 
   @ViewChild('cropper', undefined)
   cropper: ImageCropperComponent;
@@ -66,6 +68,7 @@ export class UserProfileComponent implements OnInit {
       const control = this.userForm.get(field);
       control.setValue(this.user[field]);
       control.enable();
+      this.photoUrl = `${environment.server_url}/${this.user.photoURL}`;
     });
 
     this.userForm.valueChanges.subscribe(value => {

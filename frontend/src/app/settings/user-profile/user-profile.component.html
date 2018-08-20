@@ -58,7 +58,7 @@
 			<div class="ui-g-12 ui-md-8 ui-lg-2">
 				<!-- <user-picture [pictureUrl]="user.photoURL"></user-picture> -->
 				<div class="label">Profile photo</div>
-				<img src="{{user.photoURL}}" alt="profile photo">
+				<img src="{{photoUrl}}" alt="profile photo">
 				
 				<input type="file" (change)="onImageSelected($event.target.files)" accept="image/*"/>
 				<p-dialog  [(visible)]="display">

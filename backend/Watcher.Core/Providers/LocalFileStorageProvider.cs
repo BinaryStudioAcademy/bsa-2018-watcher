@@ -20,7 +20,7 @@ namespace Watcher.Core.Providers
                     parent = Directory.GetParent(parent).FullName;
                 }
 
-                var directory = new DirectoryInfo(parent + @"\" + "content");
+                var directory = new DirectoryInfo(Path.Combine(parent, "wwwroot", "images"));
                 if (!directory.Exists) directory.Create();
 
                 var file = new FileInfo(path);

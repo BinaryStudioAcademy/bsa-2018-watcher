@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
 
@@ -114,7 +116,7 @@
                               {
                                   if ((!context.Request.Path.Value.Contains("/notifications")
                                       && !context.Request.Path.Value.Contains("/chatsHub"))
-                                      
+
                                       || !context.Request.Query.ContainsKey("Authorization")
                                       || !context.Request.Query.ContainsKey("WatcherAuthorization"))
                                       return Task.CompletedTask;
@@ -197,7 +199,10 @@
             app.UseConfiguredSwagger();
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")),
+            });
             app.UseAuthentication();
 
             app.UseWatcherAuth();

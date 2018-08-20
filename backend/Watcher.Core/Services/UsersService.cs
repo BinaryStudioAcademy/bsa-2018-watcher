@@ -14,7 +14,6 @@ namespace Watcher.Core.Services
     using Watcher.Common.Helpers.Utils;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
-    using Watcher.Core.Providers;
     using Watcher.DataAccess.Interfaces;
 
     public class UsersService : IUsersService
