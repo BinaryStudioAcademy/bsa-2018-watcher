@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Net.Http;
 using System.Threading;
 
 namespace DataCollector
@@ -12,7 +13,6 @@ namespace DataCollector
         public static Timer _timerItem;
         private static readonly AutoResetEvent _closing = new AutoResetEvent(false);
 
-
         static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder()
@@ -22,7 +22,7 @@ namespace DataCollector
 
             var uri = Configuration.GetConnectionString("DataAccumulator");
             int.TryParse(Configuration.GetSection("Delay").Value, out int delay);
-
+    
             clientIdentifier = ConfigureClientIdentifier();
             if(clientIdentifier == Guid.Empty)
             {
@@ -38,25 +38,35 @@ namespace DataCollector
                     catch(Exception)
                     {
                         Console.WriteLine("Please, enter valid value");
-                        Thread.Sleep(10);
+                        Thread.Sleep(100);
                         Console.Clear();
                     }
                 }
             }
             Console.Clear();
 
-            Console.WriteLine($"Current instance: {clientIdentifier}");
-            var sender = new DataSender(new System.Net.Http.HttpClient(), uri);
+            // sender and collector for timer
+            var payload = (
+                new DataSender(new HttpClient(), uri), 
+                Collector.Instance);
 
-            _timerItem = new Timer(timercallback, sender, 0, delay);
+            // setting timer for collecting proccess
+            _timerItem = new Timer(timercallback, payload, 0, delay);
 
-            Console.CancelKeyPress += new ConsoleCancelEventHandler(OnExit);
+
+            //two events for exit 
+            Console.CancelKeyPress += (object sender, ConsoleCancelEventArgs e) => {
+                Console.WriteLine("Exiting...");
+                SaveGuid();
+                _closing.Set();
+                Environment.Exit(0);
+            };
+            AppDomain.CurrentDomain.ProcessExit += (object sender, EventArgs e) => SaveGuid();
             _closing.WaitOne();
         }
 
-        protected static void OnExit(object sender, ConsoleCancelEventArgs args)
+        protected static void SaveGuid()
         {
-            Console.WriteLine("Exiting...");
             var currentDir = Directory.GetCurrentDirectory();
             if (clientIdentifier != Guid.Empty)
             {
@@ -65,8 +75,6 @@ namespace DataCollector
                     writer.Write(clientIdentifier.ToString());
                 }
             }
-            _closing.Set();
-            Environment.Exit(0);
         }
 
         protected static Guid ConfigureClientIdentifier()
@@ -87,36 +95,39 @@ namespace DataCollector
         public static async void timercallback(object payload)
         {
             Console.WriteLine($"Current instance: {clientIdentifier}");
-            var sender = (DataSender)payload;
-            var collector = new Collector();
-            try
-            {
-                collector.Collect();
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine("Error on this iteration");
-                Console.WriteLine(e.Message);
-            }
+
+            var turple = (ValueTuple<DataSender, Collector>)payload;
+
+            var sender = turple.Item1;
+            var collector = turple.Item2;
 
             var tempDataItem = new CollectedData();
             var sendDataItem = new CollectedData();
 
+            int count = 1;
             while (!collector.data.IsEmpty)
                 {
                   collector.data.TryTake(out tempDataItem);
                   sendDataItem += tempDataItem;
+                count++;
                 }
+            sendDataItem /= count;
+            sendDataItem.Id = clientIdentifier;
 
             Console.Clear();
             Console.WriteLine($"{DateTime.Now}\n Average info:\n{sendDataItem.ToString()}");
-
-            sendDataItem.Id = clientIdentifier;
-            if (await sender.SendAsync(sendDataItem))
+            try
             {
-                Console.WriteLine($"{DateTime.Now}\t Data was sent successfully");
+                if (await sender.SendAsync(sendDataItem))
+                {
+                    Console.WriteLine($"{DateTime.Now}\t Data was sent successfully");
+                }
+                else
+                {
+                    Console.WriteLine($"{DateTime.Now}\t Data wasn`t sent successfully");
+                }
             }
-            else
+            catch (Exception)
             {
                 Console.WriteLine($"{DateTime.Now}\t Data wasn`t sent successfully");
             }

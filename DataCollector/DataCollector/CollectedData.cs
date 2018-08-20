@@ -98,6 +98,7 @@ namespace DataCollector
         public override string ToString()
         {
             StringBuilder str = new StringBuilder();
+            str.Append($"Instance id: {this.Id}\n");
             str.Append($"Processes count: {this.ProcessesCount}\n");
             str.Append($"CPU usage: {this.CpuUsagePercent}%\n");
             str.Append($"Ram avalaible: {this.AvaliableRamBytes} bytes\n");
