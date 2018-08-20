@@ -6,9 +6,7 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
-
-    using DataAccumulator.BusinessLayer.Interfaces;
-    using DataAccumulator.BusinessLayer.Services;
+    
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.DataAccessLayer.Interfaces;
     using DataAccumulator.DataAccessLayer.Repositories;

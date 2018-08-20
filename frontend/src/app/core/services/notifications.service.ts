@@ -8,6 +8,7 @@ import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
 import {MarketPrice, MarketPriceDate} from '../../dashboards/models';
 import {from, Observable, Subject} from 'rxjs';
+import {MemoryInfo} from '../../dashboards/models/memory-info';
 
 
 @Injectable({
@@ -18,6 +19,9 @@ export class NotificationsService {
   private hubConnection: HubConnection | undefined;
   private marketSub = new Subject<MarketPriceDate>();
   public marketSubObservable = from(this.marketSub);
+
+  private infoSub = new Subject<MemoryInfo>();
+  public infoSubObservable = from(this.marketSub);
 
   sampleReceived = new EventEmitter<SampleDto>();
   connectionEstablished = new EventEmitter<Boolean>();
@@ -90,8 +94,14 @@ export class NotificationsService {
   }
 
   private registerOnServerEvents(): void {
+
     this.hubConnection.on('MarketTick', (marketStatus: MarketPriceDate) => {
         this.marketSub.next(marketStatus);
+      }
+    );
+
+    this.hubConnection.on('CollectedMemoryInfoTick', (info: MemoryInfo) => {
+        this.infoSub.next(info);
       }
     );
 

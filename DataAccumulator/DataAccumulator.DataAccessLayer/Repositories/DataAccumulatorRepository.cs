@@ -38,10 +38,25 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             {
                 ObjectId internalId = GetInternalId(id);
 
-                var list =  await _context.Datasets
+                var list = await _context.Datasets
                     .Find(data => data.Id == id || data.InternalId == internalId)
                     .ToListAsync();
                 return list[list.Count - 1];
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<CollectedData> GetEntity(ObjectId id)
+        {
+            try
+            {
+                var filter = Builders<CollectedData>.Filter.Eq(i => i.InternalId, id);
+
+                return await _context.Datasets.Find(filter).FirstOrDefaultAsync();
             }
             catch (Exception e)
             {

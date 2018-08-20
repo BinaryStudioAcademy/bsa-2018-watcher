@@ -49,7 +49,7 @@ namespace Watcher.Controllers
 
         // GET: /chats/user/:id
         [HttpGet("User/{id}", Name = "GetChatByUserID")]
-        public virtual async Task<ActionResult<ChatDto>> GetByUserId(int id)
+        public virtual async Task<ActionResult<ChatDto>> GetByUserId(string id)
         {
             var dto = await _chatsService.GetEntitiesByUserIdAsync(id);
             if (dto == null)

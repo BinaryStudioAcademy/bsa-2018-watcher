@@ -5,11 +5,15 @@ using DataAccumulator.DataAccessLayer.Entities;
 
 namespace DataAccumulator.DataAccessLayer.Interfaces
 {
+    using MongoDB.Bson;
+
     public interface IDataAccumulatorRepository<TEntity> where TEntity : IEntity
     {
         Task<IEnumerable<CollectedData>> GetAllEntities();
 
         Task<CollectedData> GetEntity(Guid id);
+
+        Task<CollectedData> GetEntity(ObjectId id);
 
         // query after multiple parameters
         Task<IEnumerable<CollectedData>> GetEntity(DateTime time);

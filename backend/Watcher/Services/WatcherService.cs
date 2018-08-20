@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using AutoMapper;
+
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.DataAccessLayer.Interfaces;
 
@@ -14,6 +17,7 @@
     using Microsoft.Extensions.Options;
 
     using Watcher.Common.Dtos;
+    using Watcher.Common.Dtos.Plots;
     using Watcher.Core.Interfaces;
     using Watcher.Hubs;
     using Watcher.Utils;
@@ -34,6 +38,11 @@
         /// The logger.
         /// </summary>
         private readonly ILogger<WatcherService> _logger;
+
+        /// <summary>
+        /// The Mapper.
+        /// </summary>
+        private readonly IMapper _mappler;
 
         /// <summary>
         /// Configurations for watcher service
@@ -65,7 +74,8 @@
                               ITransientService service, 
                               ILogger<WatcherService> logger,
                               IOptions<TimeServiceConfiguration> options,
-                              IServiceScopeFactory scopeFactory)
+                              IServiceScopeFactory scopeFactory,
+                              IMapper mapper)
         {
             _scopeFactory = scopeFactory;
             _hubContext = hubContext;
@@ -94,10 +104,11 @@
             {
                 try
                 {
+                    CollectedData data = null;
                     using (var scope = _scopeFactory.CreateScope())
                     {
                         var repo = scope.ServiceProvider.GetRequiredService<IDataAccumulatorRepository<CollectedData>>();
-                        var data = new CollectedData
+                        data = new CollectedData
                                        {
                                            Id = Guid.NewGuid(),
                                            AvaliableRamBytes = 2505.33325195312f,
@@ -127,10 +138,17 @@
                                            RamUsagePercent = 76.6187973022461f
                                        };
                         await repo.AddEntity(data);
+
+                        data = await repo.GetEntity(data.InternalId);
                     }
-                    
-                    MarketPrice.UpdateMarket();
-                    var mp = MarketPrice.MarketPositions[0];
+
+                    var info = _mappler.Map<CollectedData, MemoryInfo>(data);
+
+                    await _hubContext.Clients.All.SendAsync("CollectedMemoryInfoTick", info, cancellationToken: stoppingToken);
+
+                    //MarketPrice.UpdateMarket();
+                    //var mp = MarketPrice.MarketPositions[0];
+
                      // await _hubContext.Clients.Group("Market Data Feed").SendAsync("MarketTick", mp);
                     // var sample = await _service.GenerateRandomSampleDtoAsync();
 
@@ -138,7 +156,7 @@
 
                     // Method Name on Angular Client: "DataFeedTick",
                     // Single argument of that method is SampleDto
-                    await _hubContext.Clients.All.SendAsync("MarketTick", mp, cancellationToken: stoppingToken);
+                    // await _hubContext.Clients.All.SendAsync("MarketTick", mp, cancellationToken: stoppingToken);
                 }
                 catch (Exception e)
                 {
@@ -147,7 +165,7 @@
 
                 // Repeat this message feed every period seconds
                 // await Task.Delay(TimeSpan.FromMilliseconds(_options.Value.Period), stoppingToken);
-                await Task.Delay(5000, stoppingToken);
+                await Task.Delay(10000, stoppingToken);
             }
 
             _logger.LogError("Watcher Service stopped! Unexpected error occurred!");

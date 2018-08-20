@@ -104,7 +104,7 @@ namespace Watcher.Core.Services
             return await _repository.RemoveEntity(id);
         }
 
-        public Task<CollectedDataDto> GetFakeData()
+        public static CollectedDataDto GetFakeData()
         {
             var processNames = new List<string>()
             {
@@ -141,7 +141,7 @@ namespace Watcher.Core.Services
                 ProcessesCPU = ProcessesCPU,
                 ProcessesRAM = ProcessesRAM
             };
-            return Task.FromResult(data);
+            return data;
         }
     }
 }
