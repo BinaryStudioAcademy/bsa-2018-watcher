@@ -8,12 +8,16 @@ namespace DataCollector
 {
     public class Collector
     {
+        private static Lazy<Collector> value = new Lazy<Collector>(() => new Collector());
+        public static Collector Instance => value.Value;
+
         public ConcurrentBag<CollectedData> data;
         private Dictionary<string, PerformanceCounter> systemCounters;
         private Dictionary<string, PerformanceCounter> processCpuCounters;
         private Dictionary<string, PerformanceCounter> processRamCounters;
         Timer tm;
-        public Collector()
+
+        private Collector()
         {
             data = new ConcurrentBag<CollectedData>();
             processCpuCounters = new Dictionary<string, PerformanceCounter>();
@@ -26,34 +30,34 @@ namespace DataCollector
             systemCounters.Add("RAM", new PerformanceCounter("Memory", "% Committed Bytes In Use"));
             systemCounters.Add("InterruptsTime", new PerformanceCounter("Processor", "Interrupts/sec", "_Total"));
             systemCounters.Add("LocalDisk", new PerformanceCounter("LogicalDisk", "% Free Space", "_Total"));
+            Start();
         }
-
         public void Start()
         {
             tm = new Timer(500);
-            tm.Elapsed += this.Collect;
+            tm.Elapsed += (object sender, ElapsedEventArgs e) => Collect();
             tm.AutoReset = false;
             tm.Enabled = true;
         }
-
-        public void Collect(object obj, ElapsedEventArgs args)
+        public void Collect()
         {
-            Console.WriteLine($"{DateTime.Now}          Data collecting started");
-            var dataItem = new CollectedData();
-            dataItem.AvaliableRamBytes = systemCounters["FreeRam"].NextValue();
-            dataItem.InterruptsPerSeconds = systemCounters["Interrupts"].NextValue();
-            dataItem.LocalDiskFreeMBytes = systemCounters["DiskFreeMb"].NextValue();
-            dataItem.CpuUsagePercent= systemCounters["CPU"].NextValue();
-            dataItem.RamUsagePercent = systemCounters["RAM"].NextValue();
-            dataItem.InterruptsTimePercent = systemCounters["InterruptsTime"].NextValue();
-            dataItem.LocalDiskFreeSpacePercent = systemCounters["LocalDisk"].NextValue();
-            dataItem.ProcessesCPU = GetProcessesCPU(out int processes);
-            dataItem.ProcessesRAM = GetProcessesRAM();
-            dataItem.ProcessesCount = processes;
-            dataItem.Time=DateTime.Now;
-            data.Add(dataItem);
-            Console.WriteLine($"{DateTime.Now}          Data collecting finished");
-            Console.WriteLine($"{DateTime.Now}          Collected data:\n{dataItem.ToString()}");
+            try
+            {
+                var dataItem = new CollectedData();
+                dataItem.AvaliableRamBytes = systemCounters["FreeRam"].NextValue();
+                dataItem.InterruptsPerSeconds = systemCounters["Interrupts"].NextValue();
+                dataItem.LocalDiskFreeMBytes = systemCounters["DiskFreeMb"].NextValue();
+                dataItem.CpuUsagePercent = systemCounters["CPU"].NextValue();
+                dataItem.RamUsagePercent = systemCounters["RAM"].NextValue();
+                dataItem.InterruptsTimePercent = systemCounters["InterruptsTime"].NextValue();
+                dataItem.LocalDiskFreeSpacePercent = systemCounters["LocalDisk"].NextValue();
+                dataItem.ProcessesCPU = GetProcessesCPU(out int processes);
+                dataItem.ProcessesRAM = GetProcessesRAM();
+                dataItem.ProcessesCount = processes;
+                dataItem.Time = DateTime.Now;
+                data.Add(dataItem);
+            }
+            catch (Exception) { }
             tm.Start();
         }
 

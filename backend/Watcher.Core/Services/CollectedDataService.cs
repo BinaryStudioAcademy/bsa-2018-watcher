@@ -103,5 +103,45 @@ namespace Watcher.Core.Services
 
             return await _repository.RemoveEntity(id);
         }
+
+        public Task<CollectedDataDto> GetFakeData()
+        {
+            var processNames = new List<string>()
+            {
+                "Google_Chrome",
+                "Steam_updater",
+                "explorer",
+                "devenv",
+                "Telegram",
+                "slack",
+                "zoom",
+                "mongodbcompass"
+            };
+            var random = new Random();
+            var ProcessesCPU = new Dictionary<string, float>();
+            var ProcessesRAM = new Dictionary<string, float>();
+
+            int processes = random.Next(0, 7);
+            for (int i = 0; i < processes; i++)
+            {
+                ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
+                ProcessesRAM.Add(processNames[i], (float)random.NextDouble() * 1000);
+            }
+            var data = new CollectedDataDto()
+            {
+                Id = Guid.NewGuid(),
+                Time = DateTime.UtcNow,
+                CpuUsagePercent = (float)random.NextDouble() * 100,
+                RamUsagePercent = (float)random.NextDouble() * 100,
+                InterruptsTimePercent = (float)random.NextDouble() * 100,
+                LocalDiskFreeSpacePercent = (float)random.NextDouble() * 100,
+                AvaliableRamBytes = random.Next(100, 4096),
+                InterruptsPerSeconds = random.Next(0, 100),
+                LocalDiskFreeMBytes = random.Next(0, 1000000000),
+                ProcessesCPU = ProcessesCPU,
+                ProcessesRAM = ProcessesRAM
+            };
+            return Task.FromResult(data);
+        }
     }
 }
