@@ -109,6 +109,7 @@
                 .RuleFor(o => o.Platform, f => f.PickRandom("Windows", "Linux"))
                 .RuleFor(o => o.Title, f => f.PickRandom("Instance" + f.Random.Number(999)))
                 .RuleFor(o => o.Address, f => f.Internet.Mac())
+                .RuleFor(o => o.IsActive, true)
                 .RuleFor(o => o.OrganizationId, f => f.PickRandom(organizations).Id);
 
             var instances = instanceFaker.Generate(amount).ToArray();

@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { OrganizationService } from '../../core/services/organization.service';
+import { InstanceService } from '../../core/services/instance.service';
 import { User } from '../../shared/models/user.model';
 import { Feedback } from '../../shared/models/feedback.model';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
 import { Instance } from '../../shared/models/instance.model';
+import { InstanceRequest } from '../../dashboards/models/instance-request.model';
 
 @Component({
   selector: 'app-organization-list',
@@ -26,6 +28,7 @@ export class OrganizationListComponent implements OnInit {
               private fb: FormBuilder,
               private authService: AuthService,
               private organizationService: OrganizationService,
+              private instanceService: InstanceService,
               private toastrService: ToastrService) {
     this.display = false;
   }
@@ -81,10 +84,22 @@ export class OrganizationListComponent implements OnInit {
     this.organization = null;
   }
 
+  getNewInstance(instance: Instance) {
+    const newInstance: InstanceRequest = {
+      title: instance.title,
+      address: instance.address,
+      platform: instance.platform,
+      isActive: true,
+      organizationId: instance.organization.id
+    };
+    return newInstance;
+  }
+
   onSubmit() {
     this.display = false;
     if (this.organizationForm.valid) {
       this.organization.theme = null;
+      this.organization.instances = this.lstInstances;
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
           this.toastrService.success('Organization was updated');
@@ -95,12 +110,28 @@ export class OrganizationListComponent implements OnInit {
       );
     } else {
       this.toastrService.error('Form was filled incorrectly');
-
       Object.keys(this.organizationForm.controls).forEach(field => {
         const control = this.organizationForm.get(field);
         control.markAsDirty({ onlySelf: true });
       });
     }
-
+    console.log(this.lstInstances.length);
+     // this.lstInstances.forEach(instance => {
+      const instance: InstanceRequest = this.getNewInstance(this.lstInstances[0]);
+        this.instanceService.update(instance, this.lstInstances[0].id).subscribe(value => {
+          this.toastrService.success('Instance was updated');
+        },
+        error => {
+          this.toastrService.error(`Error ocured status: ${error.message}`);
+        }
+      );
+        /*this.instanceService.updateDto(this.lstInstances[0].id, this.lstInstances[0]).subscribe(
+        value => {
+          this.toastrService.success('Instance was updated');
+        },
+        error => {
+          this.toastrService.error(`Error ocured status: ${error.message}`);
+        }
+      );  });*/
   }
 }
