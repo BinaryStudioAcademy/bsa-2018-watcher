@@ -1,4 +1,7 @@
-﻿namespace Watcher.Controllers
+﻿using Microsoft.AspNetCore.SignalR;
+using Watcher.Hubs;
+
+namespace Watcher.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -25,7 +28,7 @@
         /// </summary>
         private readonly IResponseService _responseService;
         private readonly IEmailProvider _emailProvider;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ResponsesController"/> class. 
         /// </summary>
@@ -119,7 +122,7 @@
                 await _emailProvider.SendMessageOneToOne("watcher@net.com", "Thanks for feedback", request.Feedback.User.Email,
                     request.Text, "");
             }
-
+            
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
     }
