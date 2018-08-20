@@ -9,7 +9,7 @@ using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
-    public class ServiceBusProvider : IServiceBusProvider
+    public class ServiceBusProvider : IServiceBusProvider, IDisposable
     {
         private readonly IQueueClient queueClient;
         private readonly ILogger<ServiceBusProvider> _logger;
@@ -38,22 +38,17 @@ namespace Watcher.Core.Providers
             queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
         }
 
-        private async Task ProcessMessagesAsync(Message message, CancellationToken token)
+        private async Task<string> ProcessMessagesAsync(Message message, CancellationToken token)
         {
             // Process the message
             var m = Encoding.UTF8.GetString(message.Body);
-            // HandleMessageFromServiceBus();
+            // Handle Message From Service Bus
             
             // Complete the message so that it is not received again.
             // This can be done only if the queueClient is created in ReceiveMode.PeekLock mode (which is default).
             await queueClient.CompleteAsync(message.SystemProperties.LockToken);
 
-            //It's TEMPORARY FIX. Implement proper Dispose pattern implementation!!!!
-            await CloseClient();
-
-            // Note: Use the cancellationToken passed as necessary to determine if the queueClient has already been closed.
-            // If queueClient has already been Closed, you may chose to not call CompleteAsync() or AbandonAsync() etc. calls 
-            // to avoid unnecessary exceptions.
+            return m;
         }
 
         private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
@@ -67,19 +62,21 @@ namespace Watcher.Core.Providers
             return Task.CompletedTask;
         }
 
-        #region Dispose
+        #region IDisposable Support
         // To detect redundant calls
-        private bool disposedValue = false; 
+        private bool disposedValue; 
                 
         public async Task CloseClient()
         {
             if (!disposedValue)
             {
                 await queueClient.CloseAsync();
-                
+
                 disposedValue = true;
             }
         }
-        #endregion
+        
+        public void Dispose() => CloseClient().GetAwaiter().GetResult();
+        #endregion        
     }
 }

@@ -23,7 +23,7 @@ namespace Watcher.Core.Services
 
         public async Task<IEnumerable<FeedbackDto>> GetAllEntitiesAsync()
         {
-            var entities = await _uow.FeedbackRepository.GetRangeAsync(include: x => x
+            var entities = await _uow.FeedbackRepository.GetRangeAsync(1, 30, include: x => x
                 .Include(o => o.User)
                 .Include(o => o.Response));
 
