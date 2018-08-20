@@ -45,7 +45,7 @@ namespace Watcher.Hubs
 
             foreach (var userDto in usersInChat)
             {
-                await Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);v
+                await Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
             }
         }
 
