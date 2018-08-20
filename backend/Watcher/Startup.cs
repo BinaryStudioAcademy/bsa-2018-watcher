@@ -1,4 +1,6 @@
-﻿namespace Watcher
+﻿using Watcher.Core.Hubs;
+
+namespace Watcher
 {
     using System;
     using System.Collections.Generic;
@@ -81,6 +83,7 @@
             services.AddTransient<IOrganizationService, OrganizationService>();
             services.AddTransient<IChatsService, ChatsService>();
             services.AddTransient<IMessagesService, MessagesService>();
+            services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IInstanceService, InstanceService>();
@@ -88,6 +91,8 @@
             services.AddTransient<IResponseService, ResponseService>();
             services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
+
+            
 
             ConfigureFileStorage(services, Configuration);
 

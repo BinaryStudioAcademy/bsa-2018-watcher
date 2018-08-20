@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, Message } from 'primeng/api';
-import { NotificationsService } from '../../core/services/notifications.service';
+import { NotificationsHubService } from '../../core/services/notifications-hub.service';
 import { SampleRequest } from '../../shared/models/sample-request.model';
 import { SampleEnum } from '../../shared/models/sample-enum.enum';
 import { SampleDto } from '../../shared/models/sample-dto.model';
@@ -11,6 +11,8 @@ import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
 import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
+import { NotificationService } from '../../core/services/notification.service';
+import { Notification } from '../../shared/models/notification.model';
 
 @Component({
   selector: 'app-header',
@@ -24,6 +26,7 @@ export class HeaderComponent implements OnInit {
   samples: SampleDto[] = [];
   notificationsNumber = 0;
   messagesNumber = 2;
+  isNotificationShow: boolean;
 
   currentUser: User;
 
@@ -32,31 +35,30 @@ export class HeaderComponent implements OnInit {
   bellItems: MenuItem[];
   orgItems: MenuItem[];
 
-  constructor(private notificationsService: NotificationsService,
+  constructor(private notificationsHubService: NotificationsHubService,
     private messageService: MessageService,
     private userService: UserService,
     private toastrService: ToastrService,
     private router: Router,
-    private authService: AuthService) {
-    this.subscribeToEvents();
+    private authService: AuthService,
+    private notificationsService: NotificationService) {
+    this.conectToNotificationsHub();
+    this.subscribeToNotificationsEvents();
   }
 
   onFeedback(): void {
     this.router.navigate(['/user/feedback']);
   }
 
-  private subscribeToEvents(): void {
-    this.notificationsService.connectionEstablished.subscribe(() => {
-      this.canCreateSample = true;
-    });
+  private conectToNotificationsHub(): void {
+    this.notificationsHubService.connectToSignalR();
+  }
 
-    this.notificationsService.sampleReceived.subscribe((sample: SampleDto) => {
-      this.messagesNumber++;
+  private subscribeToNotificationsEvents(): void {
+    this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
       this.notificationsNumber++;
-      this.samples.push(sample);
-      this.msgs.push({
-        severity: 'info', summary: sample.name, detail: `Name: ${sample.name}, Id: ${sample.id},
-          Sample Field: ${sample.sampleField.toString()}, Date of creation: ${sample.dateOfCreation}, Count: ${sample.count}, `
+      this.bellItems.push({
+        label: value.text
       });
     });
   }
@@ -70,19 +72,19 @@ export class HeaderComponent implements OnInit {
       sampleField: SampleEnum.FirstItem
     };
 
-    this.notificationsService.createSample(req);
+    this.notificationsHubService.createSample(req);
   }
 
   echoToServer() {
-    this.notificationsService.echo();
+    this.notificationsHubService.echo();
   }
 
   sendMess() {
-    this.notificationsService.send('in2Kvey8O0dK1LACXH6HYMaPG102', 'From Sdadadafsd message');
+    this.notificationsHubService.send('in2Kvey8O0dK1LACXH6HYMaPG102', 'From Sdadadafsd message');
   }
 
   connectToServer() {
-    this.notificationsService.connectToSignalR();
+    this.notificationsHubService.connectToSignalR();
   }
 
   ngOnInit() {
@@ -120,20 +122,6 @@ export class HeaderComponent implements OnInit {
     }
     ];
 
-    this.bellItems = [{
-      label: 'Item',
-      icon: 'fa fa-fw fa-bell-o',
-    },
-    {
-      label: 'Item',
-      icon: 'fa fa-fw fa-bell-o',
-    },
-    {
-      label: 'Item',
-      icon: 'fa fa-fw fa-bell-o',
-    }
-    ];
-
     this.authService.currentUser.subscribe(
       (userData) => {
         this.currentUser = userData;
@@ -142,6 +130,28 @@ export class HeaderComponent implements OnInit {
         }
       }
     );
+
+    this.notificationsToItems();
+  }
+
+  bellClick() {
+    this.isNotificationShow = !this.isNotificationShow;
+    if (!this.isNotificationShow) { return; }
+
+    this.notificationsToItems();
+  }
+
+  notificationsToItems() {
+    this.bellItems = [];
+    this.notificationsService.getAll(this.authService.getCurrentUser().id).subscribe((value: Notification[]) => {
+      this.notificationsNumber = value.length;
+
+      value.forEach(item => {
+        this.bellItems.push({
+          label: item.text
+        });
+      });
+    });
   }
 
   private fillOrganizations(): void {

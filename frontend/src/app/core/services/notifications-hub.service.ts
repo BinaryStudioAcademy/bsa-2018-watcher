@@ -7,16 +7,17 @@ import {SampleDto} from '../../shared/models/sample-dto.model';
 import {SampleRequest} from '../../shared/models/sample-request.model';
 import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
+import { Notification } from '../../shared/models/notification.model';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationsService {
+export class NotificationsHubService {
   private connectionIsEstablished = false;
   private hubConnection: HubConnection | undefined;
 
-  sampleReceived = new EventEmitter<SampleDto>();
+  notificationReceived = new EventEmitter<Notification>();
   connectionEstablished = new EventEmitter<Boolean>();
 
   constructor(private authService: AuthService) {
@@ -71,32 +72,9 @@ export class NotificationsService {
   }
 
   private registerOnServerEvents(): void {
-    this.hubConnection.on('Send', (data: any) => {
-      console.log('Data received:' + data);
-      this.sampleReceived.emit(data);
-    });
-
-    this.hubConnection.on('Send', (item: string) => {
-      console.log('Message from Hub: ' + item);
-    });
-
-    this.hubConnection.on('BroadcastMessage', (message: string) => {
-      console.log('Broadcasted Message: ' + message);
-    });
-
-    this.hubConnection.on('Echo', (data: string) => {
-      console.log('Received echo data from the hub');
+    this.hubConnection.on('AddNotification', (data: Notification) => {
       console.log(data);
-    });
-
-    this.hubConnection.on('DataFeedTick', (sampleDto: SampleDto) => {
-      console.log(`Received Data feed from the hub: ${JSON.stringify(sampleDto)}`);
-    });
-
-    this.hubConnection.on('AddSample', (sampleDto: SampleDto, secondParam: string, thirdParam: number) => {
-      console.log(`secondParam: ${secondParam}, thirdParam: ${thirdParam}`);
-      console.log('Created SampleDto: ' + JSON.stringify(sampleDto) + sampleDto);
-      this.sampleReceived.emit(sampleDto);
+      this.notificationReceived.emit(data);
     });
 
     // On Close open connection again

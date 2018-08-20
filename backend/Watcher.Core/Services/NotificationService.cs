@@ -1,29 +1,34 @@
-﻿using System.Linq;
-using Watcher.DataAccess.Entities;
-
-namespace Watcher.Core.Services
+﻿namespace Watcher.Core.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using System.Linq;
 
     using AutoMapper;
+
+    using Microsoft.AspNetCore.SignalR;
+    using Microsoft.EntityFrameworkCore;
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
     using Watcher.Common.Enums;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Interfaces;
+    using Watcher.Core.Hubs;
+    using Watcher.DataAccess.Entities;
 
     public class NotificationService : INotificationService
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly IHubContext<NotificationsHub> _notificationsHub;
 
-        public NotificationService(IUnitOfWork uow, IMapper mapper)
+        public NotificationService(IUnitOfWork uow, IMapper mapper, IHubContext<NotificationsHub> notificationsHub)
         {
             _uow = uow;
             _mapper = mapper;
+            _notificationsHub = notificationsHub;
         }
 
         public async Task<IEnumerable<NotificationDto>> GetAllEntitiesAsync()
@@ -41,10 +46,14 @@ namespace Watcher.Core.Services
 
             if (user == null) return null;
 
-            var notifications = await _uow.NotificationsRepository.GetRangeAsync(1, int.MaxValue, n => n.UserId == userId || 
-                                                                        user.UserOrganizations.Count(uo => uo.OrganizationId == n.OrganizationId) != 0);
+            var userNotifications = await _uow.NotificationsRepository.GetRangeAsync(1, int.MaxValue, n => n.UserId == userId || 
+                                                                        user.UserOrganizations.Count(uo => uo.OrganizationId == n.OrganizationId) != 0,
+                                                                    include: notifications => notifications.Include(n => n.NotificationSetting)
+                                                                                                            .Include(n => n.User)
+                                                                                                            .Include(n => n.Organization)
+                                                                                                            .Include(n => n.NotificationSetting));
 
-            var dtos = _mapper.Map<List<Notification>, List<NotificationDto>>(notifications);
+            var dtos = _mapper.Map<List<Notification>, List<NotificationDto>>(userNotifications);
 
             return dtos;
         }
@@ -82,7 +91,8 @@ namespace Watcher.Core.Services
         {
             var entity = _mapper.Map<NotificationDto, Notification>(notificationDto);
 
-            var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(ns => ns.Type == notificationType);
+            var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(ns => ns.Type == notificationType 
+                                                                                                             && ns.UserId == notificationDto.UserId);
 
             if (notificationSetting == null) return null;
 
@@ -95,9 +105,9 @@ namespace Watcher.Core.Services
                 return null;
             }
 
-            if (entity == null) return null;
-
             var dto = _mapper.Map<Notification, NotificationDto>(entity);
+
+            await _notificationsHub.Clients.User(notificationDto.UserId).SendAsync("AddNotification", notificationDto);
 
             return dto;
         }

@@ -13,8 +13,11 @@ namespace Watcher.Common.Dtos
 
         public DateTime CreatedAt { get; set; }
 
-        public int OrganizationId { get; set; }
+        public int? OrganizationId { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
+
+        public int NotificationSettingId { get; set; }
+        public NotificationSettingDto NotificationSetting { get; set; }
     }
 }

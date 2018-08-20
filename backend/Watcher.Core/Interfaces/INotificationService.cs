@@ -11,6 +11,8 @@
     {
         Task<IEnumerable<NotificationDto>> GetAllEntitiesAsync();
 
+        Task<IEnumerable<NotificationDto>> GetEntitiesByUserIdAsync(string userId);
+
         Task<NotificationDto> GetEntityByIdAsync(int id);
 
         Task<NotificationDto> CreateEntityAsync(NotificationRequest request);

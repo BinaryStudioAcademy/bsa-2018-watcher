@@ -19,14 +19,20 @@ namespace Watcher.Hubs
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
         private readonly IOrganizationService _organizationService;
+        private readonly INotificationService _notificationService;
+
 
         private static Dictionary<string, List<string>> userConnections = new Dictionary<string, List<string>>();
 
-        public ChatHub(IChatsService chatsService, IMessagesService messagesService, IOrganizationService organizationService)
+        public ChatHub(IChatsService chatsService, 
+                        IMessagesService messagesService, 
+                        IOrganizationService organizationService, 
+                        INotificationService notificationService)
         {
             _chatsService = chatsService;
             _messagesService = messagesService;
             _organizationService = organizationService;
+            _notificationService = notificationService;
         }
 
         public async Task Send(MessageRequest messageRequest)
@@ -38,8 +44,13 @@ namespace Watcher.Hubs
 
             foreach (var userDto in usersInChat)
             {
-                var userId = Context.User.FindFirstValue("unique_name");
-                Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
+                await Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
+                var entityAsync = await _notificationService.CreateEntityAsync(new NotificationDto()
+                {
+                    Text = "Notification for receive message",
+                    UserId = userDto.Id,
+                    CreatedAt = DateTime.Now
+                }, NotificationType.Chat);
             }
         }
 
