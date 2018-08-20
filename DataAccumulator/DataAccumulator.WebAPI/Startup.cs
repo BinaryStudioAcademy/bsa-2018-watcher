@@ -1,17 +1,22 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using DataAccumulator.BusinessLayer.Interfaces;
 using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
+using DataAccumulator.DataAggregator;
 using DataAccumulator.DataAggregator.Services;
 using DataAccumulator.Interfaces;
 using DataAccumulator.Providers;
 using DataAccumulator.Shared.Models;
+using DataAccumulator.WebAPI.Jobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
+using Quartz.Spi;
 
 namespace DataAccumulator
 {
@@ -49,14 +54,24 @@ namespace DataAccumulator
             services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
             services.AddScoped<IService<CollectedDataDto>, DataAccumulatorService>();
             services.AddScoped<DataAggregatorService>();
+
             services.AddScoped<AggregatorService>();
+            services.AddScoped<DataAggregatorCore>();
+
+            services.AddTransient<IJobFactory, JobFactory>(
+                (provider) =>
+                {
+                    return new JobFactory(provider);
+                });
+
+            services.AddTransient<CollectedDataAggregatingJob>();
 
             var mapper = MapperConfiguration().CreateMapper();
             services.AddTransient(_ => mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime, IServiceProvider container)
         {
             app.UseCors("CorsPolicy");
 
@@ -66,6 +81,12 @@ namespace DataAccumulator
             }
 
             app.UseMvc();
+
+            app.UseQuartz((quartz) =>
+            {
+                if (Configuration.GetSection("DataAggregator").GetValue<bool>("Aggregating"))
+                    quartz.AddJob<CollectedDataAggregatingJob>("DataAggregator", "Import", Configuration.GetSection("DataAggregator").GetValue<int>("Interval"));
+            });
         }
 
         public MapperConfiguration MapperConfiguration()
