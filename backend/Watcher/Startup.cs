@@ -8,7 +8,9 @@ namespace Watcher
     using System.Threading.Tasks;
 
     using AutoMapper;
-
+    using DataAccumulator.DataAccessLayer.Entities;
+    using DataAccumulator.DataAccessLayer.Interfaces;
+    using DataAccumulator.DataAccessLayer.Repositories;
     using FluentValidation.AspNetCore;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -88,18 +90,18 @@ namespace Watcher
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IInstanceService, InstanceService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
+            services.AddTransient<IChartsService, ChartsService>();
             services.AddTransient<IResponseService, ResponseService>();
-            services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
+            services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
+            services.AddTransient<ICollectedDataService, CollectedDataService>();
 
             
 
             ConfigureFileStorage(services, Configuration);
-
+            ConfigureCosmosDb(services, Configuration);
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
-
-
             InitializeAutomapper(services);
 
             ConfigureDatabase(services, Configuration);
@@ -228,6 +230,26 @@ namespace Watcher
             app.UseMvc();
         }
 
+        public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
+        {
+            var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (enviroment == EnvironmentName.Production)
+            {
+                var cosmosDbString = Configuration.GetConnectionString("AzureCosmosDbConnection");
+                if (!string.IsNullOrWhiteSpace(cosmosDbString))
+                {
+                    services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(cosmosDbString, "DataAccumulatorDb"));
+                }
+            }
+            else
+            {
+                var mongoDbString = Configuration.GetConnectionString("MongoDbConnection");
+                services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(mongoDbString, "DataAccumulatorDb"));
+            }
+        }
+
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -236,13 +258,13 @@ namespace Watcher
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
                 {
-                    services.AddSingleton<IFileStorageProvider, FileStorageProvider>(
+                    services.AddScoped<IFileStorageProvider, FileStorageProvider>(
                         prov => new FileStorageProvider(fileStorageString));
                 }
             }
             else
             {
-                services.AddSingleton<IFileStorageProvider, LocalFileStorageProvider>(
+                services.AddScoped<IFileStorageProvider, LocalFileStorageProvider>(
                     prov => new LocalFileStorageProvider());
             }
         }
@@ -271,6 +293,7 @@ namespace Watcher
                     cfg.AddProfile<ResponseProfile>();
                     cfg.AddProfile<InstancesProfile>();
                     cfg.AddProfile<OrganizationInvitesProfile>();
+                    cfg.AddProfile<CollectedDataProfile>();
 
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/

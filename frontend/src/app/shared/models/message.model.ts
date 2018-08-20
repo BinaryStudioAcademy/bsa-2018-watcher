@@ -1,6 +1,5 @@
 ﻿
 import { User } from './user.model';
-import { Chat } from './chat.model';
 
 export interface Message  {
    id: number;

@@ -20,6 +20,10 @@ export class ChatService {
     return this.apiService.getById(`/${this.ctrlUrl}`, id);
   }
 
+  getByUserId(id: string): Observable<Chat[]> {
+    return this.apiService.getById(`/${this.ctrlUrl}/user`, id);
+  }
+
   create(chat: Chat) {
     return this.apiService.post(`/${this.ctrlUrl}`, chat);
   }

@@ -92,7 +92,7 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Admin',
         icon: 'fa fa-fw fa-user',
-        routerLink: ['/admin'],
+        routerLink: ['/admin/organization-list'],
       },
       {
         label: 'Logout',
@@ -123,7 +123,7 @@ export class HeaderComponent implements OnInit {
     ];
 
     this.authService.currentUser.subscribe(
-      (userData) => {
+      userData => {
         this.currentUser = userData;
         if (this.currentUser && this.currentUser.organizations && this.currentUser.organizations.length > 0) {
           this.fillOrganizations();

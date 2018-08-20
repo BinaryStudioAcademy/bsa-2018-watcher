@@ -8,20 +8,48 @@
     </div>
   </div>
   <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem"></p-tabMenu>
-  <div class="workspace" *ngIf="activeDashboardItem && dashboardMenuitems.length > 1">
-    <h3>
+  <div class="workspace">
+    <div class="dashboard-options">
       <button pButton type="button"
-              label="Delete "
-              class="btnedit ui-button-danger ui-button-raised "
+              label="Add Item"
+              class="btnedit ui-button-success ui-button-raised "
               [disabled]="activeDashboardItem == null"
-              (click)="delete() "></button>
+              (click)="showAddItemPopup()"></button>
       <button pButton type="button"
               label="Edit "
               class="btnedit ui-button-primary ui-button-raised "
               [disabled]="activeDashboardItem == null"
-              (click)="showCreatePopup(false) "></button>
-    </h3>
-    <img src="https://www.excel-easy.com/smi/examples/line-chart.png " alt=" ">
+              (click)="showCreatePopup(false)"></button>
+      <button pButton type="button"
+              label="Delete "
+              class="btnedit ui-button-danger ui-button-raised "
+              [disabled]="activeDashboardItem == null"
+              (click)="delete()"></button>
+    </div>
+
+    <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuitems.length > 1">
+      <div class="dashboard-item">
+        <app-line-chart></app-line-chart>
+      </div>
+      <div class="dashboard-item">
+        <app-multi-series-line-chart></app-multi-series-line-chart>
+      </div>
+      <div class="dashboard-item">
+        <app-bar-chart></app-bar-chart>
+      </div>
+      <div class="dashboard-item">
+        <app-stacked-bar-chart></app-stacked-bar-chart>
+      </div>
+      <div class="dashboard-item">
+        <app-brush-zoom></app-brush-zoom>
+      </div>
+      <!--<div class="dashboard-item">-->
+        <!--<app-pie-chart></app-pie-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+        <!--<app-donut-chart></app-donut-chart>-->
+      <!--</div>-->
+    </div>
   </div>
 </div>
 
