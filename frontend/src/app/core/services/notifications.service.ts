@@ -90,7 +90,7 @@ export class NotificationsService {
   }
 
   private registerOnServerEvents(): void {
-    this.hubConnection.on('MarketTick', (marketStatus: MarketPrice) => {
+    this.hubConnection.on('MarketTick', (marketStatus: MarketPriceDate) => {
         this.marketSub.next(marketStatus);
       }
     );

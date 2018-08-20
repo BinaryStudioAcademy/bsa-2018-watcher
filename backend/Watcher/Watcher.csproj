@@ -36,14 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DataAccumulator\DataAccumulator.DataAccessLayer\DataAccumulator.DataAccessLayer.csproj" />
     <ProjectReference Include="..\Watcher.Common\Watcher.Common.csproj" />
     <ProjectReference Include="..\Watcher.Core\Watcher.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="DataAccumulator.DataAccessLayer">
-      <HintPath>..\..\DataAccumulator\DataAccumulator.DataAccessLayer\bin\Debug\netcoreapp2.1\DataAccumulator.DataAccessLayer.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

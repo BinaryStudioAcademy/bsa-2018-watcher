@@ -9,7 +9,7 @@ import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
-import {MarketPrice} from '../models/market-price';
+import {MarketPrice} from '../models';
 import {NotificationsService} from '../../core/services/notifications.service';
 
 @Component({

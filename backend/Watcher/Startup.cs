@@ -6,6 +6,9 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
+
+    using DataAccumulator.BusinessLayer.Interfaces;
+    using DataAccumulator.BusinessLayer.Services;
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.DataAccessLayer.Interfaces;
     using DataAccumulator.DataAccessLayer.Repositories;
@@ -21,7 +24,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
-
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
@@ -94,8 +96,13 @@
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
             services.AddTransient<ICollectedDataService, CollectedDataService>();
 
-            ConfigureFileStorage(services, Configuration);
+             // services.AddScoped<IService<DataAccumulator.Shared.Models.CollectedDataDto>, DataAccumulatorService>();
+
+            // repo initialization localhost while development env, azure in prod
             ConfigureCosmosDb(services, Configuration);
+
+            ConfigureFileStorage(services, Configuration);
+
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             services.AddHostedService<WatcherService>();
 

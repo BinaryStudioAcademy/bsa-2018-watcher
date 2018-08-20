@@ -1,10 +1,14 @@
 ﻿namespace Watcher.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+    using DataAccumulator.DataAccessLayer.Entities;
+    using DataAccumulator.DataAccessLayer.Interfaces;
 
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
@@ -37,6 +41,11 @@
         private readonly IOptions<TimeServiceConfiguration> _options;
 
         /// <summary>
+        /// The Service Scope Factory 
+        /// </summary>
+        private readonly IServiceScopeFactory _scopeFactory;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="WatcherService"/> class.
         /// </summary>
         /// <param name="hubContext">
@@ -51,11 +60,14 @@
         /// <param name="options">
         /// Options
         /// </param>
+        /// <param name="scopeFactory"></param>
         public WatcherService(IHubContext<NotificationsHub> hubContext, 
                               ITransientService service, 
                               ILogger<WatcherService> logger,
-                              IOptions<TimeServiceConfiguration> options)
+                              IOptions<TimeServiceConfiguration> options,
+                              IServiceScopeFactory scopeFactory)
         {
+            _scopeFactory = scopeFactory;
             _hubContext = hubContext;
             _service = service;
             _logger = logger;
@@ -82,6 +94,41 @@
             {
                 try
                 {
+                    using (var scope = _scopeFactory.CreateScope())
+                    {
+                        var repo = scope.ServiceProvider.GetRequiredService<IDataAccumulatorRepository<CollectedData>>();
+                        var data = new CollectedData
+                                       {
+                                           Id = Guid.NewGuid(),
+                                           AvaliableRamBytes = 2505.33325195312f,
+                                           CpuUsagePercent = 69.68777465820312f,
+                                           InterruptsPerSeconds = 24424.375f,
+                                           InterruptsTimePercent = 24426.060546875f,
+                                           LocalDiskFreeMBytes = 883704,
+                                           ProcessesCount = 123,
+                                           Time = DateTime.UtcNow,
+                                           LocalDiskFreeSpacePercent = 79.61161041259766f,
+                                           ProcessesCPU = new Dictionary<string, float>
+                                                              {
+                                                                  {"Idle", 121.80587005615234f },
+                                                                  {"121.80587005615234", 8.40002727508545f },
+                                                                  {"lsass", 2.516136407852173f },
+                                                                  {"NotePad", 80.80587005615234f },
+                                                                  {"VS Code", 220.80587005615234f }
+                                                              },
+                                           ProcessesRAM = new Dictionary<string, float>
+                                                              {
+                                                                  {"Idle", 57.23391342163086f },
+                                                                  {"System", 1813.6470947265625f },
+                                                                  {"Secure System", 25586.666015625f },
+                                                                  { "Registry", 9269.3330078125f },
+                                                                  { "NotePad", 3269.3330078125f }
+                                                              },
+                                           RamUsagePercent = 76.6187973022461f
+                                       };
+                        await repo.AddEntity(data);
+                    }
+                    
                     MarketPrice.UpdateMarket();
                     var mp = MarketPrice.MarketPositions[0];
                      // await _hubContext.Clients.Group("Market Data Feed").SendAsync("MarketTick", mp);

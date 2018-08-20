@@ -2,11 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {single, multi, MarketPrice, MarketPriceDate} from '../models';
 import {DashboardService} from '../../core/services/dashboard.service';
 import {NotificationsService} from '../../core/services/notifications.service';
-
-export interface SeriesData {
-  value: number;
-  name: Date;
-}
+import {SeriesItem} from '../models/series-item';
 
 @Component({
   selector: 'app-vertical-bar-chart',
@@ -76,8 +72,8 @@ export class VerticalBarChartComponent implements OnInit {
   }
 
 
-  toSeriesData(price: MarketPriceDate, isOpen: boolean): SeriesData {
-      const data: SeriesData = {
+  toSeriesData(price: MarketPriceDate, isOpen: boolean): SeriesItem {
+      const data: SeriesItem = {
         name: new Date(price.date),
         value: 0
       };
