@@ -14,8 +14,6 @@ namespace Watcher.Core.Providers
         private readonly IQueueClient queueClient;
         private readonly ILogger<ServiceBusProvider> _logger;
 
-        private static ServiceBusProvider instance = null;
-
         public ServiceBusProvider(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             queueClient = new QueueClient(configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value);
@@ -65,7 +63,8 @@ namespace Watcher.Core.Providers
         }
 
         #region IDisposable Support
-        private bool disposedValue; // To detect redundant calls
+        // To detect redundant calls
+        private bool disposedValue; 
                 
         public async Task CloseClient()
         {
