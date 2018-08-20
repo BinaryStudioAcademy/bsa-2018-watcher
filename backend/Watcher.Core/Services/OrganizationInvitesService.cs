@@ -13,17 +13,20 @@ namespace Watcher.Core.Services
     using Watcher.DataAccess.Interfaces;
     using System.Text;
     using System;
+    using System.Linq;
     using Watcher.Common.Enums;
 
     public class OrganizationInvitesService: IOrganizationInvitesService
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly IEmailProvider _emailProvider;
 
-        public OrganizationInvitesService(IUnitOfWork uow, IMapper mapper)
+        public OrganizationInvitesService(IUnitOfWork uow, IMapper mapper, IEmailProvider emailProvider)
         {
             _uow = uow;
             _mapper = mapper;
+            _emailProvider = emailProvider;
         }
 
         public async Task<OrganizationInviteDto> GetEntityByLinkAsync(string link)
@@ -54,14 +57,10 @@ namespace Watcher.Core.Services
 
             entity = await _uow.OrganizationInvitesRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
-            if (!result)
-            {
-                return null;
-            }
+
+            if (!result)return null;
 
             if (entity == null) return null;
-
-            // TODO If Email != "" Send Email
 
             var dto = _mapper.Map<OrganizationInvite, OrganizationInviteDto>(entity);
 
@@ -98,8 +97,26 @@ namespace Watcher.Core.Services
                 await _uow.UsersRepository.UpdateAsync(invitedUser);
 
                 var updated = await _uow.OrganizationInvitesRepository.UpdateAsync(entity);
-                 result = await _uow.SaveAsync();
+                result = await _uow.SaveAsync();
                 _uow.CommitTransaction();
+            }
+            else
+            {
+                if (entity.State == OrganizationInviteState.Pending)
+                {
+                    if (String.IsNullOrWhiteSpace(entity.InviteEmail) != true) // send Email
+                    {
+                        OrganizationInvite inviteFromBd = await _uow.OrganizationInvitesRepository.GetFirstOrDefaultAsync(x => x.Id == entity.Id,
+                                                                include: invite => invite.Include(i => i.Organization)
+                                                                                         .Include(i => i.CreatedByUser));
+
+                        string body = $"User {inviteFromBd.CreatedByUser.DisplayName} granted you access to the organization {inviteFromBd.Organization.Name}. \n ";
+                        body += $"Your invite link: https://bsa-watcher.azurewebsites.net/user/invite/{entity.Link}";
+                        await _emailProvider.SendMessageOneToOne("invite@watcher.com", "WATCHER Invite", entity.InviteEmail, body, "");
+                    }
+                }
+                var updated = await _uow.OrganizationInvitesRepository.UpdateAsync(entity);
+                result = await _uow.SaveAsync();
             }
             return result;
         }
