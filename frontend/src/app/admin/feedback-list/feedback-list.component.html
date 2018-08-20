@@ -30,22 +30,22 @@
           <i *ngIf="feedback.willuse==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
         </td>
         <td class="center">
-            <i *ngIf="feedback.info==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
-            <i *ngIf="feedback.info==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
-            <i *ngIf="feedback.info==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
-            <i *ngIf="feedback.info==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+          <i *ngIf="feedback.info==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.info==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.info==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.info==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
         </td>
         <td class="center">
-            <i *ngIf="feedback.friendliness==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
-            <i *ngIf="feedback.friendliness==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
-            <i *ngIf="feedback.friendliness==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
-            <i *ngIf="feedback.friendliness==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+          <i *ngIf="feedback.friendliness==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.friendliness==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.friendliness==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.friendliness==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
         </td>
         <td class="center">
-            <i *ngIf="feedback.quickness==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
-            <i *ngIf="feedback.quickness==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
-            <i *ngIf="feedback.quickness==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
-            <i *ngIf="feedback.quickness==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+          <i *ngIf="feedback.quickness==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.quickness==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.quickness==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.quickness==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
         </td>
         <td>
           <div class="center" *ngIf="feedback.main.user.email">
@@ -55,6 +55,7 @@
       </tr>
     </ng-template>
   </p-table>
+</div>
 <p-dialog header="Create response" [(visible)]="display" [modal]="true" [responsive]="true" [width]="350" [minWidth]="200"
   [minY]="70" [maximizable]="false" [baseZIndex]="10000">
   <p class="field">Email</p>
