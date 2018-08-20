@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-
-namespace Watcher.Core.Services
+﻿namespace Watcher.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +8,7 @@ namespace Watcher.Core.Services
     using AutoMapper;
     
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.SignalR;
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
