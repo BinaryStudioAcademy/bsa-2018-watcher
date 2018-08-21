@@ -15,6 +15,12 @@ export class AddNewOrganizationComponent implements OnInit {
   @Input() display = false;
   @Output() displayChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  name = '';
+  email = '';
+  contactNumber = '';
+  webSite = '';
+  description = '';
+
   organization: Organization;
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
@@ -23,7 +29,8 @@ export class AddNewOrganizationComponent implements OnInit {
 
   constructor(  private organizationService: OrganizationService,
                 private authService: AuthService,
-                private toastrService: ToastrService) { }
+                private toastrService: ToastrService) {
+  }
 
   ngOnInit() {
   }

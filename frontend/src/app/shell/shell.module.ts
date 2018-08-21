@@ -21,6 +21,7 @@ import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component
 import { ChatModule } from '../chat/chat.module';
 import { query } from '@angular/core/src/render3/query';
 import { AddNewOrganizationComponent } from './add-new-organization/add-new-organization.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { AddNewOrganizationComponent } from './add-new-organization/add-new-orga
 
     ToolbarModule,
     TieredMenuModule,
+    FormsModule,
     ButtonModule,
     InputTextModule,
     InputTextareaModule,
