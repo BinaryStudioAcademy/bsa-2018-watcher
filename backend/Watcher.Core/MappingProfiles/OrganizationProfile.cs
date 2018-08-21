@@ -21,8 +21,8 @@
                 .ForMember(d => d.Id, o => o.Ignore());
 
             CreateMap<Organization, OrganizationDto>()
-                .ForMember(d => d.UsersId, o => o.MapFrom(s => s.UserOrganizations.Select(i => i.UserId)))
-                .ForMember(d => d.InstancesId, o => o.MapFrom(s => s.Instances.Select(i => i.Id)));
+                .ForMember(d => d.UsersId, o => o.MapFrom(s => s.UserOrganizations.Select(i => i.UserId)));
+            // .ForMember(d => d.InstancesId, o => o.MapFrom(s => s.Instances.Select(i => i.Id)));
         }
     }
 }

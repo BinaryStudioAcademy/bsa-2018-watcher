@@ -109,7 +109,7 @@ export class FeedbackListComponent implements OnInit {
           // this.notificationsService.send(this.feedback.id.toString(), 'The response to your feedback has been sent to your email.');
         },
         error => {
-          this.toastrService.error(`Error ocured status: ${error}`);
+          this.toastrService.error(`Error ocured status: ${error.message}`);
         });
   }
 }

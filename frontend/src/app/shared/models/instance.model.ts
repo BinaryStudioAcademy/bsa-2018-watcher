@@ -7,6 +7,7 @@ export interface Instance  {
    title: string;
    address: string;
    platform: string;
+   isActive: boolean;
    organization?: Organization;
    dashboards?: Dashboard[];
 }
