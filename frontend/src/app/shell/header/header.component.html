@@ -6,6 +6,7 @@
 
     <p-tieredMenu #bell [model]="bellItems" [popup]="true"></p-tieredMenu>
     
+    <div style="display: inline"  appClickOutside (clickOutside)="close()">
     <div class="toolbar-item">
       <button #btn type="button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
       <span class="topbar-badge">{{ notificationsNumber }}</span>
@@ -15,6 +16,7 @@
       <div class="notification-card" *ngFor="let bellItem of bellItems">
         <div class="notification-text">{{bellItem.label}}</div>
       </div>
+    </div>
     </div>
 
     <div class="toolbar-item">
@@ -30,7 +32,7 @@
     <p-tieredMenu #user [model]="userItems" [popup]="true"></p-tieredMenu>
     <a class="user-info" (click)="user.toggle($event)">
       <span>{{ currentUser?.displayName }}</span>
-      <img src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-4/256/User-blue-icon.png"
+      <img src="{{currentUser?.photoURL}}"
            class="user-photo" alt="">
       <i class="fa fa-sort-desc"></i>
     </a>

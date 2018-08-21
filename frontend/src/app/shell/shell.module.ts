@@ -17,6 +17,7 @@ import {
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
 import { query } from '@angular/core/src/render3/query';
+import { ClickOutsideDirective } from '../core/directives/click-outside.directive';
 
 
 @NgModule({
@@ -33,6 +34,6 @@ import { query } from '@angular/core/src/render3/query';
     PanelMenuModule,
     ChatModule
   ],
-  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent ]
+  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent, ClickOutsideDirective ]
 })
 export class ShellModule { }
