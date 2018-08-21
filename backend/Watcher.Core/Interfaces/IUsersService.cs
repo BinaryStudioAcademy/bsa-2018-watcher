@@ -11,6 +11,8 @@
     {
         Task<IEnumerable<UserDto>> GetAllEntitiesAsync();
 
+        Task<IEnumerable<UserDto>> FindEntitiesAsync(string query);
+
         Task<UserDto> GetEntityByIdAsync(string id);
 
         Task<UserDto> CreateEntityAsync(UserRegisterRequest request);
