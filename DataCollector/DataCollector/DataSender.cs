@@ -4,19 +4,22 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DataCollector
 {
     public class DataSender
     {
-        private HttpClient client;
+        private readonly HttpClient _client;
 
-        private string uri;
+        private readonly string _uri;
 
         public DataSender(HttpClient client, string dataAccumulatorUri)
         {
-            this.client = client;
-            this.uri = dataAccumulatorUri;
+            _client = client;
+            _uri = dataAccumulatorUri;
         }
 
         public async Task<bool> SendAsync(CollectedData dataItem)
@@ -28,10 +31,10 @@ namespace DataCollector
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            var response = await client.PostAsync(uri, byteContent);
-            if (response.StatusCode == System.Net.HttpStatusCode.Created)
+            var response = await _client.PostAsync(_uri, byteContent);
+            if (response.StatusCode == HttpStatusCode.Created)
                 return true;
-            else return false;
+            return false;
         }
     }
 }

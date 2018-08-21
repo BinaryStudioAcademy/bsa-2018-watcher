@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using System.Text;
 
 namespace DataCollector
 {
@@ -10,20 +10,14 @@ namespace DataCollector
     {
         public CollectedData()
         {
-            ProcessesCPU = new Dictionary<string, float>();
-            ProcessesRAM = new Dictionary<string, float>();
+            ProcessesCpu = new Dictionary<string, float>();
+            ProcessesRam = new Dictionary<string, float>();
         }
 
         public Guid Id { get; set; }
         public int ProcessesCount { get; set; }
-        public Dictionary<string, float> ProcessesCPU { get; set; }
-        public Dictionary<string, float> ProcessesRAM { get; set; }
-        #region Percentage
-        public float CpuUsagePercent { get; set; }
-        public float RamUsagePercent { get; set; }
-        public float InterruptsTimePercent { get; set; }
-        public float LocalDiskFreeSpacePercent { get; set; }
-        #endregion
+        public Dictionary<string, float> ProcessesCpu { get; set; }
+        public Dictionary<string, float> ProcessesRam { get; set; }
         public float AvaliableRamBytes { get; set; }
         public float InterruptsPerSeconds { get; set; }
         public float LocalDiskFreeMBytes { get; set; }
@@ -32,17 +26,17 @@ namespace DataCollector
 
         public static CollectedData operator +(CollectedData firstItem, CollectedData secondItem)
         {
-            var processesCPU = firstItem.ProcessesCPU;
+            var processesCpu = firstItem.ProcessesCpu;
 
-            secondItem.ProcessesCPU.ToList()
-                .ForEach(item => ConcatProcessInfo(processesCPU, item));
+            secondItem.ProcessesCpu.ToList()
+                .ForEach(item => ConcatProcessInfo(processesCpu, item));
 
-            var processesRAM = firstItem.ProcessesRAM;
+            var processesRam = firstItem.ProcessesRam;
 
-            secondItem.ProcessesRAM.ToList()
-                .ForEach(item => ConcatProcessInfo(processesRAM, item));
+            secondItem.ProcessesRam.ToList()
+                .ForEach(item => ConcatProcessInfo(processesRam, item));
 
-            return new CollectedData()
+            return new CollectedData
             {
                 AvaliableRamBytes = firstItem.AvaliableRamBytes + secondItem.AvaliableRamBytes,
                 CpuUsagePercent = firstItem.CpuUsagePercent + secondItem.CpuUsagePercent,
@@ -52,9 +46,9 @@ namespace DataCollector
                 LocalDiskFreeSpacePercent = firstItem.LocalDiskFreeSpacePercent + secondItem.LocalDiskFreeSpacePercent,
                 RamUsagePercent = firstItem.RamUsagePercent + secondItem.RamUsagePercent,
                 Time = secondItem.Time,
-                ProcessesCPU = processesCPU,
-                ProcessesRAM = processesRAM,
-                ProcessesCount = processesCPU.Count
+                ProcessesCpu = processesCpu,
+                ProcessesRam = processesRam,
+                ProcessesCount = processesCpu.Count
             };
         }
 
@@ -70,41 +64,50 @@ namespace DataCollector
 
         public static CollectedData operator /(CollectedData item, int scalar)
         {
-            var processCPU = new Dictionary<string, float>();
-            var processRAM = new Dictionary<string, float>();
+            var processCpu = new Dictionary<string, float>();
+            var processRam = new Dictionary<string, float>();
 
-            item.ProcessesCPU.ToList()
-                .ForEach(cpu => processCPU.Add(cpu.Key, cpu.Value / scalar));
+            item.ProcessesCpu.ToList()
+                .ForEach(cpu => processCpu.Add(cpu.Key, cpu.Value / scalar));
 
-            item.ProcessesRAM.ToList()
-                .ForEach(ram => processRAM.Add(ram.Key, ram.Value / scalar));
+            item.ProcessesRam.ToList()
+                .ForEach(ram => processRam.Add(ram.Key, ram.Value / scalar));
 
-            return new CollectedData()
+            return new CollectedData
             {
-                AvaliableRamBytes = item.AvaliableRamBytes / (float)scalar,
-                CpuUsagePercent = item.CpuUsagePercent / (float)scalar,
-                InterruptsPerSeconds = item.InterruptsPerSeconds / (float)scalar,
-                InterruptsTimePercent = item.InterruptsTimePercent / (float)scalar,
-                LocalDiskFreeMBytes = item.LocalDiskFreeMBytes / (float)scalar,
-                LocalDiskFreeSpacePercent = item.LocalDiskFreeSpacePercent / (float)scalar,
+                AvaliableRamBytes = item.AvaliableRamBytes / scalar,
+                CpuUsagePercent = item.CpuUsagePercent / scalar,
+                InterruptsPerSeconds = item.InterruptsPerSeconds / scalar,
+                InterruptsTimePercent = item.InterruptsTimePercent / scalar,
+                LocalDiskFreeMBytes = item.LocalDiskFreeMBytes / scalar,
+                LocalDiskFreeSpacePercent = item.LocalDiskFreeSpacePercent / scalar,
                 ProcessesCount = item.ProcessesCount,
-                RamUsagePercent = item.RamUsagePercent / (float)scalar,
+                RamUsagePercent = item.RamUsagePercent / scalar,
                 Time = item.Time,
-                ProcessesCPU = processCPU,
-                ProcessesRAM = processRAM
+                ProcessesCpu = processCpu,
+                ProcessesRam = processRam
             };
         }
 
         public override string ToString()
         {
-            StringBuilder str = new StringBuilder();
-            str.Append($"Instance id: {this.Id}\n");
-            str.Append($"Processes count: {this.ProcessesCount}\n");
-            str.Append($"CPU usage: {this.CpuUsagePercent}%\n");
-            str.Append($"Ram avalaible: {this.AvaliableRamBytes} MB\n");
-            str.Append($"Ram usage: {this.RamUsagePercent}%\n");
-            str.Append($"Local disk avalaible: {this.LocalDiskFreeMBytes} MB\n");
+            var str = new StringBuilder();
+            str.Append($"Instance id: {Id}\n");
+            str.Append($"Processes count: {ProcessesCount}\n");
+            str.Append($"CPU usage: {CpuUsagePercent}%\n");
+            str.Append($"Ram avalaible: {AvaliableRamBytes} MB\n");
+            str.Append($"Ram usage: {RamUsagePercent}%\n");
+            str.Append($"Local disk avalaible: {LocalDiskFreeMBytes} MB\n");
             return str.ToString();
         }
+
+        #region Percentage
+
+        public float CpuUsagePercent { get; set; }
+        public float RamUsagePercent { get; set; }
+        public float InterruptsTimePercent { get; set; }
+        public float LocalDiskFreeSpacePercent { get; set; }
+
+        #endregion
     }
 }

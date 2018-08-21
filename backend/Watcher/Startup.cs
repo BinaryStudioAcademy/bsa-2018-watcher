@@ -4,6 +4,7 @@ namespace Watcher
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -23,6 +24,7 @@ namespace Watcher
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
     using Watcher.Common.Options;
@@ -129,7 +131,7 @@ namespace Watcher
                                   if ((!context.Request.Path.Value.Contains("/notifications")
                                       && !context.Request.Path.Value.Contains("/dashboards")
                                       && !context.Request.Path.Value.Contains("/chatsHub"))
-                                      
+
                                       || !context.Request.Query.ContainsKey("Authorization")
                                       || !context.Request.Query.ContainsKey("WatcherAuthorization"))
                                       return Task.CompletedTask;
@@ -209,7 +211,14 @@ namespace Watcher
             app.UseConfiguredSwagger();
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+
+            string imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+            Directory.CreateDirectory(imageFolder);
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(imageFolder),
+            });
+
             app.UseAuthentication();
 
             app.UseWatcherAuth();
