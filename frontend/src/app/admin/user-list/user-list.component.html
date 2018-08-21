@@ -6,5 +6,109 @@
       <hr>
     </div>
   </div>
-  
+
+
+  <p-table [value]="users" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width:7%">CREATED AT</th>
+        <th style="width:10%">PHOTO</th>
+        <th style="width:8%">DISPLAY NAME</th>
+        <th style="width:8%">FIRST NAME</th>
+        <th style="width:8%">LAST NAME</th>
+        <th style="width:10%">BIO</th>
+        <th style="width:20%">EMAIL</th>
+        <th> ORGANIZATION ID</th>
+        <th style="width:6%">IS ACTIVE</th>
+        <th style="width:6%">ROLE</th>
+        <th style="width:6%">EDIT</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td class="center">{{user.createdAt | date:'longDate'}}</td>
+        <td class="center">
+          <img *ngIf="user.photoURL" src="user.photoURL" alt="PHOTO" />
+        </td>
+        <td class="center">{{user.displayName}}</td>
+        <td class="center">{{user.firstName}}</td>
+        <td class="center">{{user.lastName}}</td>
+        <td class="center">{{user.bio}}</td>
+        <td class="center">{{user.email}}</td>
+        <td class="center">{{user.lastPickedOrganizationId}}</td>
+        <td class="center">
+          <i *ngIf="user.isActive" class="fa fa-check-circle-o" style="font-size: 25px"></i>
+          <i *ngIf="!user.isActive" class="fa fa-times-circle-o" style="font-size: 25px"></i>
+        </td>
+        <td class="center">{{user.role.name}}</td>
+        <td>
+          <div class="center">
+            <button pButton type="button " label="Edit " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(user)"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
 </div>
+
+
+<p-dialog header="Update user" [(visible)]="display" [modal]="true" [responsive]="true" [width]="450" [minWidth]="300" [minY]="70"
+  [maximizable]="false" [baseZIndex]="10000">
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-8">
+      <form [formGroup]="userForm">
+        <p class="field">Display name</p>
+        <input size="41" type="text" formControlName="displayName" pInputText />
+
+        <p class="field">First name</p>
+        <input size="41" type="text" formControlName="firstName" pInputText />
+
+        <p class="field">Last name</p>
+        <input size="41" type="text" formControlName="lastName" pInputText />
+
+        <p class="field">Email</p>
+        <input size="41" type="text" formControlName="email" pInputText />
+
+        <p class="field">Last picked organization id</p>
+        <input size="41" type="text" formControlName="lastPickedOrganizationId" pInputText/>
+
+        <p class="field">Bio</p>
+        <textarea rows="5" [cols]="42" formControlName="bio" pInputTextarea></textarea>
+
+      </form>
+    </div>
+
+    <div class="ui-g-4">
+      <form [formGroup]="userForm">
+        <p class="field center space">Is active:
+          <p-checkbox formControlName="isActive" binary="true"></p-checkbox>
+        </p>
+      </form>
+      <p class="field center">List of organization</p>
+      <div class="border">
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-6 center">Id</div>
+          <div class="ui-g-6 ">Assign</div>
+        </div>
+        <p-scrollPanel [style]="{width: '100%', height: '350px'}" styleClass="custom">
+
+          <div *ngFor="let organization of lstOrganizations" class="ui-g ui-fluid">
+            <div class="ui-g-6 center">{{organization.id}} </div>
+            <div class="ui-g-6 ">
+              <p-checkbox [(ngModel)]="organization.assign" binary="true"></p-checkbox>
+            </div>
+          </div>
+
+        </p-scrollPanel>
+      </div>
+
+    </div>
+  </div>
+
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
+    <button type="button" pButton icon="pi pi-close" (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+  </p-footer>
+
+</p-dialog>

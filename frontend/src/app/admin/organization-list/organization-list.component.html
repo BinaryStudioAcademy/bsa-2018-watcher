@@ -88,19 +88,19 @@
       </form>
       <p class="field center">List of instances</p>
       <div class="border">
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-6 center">Id</div>
+          <div class="ui-g-6 ">Active</div>
+        </div>
         <p-scrollPanel [style]="{width: '100%', height: '311px'}" styleClass="custom">
-          <div>
-            <div class="ui-g ui-fluid">
-              <div class="ui-g-6 center">Id</div>
-              <div class="ui-g-6 ">Active</div>
-            </div>
-            <div *ngFor="let instance of lstInstances" class="ui-g ui-fluid">
-              <div class="ui-g-6 center">{{instance.id}} </div>
-              <div class="ui-g-6 ">
-                <p-checkbox [(ngModel)]="instance.isActive" binary="true"></p-checkbox>
-              </div>
+
+          <div *ngFor="let instance of lstInstances" class="ui-g ui-fluid">
+            <div class="ui-g-6 center">{{instance.id}} </div>
+            <div class="ui-g-6 ">
+              <p-checkbox [(ngModel)]="instance.isActive" binary="true"></p-checkbox>
             </div>
           </div>
+
         </p-scrollPanel>
       </div>
 
