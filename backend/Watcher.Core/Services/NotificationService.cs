@@ -50,8 +50,7 @@
 
             var userNotifications = await _uow.NotificationsRepository.GetRangeAsync(1, int.MaxValue, n => n.UserId == userId,
                                                                     include: notifications => notifications.Include(n => n.NotificationSetting)
-                                                                                                            .Include(n => n.User)
-                                                                                                            .Include(n => n.NotificationSetting));
+                                                                                                            .Include(n => n.User));
 
             var dtos = _mapper.Map<List<Notification>, List<NotificationDto>>(userNotifications);
 
