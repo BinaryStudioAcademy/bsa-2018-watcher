@@ -15,9 +15,9 @@
 
         Task<NotificationDto> GetEntityByIdAsync(int id);
 
-        Task<NotificationDto> CreateEntityAsync(NotificationRequest request);
+        // Task<NotificationDto> CreateEntityAsync(NotificationRequest request); // TODO: Change this method in service
 
-        Task<NotificationDto> CreateEntityAsync(NotificationDto notificationDto, NotificationType notificationType);
+        Task<IEnumerable<NotificationDto>> CreateEntityAsync(NotificationDto notificationDto, NotificationType notificationType);
 
         Task<bool> UpdateEntityByIdAsync(NotificationUpdateRequest request, int id);
 
