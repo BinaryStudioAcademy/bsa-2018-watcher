@@ -16,6 +16,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ChatComponent } from './chat.component';
 import { ConversationPanelComponent } from './conversation-panel/conversation-panel.component';
 import { ConversationSettingsPopupComponent } from './conversation-settings-popup/conversation-settings-popup.component';
+import { ChatCreatePopupComponent } from './chat-create-popup/chat-create-popup.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,7 @@ import { ConversationSettingsPopupComponent } from './conversation-settings-popu
     DialogModule,
     AutoCompleteModule
   ],
-  declarations: [ChatComponent, ConversationPanelComponent, ConversationSettingsPopupComponent],
+  declarations: [ChatComponent, ConversationPanelComponent, ConversationSettingsPopupComponent, ChatCreatePopupComponent],
   exports: [ChatComponent]
 })
 export class ChatModule { }
