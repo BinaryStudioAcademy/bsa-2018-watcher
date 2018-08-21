@@ -10,8 +10,10 @@
       </p-header>
       <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="openChat()">
         <ng-template let-chat pTemplate="item">
-          <i class="pi pi-fw pi-users"></i>
-          <span class="chat-name"> {{chat.value.name}}</span>
+          <div class="ui-helper-clearfix">
+            <img class="chat-list-img" src="{{chatImage}}"/>
+            <span class="chat-list-name"> {{chat.value.name}}</span>
+          </div>
         </ng-template>
       </p-listbox>
     </p-accordionTab>

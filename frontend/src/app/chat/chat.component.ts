@@ -1,6 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
-import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 
 import { ChatHub } from '../core/hubs/chat.hub';
 import { AuthService } from '../core/services/auth.service';
@@ -20,12 +19,10 @@ import { User } from '../shared/models/user.model';
 export class ChatComponent implements OnInit {
 
   constructor(
-    private fb: FormBuilder,
     private chatHub: ChatHub,
     private authService: AuthService,
     private chatService: ChatService,
     private toastrService: ToastrService) { }
-
 
   public onDisplayChat = new EventEmitter<Chat>();
   public onDisplayChatCreating = new EventEmitter<boolean>();
@@ -35,7 +32,6 @@ export class ChatComponent implements OnInit {
   currentUser: User;
 
   ngOnInit() {
-
     this.currentUser = this.authService.getCurrentUser();
     this.chatService.getByUserId(this.currentUser.id).subscribe(
       chats => {
@@ -57,6 +53,15 @@ export class ChatComponent implements OnInit {
 
   openChatCreating() {
     this.onDisplayChatCreating.emit();
+  }
+
+  get chatImage() {
+    if (this.selectedChat && this.selectedChat.users.length === 2) {
+      return this.selectedChat.users.find(u => u.id !== this.currentUser.id).photoURL;
+    }
+
+    // Default image for chat list
+    return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
   }
 
   subscribeToEvents() {

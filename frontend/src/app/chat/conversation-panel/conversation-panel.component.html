@@ -13,7 +13,7 @@
           <div *ngFor="let message of chat?.messages" class="message" [ngClass]="{'received-message': message?.user?.id != currentUser?.id}">
             <div class="ui-g">
               <div class="ui-g-3 ui-g-nopad">
-                  <img class="message-user-img" src="{{message?.user?.photoURL}}"/>
+                  <img class="message-user-img" src="{{message?.user?.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}"/>
               </div>
               <div class="ui-g-9 ui-g-nopad">
                 <strong>{{message?.user?.displayName}}</strong>

@@ -1,5 +1,6 @@
 /deep/.ui-accordion-header
 	margin: 0 !important
+
 	a
 		padding: 4px !important
 	
@@ -20,11 +21,26 @@
 	bottom: 0
 	right: 20px
 	width: 150px
+
 	/deep/.ui-listbox
 		border: 0
-	/deep/.ui-listbox-item
-		display: inline-flex !important
-		width: 100%
+
+	// /deep/.ui-listbox-item.ui-state-highlight
+	// 	background-color: #a5a5a5 !important
+
+	.chat-list-img
+		width: 25px
+		height: 25px
+		float: left
+		margin-right: 5px
+		border-radius: 50%
+	
+	.chat-list-name
+		float: left
+		width: 90px
+		overflow: hidden
+		white-space: nowrap
+		text-overflow: ellipsis
 
 .icon
     cursor: pointer
@@ -37,7 +53,8 @@
 	float: right
 
 .field
-    margin: 3px 0
+	margin-left: 3px
+	margin-top: 10px
 
 .title
 	float: right
@@ -52,6 +69,6 @@
 	float: left
 	margin-right: 5px
 
-.member-item
-	border-bottom: 1px solid #d5d5d5
+.user-list-item
+	border-top: 1px solid #d5d5d5
 	padding: 5px
