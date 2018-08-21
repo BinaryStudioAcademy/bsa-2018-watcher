@@ -1,4 +1,6 @@
-﻿namespace Watcher
+﻿using Watcher.Core.Hubs;
+
+namespace Watcher
 {
     using System;
     using System.Collections.Generic;
@@ -7,13 +9,16 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
-
+    using DataAccumulator.DataAccessLayer.Entities;
+    using DataAccumulator.DataAccessLayer.Interfaces;
+    using DataAccumulator.DataAccessLayer.Repositories;
     using FluentValidation.AspNetCore;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Azure.ServiceBus;
     using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -59,7 +64,7 @@
                 }));
 
             services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
-
+            
             var securitySection = Configuration.GetSection("Security");
             services.Configure<WatcherTokenOptions>(o =>
                 {
@@ -83,22 +88,23 @@
             services.AddTransient<IOrganizationService, OrganizationService>();
             services.AddTransient<IChatsService, ChatsService>();
             services.AddTransient<IMessagesService, MessagesService>();
+            services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IInstanceService, InstanceService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
             services.AddTransient<IChartsService, ChartsService>();
             services.AddTransient<IResponseService, ResponseService>();
-            services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
+            services.AddTransient<ICollectedDataService, CollectedDataService>();
 
+            services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
+            services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
 
             ConfigureFileStorage(services, Configuration);
-
+            ConfigureCosmosDb(services, Configuration);
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
-
-
             InitializeAutomapper(services);
 
             ConfigureDatabase(services, Configuration);
@@ -234,6 +240,26 @@
             app.UseMvc();
         }
 
+        public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
+        {
+            var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (enviroment == EnvironmentName.Production)
+            {
+                var cosmosDbString = Configuration.GetConnectionString("AzureCosmosDbConnection");
+                if (!string.IsNullOrWhiteSpace(cosmosDbString))
+                {
+                    services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(cosmosDbString, "DataAccumulatorDb"));
+                }
+            }
+            else
+            {
+                var mongoDbString = Configuration.GetConnectionString("MongoDbConnection");
+                services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(mongoDbString, "DataAccumulatorDb"));
+            }
+        }
+
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -242,13 +268,13 @@
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
                 {
-                    services.AddSingleton<IFileStorageProvider, FileStorageProvider>(
+                    services.AddScoped<IFileStorageProvider, FileStorageProvider>(
                         prov => new FileStorageProvider(fileStorageString));
                 }
             }
             else
             {
-                services.AddSingleton<IFileStorageProvider, LocalFileStorageProvider>(
+                services.AddScoped<IFileStorageProvider, LocalFileStorageProvider>(
                     prov => new LocalFileStorageProvider());
             }
         }
@@ -277,6 +303,7 @@
                     cfg.AddProfile<ResponseProfile>();
                     cfg.AddProfile<InstancesProfile>();
                     cfg.AddProfile<OrganizationInvitesProfile>();
+                    cfg.AddProfile<CollectedDataProfile>();
 
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/

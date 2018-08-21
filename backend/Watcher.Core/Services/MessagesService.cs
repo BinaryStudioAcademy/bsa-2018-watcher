@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Watcher.Common.Enums;
 
 namespace Watcher.Core.Services
 {
@@ -17,11 +19,13 @@ namespace Watcher.Core.Services
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
-        public MessagesService(IUnitOfWork uow, IMapper mapper)
+        public MessagesService(IUnitOfWork uow, IMapper mapper, INotificationService notificationService)
         {
             _uow = uow;
             _mapper = mapper;
+            _notificationService = notificationService;
         }
 
         public async Task<IEnumerable<MessageDto>> GetAllEntitiesAsync()
@@ -47,8 +51,8 @@ namespace Watcher.Core.Services
         public async Task<MessageDto> GetEntityByIdAsync(int id)
         {
             var sample = await _uow.MessagesRepository.GetFirstOrDefaultAsync(s => s.Id == id,
-                include: messages => messages.Include(m => m.User)
-                    .Include(m => m.Chat));
+                include: x => x
+                    .Include(m => m.User));
 
             if (sample == null) return null;
 
@@ -69,8 +73,16 @@ namespace Watcher.Core.Services
             }
 
             if (entity == null) return null;
+            var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(c => c.Id == entity.ChatId);
 
             var dto = _mapper.Map<Message, MessageDto>(entity);
+
+            await _notificationService.CreateEntityAsync(new NotificationDto()
+            {
+                UserId = request.UserId,
+                CreatedAt = DateTime.Now,
+                Text = $"You have message in chat {chat.Name}"
+            }, NotificationType.Chat);
 
             return dto;
         }

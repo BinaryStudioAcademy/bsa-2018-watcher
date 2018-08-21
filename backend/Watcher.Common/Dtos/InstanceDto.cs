@@ -16,6 +16,8 @@ namespace Watcher.Common.Dtos
 
         public string Platform { get; set; }
 
+        public bool IsActive { get; set; }
+
         public Guid GuidId { get; set; }
 
         public OrganizationDto Organization { get; set; }

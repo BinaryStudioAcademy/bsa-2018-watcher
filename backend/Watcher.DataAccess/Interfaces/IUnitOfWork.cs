@@ -33,7 +33,10 @@
 
         IOrganizationInvitesRepository OrganizationInvitesRepository { get; }
 
+        INotificationsRepository NotificationsRepository { get; }
+
         IChartsRepository ChartsRepository { get;  }
+
         Task<bool> SaveAsync();
     }
 }

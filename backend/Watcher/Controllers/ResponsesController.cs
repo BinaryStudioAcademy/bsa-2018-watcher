@@ -1,4 +1,9 @@
-﻿namespace Watcher.Controllers
+﻿using System;
+using Microsoft.AspNetCore.SignalR;
+using Watcher.Common.Enums;
+using Watcher.Hubs;
+
+namespace Watcher.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -25,6 +30,7 @@
         /// </summary>
         private readonly IResponseService _responseService;
         private readonly IEmailProvider _emailProvider;
+        private readonly INotificationService _notificationService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResponsesController"/> class. 
@@ -33,10 +39,11 @@
         /// Responses service
         /// </param>
         /// <param name="provider"></param>
-        public ResponsesController(IResponseService service, IEmailProvider provider)
+        public ResponsesController(IResponseService service, IEmailProvider provider, INotificationService notificationService)
         {
             _responseService = service;
             _emailProvider = provider;
+            _notificationService = notificationService;
         }
 
         /// <summary>
@@ -119,7 +126,13 @@
                 await _emailProvider.SendMessageOneToOne("watcher@net.com", "Thanks for feedback", request.Feedback.User.Email,
                     request.Text, "");
             }
-
+            var notificationDto = new NotificationDto();
+            notificationDto.CreatedAt = request.CreatedAt;
+            notificationDto.Text = "The response to your feedback has been sent to your email.";
+            var userFeedback = request.Feedback.User;
+            notificationDto.UserId = userFeedback.Id;
+            notificationDto.OrganizationId = userFeedback.LastPickedOrganizationId;
+            await _notificationService.CreateEntityAsync(notificationDto, NotificationType.Info);
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
     }

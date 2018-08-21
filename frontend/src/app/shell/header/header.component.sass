@@ -1,7 +1,8 @@
 .header
     background-color: rgb(0,0,0)
     box-sizing: border-box
-    display: block
+    display: flex
+    justify-content: space-between
     padding: 0
     height: 60px
     box-sizing: border-box
@@ -27,7 +28,7 @@
     color: white
     margin-left: 45px
     margin-top: 20px
-    display: inline-block 
+    display: flexbox
     text-transform: uppercase
 
 .organizations
@@ -67,6 +68,9 @@
     clear: both
     display: table
 
+/deep/.ui-toolbar-group-right
+    display: flexbox
+
 /deep/ .header
     .ui-button
         background-color: #313232
@@ -105,3 +109,28 @@
 .selectedMenuItem
     color: red
     font-weight: 900
+
+.notifications-block
+    background-color: #FFFFFC
+    position: absolute
+
+    margin-top: 5px
+
+    border-radius: 2px
+
+    width: 200px
+    height: 200px
+    z-index: 99999
+
+    overflow: auto
+
+.notification-card
+    margin: 5px
+    padding: 7px
+    border-radius: 3px
+    background-color: #D4D4CE
+
+.notification-text
+    border-radius: 2px
+    padding: 2px
+    font-size: 12px

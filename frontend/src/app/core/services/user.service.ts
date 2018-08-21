@@ -19,6 +19,14 @@ export class UserService {
     return this.apiService.get(`/${this.ctrlUrl}/${id}`) as Observable<User>;
   }
 
+  public getAll(): Observable<User[]> {
+    return this.apiService.get(`/${this.ctrlUrl}`) as Observable<User[]>;
+  }
+
+  public getByEmail(email: string): Observable<User> {
+    return this.apiService.get(`/${this.ctrlUrl}/email/${email}`) as Observable<User>;
+  }
+
   public updateLastPickedOrganization(userId: string, organizationId: number): Observable<Object> {
     return this.apiService.put(`/${this.ctrlUrl}/UpdateLastPickedOrganization/${userId}/${organizationId}`);
   }

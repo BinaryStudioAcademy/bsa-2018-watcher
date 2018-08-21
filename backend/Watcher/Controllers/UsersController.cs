@@ -209,5 +209,27 @@ namespace Watcher.Controllers
 
             return NoContent();
         }
+
+        /// <summary>
+        /// Get user by email
+        /// </summary>
+        /// <param name="email">User email</param>
+        /// <returns>
+        /// User with wanted email
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">User not found</response>
+        /// <response code="200">Success</response>
+        [HttpGet("email/{email}")]
+        public virtual async Task<ActionResult> GetUserByEmail([FromRoute] string email)
+        {
+            var dto = await _usersService.GetEntityByEmailAsync(email);
+            if (dto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
+        }
     }
 }
