@@ -44,15 +44,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
               private activateRoute: ActivatedRoute) {
-    this.dashboardsHub.connectToSignalR();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
+
+    await this.dashboardsHub.connectToSignalR();
+
     this.subscription = this.activateRoute.params.subscribe(params => {
       if (this.instanceGuidId) {
         this.dashboardsHub.unSubscribeFromInstanceById(this.instanceGuidId);
       }
       this.instanceId = params['insId'];
+      this.instanceGuidId = params['guidId'];
+
       this.dashboardMenuItems = [];
       if (this.instanceId && this.instanceId !== 0) {
         this.getDashboardsByInstanceId(this.instanceId);
@@ -61,14 +66,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .subscribe(info => {
           if (info && info.length > 0) {
             this.PercentageInfoToDisplay = info;
-            this.instanceGuidId = info[0].id;
-            this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
           }
+          this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
+        }, err => {
+          console.error(err);
+          this.toastrService.error('Cant fetch instance collected Data');
         });
 
     });
-
-    this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
   }
 
   ngOnDestroy(): void {

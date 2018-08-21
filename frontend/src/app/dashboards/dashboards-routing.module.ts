@@ -18,7 +18,7 @@ const dashboardRoutes: Routes = [
     component: EditInstanceComponent
   },
   {
-    path: ':insId/dashboards',
+    path: ':insId/:guidId/dashboards',
     component: DashboardComponent
   }];
 

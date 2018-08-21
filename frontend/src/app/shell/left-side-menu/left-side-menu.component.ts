@@ -116,7 +116,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     const item: MenuItem = {
       label: instance.title,
       title: instance.id.toString(),
-      routerLink:  [`instances/${instance.id}/dashboards`],
+      routerLink:  [`instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
         this.instanceService.instanceChecked.emit(instance);
         // this.router.navigate([`/user/instances/${instance.id}/dashboards`]);

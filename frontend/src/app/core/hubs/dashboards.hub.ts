@@ -27,10 +27,10 @@ export class DashboardsHub {
     return this.apiService.get(`/CollectedData/Percentage/${id}?count=20`) as Observable<PercentageInfo[]>;
   }
 
-  connectToSignalR(): void {
+  connectToSignalR(): Promise<void> {
     this.createConnection();
     this.registerOnServerEvents();
-    this.startHubConnection();
+    return this.startHubConnection();
   }
 
   subscribeToInstanceById(instanceGuidId: string): void {
@@ -87,11 +87,9 @@ export class DashboardsHub {
 
 
   // Reconnect loop
-  private startHubConnection(): void {
-    console.log('Connecting to Hub!!!');
-    this.hubConnection.start()
+  private startHubConnection(): Promise<void> {
+    return this.hubConnection.start()
       .then(() => {
-        console.log('CONNECTION STARTED!!!');
         this.connectionEstablishedSub.next(true);
       })
       .catch(function (err) {
