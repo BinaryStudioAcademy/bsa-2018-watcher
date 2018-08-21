@@ -23,6 +23,7 @@ export class OrganizationListComponent implements OnInit {
   display: boolean;
   totalRecords: number;
   lstInstances: Instance[];
+  lstInstancesTemp: Instance[];
 
   constructor(
               private fb: FormBuilder,
@@ -55,20 +56,12 @@ export class OrganizationListComponent implements OnInit {
       this.organizations = value;
       this.totalRecords = value.length;
     });
-/*
-    Object.keys(this.organizationForm.controls).forEach(field => {
-      const control = this.organizationForm.get(field);
-      control.enable();
-    });*/
   }
 
   subscribeOrganizationFormToData() {
     Object.keys(this.organizationForm.controls).forEach(field => {
       const control = this.organizationForm.get(field);
       control.setValue(this.organization[field]);
-      control.valueChanges.subscribe(value => {
-        this.organization[field] = value;
-      });
     });
   }
 
@@ -76,11 +69,12 @@ export class OrganizationListComponent implements OnInit {
     this.organization = organization;
     this.subscribeOrganizationFormToData();
     this.display = true;
-    this.lstInstances = organization.instances;
+    this.lstInstances = organization.instances.map(x => Object.assign({}, x));
   }
 
   onCancel() {
     this.display = false;
+    this.lstInstances = this.organization.instances;
     this.organization = null;
   }
 
@@ -100,6 +94,9 @@ export class OrganizationListComponent implements OnInit {
 
     if (this.organizationForm.valid) {
       this.organization.theme = null;
+      Object.keys(this.organizationForm.controls).forEach(field => {
+        this.organization[field] = this.organizationForm.get(field).value;
+        });
       this.organization.instances = this.lstInstances;
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
@@ -111,10 +108,6 @@ export class OrganizationListComponent implements OnInit {
       );
     } else {
       this.toastrService.error('Form was filled incorrectly');
-     /* Object.keys(this.organizationForm.controls).forEach(field => {
-        const control = this.organizationForm.get(field);
-        control.markAsDirty({ onlySelf: true });
-      });*/
     }
     this.lstInstances.forEach(instance => {
       const instanceNew: InstanceRequest = this.getNewInstance(instance);
