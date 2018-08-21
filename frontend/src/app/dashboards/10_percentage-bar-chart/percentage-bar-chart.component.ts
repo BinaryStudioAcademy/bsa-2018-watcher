@@ -46,11 +46,13 @@ export class PercentageBarChartComponent implements OnInit {
   ];
 
    constructor(private dashboardsHub: DashboardsHub) {
+  }
+
+  ngOnInit() {
     this.subscribePercentageInfo();
   }
 
   subscribePercentageInfo(): void {
-    // this.dashboardsHub.connectToSignalR();
     this.dashboardsHub.infoSubObservable.subscribe((latestStatus: PercentageInfo) => {
       this.data[0].value = Math.floor(latestStatus.cpuUsagePercent);
       this.data[1].value = Math.floor(latestStatus.ramUsagePercent);
@@ -58,9 +60,6 @@ export class PercentageBarChartComponent implements OnInit {
       this.data[3].value = Math.floor(latestStatus.interruptsTimePercent);
       this.data = [...this.data];
     });
-  }
-
-  ngOnInit() {
   }
 
   onSelect(event) {

@@ -7,14 +7,9 @@
       <hr>
     </div>
   </div>
-  <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem"></p-tabMenu>
-  <div class="workspace" *ngIf="activeDashboardItem && dashboardMenuitems.length > 1">
+  <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem"></p-tabMenu>
+  <div class="workspace" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">
     <div class="dashboard-options">
-      <button pButton type="button"
-              label="Market"
-              class="btnedit ui-button-success ui-button-raised "
-              [disabled]="activeDashboardItem == null"
-              (click)="subscribeToMarket()"></button>
       <button pButton type="button"
               label="Add Item"
               class="btnedit ui-button-success ui-button-raised "
@@ -32,15 +27,12 @@
               (click)="delete()"></button>
     </div>
 
-    <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuitems.length > 1">
+    <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">
       <div class="dashboard-item">
         <app-percentage-bar-chart></app-percentage-bar-chart>
       </div>
       <div class="dashboard-item">
         <app-percentage-line-chart [percentageInfo]="percentageInfoToDisplay"></app-percentage-line-chart>
-      </div>
-      <div class="dashboard-item">
-        <app-vertical-bar-chart></app-vertical-bar-chart>
       </div>
       <!--<div class="dashboard-item">-->
         <!--<app-market-chart [marketStatus]="marketStatusToPlot"></app-market-chart>-->

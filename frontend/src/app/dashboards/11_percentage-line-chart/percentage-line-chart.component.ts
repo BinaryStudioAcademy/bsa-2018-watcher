@@ -60,13 +60,17 @@ export class PercentageLineChartComponent implements OnInit, OnChanges {
 
   constructor(private dashboardsService: DashboardService,
               private dashboardsHub: DashboardsHub) {
+  }
+
+  ngOnInit(): void {
     this.buildChart(this.percentageInfo);
     this.subscribeToCollectedData();
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.buildChart(this.percentageInfo);
   }
+
 
   buildChart(info: PercentageInfo[]) {
     if (info && info.length > 0) {
@@ -81,7 +85,6 @@ export class PercentageLineChartComponent implements OnInit, OnChanges {
       this.data = [...this.data];
     }
   }
-
 
   toSeriesData(info: PercentageInfo): SeriesItem[] {
     const items: SeriesItem[] = [];
@@ -109,9 +112,6 @@ export class PercentageLineChartComponent implements OnInit, OnChanges {
 
       this.data = [...this.data];
     });
-  }
-
-  ngOnInit() {
   }
 
   onSelect(event) {

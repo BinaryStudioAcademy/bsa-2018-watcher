@@ -1,8 +1,7 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import { HubConnection} from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import {environment} from '../../../environments/environment';
-import {MarketPrice, MarketPriceDate} from '../../dashboards/models';
 import {from, Observable, Subject} from 'rxjs';
 import {PercentageInfo} from '../../dashboards/models/percentage-info';
 import {ApiService} from '../services/api.service';
@@ -13,23 +12,15 @@ import {AuthService} from '../services/auth.service';
   providedIn: 'root'
 })
 export class DashboardsHub {
-  private connectionIsEstablished = false;
   private hubConnection: HubConnection | undefined;
+  private connectionEstablishedSub = new Subject<boolean>();
+  public connectionEstablished$ = from(this.connectionEstablishedSub);
 
   private infoSub = new Subject<PercentageInfo>();
   public infoSubObservable = from(this.infoSub);
-  connectionEstablished = new EventEmitter<Boolean>();
 
   constructor(private apiService: ApiService,
               private authService: AuthService) {
-  }
-
-  public getInitialMarketStatusOld(): Observable<MarketPrice[]> {
-    return this.apiService.get(`/Samples/MarketData`) as Observable<MarketPrice[]>;
-  }
-
-  public getInitialMarketStatus(): Observable<MarketPriceDate[]> {
-    return this.apiService.get(`/Samples/MarketData`) as Observable<MarketPriceDate[]>;
   }
 
   public getInitialPercentageInfoByInstanceId(id: number): Observable<PercentageInfo[]> {
@@ -101,8 +92,7 @@ export class DashboardsHub {
     this.hubConnection.start()
       .then(() => {
         console.log('CONNECTION STARTED!!!');
-        this.connectionIsEstablished = true;
-        this.connectionEstablished.emit(true);
+        this.connectionEstablishedSub.next(true);
       })
       .catch(function (err) {
         console.error(err);
