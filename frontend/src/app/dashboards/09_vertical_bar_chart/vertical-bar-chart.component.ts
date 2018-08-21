@@ -55,10 +55,9 @@ export class VerticalBarChartComponent implements OnInit {
   ];
 
   constructor(private dashboardsService: DashboardService,
-              private notificationsService: DashboardsHub) {
-    this.notificationsService.getInitialMarketStatus()
+              private dashboardsHub: DashboardsHub) {
+    this.dashboardsHub.getInitialMarketStatus()
       .subscribe(prices => {
-        // debugger;
         const openData = prices.map(p => this.toSeriesData(p, true));
         const closeData = prices.map(p => this.toSeriesData(p, false));
 
@@ -88,10 +87,9 @@ export class VerticalBarChartComponent implements OnInit {
   }
 
   subscribeToMarket(): void {
-    this.notificationsService.connectToSignalR();
-    this.notificationsService.subscribeToMarketDataFeed();
-    this.notificationsService.marketSubObservable.subscribe((latestStatus: MarketPriceDate) => {
-      console.log(latestStatus);
+    // this.notificationsService.connectToSignalR();
+    this.dashboardsHub.subscribeToMarketDataFeed();
+    this.dashboardsHub.marketSubObservable.subscribe((latestStatus: MarketPriceDate) => {
       this.marketData[0].series.push({ name: new Date(latestStatus.date), value: latestStatus.open });
       this.marketData[1].series.push({ name: new Date(latestStatus.date), value: latestStatus.close });
       this.marketData[0].series.shift();

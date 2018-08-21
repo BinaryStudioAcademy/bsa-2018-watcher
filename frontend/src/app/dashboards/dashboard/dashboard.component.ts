@@ -42,10 +42,11 @@ export class DashboardComponent implements OnInit {
 
   constructor(private dashboardsService: DashboardService,
               private instanceService: InstanceService,
-              private notificationsService: DashboardsHub,
+              private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
               private activateRoute: ActivatedRoute) {
-    this.notificationsService.getInitialMarketStatusOld()
+    this.dashboardsHub.connectToSignalR();
+    this.dashboardsHub.getInitialMarketStatusOld()
       .subscribe(prices => {
         this.MarketStatus = prices;
       });
@@ -176,10 +177,10 @@ export class DashboardComponent implements OnInit {
   }
 
   subscribeToMarket(): void {
-    this.notificationsService.connectToSignalR();
-    this.notificationsService.subscribeToMarketDataFeed();
+    this.dashboardsHub.connectToSignalR();
+    this.dashboardsHub.subscribeToMarketDataFeed();
     // const marketUpdateObservable =  this.marketStatusSvc.getUpdates();  // 1
-    this.notificationsService.marketSubObservable.subscribe((latestStatus: MarketPrice) => {  // 2
+    this.dashboardsHub.marketSubObservable.subscribe((latestStatus: MarketPrice) => {  // 2
       console.log(latestStatus);
       this.MarketStatus = [latestStatus].concat(this.marketStatus);  // 3
     });  // 4

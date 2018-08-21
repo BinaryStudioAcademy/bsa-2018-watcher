@@ -199,9 +199,6 @@ namespace Watcher
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
 
-            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
-
             app.UseHttpStatusCodeExceptionMiddleware();
 
             UpdateDatabase(app);
@@ -225,7 +222,7 @@ namespace Watcher
                 app.UseAzureSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
-                        routes.MapHub<NotificationsHub>("/dashboards");
+                        routes.MapHub<DashboardsHub>("/dashboards");
                         routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
@@ -234,7 +231,7 @@ namespace Watcher
                 app.UseSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
-                        routes.MapHub<NotificationsHub>("/dashboards");
+                        routes.MapHub<DashboardsHub>("/dashboards");
                         routes.MapHub<ChatHub>("/chatsHub");
                     });
             }

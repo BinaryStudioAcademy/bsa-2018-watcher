@@ -56,8 +56,8 @@ export class PercentageLineChartComponent implements OnInit {
   ];
 
   constructor(private dashboardsService: DashboardService,
-              private notificationsService: DashboardsHub) {
-    this.notificationsService.getInitialPercentageInfo()
+              private dashboardsHub: DashboardsHub) {
+    this.dashboardsHub.getInitialPercentageInfo()
       .subscribe(info => {
         const infoToInsert = info.map(p => this.toSeriesData(p));
 
@@ -68,7 +68,7 @@ export class PercentageLineChartComponent implements OnInit {
         }
 
         this.data = [...this.data];
-        this.subscribeToMarket();
+        this.subscribeToCollectedData();
       });
   }
 
@@ -87,10 +87,8 @@ export class PercentageLineChartComponent implements OnInit {
     return items;
   }
 
-  subscribeToMarket(): void {
-    this.notificationsService.connectToSignalR();
-    this.notificationsService.infoSubObservable.subscribe((latestInfo: PercentageInfo) => {
-      console.log(latestInfo);
+  subscribeToCollectedData(): void {
+    this.dashboardsHub.infoSubObservable.subscribe((latestInfo: PercentageInfo) => {
       const infoToInsert = this.toSeriesData(latestInfo);
       for (let i = 0; i < 4; i++) {
         this.data[i].series.shift();

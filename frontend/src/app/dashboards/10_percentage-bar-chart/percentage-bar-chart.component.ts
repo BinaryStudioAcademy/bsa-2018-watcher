@@ -45,13 +45,13 @@ export class PercentageBarChartComponent implements OnInit {
     }
   ];
 
-   constructor(private notificationsService: DashboardsHub) {
+   constructor(private dashboardsHub: DashboardsHub) {
     this.subscribePercentageInfo();
   }
 
   subscribePercentageInfo(): void {
-    this.notificationsService.connectToSignalR();
-    this.notificationsService.infoSubObservable.subscribe((latestStatus: PercentageInfo) => {
+    // this.dashboardsHub.connectToSignalR();
+    this.dashboardsHub.infoSubObservable.subscribe((latestStatus: PercentageInfo) => {
       this.data[0].value = Math.floor(latestStatus.cpuUsagePercent);
       this.data[1].value = Math.floor(latestStatus.ramUsagePercent);
       this.data[2].value = Math.floor(latestStatus.localDiskFreeSpacePercent);

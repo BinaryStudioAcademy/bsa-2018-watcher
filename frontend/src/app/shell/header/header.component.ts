@@ -12,6 +12,7 @@ import { ToastrService } from '../../core/services/toastr.service';
 import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../core/services/notification.service';
 import { Notification } from '../../shared/models/notification.model';
+import {NotificationsHubService} from '../../core/services/notifications-hub.service';
 
 @Component({
   selector: 'app-header',
