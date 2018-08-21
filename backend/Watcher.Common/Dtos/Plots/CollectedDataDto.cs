@@ -4,6 +4,9 @@ using Watcher.Common.Interfaces.Entities;
 
 namespace Watcher.Common.Dtos.Plots
 {
+    using Watcher.Common.MoveToFrontend;
+
+    [ExportClassToTypescript]
     public class CollectedDataDto : ICollectedData
     {
         public Guid Id { get; set; }

@@ -253,11 +253,11 @@ namespace Watcher
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (enviroment == EnvironmentName.Production)
             {
-                var cosmosDbString = Configuration.GetConnectionString("AzureCosmosDbConnection");
+                var cosmosDbString = Configuration.GetConnectionString("AzureMongoDbConnection");
                 if (!string.IsNullOrWhiteSpace(cosmosDbString))
                 {
                     services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-                          options => new DataAccumulatorRepository(cosmosDbString, "DataAccumulatorDb"));
+                          options => new DataAccumulatorRepository(cosmosDbString, "bsa-watcher-data-storage"));
                 }
             }
             else
