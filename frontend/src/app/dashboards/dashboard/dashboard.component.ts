@@ -19,7 +19,7 @@ import {InstanceService} from '../../core/services/instance.service';
 })
 
 export class DashboardComponent implements OnInit {
-  private instanceId: number;
+  public instanceId: number;
   private subscription: Subscription;
 
   dashboards: Dashboard[] = [];
