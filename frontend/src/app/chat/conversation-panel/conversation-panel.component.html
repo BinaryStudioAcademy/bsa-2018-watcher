@@ -1,3 +1,5 @@
+<app-conversation-settings-popup [onDisplay]="onDisplaySettings"></app-conversation-settings-popup>
+
 <div class="conversation-panel" [hidden]="!display">
   <p-accordion>
     <p-accordionTab [selected]="true">
@@ -28,41 +30,3 @@
     </p-accordionTab>
   </p-accordion>
 </div>
-
-<p-dialog [(visible)]="displaySettings" [modal]="true" [responsive]="true" [contentStyle]="{'overflow':'visible'}" [width]="350"
-  [baseZIndex]="10000">
-  <p-header>
-    Chat settings
-  </p-header>
-  <div class="ui-fluid">
-    <form [formGroup]="chatSettingsForm">
-      <p class="field">Name*:</p>
-      <input type="text" pInputText formControlName="name" placeholder="Enter chat name">
-    </form>
-    <p class="field">Add user:</p>
-    <p-autoComplete [(ngModel)]="wantedUser" [suggestions]="filteredUsers" (completeMethod)="filterUsers($event)" (onSelect)="addUser($event)"
-    emptyMessage="User not found" placeholder="Write name or email">
-      <ng-template let-user pTemplate="item">
-        <div class="ui-helper-clearfix">
-          <img class="user-list-img" src="{{user.photoURL}}"/>
-          <strong>{{user.firstName}} {{user.lastName}}</strong>
-          <div>{{user.email}}</div>
-        </div>
-      </ng-template>
-    </p-autoComplete>
-    <p class="field">Members:</p>
-    <div *ngFor="let user of chat?.users">
-      <div class="ui-helper-clearfix member-item">
-        <img class="user-list-img" src="{{user.photoURL}}" />
-        <strong>{{user.firstName}} {{user.lastName}}</strong>
-        <i *ngIf="user?.id != chat.createdBy?.id" class="icon fa fa-close" (click)="deleteUser(user.id)"></i>
-        <div>{{user.email}}</div>
-      </div>
-    </div>
-  </div>
-  <p-footer>
-    <div style="text-align: center">
-        <button type="button" pButton (click)="updateChat()" label="Update" [disabled]="!chatSettingsForm.valid"></button>
-    </div>
-  </p-footer>
-</p-dialog>

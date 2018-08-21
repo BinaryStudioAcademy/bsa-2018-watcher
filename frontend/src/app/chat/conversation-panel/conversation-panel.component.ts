@@ -1,13 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { UserService } from '../../core/services/user.service';
 import { ChatService } from '../../core/services/chat.service';
 import { AuthService } from '../../core/services/auth.service';
-import { ToastrService } from '../../core/services/toastr.service';
 import { ChatHub } from '../../core/hubs/chat.hub';
 
-import { ChatUpdateRequest } from '../../shared/requests/chat-update-request';
 import { MessageRequest } from '../../shared/requests/message-request';
 import { Message } from '../../shared/models/message.model';
 import { User } from '../../shared/models/user.model';
@@ -30,32 +26,19 @@ export class ConversationPanelComponent implements OnInit {
   currentUser: User;
 
   display: boolean;
-  displaySettings: boolean;
-
-  chatSettingsForm: FormGroup;
-  filteredUsers: User[];
-
-  wantedUser: string;
+  onDisplaySettings = new EventEmitter<Chat>();
   textMessage: string;
 
   constructor(
-    private fb: FormBuilder,
     private authService: AuthService,
-    private userService: UserService,
     private chatService: ChatService,
-    private toastrService: ToastrService,
     private chatHub: ChatHub) { }
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    this.chatSettingsForm = this.fb.group({
-      'name': new FormControl('', Validators.required)
-    });
-
     this.onDisplay.subscribe((data: Chat) => {
       this.chatService.get(data.id).subscribe((chat: Chat) => {
         this.chat = chat;
-        console.log(chat);
         this.scrollMessageListToBottom();
       });
       this.display = true;
@@ -72,46 +55,7 @@ export class ConversationPanelComponent implements OnInit {
   }
 
   openSettings() {
-    this.chatSettingsForm.controls['name'].setValue(this.chat.name);
-    this.displaySettings = true;
-  }
-
-  addUser(value) {
-    console.log(value);
-    if (this.chat.users.some(u => u === value)) {
-      this.toastrService.error('User already added');
-      return;
-    }
-
-    this.chatHub.addUserToChat(value.id, this.chat.id);
-    this.chat.users.push(value);
-    this.wantedUser = '';
-  }
-
-  filterUsers(event) {
-    this.userService.find(event.query).subscribe(data => {
-      this.filteredUsers = [];
-      if (data.length) {
-        this.filteredUsers = data.filter(u => u.id !== this.currentUser.id);
-      }
-    });
-  }
-
-  deleteUser(id: string) {
-    this.chatHub.deleteUserFromChat(id, this.chat.id);
-  }
-
-  updateChat() {
-    if (!this.chatSettingsForm.valid) {
-      this.toastrService.error('Form was filled incorrectly');
-      return;
-    }
-    const updatedChat: ChatUpdateRequest = {
-      name: this.chatSettingsForm.get('name').value
-    };
-
-    this.chatHub.updateChat(updatedChat, this.chat.id);
-    this.displaySettings = false;
+    this.onDisplaySettings.emit(this.chat);
   }
 
   sendMessage() {
