@@ -9,6 +9,7 @@ using DataAccumulator.Providers;
 using DataAccumulator.Shared.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -38,9 +39,12 @@ namespace DataAccumulator
 
             services.AddMvc();
 
-            services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
+            services.AddSingleton<IQueueClient>( s => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value) );
+            services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
+
             services.AddScoped<IService<CollectedDataDto>, DataAccumulatorService>();
 
+            
             // repo initialization localhost while development env, azure in prod
             ConfigureCosmosDb(services, Configuration);
 
