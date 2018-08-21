@@ -145,6 +145,8 @@ namespace Watcher.Core.Services
 
             if (!existingEntity.PhotoURL.Equals(entity.PhotoURL))
             {
+                await _fileStorageProvider.DeleteFileAsync(existingEntity.PhotoURL);
+
                 string containerName = "watcher";
                 string newPhotoUrl = await _fileStorageProvider.UploadFileBase64Async(entity.PhotoURL, containerName);
                 entity.PhotoURL = newPhotoUrl;

@@ -76,7 +76,7 @@ namespace Watcher.Core.Providers
                 parent = Directory.GetParent(parent).FullName;
                 if (parent == Directory.GetDirectoryRoot(parent)) throw new ArgumentNullException("Wrong relative path");
             }
-            parent += @"\" + relativePath;
+            parent += @"\wwwroot\" + relativePath;
             return parent;
         }
 

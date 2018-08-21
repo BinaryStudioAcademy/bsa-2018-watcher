@@ -4,7 +4,7 @@ import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
-import { ImageCropperComponent, CropperSettings, ImageCropper } from 'ngx-img-cropper';
+import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { environment } from '../../../environments/environment';
 
 
@@ -38,7 +38,7 @@ export class UserProfileComponent implements OnInit {
     this.cropperSettings.canvasWidth = 400;
     this.cropperSettings.canvasHeight = 400;
     this.cropperSettings.noFileInput = true;
-    this.cropperSettings.minWithRelativeToResolution = true;
+    this.cropperSettings.preserveSize = true;
 
     this.data = {};
     }
