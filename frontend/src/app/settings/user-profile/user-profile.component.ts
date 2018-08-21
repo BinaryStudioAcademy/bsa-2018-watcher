@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
+import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
+import { PathService } from '../../core/services/path.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -11,11 +13,36 @@ import { ToastrService } from '../../core/services/toastr.service';
   styleUrls: ['./user-profile.component.sass']
 })
 export class UserProfileComponent implements OnInit {
+  data: any;
+  photoUrl: string;
+
+  @ViewChild('cropper', undefined)
+
+  cropper: ImageCropperComponent;
+
+  cropperSettings: CropperSettings;
+  display: Boolean = false;
 
   constructor(private fb: FormBuilder,
     private userService: UserService,
     private authService: AuthService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private pathService: PathService) {
+
+    this.cropperSettings = new CropperSettings();
+    this.cropperSettings.width = 200;
+    this.cropperSettings.height = 200;
+    this.cropperSettings.minWidth = 100;
+    this.cropperSettings.minHeight = 100;
+    this.cropperSettings.croppedWidth = 70;
+    this.cropperSettings.croppedHeight = 70;
+    this.cropperSettings.canvasWidth = 400;
+    this.cropperSettings.canvasHeight = 400;
+    this.cropperSettings.noFileInput = true;
+    this.cropperSettings.preserveSize = true;
+
+    this.data = {};
+    }
 
   public user: User;
   private userId: string;
@@ -42,6 +69,7 @@ export class UserProfileComponent implements OnInit {
       const control = this.userForm.get(field);
       control.setValue(this.user[field]);
       control.enable();
+      this.photoUrl = this.pathService.convertToUrl(this.user.photoURL);
     });
 
     this.userForm.valueChanges.subscribe(value => {
@@ -51,9 +79,34 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  onImageSelected(upload) {
+    const image: any = new Image();
+    const reader: FileReader = new FileReader();
+    const that = this;
+    reader.onloadend = (eventLoad: any) => {
+      image.src = eventLoad.target.result;
+      that.cropper.setImage(image);
+      this.display = true;
+    };
+
+    reader.readAsDataURL(upload[0]);
+    upload.splice(0, upload.length);
+  }
+
+  onCropCancel() {
+    this.display = false;
+  }
+
+  onCropSave() {
+    this.user.photoURL = this.data.image;
+    this.photoUrl = this.data.image;
+    this.display = false;
+  }
+
   onSubmit() {
     if (this.userForm.valid) {
       this.userService.update(this.userId, this.user).subscribe(value => {
+
         this.authService.updateCurrentUser(this.user);
         this.toastrService.success('Profile was updated');
       },
