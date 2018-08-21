@@ -79,7 +79,7 @@
 
             foreach (var user in usersInChat)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged");
+                await Clients.User(user.Id).SendAsync("UserAdded");
             }
         }
 
@@ -92,7 +92,7 @@
 
             foreach (var user in usersInChat)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged");
+                await Clients.User(user.Id).SendAsync("UserDeleted");
             }
         }
 

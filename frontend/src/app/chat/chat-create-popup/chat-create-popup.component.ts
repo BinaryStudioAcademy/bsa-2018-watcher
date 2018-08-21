@@ -54,6 +54,10 @@ export class ChatCreatePopupComponent implements OnInit {
       this.toastrService.error('Form was filled incorrectly');
       return;
     }
+    if (this.users.length < 1) {
+      this.toastrService.error('Chat can`t be empty. Add someone.');
+      return;
+    }
     const newChat: ChatRequest = {
       name: this.chatSettingsForm.get('name').value,
       createdById: this.currentUser.id,
@@ -75,7 +79,8 @@ export class ChatCreatePopupComponent implements OnInit {
     this.userService.find(event.query).subscribe(data => {
       this.filteredUsers = [];
       if (data.length) {
-        this.filteredUsers = data.filter(u => !this.users.some(x => x.id === u.id));
+        this.filteredUsers = data.filter(u => u.id !== this.currentUser.id &&
+          !this.users.some(x => x.id === u.id));
       }
     });
   }

@@ -73,6 +73,8 @@ export class ConversationSettingsPopupComponent implements OnInit {
   }
 
   deleteUser(id: string) {
+    const index = this.chat.users.findIndex(u => u.id === id);
+    this.chat.users.splice(index, 1);
     this.chatHub.deleteUserFromChat(id, this.chat.id);
   }
 

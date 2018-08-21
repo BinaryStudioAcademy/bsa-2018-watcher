@@ -51,12 +51,16 @@ export class ChatComponent implements OnInit {
     this.onDisplayChat.emit(this.selectedChat);
   }
 
+  removeSelect() {
+    this.selectedChat = null;
+  }
+
   openChatCreating() {
     this.onDisplayChatCreating.emit();
   }
 
   get chatImage() {
-    if (this.selectedChat && this.selectedChat.users.length === 2) {
+    if (this.selectedChat && this.selectedChat.users && this.selectedChat.users.length === 2) {
       return this.selectedChat.users.find(u => u.id !== this.currentUser.id).photoURL;
     }
 
@@ -67,19 +71,15 @@ export class ChatComponent implements OnInit {
   subscribeToEvents() {
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
       this.chatList.unshift({ value: chat });
-      this.selectedChat = chat;
-      this.openChat();
-    });
-
-    this.chatHub.messageReceived.subscribe((message: Message) => {
-      if (this.selectedChat && this.selectedChat.id === message.chatId) {
-        this.selectedChat.messages.push(message);
-      }
     });
 
     this.chatHub.chatChanged.subscribe((chat: Chat) => {
       const index = this.chatList.findIndex(x => x.value.id === chat.id);
       this.chatList.splice(index, 1, { value: chat });
+    });
+
+    this.chatHub.messageReceived.subscribe((message: Message) => {
+      // add to unreaded message counter
     });
   }
 }

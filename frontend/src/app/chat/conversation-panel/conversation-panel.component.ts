@@ -39,6 +39,7 @@ export class ConversationPanelComponent implements OnInit {
     this.onDisplay.subscribe((data: Chat) => {
       this.chatService.get(data.id).subscribe((chat: Chat) => {
         this.chat = chat;
+        this.subscribeToEvents();
         this.scrollMessageListToBottom();
       });
       this.display = true;

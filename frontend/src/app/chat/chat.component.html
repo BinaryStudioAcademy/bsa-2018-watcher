@@ -8,7 +8,7 @@
         Chats
         <i class="icon icon-right fa fa-plus" (click)="openChatCreating()"></i>
       </p-header>
-      <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="openChat()">
+      <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="openChat()" (onDblClick)="removeSelect()">
         <ng-template let-chat pTemplate="item">
           <div class="ui-helper-clearfix">
             <img class="chat-list-img" src="{{chatImage}}"/>
