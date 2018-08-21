@@ -118,8 +118,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       title: instance.id.toString(),
       routerLink:  [`instances/${instance.id}/dashboards`],
       command: () => {
-        // debugger;
-        this.dashboardsHub.subscribeToInstanceById(instance.guidId);
         this.instanceService.instanceChecked.emit(instance);
         // this.router.navigate([`/user/instances/${instance.id}/dashboards`]);
       },

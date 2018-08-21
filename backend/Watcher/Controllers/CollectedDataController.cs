@@ -26,15 +26,20 @@
         /// </summary>
         private readonly ICollectedDataService _collectedDataService;
 
+        private readonly IInstanceService _instanceService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectedDataController"/> class. 
         /// </summary>
         /// <param name="service">
         /// The service.
         /// </param>
-        public CollectedDataController(ICollectedDataService service)
+        /// <param name="instanceService"></param>
+        public CollectedDataController(ICollectedDataService service,
+                                        IInstanceService instanceService)
         {
             _collectedDataService = service;
+            _instanceService = instanceService;
         }
 
         /// <summary>
@@ -76,9 +81,11 @@
 
         [HttpGet("Percentage/{id}")]
         [AllowAnonymous]
-        public virtual async Task<ActionResult<PercentageInfo>> GetInstancePercentageInfo([FromRoute] Guid id, [FromQuery] int count)
+        public virtual async Task<ActionResult<PercentageInfo>> GetInstancePercentageInfo([FromRoute] int id, [FromQuery] int count)
         {
-            var dto = await _collectedDataService.GetInstancePercentageInfo(id, count);
+            var entity = await _instanceService.GetEntityByIdAsync(id);
+
+            var dto = await _collectedDataService.GetInstancePercentageInfo(entity.GuidId, count);
             if (dto == null)
             {
                 return NoContent();

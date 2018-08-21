@@ -20,20 +20,17 @@
     using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
     using Watcher.Core.Services;
-    using Watcher.Hubs;
     using Watcher.Utils;
 
     public class WatcherService : BackgroundService
     {
         private readonly IHubContext<DashboardsHub> _hubContext;
-        private readonly ITransientService _service;
         private readonly ILogger<WatcherService> _logger;
         private readonly IOptions<TimeServiceConfiguration> _options;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IServiceBusProvider _serviceBusProvider;
 
-        public WatcherService(IHubContext<DashboardsHub> hubContext, 
-                              ITransientService service, 
+        public WatcherService(IHubContext<DashboardsHub> hubContext,
                               ILogger<WatcherService> logger,
                               IOptions<TimeServiceConfiguration> options,
                               IServiceScopeFactory scopeFactory,
@@ -41,7 +38,6 @@
         {
             _scopeFactory = scopeFactory;
             _hubContext = hubContext;
-            _service = service;
             _logger = logger;
             _options = options;
             _serviceBusProvider = serviceBusProvider;
@@ -69,16 +65,8 @@
                 {
                     foreach (var id in _serviceBusProvider.SubscribedInstancesGuidIds)
                     {
-                        await SS(id, stoppingToken);
+                        await GenerateAndSendCollectedData(id, stoppingToken);
                     }
-                    // await _hubContext.Clients.Group("Market Data Feed").SendAsync("MarketTick", mp);
-
-                    // var sample = await _service.GenerateRandomSampleDtoAsync();
-
-                    // _logger.LogInformation($"Sending generated sample id: {sample.Id}.");
-
-                    // Method Name on Angular Client: "DataFeedTick",
-                    // Single argument of that method is SampleDto
                 }
                 catch (Exception e)
                 {
@@ -93,7 +81,7 @@
             _logger.LogError("Watcher Service stopped! Unexpected error occurred!");
         }
 
-        private async Task SS(Guid instanceId, CancellationToken stoppingToken)
+        private async Task GenerateAndSendCollectedData(Guid instanceId, CancellationToken stoppingToken)
         {
             CollectedDataDto dto = null;
             using (var scope = _scopeFactory.CreateScope())
@@ -124,9 +112,6 @@
             var mp = MarketPrice.MarketPositions[0];
 
             await _hubContext.Clients.Group(instanceId.ToString()).SendAsync("InstanceDataTick", info, stoppingToken); // TODO: change to dto
-            // await _hubContext.Group("").SendAsync("CollectedPercentageInfoTick", info, cancellationToken: stoppingToken);
-
-            await _hubContext.Clients.All.SendAsync("MarketTick", mp, cancellationToken: stoppingToken);
         }
     }
 }

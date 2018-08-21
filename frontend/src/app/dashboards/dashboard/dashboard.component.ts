@@ -11,6 +11,7 @@ import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
 import {MarketPrice} from '../models';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+import {PercentageInfo} from '../models/percentage-info';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,8 @@ import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 
 export class DashboardComponent implements OnInit {
   private instanceId: number;
+  private instanceGuidId = '';
+
   private subscription: Subscription;
 
   dashboards: Dashboard[] = [];
@@ -34,10 +37,15 @@ export class DashboardComponent implements OnInit {
 
   marketStatus: MarketPrice[];
   marketStatusToPlot: MarketPrice[];
+  percentageInfoToDisplay: PercentageInfo[];
 
   set MarketStatus(status: MarketPrice[]) {
     this.marketStatus = status;
     this.marketStatusToPlot = this.marketStatus.slice(0, 20);
+  }
+
+  set PercentageInfoToDisplay(info: PercentageInfo[]) {
+    this.percentageInfoToDisplay = info;
   }
 
   constructor(private dashboardsService: DashboardService,
@@ -46,15 +54,26 @@ export class DashboardComponent implements OnInit {
               private toastrService: ToastrService,
               private activateRoute: ActivatedRoute) {
     this.dashboardsHub.connectToSignalR();
+
     this.dashboardsHub.getInitialMarketStatusOld()
       .subscribe(prices => {
         this.MarketStatus = prices;
       });
 
     this.subscription = activateRoute.params.subscribe(params => {
+      this.dashboardsHub.unSubscribeFromInstanceById(this.instanceGuidId);
       this.instanceId = params['insId'];
       this.dashboardMenuitems = [];
       this.getDashboards();
+      this.dashboardsHub.getInitialPercentageInfoByInstanceId(this.instanceId)
+        .subscribe(info => {
+          if (info && info.length > 0) {
+            this.PercentageInfoToDisplay = info;
+            this.instanceGuidId = info[0].id;
+            this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
+          }
+        });
+
     });
 
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));

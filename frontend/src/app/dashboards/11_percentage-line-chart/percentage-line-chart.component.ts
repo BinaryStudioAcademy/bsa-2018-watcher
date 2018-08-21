@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit} from '@angular/core';
 import {DashboardService} from '../../core/services/dashboard.service';
 import {SeriesItem} from '../models/series-item';
 import {PercentageInfo} from '../models/percentage-info';
@@ -8,9 +8,10 @@ import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 @Component({
   selector: 'app-percentage-line-chart',
   templateUrl: './percentage-line-chart.component.html',
-  styleUrls: ['./percentage-line-chart.component.sass']
+  styleUrls: ['./percentage-line-chart.component.sass'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
-export class PercentageLineChartComponent implements OnInit {
+export class PercentageLineChartComponent implements OnInit, OnChanges {
   view: any[] = [700, 300];
 
   // options
@@ -31,6 +32,8 @@ export class PercentageLineChartComponent implements OnInit {
   yScaleMax = 100;
   xAxisLabel = 'Time';
   yAxisLabel = 'Percentage %';
+
+  @Input() percentageInfo: PercentageInfo[];
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
@@ -57,19 +60,26 @@ export class PercentageLineChartComponent implements OnInit {
 
   constructor(private dashboardsService: DashboardService,
               private dashboardsHub: DashboardsHub) {
-    this.dashboardsHub.getInitialPercentageInfo()
-      .subscribe(info => {
-        const infoToInsert = info.map(p => this.toSeriesData(p));
+    this.buildChart(this.percentageInfo);
+    this.subscribeToCollectedData();
+  }
 
-        for (const inf of infoToInsert) {
-          for (let i = 0; i < 4; i++) {
-            this.data[i].series.push(inf[i]);
-          }
+  ngOnChanges() {
+    this.buildChart(this.percentageInfo);
+  }
+
+  buildChart(info: PercentageInfo[]) {
+    if (info && info.length > 0) {
+      const infoToInsert = info.map(p => this.toSeriesData(p));
+
+      for (const inf of infoToInsert) {
+        for (let i = 0; i < 4; i++) {
+          this.data[i].series.push(inf[i]);
         }
+      }
 
-        this.data = [...this.data];
-        this.subscribeToCollectedData();
-      });
+      this.data = [...this.data];
+    }
   }
 
 
@@ -91,7 +101,9 @@ export class PercentageLineChartComponent implements OnInit {
     this.dashboardsHub.infoSubObservable.subscribe((latestInfo: PercentageInfo) => {
       const infoToInsert = this.toSeriesData(latestInfo);
       for (let i = 0; i < 4; i++) {
-        this.data[i].series.shift();
+        if (this.data[i].series > 20) {
+          this.data[i].series.shift();
+        }
         this.data[i].series.push(infoToInsert[i]);
       }
 

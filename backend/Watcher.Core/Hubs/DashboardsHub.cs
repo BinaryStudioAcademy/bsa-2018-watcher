@@ -7,23 +7,15 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
 
-    using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
 
     public class DashboardsHub : Hub
     {
-        /// <summary>
-        /// The Samples Service.
-        /// </summary>
-        private readonly ISamplesService _samplesService;
-
         private readonly IServiceBusProvider _serviceBusProvider;
 
-        public DashboardsHub(ISamplesService samplesService,
-                             IServiceBusProvider serviceBusProvider)
+        public DashboardsHub(IServiceBusProvider serviceBusProvider)
         {
             _serviceBusProvider = serviceBusProvider;
-            _samplesService = samplesService;
         }
 
         /// <summary>
@@ -52,12 +44,6 @@
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Market Data Feed");
             await base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
         }
-        
-        [Authorize]
-        public Task SubscribeToMarketDataFeed()
-        {
-            return Groups.AddToGroupAsync(Context.ConnectionId, "Market Data Feed");
-        }
 
         [Authorize]
         public async Task SubscribeToInstanceById(Guid GuidId)
@@ -67,37 +53,10 @@
             await _serviceBusProvider.SendMessageToServiceBus(GuidId.ToString());
         }
 
-        /// <summary>
-        /// Send Message to all connected clients
-        /// </summary>
-        /// <param name="message"></param>
-        public void BroadcastMessage(string message)
-        {
-            Clients.All.SendAsync("BroadcastMessage", message);
-        }
-
-
-        /// <summary>
-        /// Send message to caller of this method(to connection that invoked this method)
-        /// </summary>
         [Authorize]
-        public void Echo()
+        public Task UnSubscribeFromInstanceById(Guid GuidId)
         {
-            Clients.Client(Context.ConnectionId).SendAsync("Echo", " (echo from server)");
-        }
-
-        /// <summary>
-        /// Creates sample, Invokes callers method: AddSample with
-        /// arguments: SampleDto, string, number
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>Task</returns>
-        [Authorize(Roles = "Admin")]
-        public async Task CreateSample(SampleRequest request)
-        {
-            // TODO: validate model using Fluent Validator
-            var dto = await _samplesService.CreateEntityAsync(request);
-            await Clients.Client(Context.ConnectionId).SendAsync("AddSample", dto, "Second Parameter", 3);
+            return Groups.RemoveFromGroupAsync(Context.ConnectionId, GuidId.ToString());
         }
 
         [Authorize(Roles = "User")]
