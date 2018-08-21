@@ -10,13 +10,9 @@
             <input [(ngModel)]="name" type="text" pInputText placeholder="Company name"
             required id="cName" required minlength="4" #cName="ngModel" />
             <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
-              <div *ngIf="cName.errors.required">
-                  Company name is required.
-              </div>
-              <div *ngIf="cName.errors.minlength">
-                  Company name must be at least 4 characters long.
-              </div>
-          </div>
+              <div *ngIf="cName.errors.required">Company name is required.</div>
+              <div *ngIf="cName.errors.minlength">Company name must be at least 4 characters long.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -34,10 +30,6 @@
         </div>
       </div>
 
-      <div class="invalid" *ngIf="false">
-        <label>Wrong email format.</label>
-      </div>
-
       <div class="label">Contact number:</div>
       <div class="ui-g ui-fluid">
         <div class="ui-g-12">
@@ -45,10 +37,6 @@
             <input type="text" pInputText placeholder="Contact number">
           </div>
         </div>
-      </div>
-
-      <div class="invalid" *ngIf="false">
-        <label>Wrong number format.</label>
       </div>
 
       <div class="label">Web site:</div>
@@ -74,7 +62,8 @@
   
   </div>
  <p-footer>
-     <button class="ui-button-raised ui-button-success button" pButton type="button" (click)="onClose()" label="Add"></button>
+     <button class="ui-button-raised ui-button-success button" pButton type="button" (click)="onClose()" label="Add"
+     [disabled]="cName?.invalid || cEmail?.invalid"></button>
      <button class="ui-button-raised ui-button-danger button" pButton type="button" (click)="onClose()" label="Cancel"></button>
  </p-footer>
 </p-dialog>
