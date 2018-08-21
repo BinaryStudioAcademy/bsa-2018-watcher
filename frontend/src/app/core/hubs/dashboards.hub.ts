@@ -4,17 +4,17 @@ import * as signalR from '@aspnet/signalr';
 import {environment} from '../../../environments/environment';
 import {SampleDto} from '../../shared/models/sample-dto.model';
 import {SampleRequest} from '../../shared/models/sample-request.model';
-import {ApiService} from './api.service';
-import {AuthService} from './auth.service';
 import {MarketPrice, MarketPriceDate} from '../../dashboards/models';
 import {from, Observable, Subject} from 'rxjs';
 import {PercentageInfo} from '../../dashboards/models/percentage-info';
+import {ApiService} from '../services/api.service';
+import {AuthService} from '../services/auth.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationsService {
+export class DashboardsHub {
   private connectionIsEstablished = false;
   private hubConnection: HubConnection | undefined;
   private marketSub = new Subject<MarketPriceDate>();
@@ -91,7 +91,7 @@ export class NotificationsService {
   private createConnection(): void {
     const firebaseToken = this.authService.getFirebaseToken();
     const watcherToken = this.authService.getWatcherToken();
-    const connPath = `${environment.server_url}/notifications?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
+    const connPath = `${environment.server_url}/dashboards?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(connPath) // {accessTokenFactory: () => firebaseToken}

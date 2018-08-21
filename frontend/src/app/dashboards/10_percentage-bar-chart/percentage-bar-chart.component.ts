@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {NotificationsService} from '../../core/services/notifications.service';
 import {PercentageInfo} from '../models/percentage-info';
+import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 
 @Component({
   selector: 'app-percentage-bar-chart',
@@ -45,7 +45,7 @@ export class PercentageBarChartComponent implements OnInit {
     }
   ];
 
-   constructor(private notificationsService: NotificationsService) {
+   constructor(private notificationsService: DashboardsHub) {
     this.subscribePercentageInfo();
   }
 

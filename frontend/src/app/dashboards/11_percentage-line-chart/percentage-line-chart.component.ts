@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {DashboardService} from '../../core/services/dashboard.service';
-import {NotificationsService} from '../../core/services/notifications.service';
 import {SeriesItem} from '../models/series-item';
 import {PercentageInfo} from '../models/percentage-info';
-import * as d3 from 'd3';
 import * as shape from 'd3-shape';
+import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 
 @Component({
   selector: 'app-percentage-line-chart',
@@ -57,7 +56,7 @@ export class PercentageLineChartComponent implements OnInit {
   ];
 
   constructor(private dashboardsService: DashboardService,
-              private notificationsService: NotificationsService) {
+              private notificationsService: DashboardsHub) {
     this.notificationsService.getInitialPercentageInfo()
       .subscribe(info => {
         const infoToInsert = info.map(p => this.toSeriesData(p));

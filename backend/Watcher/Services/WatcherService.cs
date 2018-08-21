@@ -25,9 +25,9 @@ namespace Watcher.Services
     public class WatcherService : BackgroundService
     {
         /// <summary>
-        /// The Notifications Hub context.
+        /// The Dashboards Hub context.
         /// </summary>
-        private readonly IHubContext<NotificationsHub> _hubContext;
+        private readonly IHubContext<DashboardsHub> _hubContext;
 
         /// <summary>
         /// The Transient Service.
@@ -67,7 +67,7 @@ namespace Watcher.Services
         /// <param name="scopeFactory">
         /// Scope Factory
         /// </param>
-        public WatcherService(IHubContext<NotificationsHub> hubContext, 
+        public WatcherService(IHubContext<DashboardsHub> hubContext, 
                               ITransientService service, 
                               ILogger<WatcherService> logger,
                               IOptions<TimeServiceConfiguration> options,

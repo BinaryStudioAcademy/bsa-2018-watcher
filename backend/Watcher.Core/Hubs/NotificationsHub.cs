@@ -1,13 +1,8 @@
 ﻿namespace Watcher.Core.Hubs
 {
-    using System;
-    using System.Security.Claims;
     using System.Threading.Tasks;
     
     using Microsoft.AspNetCore.SignalR;
-
-    using Watcher.Common.Requests;
-    using Watcher.Core.Interfaces;
 
     using Watcher.Common.Dtos;
 

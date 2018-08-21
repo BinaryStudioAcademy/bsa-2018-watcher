@@ -10,7 +10,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
 import {MarketPrice} from '../models';
-import {NotificationsService} from '../../core/services/notifications.service';
+import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 
 @Component({
   selector: 'app-dashboard',
@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private dashboardsService: DashboardService,
               private instanceService: InstanceService,
-              private notificationsService: NotificationsService,
+              private notificationsService: DashboardsHub,
               private toastrService: ToastrService,
               private activateRoute: ActivatedRoute) {
     this.notificationsService.getInitialMarketStatusOld()

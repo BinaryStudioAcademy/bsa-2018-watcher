@@ -127,6 +127,7 @@ namespace Watcher
                             OnMessageReceived = delegate (MessageReceivedContext context)
                               {
                                   if ((!context.Request.Path.Value.Contains("/notifications")
+                                      && !context.Request.Path.Value.Contains("/dashboards")
                                       && !context.Request.Path.Value.Contains("/chatsHub"))
                                       
                                       || !context.Request.Query.ContainsKey("Authorization")
@@ -224,6 +225,7 @@ namespace Watcher
                 app.UseAzureSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<NotificationsHub>("/dashboards");
                         routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
@@ -232,6 +234,7 @@ namespace Watcher
                 app.UseSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<NotificationsHub>("/dashboards");
                         routes.MapHub<ChatHub>("/chatsHub");
                     });
             }

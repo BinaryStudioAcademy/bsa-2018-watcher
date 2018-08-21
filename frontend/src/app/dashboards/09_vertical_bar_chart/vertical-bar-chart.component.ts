@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {single, multi, MarketPrice, MarketPriceDate} from '../models';
+import {MarketPriceDate} from '../models';
 import {DashboardService} from '../../core/services/dashboard.service';
-import {NotificationsService} from '../../core/services/notifications.service';
 import {SeriesItem} from '../models/series-item';
+import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 
 @Component({
   selector: 'app-vertical-bar-chart',
@@ -55,7 +55,7 @@ export class VerticalBarChartComponent implements OnInit {
   ];
 
   constructor(private dashboardsService: DashboardService,
-              private notificationsService: NotificationsService) {
+              private notificationsService: DashboardsHub) {
     this.notificationsService.getInitialMarketStatus()
       .subscribe(prices => {
         // debugger;
