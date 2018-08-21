@@ -55,11 +55,11 @@ export class OrganizationListComponent implements OnInit {
       this.organizations = value;
       this.totalRecords = value.length;
     });
-
+/*
     Object.keys(this.organizationForm.controls).forEach(field => {
       const control = this.organizationForm.get(field);
       control.enable();
-    });
+    });*/
   }
 
   subscribeOrganizationFormToData() {
@@ -89,14 +89,15 @@ export class OrganizationListComponent implements OnInit {
       title: instance.title,
       address: instance.address,
       platform: instance.platform,
-      isActive: true,
-      organizationId: instance.organization.id
+      isActive: instance.isActive,
+      organizationId: this.organization.id
     };
     return newInstance;
   }
 
   onSubmit() {
     this.display = false;
+
     if (this.organizationForm.valid) {
       this.organization.theme = null;
       this.organization.instances = this.lstInstances;
@@ -110,28 +111,20 @@ export class OrganizationListComponent implements OnInit {
       );
     } else {
       this.toastrService.error('Form was filled incorrectly');
-      Object.keys(this.organizationForm.controls).forEach(field => {
+     /* Object.keys(this.organizationForm.controls).forEach(field => {
         const control = this.organizationForm.get(field);
         control.markAsDirty({ onlySelf: true });
-      });
+      });*/
     }
-    console.log(this.lstInstances.length);
-     // this.lstInstances.forEach(instance => {
-      const instance: InstanceRequest = this.getNewInstance(this.lstInstances[0]);
-        this.instanceService.update(instance, this.lstInstances[0].id).subscribe(value => {
-          this.toastrService.success('Instance was updated');
-        },
-        error => {
-          this.toastrService.error(`Error ocured status: ${error.message}`);
-        }
-      );
-        /*this.instanceService.updateDto(this.lstInstances[0].id, this.lstInstances[0]).subscribe(
+    this.lstInstances.forEach(instance => {
+      const instanceNew: InstanceRequest = this.getNewInstance(instance);
+        this.instanceService.update(instanceNew, instance.id).subscribe(
         value => {
-          this.toastrService.success('Instance was updated');
+          this.toastrService.success(`Instance with id ${instance.id} was updated`);
         },
         error => {
           this.toastrService.error(`Error ocured status: ${error.message}`);
         }
-      );  });*/
+      ); });
   }
 }
