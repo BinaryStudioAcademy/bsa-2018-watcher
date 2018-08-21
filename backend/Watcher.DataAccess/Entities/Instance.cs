@@ -19,6 +19,8 @@
         [Required]
         public string Platform { get; set; }
 
+        public bool IsActive { get; set; }
+
         public Guid GuidId { get; set; }
 
         public int OrganizationId { get; set; }

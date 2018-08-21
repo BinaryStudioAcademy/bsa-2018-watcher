@@ -9,6 +9,8 @@ import { FeedbackListComponent } from './feedback-list/feedback-list.component';
 import { DialogModule } from 'primeng/dialog';
 import { TabViewModule, InputTextModule, ButtonModule, ToggleButtonModule, InputTextareaModule } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 
 @NgModule({
   imports: [
@@ -22,7 +24,9 @@ import { TableModule } from 'primeng/table';
     DialogModule,
     FormsModule,
     ReactiveFormsModule,
-    TableModule
+    TableModule,
+    CheckboxModule,
+    ScrollPanelModule
   ],
   declarations: [
     AdminPageComponent,

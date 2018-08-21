@@ -49,6 +49,7 @@ export class EditInstanceComponent implements OnInit {
       title: this.instanceForm.controls.title.value,
       address: this.instanceForm.controls.address.value,
       platform: this.instanceForm.controls.platform.value,
+      isActive: true,
       organizationId: this.organizationId
     };
     return newInstance;
@@ -64,7 +65,8 @@ export class EditInstanceComponent implements OnInit {
             title: instance.title,
             address: instance.address,
             id: this.id,
-            platform: instance.platform
+            platform: instance.platform,
+            isActive: true
           };
           this.instanceService.instanceEdited.emit(instanceEvent);
           this.router.navigate([`/user/instances/${instanceEvent.id}/dashboards`]);

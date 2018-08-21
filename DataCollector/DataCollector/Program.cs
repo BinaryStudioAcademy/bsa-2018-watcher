@@ -11,6 +11,7 @@ namespace DataCollector
         public static Guid clientIdentifier;
         public static IConfiguration Configuration { get; set; }
         public static Timer _timerItem;
+        //event for exiting by pressing ctrl+c
         private static readonly AutoResetEvent _closing = new AutoResetEvent(false);
 
         static void Main(string[] args)
@@ -44,7 +45,7 @@ namespace DataCollector
                 }
             }
             Console.Clear();
-
+            Console.WriteLine("Initializating...");
             // sender and collector for timer
             var payload = (
                 new DataSender(new HttpClient(), uri), 

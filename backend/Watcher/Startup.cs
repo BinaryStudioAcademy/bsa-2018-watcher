@@ -1,4 +1,6 @@
-﻿namespace Watcher
+﻿using Watcher.Core.Hubs;
+
+namespace Watcher
 {
     using System;
     using System.Collections.Generic;
@@ -16,6 +18,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Azure.ServiceBus;
     using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -60,7 +63,7 @@
                 }));
 
             services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
-
+            
             var securitySection = Configuration.GetSection("Security");
             services.Configure<WatcherTokenOptions>(o =>
                 {
@@ -84,15 +87,18 @@
             services.AddTransient<IOrganizationService, OrganizationService>();
             services.AddTransient<IChatsService, ChatsService>();
             services.AddTransient<IMessagesService, MessagesService>();
+            services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IInstanceService, InstanceService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
             services.AddTransient<IChartsService, ChartsService>();
             services.AddTransient<IResponseService, ResponseService>();
-            services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
             services.AddTransient<ICollectedDataService, CollectedDataService>();
+
+            services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
+            services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
 
              // services.AddScoped<IService<DataAccumulator.Shared.Models.CollectedDataDto>, DataAccumulatorService>();
 

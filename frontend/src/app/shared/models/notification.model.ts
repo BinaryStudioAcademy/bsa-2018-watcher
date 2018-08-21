@@ -6,8 +6,9 @@ export interface Notification  {
    id: number;
    text: string;
    createdAt: Date;
-   organization: Organization;
-   user: User;
+   organizationId: Number;
+   userId: Number;
+   notificationSettingId: Number;
 }
 
 
