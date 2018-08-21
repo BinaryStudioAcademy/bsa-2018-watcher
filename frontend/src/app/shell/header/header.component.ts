@@ -34,6 +34,7 @@ export class HeaderComponent implements OnInit {
   cogItems: MenuItem[];
   bellItems: MenuItem[];
   orgItems: MenuItem[];
+  displayAddNewOrganization = false;
 
   constructor(private notificationsHubService: NotificationsHubService,
     private messageService: MessageService,
@@ -175,8 +176,12 @@ export class HeaderComponent implements OnInit {
 
   }
 
+  onDisplayChange(event: boolean) {
+    this.displayAddNewOrganization = event;
+  }
+
   addNewOrganization() {
-    this.toastrService.success('Ok!');
+    this.displayAddNewOrganization = true;
   }
 
 

@@ -9,14 +9,18 @@ import {
   ToolbarModule,
   TieredMenuModule,
   ButtonModule,
+  DialogModule,
   MessagesModule,
   MessageModule,
   GrowlModule,
-  PanelMenuModule
+  PanelMenuModule,
+  InputTextModule,
+  InputTextareaModule
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
 import { query } from '@angular/core/src/render3/query';
+import { AddNewOrganizationComponent } from './add-new-organization/add-new-organization.component';
 
 
 @NgModule({
@@ -27,12 +31,15 @@ import { query } from '@angular/core/src/render3/query';
     ToolbarModule,
     TieredMenuModule,
     ButtonModule,
+    InputTextModule,
+    InputTextareaModule,
+    DialogModule,
     GrowlModule,
     MessagesModule,
     MessageModule,
     PanelMenuModule,
     ChatModule
   ],
-  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent ]
+  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent, AddNewOrganizationComponent ]
 })
 export class ShellModule { }
