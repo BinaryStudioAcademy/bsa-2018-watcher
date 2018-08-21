@@ -1,8 +1,9 @@
 <p-dialog [(visible)]="display" [modal]="true" [responsive]="true" [contentStyle]="{'overflow':'visible'}" [width]="350"
-  [baseZIndex]="10000">
+  [baseZIndex]="10000" (onHide)="closeSettings()">
   <p-header>
     Chat settings
   </p-header>
+
   <div class="ui-fluid">
     <form [formGroup]="chatSettingsForm">
       <p class="field">Name*:</p>
@@ -29,6 +30,7 @@
       </div>
     </div>
   </div>
+
   <p-footer>
     <div style="text-align: center">
         <button type="button" pButton (click)="updateChat()" label="Update" [disabled]="!chatSettingsForm.valid"></button>

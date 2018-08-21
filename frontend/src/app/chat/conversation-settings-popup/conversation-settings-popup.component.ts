@@ -46,7 +46,6 @@ export class ConversationSettingsPopupComponent implements OnInit {
     });
 
     this.onDisplay.subscribe((data: Chat) => {
-      console.log(data);
       this.chat = data;
       this.display = true;
     });
@@ -87,5 +86,11 @@ export class ConversationSettingsPopupComponent implements OnInit {
 
     this.chatHub.updateChat(updatedChat, this.chat.id);
     this.display = false;
+  }
+
+  closeSettings() {
+    this.display = false;
+    this.wantedUser = '';
+    this.chatSettingsForm.reset();
   }
 }
