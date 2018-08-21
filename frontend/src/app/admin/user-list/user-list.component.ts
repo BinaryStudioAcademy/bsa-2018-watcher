@@ -7,6 +7,10 @@ import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
 import { OrganizationService } from '../../core/services/organization.service';
 
+import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
+import { OrganizationInvite } from '../../shared/models/organization-invite.model';
+import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
+
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -19,15 +23,16 @@ export class UserListComponent implements OnInit {
   currentUser: User;
   display: boolean;
   totalRecords: number;
-  simplelstOrganizations: Organization[];
+  lstOrganizations: Organization[];
   lstOrganizationId: number[];
-  lstOrganizations: [{id: number, assign: boolean}];
+  invite: OrganizationInvite;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
     private organizationService: OrganizationService,
+    private organizationInvitesService: OrganizationInvitesService,
     private toastrService: ToastrService) {
 
     this.display = false;
@@ -37,8 +42,6 @@ export class UserListComponent implements OnInit {
     displayName: new FormControl({ value: '', disabled: false }, Validators.required),
     firstName: new FormControl({ value: '', disabled: false }),
     lastName: new FormControl({ value: '', disabled: false }),
-    email: new FormControl({ value: '', disabled: false }, Validators.email),
-    lastPickedOrganizationId: new FormControl({ value: 0, disabled: false }),
     bio: new FormControl({ value: '', disabled: false }),
     isActive: new FormControl({ value: true, disabled: false }, Validators.required)
   });
@@ -55,14 +58,9 @@ export class UserListComponent implements OnInit {
     });
 
     this.organizationService.getAll().subscribe((value: Organization[]) => {
-      this.simplelstOrganizations = value;
-      this.fillLstFeedbacks();
+      this.lstOrganizations = value;
     });
   }
-
-  private fillLstFeedbacks(): void {
-    this.simplelstOrganizations.forEach(el => this.lstOrganizations.push({ id: el.id, assign: false }));
-   }
 
   subscribeOrganizationFormToData() {
     Object.keys(this.userForm.controls).forEach(field => {
@@ -77,11 +75,12 @@ export class UserListComponent implements OnInit {
     this.display = true;
     this.lstOrganizationId = user.organizations.map(x => Object.assign({}, x.id));
     this.lstOrganizationId.push(user.lastPickedOrganizationId);
-    console.log(this.lstOrganizationId);
+    console.log(user.lastPickedOrganization);
   }
 
   onCancel() {
     this.display = false;
+    this.user = null;
   }
 
   onSubmit() {
@@ -102,7 +101,44 @@ export class UserListComponent implements OnInit {
     } else {
       this.toastrService.error('Form was filled incorrectly');
     }
-
   }
 
+  onInvite(id: number) {
+    const invite: OrganizationInvite = {
+      id: 0,
+      organizationId: id,
+      createdByUserId: this.authService.getCurrentUser().id,
+      inviteEmail: null,
+      invitedUserId: null,
+      createdByUser: null,
+      organization: null,
+      createdDate: null,
+      experationDate: null,
+      link: null,
+      state: OrganizationInviteState.Pending
+    };
+
+    this.organizationInvitesService.create(invite).subscribe(
+      value => {
+        this.toastrService.success('Organization Invite was created');
+        this.invite = value;
+      },
+      error => {
+       // this.toastrService.error('Organization Invite was not created');
+       this.toastrService.error(`Error ocured status: ${error.message}`);
+      });
+  }
+
+  onSentInviteToEmail(id: number) {
+    if (this.user.email === null) { return; }
+    this.onInvite(id);
+    this.invite.inviteEmail = this.user.email;
+    this.organizationInvitesService.update(this.invite.id, this.invite).subscribe(
+    value => {
+      this.toastrService.success('Organization Invite was updated and sends to email.');
+    },
+    err => {
+      this.toastrService.error('Organization Invite was not updated');
+    });
+  }
 }

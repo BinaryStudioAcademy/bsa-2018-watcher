@@ -53,11 +53,14 @@
 </div>
 
 
-<p-dialog header="Update user" [(visible)]="display" [modal]="true" [responsive]="true" [width]="450" [minWidth]="300" [minY]="70"
+<p-dialog header="Update user" [(visible)]="display" [modal]="true" [responsive]="true" [width]="500" [minWidth]="350" [minY]="70"
   [maximizable]="false" [baseZIndex]="10000">
   <div class="ui-g ui-fluid">
-    <div class="ui-g-8">
+    <div class="ui-g-7">
       <form [formGroup]="userForm">
+        <p class="field">Photo</p>
+        <textarea rows="5" [cols]="42" pInputTextarea></textarea>
+
         <p class="field">Display name</p>
         <input size="41" type="text" formControlName="displayName" pInputText />
 
@@ -67,11 +70,8 @@
         <p class="field">Last name</p>
         <input size="41" type="text" formControlName="lastName" pInputText />
 
-        <p class="field">Email</p>
-        <input size="41" type="text" formControlName="email" pInputText />
-
-        <p class="field">Last picked organization id</p>
-        <input size="41" type="text" formControlName="lastPickedOrganizationId" pInputText/>
+        <p class="field">Role name</p>
+        <input size="41" type="text" pInputText />
 
         <p class="field">Bio</p>
         <textarea rows="5" [cols]="42" formControlName="bio" pInputTextarea></textarea>
@@ -79,7 +79,7 @@
       </form>
     </div>
 
-    <div class="ui-g-4">
+    <div class="ui-g-5">
       <form [formGroup]="userForm">
         <p class="field center space">Is active:
           <p-checkbox formControlName="isActive" binary="true"></p-checkbox>
@@ -88,15 +88,15 @@
       <p class="field center">List of organization</p>
       <div class="border">
         <div class="ui-g ui-fluid">
-          <div class="ui-g-6 center">Id</div>
-          <div class="ui-g-6 ">Assign</div>
+          <div class="ui-g-7 center">Name</div>
+          <div class="ui-g-5 center">Invite</div>
         </div>
         <p-scrollPanel [style]="{width: '100%', height: '350px'}" styleClass="custom">
 
           <div *ngFor="let organization of lstOrganizations" class="ui-g ui-fluid">
-            <div class="ui-g-6 center">{{organization.id}} </div>
-            <div class="ui-g-6 ">
-              <p-checkbox [(ngModel)]="organization.assign" binary="true"></p-checkbox>
+            <div class="ui-g-7 center">{{organization.name}} </div>
+            <div class="ui-g-5 ">
+              <button pButton label="Invite" (click)="onSentInviteToEmail(organization.id)" class="ui-button-raised ui-button-success"></button>
             </div>
           </div>
 
