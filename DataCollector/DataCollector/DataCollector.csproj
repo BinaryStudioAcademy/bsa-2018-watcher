@@ -2,7 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationIcon>cloud-computing.ico</ApplicationIcon>
+    <SignAssembly>false</SignAssembly>
+    <Authors>BsaWatcherTeam</Authors>
+    <Description>Client application that provides data about machine to server.</Description>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageIconUrl></PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>

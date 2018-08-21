@@ -23,7 +23,6 @@ export class OrganizationListComponent implements OnInit {
   display: boolean;
   totalRecords: number;
   lstInstances: Instance[];
-  lstInstancesTemp: Instance[];
 
   constructor(
               private fb: FormBuilder,
