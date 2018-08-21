@@ -8,7 +8,8 @@ import {
   DialogModule,
   CardModule,
   ListboxModule,
-  AccordionModule
+  AccordionModule,
+  AutoCompleteModule
 } from 'primeng/primeng';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 
@@ -25,7 +26,8 @@ import { ChatComponent } from './chat.component';
     ButtonModule,
     ScrollPanelModule,
     ListboxModule,
-    DialogModule
+    DialogModule,
+    AutoCompleteModule
   ],
   declarations: [ChatComponent],
   exports: [ChatComponent]

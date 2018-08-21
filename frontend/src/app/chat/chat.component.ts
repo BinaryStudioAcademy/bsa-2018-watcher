@@ -132,14 +132,14 @@ export class ChatComponent implements OnInit {
       this.toastrService.error('User already added');
       return;
     }
-    this.userService.getByEmail(email).subscribe((value: User) => {
-      this.selectedChat.users.push(value);
-      this.chatHub.addUserToChat(value.id, this.selectedChat.id);
-    },
-      err => {
-        this.toastrService.error('User don`t exist');
-      }
-    );
+    // this.userService.getByEmail(email).subscribe((value: User) => {
+    //   this.selectedChat.users.push(value);
+    //   this.chatHub.addUserToChat(value.id, this.selectedChat.id);
+    // },
+    //   err => {
+    //     this.toastrService.error('User don`t exist');
+    //   }
+    // );
   }
 
   addToLocalList() {
@@ -154,13 +154,13 @@ export class ChatComponent implements OnInit {
       this.toastrService.error('User already added');
       return;
     }
-    this.userService.getByEmail(email).subscribe((value: User) => {
-      this.addedUsers.push(value);
-    },
-      err => {
-        this.toastrService.error('User don`t exist');
-      }
-    );
+    // this.userService.getByEmail(email).subscribe((value: User) => {
+    //   this.addedUsers.push(value);
+    // },
+    //   err => {
+    //     this.toastrService.error('User don`t exist');
+    //   }
+    // );
   }
 
   deleteUser(id: string) {
@@ -194,4 +194,14 @@ export class ChatComponent implements OnInit {
     this.chatHub.sendMessage(newMessage);
     this.textMessage = '';
   }
+
+  wantedUser: string;
+  filteredUsers: User[];
+
+  filterUsers(event) {
+    this.userService.find(event.query).subscribe(data => {
+        this.filteredUsers = data;
+    });
+}
+
 }
