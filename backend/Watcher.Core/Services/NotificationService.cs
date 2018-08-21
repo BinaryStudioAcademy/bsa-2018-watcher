@@ -115,6 +115,8 @@
                                                                                                                  && ns.UserId == notificationDto.UserId);
 
                 if (notificationSetting == null) return null;
+                
+                if (notificationSetting.IsDisable) continue;
 
                 notificationDto.NotificationSettingId = notificationSetting.Id;
 
@@ -128,17 +130,20 @@
                 }
 
                 entity = await _uow.NotificationsRepository.GetFirstOrDefaultAsync(n => n.Id == entity.Id,
-                                                                            include: notifications => notifications.Include(n => n.NotificationSetting));
+                    include: notifications => notifications.Include(n => n.NotificationSetting));
 
                 var dto = _mapper.Map<Notification, NotificationDto>(entity);
 
                 if (dto.NotificationSetting.IsEmailable)
-                    await _emailProvider.SendMessageOneToOne("watcher@net.com", $"{dto.NotificationSetting.Type} Notification", receiver.Email,
+                    await _emailProvider.SendMessageOneToOne("watcher@net.com",
+                        $"{dto.NotificationSetting.Type} Notification", receiver.Email,
                         dto.Text, "");
 
-                await _notificationsHub.Clients.User(notificationDto.UserId).SendAsync("AddNotification", notificationDto);
+                await _notificationsHub.Clients.User(notificationDto.UserId)
+                    .SendAsync("AddNotification", notificationDto);
 
                 dtos.Add(dto);
+
             }
 
             return dtos;
