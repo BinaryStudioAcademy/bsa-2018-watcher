@@ -48,11 +48,9 @@
 
             if (user == null) return null;
 
-            var userNotifications = await _uow.NotificationsRepository.GetRangeAsync(1, int.MaxValue, n => n.UserId == userId || 
-                                                                        user.UserOrganizations.Count(uo => uo.OrganizationId == n.OrganizationId) != 0,
+            var userNotifications = await _uow.NotificationsRepository.GetRangeAsync(1, int.MaxValue, n => n.UserId == userId,
                                                                     include: notifications => notifications.Include(n => n.NotificationSetting)
                                                                                                             .Include(n => n.User)
-                                                                                                            .Include(n => n.Organization)
                                                                                                             .Include(n => n.NotificationSetting));
 
             var dtos = _mapper.Map<List<Notification>, List<NotificationDto>>(userNotifications);
