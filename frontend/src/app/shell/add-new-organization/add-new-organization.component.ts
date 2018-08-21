@@ -4,6 +4,7 @@ import { OrganizationService } from '../../core/services/organization.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-add-new-organization',
@@ -15,17 +16,13 @@ export class AddNewOrganizationComponent implements OnInit {
   @Input() display = false;
   @Output() displayChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  user: User;
+
   name = '';
   email = '';
   contactNumber = '';
   webSite = '';
   description = '';
-
-  organization: Organization;
-  private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
-  private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
-
-
 
   constructor(  private organizationService: OrganizationService,
                 private authService: AuthService,
@@ -33,11 +30,38 @@ export class AddNewOrganizationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.authService.currentUser.subscribe(
+      (userData) => {
+        this.user = { ...userData };
+    });
   }
 
   onClose() {
     this.display = false;
     this.displayChange.emit(this.display);
+  }
+
+  onAdd() {
+    const org = <Organization>{};
+    org.name = this.name;
+    org.email = this.email;
+    org.contactNumber = this.contactNumber;
+    org.webSite = this.webSite;
+    org.description = this.description;
+    org.createdByUserId = this.user.id;
+    org.usersId = new Array<string>(this.user.id);
+
+    this.organizationService.create(org).subscribe(
+      value => {
+        this.toastrService.success('ok');
+        debugger;
+      },
+      err => {
+        this.toastrService.error('err');
+        debugger;
+      }
+    );
+    this.onClose();
   }
 
 }
