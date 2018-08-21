@@ -177,13 +177,11 @@ export class DashboardComponent implements OnInit {
   }
 
   subscribeToMarket(): void {
-    this.dashboardsHub.connectToSignalR();
     this.dashboardsHub.subscribeToMarketDataFeed();
-    // const marketUpdateObservable =  this.marketStatusSvc.getUpdates();  // 1
-    this.dashboardsHub.marketSubObservable.subscribe((latestStatus: MarketPrice) => {  // 2
+    this.dashboardsHub.marketSubObservable.subscribe((latestStatus: MarketPrice) => {
       console.log(latestStatus);
-      this.MarketStatus = [latestStatus].concat(this.marketStatus);  // 3
-    });  // 4
+      this.MarketStatus = [latestStatus].concat(this.marketStatus);
+    });
   }
 
   onEdited(title: string) {

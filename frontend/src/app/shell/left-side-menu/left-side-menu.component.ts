@@ -7,6 +7,7 @@ import {ToastrService} from '../../core/services/toastr.service';
 import {AuthService} from '../../core/services/auth.service';
 import {AfterContentChecked, AfterViewChecked} from '@angular/core';
 import {NavigationStart} from '@angular/router';
+import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -36,6 +37,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   constructor(private router: Router,
               private instanceService: InstanceService,
+              private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
               private authService: AuthService) {
     router.events.forEach((event) => {
@@ -118,6 +120,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       routerLink:  [`instances/${instance.id}/dashboards`],
       command: () => {
         // debugger;
+        this.dashboardsHub.subscribeToInstanceById(instance.id);
         this.instanceService.instanceChecked.emit(instance);
         // this.router.navigate([`/user/instances/${instance.id}/dashboards`]);
       },

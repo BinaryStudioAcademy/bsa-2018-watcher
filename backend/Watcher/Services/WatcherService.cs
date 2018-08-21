@@ -1,10 +1,10 @@
-﻿using Watcher.Core.Hubs;
-
-namespace Watcher.Services
+﻿namespace Watcher.Services
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using AutoMapper;
 
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.DataAccessLayer.Interfaces;
@@ -17,6 +17,7 @@ namespace Watcher.Services
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Dtos.Plots;
+    using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
     using Watcher.Core.Services;
     using Watcher.Hubs;
@@ -24,60 +25,26 @@ namespace Watcher.Services
 
     public class WatcherService : BackgroundService
     {
-        /// <summary>
-        /// The Dashboards Hub context.
-        /// </summary>
         private readonly IHubContext<DashboardsHub> _hubContext;
-
-        /// <summary>
-        /// The Transient Service.
-        /// </summary>
         private readonly ITransientService _service;
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
         private readonly ILogger<WatcherService> _logger;
-
-        /// <summary>
-        /// Configurations for watcher service
-        /// </summary>
         private readonly IOptions<TimeServiceConfiguration> _options;
-
-        /// <summary>
-        /// The Service Scope Factory 
-        /// </summary>
         private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IServiceBusProvider _serviceBusProvider;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WatcherService"/> class.
-        /// </summary>
-        /// <param name="hubContext">
-        /// The hub Context.
-        /// </param>
-        /// <param name="service">
-        /// The Transient Service.
-        /// </param>
-        /// <param name="logger">
-        /// The logger.
-        /// </param>
-        /// <param name="options">
-        /// Options
-        /// </param>
-        /// <param name="scopeFactory">
-        /// Scope Factory
-        /// </param>
         public WatcherService(IHubContext<DashboardsHub> hubContext, 
                               ITransientService service, 
                               ILogger<WatcherService> logger,
                               IOptions<TimeServiceConfiguration> options,
-                              IServiceScopeFactory scopeFactory)
+                              IServiceScopeFactory scopeFactory,
+                              IServiceBusProvider serviceBusProvider)
         {
             _scopeFactory = scopeFactory;
             _hubContext = hubContext;
             _service = service;
             _logger = logger;
             _options = options;
+            _serviceBusProvider = serviceBusProvider;
         }
 
 
@@ -100,64 +67,10 @@ namespace Watcher.Services
             {
                 try
                 {
-                    CollectedData data = null;
-                    using (var scope = _scopeFactory.CreateScope())
+                    foreach (var id in _serviceBusProvider.SubscribedIncstancesIds)
                     {
-                        var repo = scope.ServiceProvider.GetRequiredService<IDataAccumulatorRepository<CollectedData>>();
-
-                        data = CollectedDataService.GetFakeData();
-
-                        //data = new CollectedData
-                        //               {
-                        //                   Id = Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"),
-                        //                   CpuUsagePercent = 69.68777465820312f,
-                        //                   RamUsagePercent = 76.6187973022461f,
-                        //                   LocalDiskFreeSpacePercent = 79.61161041259766f,
-                        //                   InterruptsTimePercent = 26.060546875f,
-                        //                   AvaliableRamBytes = 2505.33325195312f,
-                        //                   LocalDiskFreeMBytes = 883704,
-                        //                   InterruptsPerSeconds = 24424.375f,
-                        //                   ProcessesCount = 123,
-                        //                   Time = DateTime.UtcNow,
-                        //                   ProcessesCPU = new Dictionary<string, float>
-                        //                                      {
-                        //                                          {"Idle", 121.80587005615234f },
-                        //                                          {"121.80587005615234", 8.40002727508545f },
-                        //                                          {"lsass", 2.516136407852173f },
-                        //                                          {"NotePad", 80.80587005615234f },
-                        //                                          {"VS Code", 220.80587005615234f }
-                        //                                      },
-                        //                   ProcessesRAM = new Dictionary<string, float>
-                        //                                      {
-                        //                                          {"Idle", 57.23391342163086f },
-                        //                                          {"System", 1813.6470947265625f },
-                        //                                          {"Secure System", 25586.666015625f },
-                        //                                          { "Registry", 9269.3330078125f },
-                        //                                          { "NotePad", 3269.3330078125f }
-                        //                                      }
-                        //               };
-
-                        await repo.AddEntity(data);
-
-                        data = await repo.GetEntity(data.InternalId);
+                        await SS(id, stoppingToken);
                     }
-
-                    var info = new PercentageInfo()
-                                   {
-                                       Id = data.Id,
-                                       Time = data.Time,
-                                       RamUsagePercent = data.RamUsagePercent,
-                                       InterruptsTimePercent = data.InterruptsTimePercent,
-                                       LocalDiskFreeSpacePercent = data.LocalDiskFreeSpacePercent,
-                                       CpuUsagePercent = data.CpuUsagePercent
-                    };
-                    MarketPrice.UpdateMarket();
-                    var mp = MarketPrice.MarketPositions[0];
-
-                    await _hubContext.Clients.All.SendAsync("CollectedPercentageInfoTick", info, cancellationToken: stoppingToken);
-
-                    await _hubContext.Clients.All.SendAsync("MarketTick", mp, cancellationToken: stoppingToken);
-
                     // await _hubContext.Clients.Group("Market Data Feed").SendAsync("MarketTick", mp);
 
                     // var sample = await _service.GenerateRandomSampleDtoAsync();
@@ -178,6 +91,42 @@ namespace Watcher.Services
             }
 
             _logger.LogError("Watcher Service stopped! Unexpected error occurred!");
+        }
+
+        private async Task SS(int instanceId, CancellationToken stoppingToken)
+        {
+            CollectedDataDto dto = null;
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var repo = scope.ServiceProvider.GetRequiredService<IDataAccumulatorRepository<CollectedData>>();
+                var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+
+                var data = CollectedDataService.GetFakeData(instanceId);
+
+                await repo.AddEntity(data);
+
+                data = await repo.GetEntity(data.InternalId);
+
+                dto = mapper.Map<CollectedData, CollectedDataDto>(data);
+            }
+
+            var info = new PercentageInfo
+            {
+                Id = dto.Id,
+                Time = dto.Time,
+                RamUsagePercent = dto.RamUsagePercent,
+                InterruptsTimePercent = dto.InterruptsTimePercent,
+                LocalDiskFreeSpacePercent = dto.LocalDiskFreeSpacePercent,
+                CpuUsagePercent = dto.CpuUsagePercent
+            };
+
+            MarketPrice.UpdateMarket();
+            var mp = MarketPrice.MarketPositions[0];
+
+            await _hubContext.Clients.Group(instanceId.ToString()).SendAsync("InstanceDataTick", info, stoppingToken); // TODO: change to dto
+            // await _hubContext.Group("").SendAsync("CollectedPercentageInfoTick", info, cancellationToken: stoppingToken);
+
+            await _hubContext.Clients.All.SendAsync("MarketTick", mp, cancellationToken: stoppingToken);
         }
     }
 }

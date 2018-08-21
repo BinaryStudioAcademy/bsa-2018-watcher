@@ -4,7 +4,7 @@ using Watcher.Common.Interfaces.Entities;
 
 namespace Watcher.Common.Dtos.Plots
 {
-    public class CollectedDataDto: ICollectedData
+    public class CollectedDataDto : ICollectedData
     {
         public Guid Id { get; set; }
         public DateTime Time { get; set; }

@@ -17,8 +17,12 @@
         /// </summary>
         private readonly ISamplesService _samplesService;
 
-        public DashboardsHub(ISamplesService samplesService)
+        private readonly IServiceBusProvider _serviceBusProvider;
+
+        public DashboardsHub(ISamplesService samplesService,
+                             IServiceBusProvider serviceBusProvider)
         {
+            _serviceBusProvider = serviceBusProvider;
             _samplesService = samplesService;
         }
 
@@ -48,15 +52,19 @@
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Market Data Feed");
             await base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
         }
-
-        /// <summary>
-        /// Subscribes to Marker Data Feed
-        /// </summary>
+        
         [Authorize]
         public Task SubscribeToMarketDataFeed()
         {
             return Groups.AddToGroupAsync(Context.ConnectionId, "Market Data Feed");
-            // Clients.All.SendAsync("BroadcastMessage", message);
+        }
+
+        [Authorize]
+        public async Task SubscribeToInstanceById(int id)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, id.ToString());
+
+            await _serviceBusProvider.SendMessageToServiceBus(id.ToString());
         }
 
         /// <summary>

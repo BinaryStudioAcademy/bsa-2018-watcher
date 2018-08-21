@@ -57,6 +57,13 @@ export class DashboardsHub {
     }
   }
 
+  subscribeToInstanceById(instanceId: number): void {
+    if (this.hubConnection) {
+      this.hubConnection.invoke('SubscribeToInstanceById', instanceId)
+        .catch(err => console.error(err));
+    }
+  }
+
   send(userId: string, item: string): string {
     if (this.hubConnection) {
       this.hubConnection.invoke('Send', userId, item)
@@ -101,6 +108,11 @@ export class DashboardsHub {
 
   private registerOnServerEvents(): void {
 
+    this.hubConnection.on('InstanceDataTick', (info: PercentageInfo) => {
+        this.infoSub.next(info);
+      }
+    );
+
     this.hubConnection.on('MarketTick', (marketStatus: MarketPriceDate) => {
         this.marketSub.next(marketStatus);
       }
@@ -117,7 +129,7 @@ export class DashboardsHub {
     });
 
     this.hubConnection.on('Send', (item: string) => {
-      console.log('Message from Hub: ' + item);
+      console.log(`Message from Service Bus: ${item}`);
     });
 
     this.hubConnection.on('BroadcastMessage', (message: string) => {

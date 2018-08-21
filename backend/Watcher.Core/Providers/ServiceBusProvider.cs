@@ -1,23 +1,41 @@
-﻿using Microsoft.Azure.ServiceBus;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Watcher.Core.Interfaces;
-
-namespace Watcher.Core.Providers
+﻿namespace Watcher.Core.Providers
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.SignalR;
+    using Microsoft.Azure.ServiceBus;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+
+    using Watcher.Core.Hubs;
+    using Watcher.Core.Interfaces;
+
     public class ServiceBusProvider : IServiceBusProvider, IDisposable
     {
         private readonly IQueueClient _queueClient;
         private readonly ILogger<ServiceBusProvider> _logger;
+        private readonly IHubContext<DashboardsHub> _dashboardsHubContext;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public ServiceBusProvider(IQueueClient queueClient, ILoggerFactory loggerFactory)
+        public ServiceBusProvider(IQueueClient queueClient, 
+                                  ILoggerFactory loggerFactory,
+                                  IServiceScopeFactory scopeFactory,
+                                  IHubContext<DashboardsHub> dashboardsHubContext)
         {
+            SubscribedIncstancesIds = new ConcurrentBag<int>();
+            _dashboardsHubContext = dashboardsHubContext;
             _queueClient = queueClient;
             _logger = loggerFactory?.CreateLogger<ServiceBusProvider>() ?? throw new ArgumentNullException(nameof(loggerFactory));
+            RegisterOnMessageHandlerAndReceiveMessages();
         }
+
+        public ConcurrentBag<int> SubscribedIncstancesIds { get; }
 
         #region Subscribe
 
@@ -43,11 +61,24 @@ namespace Watcher.Core.Providers
         {
             // Process the message
             var m = Encoding.UTF8.GetString(message.Body);
+
+            if (int.TryParse(m, out var instanceId))
+            {
+                var any = SubscribedIncstancesIds.Any(i => i == instanceId);
+                if (!any)
+                {
+                    SubscribedIncstancesIds.Add(instanceId);
+                }
+            }
+
             // Handle Message From Service Bus
-            
             // Complete the message so that it is not received again.
             // This can be done only if the queueClient is created in ReceiveMode.PeekLock mode (which is default).
             await _queueClient.CompleteAsync(message.SystemProperties.LockToken);
+
+            await _dashboardsHubContext.Clients.All.SendAsync("Send", "Instance Id to subscribe" + m, token);
+
+            Debug.WriteLine($"********************{m}***********************");
 
             return m;
         }
