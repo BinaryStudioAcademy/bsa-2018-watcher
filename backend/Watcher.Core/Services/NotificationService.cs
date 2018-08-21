@@ -42,7 +42,7 @@
 
         public async Task<IEnumerable<NotificationDto>> GetEntitiesByUserIdAsync(string userId)
         {
-            var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == userId, include: users => users.Include(u => u.UserOrganizations));
 
             if (user == null) return null;
 
