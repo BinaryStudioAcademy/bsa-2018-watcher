@@ -5,8 +5,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
-import { environment } from '../../../environments/environment';
-
+import { PathService } from '../../core/services/path.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -18,6 +17,7 @@ export class UserProfileComponent implements OnInit {
   photoUrl: string;
 
   @ViewChild('cropper', undefined)
+
   cropper: ImageCropperComponent;
 
   cropperSettings: CropperSettings;
@@ -26,7 +26,8 @@ export class UserProfileComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private userService: UserService,
     private authService: AuthService,
-    private toastrService: ToastrService) {
+    private toastrService: ToastrService,
+    private pathService: PathService) {
 
     this.cropperSettings = new CropperSettings();
     this.cropperSettings.width = 200;
@@ -68,7 +69,7 @@ export class UserProfileComponent implements OnInit {
       const control = this.userForm.get(field);
       control.setValue(this.user[field]);
       control.enable();
-      this.photoUrl = this.convertToUrl(this.user.photoURL)
+      this.photoUrl = this.pathService.convertToUrl(this.user.photoURL);
     });
 
     this.userForm.valueChanges.subscribe(value => {
@@ -76,14 +77,6 @@ export class UserProfileComponent implements OnInit {
         this.user[field] = this.userForm.get(field).value;
       });
     });
-  }
-
-  convertToUrl(filePath: string): string {
-    const firstSymbols = filePath.slice(0, 7)
-    if (firstSymbols === 'images/') {
-      filePath = `${environment.server_url}/${filePath}`;
-    }
-    return filePath;
   }
 
   onImageSelected(upload) {
@@ -97,6 +90,11 @@ export class UserProfileComponent implements OnInit {
     };
 
     reader.readAsDataURL(upload[0]);
+    upload.splice(0, upload.length);
+  }
+
+  onCropCancel() {
+    this.display = false;
   }
 
   onCropSave() {

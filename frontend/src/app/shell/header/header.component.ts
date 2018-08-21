@@ -11,6 +11,7 @@ import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
 import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
+import { PathService } from '../../core/services/path.service';
 
 @Component({
   selector: 'app-header',
@@ -37,7 +38,8 @@ export class HeaderComponent implements OnInit {
     private userService: UserService,
     private toastrService: ToastrService,
     private router: Router,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private pathService: PathService) {
     this.subscribeToEvents();
   }
 
@@ -137,6 +139,7 @@ export class HeaderComponent implements OnInit {
     this.authService.currentUser.subscribe(
       (userData) => {
         this.currentUser = userData;
+        this.currentUser.photoURL = this.pathService.convertToUrl(this.currentUser.photoURL);
         if (this.currentUser && this.currentUser.organizations && this.currentUser.organizations.length > 0) {
           this.fillOrganizations();
         }
