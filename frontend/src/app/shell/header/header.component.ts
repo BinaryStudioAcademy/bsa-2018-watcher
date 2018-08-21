@@ -124,7 +124,7 @@ export class HeaderComponent implements OnInit {
 
     this.authService.currentUser.subscribe(
       userData => {
-        this.currentUser = userData;
+        this.currentUser = { ...userData };
         if (this.currentUser && this.currentUser.organizations && this.currentUser.organizations.length > 0) {
           this.fillOrganizations();
         }
@@ -167,7 +167,18 @@ export class HeaderComponent implements OnInit {
         disabled: (element.id === this.currentUser.lastPickedOrganizationId)
       });
     });
+    this.orgItems.push({
+      label: 'Add new',
+      icon: 'fa fa-fw fa-plus',
+      command: (onclick) => { this.addNewOrganization(); },
+    });
+
   }
+
+  addNewOrganization() {
+    this.toastrService.success('Ok!');
+  }
+
 
   private chengeLastPicOrganizations(item: Organization): void {
     // update user in beckend
@@ -178,7 +189,6 @@ export class HeaderComponent implements OnInit {
         this.currentUser.lastPickedOrganizationId = item.id;
         this.currentUser.lastPickedOrganization = item;
         this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
-        this.fillOrganizations();
         // notify user about changes
         this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
       },
