@@ -25,7 +25,9 @@
 
         public async Task<IEnumerable<ChatDto>> GetAllEntitiesAsync()
         {
-            var chats = await _uow.ChatsRepository.GetRangeAsync();
+            var chats = await _uow.ChatsRepository.GetRangeAsync(count: 100,
+                include: c => c.Include(x => x.UserChats)
+                               .ThenInclude(x => x.User));
 
             var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats);
 
