@@ -120,17 +120,18 @@ namespace Watcher.Controllers
             {
                 return StatusCode(500);
             }
-           
+           /*
             if (!string.IsNullOrEmpty(request.User.Email))
             {
                 await _emailProvider.SendMessageOneToOne("watcher@net.com", "Thanks for feedback", request.Feedback.User.Email,
                     request.Text, "");
-            }
+            }*/
             var notificationDto = new NotificationDto();
             notificationDto.CreatedAt = request.CreatedAt;
             notificationDto.Text = "The response to your feedback has been sent to your email.";
-            notificationDto.UserId = request.User.Id;
-            notificationDto.OrganizationId = request.User.LastPickedOrganization.Id;
+            var userFeedback = request.Feedback.User;
+            notificationDto.UserId = userFeedback.Id;
+            notificationDto.OrganizationId = userFeedback.LastPickedOrganizationId;
             await _notificationService.CreateEntityAsync(notificationDto, NotificationType.Info);
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
