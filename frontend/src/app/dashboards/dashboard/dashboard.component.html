@@ -4,11 +4,11 @@
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
       <div class="title">DASHBOARDS</div>
-      <hr>
+      <hr *ngIf="!instanceId">
     </div>
   </div>
-  <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem"></p-tabMenu>
-  <div class="workspace">
+  <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
+  <div class="workspace" *ngIf="instanceId">
     <div class="dashboard-options">
       <button pButton type="button"
               label="Add Item"
@@ -50,6 +50,12 @@
         <!--<app-donut-chart></app-donut-chart>-->
       <!--</div>-->
     </div>
+  </div>
+
+  <div *ngIf="!instanceId" class="placeholder">
+    <p>First - create VM instance</p>
+    <p>Second - Download the application</p>
+    <p>Third - Create your dashboard to track VM activity</p>
   </div>
 </div>
 
