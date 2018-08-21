@@ -1,0 +1,68 @@
+<div class="conversation-panel" [hidden]="!display">
+  <p-accordion>
+    <p-accordionTab [selected]="true">
+      <p-header>
+        <i class="icon icon-right fa fa-close" (click)="display=false"></i>
+        <i class="icon icon-right fa fa-cog" (click)="openSettings()"></i>
+        <div class="title">{{chat?.name}}</div>
+      </p-header>
+      <div class="conversation-panel-content ui-fluid">
+        <div #messageList class="conversation-message-list">
+          <div *ngFor="let message of chat?.messages" class="message" [ngClass]="{'received-message': message?.user?.id != currentUser?.id}">
+            <div class="ui-g">
+              <div class="ui-g-3 ui-g-nopad">
+                  <img class="message-user-img" src="{{message?.user?.photoURL}}"/>
+              </div>
+              <div class="ui-g-9 ui-g-nopad">
+                <strong>{{message?.user?.displayName}}</strong>
+                <div class="">{{message?.text}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ui-inputgroup">
+          <input type="text" pInputText [(ngModel)]="textMessage" (keyup.enter)="sendMessage()" placeholder="Write message">
+          <button pButton icon="fa fa-send" (click)="sendMessage()"></button>
+        </div>
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</div>
+
+<p-dialog [(visible)]="displaySettings" [modal]="true" [responsive]="true" [contentStyle]="{'overflow':'visible'}" [width]="350"
+  [baseZIndex]="10000">
+  <p-header>
+    Chat settings
+  </p-header>
+  <div class="ui-fluid">
+    <form [formGroup]="chatSettingsForm">
+      <p class="field">Name*:</p>
+      <input type="text" pInputText formControlName="name" placeholder="Enter chat name">
+    </form>
+    <p class="field">Add user:</p>
+    <p-autoComplete [(ngModel)]="wantedUser" [suggestions]="filteredUsers" (completeMethod)="filterUsers($event)" (onSelect)="addUser($event)"
+    emptyMessage="User not found" placeholder="Write name or email">
+      <ng-template let-user pTemplate="item">
+        <div class="ui-helper-clearfix">
+          <img class="user-list-img" src="{{user.photoURL}}"/>
+          <strong>{{user.firstName}} {{user.lastName}}</strong>
+          <div>{{user.email}}</div>
+        </div>
+      </ng-template>
+    </p-autoComplete>
+    <p class="field">Members:</p>
+    <div *ngFor="let user of chat?.users">
+      <div class="ui-helper-clearfix member-item">
+        <img class="user-list-img" src="{{user.photoURL}}" />
+        <strong>{{user.firstName}} {{user.lastName}}</strong>
+        <i *ngIf="user?.id != chat.createdBy?.id" class="icon fa fa-close" (click)="deleteUser(user.id)"></i>
+        <div>{{user.email}}</div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div style="text-align: center">
+        <button type="button" pButton (click)="updateChat()" label="Update" [disabled]="!chatSettingsForm.valid"></button>
+    </div>
+  </p-footer>
+</p-dialog>
