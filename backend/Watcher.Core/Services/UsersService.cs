@@ -64,25 +64,29 @@ namespace Watcher.Core.Services
 
         public async Task<UserDto> GetEntityByIdAsync(string id)
         {
+
             var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id,
-                include: users => users.Include(u => u.Role)
-                                                    .Include(u => u.CreatedChats)
-                                                    .Include(u => u.Feedbacks)
-                                                    .Include(u => u.Responses)
-                                                    .Include(u => u.Messages)
-                                                    .Include(u => u.Notifications)
-                                                    .Include(u => u.NotificationSettings)
-                                                    .Include(u => u.LastPickedOrganization)
-                                                    .Include(u => u.UserOrganizations)
-                                                        .ThenInclude(uo => uo.Organization)
-                                                    .Include(u => u.UserChats)
-                                                        .ThenInclude(uc => uc.Chat));
+            include: users => users.Include(u => u.Role)
+                                                .Include(u => u.CreatedChats)
+                                                .Include(u => u.Feedbacks)
+                                                .Include(u => u.Responses)
+                                                .Include(u => u.Messages)
+                                                .Include(u => u.Notifications)
+                                                .Include(u => u.NotificationSettings)
+                                                .Include(u => u.LastPickedOrganization)
+                                                .Include(u => u.UserOrganizations)
+                                                    .ThenInclude(uo => uo.Organization)
+                                                .Include(u => u.UserChats)
+                                                    .ThenInclude(uc => uc.Chat));
 
             if (user == null) return null;
 
             var dto = _mapper.Map<User, UserDto>(user);
 
             return dto;
+
+
+
         }
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
@@ -102,7 +106,7 @@ namespace Watcher.Core.Services
                 IsActive = true,
                 CreatedByUserId = entity.Id
             };
-                  
+
             entity.NotificationSettings = CreateNotificationSetting();
 
             entity.UserOrganizations.Add(

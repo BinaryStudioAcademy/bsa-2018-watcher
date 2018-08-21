@@ -157,6 +157,10 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  close() {
+    this.isNotificationShow = false;
+  }
+
   private fillOrganizations(): void {
     this.orgItems = new Array<MenuItem>();
 

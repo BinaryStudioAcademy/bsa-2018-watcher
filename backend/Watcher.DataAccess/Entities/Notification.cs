@@ -13,8 +13,7 @@
         [Required]
         public DateTime CreatedAt { get; set; }
 
-        public int? OrganizationId { get; set; }
-        public Organization Organization { get; set; }
+        public bool WasRead { get; set; }
 
         public string UserId { get; set; }
         public User User { get; set; }
