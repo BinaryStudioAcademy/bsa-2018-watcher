@@ -15,7 +15,6 @@
         {
             CreateMap<Notification, Notification>()
                 .ForMember(d => d.Id, o => o.Ignore())
-                .ForMember(d => d.OrganizationId, o => o.Ignore())
                 .ForMember(d => d.UserId, o => o.Ignore())
                 .ForMember(d => d.CreatedAt, o => o.Ignore());
 
@@ -29,7 +28,6 @@
             CreateMap<NotificationUpdateRequest, Notification>()
                 .ForMember(d => d.Id, o => o.Ignore())
                 .ForMember(d => d.NotificationSettingId, o => o.Ignore())
-                .ForMember(d => d.OrganizationId, o => o.Ignore())
                 .ForMember(d => d.UserId, o => o.Ignore())
                 .ForMember(d => d.CreatedAt, o => o.Ignore());
         }
