@@ -62,8 +62,7 @@ namespace Watcher
                 }));
 
             services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
-            services.Configure<IQueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
-
+            
             var securitySection = Configuration.GetSection("Security");
             services.Configure<WatcherTokenOptions>(o =>
                 {
@@ -97,6 +96,7 @@ namespace Watcher
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
             services.AddTransient<ICollectedDataService, CollectedDataService>();
 
+            services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
 
             ConfigureFileStorage(services, Configuration);
