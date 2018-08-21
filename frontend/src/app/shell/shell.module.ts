@@ -15,7 +15,8 @@ import {
   GrowlModule,
   PanelMenuModule,
   InputTextModule,
-  InputTextareaModule
+  InputTextareaModule,
+  InputMaskModule
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
@@ -34,6 +35,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     ButtonModule,
     InputTextModule,
+    InputMaskModule,
     InputTextareaModule,
     DialogModule,
     GrowlModule,

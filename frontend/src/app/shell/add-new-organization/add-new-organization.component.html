@@ -21,7 +21,7 @@
       <div class="ui-g ui-fluid">
         <div class="ui-g-12">
           <div class="ui-inputgroup">
-            <input type="email" pInputText placeholder="Email"[(ngModel)]="email" id="cEmail" #cEmail="ngModel" ngModel email />
+            <input type="email" pInputText placeholder="Email" [(ngModel)]="email" id="cEmail" #cEmail="ngModel" ngModel email />
             <div *ngIf="cEmail?.invalid && (cEmail?.dirty || cEmail?.touched)" class="alert alert-danger">
               <div *ngIf="cEmail.errors.required"> Email is required.</div>
               <div *ngIf="cEmail.errors.email">Email must be a valid email address</div>
@@ -34,7 +34,8 @@
       <div class="ui-g ui-fluid">
         <div class="ui-g-12">
           <div class="ui-inputgroup">
-            <input type="text" pInputText placeholder="Contact number">
+              <p-inputMask type="phone" [(ngModel)]="val" mask="+380 (99) 999-99-99"  placeholder="Contact number" 
+              [(ngModel)]="contactNumber"></p-inputMask>
           </div>
         </div>
       </div>
@@ -43,19 +44,15 @@
       <div class="ui-g ui-fluid">
         <div class="ui-g-12">
           <div class="ui-inputgroup">
-            <input type="text" pInputText placeholder="Web site">
+            <input type="text" pInputText placeholder="Web site"  [(ngModel)]="webSite">
           </div>
         </div>
-      </div>
-
-      <div class="invalid" *ngIf="false">
-        <label>Wrong url format.</label>
       </div>
 
       <div class="label">Description:</div>
       <div class="ui-g ui-fluid">
         <div class="ui-g-12">
-          <textarea rows="5" pInputTextarea></textarea>
+          <textarea rows="5" pInputTextarea  [(ngModel)]="description"></textarea>
         </div>
       </div>
     </div>
