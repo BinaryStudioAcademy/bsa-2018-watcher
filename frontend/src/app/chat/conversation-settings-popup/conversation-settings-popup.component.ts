@@ -66,7 +66,8 @@ export class ConversationSettingsPopupComponent implements OnInit {
     this.userService.find(event.query).subscribe(data => {
       this.filteredUsers = [];
       if (data.length) {
-        this.filteredUsers = data.filter(u => u.id !== this.currentUser.id);
+        this.filteredUsers = data.filter(u => u.id !== this.currentUser.id &&
+          !this.chat.users.some(x => x.id === u.id));
       }
     });
   }

@@ -54,17 +54,17 @@ export class ChatCreatePopupComponent implements OnInit {
       this.toastrService.error('Form was filled incorrectly');
       return;
     }
-      const newChat: ChatRequest = {
-        name: this.chatSettingsForm.get('name').value,
-        createdById: this.currentUser.id,
-        type: ChatType.BetweenUsers,
-        users: this.users,
-        organizationId: null
-      };
+    const newChat: ChatRequest = {
+      name: this.chatSettingsForm.get('name').value,
+      createdById: this.currentUser.id,
+      type: ChatType.BetweenUsers,
+      users: this.users,
+      organizationId: null
+    };
 
-      this.chatHub.createNewChat(newChat);
-      this.display = false;
-    }
+    this.chatHub.createNewChat(newChat);
+    this.display = false;
+  }
 
   addUser(value) {
     this.users.push(value);
@@ -75,8 +75,7 @@ export class ChatCreatePopupComponent implements OnInit {
     this.userService.find(event.query).subscribe(data => {
       this.filteredUsers = [];
       if (data.length) {
-        this.filteredUsers = data.filter(u => u.id !== this.currentUser.id ||
-          this.users.some(x => x.id === u.id));
+        this.filteredUsers = data.filter(u => !this.users.some(x => x.id === u.id));
       }
     });
   }
