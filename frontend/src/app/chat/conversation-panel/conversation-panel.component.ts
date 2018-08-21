@@ -55,8 +55,16 @@ export class ConversationPanelComponent implements OnInit {
     });
   }
 
-  openSettings() {
+  openSettings(event) {
+    event.stopPropagation();
+    event.preventDefault();
     this.onDisplaySettings.emit(this.chat);
+  }
+
+  closePanel(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.display = false;
   }
 
   sendMessage() {

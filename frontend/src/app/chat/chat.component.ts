@@ -55,7 +55,9 @@ export class ChatComponent implements OnInit {
     this.selectedChat = null;
   }
 
-  openChatCreating() {
+  openChatCreating(event) {
+    event.stopPropagation();
+    event.preventDefault();
     this.onDisplayChatCreating.emit();
   }
 

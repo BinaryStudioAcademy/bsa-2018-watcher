@@ -4,8 +4,8 @@
   <p-accordion>
     <p-accordionTab [selected]="true">
       <p-header>
-        <i class="icon icon-right fa fa-close" (click)="display=false"></i>
-        <i class="icon icon-right fa fa-cog" style="z-index:999" (click)="openSettings()"></i>
+        <i class="icon icon-right fa fa-close" (click)="closePanel($event)"></i>
+        <i class="icon icon-right fa fa-cog" style="z-index:999;" (click)="openSettings($event)"></i>
         <div class="title">{{chat?.name}}</div>
       </p-header>
       <div class="conversation-panel-content ui-fluid">
