@@ -27,7 +27,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
   private regexInviteUrl: RegExp = /\/user\/invite/;
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
-  private regexInstancesUrl: RegExp = /\/user(\/instances)?/;
   private regexAdminUrl = /\/admin/;
 
   isSearching: boolean;
@@ -120,7 +119,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       routerLink:  [`instances/${instance.id}/dashboards`],
       command: () => {
         // debugger;
-        this.dashboardsHub.subscribeToInstanceById(instance.id);
+        this.dashboardsHub.subscribeToInstanceById(instance.guidId);
         this.instanceService.instanceChecked.emit(instance);
         // this.router.navigate([`/user/instances/${instance.id}/dashboards`]);
       },

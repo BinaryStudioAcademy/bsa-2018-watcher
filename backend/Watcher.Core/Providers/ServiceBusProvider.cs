@@ -28,14 +28,14 @@
                                   IServiceScopeFactory scopeFactory,
                                   IHubContext<DashboardsHub> dashboardsHubContext)
         {
-            SubscribedIncstancesIds = new ConcurrentBag<int>();
+            SubscribedInstancesGuidIds = new ConcurrentBag<Guid>();
             _dashboardsHubContext = dashboardsHubContext;
             _queueClient = queueClient;
             _logger = loggerFactory?.CreateLogger<ServiceBusProvider>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             RegisterOnMessageHandlerAndReceiveMessages();
         }
 
-        public ConcurrentBag<int> SubscribedIncstancesIds { get; }
+        public ConcurrentBag<Guid> SubscribedInstancesGuidIds { get; }
 
         #region Subscribe
 
@@ -62,12 +62,12 @@
             // Process the message
             var m = Encoding.UTF8.GetString(message.Body);
 
-            if (int.TryParse(m, out var instanceId))
+            if (Guid.TryParse(m, out var instanceGuidId))
             {
-                var any = SubscribedIncstancesIds.Any(i => i == instanceId);
+                var any = SubscribedInstancesGuidIds.Any(i => i == instanceGuidId);
                 if (!any)
                 {
-                    SubscribedIncstancesIds.Add(instanceId);
+                    SubscribedInstancesGuidIds.Add(instanceGuidId);
                 }
             }
 

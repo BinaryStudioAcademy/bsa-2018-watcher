@@ -67,7 +67,7 @@
             {
                 try
                 {
-                    foreach (var id in _serviceBusProvider.SubscribedIncstancesIds)
+                    foreach (var id in _serviceBusProvider.SubscribedInstancesGuidIds)
                     {
                         await SS(id, stoppingToken);
                     }
@@ -93,7 +93,7 @@
             _logger.LogError("Watcher Service stopped! Unexpected error occurred!");
         }
 
-        private async Task SS(int instanceId, CancellationToken stoppingToken)
+        private async Task SS(Guid instanceId, CancellationToken stoppingToken)
         {
             CollectedDataDto dto = null;
             using (var scope = _scopeFactory.CreateScope())

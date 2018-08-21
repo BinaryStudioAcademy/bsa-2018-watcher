@@ -60,11 +60,11 @@
         }
 
         [Authorize]
-        public async Task SubscribeToInstanceById(int id)
+        public async Task SubscribeToInstanceById(Guid GuidId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, id.ToString());
+            await Groups.AddToGroupAsync(Context.ConnectionId, GuidId.ToString());
 
-            await _serviceBusProvider.SendMessageToServiceBus(id.ToString());
+            await _serviceBusProvider.SendMessageToServiceBus(GuidId.ToString());
         }
 
         /// <summary>

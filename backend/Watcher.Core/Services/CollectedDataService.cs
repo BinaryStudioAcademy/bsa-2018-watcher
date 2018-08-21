@@ -107,7 +107,7 @@ namespace Watcher.Core.Services
             return await _repository.RemoveEntity(id);
         }
 
-        public static CollectedData GetFakeData(int instanceId)
+        public static CollectedData GetFakeData(Guid instanceId)
         {
             var processNames = new List<string>()
             {
@@ -132,7 +132,7 @@ namespace Watcher.Core.Services
             }
             var data = new CollectedData()
             {
-                Id = Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"), // instanceId
+                Id = instanceId, // Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"), // instanceId
                 Time = DateTime.UtcNow,
                 CpuUsagePercent = (float)Math.Round(random.NextDouble() * 100, 2),
                 RamUsagePercent = (float)Math.Round(random.NextDouble() * 100, 2),

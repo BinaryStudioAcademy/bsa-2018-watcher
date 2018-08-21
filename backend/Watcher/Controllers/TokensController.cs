@@ -7,7 +7,6 @@
 
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
-    using Watcher.Utils;
 
     [Route("[controller]")]
     [Produces("application/json")]

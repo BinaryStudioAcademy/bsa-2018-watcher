@@ -41,7 +41,7 @@ export class DashboardsHub {
   public getInitialPercentageInfo(): Observable<PercentageInfo[]> { // TODO: For Line Chart
     // Get first instance
     const iId = '7FE193DE-B3DC-4DF5-8646-A81EDBE047E2'; // this.authService.getCurrentUser().lastPickedOrganization.instancesId[0];
-    return this.apiService.get(`/CollectedData/Percentage/${iId}?count=50`) as Observable<PercentageInfo[]>;
+    return this.apiService.get(`/CollectedData/Percentage/${iId}?count=20`) as Observable<PercentageInfo[]>;
   }
 
   connectToSignalR(): void {
@@ -57,9 +57,9 @@ export class DashboardsHub {
     }
   }
 
-  subscribeToInstanceById(instanceId: number): void {
+  subscribeToInstanceById(instanceGuidId: string): void {
     if (this.hubConnection) {
-      this.hubConnection.invoke('SubscribeToInstanceById', instanceId)
+      this.hubConnection.invoke('SubscribeToInstanceById', instanceGuidId)
         .catch(err => console.error(err));
     }
   }
