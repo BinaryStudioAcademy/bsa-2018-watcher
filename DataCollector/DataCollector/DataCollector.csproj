@@ -9,6 +9,7 @@
     <Description>Client application that provides data about machine to server.</Description>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageIconUrl></PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
