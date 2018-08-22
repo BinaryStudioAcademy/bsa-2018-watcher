@@ -51,14 +51,10 @@ import { PercentageLineChartComponent } from './11_percentage-line-chart/percent
     BrushZoomComponent,
     PieChartComponent,
     DonutChartComponent,
-<<<<<<< HEAD
-    ],
-=======
     MarketChartComponent,
     PercentageBarChartComponent,
     PercentageLineChartComponent
   ],
->>>>>>> dev
   exports: []
 })
 export class DashboardsModule {
