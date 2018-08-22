@@ -75,11 +75,12 @@
             var result = await _chatsService.AddUserToChat(chatId, userId);
             if (!result) return;
 
+            var changedChat = await _chatsService.GetLightEntityByIdAsync(chatId);
             var usersInChat = await _chatsService.GetUsersByChatIdAsync(chatId);
 
             foreach (var user in usersInChat)
             {
-                await Clients.User(user.Id).SendAsync("UserAdded");
+                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
             }
         }
 
@@ -88,11 +89,12 @@
             var result = await _chatsService.DeleteUserFromChat(chatId, userId);
             if (!result) return;
 
+            var changedChat = await _chatsService.GetLightEntityByIdAsync(chatId);
             var usersInChat = await _chatsService.GetUsersByChatIdAsync(chatId);
 
             foreach (var user in usersInChat)
             {
-                await Clients.User(user.Id).SendAsync("UserDeleted");
+                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
             }
         }
 

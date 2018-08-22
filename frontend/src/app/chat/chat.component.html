@@ -11,7 +11,7 @@
       <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="openChat()" (onDblClick)="removeSelect()">
         <ng-template let-chat pTemplate="item">
           <div class="ui-helper-clearfix">
-            <img class="chat-list-img" src="{{chatImage}}"/>
+            <img class="chat-list-img" src="{{getChatImage(chat?.value)}}"/>
             <span class="chat-list-name"> {{chat.value.name}}</span>
           </div>
         </ng-template>

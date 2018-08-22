@@ -22,7 +22,11 @@ namespace Watcher.DataAccess.Repositories
 
         public async Task<List<Chat>> GetChatsByUserId(string id)
         {
-            IQueryable<Chat> chats = Context.UserChat.Where(uc => uc.UserId == id).Select(uc => uc.Chat);
+            IQueryable<Chat> chats = Context.UserChat
+                .Where(uc => uc.UserId == id)
+                .Select(uc => uc.Chat)
+                .Include(uc => uc.UserChats)
+                    .ThenInclude(uc => uc.User);
 
             return await chats.ToListAsync();
         }

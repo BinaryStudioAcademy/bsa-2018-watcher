@@ -61,9 +61,12 @@ export class ChatComponent implements OnInit {
     this.onDisplayChatCreating.emit();
   }
 
-  get chatImage() {
-    if (this.selectedChat && this.selectedChat.users && this.selectedChat.users.length === 2) {
-      return this.selectedChat.users.find(u => u.id !== this.currentUser.id).photoURL;
+  getChatImage(chat: Chat) {
+    if (chat.users.length === 2) {
+      const photo = chat.users.find(u => u.id !== this.currentUser.id).photoURL;
+      if (photo !== undefined) {
+        return photo;
+      }
     }
 
     // Default image for chat list

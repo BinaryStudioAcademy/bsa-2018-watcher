@@ -47,6 +47,7 @@ export class ConversationSettingsPopupComponent implements OnInit {
 
     this.onDisplay.subscribe((data: Chat) => {
       this.chat = data;
+      this.chatSettingsForm.controls['name'].setValue(data.name);
       this.display = true;
     });
   }
