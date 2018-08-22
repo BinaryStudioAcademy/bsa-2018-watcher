@@ -9,14 +9,20 @@ import {
   ToolbarModule,
   TieredMenuModule,
   ButtonModule,
+  DialogModule,
   MessagesModule,
   MessageModule,
   GrowlModule,
-  PanelMenuModule
+  PanelMenuModule,
+  InputTextModule,
+  InputTextareaModule,
+  InputMaskModule
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
 import { query } from '@angular/core/src/render3/query';
+import { AddNewOrganizationComponent } from './add-new-organization/add-new-organization.component';
+import { FormsModule } from '@angular/forms';
 import { ClickOutsideDirective } from '../core/directives/click-outside.directive';
 
 
@@ -27,13 +33,18 @@ import { ClickOutsideDirective } from '../core/directives/click-outside.directiv
 
     ToolbarModule,
     TieredMenuModule,
+    FormsModule,
     ButtonModule,
+    InputTextModule,
+    InputMaskModule,
+    InputTextareaModule,
+    DialogModule,
     GrowlModule,
     MessagesModule,
     MessageModule,
     PanelMenuModule,
     ChatModule
   ],
-  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent, ClickOutsideDirective ]
+  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent, AddNewOrganizationComponent ]
 })
 export class ShellModule { }

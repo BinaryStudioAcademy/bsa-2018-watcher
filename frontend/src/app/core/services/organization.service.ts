@@ -20,7 +20,7 @@ export class OrganizationService {
     return this.apiService.get(`/${this.ctrlUrl}/${id}`);
   }
 
-  create(organization: Organization) {
+  create(organization: Organization): Observable<Organization> {
     return this.apiService.post(`/${this.ctrlUrl}`, organization);
   }
 
