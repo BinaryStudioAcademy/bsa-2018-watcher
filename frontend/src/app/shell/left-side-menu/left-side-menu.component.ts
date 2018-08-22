@@ -7,6 +7,7 @@ import {ToastrService} from '../../core/services/toastr.service';
 import {AuthService} from '../../core/services/auth.service';
 import {AfterContentChecked, AfterViewChecked} from '@angular/core';
 import {NavigationStart} from '@angular/router';
+import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -26,7 +27,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
   private regexInviteUrl: RegExp = /\/user\/invite/;
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
-  private regexInstancesUrl: RegExp = /\/user(\/instances)?/;
   private regexAdminUrl = /\/admin/;
 
   currentQuery: string;
@@ -39,6 +39,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   constructor(private router: Router,
               private instanceService: InstanceService,
+              private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
               private authService: AuthService) {
     router.events.forEach((event) => {
@@ -118,9 +119,8 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     const item: MenuItem = {
       label: instance.title,
       title: instance.id.toString(),
-      routerLink:  [`instances/${instance.id}/dashboards`],
+      routerLink:  [`instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
-        // debugger;
         this.instanceService.instanceChecked.emit(instance);
         // this.router.navigate([`/user/instances/${instance.id}/dashboards`]);
       },

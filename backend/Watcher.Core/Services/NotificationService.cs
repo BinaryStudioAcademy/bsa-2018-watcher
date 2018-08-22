@@ -48,12 +48,9 @@
 
             if (user == null) return null;
 
-            var userNotifications = await _uow.NotificationsRepository.GetRangeAsync(1, int.MaxValue, n => n.UserId == userId || 
-                                                                        user.UserOrganizations.Count(uo => uo.OrganizationId == n.OrganizationId) != 0,
+            var userNotifications = await _uow.NotificationsRepository.GetRangeAsync(1, int.MaxValue, n => n.UserId == userId,
                                                                     include: notifications => notifications.Include(n => n.NotificationSetting)
-                                                                                                            .Include(n => n.User)
-                                                                                                            .Include(n => n.Organization)
-                                                                                                            .Include(n => n.NotificationSetting));
+                                                                                                            .Include(n => n.User));
 
             var dtos = _mapper.Map<List<Notification>, List<NotificationDto>>(userNotifications);
 
@@ -115,6 +112,8 @@
                                                                                                                  && ns.UserId == notificationDto.UserId);
 
                 if (notificationSetting == null) return null;
+                
+                if (notificationSetting.IsDisable) continue;
 
                 notificationDto.NotificationSettingId = notificationSetting.Id;
 
@@ -128,17 +127,20 @@
                 }
 
                 entity = await _uow.NotificationsRepository.GetFirstOrDefaultAsync(n => n.Id == entity.Id,
-                                                                            include: notifications => notifications.Include(n => n.NotificationSetting));
+                    include: notifications => notifications.Include(n => n.NotificationSetting));
 
                 var dto = _mapper.Map<Notification, NotificationDto>(entity);
 
                 if (dto.NotificationSetting.IsEmailable)
-                    await _emailProvider.SendMessageOneToOne("watcher@net.com", $"{dto.NotificationSetting.Type} Notification", receiver.Email,
+                    await _emailProvider.SendMessageOneToOne("watcher@net.com",
+                        $"{dto.NotificationSetting.Type} Notification", receiver.Email,
                         dto.Text, "");
 
-                await _notificationsHub.Clients.User(notificationDto.UserId).SendAsync("AddNotification", notificationDto);
+                await _notificationsHub.Clients.User(dto.UserId)
+                    .SendAsync("AddNotification", dto);
 
                 dtos.Add(dto);
+
             }
 
             return dtos;

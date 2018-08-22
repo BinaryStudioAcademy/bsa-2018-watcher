@@ -4,11 +4,11 @@
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
       <div class="title">DASHBOARDS</div>
-      <hr>
+      <hr *ngIf="!instanceId">
     </div>
   </div>
-  <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem"></p-tabMenu>
-  <div class="workspace">
+  <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
+  <div class="workspace" *ngIf="instanceId">
     <div class="dashboard-options">
       <button pButton type="button"
               label="Add Item"
@@ -27,22 +27,31 @@
               (click)="delete()"></button>
     </div>
 
-    <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuitems.length > 1">
+    <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">
       <div class="dashboard-item">
-        <app-line-chart></app-line-chart>
+        <app-percentage-bar-chart [dataToPlot]="percentageInfoToDisplaySingle"></app-percentage-bar-chart>
       </div>
       <div class="dashboard-item">
-        <app-multi-series-line-chart></app-multi-series-line-chart>
+        <app-percentage-line-chart [percentageInfo]="percentageInfoToDisplay"></app-percentage-line-chart>
       </div>
-      <div class="dashboard-item">
-        <app-bar-chart></app-bar-chart>
-      </div>
-      <div class="dashboard-item">
-        <app-stacked-bar-chart></app-stacked-bar-chart>
-      </div>
-      <div class="dashboard-item">
-        <app-brush-zoom></app-brush-zoom>
-      </div>
+      <!--<div class="dashboard-item">-->
+        <!--<app-market-chart [marketStatus]="marketStatusToPlot"></app-market-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+      <!--<app-line-chart></app-line-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+      <!--<app-multi-series-line-chart></app-multi-series-line-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+      <!--<app-bar-chart></app-bar-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+      <!--<app-stacked-bar-chart></app-stacked-bar-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+      <!--<app-brush-zoom></app-brush-zoom>-->
+      <!--</div>-->
       <!--<div class="dashboard-item">-->
         <!--<app-pie-chart></app-pie-chart>-->
       <!--</div>-->
@@ -50,6 +59,12 @@
         <!--<app-donut-chart></app-donut-chart>-->
       <!--</div>-->
     </div>
+  </div>
+
+  <div *ngIf="!instanceId" class="placeholder">
+    <div><i class="fa fa-plus"></i> 1. Create a VM instance</div>
+    <div><i class="fa fa-download"></i> 2. Download the application</div>
+    <div><i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity</div>
   </div>
 </div>
 

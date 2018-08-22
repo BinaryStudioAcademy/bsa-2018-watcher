@@ -8,11 +8,15 @@ import {
   DialogModule,
   CardModule,
   ListboxModule,
-  AccordionModule
+  AccordionModule,
+  AutoCompleteModule
 } from 'primeng/primeng';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 
 import { ChatComponent } from './chat.component';
+import { ConversationPanelComponent } from './conversation-panel/conversation-panel.component';
+import { ConversationSettingsPopupComponent } from './conversation-settings-popup/conversation-settings-popup.component';
+import { ChatCreatePopupComponent } from './chat-create-popup/chat-create-popup.component';
 
 @NgModule({
   imports: [
@@ -25,9 +29,10 @@ import { ChatComponent } from './chat.component';
     ButtonModule,
     ScrollPanelModule,
     ListboxModule,
-    DialogModule
+    DialogModule,
+    AutoCompleteModule
   ],
-  declarations: [ChatComponent],
+  declarations: [ChatComponent, ConversationPanelComponent, ConversationSettingsPopupComponent, ChatCreatePopupComponent],
   exports: [ChatComponent]
 })
 export class ChatModule { }

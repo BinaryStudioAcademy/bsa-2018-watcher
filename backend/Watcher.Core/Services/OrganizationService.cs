@@ -58,9 +58,28 @@ namespace Watcher.Core.Services
         public async Task<OrganizationDto> CreateEntityAsync(OrganizationRequest request)
         {
             var entity = _mapper.Map<OrganizationRequest, Organization>(request);
+            var result = false;
 
-            entity = await _uow.OrganizationRepository.CreateAsync(entity);
-            var result = await _uow.SaveAsync();
+            var CreatedEntity = await _uow.OrganizationRepository.CreateAsync(entity);
+            result = await _uow.SaveAsync();
+            if (result)
+            {
+                CreatedEntity.UserOrganizations.Add(new UserOrganization
+                {
+                    UserId = entity.CreatedByUserId,
+                    OrganizationId = entity.Id
+                });
+            }
+            result &= await _uow.SaveAsync();
+
+            var curentUser = await _uow.UsersRepository.GetFirstOrDefaultAsync(x => x.Id == CreatedEntity.CreatedByUserId,
+                include: user => user.Include(x => x.UserOrganizations));
+
+            curentUser.LastPickedOrganizationId = CreatedEntity.Id;
+            curentUser.LastPickedOrganization = CreatedEntity;
+
+            result &= await _uow.SaveAsync();
+
             if (!result)
             {
                 return null;

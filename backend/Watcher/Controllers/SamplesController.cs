@@ -73,6 +73,19 @@ namespace Watcher.Controllers
 
             return Ok(dtos);
         }
+        
+        /// <summary>
+        /// Returning Initial market Data for chart
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("MarketData")]
+        [AllowAnonymous]
+        public ActionResult<IEnumerable<MarketPrice>> GetMarketData()
+        {
+            var data = MarketPrice.MarketPositions;
+
+            return Ok(data.Take(20));
+        }
 
         /// <summary>
         /// Get Sample by id

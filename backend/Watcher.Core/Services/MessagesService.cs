@@ -77,13 +77,6 @@ namespace Watcher.Core.Services
 
             var dto = _mapper.Map<Message, MessageDto>(entity);
 
-            await _notificationService.CreateEntityAsync(new NotificationDto()
-            {
-                UserId = request.UserId,
-                CreatedAt = DateTime.Now,
-                Text = $"You have message in chat {chat.Name}"
-            }, NotificationType.Chat);
-
             return dto;
         }
 

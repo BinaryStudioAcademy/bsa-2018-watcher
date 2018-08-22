@@ -9,16 +9,22 @@ import {
   ToolbarModule,
   TieredMenuModule,
   ButtonModule,
+  DialogModule,
   MessagesModule,
   MessageModule,
   GrowlModule,
   PanelMenuModule,
-  DialogModule
+  InputTextModule,
+  InputTextareaModule,
+  InputMaskModule
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
 import { query } from '@angular/core/src/render3/query';
 import { DownloadAppComponent } from '../download-app/download-app.component';
+import { AddNewOrganizationComponent } from './add-new-organization/add-new-organization.component';
+import { FormsModule } from '@angular/forms';
+import { ClickOutsideDirective } from '../core/directives/click-outside.directive';
 
 
 @NgModule({
@@ -28,7 +34,12 @@ import { DownloadAppComponent } from '../download-app/download-app.component';
 
     ToolbarModule,
     TieredMenuModule,
+    FormsModule,
     ButtonModule,
+    InputTextModule,
+    InputMaskModule,
+    InputTextareaModule,
+    DialogModule,
     GrowlModule,
     MessagesModule,
     MessageModule,
@@ -36,6 +47,13 @@ import { DownloadAppComponent } from '../download-app/download-app.component';
     ChatModule,
     DialogModule,
   ],
-  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent, DownloadAppComponent ]
+  declarations: [
+    ShellComponent,
+    HeaderComponent,
+    LeftSideMenuComponent,
+    AddNewOrganizationComponent,
+    ClickOutsideDirective,
+    DownloadAppComponent
+  ]
 })
 export class ShellModule { }

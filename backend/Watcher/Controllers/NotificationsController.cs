@@ -1,5 +1,7 @@
 ﻿
 
+using Watcher.Common.Requests;
+
 namespace Watcher.Controllers
 {
     using System.Collections.Generic;
@@ -38,13 +40,27 @@ namespace Watcher.Controllers
         [HttpGet("{userId}")]
         public virtual async Task<ActionResult<IEnumerable<NotificationDto>>> GetEntitiesByUserId(string userId)
         {
+            // Fix?
             var dtos = await _notificationService.GetEntitiesByUserIdAsync(userId);
-            if (!dtos.Any())
-            {
-                return NotFound();
-            }
 
             return Ok(dtos);
+        }
+
+        [HttpPut("{id}")]
+        public virtual async Task<ActionResult> Update([FromRoute] int id, [FromBody] NotificationUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _notificationService.UpdateEntityByIdAsync(request, id);
+            if (!result)
+            {
+                return StatusCode(500);
+            }
+
+            return NoContent();
         }
     }
 }
