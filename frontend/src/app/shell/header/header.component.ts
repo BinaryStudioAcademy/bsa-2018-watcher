@@ -60,8 +60,11 @@ export class HeaderComponent implements OnInit {
 
   private subscribeToNotificationsEvents(): void {
     this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
-      this.notificationsNumber++;
       value.type = NotificationType[value.notificationSetting.type].toLowerCase();
+
+      if (NotificationType[value.notificationSetting.type] !== 'Chat' && !value.notificationSetting.isMute) {
+        this.notificationsNumber++;
+      }
       this.notifications.unshift(value);
     });
   }
@@ -90,7 +93,7 @@ export class HeaderComponent implements OnInit {
   calcNotReadNotification(allNotifications: Notification[]): number {
     return allNotifications.filter(item => item.wasRead === false &&
                                   item.notificationSetting.isMute === false &&
-                                  NotificationType[item.notificationSetting.type] === 'Chat').length;
+                                  NotificationType[item.notificationSetting.type] !== 'Chat').length;
   }
 
   markAsRead(): void {
