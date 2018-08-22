@@ -24,14 +24,32 @@ namespace Watcher.Controllers
         private readonly ILogger<DefaultController> _logger;
 
         private readonly IServiceBusProvider _serviceBusProvider;
-        
+        private readonly IFileStorageProvider _provider;
+
         public DefaultController(ILogger<DefaultController> logger,
-                                 IServiceBusProvider serviceBusProvider)
+                                 IServiceBusProvider serviceBusProvider,
+                                 IFileStorageProvider provider)
         {
             _logger = logger;
             _serviceBusProvider = serviceBusProvider;
+            _provider = provider;
         }
-        
+
+        [HttpPost("Upload64Image")]
+        public async Task<IActionResult> RegisterToMessages([FromBody] string base64StingImage)
+        {
+            try
+            {
+                await _provider.UploadFileBase64Async(base64StingImage, "watcher");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+
+            return Ok();
+        }
+
         [HttpGet("RegisterToMessages")]
         public async Task<IActionResult> RegisterToMessages()
         {
