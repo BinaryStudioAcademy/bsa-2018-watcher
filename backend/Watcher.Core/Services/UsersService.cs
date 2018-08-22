@@ -162,13 +162,14 @@ namespace Watcher.Core.Services
 
             var existingEntity = await GetEntityByIdAsync(id);
 
-            if (!existingEntity.PhotoURL.Equals(entity.PhotoURL))
+            if (null == existingEntity.PhotoURL)
+            {
+                entity.PhotoURL = await UpdatePhoto(entity.PhotoURL);
+            }
+            else if (!existingEntity.PhotoURL.Equals(entity.PhotoURL))
             {
                 await _fileStorageProvider.DeleteFileAsync(existingEntity.PhotoURL);
-
-                string containerName = "watcher";
-                string newPhotoUrl = await _fileStorageProvider.UploadFileBase64Async(entity.PhotoURL, containerName);
-                entity.PhotoURL = newPhotoUrl;
+                entity.PhotoURL = await UpdatePhoto(entity.PhotoURL);
             }
 
             // In returns updated entity, you could do smth with it or just leave as it is
@@ -176,6 +177,13 @@ namespace Watcher.Core.Services
             var result = await _uow.SaveAsync();
 
             return result;
+        }
+
+        private async Task<string> UpdatePhoto(string photoURL)
+        {
+            string containerName = "watcher";
+            string newPhotoUrl = await _fileStorageProvider.UploadFileBase64Async(photoURL, containerName);
+            return newPhotoUrl;
         }
 
         public async Task<bool> DeleteEntityByIdAsync(string id)
