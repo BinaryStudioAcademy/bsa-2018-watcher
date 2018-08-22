@@ -2,10 +2,7 @@
   <a routerLink="/user" class="logo">Watcher</a>
   <p-growl [(value)]="msgs"></p-growl>
 
-  <div class="ui-toolbar-group-right">
-
-    <p-tieredMenu #bell [model]="bellItems" [popup]="true"></p-tieredMenu>
-    
+  <div class="ui-toolbar-group-right">    
     <div class="notifications-block"  appClickOutside (clickOutside)="close()">
       <div class="toolbar-item">
         <button #btn type="button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
