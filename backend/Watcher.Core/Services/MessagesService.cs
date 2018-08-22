@@ -30,33 +30,34 @@ namespace Watcher.Core.Services
 
         public async Task<IEnumerable<MessageDto>> GetAllEntitiesAsync()
         {
-            var samples = await _uow.MessagesRepository.GetRangeAsync();
+            var chats = await _uow.MessagesRepository.GetRangeAsync();
 
-            var dtos = _mapper.Map<List<Message>, List<MessageDto>>(samples);
+            var dtos = _mapper.Map<List<Message>, List<MessageDto>>(chats);
 
             return dtos;
         }
 
         public async Task<IEnumerable<MessageDto>> GetEntitiesByChatIdAsync(int id)
         {
-            var samples = await _uow.MessagesRepository.GetRangeAsync();
+            var chats = await _uow.MessagesRepository.GetRangeAsync();
 
-            samples = samples.Where(m => m.ChatId == id).ToList();
+            chats = chats.Where(m => m.ChatId == id).ToList();
 
-            var dtos = _mapper.Map<List<Message>, List<MessageDto>>(samples);
+            var dtos = _mapper.Map<List<Message>, List<MessageDto>>(chats);
 
             return dtos;
         }
 
         public async Task<MessageDto> GetEntityByIdAsync(int id)
         {
-            var sample = await _uow.MessagesRepository.GetFirstOrDefaultAsync(s => s.Id == id,
+            var chat = await _uow.MessagesRepository.GetFirstOrDefaultAsync(s => s.Id == id,
                 include: x => x
-                    .Include(m => m.User));
+                    .Include(m => m.User)
+                    .Include(m => m.Chat));
 
-            if (sample == null) return null;
+            if (chat == null) return null;
 
-            var dto = _mapper.Map<Message, MessageDto>(sample);
+            var dto = _mapper.Map<Message, MessageDto>(chat);
 
             return dto;
         }
