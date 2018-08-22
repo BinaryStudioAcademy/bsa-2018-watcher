@@ -62,7 +62,7 @@ namespace Watcher.Core.Services
 
             var CreatedEntity = await _uow.OrganizationRepository.CreateAsync(entity);
             result = await _uow.SaveAsync();
-            if(result)
+            if (result)
             {
                 CreatedEntity.UserOrganizations.Add(new UserOrganization
                 {
@@ -72,11 +72,11 @@ namespace Watcher.Core.Services
             }
             result &= await _uow.SaveAsync();
 
-            var curentUser = await _uow.UsersRepository.GetFirstOrDefaultAsync(x => x.Id == CreatedEntity.CreatedByUserId);
+            var curentUser = await _uow.UsersRepository.GetFirstOrDefaultAsync(x => x.Id == CreatedEntity.CreatedByUserId,
+                include: user => user.Include(x => x.UserOrganizations));
 
             curentUser.LastPickedOrganizationId = CreatedEntity.Id;
-
-            await _uow.UsersRepository.UpdateAsync(curentUser);
+            curentUser.LastPickedOrganization = CreatedEntity;
 
             result &= await _uow.SaveAsync();
 
