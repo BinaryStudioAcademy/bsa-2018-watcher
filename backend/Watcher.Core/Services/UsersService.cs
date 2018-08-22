@@ -39,6 +39,21 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<IEnumerable<UserDto>> FindEntitiesAsync(string query)
+        {
+            var users = await _uow.UsersRepository.GetRangeAsync(
+                filter: 
+                    u => u.DisplayName.Contains(query) ||
+                         u.FirstName.Contains(query) ||
+                         u.LastName.Contains(query) ||
+                         u.Email.Contains(query),
+                orderBy: u => u.OrderBy(q => q.FirstName));
+
+            var dtos = _mapper.Map<List<User>, List<UserDto>>(users);
+
+            return dtos;
+        }
+
         public async Task<UserDto> GetEntityByEmailAsync(string email)
         {
             var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Email == email,

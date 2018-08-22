@@ -44,7 +44,7 @@
         public async Task<TokenDto> CreateTokenAsync(UserLoginRequest request)
         {
             // TODO: Parse token claim to get user email
-            var userDto = await _usersService.GetEntityByEmailAsync(request.Email);
+            var userDto = await _usersService.GetEntityByIdAsync(request.Uid);
 
             // TODO: Add logic about registration purpose
             if (userDto == null)
