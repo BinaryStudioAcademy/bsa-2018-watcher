@@ -10,6 +10,7 @@ import { OrganizationInvite } from '../../shared/models/organization-invite.mode
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
 import { environment } from '../../../environments/environment';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-organization-profile',
@@ -55,6 +56,8 @@ export class OrganizationProfileComponent implements OnInit {
   imageUrl = '';
   data: any;
 
+  user: User;
+
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
 
@@ -67,28 +70,15 @@ export class OrganizationProfileComponent implements OnInit {
   });
 
   ngOnInit() {
-    const user = this.authService.getCurrentUser();
-    if (user == null || user.lastPickedOrganizationId == null) {
-      return;
-    }
-
-    if (user.lastPickedOrganization == null && user.lastPickedOrganizationId !== 0) {
-      this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => {
-        this.organization = value;
+    this.authService.currentUser.subscribe(
+      (userData) => {
+        this.user = { ...userData };
+        this.organization = this.user.lastPickedOrganization;
         this.subscribeOrganizationFormToData();
-
-        // Only user who create organozation can edit it
-        if (this.organization.createdByUserId === user.id) {
+        if (this.organization.createdByUserId === this.user.id) {
           this.editable = true;
         }
       });
-    } else {
-      this.organization = user.lastPickedOrganization;
-      this.subscribeOrganizationFormToData();
-      if (this.organization.createdByUserId === user.id) {
-        this.editable = true;
-      }
-    }
 
     Object.keys(this.organizationForm.controls).forEach(field => {
       const control = this.organizationForm.get(field);
