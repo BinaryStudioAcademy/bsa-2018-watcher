@@ -17,6 +17,10 @@ namespace Watcher.Core.MappingProfiles
 
             CreateMap<Message, MessageDto>();
 
+            CreateMap<Message, MessageDto>()
+                .ForMember(d => d.ChatName, o => o.MapFrom(d => d.Chat.Name));
+
+
             CreateMap<MessageRequest, Message>();
 
             CreateMap<MessageUpdateRequest, Message>()
