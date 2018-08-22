@@ -83,7 +83,7 @@ export class HeaderComponent implements OnInit {
   }
 
   calcNotReadNotification(allNotifications: Notification[]): number {
-    return allNotifications.filter(item => item.wasRead === false).length;
+    return allNotifications.filter(item => item.wasRead === false && item.notificationSetting.isMute === false).length;
   }
 
   markAsRead(): void {
