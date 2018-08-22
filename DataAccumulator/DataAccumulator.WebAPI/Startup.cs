@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+
+using AutoMapper;
+
 using DataAccumulator.BusinessLayer.Interfaces;
 using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.DataAccessLayer.Entities;
@@ -7,12 +10,12 @@ using DataAccumulator.DataAccessLayer.Repositories;
 using DataAccumulator.Interfaces;
 using DataAccumulator.Providers;
 using DataAccumulator.Shared.Models;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace DataAccumulator
 {

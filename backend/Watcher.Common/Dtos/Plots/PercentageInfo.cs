@@ -3,8 +3,10 @@ using Watcher.Common.Interfaces.Entities;
 
 namespace Watcher.Common.Dtos.Plots
 {
-    public class PercentageInfo: ICollectedData
+    public class PercentageInfo : ICollectedData
     {
+        public PercentageInfo() { }
+        
         public Guid Id { get; set; }
         public DateTime Time { get; set; }
 

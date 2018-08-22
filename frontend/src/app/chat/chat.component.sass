@@ -3,7 +3,6 @@
 	a
 		padding: 4px !important
 	
-
 /deep/.ui-accordion-content
 	padding: 0 !important
 	border-top: 0
@@ -16,34 +15,6 @@
 /deep/.ui-button
 	border-radius: 0 !important
 
-.conversation-panel
-	position: fixed
-	bottom: 0
-	right: 190px
-	width: 250px
-	.conversation-panel-content
-		height: 100%
-		display: grid
-		grid-template-rows: 1fr auto
-	.conversation-message-list
-		overflow-y: auto
-		.message
-			float: right
-			margin: 2px 5px
-			padding: 5px
-			border-radius: 5px
-			word-wrap: break-word
-			font-size: 0.9em
-			width: 70%
-            font-size: 0.9em
-            word-wrap: break-word
-			background-color: #E3E3E3
-		.received-message
-			float: left
-			border: 3px solid #E3E3E3
-			background-color: #FFF
-
-
 .chat-list-panel
 	position: fixed
 	bottom: 0
@@ -51,9 +22,21 @@
 	width: 150px
 	/deep/.ui-listbox
 		border: 0
-	/deep/.ui-listbox-item
-		display: inline-flex !important
-		width: 100%
+	.chat-list-img
+		width: 25px
+		height: 25px
+		float: left
+		margin-right: 5px
+		border-radius: 50%
+	.chat-list-name
+		float: left
+		width: 90px
+		overflow: hidden
+		white-space: nowrap
+		text-overflow: ellipsis
+	
+	// /deep/.ui-listbox-item.ui-state-highlight
+		// 	background-color: #a5a5a5 !important
 
 .icon
     cursor: pointer
@@ -66,7 +49,8 @@
 	float: right
 
 .field
-    margin: 3px 0
+	margin-left: 3px
+	margin-top: 10px
 
 .title
 	float: right
@@ -75,11 +59,17 @@
 	white-space: nowrap
 	text-overflow: ellipsis
 
-.member-list
-	justify-content: center
-	display: flex
-	.member-item
-		max-width: 95%
-		overflow: hidden
-		white-space: nowrap
-		text-overflow: ellipsis
+.user-list
+	overflow-y: auto
+	max-height: 150px
+
+.user-list-img
+	width: 40px
+	height: 40px
+	float: left
+	margin-right: 5px
+	border-radius: 50%
+
+.user-list-item
+	border-top: 1px solid #d5d5d5
+	padding: 5px

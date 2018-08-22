@@ -42,14 +42,17 @@
 
     <p-tieredMenu #org [model]="orgItems" [popup]="true"></p-tieredMenu>
     <button #btn type="button" pButton icon="fa fa-sitemap" (click)="org.toggle($event)"></button>
+    <app-add-new-organization [(display)]="displayAddNewOrganization" (displayChange)="onDisplayChange($event)"></app-add-new-organization>
+    
 
     <p-tieredMenu #user [model]="userItems" [popup]="true"></p-tieredMenu>
     <a class="user-info" (click)="user.toggle($event)">
       <span>{{ currentUser?.displayName }}</span>
-      <img src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-4/256/User-blue-icon.png"
-           class="user-photo" alt="">
+      <img src="{{currentUser?.photoURL}}"
+           class="user-photo" alt="" />
       <i class="fa fa-sort-desc"></i>
     </a>
   </div>
 </div>
+
 
