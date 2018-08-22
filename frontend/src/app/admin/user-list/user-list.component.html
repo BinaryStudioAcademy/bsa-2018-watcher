@@ -66,7 +66,7 @@
         <p class="fieldRole">Role: </p>
         <!--<p-listbox [options]="lstRoles" [(ngModel)]="selectedRole" optionLabel="name" (toggleSelect)="selectedRole = null"
               [listStyle]="{'max-height':'30px', 'min-width':'176px'}"> </p-listbox>-->
-        <p-dropdown [options]="dropdownRole" [(ngModel)]="selectedRole"></p-dropdown>
+        <p-dropdown [options]="dropdownRole" [(ngModel)]="selectedRole" [style]="{'width':'178px'}"></p-dropdown>
       </div>
 
       <form [formGroup]="userForm">
@@ -85,21 +85,25 @@
         <p class="field">Last name</p>
         <input size="41" type="text" formControlName="lastName" pInputText />
         <p class="field">Bio</p>
-        <textarea rows="5" [cols]="42" formControlName="bio" pInputTextarea></textarea>
+        <textarea rows="3" [cols]="42" formControlName="bio" pInputTextarea></textarea>
       </form>
     </div>
   </div>
 
   <div class="ui-g ui-fluid">
-    <div class="inline">  <p class="field">List of other organizations</p>
-      <!--<p-listbox [options]="lstRoles" [(ngModel)]="selectedRole" optionLabel="name" (toggleSelect)="selectedRole = null"
-                [listStyle]="{'max-height':'30px', 'min-width':'176px'}"> </p-listbox>-->
-      <p-dropdown [options]="dropdownCompany" [(ngModel)]="selectedCompany"></p-dropdown>
-      <button pButton label="Invite" (click)="onSentInviteToEmail()" class="btnedit ui-button-primary ui-button-raised"></button>
+    <!--<div class="inline"> </div>-->
+    <div class="ui-g-6">
+      <p class="fieldOrg">List of other organizations</p>
+    </div>
+    <div class="ui-g-4">
+      <p-dropdown [options]="dropdownCompany" [(ngModel)]="selectedCompany" [style]="{'width':'150px'}" filter="true"></p-dropdown>
+    </div>
+    <div class="ui-g-2">
+      <button pButton label="Invite" (click)="onSentInviteToEmail()" class="ui-button-primary ui-button-raised"></button>
     </div>
   </div>
 
-  <p class="field ui-g ui-fluid">List of your organizations</p>
+  <p class="field ui-g ui-fluid space">List of your organizations</p>
   <div class="border">
 
     <div class="ui-g ui-fluid">
@@ -109,7 +113,7 @@
     </div>
 
     <div class="ui-g ui-fluid" *ngIf="lstUserCompany">
-      <p-scrollPanel [style]="{width: '100%', height: '135px'}" styleClass="custom">
+      <p-scrollPanel [style]="{width: '100%', height: '50px'}" styleClass="custom">
         <!--width: 464px;-->
         <div *ngFor="let organization of lstUserCompany" class="ui-g ui-fluid">
           <div class="ui-g-4 center fieldOrg">{{organization?.name}} </div>
@@ -122,10 +126,12 @@
     </div>
 
   </div>
-  
+
   <p-footer>
-    <button type="button" pButton icon="pi pi-check" class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
-    <button type="button" pButton icon="pi pi-close" (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+    <div class="center">
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
+      <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+    </div>
   </p-footer>
 
 </p-dialog>

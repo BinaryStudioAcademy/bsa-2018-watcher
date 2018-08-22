@@ -35,6 +35,7 @@ export class UserListComponent implements OnInit {
   selectedCompany: Organization;
   dropdownRole: SelectItem[];
   dropdownCompany: SelectItem[];
+  lastOrganization: Organization;
 
   constructor(
     private fb: FormBuilder,
@@ -105,10 +106,18 @@ export class UserListComponent implements OnInit {
   }*/
 
   onUnassign(company: Organization) {
+    if (this.lstUserCompany.length <= 1) {
+      this.toastrService.warning('The user must have at least one organization.');
+      return;
+    }
     if (this.user.lastPickedOrganizationId === company.id) {
       this.user.lastPickedOrganizationId = 0;
       this.user.lastPickedOrganization = null;
-      this.userService.update(this.user.id, this.user).subscribe(
+    } else {
+      const index = this.user.organizations.indexOf(company);
+      this.user.organizations.splice(index, 1);
+    }
+    this.userService.update(this.user.id, this.user).subscribe(
         value => {
           this.toastrService.success(`Now last picked organization - ${this.user.organizations[0].name}`);
         },
@@ -116,10 +125,6 @@ export class UserListComponent implements OnInit {
           this.toastrService.error(`Error ocured status: ${error.message}`);
         }
       );
-    } else {
-      const index = this.user.organizations.indexOf(company);
-      this.user.organizations.splice(index, 1);
-    }
   }
 
 lastPickedCompany(id: number) {
@@ -147,9 +152,14 @@ lastPickedCompany(id: number) {
     this.subscribeOrganizationFormToData();
     this.display = true;
     this.lstUserCompany = user.organizations.map(x => Object.assign({}, x));
-    this.lstUserCompany.push(this.lastPickedCompany(user.lastPickedOrganizationId));
+    if (user.lastPickedOrganizationId) {
+      this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => this.lastOrganization = value);
+    this.lstUserCompany.push(this.lastOrganization);
+  }
     this.selectedRole = user.role;
     console.log(this.lstUserCompany);
+    console.log(user.organizations);
+    console.log(this.lastOrganization);
   }
 
   onCancel() {
