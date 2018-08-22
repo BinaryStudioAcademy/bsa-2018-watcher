@@ -11,6 +11,10 @@ import { FormsModule } from '@angular/forms';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { UserPictureComponent } from './user-picture/user-picture.component';
+import { ImageCropperModule } from 'ngx-img-cropper';
+import { DialogModule } from 'primeng/dialog';
+import { FileUploadModule } from 'primeng/fileupload';
+
 
 @NgModule({
   imports: [
@@ -24,7 +28,10 @@ import { UserPictureComponent } from './user-picture/user-picture.component';
     DropdownModule,
     ReactiveFormsModule,
     SettingsRoutingModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    ImageCropperModule,
+    DialogModule,
+    FileUploadModule
   ],
   declarations: [
     SettingsComponent,

@@ -23,6 +23,7 @@ import { ChatModule } from '../chat/chat.module';
 import { query } from '@angular/core/src/render3/query';
 import { AddNewOrganizationComponent } from './add-new-organization/add-new-organization.component';
 import { FormsModule } from '@angular/forms';
+import { ClickOutsideDirective } from '../core/directives/click-outside.directive';
 
 
 @NgModule({

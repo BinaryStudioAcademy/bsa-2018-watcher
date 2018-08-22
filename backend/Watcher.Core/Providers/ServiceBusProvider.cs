@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.ServiceBus;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Text;
@@ -11,14 +10,16 @@ namespace Watcher.Core.Providers
 {
     public class ServiceBusProvider : IServiceBusProvider, IDisposable
     {
-        private readonly IQueueClient queueClient;
+        private readonly IQueueClient _queueClient;
         private readonly ILogger<ServiceBusProvider> _logger;
 
-        public ServiceBusProvider(IConfiguration configuration, ILoggerFactory loggerFactory)
+        public ServiceBusProvider(IQueueClient queueClient, ILoggerFactory loggerFactory)
         {
-            queueClient = new QueueClient(configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value);
+            _queueClient = queueClient;
             _logger = loggerFactory?.CreateLogger<ServiceBusProvider>() ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
+
+        #region Subscribe
 
         public void RegisterOnMessageHandlerAndReceiveMessages()
         {
@@ -35,7 +36,7 @@ namespace Watcher.Core.Providers
             };
 
             // Register the function that will process messages
-            queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
+            _queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
         }
 
         private async Task<string> ProcessMessagesAsync(Message message, CancellationToken token)
@@ -46,10 +47,27 @@ namespace Watcher.Core.Providers
             
             // Complete the message so that it is not received again.
             // This can be done only if the queueClient is created in ReceiveMode.PeekLock mode (which is default).
-            await queueClient.CompleteAsync(message.SystemProperties.LockToken);
+            await _queueClient.CompleteAsync(message.SystemProperties.LockToken);
 
             return m;
         }
+
+        #endregion
+
+        #region Publish
+        public async Task SendMessageToServiceBus(string message)
+        {
+            try
+            {
+                var messageBody = new Message(Encoding.UTF8.GetBytes(message));
+                await _queueClient.SendAsync(messageBody);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
 
         private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
         {
@@ -70,7 +88,7 @@ namespace Watcher.Core.Providers
         {
             if (!disposedValue)
             {
-                await queueClient.CloseAsync();
+                await _queueClient.CloseAsync();
 
                 disposedValue = true;
             }

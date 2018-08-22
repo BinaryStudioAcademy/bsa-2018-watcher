@@ -1,14 +1,8 @@
-﻿using System.Collections.Generic;
-using Watcher.Common.Dtos;
-using Watcher.Common.Enums;
-
-namespace Watcher.Hubs
+﻿namespace Watcher.Hubs
 {
     using System;
-    using System.Security.Claims;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
 
     using Watcher.Common.Requests;
@@ -85,7 +79,7 @@ namespace Watcher.Hubs
 
             foreach (var user in usersInChat)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged");
+                await Clients.User(user.Id).SendAsync("UserAdded");
             }
         }
 
@@ -98,7 +92,7 @@ namespace Watcher.Hubs
 
             foreach (var user in usersInChat)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged");
+                await Clients.User(user.Id).SendAsync("UserDeleted");
             }
         }
 

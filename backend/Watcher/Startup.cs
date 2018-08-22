@@ -4,6 +4,7 @@ namespace Watcher
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -17,10 +18,12 @@ namespace Watcher
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Azure.ServiceBus;
     using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
 
@@ -61,7 +64,7 @@ namespace Watcher
                 }));
 
             services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
-
+            
             var securitySection = Configuration.GetSection("Security");
             services.Configure<WatcherTokenOptions>(o =>
                 {
@@ -92,11 +95,11 @@ namespace Watcher
             services.AddTransient<IFeedbackService, FeedbackService>();
             services.AddTransient<IChartsService, ChartsService>();
             services.AddTransient<IResponseService, ResponseService>();
-            services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
             services.AddTransient<ICollectedDataService, CollectedDataService>();
 
-            
+            services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
+            services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
 
             ConfigureFileStorage(services, Configuration);
             ConfigureCosmosDb(services, Configuration);
@@ -119,7 +122,7 @@ namespace Watcher
                               {
                                   if ((!context.Request.Path.Value.Contains("/notifications")
                                       && !context.Request.Path.Value.Contains("/chatsHub"))
-                                      
+
                                       || !context.Request.Query.ContainsKey("Authorization")
                                       || !context.Request.Query.ContainsKey("WatcherAuthorization"))
                                       return Task.CompletedTask;
@@ -202,7 +205,14 @@ namespace Watcher
             app.UseConfiguredSwagger();
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+
+            string imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+            Directory.CreateDirectory(imageFolder);
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(imageFolder),
+            });
+
             app.UseAuthentication();
 
             app.UseWatcherAuth();

@@ -13,6 +13,7 @@ import { ToastrService } from '../../core/services/toastr.service';
 import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../core/services/notification.service';
 import { Notification } from '../../shared/models/notification.model';
+import { PathService } from '../../core/services/path.service';
 
 @Component({
   selector: 'app-header',
@@ -42,9 +43,10 @@ export class HeaderComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private authService: AuthService,
-    private notificationsService: NotificationService) {
-    this.conectToNotificationsHub();
-    this.subscribeToNotificationsEvents();
+    private notificationsService: NotificationService,
+    private pathService: PathService) {
+      this.conectToNotificationsHub();
+      this.subscribeToNotificationsEvents();
   }
 
   onFeedback(): void {
@@ -126,9 +128,8 @@ export class HeaderComponent implements OnInit {
     this.authService.currentUser.subscribe(
       userData => {
         this.currentUser = { ...userData };
-        if (this.currentUser && this.currentUser.organizations && this.currentUser.organizations.length > 0) {
-          this.fillOrganizations();
-        }
+        //this.currentUser.photoURL = this.pathService.convertToUrl(this.currentUser.photoURL);   // error    
+        this.fillOrganizations();
       }
     );
 
@@ -153,6 +154,10 @@ export class HeaderComponent implements OnInit {
         });
       });
     });
+  }
+
+  close() {
+    this.isNotificationShow = false;
   }
 
   private fillOrganizations(): void {
@@ -199,6 +204,6 @@ export class HeaderComponent implements OnInit {
       },
         err => {
           this.toastrService.error('Organization by defaul was not updated.');
-        });
+      });
   }
 }
