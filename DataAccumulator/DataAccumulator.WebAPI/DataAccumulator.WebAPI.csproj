@@ -12,7 +12,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="3.1.0" />
-    <PackageReference Include="Ninject" Version="3.3.4" />
     <PackageReference Include="Quartz" Version="3.0.6" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="2.6.1" />
