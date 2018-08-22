@@ -12,7 +12,7 @@ using MongoDB.Driver;
 
 namespace DataAccumulator.DataAccessLayer.Repositories
 {
-    public class DataAggregatorRepository : IDataAccumulatorRepository<CollectedData>
+    public class DataAggregatorRepository : IDataAggregatorRepository<CollectedData>
     {
         private readonly DataAccumulatorContext _context = null;
 
