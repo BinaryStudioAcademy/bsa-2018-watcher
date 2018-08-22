@@ -12,6 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { FeedbackService } from './services/feedback.service';
 import { ResponseService } from './services/response.service';
 import {DashboardsHub} from './hubs/dashboards.hub';
+import { RoleService } from './services/role.service';
 import { NotificationsHubService } from './hubs/notifications.hub';
 
 @NgModule({
@@ -25,6 +26,7 @@ import { NotificationsHubService } from './hubs/notifications.hub';
     ToastrService,
     FeedbackService,
     ResponseService,
+    RoleService,
     ConfirmationService,
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },

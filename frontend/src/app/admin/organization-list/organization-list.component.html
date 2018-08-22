@@ -13,10 +13,10 @@
         <th>NAME</th>
         <th style="width:20%">DESCRIPTION</th>
         <th style="width:22%">EMAIL</th>
-        <th style="width:14%">WEBSITE</th>
+        <th style="width:17%">WEBSITE</th>
         <th>CONTACT NUMBER</th>
         <th style="width:7%">IS ACTIVE</th>
-        <th style="width:10%">THEME ID</th>
+        <th style="width:7%">THEME ID</th>
         <th style="width:7%">EDIT</th>
       </tr>
     </ng-template>
@@ -47,69 +47,78 @@
 
 <p-dialog header="Update organization" [(visible)]="display" [modal]="true" [responsive]="true" [width]="450" [minWidth]="300"
   [minY]="70" [maximizable]="false" [baseZIndex]="10000">
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-8">
-      <form [formGroup]="organizationForm">
-        <p class="field">Name</p>
-        <input size="41" type="text" formControlName="name" pInputText placeholder="Name" />
-        <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
-          <label>Name is required.</label>
-        </div>
 
-        <p class="field">Email</p>
-        <input size="41" type="text" formControlName="email" pInputText placeholder="Email" />
-        <div class="invalid" *ngIf="organizationForm.get('email').errors && organizationForm.get('email').dirty">
-          <label>Wrong email format.</label>
-        </div>
+  <form [formGroup]="organizationForm">
 
+    <div class="ui-g ui-fluid">
+      <p class="field">Name</p>
+      <input size="41" type="text" formControlName="name" pInputText placeholder="Name" />
+      <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
+        <label>Name is required.</label>
+      </div>
+    </div>
+
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-8 spacePad">
         <p class="field">Contact number</p>
         <input size="41" type="text" formControlName="contactNumber" pInputText placeholder="Contact number" />
         <div class="invalid" *ngIf="organizationForm.get('contactNumber').errors && organizationForm.get('contactNumber').dirty">
           <label>Wrong number format.</label>
         </div>
-
-        <p class="field">Web site</p>
-        <input size="41" type="text" formControlName="webSite" pInputText placeholder="Web site" />
-        <div class="invalid" *ngIf="organizationForm.get('webSite').errors && organizationForm.get('webSite').dirty">
-          <label>Wrong url format.</label>
+      </div>
+      <div class="ui-g-4">
+        <p class="center space">Is active </p>
+        <div class="center">
+          <p-checkbox formControlName="isActive" binary="true"></p-checkbox>
         </div>
-
-        <p class="field">Description</p>
-        <textarea rows="5" [cols]="42" formControlName="description" pInputTextarea></textarea>
-
-      </form>
+      </div>
     </div>
 
-    <div class="ui-g-4">
-      <form [formGroup]="organizationForm">
-        <p class="field center space">Is active:
-          <p-checkbox formControlName="isActive" binary="true"></p-checkbox>
-        </p>
-      </form>
-      <p class="field center">List of instances</p>
-      <div class="border">
-        <p-scrollPanel [style]="{width: '100%', height: '311px'}" styleClass="custom">
-          <div>
-            <div class="ui-g ui-fluid">
-              <div class="ui-g-6 center">Id</div>
-              <div class="ui-g-6 ">Active</div>
-            </div>
-            <div *ngFor="let instance of lstInstances" class="ui-g ui-fluid">
-              <div class="ui-g-6 center">{{instance.id}} </div>
-              <div class="ui-g-6 ">
-                <p-checkbox [(ngModel)]="instance.isActive" binary="true"></p-checkbox>
-              </div>
-            </div>
-          </div>
-        </p-scrollPanel>
+    <div class="ui-g ui-fluid">
+      <p class="field">Email</p>
+      <input size="41" type="text" formControlName="email" pInputText placeholder="Email" />
+      <div class="invalid" *ngIf="organizationForm.get('email').errors && organizationForm.get('email').dirty">
+        <label>Wrong email format.</label>
       </div>
 
+      <p class="field">Web site</p>
+      <input size="41" type="text" formControlName="webSite" pInputText placeholder="Web site" />
+      <div class="invalid" *ngIf="organizationForm.get('webSite').errors && organizationForm.get('webSite').dirty">
+        <label>Wrong url format.</label>
+      </div>
+
+      <p class="field">Description</p>
+      <textarea rows="3" [cols]="42" formControlName="description" pInputTextarea></textarea>
     </div>
+  </form>
+
+  <p class="field ui-g ui-fluid">List of instances</p>
+  <div class="border">
+
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-3 center">Id</div>
+      <div class="ui-g-6 center">Title</div>
+      <div class="ui-g-3 ">Active</div>
+    </div>
+    <p-scrollPanel [style]="{width: '100%', height: '50px'}" styleClass="custom">
+
+      <div *ngFor="let instance of lstInstances" class="ui-g ui-fluid">
+        <div class="ui-g-3 center">{{instance.id}} </div>
+        <div class="ui-g-6 center">{{instance.title}} </div>
+        <div class="ui-g-3 ">
+          <p-checkbox [(ngModel)]="instance.isActive" binary="true"></p-checkbox>
+        </div>
+      </div>
+
+    </p-scrollPanel>
+
   </div>
 
   <p-footer>
-    <button type="button" pButton icon="pi pi-check" class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
-    <button type="button" pButton icon="pi pi-close" (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+    <div class="center">
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
+      <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+    </div>
   </p-footer>
 
 </p-dialog>

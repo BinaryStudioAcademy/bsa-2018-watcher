@@ -6,5 +6,132 @@
       <hr>
     </div>
   </div>
-  
+
+
+  <p-table [value]="users" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width:7%">CREATED AT</th>
+        <th style="width:10%">PHOTO</th>
+        <th style="width:8%">DISPLAY NAME</th>
+        <th style="width:8%">FIRST NAME</th>
+        <th style="width:8%">LAST NAME</th>
+        <th style="width:10%">BIO</th>
+        <th style="width:22%">EMAIL</th>
+        <th> COMPANY ID</th>
+        <th style="width:6%">IS ACTIVE</th>
+        <th style="width:6%">ROLE</th>
+        <th style="width:6%">EDIT</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td class="center">{{user.createdAt | date:'longDate'}}</td>
+        <td class="center">
+          <img *ngIf="user.photoURL" src="user.photoURL" alt="PHOTO" />
+        </td>
+        <td class="center">{{user.displayName}}</td>
+        <td class="center">{{user.firstName}}</td>
+        <td class="center">{{user.lastName}}</td>
+        <td class="center">{{user.bio}}</td>
+        <td class="center">{{user.email}}</td>
+        <td class="center">{{user.lastPickedOrganizationId}}</td>
+        <td class="center">
+          <i *ngIf="user.isActive" class="fa fa-check-circle-o" style="font-size: 25px"></i>
+          <i *ngIf="!user.isActive" class="fa fa-times-circle-o" style="font-size: 25px"></i>
+        </td>
+        <td class="center">{{user.role.name}}</td>
+        <td>
+          <div class="center">
+            <button pButton type="button " label="Edit " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(user)"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
 </div>
+
+
+<p-dialog header="Update user" [(visible)]="display" [modal]="true" [responsive]="true" [width]="500" [minWidth]="350" [minY]="70"
+  [maximizable]="false" [baseZIndex]="10000">
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-6">
+      <form [formGroup]="userForm">
+        <p class="field">Photo</p>
+        <textarea rows="5" [cols]="42" pInputTextarea></textarea>
+      </form>
+
+      <div class="inline">
+        <p class="fieldRole">Role: </p>
+        <!--<p-listbox [options]="lstRoles" [(ngModel)]="selectedRole" optionLabel="name" (toggleSelect)="selectedRole = null"
+              [listStyle]="{'max-height':'30px', 'min-width':'176px'}"> </p-listbox>-->
+        <p-dropdown [options]="dropdownRole" [(ngModel)]="selectedRole" [style]="{'width':'178px'}"></p-dropdown>
+      </div>
+
+      <form [formGroup]="userForm">
+        <p class="field">Is active:
+          <p-checkbox formControlName="isActive" binary="true"></p-checkbox>
+        </p>
+      </form>
+    </div>
+
+    <div class="ui-g-6">
+      <form [formGroup]="userForm">
+        <p class="field">Display name</p>
+        <input size="41" type="text" formControlName="displayName" pInputText />
+        <p class="field">First name</p>
+        <input size="41" type="text" formControlName="firstName" pInputText />
+        <p class="field">Last name</p>
+        <input size="41" type="text" formControlName="lastName" pInputText />
+        <p class="field">Bio</p>
+        <textarea rows="3" [cols]="42" formControlName="bio" pInputTextarea></textarea>
+      </form>
+    </div>
+  </div>
+
+  <div class="ui-g ui-fluid">
+    <!--<div class="inline"> </div>-->
+    <div class="ui-g-6">
+      <p class="fieldOrg">List of other organizations</p>
+    </div>
+    <div class="ui-g-4">
+      <p-dropdown [options]="dropdownCompany" [(ngModel)]="selectedCompany" [style]="{'width':'150px'}" filter="true"></p-dropdown>
+    </div>
+    <div class="ui-g-2">
+      <button pButton label="Invite" (click)="onSentInviteToEmail()" class="ui-button-primary ui-button-raised"></button>
+    </div>
+  </div>
+
+  <p class="field ui-g ui-fluid space">List of your organizations</p>
+  <div class="border">
+
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-4 center">Name</div>
+      <div class="ui-g-5 center">Email</div>
+      <div class="ui-g-3 "></div>
+    </div>
+
+    <div class="ui-g ui-fluid" *ngIf="lstUserCompany">
+      <p-scrollPanel [style]="{width: '100%', height: '50px'}" styleClass="custom">
+        <!--width: 464px;-->
+        <div *ngFor="let organization of lstUserCompany" class="ui-g ui-fluid">
+          <div class="ui-g-4 center fieldOrg">{{organization?.name}} </div>
+          <div class="ui-g-5 center fieldOrg">{{organization?.email}} </div>
+          <div class="ui-g-3 center">
+            <button pButton label="Unassign" (click)="onUnassign(organization)" class="ui-button-raised ui-button-danger"></button>
+          </div>
+        </div>
+      </p-scrollPanel>
+    </div>
+
+  </div>
+
+  <p-footer>
+    <div class="center">
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
+      <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+    </div>
+  </p-footer>
+
+</p-dialog>
