@@ -97,6 +97,7 @@ namespace Watcher
             services.AddTransient<IResponseService, ResponseService>();
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
             services.AddTransient<ICollectedDataService, CollectedDataService>();
+            services.AddTransient<IRoleService, RoleService>();
 
             services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
@@ -300,6 +301,7 @@ namespace Watcher
                     cfg.AddProfile<MessageProfile>();
 
                     cfg.AddProfile<FeedbackProfile>();
+                    cfg.AddProfile<RoleProfile>();
                     cfg.AddProfile<ResponseProfile>();
                     cfg.AddProfile<InstancesProfile>();
                     cfg.AddProfile<OrganizationInvitesProfile>();

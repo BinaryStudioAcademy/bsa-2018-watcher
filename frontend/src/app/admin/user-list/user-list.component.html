@@ -69,10 +69,21 @@
 
         <p class="field">Last name</p>
         <input size="41" type="text" formControlName="lastName" pInputText />
-
-        <p class="field">Role name</p>
-        <input size="41" type="text" pInputText />
-
+        <div class="inline">
+          <p class="fieldRole">Role: </p>
+          <p-listbox [options]="lstRoles" [(ngModel)]="selectedRole" optionLabel="name" (toggleSelect)="selectedRole = null"
+              [listStyle]="{'max-height':'30px', 'min-width':'215px'}">
+            <!--<ng-template let-role pTemplate="item">
+              <div class="ui-helper-clearfix">
+                <span style="float:left;">{{role.name}}</span>
+              </div>
+            </ng-template>
+            <p-footer>
+              Selected: {{selectedCar||'none'}}
+            </p-footer>-->
+          </p-listbox>
+         
+        </div> <p>Selected role: {{selectedRole ? selectedRole.name : 'none'}}</p>
         <p class="field">Bio</p>
         <textarea rows="5" [cols]="42" formControlName="bio" pInputTextarea></textarea>
 

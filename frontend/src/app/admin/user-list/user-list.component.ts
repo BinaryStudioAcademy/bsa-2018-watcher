@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Directive, Output, HostListener, ElementRef, EventEmitter  } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
@@ -6,16 +6,20 @@ import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
 import { OrganizationService } from '../../core/services/organization.service';
+import { RoleService } from '../../core/services/role.service';
+import {SelectItem} from 'primeng/primeng';
 
 import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
+import { Role } from '../../shared/models/role.model';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.sass']
 })
+
 export class UserListComponent implements OnInit {
 
   users: User[];
@@ -26,6 +30,8 @@ export class UserListComponent implements OnInit {
   lstOrganizations: Organization[];
   lstOrganizationId: number[];
   invite: OrganizationInvite;
+  lstRoles: Role[];
+  selectedRole: Role;
 
   constructor(
     private fb: FormBuilder,
@@ -33,6 +39,7 @@ export class UserListComponent implements OnInit {
     private userService: UserService,
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,
+    private roleService: RoleService,
     private toastrService: ToastrService) {
 
     this.display = false;
@@ -59,6 +66,11 @@ export class UserListComponent implements OnInit {
 
     this.organizationService.getAll().subscribe((value: Organization[]) => {
       this.lstOrganizations = value;
+    });
+
+    this.roleService.getAll().subscribe((value: Role[]) => {
+      this.lstRoles = value;
+      // this.selectedRole = value[0];
     });
   }
 
@@ -140,5 +152,32 @@ export class UserListComponent implements OnInit {
     err => {
       this.toastrService.error('Organization Invite was not updated');
     });
+  }
+}
+
+@Directive({
+  // tslint:disable-next-line:directive-selector
+  selector: '[toggleSelect]',
+})
+export class ToggleSelectDirective {
+  @Output('toggleSelect') public toggleSelect: EventEmitter<null> = new EventEmitter<null>();
+
+  private wasChanged = false;
+
+  constructor(el: ElementRef) {
+    el.nativeElement.style.backgroundColor = 'yellow';
+  }
+
+  @HostListener('onChange', ['$event'])
+  public onChange(event: any) {
+    this.wasChanged = true;
+    setTimeout(() => this.wasChanged = false, 100);
+  }
+
+  @HostListener('click', ['$event'])
+  public onClick(event: any) {
+    if (!this.wasChanged) {
+      this.toggleSelect.emit();
+    }
   }
 }
