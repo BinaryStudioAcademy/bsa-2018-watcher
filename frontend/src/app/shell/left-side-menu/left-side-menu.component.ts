@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnChanges} from '@angular/core';
 import {MenuItem} from 'primeng/api';
 import {Router, RouterEvent} from '@angular/router';
 import {InstanceService} from '../../core/services/instance.service';
@@ -27,6 +27,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private regexInviteUrl: RegExp = /\/user\/invite/;
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
   private regexInstancesUrl: RegExp = /\/user(\/instances)?/;
+  private currentQuery: string;
   private regexAdminUrl = /\/admin/;
 
   isSearching: boolean;
@@ -83,7 +84,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     this.instanceItems = [{
       label: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
-      routerLink: ['instances/create']
+      routerLink: ['instances/create'],
     }];
 
     this.adminItems = [{
@@ -122,8 +123,8 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
         // this.router.navigate([`/user/instances/${instance.id}/dashboards`]);
       },
       items: [{
-        label: 'Update',
-        icon: 'fa fa-refresh',
+        label: 'Edit',
+        icon: 'fa fa-pencil',
         routerLink: [`instances/${instance.id}/edit`],
         styleClass: 'instance-options'
       }, {
@@ -151,6 +152,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
         this.toastrService.success('Deleted instance');
         this.instanceItems.splice(index, 1);
         this.router.navigate([`instances`]);
+        this.onSearchChange(this.currentQuery);
       });
     }
   }
@@ -158,6 +160,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   onInstanceAdded(instance: Instance) {
     const item: MenuItem = this.instanceToMenuItem(instance);
     this.instanceItems.push(item);
+    this.onSearchChange(this.currentQuery);
   }
 
   onInstanceRemoved(id: number) {
@@ -170,6 +173,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     const item: MenuItem = this.instanceToMenuItem(instance);
     const index: number = this.instanceItems.findIndex(inst => inst.title === instance.id.toString());
     this.instanceItems[index] = item;
+    this.onSearchChange(this.currentQuery);
   }
 
   private subscribeRouteChanges(): void {
@@ -229,5 +233,18 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   private getSettingByUrl(url: string): Element {
     return document.querySelector(`div.ui-panelmenu-header a[href="${url}"]`);
+  }
+
+  onSearchChange(searchQuery: string): void {
+    this.currentQuery = searchQuery;
+    this.instanceItems = this.instanceItems.map( (menuitem: MenuItem) => {
+      if (!menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase())) {
+        menuitem.visible = false;
+      } else {
+        menuitem.visible = true;
+      }
+      if (menuitem.label === this.menuItems[0].label) { menuitem.visible = true; }
+      return menuitem;
+    });
   }
 }

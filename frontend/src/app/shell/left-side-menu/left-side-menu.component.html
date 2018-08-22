@@ -1,8 +1,8 @@
 <div *ngIf="!isFeedback && !isInvite" class="menu">
   <div *ngIf="isSearching" class="input-group stylish-input-group">
     <div class="search">
-      <input type="text" placeholder="Search">
-      <i class="fa fa-search"></i>
+        <input type="text" size="10" pInputText placeholder="Search" (input)="onSearchChange($event.target.value)">  
+        <i class="fa fa-search"></i>      
     </div>
   </div>
   <div class="panelMenuContainer">
