@@ -6,11 +6,10 @@ namespace DataAccumulator.WebAPI.Jobs
 {
     public class Quartz
     {
-        // Der verwendete Scheduler
         private IScheduler _scheduler;
 
         /// <summary>
-        /// Verwendete Scheduler
+        /// Used scheduler
         /// </summary>
         public static IScheduler Scheduler { get { return Instance._scheduler; } }
 
@@ -34,18 +33,18 @@ namespace DataAccumulator.WebAPI.Jobs
 
         private Quartz()
         {
-            // Initialisieren
+            // Initialize
             Init();
         }
 
         private async void Init()
         {
-            // Scheduler setzen mit standard Scheduler Factory
+            // Scheduler set with standard scheduler factory
             _scheduler = await new StdSchedulerFactory().GetScheduler();
         }
 
         /// <summary>
-        /// Legt die JobFactory fest aus der die jobs erzeugt werden
+        /// Defines the JobFactory from which the jobs are generated
         /// </summary>
         /// <param name="jobFactory"></param>
         /// <returns></returns>
@@ -56,33 +55,33 @@ namespace DataAccumulator.WebAPI.Jobs
         }
 
         /// <summary>
-        /// Fügt einen neuen Job dem Scheduler hinzu
+        /// Adds a new job to the scheduler
         /// </summary>
-        /// <typeparam name="T">Job der erzeugt wird</typeparam>
-        /// <param name="name">Name des Jobs</param>
-        /// <param name="group">Gruppe des jobs</param>
-        /// <param name="interval">Interval zweischen Ausführung in sekunden</param>
+        /// <typeparam name="T">Job is generated</typeparam>
+        /// <param name="name">Name of the job</param>
+        /// <param name="group">Group of jobs</param>
+        /// <param name="interval">Interval between execution in seconds</param>
         public async void AddJob<T>(string name, string group, int interval)
             where T : IJob
         {
-            // Job erstellen
+            // Create a job
             IJobDetail job = JobBuilder.Create<T>()
                 .WithIdentity(name, group)
                 .Build();
 
-            // Trigger erstellen
+            // Create triggers
             ITrigger jobTrigger = TriggerBuilder.Create()
                 .WithIdentity(name + "Trigger", group)
-                .StartNow() // Jetzt starten
-                .WithSimpleSchedule(t => t.WithIntervalInSeconds(interval).RepeatForever()) // Mit wiederholung alle interval sekunden
+                .StartNow() // Start now
+                .WithSimpleSchedule(t => t.WithIntervalInSeconds(interval).RepeatForever()) // With repetition every interval second
                 .Build();
 
-            // Job anfügen
+            // Attach job
             await Scheduler.ScheduleJob(job, jobTrigger);
         }
 
         /// <summary>
-        /// Startet den Scheduler
+        /// Starts the scheduler
         /// </summary>
         public static async void Start()
         {
