@@ -1,11 +1,12 @@
 <div *ngIf="!isFeedback && !isInvite" class="menu">
   <div *ngIf="isSearching" class="input-group stylish-input-group">
     <div class="search">
-      <input type="text" placeholder="Search">
-      <i class="fa fa-search"></i>
+        <input type="text" size="10" pInputText placeholder="Search" (input)="onSearchChange($event.target.value)">  
+        <i class="fa fa-search"></i>      
     </div>
   </div>
   <div class="panelMenuContainer">
     <p-panelMenu [multiple]="false" [model]="menuItems"></p-panelMenu>
   </div>
 </div>
+<app-download-app (closed)="onClose()" [display]="showDownloadModal" [guid]="currentGuidId"></app-download-app>

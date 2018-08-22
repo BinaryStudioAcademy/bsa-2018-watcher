@@ -4,7 +4,6 @@ namespace Watcher.Core.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -12,7 +11,6 @@ namespace Watcher.Core.Services
     using Microsoft.EntityFrameworkCore;
     using Watcher.Common.Dtos;
     using Watcher.Common.Enums;
-    using Watcher.Common.Helpers.Utils;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Interfaces;
@@ -115,7 +113,7 @@ namespace Watcher.Core.Services
 
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
 
-            var defaultOrganization = new Organization()
+            var defaultOrganization = new Organization
             {
                 Name = request.CompanyName ?? "Default",
                 IsActive = true,
@@ -131,20 +129,12 @@ namespace Watcher.Core.Services
                    UserId = entity.Id
                });
 
-            string photoPath = string.Empty;
-            if (entity.PhotoURL == null)
-            {
-                photoPath = FileHelpers.DownloadImageFromUrl("https://bsawatcherfiles.blob.core.windows.net/watcher/f6efd981-4e08-44f0-ab87-837720b372ef.png");
-            }
-            else
-            {
-                photoPath = FileHelpers.DownloadImageFromUrl(entity.PhotoURL);
-            }
-
-            var containerName = "watcher";
-            var newPhotoUrl = await _fileStorageProvider.UploadFileAsync(photoPath, containerName);
+            var newPhotoUrl = await _fileStorageProvider.UploadFileFromStreamAsync(
+                                  string.IsNullOrWhiteSpace(entity.PhotoURL)
+                                      ? "https://bsawatcherfiles.blob.core.windows.net/watcher/f6efd981-4e08-44f0-ab87-837720b372ef.png" // Standart photo path
+                                      : entity.PhotoURL);
+            
             entity.PhotoURL = newPhotoUrl;
-            await FileHelpers.DeleteFileByPath(photoPath);
 
             var createdUser = await _uow.UsersRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
@@ -172,14 +162,14 @@ namespace Watcher.Core.Services
 
             var existingEntity = await GetEntityByIdAsync(id);
 
-            if (null == existingEntity.PhotoURL)
+            if (string.IsNullOrWhiteSpace(existingEntity.PhotoURL))
             {
-                entity.PhotoURL = await UpdatePhoto(entity.PhotoURL);
+                entity.PhotoURL = existingEntity.PhotoURL;
             }
             else if (!existingEntity.PhotoURL.Equals(entity.PhotoURL))
             {
                 await _fileStorageProvider.DeleteFileAsync(existingEntity.PhotoURL);
-                entity.PhotoURL = await UpdatePhoto(entity.PhotoURL);
+                entity.PhotoURL = await _fileStorageProvider.UploadFileBase64Async(entity.PhotoURL, request.PhotoType); // TODO: change here for real image type
             }
 
             // In returns updated entity, you could do smth with it or just leave as it is
@@ -187,13 +177,6 @@ namespace Watcher.Core.Services
             var result = await _uow.SaveAsync();
 
             return result;
-        }
-
-        private async Task<string> UpdatePhoto(string photoURL)
-        {
-            string containerName = "watcher";
-            string newPhotoUrl = await _fileStorageProvider.UploadFileBase64Async(photoURL, containerName);
-            return newPhotoUrl;
         }
 
         public async Task<bool> DeleteEntityByIdAsync(string id)
