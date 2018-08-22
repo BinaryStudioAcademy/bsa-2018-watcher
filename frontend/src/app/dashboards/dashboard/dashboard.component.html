@@ -7,7 +7,7 @@
       <hr *ngIf="!instanceId">
     </div>
   </div>
-  <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
+  <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
   <div class="workspace" *ngIf="instanceId">
     <div class="dashboard-options">
       <button pButton type="button"

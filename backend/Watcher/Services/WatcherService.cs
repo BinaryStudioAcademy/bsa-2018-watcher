@@ -15,7 +15,6 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
-    using Watcher.Common.Dtos;
     using Watcher.Common.Dtos.Plots;
     using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
