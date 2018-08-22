@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccumulator.DataAggregator.Interfaces;
 using DataAccumulator.DataAggregator.Services;
 using DataAccumulator.Shared.Models;
 
 namespace DataAccumulator.DataAggregator
 {
-    public class DataAggregatorCore
+    public class DataAggregatorCore : IDataAggregatorCore<CollectedDataDto>
     {
-        private readonly AggregatorService _aggregatorService;
+        private readonly IAggregatorService<CollectedDataDto> _aggregatorService;
 
-        public DataAggregatorCore(AggregatorService aggregatorService)
+        public DataAggregatorCore(IAggregatorService<CollectedDataDto> aggregatorService)
         {
             _aggregatorService = aggregatorService;
         }

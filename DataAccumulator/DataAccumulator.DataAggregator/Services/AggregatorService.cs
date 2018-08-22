@@ -6,20 +6,21 @@ using AutoMapper;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
+using DataAccumulator.DataAggregator.Interfaces;
 using DataAccumulator.Shared.Exceptions;
 using DataAccumulator.Shared.Models;
 
 namespace DataAccumulator.DataAggregator.Services
 {
-    public class AggregatorService
+    public class AggregatorService : IAggregatorService<CollectedDataDto>
     {
         private readonly IMapper _mapper;
         private readonly IDataAccumulatorRepository<CollectedData> _dataAccumulatorRepository;
-        private readonly IDataAccumulatorRepository<CollectedData> _dataAggregatorRepository;
+        private readonly IDataAggregatorRepository<CollectedData> _dataAggregatorRepository;
 
-        public AggregatorService(IMapper mapper, 
-            DataAccumulatorRepository dataAccumulatorRepository, 
-            DataAggregatorRepository dataAggregatorRepository)
+        public AggregatorService(IMapper mapper,
+            IDataAccumulatorRepository<CollectedData> dataAccumulatorRepository,
+            IDataAggregatorRepository<CollectedData> dataAggregatorRepository)
         {
             _mapper = mapper;
             _dataAccumulatorRepository = dataAccumulatorRepository;
