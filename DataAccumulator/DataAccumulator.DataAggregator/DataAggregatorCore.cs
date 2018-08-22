@@ -34,11 +34,11 @@ namespace DataAccumulator.DataAggregator
 
             var collectedDataDtosAverage =
                 from collectedDataDto in accumulatedCollectedDataDtos
-                group collectedDataDto by collectedDataDto.Id
+                group collectedDataDto by collectedDataDto.ClientId
                 into collectedDataGroup
                 select new CollectedDataDto
                 {
-                    Id = collectedDataGroup.Key,
+                    ClientId = collectedDataGroup.Key,
                     ProcessesCount = Convert.ToInt32(collectedDataGroup
                         .Average(d => d.ProcessesCount)),
                     CpuUsagePercent = collectedDataGroup

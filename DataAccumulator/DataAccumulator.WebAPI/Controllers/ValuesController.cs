@@ -30,7 +30,8 @@ namespace DataAccumulator.WebAPI.Controllers
 
                     await _repository.AddEntity(new CollectedData()
                     {
-                        Id = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        Id = Guid.NewGuid(),
+                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
                         ProcessesCount = 2,
                         CpuUsagePercent = 3,
                         RamUsagePercent = 4,
@@ -54,7 +55,8 @@ namespace DataAccumulator.WebAPI.Controllers
 
                     await _repository.AddEntity(new CollectedData()
                     {
-                        Id = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        Id = Guid.NewGuid(),
+                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
                         ProcessesCount = 2,
                         CpuUsagePercent = 3,
                         RamUsagePercent = 4,
@@ -78,7 +80,8 @@ namespace DataAccumulator.WebAPI.Controllers
 
                     await _repository.AddEntity(new CollectedData()
                     {
-                        Id = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        Id = Guid.NewGuid(),
+                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
                         ProcessesCount = 2,
                         CpuUsagePercent = 3,
                         RamUsagePercent = 4,
@@ -102,7 +105,8 @@ namespace DataAccumulator.WebAPI.Controllers
 
                     await _repository.AddEntity(new CollectedData()
                     {
-                        Id = new Guid("76053df4-6687-4353-8937-b45556748abe"),
+                        Id = Guid.NewGuid(),
+                        ClientId = new Guid("76053df4-6687-4353-8937-b45556748abe"),
                         ProcessesCount = 2,
                         CpuUsagePercent = 3,
                         RamUsagePercent = 4,
@@ -126,7 +130,8 @@ namespace DataAccumulator.WebAPI.Controllers
 
                     await _repository.AddEntity(new CollectedData()
                     {
-                        Id = new Guid("76053df4-6687-4353-8937-b45556748abe"),
+                        Id = Guid.NewGuid(),
+                        ClientId = new Guid("76053df4-6687-4353-8937-b45556748abe"),
                         ProcessesCount = 5,
                         CpuUsagePercent = 6,
                         RamUsagePercent = 9,

@@ -16,6 +16,9 @@ namespace DataAccumulator.DataAccessLayer.Entities
         // external Id, to reference
         public Guid Id { get; set; }
 
+        // external ClientId - Client identification number
+        public Guid ClientId { get; set; }
+
         public int ProcessesCount { get; set; }
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
