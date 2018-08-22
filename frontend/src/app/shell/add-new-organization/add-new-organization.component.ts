@@ -53,12 +53,17 @@ export class AddNewOrganizationComponent implements OnInit {
 
     this.organizationService.create(org).subscribe(
       value => {
-        this.toastrService.success('ok');
-        debugger;
+        this.user.organizations.push(value);
+        this.user.lastPickedOrganization = value;
+        this.user.lastPickedOrganizationId = value.id;
+
+        this.authService.updateCurrentUser(this.user);
+
+        this.toastrService.success(`${value.name} organization Successfully established,
+          and it was set as the default organization.`);
       },
       err => {
-        this.toastrService.error('err');
-        debugger;
+        this.toastrService.error(`Error The organization was not created!`);
       }
     );
     this.onClose();
