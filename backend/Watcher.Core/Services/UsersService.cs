@@ -133,7 +133,17 @@ namespace Watcher.Core.Services
 
 
             string containerName = "watcher";
-            string photoPath = FileHelpers.DownloadImageFromUrl(entity.PhotoURL);
+            string photoPath = "";
+            if (null == entity.PhotoURL)
+            {
+                photoPath = FileHelpers.DownloadImageFromUrl("https://bsawatcherfiles.blob.core.windows.net/watcher/b6d204b0-ff1c-4fad-9bbe-9feab9e6845b.png");
+
+            }
+            else
+            {
+                photoPath = FileHelpers.DownloadImageFromUrl(entity.PhotoURL);
+            }
+            
             string newPhotoUrl = await _fileStorageProvider.UploadFileAsync(photoPath, containerName);
             entity.PhotoURL = newPhotoUrl;
             await FileHelpers.DeleteFileByPath(photoPath);
