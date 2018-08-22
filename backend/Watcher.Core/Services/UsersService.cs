@@ -131,10 +131,12 @@ namespace Watcher.Core.Services
                    UserId = entity.Id
                });
 
-            string photoPath = FileHelpers.DownloadImageFromUrl(entity.PhotoURL);
+
             string containerName = "watcher";
+            string photoPath = FileHelpers.DownloadImageFromUrl(entity.PhotoURL);
             string newPhotoUrl = await _fileStorageProvider.UploadFileAsync(photoPath, containerName);
             entity.PhotoURL = newPhotoUrl;
+            await FileHelpers.DeleteFileByPath(photoPath);
 
             var createdUser = await _uow.UsersRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
