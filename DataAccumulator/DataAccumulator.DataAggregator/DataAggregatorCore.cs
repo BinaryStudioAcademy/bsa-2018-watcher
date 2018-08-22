@@ -18,9 +18,14 @@ namespace DataAccumulator.DataAggregator
 
         public async Task AggregatingData()
         {
-            // todo use time by parameter
-            // Subtract 1 hour from the current time
-            DateTime timeFrom = DateTime.Now.AddHours(-1);
+            // By default subtract 1 hour from the current time
+            await AggregatingData(TimeSpan.FromHours(1));
+        }
+
+        public async Task AggregatingData(TimeSpan interval)
+        {
+            // Subtract interval from the current time
+            DateTime timeFrom = DateTime.Now.Add(-interval);
             DateTime timeTo = DateTime.Now;
 
             var accumulatedCollectedDataDtos = 
