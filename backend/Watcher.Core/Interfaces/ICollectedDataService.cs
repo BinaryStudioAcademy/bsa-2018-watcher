@@ -15,9 +15,6 @@ namespace Watcher.Core.Interfaces
 
         Task<ProcessesRamInfo> GetInstanceProcessRamInfo(Guid id);
 
-        Task<PercentageInfo> GetInstancePercentageInfo(Guid id);
-
-        Task<CollectedDataDto> GetFakeData();
-
+        Task<List<PercentageInfo>> GetInstancePercentageInfo(Guid id, int count);
     }
 }

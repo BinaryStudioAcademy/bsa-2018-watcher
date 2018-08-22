@@ -43,22 +43,31 @@ export class ChatHub {
                 this.registerOnEvents();
             })
             .catch(err => {
-                console.log('Error while establishing connection');
+                console.log('Error while establishing connection...');
+                setTimeout(this.startConnection(), 5000);
             });
     }
 
     private registerOnEvents(): void {
         this.hubConnection.on('ReceiveMessage', (data: any) => {
-            // this.messageReceived.emit(data);
+            this.messageReceived.emit(data);
             console.log(data);
         });
 
         this.hubConnection.on('ChatCreated', (data: any) => {
             this.chatCreated.emit(data);
+            console.log(data);
         });
 
         this.hubConnection.on('ChatChanged', (data: any) => {
             this.chatChanged.emit(data);
+            console.log(data);
+        });
+
+        this.hubConnection.onclose(function (error) {
+            console.log('Connection closed!!!');
+            console.error(error);
+            this.startConnection();
         });
     }
 

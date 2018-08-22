@@ -8,11 +8,12 @@ import { TokensInterceptor } from './interceptors/tokens-interceptor';
 import { ToastrService } from './services/toastr.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ApiService } from './services/api.service';
-import { NotificationsHubService } from './services/notifications-hub.service';
 import { AuthGuard } from './guards/auth.guard';
 import { FeedbackService } from './services/feedback.service';
 import { ResponseService } from './services/response.service';
+import {DashboardsHub} from './hubs/dashboards.hub';
 import { RoleService } from './services/role.service';
+import { NotificationsHubService } from './hubs/notifications.hub';
 
 @NgModule({
   imports: [
@@ -22,7 +23,6 @@ import { RoleService } from './services/role.service';
     AuthService,
     TokenService,
     ApiService,
-    NotificationsHubService,
     ToastrService,
     FeedbackService,
     ResponseService,
@@ -30,7 +30,9 @@ import { RoleService } from './services/role.service';
     ConfirmationService,
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },
-    AuthGuard
+    AuthGuard,
+    DashboardsHub,
+    NotificationsHubService
   ],
 
   declarations: []

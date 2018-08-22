@@ -1,66 +1,45 @@
-﻿using Watcher.Core.Hubs;
-
-namespace Watcher.Services
+﻿namespace Watcher.Services
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
 
+    using AutoMapper;
+
+    using DataAccumulator.DataAccessLayer.Entities;
+    using DataAccumulator.DataAccessLayer.Interfaces;
+
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
+    using Watcher.Common.Dtos.Plots;
+    using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
-    using Watcher.Hubs;
+    using Watcher.Core.Services;
     using Watcher.Utils;
 
     public class WatcherService : BackgroundService
     {
-        /// <summary>
-        /// The Notifications Hub context.
-        /// </summary>
-        private readonly IHubContext<NotificationsHub> _hubContext;
-
-        /// <summary>
-        /// The Transient Service.
-        /// </summary>
-        private readonly ITransientService _service;
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
+        private readonly IHubContext<DashboardsHub> _hubContext;
         private readonly ILogger<WatcherService> _logger;
-
-        /// <summary>
-        /// Configurations for watcher service
-        /// </summary>
         private readonly IOptions<TimeServiceConfiguration> _options;
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IServiceBusProvider _serviceBusProvider;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WatcherService"/> class.
-        /// </summary>
-        /// <param name="hubContext">
-        /// The hub Context.
-        /// </param>
-        /// <param name="service">
-        /// The Transient Service.
-        /// </param>
-        /// <param name="logger">
-        /// The logger.
-        /// </param>
-        /// <param name="options">
-        /// Options
-        /// </param>
-        public WatcherService(IHubContext<NotificationsHub> hubContext, 
-                              ITransientService service, 
+        public WatcherService(IHubContext<DashboardsHub> hubContext,
                               ILogger<WatcherService> logger,
-                              IOptions<TimeServiceConfiguration> options)
+                              IOptions<TimeServiceConfiguration> options,
+                              IServiceScopeFactory scopeFactory,
+                              IServiceBusProvider serviceBusProvider)
         {
+            _scopeFactory = scopeFactory;
             _hubContext = hubContext;
-            _service = service;
             _logger = logger;
             _options = options;
+            _serviceBusProvider = serviceBusProvider;
         }
 
 
@@ -83,24 +62,52 @@ namespace Watcher.Services
             {
                 try
                 {
-                    var sample = await _service.GenerateRandomSampleDtoAsync();
-
-                    _logger.LogInformation($"Sending generated sample id: {sample.Id}.");
-
-                    // Method Name on Angular Client: "DataFeedTick",
-                    // Single argument of that method is SampleDto
-                    await _hubContext.Clients.All.SendAsync("DataFeedTick", sample, cancellationToken: stoppingToken);
+                    foreach (var id in _serviceBusProvider.SubscribedInstancesGuidIds)
+                    {
+                        await GenerateAndSendCollectedData(id, stoppingToken);
+                    }
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e.Message);
                 }
-                
+
                 // Repeat this message feed every period seconds
-                await Task.Delay(TimeSpan.FromMilliseconds(_options.Value.Period), stoppingToken);
+                // await Task.Delay(TimeSpan.FromMilliseconds(_options.Value.Period), stoppingToken);
+                await Task.Delay(120_000, stoppingToken);
             }
 
             _logger.LogError("Watcher Service stopped! Unexpected error occurred!");
+        }
+
+        private async Task GenerateAndSendCollectedData(Guid instanceId, CancellationToken stoppingToken)
+        {
+            CollectedDataDto dto = null;
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var repo = scope.ServiceProvider.GetRequiredService<IDataAccumulatorRepository<CollectedData>>();
+                var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+
+                var data = CollectedDataService.GetFakeData(instanceId);
+
+                await repo.AddEntity(data);
+
+                data = await repo.GetEntity(data.InternalId);
+
+                dto = mapper.Map<CollectedData, CollectedDataDto>(data);
+            }
+
+            //var info = new PercentageInfo
+            //{
+            //    Id = dto.Id,
+            //    Time = dto.Time,
+            //    RamUsagePercent = dto.RamUsagePercent,
+            //    InterruptsTimePercent = dto.InterruptsTimePercent,
+            //    LocalDiskFreeSpacePercent = dto.LocalDiskFreeSpacePercent,
+            //    CpuUsagePercent = dto.CpuUsagePercent
+            //};
+
+            await _hubContext.Clients.Group(instanceId.ToString()).SendAsync("InstanceDataTick", dto, stoppingToken); // TODO: change to dto
         }
     }
 }

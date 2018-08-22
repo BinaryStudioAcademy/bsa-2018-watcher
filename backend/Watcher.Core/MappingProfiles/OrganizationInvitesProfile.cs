@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Watcher.Core.MappingProfiles
+﻿namespace Watcher.Core.MappingProfiles
 {
-    using System.Linq;
-
     using AutoMapper;
 
     using Watcher.Common.Dtos;
