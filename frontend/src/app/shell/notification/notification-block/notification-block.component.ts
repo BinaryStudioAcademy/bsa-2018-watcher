@@ -2,10 +2,13 @@ import { Component,
          OnInit,
          ViewChild,
          ComponentFactoryResolver,
-         ViewContainerRef } from '@angular/core';
+         ViewContainerRef,
+         ComponentRef } from '@angular/core';
 
 import { NotificationComponent } from '../notification/notification.component';
 import { NotificationsHubService } from '../../../core/hubs/notifications.hub';
+import { Notification } from '../../../shared/models/notification.model';
+import { NotificationType } from '../../../shared/models/notification-type.enum';
 
 @Component({
   selector: 'app-notification-block',
@@ -18,28 +21,38 @@ export class NotificationBlockComponent implements OnInit {
 
   constructor(private _cfr: ComponentFactoryResolver,
     private notificationsHubService: NotificationsHubService) {
-      this.conectToNotificationsHub();
       this.subscribeToNotificationsEvents();
   }
 
   ngOnInit() {
   }
 
-  private conectToNotificationsHub(): void {
-    // this.notificationsHubService.connectToSignalR();
-  }
-
   private subscribeToNotificationsEvents(): void {
     this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
       console.log('message');
-      this.addComponent();
+      value.type = NotificationType[value.notificationSetting.type].toLowerCase();
+
+      if (value.type === 'chat') {
+        return;
+      }
+
+      const component = this.addComponent(value);
+      this.destroyTimeout(component);
     });
   }
 
-  addComponent() {
+  addComponent(notification: Notification): ComponentRef<NotificationComponent> {
       const comp = this._cfr.resolveComponentFactory(NotificationComponent);
       const expComponent = this.container.createComponent(comp);
-      expComponent.instance._ref = expComponent;
+      expComponent.instance.notification = notification;
+
+      return expComponent;
+  }
+
+  destroyTimeout(component: ComponentRef<NotificationComponent>): void {
+    setTimeout(() => {
+      component.destroy();
+    }, 3000);
   }
 
 }

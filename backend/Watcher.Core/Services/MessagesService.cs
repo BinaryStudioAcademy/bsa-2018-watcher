@@ -82,7 +82,7 @@ namespace Watcher.Core.Services
                 Text = "notification test",
                 CreatedAt = DateTime.Now,
                 UserId = request.UserId
-            }, NotificationType.System);
+            }, NotificationType.Info);
 
             return dto;
         }
