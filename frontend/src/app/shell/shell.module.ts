@@ -45,6 +45,12 @@ import { ClickOutsideDirective } from '../core/directives/click-outside.directiv
     PanelMenuModule,
     ChatModule
   ],
-  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent, AddNewOrganizationComponent ]
+  declarations: [
+    ShellComponent,
+    HeaderComponent,
+    LeftSideMenuComponent,
+    AddNewOrganizationComponent,
+    ClickOutsideDirective
+  ]
 })
 export class ShellModule { }
