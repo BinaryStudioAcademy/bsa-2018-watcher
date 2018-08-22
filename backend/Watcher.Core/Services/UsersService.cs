@@ -169,7 +169,7 @@ namespace Watcher.Core.Services
             else if (!existingEntity.PhotoURL.Equals(entity.PhotoURL))
             {
                 await _fileStorageProvider.DeleteFileAsync(existingEntity.PhotoURL);
-                entity.PhotoURL = await _fileStorageProvider.UploadFileBase64Async(entity.PhotoURL); // TODO: change here for real image type
+                entity.PhotoURL = await _fileStorageProvider.UploadFileBase64Async(entity.PhotoURL, request.PhotoType); // TODO: change here for real image type
             }
 
             // In returns updated entity, you could do smth with it or just leave as it is

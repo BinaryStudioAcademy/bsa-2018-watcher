@@ -9,6 +9,8 @@ namespace Watcher.Core.Providers
 {
     using System.Net.Http;
 
+    using Watcher.Common.Helpers.Utils;
+
     public class FileStorageProvider : IFileStorageProvider
     {
         private CloudStorageAccount StorageAccount;
@@ -67,18 +69,23 @@ namespace Watcher.Core.Providers
             return blob.Uri.ToString();
         }
 
-        public async Task<string> UploadFileBase64Async(string base64string, string imageType = "png", string containerName = "watcher")
+        public async Task<string> UploadFileBase64Async(string base64string, string imageType = "image/png", string containerName = "watcher")
         {
+            // Check if file if supported image format
+            if (!ImageHelper.ImageFormats.TryGetValue(imageType, out var imageFormat))
+            {
+                return "https://bsawatcherfiles.blob.core.windows.net/watcher/f6efd981-4e08-44f0-ab87-837720b372ef.png"; // Return base pic
+            }
+
+            var filename = $"{Guid.NewGuid()}.{imageFormat}";
+
             var base64 = base64string.Split(',')[1];
-
-            var filename = $"{Guid.NewGuid()}.{imageType}";
-
             var imageInBytes = Convert.FromBase64String(base64);
             var client = StorageAccount.CreateCloudBlobClient();
 
             var container = client.GetContainerReference(containerName.ToLower());
 
-            if ((await container.ExistsAsync()) == false)
+            if (await container.ExistsAsync() == false)
             {
                 await container.CreateAsync();
             }
