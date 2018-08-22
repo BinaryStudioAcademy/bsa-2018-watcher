@@ -16,7 +16,8 @@ import {
   PanelMenuModule,
   InputTextModule,
   InputTextareaModule,
-  InputMaskModule
+  InputMaskModule,
+  ScrollPanelModule
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
@@ -45,7 +46,8 @@ import { NotificationBlockComponent } from './notification/notification-block/no
     MessagesModule,
     MessageModule,
     PanelMenuModule,
-    ChatModule
+    ChatModule,
+    ScrollPanelModule
   ],
   declarations: [
     ShellComponent,

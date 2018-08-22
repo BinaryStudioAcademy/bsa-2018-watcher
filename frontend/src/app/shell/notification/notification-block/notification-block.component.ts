@@ -17,9 +17,23 @@ export class NotificationBlockComponent implements OnInit {
   @ViewChild('parent', { read: ViewContainerRef }) container: ViewContainerRef;
 
   constructor(private _cfr: ComponentFactoryResolver,
-              private notificationHub: NotificationsHubService) { }
+    private notificationsHubService: NotificationsHubService) {
+      this.conectToNotificationsHub();
+      this.subscribeToNotificationsEvents();
+  }
 
   ngOnInit() {
+  }
+
+  private conectToNotificationsHub(): void {
+    // this.notificationsHubService.connectToSignalR();
+  }
+
+  private subscribeToNotificationsEvents(): void {
+    this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
+      console.log('message');
+      this.addComponent();
+    });
   }
 
   addComponent() {
