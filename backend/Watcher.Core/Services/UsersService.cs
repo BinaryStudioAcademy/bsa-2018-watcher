@@ -131,7 +131,7 @@ namespace Watcher.Core.Services
                    UserId = entity.Id
                });
 
-
+            string photoPath = await FileHelpers.DownloadImageFromUrl(entity.PhotoURL);
             string containerName = "watcher";
             string photoPath = "";
             if (null == entity.PhotoURL)
