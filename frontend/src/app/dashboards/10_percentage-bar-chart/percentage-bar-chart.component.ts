@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import {PercentageInfo} from '../models/percentage-info';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+import {CollectedData} from '../../shared/models/collected-data.model';
+import {PercentageInfo} from '../models/percentage-info';
 
 @Component({
   selector: 'app-percentage-bar-chart',
   templateUrl: './percentage-bar-chart.component.html',
-  styleUrls: ['./percentage-bar-chart.component.sass']
+  styleUrls: ['./percentage-bar-chart.component.sass'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class PercentageBarChartComponent implements OnInit {
   view: any[] = [700, 300];
@@ -21,6 +23,8 @@ export class PercentageBarChartComponent implements OnInit {
   yScaleMax = 100;
   xAxisLabel = 'Parameters';
   yAxisLabel = 'Percentage %';
+
+  @Input() dataToPlot: CollectedData | PercentageInfo;
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
@@ -49,17 +53,24 @@ export class PercentageBarChartComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.dataToPlot) {
+      this.renderChart(this.dataToPlot);
+    }
     this.subscribePercentageInfo();
   }
 
   subscribePercentageInfo(): void {
-    this.dashboardsHub.infoSubObservable.subscribe((latestStatus: PercentageInfo) => {
-      this.data[0].value = Math.floor(latestStatus.cpuUsagePercent);
-      this.data[1].value = Math.floor(latestStatus.ramUsagePercent);
-      this.data[2].value = Math.floor(latestStatus.localDiskFreeSpacePercent);
-      this.data[3].value = Math.floor(latestStatus.interruptsTimePercent);
-      this.data = [...this.data];
+    this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData | PercentageInfo) => {
+      this.renderChart(latestData);
     });
+  }
+
+  renderChart(data: CollectedData | PercentageInfo) {
+    this.data[0].value = Math.floor(data.cpuUsagePercent);
+    this.data[1].value = Math.floor(data.ramUsagePercent);
+    this.data[2].value = Math.floor(data.localDiskFreeSpacePercent);
+    this.data[3].value = Math.floor(data.interruptsTimePercent);
+    this.data = [...this.data];
   }
 
   onSelect(event) {

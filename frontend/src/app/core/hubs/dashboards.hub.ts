@@ -6,6 +6,7 @@ import {from, Observable, Subject} from 'rxjs';
 import {PercentageInfo} from '../../dashboards/models/percentage-info';
 import {ApiService} from '../services/api.service';
 import {AuthService} from '../services/auth.service';
+import {CollectedData} from '../../shared/models/collected-data.model';
 
 
 @Injectable({
@@ -68,7 +69,7 @@ export class DashboardsHub {
 
   private registerOnServerEvents(): void {
 
-    this.hubConnection.on('InstanceDataTick', (info: PercentageInfo) => {
+    this.hubConnection.on('InstanceDataTick', (info: CollectedData) => {
         this.infoSub.next(info);
       }
     );

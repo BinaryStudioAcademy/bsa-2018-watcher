@@ -29,7 +29,7 @@
 
     <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">
       <div class="dashboard-item">
-        <app-percentage-bar-chart></app-percentage-bar-chart>
+        <app-percentage-bar-chart [dataToPlot]="percentageInfoToDisplaySingle"></app-percentage-bar-chart>
       </div>
       <div class="dashboard-item">
         <app-percentage-line-chart [percentageInfo]="percentageInfoToDisplay"></app-percentage-line-chart>

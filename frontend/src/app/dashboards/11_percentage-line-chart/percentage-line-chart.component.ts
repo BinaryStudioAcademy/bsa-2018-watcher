@@ -4,6 +4,7 @@ import {SeriesItem} from '../models/series-item';
 import {PercentageInfo} from '../models/percentage-info';
 import * as shape from 'd3-shape';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+import {CollectedData} from '../../shared/models/collected-data.model';
 
 @Component({
   selector: 'app-percentage-line-chart',
@@ -86,7 +87,7 @@ export class PercentageLineChartComponent implements OnInit, OnChanges {
     }
   }
 
-  toSeriesData(info: PercentageInfo): SeriesItem[] {
+  toSeriesData(info: PercentageInfo | CollectedData): SeriesItem[] {
     const items: SeriesItem[] = [];
     for (let i = 0; i < 4; i++) {
       items.push({name: new Date(info.time), value: 0});
@@ -101,8 +102,8 @@ export class PercentageLineChartComponent implements OnInit, OnChanges {
   }
 
   subscribeToCollectedData(): void {
-    this.dashboardsHub.infoSubObservable.subscribe((latestInfo: PercentageInfo) => {
-      const infoToInsert = this.toSeriesData(latestInfo);
+    this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
+      const infoToInsert = this.toSeriesData(latestData);
       for (let i = 0; i < 4; i++) {
         if (this.data[i].series > 20) {
           this.data[i].series.shift();

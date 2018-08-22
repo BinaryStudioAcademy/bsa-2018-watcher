@@ -7,7 +7,7 @@ const dashboardRoutes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-    pathMatch: 'full'
+    pathMatch: 'full' // TODO: Write resolver that redirect or just fetch Organization first instance to show dashboards
   },
   {
     path: ':insId/edit',

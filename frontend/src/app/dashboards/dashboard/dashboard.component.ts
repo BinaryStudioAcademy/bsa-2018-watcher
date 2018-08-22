@@ -34,9 +34,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loading = false;
   displayEditDashboard = false;
   percentageInfoToDisplay: PercentageInfo[];
+  percentageInfoToDisplaySingle: PercentageInfo;
 
   set PercentageInfoToDisplay(info: PercentageInfo[]) {
     this.percentageInfoToDisplay = info;
+  }
+
+  set PercentageInfoToDisplaySingle(info: PercentageInfo) {
+    this.percentageInfoToDisplaySingle = info;
   }
 
   constructor(private dashboardsService: DashboardService,
@@ -61,18 +66,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.dashboardMenuItems = [];
       if (this.instanceId && this.instanceId !== 0) {
         this.getDashboardsByInstanceId(this.instanceId);
-      }
-      this.dashboardsHub.getInitialPercentageInfoByInstanceId(this.instanceId)
-        .subscribe(info => {
-          if (info && info.length > 0) {
-            this.PercentageInfoToDisplay = info;
-          }
-          this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
-        }, err => {
-          console.error(err);
-          this.toastrService.error('Cant fetch instance collected Data');
-        });
 
+        this.dashboardsHub.getInitialPercentageInfoByInstanceId(this.instanceId)
+          .subscribe(info => {
+            if (info && info.length > 0) {
+              this.PercentageInfoToDisplaySingle = info[info.length - 1];
+              this.PercentageInfoToDisplay = info;
+            }
+            this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
+          }, err => {
+            console.error(err);
+            this.toastrService.error('Cant fetch instance collected Data');
+          });
+      }
     });
   }
 
@@ -89,25 +95,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   getDashboardsByInstanceId(id: number): void {
     this.loading = true;
-      const lastItem: DashboardMenuItem = {
-        icon: 'fa fa-plus',
-        command: (onlick) => {
-          this.showCreatePopup(true);
-        },
-        id: 'lastTab'
-      };
-      this.dashboardMenuItems.push(lastItem);
-      this.dashboardsService.getAllByInstance(id)
-        .subscribe(value => {
-          this.dashboards = value;
-          if (this.dashboards && this.dashboards.length > 0) {
-            // Fill Dashboard Menu Items
-            this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
-            this.activeDashboardItem = this.dashboardMenuItems[0];
-          }
-          this.loading = false;
-          this.toastrService.success('Successfully got instance info from server');
-        }, error => this.toastrService.error(error.toString()));
+    const lastItem: DashboardMenuItem = {
+      icon: 'fa fa-plus',
+      command: (onlick) => {
+        this.showCreatePopup(true);
+      },
+      id: 'lastTab'
+    };
+    this.dashboardMenuItems.push(lastItem);
+    this.dashboardsService.getAllByInstance(id)
+      .subscribe(value => {
+        this.dashboards = value;
+        if (this.dashboards && this.dashboards.length > 0) {
+          // Fill Dashboard Menu Items
+          this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
+          this.activeDashboardItem = this.dashboardMenuItems[0];
+        }
+        this.loading = false;
+        this.toastrService.success('Successfully got instance info from server');
+      }, error => this.toastrService.error(error.toString()));
   }
 
   createDashboard(newDashboard: DashboardRequest): void {

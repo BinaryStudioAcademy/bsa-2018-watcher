@@ -75,7 +75,7 @@
 
                 // Repeat this message feed every period seconds
                 // await Task.Delay(TimeSpan.FromMilliseconds(_options.Value.Period), stoppingToken);
-                await Task.Delay(10000, stoppingToken);
+                await Task.Delay(6000, stoppingToken);
             }
 
             _logger.LogError("Watcher Service stopped! Unexpected error occurred!");
@@ -98,20 +98,17 @@
                 dto = mapper.Map<CollectedData, CollectedDataDto>(data);
             }
 
-            var info = new PercentageInfo
-            {
-                Id = dto.Id,
-                Time = dto.Time,
-                RamUsagePercent = dto.RamUsagePercent,
-                InterruptsTimePercent = dto.InterruptsTimePercent,
-                LocalDiskFreeSpacePercent = dto.LocalDiskFreeSpacePercent,
-                CpuUsagePercent = dto.CpuUsagePercent
-            };
+            //var info = new PercentageInfo
+            //{
+            //    Id = dto.Id,
+            //    Time = dto.Time,
+            //    RamUsagePercent = dto.RamUsagePercent,
+            //    InterruptsTimePercent = dto.InterruptsTimePercent,
+            //    LocalDiskFreeSpacePercent = dto.LocalDiskFreeSpacePercent,
+            //    CpuUsagePercent = dto.CpuUsagePercent
+            //};
 
-            MarketPrice.UpdateMarket();
-            var mp = MarketPrice.MarketPositions[0];
-
-            await _hubContext.Clients.Group(instanceId.ToString()).SendAsync("InstanceDataTick", info, stoppingToken); // TODO: change to dto
+            await _hubContext.Clients.Group(instanceId.ToString()).SendAsync("InstanceDataTick", dto, stoppingToken); // TODO: change to dto
         }
     }
 }
