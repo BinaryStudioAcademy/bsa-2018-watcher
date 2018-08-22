@@ -13,7 +13,7 @@ namespace Watcher.Core.Providers
 
         public FileStorageProvider(string ConnectionString)
         {
-            this.StorageAccount = CloudStorageAccount.Parse(ConnectionString);
+            StorageAccount = CloudStorageAccount.Parse(ConnectionString);
         }
 
         public async Task<string> UploadFileAsync(string path, string containerName = "watcher")
@@ -27,7 +27,7 @@ namespace Watcher.Core.Providers
                 await container.CreateAsync();
             }
 
-            var filename = Guid.NewGuid().ToString()+Path.GetExtension(path);
+            var filename = Guid.NewGuid() + Path.GetExtension(path);
 
             var blob = container.GetBlockBlobReference(filename);
 
@@ -67,7 +67,7 @@ namespace Watcher.Core.Providers
             var directory = new DirectoryInfo(Path.Combine(parent, "wwwroot", "images"));
             if (!directory.Exists) directory.Create();
 
-            string filename = Guid.NewGuid().ToString() + ".png";
+            string filename = Guid.NewGuid() + ".png";
 
             File.WriteAllBytes(Path.Combine(directory.FullName, filename), Convert.FromBase64String(base64));
             var file = new FileInfo(directory + @"\\" + filename);

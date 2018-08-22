@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Watcher.Common.Helpers.Utils
 {
@@ -10,7 +8,7 @@ namespace Watcher.Common.Helpers.Utils
 
     public static class FileHelpers
     {
-        public static async Task<string> DownloadImageFromUrl(string url)
+        public static string DownloadImageFromUrl(string url)
         {
             using (WebClient client = new WebClient())
             {

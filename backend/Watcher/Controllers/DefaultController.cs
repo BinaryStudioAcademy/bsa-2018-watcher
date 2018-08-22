@@ -36,7 +36,7 @@ namespace Watcher.Controllers
         }
 
         [HttpPost("Upload64Image")]
-        public async Task<IActionResult> RegisterToMessages([FromBody] string base64StingImage)
+        public async Task<IActionResult> Upload64Image([FromBody] string base64StingImage)
         {
             try
             {

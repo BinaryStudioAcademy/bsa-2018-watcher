@@ -131,20 +131,18 @@ namespace Watcher.Core.Services
                    UserId = entity.Id
                });
 
-            string photoPath = await FileHelpers.DownloadImageFromUrl(entity.PhotoURL);
-            string containerName = "watcher";
-            string photoPath = "";
-            if (null == entity.PhotoURL)
+            string photoPath = string.Empty;
+            if (entity.PhotoURL == null)
             {
-                photoPath = FileHelpers.DownloadImageFromUrl("https://bsawatcherfiles.blob.core.windows.net/watcher/b6d204b0-ff1c-4fad-9bbe-9feab9e6845b.png");
-
+                photoPath = FileHelpers.DownloadImageFromUrl("https://bsawatcherfiles.blob.core.windows.net/watcher/f6efd981-4e08-44f0-ab87-837720b372ef.png");
             }
             else
             {
                 photoPath = FileHelpers.DownloadImageFromUrl(entity.PhotoURL);
             }
-            
-            string newPhotoUrl = await _fileStorageProvider.UploadFileAsync(photoPath, containerName);
+
+            var containerName = "watcher";
+            var newPhotoUrl = await _fileStorageProvider.UploadFileAsync(photoPath, containerName);
             entity.PhotoURL = newPhotoUrl;
             await FileHelpers.DeleteFileByPath(photoPath);
 
