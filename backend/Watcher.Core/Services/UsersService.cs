@@ -106,7 +106,7 @@ namespace Watcher.Core.Services
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
-            var user = await GetEntityByIdAsync(request.Email);
+            var user = await GetEntityByIdAsync(request.Uid);
 
             if (user != null)
             {
