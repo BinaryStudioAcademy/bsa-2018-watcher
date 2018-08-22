@@ -1,10 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Watcher.Common.Helpers.Utils
 {
+    using System.IO;
+    using System.Threading.Tasks;
+
     public static class FileHelpers
     {
         public static string DownloadImageFromUrl(string url)
