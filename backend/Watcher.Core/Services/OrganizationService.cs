@@ -75,6 +75,9 @@ namespace Watcher.Core.Services
             var curentUser = await _uow.UsersRepository.GetFirstOrDefaultAsync(x => x.Id == CreatedEntity.CreatedByUserId);
 
             curentUser.LastPickedOrganizationId = CreatedEntity.Id;
+
+            await _uow.UsersRepository.UpdateAsync(curentUser);
+
             result &= await _uow.SaveAsync();
 
             if (!result)
