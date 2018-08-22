@@ -6,6 +6,7 @@ using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
 using DataAccumulator.DataAggregator;
+using DataAccumulator.DataAggregator.Interfaces;
 using DataAccumulator.DataAggregator.Services;
 using DataAccumulator.Interfaces;
 using DataAccumulator.Providers;
@@ -50,13 +51,15 @@ namespace DataAccumulator
             });
 
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
-            services.AddTransient<DataAggregatorRepository>();
-            services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
-            services.AddScoped<IService<CollectedDataDto>, DataAccumulatorService>();
-            services.AddScoped<DataAggregatorService>();
+            services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>();
 
-            services.AddScoped<AggregatorService>();
-            services.AddScoped<DataAggregatorCore>();
+            services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
+
+            services.AddScoped<IDataAccumulatorService<CollectedDataDto>, DataAccumulatorService>();
+            services.AddScoped<IDataAggregatorService<CollectedDataDto>, DataAggregatorService>();
+
+            services.AddTransient<IAggregatorService<CollectedDataDto>, AggregatorService>();
+            services.AddTransient<IDataAggregatorCore<CollectedDataDto>, DataAggregatorCore>();
 
             services.AddTransient<IJobFactory, JobFactory>(
                 (provider) =>

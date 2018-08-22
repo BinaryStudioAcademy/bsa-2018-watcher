@@ -73,7 +73,7 @@ namespace DataAccumulator.WebAPI.Jobs
             ITrigger jobTrigger = TriggerBuilder.Create()
                 .WithIdentity(name + "Trigger", group)
                 .StartNow() // Start now
-                .WithSimpleSchedule(t => t.WithIntervalInSeconds(interval).RepeatForever()) // With repetition every interval second
+                .WithSimpleSchedule(t => t.WithIntervalInMinutes(interval).RepeatForever()) // With repetition every interval minutes
                 .Build();
 
             // Attach job
