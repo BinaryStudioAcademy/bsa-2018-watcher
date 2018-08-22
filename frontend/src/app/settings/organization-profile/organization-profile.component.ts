@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { OrganizationService } from '../../core/services/organization.service';
 import { ToastrService } from '../../core/services/toastr.service';
@@ -9,6 +9,7 @@ import { OrganizationInvitesService } from '../../core/services/organization-ivi
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
 import { environment } from '../../../environments/environment';
+import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 
 @Component({
   selector: 'app-organization-profile',
@@ -25,7 +26,20 @@ export class OrganizationProfileComponent implements OnInit {
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,
     private authService: AuthService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService) {
+      this.cropperSettings = new CropperSettings();
+      this.cropperSettings.width = 200;
+      this.cropperSettings.height = 200;
+      this.cropperSettings.minWidth = 100;
+      this.cropperSettings.minHeight = 100;
+      this.cropperSettings.croppedWidth = 70;
+      this.cropperSettings.croppedHeight = 70;
+      this.cropperSettings.canvasWidth = 400;
+      this.cropperSettings.canvasHeight = 400;
+      this.cropperSettings.noFileInput = true;
+      this.cropperSettings.preserveSize = true;
+      this.data = {};
+    }
 
   editable: boolean;
   organization: Organization;
@@ -33,6 +47,13 @@ export class OrganizationProfileComponent implements OnInit {
   inviteLink = '';
   inviteEmail: string;
   invite: OrganizationInvite;
+
+  @ViewChild('cropper', undefined)
+  cropper: ImageCropperComponent;
+  cropperSettings: CropperSettings;
+  display: Boolean = false;
+  imageUrl = '';
+  data: any;
 
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
@@ -157,5 +178,29 @@ export class OrganizationProfileComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
+  }
+
+  onImageSelected(upload) {
+    const image: any = new Image();
+    const reader: FileReader = new FileReader();
+    const that = this;
+    reader.onloadend = (eventLoad: any) => {
+      image.src = eventLoad.target.result;
+      that.cropper.setImage(image);
+      this.display = true;
+    };
+
+    reader.readAsDataURL(upload[0]);
+    upload.splice(0, upload.length);
+  }
+
+  onCropCancel() {
+    this.display = false;
+  }
+
+  onCropSave() {
+    this.organization.imageURL = this.data.image;
+    this.imageUrl = this.data.image;
+    this.display = false;
   }
 }

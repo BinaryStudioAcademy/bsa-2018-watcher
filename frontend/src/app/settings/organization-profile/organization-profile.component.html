@@ -7,8 +7,36 @@
     </div>
   </div>
 
+
+
 <div class="grid-container">
-  <form class="grid-item" [formGroup]="organizationForm" (ngSubmit)="onSubmit()" >
+
+  <div class="grid-item logo">
+      <div class="ui-g-12 ui-md-8 ui-lg-5">
+          <div class="label">Organization logo</div>
+          <figure class="cap-bot">
+          <img class="imageLogo" src="https://trellis.co/wp-content/uploads/2015/09/hidden_meanings_facts_within_famous_logos_cover_image.jpg" alt="organization logo">
+            <figcaption class="centered-text custom-upload-btn">
+              <span ><i class="fa fa-camera"></i> Update logo</span>
+              <p-fileUpload #upload mode="basic" name="myfile[]" files="photosList" 
+              accept="image/*" (uploadHandler)="onImageSelected($event.files)" 
+              customUpload="true" maxFileSize="2000000" auto="true" chooseLabel="Change"></p-fileUpload>
+            </figcaption>
+          </figure>
+    
+          <p-dialog  [(visible)]="display" [showHeader]="false" appendTo="body" [closable]=false
+          [modal]="true" [responsive]="true" [draggable]="false">
+            <img-cropper #cropper [image]="data" [settings]="cropperSettings" ></img-cropper>
+    
+            <div class="btn-panel crop-btn-panel">
+              <button pButton class="ui-button-raised ui-button-success" (click)="onCropCancel() " label="Cancel"></button>
+              <button pButton class="ui-button-raised ui-button-success" (click)="onCropSave()" label="Crop"></button>
+            </div>
+          </p-dialog>
+        </div>
+  </div>
+
+  <form class="grid-item orgData" [formGroup]="organizationForm" (ngSubmit)="onSubmit()" >
     <div class="ui-g">
       <div class="ui-g-12 ui-md-12 ui-lg-12">
         <div class="label">Name</div>
@@ -77,7 +105,7 @@
     </div>
   </form>
 
-  <div class="grid-item">
+  <div class="grid-item invite">
     <div class="ui-g">
         <div class="ui-g-12 ui-md-12 ui-lg-12">
           <div class="label">Invitation to this organization:</div>
