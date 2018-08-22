@@ -13,20 +13,27 @@
       </div>
 
       <div class="notifications-popup" *ngIf="isNotificationShow">
-        <div class="markAsRead">
-          <a (click)="markAsRead()">Mark as read</a>
+        <div class="withoutNotification" *ngIf="notifications.length == 0">
+          <p>
+            You don`t have notifications yet.
+          </p>
         </div>
-        <div class="notification-card" *ngFor="let notification of notifications">
-          <div class="notification-type {{notification.type}}"></div>
-          <div class="notification-text">{{notification.text}}</div>
-          <div class="info-block">
-            <div class="short-info">
-              <p class="time">{{notification.createdAt | date:'dd/MM/yy HH:mm'}}</p>
-              <p>Type: {{notification.type}}</p>
-            </div>
-            <div class="readIndicator">
-              <i *ngIf="notification.wasRead" class="fa fa-check-square"></i>
-              <i *ngIf="!notification.wasRead" class="fa fa-check"></i>
+        <div *ngIf="notifications.length !== 0">
+          <div class="markAsRead">
+            <a (click)="markAsRead()">Mark as read</a>
+          </div>
+          <div class="notification-card" *ngFor="let notification of notifications">
+            <div class="notification-type {{notification.type}}"></div>
+            <div class="notification-text">{{notification.text}}</div>
+            <div class="info-block">
+              <div class="short-info">
+                <p class="time">{{notification.createdAt | date:'dd/MM/yy HH:mm'}}</p>
+                <p>Type: {{notification.type}}</p>
+              </div>
+              <div class="readIndicator">
+                <i *ngIf="notification.wasRead" class="fa fa-check-square"></i>
+                <i *ngIf="!notification.wasRead" class="fa fa-check"></i>
+              </div>
             </div>
           </div>
         </div>
