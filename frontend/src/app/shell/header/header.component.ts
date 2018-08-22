@@ -77,13 +77,17 @@ export class HeaderComponent implements OnInit {
 
       value.forEach(item => {
         item.type = NotificationType[item.notificationSetting.type].toLowerCase();
-        this.notifications.unshift(item);
+        if (item.type !== 'chat')  {
+          this.notifications.unshift(item);
+        }
       });
     });
   }
 
   calcNotReadNotification(allNotifications: Notification[]): number {
-    return allNotifications.filter(item => item.wasRead === false && item.notificationSetting.isMute === false).length;
+    return allNotifications.filter(item => item.wasRead === false &&
+                                  item.notificationSetting.isMute === false &&
+                                  NotificationType[item.notificationSetting.type] === 'Chat').length;
   }
 
   markAsRead(): void {
