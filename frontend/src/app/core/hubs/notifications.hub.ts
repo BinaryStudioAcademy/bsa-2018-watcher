@@ -5,8 +5,8 @@ import * as signalR from '@aspnet/signalr';
 import {environment} from '../../../environments/environment';
 import {SampleDto} from '../../shared/models/sample-dto.model';
 import {SampleRequest} from '../../shared/models/sample-request.model';
-import {ApiService} from './api.service';
-import {AuthService} from './auth.service';
+import {ApiService} from '../services/api.service';
+import {AuthService} from '../services/auth.service';
 import { Notification } from '../../shared/models/notification.model';
 
 
