@@ -53,6 +53,7 @@ export class EditInstanceComponent implements OnInit {
     }
     this.instanceForm = this.getInstanceForm(this.instance);
     this.fillDropdown();
+    this.instanceForm.controls['platform'].setValue(this.platformsDropdown[0].value);
   }
 
   getInstanceForm(instance: Instance) {
