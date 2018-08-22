@@ -30,7 +30,7 @@ namespace DataAccumulator.WebAPI.Controllers
 
                     await _repository.AddEntity(new CollectedData()
                     {
-                        Id = Guid.NewGuid(),
+                        Id = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
                         ProcessesCount = 2,
                         CpuUsagePercent = 3,
                         RamUsagePercent = 4,
@@ -54,7 +54,79 @@ namespace DataAccumulator.WebAPI.Controllers
 
                     await _repository.AddEntity(new CollectedData()
                     {
-                        Id = Guid.NewGuid(),
+                        Id = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        ProcessesCount = 2,
+                        CpuUsagePercent = 3,
+                        RamUsagePercent = 4,
+                        InterruptsTimePercent = 100,
+                        LocalDiskFreeSpacePercent = 80,
+                        AvaliableRamBytes = 60,
+                        InterruptsPerSeconds = 10,
+                        LocalDiskFreeMBytes = 90,
+                        Time = DateTime.Now,
+                        ProcessesCPU = new Dictionary<string, float>
+                        {
+                            { "ProcessesCPU1", 1 },
+                            { "ProcessesCPU2", 2 }
+                        },
+                        ProcessesRAM = new Dictionary<string, float>
+                        {
+                            { "ProcessesRAM1", 1 },
+                            { "ProcessesRAM2", 2 }
+                        }
+                    });
+
+                    await _repository.AddEntity(new CollectedData()
+                    {
+                        Id = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        ProcessesCount = 2,
+                        CpuUsagePercent = 3,
+                        RamUsagePercent = 4,
+                        InterruptsTimePercent = 100,
+                        LocalDiskFreeSpacePercent = 80,
+                        AvaliableRamBytes = 60,
+                        InterruptsPerSeconds = 10,
+                        LocalDiskFreeMBytes = 90,
+                        Time = DateTime.Now,
+                        ProcessesCPU = new Dictionary<string, float>
+                        {
+                            { "ProcessesCPU1", 1 },
+                            { "ProcessesCPU2", 2 }
+                        },
+                        ProcessesRAM = new Dictionary<string, float>
+                        {
+                            { "ProcessesRAM1", 1 },
+                            { "ProcessesRAM2", 2 }
+                        }
+                    });
+
+                    await _repository.AddEntity(new CollectedData()
+                    {
+                        Id = new Guid("76053df4-6687-4353-8937-b45556748abe"),
+                        ProcessesCount = 2,
+                        CpuUsagePercent = 3,
+                        RamUsagePercent = 4,
+                        InterruptsTimePercent = 100,
+                        LocalDiskFreeSpacePercent = 80,
+                        AvaliableRamBytes = 60,
+                        InterruptsPerSeconds = 10,
+                        LocalDiskFreeMBytes = 90,
+                        Time = DateTime.Now,
+                        ProcessesCPU = new Dictionary<string, float>
+                        {
+                            { "ProcessesCPU1", 1 },
+                            { "ProcessesCPU2", 2 }
+                        },
+                        ProcessesRAM = new Dictionary<string, float>
+                        {
+                            { "ProcessesRAM1", 1 },
+                            { "ProcessesRAM2", 2 }
+                        }
+                    });
+
+                    await _repository.AddEntity(new CollectedData()
+                    {
+                        Id = new Guid("76053df4-6687-4353-8937-b45556748abe"),
                         ProcessesCount = 5,
                         CpuUsagePercent = 6,
                         RamUsagePercent = 9,
@@ -76,7 +148,7 @@ namespace DataAccumulator.WebAPI.Controllers
                         }
                     });
 
-                    return Ok("Database DataAccumulator was created, and collection 'CollectedData' was filled with 2 sample items");
+                    return Ok("Database DataAccumulator was created, and collection 'CollectedData' was filled with 5 sample items");
                 }
 
                 return BadRequest();

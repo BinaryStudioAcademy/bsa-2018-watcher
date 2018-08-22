@@ -12,9 +12,9 @@ namespace DataAccumulator.WebAPI.Controllers
     [Route("api/v1/dataaggregator")]
     public class DataAggregatorController : Controller
     {
-        private readonly IService<CollectedDataDto> _dataAggregatorService;
+        private readonly IDataAggregatorService<CollectedDataDto> _dataAggregatorService;
 
-        public DataAggregatorController(DataAggregatorService dataAggregatorService)
+        public DataAggregatorController(IDataAggregatorService<CollectedDataDto> dataAggregatorService)
         {
             _dataAggregatorService = dataAggregatorService;
         }
