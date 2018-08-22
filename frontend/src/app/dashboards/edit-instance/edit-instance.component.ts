@@ -18,6 +18,7 @@ export class EditInstanceComponent implements OnInit {
   organizationId: number;
   instanceForm: FormGroup;
   instance: Instance;
+  instanceTitle: string;
 
   constructor(private activateRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -56,12 +57,14 @@ export class EditInstanceComponent implements OnInit {
         platform: new FormControl({ value: '', disabled: false }, Validators.required),
         address: new FormControl({ value: '', disabled: false }, Validators.required)
       });
+      this.instanceTitle = 'NEW INSTANCE'
     } else {
       form = this.fb.group({
         title: new FormControl({ value: instance.title, disabled: false }, Validators.required),
         platform: new FormControl({ value: instance.platform, disabled: false }, Validators.required),
         address: new FormControl({ value: instance.address, disabled: false }, Validators.required)
       });
+      this.instanceTitle = 'EDIT INSTANCE'
     }
     return form;
   }
