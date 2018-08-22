@@ -6,9 +6,9 @@ import { Component,
          ComponentRef } from '@angular/core';
 
 import { NotificationComponent } from '../notification/notification.component';
-import { NotificationsHubService } from '../../../core/hubs/notifications.hub';
-import { Notification } from '../../../shared/models/notification.model';
-import { NotificationType } from '../../../shared/models/notification-type.enum';
+import { NotificationsHubService } from '../../core/hubs/notifications.hub';
+import { Notification } from '../../shared/models/notification.model';
+import { NotificationType } from '../../shared/models/notification-type.enum';
 
 @Component({
   selector: 'app-notification-block',

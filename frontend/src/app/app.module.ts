@@ -26,12 +26,16 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
 import { ShellModule } from './shell/shell.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { NotificationComponent } from './notification/notification/notification.component';
+import { NotificationBlockComponent } from './notification/notification-block/notification-block.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingComponent,
-    AuthorizationComponent
+    AuthorizationComponent,
+    NotificationBlockComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,
@@ -58,6 +62,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     NotificationsModule,
     ShellModule
   ],
+  entryComponents: [NotificationComponent],
   providers: [AuthService],
   bootstrap: [AppComponent]
 })
