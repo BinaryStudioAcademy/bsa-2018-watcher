@@ -1,0 +1,71 @@
+<div class="working-area">
+
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <div class="title">FEEDBACKS</div>
+      <hr>
+    </div>
+  </div>
+  <p-table [value]="lstFeedbacks" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th>DATE</th>
+        <th>USER NAME</th>
+        <th>TEXT</th>
+        <th>WILL USE</th>
+        <th>INFORMATIVELY</th>
+        <th>FRIENDLINESS</th>
+        <th>QUICKNESS</th>
+        <th>RESPONSE</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-feedback>
+      <tr>
+        <td class="center">{{feedback.main.createdAt | date:'shortDate'}}</td>
+        <td class="center">{{feedback.main.user.displayName}}</td>
+        <td>{{feedback.main.text}}</td>
+        <td class="center">
+          <i *ngIf="feedback.willuse==='Yes'" class="fa fa-check-circle-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.willuse==='No'" class="fa fa-times-circle-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.willuse==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+        </td>
+        <td class="center">
+          <i *ngIf="feedback.info==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.info==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.info==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.info==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+        </td>
+        <td class="center">
+          <i *ngIf="feedback.friendliness==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.friendliness==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.friendliness==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.friendliness==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+        </td>
+        <td class="center">
+          <i *ngIf="feedback.quickness==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.quickness==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.quickness==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.quickness==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+        </td>
+        <td>
+          <div class="center" *ngIf="feedback.main.user.email">
+            <button pButton type="button " label="Response " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(feedback.main)"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<p-dialog header="Create response" [(visible)]="display" [modal]="true" [responsive]="true" [width]="350" [minWidth]="200"
+  [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+  <p class="field">Email</p>
+  <input type="text" disabled [value]="email"/> 
+  <p class="field">Text</p>
+  <form [formGroup]="responseForm">
+    <textarea rows="5" [cols]="42" formControlName="text" pInputTextarea></textarea>
+  </form>
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
+    <button type="button" pButton icon="pi pi-close" (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+  </p-footer>
+</p-dialog>

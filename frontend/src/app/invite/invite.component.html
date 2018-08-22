@@ -1,0 +1,15 @@
+<!-- <app-authorization></app-authorization> -->
+  <div class="center ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-12">
+      <div class="title">INVITE</div>
+      <hr>
+      <div>User {{createdByUserName}} granted you access to the organization {{organizationName}}.</div>
+    </div>
+    <div class="btn-panel ui-g-12 ui-lg-3">
+      <button pButton type="submit" label="Accept" (click)="onAccept()" class="ui-button-raised ui-button-success"></button>
+    </div>
+    <div class="btn-panel ui-g-12 ui-lg-3">
+      <button pButton type="submit" label="Reject" (click)="onReject()" class="ui-button-raised ui-button-danger"></button>
+    </div> 
+  </div>
+

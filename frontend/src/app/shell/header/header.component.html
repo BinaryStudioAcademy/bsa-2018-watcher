@@ -1,0 +1,44 @@
+<div class="header">
+  <a routerLink="/user" class="logo">Watcher</a>
+  <p-growl [(value)]="msgs"></p-growl>
+
+  <div class="ui-toolbar-group-right">
+
+    <p-tieredMenu #bell [model]="bellItems" [popup]="true"></p-tieredMenu>
+    
+    <div style="display: inline"  appClickOutside (clickOutside)="close()">
+    <div class="toolbar-item">
+      <button #btn type="button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
+      <span class="topbar-badge">{{ notificationsNumber }}</span>
+    </div>
+
+    <div class="notifications-block" *ngIf="isNotificationShow">
+      <div class="notification-card" *ngFor="let bellItem of bellItems">
+        <div class="notification-text">{{bellItem.label}}</div>
+      </div>
+    </div>
+    </div>
+
+    <div class="toolbar-item">
+      <button #btn type="button" pButton icon="fa fa-fw fa-bullhorn" (click)="onFeedback()"></button>
+    </div>
+
+    <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
+    <button #btn type="button" pButton icon="fa fa-fw fa-cog" (click)="cog.toggle($event)"></button>
+
+    <p-tieredMenu #org [model]="orgItems" [popup]="true"></p-tieredMenu>
+    <button #btn type="button" pButton icon="fa fa-sitemap" (click)="org.toggle($event)"></button>
+    <app-add-new-organization [(display)]="displayAddNewOrganization" (displayChange)="onDisplayChange($event)"></app-add-new-organization>
+    
+
+    <p-tieredMenu #user [model]="userItems" [popup]="true"></p-tieredMenu>
+    <a class="user-info" (click)="user.toggle($event)">
+      <span>{{ currentUser?.displayName }}</span>
+      <img src="{{currentUser?.photoURL}}"
+           class="user-photo" alt="" />
+      <i class="fa fa-sort-desc"></i>
+    </a>
+  </div>
+</div>
+
+

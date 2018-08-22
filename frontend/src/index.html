@@ -1,14 +1,32 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Watcher</title>
-  <base href="/">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+<head>
+    <meta charset="utf-8">
+    <title>Watcher</title>
+    <base href="/">
+
+    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDkG6cWbERooMWbAn9sRBbYiRkXm81WP8U",
+        authDomain: "watcherapp-2984b.firebaseapp.com",
+        databaseURL: "https://watcherapp-2984b.firebaseio.com",
+        projectId: "watcherapp-2984b",
+        storageBucket: "",
+        messagingSenderId: "772299845034"
+      };
+      firebase.initializeApp(config);
+    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
 </head>
+
 <body>
-  <app-root></app-root>
+    <app-root></app-root>
 </body>
+
 </html>

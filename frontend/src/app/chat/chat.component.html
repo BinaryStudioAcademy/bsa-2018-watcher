@@ -1,0 +1,21 @@
+<app-conversation-panel [onDisplay]="onDisplayChat"></app-conversation-panel>
+<app-chat-create-popup [onDisplay]="onDisplayChatCreating"></app-chat-create-popup>
+
+<div class="chat-list-panel">
+  <p-accordion>
+    <p-accordionTab>
+      <p-header>
+        Chats
+        <i class="icon icon-right fa fa-plus" (click)="openChatCreating($event)"></i>
+      </p-header>
+      <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="openChat()" (onDblClick)="removeSelect()">
+        <ng-template let-chat pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <img class="chat-list-img" src="{{getChatImage(chat?.value)}}"/>
+            <span class="chat-list-name"> {{chat.value.name}}</span>
+          </div>
+        </ng-template>
+      </p-listbox>
+    </p-accordionTab>
+  </p-accordion>
+</div>

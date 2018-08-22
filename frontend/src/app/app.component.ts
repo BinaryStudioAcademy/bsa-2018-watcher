@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.sass']
+  templateUrl: './app.component.html'
 })
-export class AppComponent {
-  title = 'Watcher';
+
+export class AppComponent implements OnInit {
+  constructor(private authService: AuthService) {
+  }
+
+  async ngOnInit() {
+    if (!this.authService.isAuthorized()) {
+      await this.authService.populate();
+    }
+
+  }
 }

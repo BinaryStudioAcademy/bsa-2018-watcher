@@ -1,0 +1,72 @@
+.site-wrap
+  margin: 17px 0px 20px 32px
+
+.add-button
+  color: #3b5998
+
+hr
+  border: 0
+  height: 0
+  border-top: 1px solid rgba(0, 0, 0, 0.1)
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3)
+
+/deep/ .ui-tabmenuitem
+  #lastTab
+    /deep/ .ui-state-active
+      background-color: red !important
+    /deep/ .ui-menuitem-text
+      color: #007ad9
+    /deep/ .ui-menuitem-icon
+      color: #007ad9
+      margin-left: 11px
+  #lastTab a:active
+    color: red !important
+  ///deep/ .ui-menuitem-icon
+// color: #F8FAFC
+nav
+  ul
+    li:last-child
+      color: red !important
+
+.title
+  padding-bottom: 10px
+  font-size: 22px
+  font-weight: normal
+
+.dashboard-options
+    display: flex
+    justify-content: flex-end
+    button
+      margin-left: 5px
+      margin-right: 5px
+
+.workspace
+    display: flex
+    flex-direction: column
+    padding: 10px
+    .charts-area
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      .dashboard-item
+        margin: 10px
+
+.placeholder
+  padding: 0px 10px 10px 0px
+  font-size: 1.5em
+  font-weight: normal
+  align-content: center
+  color: rgb(96,96,96)
+  div
+    vertical-align: middle
+    margin: 10px 0px 20px 10px
+
+.fa-plus
+  padding-right: 13.14px
+  padding-left: 2px
+
+.fa-download
+  padding-right: 11.72px
+
+.fa-dashboard
+  padding-right: 10px

@@ -1,0 +1,77 @@
+<app-edit-dashboard (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard"
+                    [dashboardTitle]="editTitle"></app-edit-dashboard>
+<div class="site-wrap">
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-lg-6">
+      <div class="title">DASHBOARDS</div>
+      <hr *ngIf="!instanceId">
+    </div>
+  </div>
+  <p-tabMenu [model]="dashboardMenuitems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
+  <div class="workspace" *ngIf="instanceId">
+    <div class="dashboard-options">
+      <button pButton type="button"
+              label="Add Item"
+              class="btnedit ui-button-success ui-button-raised "
+              [disabled]="activeDashboardItem == null"
+              (click)="showAddItemPopup()"></button>
+      <button pButton type="button"
+              label="Edit "
+              class="btnedit ui-button-primary ui-button-raised "
+              [disabled]="activeDashboardItem == null"
+              (click)="showCreatePopup(false)"></button>
+      <button pButton type="button"
+              label="Delete "
+              class="btnedit ui-button-danger ui-button-raised "
+              [disabled]="activeDashboardItem == null"
+              (click)="delete()"></button>
+    </div>
+
+    <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuitems.length > 1">
+      <div class="dashboard-item">
+        <app-line-chart></app-line-chart>
+      </div>
+      <div class="dashboard-item">
+        <app-multi-series-line-chart></app-multi-series-line-chart>
+      </div>
+      <div class="dashboard-item">
+        <app-bar-chart></app-bar-chart>
+      </div>
+      <div class="dashboard-item">
+        <app-stacked-bar-chart></app-stacked-bar-chart>
+      </div>
+      <div class="dashboard-item">
+        <app-brush-zoom></app-brush-zoom>
+      </div>
+      <!--<div class="dashboard-item">-->
+        <!--<app-pie-chart></app-pie-chart>-->
+      <!--</div>-->
+      <!--<div class="dashboard-item">-->
+        <!--<app-donut-chart></app-donut-chart>-->
+      <!--</div>-->
+    </div>
+  </div>
+
+  <div *ngIf="!instanceId" class="placeholder">
+    <div><i class="fa fa-plus"></i> 1. Create a VM instance</div>
+    <div><i class="fa fa-download"></i> 2. Download the application</div>
+    <div><i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity</div>
+  </div>
+</div>
+
+<p-confirmDialog header="Confirmation " icon="pi pi-exclamation-triangle " width="425 " #cd>
+  <p-footer>
+    <button pButton
+            type="button "
+            class="ui-button-success ui-button-raised "
+            icon="pi pi-times "
+            label="No "
+            (click)="cd.reject() "></button>
+    <button pButton type="button "
+            class="ui-button-danger ui-button-raised "
+            icon="pi pi-check "
+            label="Yes "
+            (click)="cd.accept() "></button>
+  </p-footer>
+</p-confirmDialog>
+<p-toast position="bottom-right" life="500"></p-toast>
