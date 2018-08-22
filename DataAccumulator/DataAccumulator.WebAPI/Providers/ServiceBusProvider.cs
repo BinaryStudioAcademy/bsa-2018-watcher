@@ -1,10 +1,12 @@
-﻿using DataAccumulator.Interfaces;
-using Microsoft.Azure.ServiceBus;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
+using DataAccumulator.Interfaces;
+
+using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Logging;
 
 namespace DataAccumulator.Providers
 {

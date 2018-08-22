@@ -23,6 +23,9 @@
     <None Update="MoveToFrontend\chat.model.ts">
       <CustomToolNamespace>Dtos\ChatDto.cs</CustomToolNamespace>
     </None>
+    <None Update="MoveToFrontend\collected-data.model.ts">
+      <CustomToolNamespace>Dtos\Plots\CollectedDataDto.cs</CustomToolNamespace>
+    </None>
     <None Update="MoveToFrontend\dashboard.model.ts">
       <CustomToolNamespace>Dtos\DashboardDto.cs</CustomToolNamespace>
     </None>

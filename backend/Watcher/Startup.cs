@@ -9,6 +9,7 @@ namespace Watcher
     using System.Threading.Tasks;
 
     using AutoMapper;
+    
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.DataAccessLayer.Interfaces;
     using DataAccumulator.DataAccessLayer.Repositories;
@@ -26,7 +27,6 @@ namespace Watcher
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
-
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
@@ -38,6 +38,7 @@ namespace Watcher
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
     using Watcher.Hubs;
+    using Watcher.Services;
     using Watcher.Utils;
 
     public class Startup
@@ -101,10 +102,17 @@ namespace Watcher
             services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
 
-            ConfigureFileStorage(services, Configuration);
+             // services.AddScoped<IService<DataAccumulator.Shared.Models.CollectedDataDto>, DataAccumulatorService>();
+
+            // repo initialization localhost while development env, azure in prod
             ConfigureCosmosDb(services, Configuration);
+
+            ConfigureFileStorage(services, Configuration);
+
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
-            // services.AddHostedService<WatcherService>();
+            services.AddHostedService<WatcherService>();
+
+
             InitializeAutomapper(services);
 
             ConfigureDatabase(services, Configuration);
@@ -121,6 +129,7 @@ namespace Watcher
                             OnMessageReceived = delegate (MessageReceivedContext context)
                               {
                                   if ((!context.Request.Path.Value.Contains("/notifications")
+                                      && !context.Request.Path.Value.Contains("/dashboards")
                                       && !context.Request.Path.Value.Contains("/chatsHub"))
 
                                       || !context.Request.Query.ContainsKey("Authorization")
@@ -192,9 +201,6 @@ namespace Watcher
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
 
-            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
-
             app.UseHttpStatusCodeExceptionMiddleware();
 
             UpdateDatabase(app);
@@ -225,6 +231,7 @@ namespace Watcher
                 app.UseAzureSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<DashboardsHub>("/dashboards");
                         routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
@@ -233,6 +240,7 @@ namespace Watcher
                 app.UseSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<DashboardsHub>("/dashboards");
                         routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
@@ -245,11 +253,11 @@ namespace Watcher
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (enviroment == EnvironmentName.Production)
             {
-                var cosmosDbString = Configuration.GetConnectionString("AzureCosmosDbConnection");
+                var cosmosDbString = Configuration.GetConnectionString("AzureMongoDbConnection");
                 if (!string.IsNullOrWhiteSpace(cosmosDbString))
                 {
                     services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-                          options => new DataAccumulatorRepository(cosmosDbString, "DataAccumulatorDb"));
+                          options => new DataAccumulatorRepository(cosmosDbString, "bsa-watcher-data-storage"));
                 }
             }
             else

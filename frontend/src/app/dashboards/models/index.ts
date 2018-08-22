@@ -1,4 +1,6 @@
 export * from './dashboard-menuitem.model';
+export * from './market-price';
+export * from './data';
 export * from './stocks';
 export * from './temperatures';
 export * from './statistics';

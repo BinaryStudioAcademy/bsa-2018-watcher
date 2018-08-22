@@ -1,11 +1,9 @@
 import {EventEmitter, Injectable} from '@angular/core';
 
-import {HttpClient, HubConnection} from '@aspnet/signalr';
+import {HubConnection} from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import {environment} from '../../../environments/environment';
-import {SampleDto} from '../../shared/models/sample-dto.model';
 import {SampleRequest} from '../../shared/models/sample-request.model';
-import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
 import { Notification } from '../../shared/models/notification.model';
 
