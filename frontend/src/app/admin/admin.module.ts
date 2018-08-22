@@ -11,7 +11,7 @@ import { TabViewModule, InputTextModule, ButtonModule, ToggleButtonModule, Input
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { ListboxModule } from 'primeng/listbox';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   imports: [
@@ -28,7 +28,7 @@ import { ListboxModule } from 'primeng/listbox';
     TableModule,
     CheckboxModule,
     ScrollPanelModule,
-    ListboxModule
+    DropdownModule
   ],
   declarations: [
     AdminPageComponent,

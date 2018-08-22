@@ -1,4 +1,4 @@
-import { Component, OnInit, Directive, Output, HostListener, ElementRef, EventEmitter  } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
@@ -7,7 +7,7 @@ import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
 import { OrganizationService } from '../../core/services/organization.service';
 import { RoleService } from '../../core/services/role.service';
-import {SelectItem} from 'primeng/primeng';
+import { SelectItem } from 'primeng/api';
 
 import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
@@ -28,10 +28,13 @@ export class UserListComponent implements OnInit {
   display: boolean;
   totalRecords: number;
   lstOrganizations: Organization[];
-  lstOrganizationId: number[];
+  lstUserCompany: Organization[];
   invite: OrganizationInvite;
   lstRoles: Role[];
   selectedRole: Role;
+  selectedCompany: Organization;
+  dropdownRole: SelectItem[];
+  dropdownCompany: SelectItem[];
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +46,9 @@ export class UserListComponent implements OnInit {
     private toastrService: ToastrService) {
 
     this.display = false;
+    this.lstUserCompany = new Array<Organization>();
+    this.dropdownRole = new Array<SelectItem>();
+    this.dropdownCompany = new Array<SelectItem>();
   }
 
   userForm = this.fb.group({
@@ -66,11 +72,24 @@ export class UserListComponent implements OnInit {
 
     this.organizationService.getAll().subscribe((value: Organization[]) => {
       this.lstOrganizations = value;
+      this.fillDropdownCompany();
     });
 
     this.roleService.getAll().subscribe((value: Role[]) => {
       this.lstRoles = value;
-      // this.selectedRole = value[0];
+      this.fillDropdownRole();
+    });
+  }
+
+  private fillDropdownRole(): void {
+    this.lstRoles.forEach(element => {
+      this.dropdownRole.push({label: element.name, value: element});
+    });
+  }
+
+  private fillDropdownCompany(): void {
+    this.lstOrganizations.forEach(element => {
+      this.dropdownCompany.push({label: element.name, value: element});
     });
   }
 
@@ -80,14 +99,57 @@ export class UserListComponent implements OnInit {
       control.setValue(this.user[field]);
     });
   }
+/*
+  isAssign(id: number) {
+    return this.lstOrganizationId.includes(id);
+  }*/
+
+  onUnassign(company: Organization) {
+    if (this.user.lastPickedOrganizationId === company.id) {
+      this.user.lastPickedOrganizationId = 0;
+      this.user.lastPickedOrganization = null;
+      this.userService.update(this.user.id, this.user).subscribe(
+        value => {
+          this.toastrService.success(`Now last picked organization - ${this.user.organizations[0].name}`);
+        },
+        error => {
+          this.toastrService.error(`Error ocured status: ${error.message}`);
+        }
+      );
+    } else {
+      const index = this.user.organizations.indexOf(company);
+      this.user.organizations.splice(index, 1);
+    }
+  }
+
+lastPickedCompany(id: number) {
+  const company: Organization = {
+    id: id,
+    name: 'last picked',
+    description: '',
+    email: 'last picked',
+    webSite: '',
+    contactNumber: '',
+    isActive: true,
+    themeId: 0,
+    theme: null,
+    chatId: 0,
+    createdByUserId: '',
+    usersId: null,
+    instances: null,
+    notifications: null
+   };
+   return company;
+}
 
   showPopup(user: User) {
     this.user = user;
     this.subscribeOrganizationFormToData();
     this.display = true;
-    this.lstOrganizationId = user.organizations.map(x => Object.assign({}, x.id));
-    this.lstOrganizationId.push(user.lastPickedOrganizationId);
-    console.log(user.lastPickedOrganization);
+    this.lstUserCompany = user.organizations.map(x => Object.assign({}, x));
+    this.lstUserCompany.push(this.lastPickedCompany(user.lastPickedOrganizationId));
+    this.selectedRole = user.role;
+    console.log(this.lstUserCompany);
   }
 
   onCancel() {
@@ -101,7 +163,8 @@ export class UserListComponent implements OnInit {
     if (this.userForm.valid) {
       Object.keys(this.userForm.controls).forEach(field => {
         this.user[field] = this.userForm.get(field).value;
-        });
+      });
+      this.user.role = this.selectedRole;
       this.userService.update(this.user.id, this.user).subscribe(
         value => {
           this.toastrService.success('User was updated');
@@ -136,48 +199,21 @@ export class UserListComponent implements OnInit {
         this.invite = value;
       },
       error => {
-       // this.toastrService.error('Organization Invite was not created');
-       this.toastrService.error(`Error ocured status: ${error.message}`);
+        // this.toastrService.error('Organization Invite was not created');
+        this.toastrService.error(`Error ocured status: ${error.message}`);
       });
   }
 
-  onSentInviteToEmail(id: number) {
+  onSentInviteToEmail() {
     if (this.user.email === null) { return; }
-    this.onInvite(id);
+    this.onInvite(this.selectedCompany.id);
     this.invite.inviteEmail = this.user.email;
     this.organizationInvitesService.update(this.invite.id, this.invite).subscribe(
-    value => {
-      this.toastrService.success('Organization Invite was updated and sends to email.');
-    },
-    err => {
-      this.toastrService.error('Organization Invite was not updated');
-    });
-  }
-}
-
-@Directive({
-  // tslint:disable-next-line:directive-selector
-  selector: '[toggleSelect]',
-})
-export class ToggleSelectDirective {
-  @Output('toggleSelect') public toggleSelect: EventEmitter<null> = new EventEmitter<null>();
-
-  private wasChanged = false;
-
-  constructor(el: ElementRef) {
-    el.nativeElement.style.backgroundColor = 'yellow';
-  }
-
-  @HostListener('onChange', ['$event'])
-  public onChange(event: any) {
-    this.wasChanged = true;
-    setTimeout(() => this.wasChanged = false, 100);
-  }
-
-  @HostListener('click', ['$event'])
-  public onClick(event: any) {
-    if (!this.wasChanged) {
-      this.toggleSelect.emit();
-    }
+      value => {
+        this.toastrService.success('Organization Invite was updated and sends to email.');
+      },
+      err => {
+        this.toastrService.error('Organization Invite was not updated');
+      });
   }
 }

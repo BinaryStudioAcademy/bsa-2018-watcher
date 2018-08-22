@@ -17,8 +17,8 @@
         <th style="width:8%">FIRST NAME</th>
         <th style="width:8%">LAST NAME</th>
         <th style="width:10%">BIO</th>
-        <th style="width:20%">EMAIL</th>
-        <th> ORGANIZATION ID</th>
+        <th style="width:22%">EMAIL</th>
+        <th> COMPANY ID</th>
         <th style="width:6%">IS ACTIVE</th>
         <th style="width:6%">ROLE</th>
         <th style="width:6%">EDIT</th>
@@ -56,67 +56,73 @@
 <p-dialog header="Update user" [(visible)]="display" [modal]="true" [responsive]="true" [width]="500" [minWidth]="350" [minY]="70"
   [maximizable]="false" [baseZIndex]="10000">
   <div class="ui-g ui-fluid">
-    <div class="ui-g-7">
+    <div class="ui-g-6">
       <form [formGroup]="userForm">
         <p class="field">Photo</p>
         <textarea rows="5" [cols]="42" pInputTextarea></textarea>
-
-        <p class="field">Display name</p>
-        <input size="41" type="text" formControlName="displayName" pInputText />
-
-        <p class="field">First name</p>
-        <input size="41" type="text" formControlName="firstName" pInputText />
-
-        <p class="field">Last name</p>
-        <input size="41" type="text" formControlName="lastName" pInputText />
-        <div class="inline">
-          <p class="fieldRole">Role: </p>
-          <p-listbox [options]="lstRoles" [(ngModel)]="selectedRole" optionLabel="name" (toggleSelect)="selectedRole = null"
-              [listStyle]="{'max-height':'30px', 'min-width':'215px'}">
-            <!--<ng-template let-role pTemplate="item">
-              <div class="ui-helper-clearfix">
-                <span style="float:left;">{{role.name}}</span>
-              </div>
-            </ng-template>
-            <p-footer>
-              Selected: {{selectedCar||'none'}}
-            </p-footer>-->
-          </p-listbox>
-         
-        </div> <p>Selected role: {{selectedRole ? selectedRole.name : 'none'}}</p>
-        <p class="field">Bio</p>
-        <textarea rows="5" [cols]="42" formControlName="bio" pInputTextarea></textarea>
-
       </form>
-    </div>
 
-    <div class="ui-g-5">
+      <div class="inline">
+        <p class="fieldRole">Role: </p>
+        <!--<p-listbox [options]="lstRoles" [(ngModel)]="selectedRole" optionLabel="name" (toggleSelect)="selectedRole = null"
+              [listStyle]="{'max-height':'30px', 'min-width':'176px'}"> </p-listbox>-->
+        <p-dropdown [options]="dropdownRole" [(ngModel)]="selectedRole"></p-dropdown>
+      </div>
+
       <form [formGroup]="userForm">
-        <p class="field center space">Is active:
+        <p class="field">Is active:
           <p-checkbox formControlName="isActive" binary="true"></p-checkbox>
         </p>
       </form>
-      <p class="field center">List of organization</p>
-      <div class="border">
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-7 center">Name</div>
-          <div class="ui-g-5 center">Invite</div>
-        </div>
-        <p-scrollPanel [style]="{width: '100%', height: '350px'}" styleClass="custom">
+    </div>
 
-          <div *ngFor="let organization of lstOrganizations" class="ui-g ui-fluid">
-            <div class="ui-g-7 center">{{organization.name}} </div>
-            <div class="ui-g-5 ">
-              <button pButton label="Invite" (click)="onSentInviteToEmail(organization.id)" class="ui-button-raised ui-button-success"></button>
-            </div>
-          </div>
-
-        </p-scrollPanel>
-      </div>
-
+    <div class="ui-g-6">
+      <form [formGroup]="userForm">
+        <p class="field">Display name</p>
+        <input size="41" type="text" formControlName="displayName" pInputText />
+        <p class="field">First name</p>
+        <input size="41" type="text" formControlName="firstName" pInputText />
+        <p class="field">Last name</p>
+        <input size="41" type="text" formControlName="lastName" pInputText />
+        <p class="field">Bio</p>
+        <textarea rows="5" [cols]="42" formControlName="bio" pInputTextarea></textarea>
+      </form>
     </div>
   </div>
 
+  <div class="ui-g ui-fluid">
+    <div class="inline">  <p class="field">List of other organizations</p>
+      <!--<p-listbox [options]="lstRoles" [(ngModel)]="selectedRole" optionLabel="name" (toggleSelect)="selectedRole = null"
+                [listStyle]="{'max-height':'30px', 'min-width':'176px'}"> </p-listbox>-->
+      <p-dropdown [options]="dropdownCompany" [(ngModel)]="selectedCompany"></p-dropdown>
+      <button pButton label="Invite" (click)="onSentInviteToEmail()" class="btnedit ui-button-primary ui-button-raised"></button>
+    </div>
+  </div>
+
+  <p class="field ui-g ui-fluid">List of your organizations</p>
+  <div class="border">
+
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-4 center">Name</div>
+      <div class="ui-g-5 center">Email</div>
+      <div class="ui-g-3 "></div>
+    </div>
+
+    <div class="ui-g ui-fluid" *ngIf="lstUserCompany">
+      <p-scrollPanel [style]="{width: '100%', height: '135px'}" styleClass="custom">
+        <!--width: 464px;-->
+        <div *ngFor="let organization of lstUserCompany" class="ui-g ui-fluid">
+          <div class="ui-g-4 center fieldOrg">{{organization?.name}} </div>
+          <div class="ui-g-5 center fieldOrg">{{organization?.email}} </div>
+          <div class="ui-g-3 center">
+            <button pButton label="Unassign" (click)="onUnassign(organization)" class="ui-button-raised ui-button-danger"></button>
+          </div>
+        </div>
+      </p-scrollPanel>
+    </div>
+
+  </div>
+  
   <p-footer>
     <button type="button" pButton icon="pi pi-check" class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
     <button type="button" pButton icon="pi pi-close" (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
