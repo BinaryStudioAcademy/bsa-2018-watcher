@@ -14,6 +14,7 @@ namespace Watcher.Common.Requests
         public string DisplayName { get; set; }
         public string Bio { get; set; }
         public string PhotoURL { get; set; }
+        public string PhotoType { get; set; }
         
         public RoleDto Role { get; set; }
 

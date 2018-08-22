@@ -129,7 +129,7 @@ export class AuthService {
 
     const firebaseToken = await credential.user.getIdToken();
     localStorage.setItem('firebaseToken', firebaseToken);
-
+    console.log(credential.user.photoURL);
     return this.tokenService.login(request).toPromise()
       .then(tokenDto => {
         this.setAuth(tokenDto);
