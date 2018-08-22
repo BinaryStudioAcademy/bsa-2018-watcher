@@ -27,9 +27,11 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private regexInviteUrl: RegExp = /\/user\/invite/;
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
   private regexInstancesUrl: RegExp = /\/user(\/instances)?/;
-  private currentQuery: string;
   private regexAdminUrl = /\/admin/;
 
+  currentQuery: string;
+  currentGuidId: string;
+  showDownloadModal: boolean;
   isSearching: boolean;
   isFeedback: boolean;
   isInvite: boolean;
@@ -138,8 +140,12 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       }, {
         label: 'Download app',
         icon: 'fa fa-download',
-        routerLink: [`instances/${instance.id}/download`],
-        styleClass: 'instance-options'
+        styleClass: 'instance-options',
+        command: () => {
+          console.log(this.showDownloadModal);
+          this.showDownloadModal = true;
+          this.currentGuidId = instance.guidId;
+        }
       }]
     };
     return item;
@@ -246,5 +252,9 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       if (menuitem.label === this.menuItems[0].label) { menuitem.visible = true; }
       return menuitem;
     });
+  }
+  onClose(): void {
+    console.log('emits onclose');
+    this.showDownloadModal = false;
   }
 }

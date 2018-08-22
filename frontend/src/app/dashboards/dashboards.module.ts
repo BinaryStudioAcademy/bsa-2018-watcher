@@ -45,7 +45,8 @@ import {DonutChartComponent} from './07_donut_chart/donut-chart.component';
     StackedBarChartComponent,
     BrushZoomComponent,
     PieChartComponent,
-    DonutChartComponent],
+    DonutChartComponent,
+    ],
   exports: []
 })
 export class DashboardsModule {

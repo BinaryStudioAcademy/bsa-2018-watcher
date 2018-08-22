@@ -12,11 +12,13 @@ import {
   MessagesModule,
   MessageModule,
   GrowlModule,
-  PanelMenuModule
+  PanelMenuModule,
+  DialogModule
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
 import { query } from '@angular/core/src/render3/query';
+import { DownloadAppComponent } from '../download-app/download-app.component';
 
 
 @NgModule({
@@ -31,8 +33,9 @@ import { query } from '@angular/core/src/render3/query';
     MessagesModule,
     MessageModule,
     PanelMenuModule,
-    ChatModule
+    ChatModule,
+    DialogModule,
   ],
-  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent ]
+  declarations: [ ShellComponent, HeaderComponent, LeftSideMenuComponent, DownloadAppComponent ]
 })
 export class ShellModule { }
