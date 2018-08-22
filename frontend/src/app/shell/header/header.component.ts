@@ -128,7 +128,7 @@ export class HeaderComponent implements OnInit {
     this.authService.currentUser.subscribe(
       userData => {
         this.currentUser = { ...userData };
-        //this.currentUser.photoURL = this.pathService.convertToUrl(this.currentUser.photoURL);   // error    
+        this.currentUser.photoURL = this.pathService.convertToUrl(this.currentUser.photoURL);
         this.fillOrganizations();
       }
     );
