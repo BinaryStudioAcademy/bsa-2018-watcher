@@ -26,7 +26,6 @@ import { AddNewOrganizationComponent } from './add-new-organization/add-new-orga
 import { FormsModule } from '@angular/forms';
 import { ClickOutsideDirective } from '../core/directives/click-outside.directive';
 
-
 @NgModule({
   imports: [
     CommonModule,

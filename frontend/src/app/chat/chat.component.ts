@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
+import { MessageService } from 'primeng/api';
 
 import { ChatHub } from '../core/hubs/chat.hub';
 import { AuthService } from '../core/services/auth.service';
@@ -22,14 +23,16 @@ export class ChatComponent implements OnInit {
     private chatHub: ChatHub,
     private authService: AuthService,
     private chatService: ChatService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private messageService: MessageService) { }
 
-  public onDisplayChat = new EventEmitter<Chat>();
+  public onDisplayChat = new EventEmitter<number>();
   public onDisplayChatCreating = new EventEmitter<boolean>();
 
   chatList: SelectItem[] = [];
   selectedChat: Chat;
   currentUser: User;
+  unreadedMessageCount = 0;
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -38,6 +41,7 @@ export class ChatComponent implements OnInit {
         chats.reverse();
         chats.forEach(chat => {
           this.chatList.push({ value: chat });
+          // this.unreadedMessageCount += this.calcNotReadMessages(chat);
         });
         this.subscribeToEvents();
       },
@@ -47,8 +51,12 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  openChat() {
-    this.onDisplayChat.emit(this.selectedChat);
+  openChat(chatId: number) {
+    this.onDisplayChat.emit(chatId);
+  }
+
+  selectChat() {
+    this.onDisplayChat.emit(this.selectedChat.id);
   }
 
   removeSelect() {
@@ -64,18 +72,26 @@ export class ChatComponent implements OnInit {
   getChatImage(chat: Chat) {
     if (chat.users.length === 2) {
       const photo = chat.users.find(u => u.id !== this.currentUser.id).photoURL;
-      if (photo !== undefined) {
+      if (photo) {
         return photo;
+      } else {
+        return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
       }
     }
-
-    // Default image for chat list
     return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
+  }
+
+  calcNotReadMessages(chat: Chat): number {
+    return chat.messages.filter(item => !item.wasRead && item.user.id !== this.currentUser.id).length;
   }
 
   subscribeToEvents() {
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
       this.chatList.unshift({ value: chat });
+    });
+
+    this.chatHub.messageReceived.subscribe(() => {
+      this.unreadedMessageCount++;
     });
 
     this.chatHub.chatChanged.subscribe((chat: Chat) => {
@@ -84,7 +100,14 @@ export class ChatComponent implements OnInit {
     });
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
-      // add to unreaded message counter
+      if (message.user.id !== this.currentUser.id) {
+        this.messageService.add(
+          {
+            key: 'chat-message',
+            data: message,
+          }
+        );
+      }
     });
   }
 }
