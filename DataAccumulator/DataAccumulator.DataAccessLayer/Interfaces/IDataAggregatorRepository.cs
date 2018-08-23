@@ -6,10 +6,6 @@ using DataAccumulator.DataAccessLayer.Entities;
 
 namespace DataAccumulator.DataAccessLayer.Interfaces
 {
-    //interface IDataAggregatorRepository
-    //{
-    //}
-
     public interface IDataAggregatorRepository<TEntity> where TEntity : IEntity
     {
         Task<IEnumerable<CollectedData>> GetAllEntities();
