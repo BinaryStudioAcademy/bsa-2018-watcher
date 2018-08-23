@@ -94,13 +94,13 @@ export class EditInstanceComponent implements OnInit {
             organization: this.instance.organization
           };
           this.instanceService.instanceEdited.emit(updatedInstance);
-          this.router.navigate([`/user/instances/${updatedInstance.id}/dashboards`]);
+          this.router.navigate([`/user/instances/${updatedInstance.id}/${updatedInstance.guidId}/dashboards`]);
         });
       } else {
         this.instanceService.create(request).subscribe((res: Instance) => {
           this.toastrService.success('created instance');
           this.instanceService.instanceAdded.emit(res);
-          this.router.navigate([`/user/instances/${res.id}/dashboards`]);
+          this.router.navigate([`/user/instances/${res.id}/${res.guidId}/dashboards`]);
         });
       }
     } else {
