@@ -19,16 +19,33 @@ namespace Watcher.Core.Services
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly IFileStorageProvider _fileStorageProvider;
 
-        public UsersService(IUnitOfWork uow, IMapper mapper)
+        public UsersService(IUnitOfWork uow, IMapper mapper, IFileStorageProvider fileStorageProvider)
         {
             _uow = uow;
             _mapper = mapper;
+            _fileStorageProvider = fileStorageProvider;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllEntitiesAsync()
         {
             var users = await _uow.UsersRepository.GetRangeAsync();
+
+            var dtos = _mapper.Map<List<User>, List<UserDto>>(users);
+
+            return dtos;
+        }
+
+        public async Task<IEnumerable<UserDto>> FindEntitiesAsync(string query)
+        {
+            var users = await _uow.UsersRepository.GetRangeAsync(
+                filter: 
+                    u => u.DisplayName.Contains(query) ||
+                         u.FirstName.Contains(query) ||
+                         u.LastName.Contains(query) ||
+                         u.Email.Contains(query),
+                orderBy: u => u.OrderBy(q => q.FirstName));
 
             var dtos = _mapper.Map<List<User>, List<UserDto>>(users);
 
@@ -60,30 +77,34 @@ namespace Watcher.Core.Services
 
         public async Task<UserDto> GetEntityByIdAsync(string id)
         {
+
             var user = await _uow.UsersRepository.GetFirstOrDefaultAsync(s => s.Id == id,
-                include: users => users.Include(u => u.Role)
-                                                    .Include(u => u.CreatedChats)
-                                                    .Include(u => u.Feedbacks)
-                                                    .Include(u => u.Responses)
-                                                    .Include(u => u.Messages)
-                                                    .Include(u => u.Notifications)
-                                                    .Include(u => u.NotificationSettings)
-                                                    .Include(u => u.LastPickedOrganization)
-                                                    .Include(u => u.UserOrganizations)
-                                                        .ThenInclude(uo => uo.Organization)
-                                                    .Include(u => u.UserChats)
-                                                        .ThenInclude(uc => uc.Chat));
+            include: users => users.Include(u => u.Role)
+                                                .Include(u => u.CreatedChats)
+                                                .Include(u => u.Feedbacks)
+                                                .Include(u => u.Responses)
+                                                .Include(u => u.Messages)
+                                                .Include(u => u.Notifications)
+                                                .Include(u => u.NotificationSettings)
+                                                .Include(u => u.LastPickedOrganization)
+                                                .Include(u => u.UserOrganizations)
+                                                    .ThenInclude(uo => uo.Organization)
+                                                .Include(u => u.UserChats)
+                                                    .ThenInclude(uc => uc.Chat));
 
             if (user == null) return null;
 
             var dto = _mapper.Map<User, UserDto>(user);
 
             return dto;
+
+
+
         }
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
         {
-            var user = await GetEntityByIdAsync(request.Email);
+            var user = await GetEntityByIdAsync(request.Uid);
 
             if (user != null)
             {
@@ -92,13 +113,13 @@ namespace Watcher.Core.Services
 
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
 
-            var defaultOrganization = new Organization()
+            var defaultOrganization = new Organization
             {
                 Name = request.CompanyName ?? "Default",
                 IsActive = true,
                 CreatedByUserId = entity.Id
             };
-                  
+
             entity.NotificationSettings = CreateNotificationSetting();
 
             entity.UserOrganizations.Add(
@@ -107,6 +128,13 @@ namespace Watcher.Core.Services
                    Organization = defaultOrganization,
                    UserId = entity.Id
                });
+
+            var newPhotoUrl = await _fileStorageProvider.UploadFileFromStreamAsync(
+                                  string.IsNullOrWhiteSpace(entity.PhotoURL)
+                                      ? "https://bsawatcherfiles.blob.core.windows.net/watcher/f6efd981-4e08-44f0-ab87-837720b372ef.png" // Standart photo path
+                                      : entity.PhotoURL);
+            
+            entity.PhotoURL = newPhotoUrl;
 
             var createdUser = await _uow.UsersRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();
@@ -131,6 +159,18 @@ namespace Watcher.Core.Services
         {
             var entity = _mapper.Map<UserUpdateRequest, User>(request);
             entity.Id = id;
+
+            var existingEntity = await GetEntityByIdAsync(id);
+
+            if (string.IsNullOrWhiteSpace(existingEntity.PhotoURL))
+            {
+                entity.PhotoURL = existingEntity.PhotoURL;
+            }
+            else if (!existingEntity.PhotoURL.Equals(entity.PhotoURL))
+            {
+                await _fileStorageProvider.DeleteFileAsync(existingEntity.PhotoURL);
+                entity.PhotoURL = await _fileStorageProvider.UploadFileBase64Async(entity.PhotoURL, request.PhotoType); // TODO: change here for real image type
+            }
 
             // In returns updated entity, you could do smth with it or just leave as it is
             var updated = await _uow.UsersRepository.UpdateAsync(entity);

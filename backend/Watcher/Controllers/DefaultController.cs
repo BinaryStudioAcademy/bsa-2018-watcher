@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Watcher.Controllers
 {
+    using System;
     using System.Net;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.Extensions.Logging;
@@ -13,15 +15,54 @@ namespace Watcher.Controllers
     using Serilog.Context;
 
     using Watcher.Common.Errors;
+    using Watcher.Core.Interfaces;
 
     [Route("[controller]")]
     [ApiController]
     public class DefaultController : ControllerBase
     {
         private readonly ILogger<DefaultController> _logger;
-        public DefaultController(ILogger<DefaultController> logger)
+
+        private readonly IServiceBusProvider _serviceBusProvider;
+        private readonly IFileStorageProvider _provider;
+
+        public DefaultController(ILogger<DefaultController> logger,
+                                 IServiceBusProvider serviceBusProvider,
+                                 IFileStorageProvider provider)
         {
             _logger = logger;
+            _serviceBusProvider = serviceBusProvider;
+            _provider = provider;
+        }
+
+        [HttpPost("Upload64Image")]
+        public async Task<IActionResult> Upload64Image([FromBody] string base64StingImage)
+        {
+            try
+            {
+                await _provider.UploadFileBase64Async(base64StingImage, "watcher");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+
+            return Ok();
+        }
+
+        [HttpGet("RegisterToMessages")]
+        public async Task<IActionResult> RegisterToMessages()
+        {
+            try
+            {
+                _serviceBusProvider.RegisterOnMessageHandlerAndReceiveMessages();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+
+            return Ok();
         }
 
         // [WatcherAuthorize("Admin")]

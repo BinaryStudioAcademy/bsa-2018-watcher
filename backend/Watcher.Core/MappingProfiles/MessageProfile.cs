@@ -1,4 +1,6 @@
-﻿namespace Watcher.Core.MappingProfiles
+﻿using System.Collections.Generic;
+
+namespace Watcher.Core.MappingProfiles
 {
     using AutoMapper;
 
@@ -14,6 +16,10 @@
                 .ForMember(d => d.Id, o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
 
             CreateMap<Message, MessageDto>();
+
+            CreateMap<Message, MessageDto>()
+                .ForMember(d => d.ChatName, o => o.MapFrom(d => d.Chat.Name));
+
 
             CreateMap<MessageRequest, Message>();
 

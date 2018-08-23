@@ -7,7 +7,7 @@ const userRoutes: Routes = [
   {
     path: '',
     redirectTo: 'instances',
-    pathMatch: 'full'
+    pathMatch: 'full' // TODO: Write resolver that redirect or just fetch Organization first instance to show dashboards
   },
   { path: 'instances', loadChildren: '../dashboards/dashboards.module#DashboardsModule' },
   {path: 'feedback', component: FeedbackComponent},

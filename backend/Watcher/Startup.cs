@@ -1,25 +1,34 @@
-﻿namespace Watcher
+﻿using Watcher.Core.Hubs;
+
+namespace Watcher
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
     using AutoMapper;
-
+    
+    using DataAccumulator.DataAccessLayer.Entities;
+    using DataAccumulator.DataAccessLayer.Interfaces;
+    using DataAccumulator.DataAccessLayer.Repositories;
     using FluentValidation.AspNetCore;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Azure.ServiceBus;
     using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
-
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
@@ -31,6 +40,7 @@
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
     using Watcher.Hubs;
+    using Watcher.Services;
     using Watcher.Utils;
 
     public class Startup
@@ -57,7 +67,7 @@
                 }));
 
             services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
-
+            
             var securitySection = Configuration.GetSection("Security");
             services.Configure<WatcherTokenOptions>(o =>
                 {
@@ -81,20 +91,29 @@
             services.AddTransient<IOrganizationService, OrganizationService>();
             services.AddTransient<IChatsService, ChatsService>();
             services.AddTransient<IMessagesService, MessagesService>();
+            services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<INotificationSettingsService, NotificationSettingsService>();
             services.AddTransient<IEmailProvider, EmailProvider>();
             services.AddTransient<IInstanceService, InstanceService>();
             services.AddTransient<IFeedbackService, FeedbackService>();
             services.AddTransient<IChartsService, ChartsService>();
             services.AddTransient<IResponseService, ResponseService>();
-            services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
+            services.AddTransient<ICollectedDataService, CollectedDataService>();
+            services.AddTransient<IRoleService, RoleService>();
 
+            services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
+            services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
+
+             // services.AddScoped<IService<DataAccumulator.Shared.Models.CollectedDataDto>, DataAccumulatorService>();
+
+            // repo initialization localhost while development env, azure in prod
+            ConfigureCosmosDb(services, Configuration);
 
             ConfigureFileStorage(services, Configuration);
 
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
-            // services.AddHostedService<WatcherService>();
+            services.AddHostedService<WatcherService>();
 
 
             InitializeAutomapper(services);
@@ -113,8 +132,9 @@
                             OnMessageReceived = delegate (MessageReceivedContext context)
                               {
                                   if ((!context.Request.Path.Value.Contains("/notifications")
+                                      && !context.Request.Path.Value.Contains("/dashboards")
                                       && !context.Request.Path.Value.Contains("/chatsHub"))
-                                      
+
                                       || !context.Request.Query.ContainsKey("Authorization")
                                       || !context.Request.Query.ContainsKey("WatcherAuthorization"))
                                       return Task.CompletedTask;
@@ -158,7 +178,8 @@
                         });
                 });
 
-            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
+            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true)
+                .AddJsonProtocol(options => options.PayloadSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             if (UseAzureSignalR)
             {
@@ -184,9 +205,6 @@
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
 
-            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
-
             app.UseHttpStatusCodeExceptionMiddleware();
 
             UpdateDatabase(app);
@@ -197,7 +215,14 @@
             app.UseConfiguredSwagger();
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+
+            string imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+            Directory.CreateDirectory(imageFolder);
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(imageFolder),
+            });
+
             app.UseAuthentication();
 
             app.UseWatcherAuth();
@@ -210,6 +235,7 @@
                 app.UseAzureSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<DashboardsHub>("/dashboards");
                         routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
@@ -218,11 +244,32 @@
                 app.UseSignalR(routes =>
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
+                        routes.MapHub<DashboardsHub>("/dashboards");
                         routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
 
             app.UseMvc();
+        }
+
+        public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
+        {
+            var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (enviroment == EnvironmentName.Production)
+            {
+                var cosmosDbString = Configuration.GetConnectionString("AzureMongoDbConnection");
+                if (!string.IsNullOrWhiteSpace(cosmosDbString))
+                {
+                    services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(cosmosDbString, "bsa-watcher-data-storage"));
+                }
+            }
+            else
+            {
+                var mongoDbString = Configuration.GetConnectionString("MongoDbConnection");
+                services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(mongoDbString, "DataAccumulatorDb"));
+            }
         }
 
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
@@ -233,13 +280,13 @@
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
                 {
-                    services.AddSingleton<IFileStorageProvider, FileStorageProvider>(
+                    services.AddScoped<IFileStorageProvider, FileStorageProvider>(
                         prov => new FileStorageProvider(fileStorageString));
                 }
             }
             else
             {
-                services.AddSingleton<IFileStorageProvider, LocalFileStorageProvider>(
+                services.AddScoped<IFileStorageProvider, LocalFileStorageProvider>(
                     prov => new LocalFileStorageProvider());
             }
         }
@@ -265,9 +312,11 @@
                     cfg.AddProfile<MessageProfile>();
 
                     cfg.AddProfile<FeedbackProfile>();
+                    cfg.AddProfile<RoleProfile>();
                     cfg.AddProfile<ResponseProfile>();
                     cfg.AddProfile<InstancesProfile>();
                     cfg.AddProfile<OrganizationInvitesProfile>();
+                    cfg.AddProfile<CollectedDataProfile>();
 
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/

@@ -11,3 +11,69 @@ hr
     height: 0
     border-top: 1px solid rgba(0, 0, 0, 0.1)
     border-bottom: 1px solid rgba(255, 255, 255, 0.3)
+
+.center
+    text-align: center
+
+.field
+    margin: 3px 0
+
+.border
+     border: 1px solid #a6a6a6
+
+.inline
+    display: inline-flex
+    margin: 10px 0 3px
+
+.fieldRole
+    padding: 7px 10px 0 0
+
+.fieldOrg
+    margin-top: 9px
+
+.space
+    margin: 0 7px 3px
+
+
+
+figure
+  display: block
+  position: relative
+  float: left
+  overflow: hidden
+  margin: 0 20px 20px 0
+
+figcaption
+  position: absolute
+  background: black
+  background: rgba(0,0,0,0.75)
+  border-radius: 0px 0px 5px 5px
+  margin-bottom: 4px
+  color: white
+  padding: 10px 20px
+  width: 150px
+  opacity: 0
+  -webkit-transition: all 0.6s ease
+  -moz-transition:  all 0.6s ease
+  -o-transition:    all 0.6s ease
+
+
+figure:hover figcaption
+  opacity: 1
+
+.inputfile span
+  background: red !important
+
+figure:hover:before
+  opacity: 0
+
+.cap-bot:before
+  bottom: 10px
+  left: 10px
+
+.cap-bot figcaption
+  left: 0
+  bottom: -30%
+
+.cap-bot:hover figcaption
+  bottom: 0

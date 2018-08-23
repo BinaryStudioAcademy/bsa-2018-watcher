@@ -1,27 +1,43 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { AccordionModule } from 'primeng/accordion';
-import { InputTextModule, ButtonModule } from 'primeng/primeng';
-import { CardModule } from 'primeng/card';
-import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import {
+  InputTextModule,
+  ButtonModule,
+  DialogModule,
+  CardModule,
+  ListboxModule,
+  AccordionModule,
+  AutoCompleteModule,
+} from 'primeng/primeng';
+import { ToastModule } from 'primeng/toast';
+
 import { ChatComponent } from './chat.component';
+import { ConversationPanelComponent } from './conversation-panel/conversation-panel.component';
+import { ConversationSettingsPopupComponent } from './conversation-settings-popup/conversation-settings-popup.component';
+import { ChatCreatePopupComponent } from './chat-create-popup/chat-create-popup.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    PanelMenuModule,
     AccordionModule,
     InputTextModule,
     CardModule,
     ReactiveFormsModule,
     FormsModule,
     ButtonModule,
-    ScrollPanelModule
+    ListboxModule,
+    DialogModule,
+    AutoCompleteModule,
+    ToastModule
   ],
-  declarations: [ ChatComponent ],
-  exports: [ ChatComponent ]
+  declarations: [
+    ChatComponent,
+    ConversationPanelComponent,
+    ConversationSettingsPopupComponent,
+    ChatCreatePopupComponent
+  ],
+  exports: [ChatComponent]
 })
 export class ChatModule { }

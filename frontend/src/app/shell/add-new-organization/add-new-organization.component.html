@@ -1,0 +1,66 @@
+<p-dialog header="Add new organizations" [(visible)]="display" [width]="350" [minWidth]="200" [minY]="70" [closable]="false"
+[modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="999"  >
+
+  <div class="ui-g">
+    <div class="ui-g-12 ui-md-12 ui-lg-12">
+      <div class="label">Name*:</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <div class="ui-inputgroup">
+            <input [(ngModel)]="name" type="text" pInputText placeholder="Company name"
+            required id="cName" required minlength="4" #cName="ngModel" />
+            <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
+              <div *ngIf="cName.errors.required">Company name is required.</div>
+              <div *ngIf="cName.errors.minlength">Company name must be at least 4 characters long.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="label">Email:</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <div class="ui-inputgroup">
+            <input type="email" pInputText placeholder="Email" [(ngModel)]="email" id="cEmail" #cEmail="ngModel" ngModel email />
+            <div *ngIf="cEmail?.invalid && (cEmail?.dirty || cEmail?.touched)" class="alert alert-danger">
+              <div *ngIf="cEmail.errors.required"> Email is required.</div>
+              <div *ngIf="cEmail.errors.email">Email must be a valid email address</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="label">Contact number:</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <div class="ui-inputgroup">
+              <p-inputMask type="phone" [(ngModel)]="contactNumber" mask="+380 (99) 999-99-99"  placeholder="Contact number" 
+              [(ngModel)]="contactNumber"></p-inputMask>
+          </div>
+        </div>
+      </div>
+
+      <div class="label">Web site:</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <div class="ui-inputgroup">
+            <input type="text" pInputText placeholder="Web site"  [(ngModel)]="webSite">
+          </div>
+        </div>
+      </div>
+
+      <div class="label">Description:</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <textarea rows="5" pInputTextarea  [(ngModel)]="description"></textarea>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+ <p-footer>
+     <button class="ui-button-raised ui-button-success button" pButton type="button" (click)="onAdd()" label="Add"
+     [disabled]="cName?.invalid || cEmail?.invalid"></button>
+     <button class="ui-button-raised ui-button-danger button" pButton type="button" (click)="onClose()" label="Cancel"></button>
+ </p-footer>
+</p-dialog>

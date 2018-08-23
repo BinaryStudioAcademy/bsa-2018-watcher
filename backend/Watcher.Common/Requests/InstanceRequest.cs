@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Watcher.Common.Requests
 {
@@ -11,9 +10,9 @@ namespace Watcher.Common.Requests
 
         public string Platform { get; set; }
 
-        public int OrganizationId { get; set; }
+        public bool IsActive { get; set; }
 
-        public Guid GuidId { get; set; }
+        public int OrganizationId { get; set; }
 
         public List<int> DashboardsId { get; set; }
     }

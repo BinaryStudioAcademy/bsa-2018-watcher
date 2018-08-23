@@ -12,5 +12,7 @@
         Task<List<User>> GetUsersByChatId(int id);
 
         Task<UserChat> AddUserChat(UserChat userChat);
+
+        Task DeleteUserChat(UserChat userChat);
     }
 }

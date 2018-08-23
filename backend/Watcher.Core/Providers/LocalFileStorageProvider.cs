@@ -5,7 +5,7 @@ using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
-    public class LocalFileStorageProvider:IFileStorageProvider
+    public class LocalFileStorageProvider : IFileStorageProvider
     {
         public LocalFileStorageProvider()
         { }
@@ -20,7 +20,7 @@ namespace Watcher.Core.Providers
                     parent = Directory.GetParent(parent).FullName;
                 }
 
-                var directory = new DirectoryInfo(parent + @"\" + "content");
+                var directory = new DirectoryInfo(Path.Combine(parent, "wwwroot", "images"));
                 if (!directory.Exists) directory.Create();
 
                 var file = new FileInfo(path);
@@ -40,6 +40,11 @@ namespace Watcher.Core.Providers
             {
                 return Task.FromException<string>(ex);
             }
+        }
+
+        public Task<string> UploadFileFromStreamAsync(string url, string containerName = "watcher")
+        {
+            throw new NotImplementedException();
         }
 
         public Task DeleteFileAsync(string path)
@@ -76,8 +81,37 @@ namespace Watcher.Core.Providers
                 parent = Directory.GetParent(parent).FullName;
                 if (parent == Directory.GetDirectoryRoot(parent)) throw new ArgumentNullException("Wrong relative path");
             }
-            parent += @"\" + relativePath;
+            parent += @"\wwwroot\" + relativePath;
             return parent;
+        }
+
+        public Task<string> UploadFileBase64Async(string base64string, string imageType = "png", string containerName = "watcher")
+        {
+            try
+            {
+                string base64 = base64string.Split(',')[1];
+                string parent = string.Copy(Directory.GetCurrentDirectory());
+                while (new DirectoryInfo(parent).Name != "Watcher")
+                {
+                    parent = Directory.GetParent(parent).FullName;
+                }
+
+                var directory = new DirectoryInfo(Path.Combine(parent, "wwwroot", "images"));
+                if (!directory.Exists) directory.Create();
+
+                string filename = Guid.NewGuid().ToString() + ".png";
+
+                File.WriteAllBytes(Path.Combine(directory.FullName, filename), Convert.FromBase64String(base64));
+                var file = new FileInfo(directory + @"\\" + filename);
+
+                string filePath = file.FullName;
+
+                return Task.FromResult(ConvertToUri(filePath));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<string>(ex);
+            }
         }
     }
 }

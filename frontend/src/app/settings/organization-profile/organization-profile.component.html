@@ -7,83 +7,130 @@
     </div>
   </div>
 
-  <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()" >
+<div class="grid-container">
+  <form class="grid-item" [formGroup]="organizationForm" (ngSubmit)="onSubmit()" >
     <div class="ui-g">
-      <div class="ui-g-12 ui-md-8 ui-lg-4">
-      <div class="label">Name</div>
-      <div class="ui-g ui-fluid">
-        <div class="ui-g-12">
-          <div class="ui-inputgroup">
-            <input type="text" formControlName="name" pInputText placeholder="Name">
+      <div class="ui-g-12 ui-md-12 ui-lg-12">
+        <div class="label">Name</div>
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-12">
+            <div class="ui-inputgroup">
+              <input type="text" formControlName="name" pInputText placeholder="Name">
+            </div>
           </div>
         </div>
+
+        <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
+          <label>Name is required.</label>
+        </div>
+
+        <div class="label">Email</div>
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-12">
+            <div class="ui-inputgroup">
+              <input type="text" formControlName="email" pInputText placeholder="Email">
+            </div>
+          </div>
+        </div>
+
+        <div class="invalid" *ngIf="organizationForm.get('email').errors && organizationForm.get('email').dirty">
+          <label>Wrong email format.</label>
+        </div>
+
+        <div class="label">Contact number</div>
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-12">
+            <div class="ui-inputgroup">
+              <input type="text" formControlName="contactNumber" pInputText placeholder="Contact number">
+            </div>
+          </div>
+        </div>
+
+        <div class="invalid" *ngIf="organizationForm.get('contactNumber').errors && organizationForm.get('contactNumber').dirty">
+          <label>Wrong number format.</label>
+        </div>
+
+        <div class="label">Web site</div>
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-12">
+            <div class="ui-inputgroup">
+              <input type="text" formControlName="webSite" pInputText placeholder="Web site">
+            </div>
+          </div>
+        </div>
+
+        <div class="invalid" *ngIf="organizationForm.get('webSite').errors && organizationForm.get('webSite').dirty">
+          <label>Wrong url format.</label>
+        </div>
+
+        <div class="label">Description</div>
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-12">
+            <textarea rows="5" formControlName="description" pInputTextarea></textarea>
+          </div>
+        </div>
+        <div class="btn-panel">
+          <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success" *ngIf="!isUpdating"></button>
+          <p-progressSpinner class="btn-spinner" *ngIf="isUpdating"></p-progressSpinner>
+        </div>
       </div>
-
-    <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
-      <label>Name is required.</label>
+    
     </div>
+  </form>
 
-    <div class="label">Email</div>
-    <div class="ui-g ui-fluid">
-      <div class="ui-g-12">
-        <div class="ui-inputgroup">
-          <input type="text" formControlName="email" pInputText placeholder="Email">
+  <div class="grid-item">
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12 ui-lg-12">
+          <div class="label">Invitation to this organization:</div>
+          <div class="ui-g ui-fluid">
+              <div class="btn-panel">
+                <button (click)="onInvite()" pButton label="Invite" class="ui-button-raised ui-button-success" *ngIf="!isInviting"></button>
+                <p-progressSpinner class="btn-spinner" *ngIf="isInviting"></p-progressSpinner>
+              </div>
+          </div>
+
+          <div class="label">Invite link:</div>
+          <div class="ui-g ui-fluid">
+            <div class="ui-g-12 ui-lg-12">
+              <input disabled [(ngModel)]="inviteLink" required minlength="20" class="form-control" pInputText placeholder="Invite link">
+            </div>
+          </div>
+
+          <div class="label">Copy link:</div>
+          <div class="ui-g ui-fluid">
+              <div class="btn-panel">
+                  <button pButton label="Copy link" (click)="onCopy()"
+                  [disabled]="inviteLink === ''" *ngIf="!isCopying"></button>
+                  <p-progressSpinner class="btn-spinner" *ngIf="isCopying"></p-progressSpinner>
+              </div>
+          </div>
+
+          <div class="label">Send invite link to Email:</div>
+          <div class="ui-g ui-fluid">
+            <div class="inputEmail ui-g-12 ui-lg-12">
+              <input type="email" [(ngModel)]="inviteEmail" id="iEmail" #iEmail="ngModel" ngModel email="true" class="form-control" required minlength="6" pInputText placeholder="Email">
+              <div *ngIf="iEmail?.invalid && (iEmail?.dirty || iEmail?.touched)" class="alert alert-danger">
+                  <div *ngIf="iEmail.errors.required">
+                      Email is required.
+                  </div>
+                  <div *ngIf="iEmail.errors.minlength">
+                      Email must be at least 4 characters long.
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="label">Send:</div>
+          <div class="ui-g ui-fluid">
+            <div class="btn-panel">
+                <button pButton label="Send" (click)="onSentInviteToEmail()" class="ui-button-raised ui-button-success"
+                [disabled]="inviteLink === '' || iEmail?.invalid" *ngIf="!isSending"></button>
+                <p-progressSpinner class="btn-spinner" *ngIf="isSending"></p-progressSpinner>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
-
-    <div class="invalid" *ngIf="organizationForm.get('email').errors && organizationForm.get('email').dirty">
-      <label>Wrong email format.</label>
-    </div>
-
-    <div class="label">Contact number</div>
-    <div class="ui-g ui-fluid">
-      <div class="ui-g-12">
-        <div class="ui-inputgroup">
-          <input type="text" formControlName="contactNumber" pInputText placeholder="Contact number">
-        </div>
-      </div>
-    </div>
-
-    <div class="invalid" *ngIf="organizationForm.get('contactNumber').errors && organizationForm.get('contactNumber').dirty">
-      <label>Wrong number format.</label>
-    </div>
-
-    <div class="label">Web site</div>
-    <div class="ui-g ui-fluid">
-      <div class="ui-g-12">
-        <div class="ui-inputgroup">
-          <input type="text" formControlName="webSite" pInputText placeholder="Web site">
-        </div>
-      </div>
-    </div>
-
-    <div class="invalid" *ngIf="organizationForm.get('webSite').errors && organizationForm.get('webSite').dirty">
-      <label>Wrong url format.</label>
-    </div>
-
-    <div class="label">Description</div>
-    <div class="ui-g ui-fluid">
-      <div class="ui-g-12">
-        <textarea rows="5" formControlName="description" pInputTextarea></textarea>
-      </div>
-    </div>
   </div>
-  <div class="btn-panel">
-    <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success"></button>
-  </div>
-  </div>
-</form>
-
-<div class="btn-panel">
-  <button (click)="onInvite()" pButton label="Invite" class="ui-button-raised ui-button-success"></button>
-</div>
-
-<div class="label">Invite link:</div>
-<div class="ui-g ui-fluid">
-  <div class="ui-g-12 ui-lg-4">
-    <input rows="5" [(ngModel)]="inviteLink" pInput/>
-    <button pButton label="Copy link" (click)="onCopy()"></button>
-  </div>
-</div>
 </div>

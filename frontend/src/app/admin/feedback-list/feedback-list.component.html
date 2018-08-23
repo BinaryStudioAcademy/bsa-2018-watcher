@@ -6,7 +6,7 @@
       <hr>
     </div>
   </div>
-  <p-table [value]="lstFeedbacks" [paginator]="true" [rows]="10">
+  <p-table [value]="lstFeedbacks" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th>DATE</th>
@@ -24,10 +24,29 @@
         <td class="center">{{feedback.main.createdAt | date:'shortDate'}}</td>
         <td class="center">{{feedback.main.user.displayName}}</td>
         <td>{{feedback.main.text}}</td>
-        <td class="center">{{feedback.willuse}}</td>
-        <td class="center">{{feedback.info}}</td>
-        <td class="center">{{feedback.friendliness}}</td>
-        <td class="center">{{feedback.quickness}}</td>
+        <td class="center">
+          <i *ngIf="feedback.willuse==='Yes'" class="fa fa-check-circle-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.willuse==='No'" class="fa fa-times-circle-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.willuse==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+        </td>
+        <td class="center">
+          <i *ngIf="feedback.info==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.info==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.info==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.info==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+        </td>
+        <td class="center">
+          <i *ngIf="feedback.friendliness==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.friendliness==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.friendliness==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.friendliness==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+        </td>
+        <td class="center">
+          <i *ngIf="feedback.quickness==='Satisfied'" class="fa fa-smile-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.quickness==='Neutral'" class="fa fa-meh-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.quickness==='Unsatisfied'" class="fa fa-frown-o" style="font-size: 25px"></i>
+          <i *ngIf="feedback.quickness==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
+        </td>
         <td>
           <div class="center" *ngIf="feedback.main.user.email">
             <button pButton type="button " label="Response " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(feedback.main)"></button>
@@ -36,39 +55,19 @@
       </tr>
     </ng-template>
   </p-table>
-<!-- 
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-1">DATE</div>
-    <div class="ui-g-2">USER NAME</div>
-    <div class="ui-g-3">TEXT</div>
-    <div class="ui-g-1">WILL USE</div>
-    <div class="ui-g-4">INFORMATIVELY | FRIENDLINESS | QUICKNESS</div>
-
-  </div>
-  <div *ngFor="let feedback of lstFeedbacks; let i = index" class="ui-g ui-fluid">
-
-    <div class="ui-g-1">{{feedback?.main.createdAt | date:'shortDate'}}</div>
-    <div class="ui-g-2">{{feedback?.main.user?.displayName}}</div>
-    <div class="ui-g-3">{{feedback?.main.text}}</div>
-    <div class="ui-g-1 center">{{feedback?.willuse}}</div>
-    <div class="ui-g-4 center">{{feedback?.info}} | {{feedback?.friendliness}} | {{feedback?.quickness}}</div>
-
-    <div class="ui-g-1" *ngIf="feedback.main.user.email">
-      <button pButton type="button " label="Response " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(feedback.main)"></button>
-    </div>
-
-  </div>
-</div>      -->
+</div>
 <p-dialog header="Create response" [(visible)]="display" [modal]="true" [responsive]="true" [width]="350" [minWidth]="200"
   [minY]="70" [maximizable]="false" [baseZIndex]="10000">
   <p class="field">Email</p>
-  <input type="text" size="46" disabled [value]="email"/> 
+  <input type="text" disabled [value]="email" />
   <p class="field">Text</p>
   <form [formGroup]="responseForm">
     <textarea rows="5" [cols]="42" formControlName="text" pInputTextarea></textarea>
   </form>
   <p-footer>
-    <button type="button" pButton icon="pi pi-check" class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
-    <button type="button" pButton icon="pi pi-close" (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+    <div class="center">
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
+      <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
+    </div>
   </p-footer>
 </p-dialog>

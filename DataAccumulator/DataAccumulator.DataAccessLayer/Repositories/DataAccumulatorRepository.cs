@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using DataAccumulator.DataAccessLayer.Data;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
-using DataAccumulator.Shared.Models;
-using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -15,9 +13,9 @@ namespace DataAccumulator.DataAccessLayer.Repositories
     {
         private readonly DataAccumulatorContext _context = null;
 
-        public DataAccumulatorRepository(IOptions<Settings> settings)
+        public DataAccumulatorRepository(string ConnectionString, string Database)
         {
-            _context = new DataAccumulatorContext(settings);
+            _context = new DataAccumulatorContext(ConnectionString, Database);
         }
 
         public async Task<IEnumerable<CollectedData>> GetAllEntities()
@@ -39,9 +37,25 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             {
                 ObjectId internalId = GetInternalId(id);
 
-                return await _context.Datasets
+                var list = await _context.Datasets
                     .Find(data => data.Id == id || data.InternalId == internalId)
-                    .FirstOrDefaultAsync();
+                    .ToListAsync();
+                return list[list.Count - 1];
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<CollectedData> GetEntity(ObjectId id)
+        {
+            try
+            {
+                var filter = Builders<CollectedData>.Filter.Eq(i => i.InternalId, id);
+
+                return await _context.Datasets.Find(filter).FirstOrDefaultAsync();
             }
             catch (Exception e)
             {
@@ -132,6 +146,23 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         public Task<bool> EntityExistsAsync(Guid id)
         {
             return _context.Datasets.Find(entity => entity.Id == id).AnyAsync();
+        }
+
+        public Task<List<CollectedData>> GetPercentageInfoByEntityIdAsync(Guid id, int count)
+        {
+            try
+            {
+                return _context.Datasets.Find(data => data.Id == id)
+                                        .SortByDescending(cd => cd.Time)
+                                        .Limit(count)
+                                        .ToListAsync();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         // It creates a sample compound index 

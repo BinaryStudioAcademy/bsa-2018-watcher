@@ -1,6 +1,4 @@
 ﻿using DataAccumulator.DataAccessLayer.Entities;
-using DataAccumulator.Shared.Models;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace DataAccumulator.DataAccessLayer.Data
@@ -9,12 +7,12 @@ namespace DataAccumulator.DataAccessLayer.Data
     {
         private readonly IMongoDatabase _database = null;
 
-        public DataAccumulatorContext(IOptions<Settings> settings)
+        public DataAccumulatorContext(string ConnectionString, string Database)
         {
-            var client = new MongoClient(settings.Value.ConnectionString);
+            var client = new MongoClient(ConnectionString);
             if (client != null)
             {
-                _database = client.GetDatabase(settings.Value.Database);
+                _database = client.GetDatabase(Database);
             }
         }
 

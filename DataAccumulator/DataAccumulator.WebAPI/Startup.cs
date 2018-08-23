@@ -14,6 +14,7 @@ using DataAccumulator.Shared.Models;
 using DataAccumulator.WebAPI.Jobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
@@ -44,11 +45,8 @@ namespace DataAccumulator
 
             services.AddMvc();
 
-            services.Configure<Settings>(options =>
-            {
-                options.ConnectionString = Configuration.GetSection("MongoConnection:ConnectionString").Value;
-                options.Database = Configuration.GetSection("MongoConnection:Database").Value;
-            });
+            services.AddSingleton<IQueueClient>( s => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value) );
+            services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
 
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>();
@@ -68,6 +66,10 @@ namespace DataAccumulator
                 });
 
             services.AddTransient<CollectedDataAggregatingJob>();
+
+            
+            // repo initialization localhost while development env, azure in prod
+            ConfigureCosmosDb(services, Configuration);
 
             var mapper = MapperConfiguration().CreateMapper();
             services.AddTransient(_ => mapper);
@@ -91,7 +93,25 @@ namespace DataAccumulator
                     quartz.AddJob<CollectedDataAggregatingJob>("DataAggregator", "Import", Configuration.GetSection("DataAggregator").GetValue<int>("IntervalMinute"));
             });
         }
-
+        public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
+        {
+            var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (enviroment == EnvironmentName.Production)
+            {
+                var cosmosDbString = Configuration.GetConnectionString("AzureCosmosDbConnection");
+                if (!string.IsNullOrWhiteSpace(cosmosDbString))
+                {
+                    services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(cosmosDbString, "DataAccumulatorDb"));
+                }
+            }
+            else
+            {
+                var mongoDbString = Configuration.GetConnectionString("MongoDbConnection");
+                services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                          options => new DataAccumulatorRepository(mongoDbString, "DataAccumulatorDb"));
+            }
+        }
         public MapperConfiguration MapperConfiguration()
         {
             var config = new MapperConfiguration(cfg =>

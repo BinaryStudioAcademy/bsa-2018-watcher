@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
 using Watcher.Common.Dtos;
 using Watcher.Common.Requests;
@@ -22,7 +22,7 @@ namespace Watcher.Controllers
         }
 
         // GET: /chats
-        [HttpGet()]
+        [HttpGet]
         public virtual async Task<ActionResult<IEnumerable<ChatDto>>> Get()
         {
             var dtos = await _chatsService.GetAllEntitiesAsync();
@@ -35,7 +35,7 @@ namespace Watcher.Controllers
         }
 
         // GET: /chats/:id
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetChatByID")]
         public virtual async Task<ActionResult<ChatDto>> GetById(int id)
         {
             var dto = await _chatsService.GetEntityByIdAsync(id);
@@ -48,10 +48,10 @@ namespace Watcher.Controllers
         }
 
         // GET: /chats/user/:id
-        [HttpGet("User/{id}")]
-        public virtual async Task<ActionResult<ChatDto>> GetByUserId(int id)
+        [HttpGet("User/{id}", Name = "GetChatByUserID")]
+        public virtual async Task<ActionResult<ChatDto>> GetByUserId(string id)
         {
-            var dto = await _chatsService.GetEntityByIdAsync(id);
+            var dto = await _chatsService.GetEntitiesByUserIdAsync(id);
             if (dto == null)
             {
                 return NoContent();

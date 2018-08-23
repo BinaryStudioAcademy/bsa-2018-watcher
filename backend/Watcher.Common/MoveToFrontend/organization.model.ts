@@ -1,5 +1,6 @@
 ﻿
 import { Theme } from './theme.model';
+import { Instance } from './instance.model';
 import { Notification } from './notification.model';
 
 export interface Organization  {
@@ -15,7 +16,7 @@ export interface Organization  {
    chatId: number;
    createdByUserId: string;
    usersId: string[];
-   instancesId: number[];
+   instances: Instance[];
    notifications: Notification[];
 }
 

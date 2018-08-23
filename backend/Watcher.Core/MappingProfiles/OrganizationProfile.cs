@@ -1,5 +1,6 @@
 ﻿namespace Watcher.Core.MappingProfiles
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using AutoMapper;
@@ -17,12 +18,15 @@
 
             CreateMap<OrganizationDto, Organization>();
 
+            CreateMap<OrganizationRequest, Organization>();
+
             CreateMap<OrganizationRequest, Organization>()
-                .ForMember(d => d.Id, o => o.Ignore());
+                .ForMember(d => d.Id, o => o.Ignore())
+                .ForMember(d => d.UserOrganizations, o => o.UseValue(new List<UserOrganization>()));
+
 
             CreateMap<Organization, OrganizationDto>()
-                .ForMember(d => d.UsersId, o => o.MapFrom(s => s.UserOrganizations.Select(i => i.UserId)))
-                .ForMember(d => d.InstancesId, o => o.MapFrom(s => s.Instances.Select(i => i.Id)));
+                .ForMember(d => d.UsersId, o => o.MapFrom(s => s.UserOrganizations.Select(i => i.UserId)));
         }
     }
 }

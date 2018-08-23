@@ -23,6 +23,8 @@
 
         IResponseRepository ResponseRepository { get; }
 
+        IRoleRepository RoleRepository { get; }
+
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 
         IChatsRepository ChatsRepository { get; }
@@ -33,7 +35,10 @@
 
         IOrganizationInvitesRepository OrganizationInvitesRepository { get; }
 
+        INotificationsRepository NotificationsRepository { get; }
+
         IChartsRepository ChartsRepository { get;  }
+
         Task<bool> SaveAsync();
     }
 }

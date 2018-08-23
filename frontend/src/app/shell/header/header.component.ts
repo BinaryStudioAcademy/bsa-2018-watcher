@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, Message } from 'primeng/api';
-import { NotificationsService } from '../../core/services/notifications.service';
 import { SampleRequest } from '../../shared/models/sample-request.model';
 import { SampleEnum } from '../../shared/models/sample-enum.enum';
 import { SampleDto } from '../../shared/models/sample-dto.model';
@@ -11,6 +10,11 @@ import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
 import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
+import { NotificationService } from '../../core/services/notification.service';
+import { Notification } from '../../shared/models/notification.model';
+import { NotificationType } from '../../shared/models/notification-type.enum';
+import { NotificationsHubService } from '../../core/hubs/notifications.hub';
+import { PathService } from '../../core/services/path.service';
 
 @Component({
   selector: 'app-header',
@@ -24,41 +28,86 @@ export class HeaderComponent implements OnInit {
   samples: SampleDto[] = [];
   notificationsNumber = 0;
   messagesNumber = 2;
+  isNotificationShow: boolean;
 
   currentUser: User;
 
   userItems: MenuItem[];
   cogItems: MenuItem[];
-  bellItems: MenuItem[];
   orgItems: MenuItem[];
+  notifications: Notification[];
+  displayAddNewOrganization = false;
 
-  constructor(private notificationsService: NotificationsService,
+  constructor(private notificationsHubService: NotificationsHubService,
     private messageService: MessageService,
     private userService: UserService,
     private toastrService: ToastrService,
     private router: Router,
-    private authService: AuthService) {
-    this.subscribeToEvents();
+    private authService: AuthService,
+    private notificationsService: NotificationService,
+    private pathService: PathService) {
+      this.conectToNotificationsHub();
+      this.subscribeToNotificationsEvents();
   }
 
   onFeedback(): void {
     this.router.navigate(['/user/feedback']);
   }
 
-  private subscribeToEvents(): void {
-    this.notificationsService.connectionEstablished.subscribe(() => {
-      this.canCreateSample = true;
-    });
+  private conectToNotificationsHub(): void {
+    this.notificationsHubService.connectToSignalR();
+  }
 
-    this.notificationsService.sampleReceived.subscribe((sample: SampleDto) => {
-      this.messagesNumber++;
-      this.notificationsNumber++;
-      this.samples.push(sample);
-      this.msgs.push({
-        severity: 'info', summary: sample.name, detail: `Name: ${sample.name}, Id: ${sample.id},
-          Sample Field: ${sample.sampleField.toString()}, Date of creation: ${sample.dateOfCreation}, Count: ${sample.count}, `
+  private subscribeToNotificationsEvents(): void {
+    this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
+      value.type = NotificationType[value.notificationSetting.type].toLowerCase();
+
+      if (NotificationType[value.notificationSetting.type] !== 'Chat' && !value.notificationSetting.isMute) {
+        this.notificationsNumber++;
+      }
+      this.notifications.unshift(value);
+    });
+  }
+
+  bellClick(): void {
+    this.isNotificationShow = !this.isNotificationShow;
+    if (!this.isNotificationShow) { return; }
+
+    this.notificationsToItems();
+  }
+
+  notificationsToItems(): void {
+    this.notifications = [];
+    this.notificationsService.getAll(this.authService.getCurrentUser().id).subscribe((value: Notification[]) => {
+      this.notificationsNumber = this.calcNotReadNotification(value);
+
+      value.forEach(item => {
+        item.type = NotificationType[item.notificationSetting.type].toLowerCase();
+        if (item.type !== 'chat')  {
+          this.notifications.unshift(item);
+        }
       });
     });
+  }
+
+  calcNotReadNotification(allNotifications: Notification[]): number {
+    return allNotifications.filter(item => item.wasRead === false &&
+                                  item.notificationSetting.isMute === false &&
+                                  NotificationType[item.notificationSetting.type] !== 'Chat').length;
+  }
+
+  markAsRead(): void {
+    let notReadNotifications: Notification[];
+
+    notReadNotifications = this.notifications.filter(item => item.wasRead === false);
+    notReadNotifications.forEach(item => {
+      item.wasRead = true;
+      this.notificationsService.update(item.id, item).subscribe(value => this.notificationsNumber--);
+    });
+  }
+
+  close(): void {
+    this.isNotificationShow = false;
   }
 
   // TODO: methods for SignalR Tests
@@ -70,19 +119,19 @@ export class HeaderComponent implements OnInit {
       sampleField: SampleEnum.FirstItem
     };
 
-    this.notificationsService.createSample(req);
+    this.notificationsHubService.createSample(req);
   }
 
   echoToServer() {
-    this.notificationsService.echo();
+    this.notificationsHubService.echo();
   }
 
   sendMess() {
-    this.notificationsService.send('in2Kvey8O0dK1LACXH6HYMaPG102', 'From Sdadadafsd message');
+    this.notificationsHubService.send('in2Kvey8O0dK1LACXH6HYMaPG102', 'From Sdadadafsd message');
   }
 
   connectToServer() {
-    this.notificationsService.connectToSignalR();
+    this.notificationsHubService.connectToSignalR();
   }
 
   ngOnInit() {
@@ -120,28 +169,15 @@ export class HeaderComponent implements OnInit {
     }
     ];
 
-    this.bellItems = [{
-      label: 'Item',
-      icon: 'fa fa-fw fa-bell-o',
-    },
-    {
-      label: 'Item',
-      icon: 'fa fa-fw fa-bell-o',
-    },
-    {
-      label: 'Item',
-      icon: 'fa fa-fw fa-bell-o',
-    }
-    ];
-
     this.authService.currentUser.subscribe(
-      (userData) => {
-        this.currentUser = userData;
-        if (this.currentUser && this.currentUser.organizations && this.currentUser.organizations.length > 0) {
-          this.fillOrganizations();
-        }
+      userData => {
+        this.currentUser = { ...userData };
+        this.currentUser.photoURL = this.pathService.convertToUrl(this.currentUser.photoURL);
+        this.fillOrganizations();
       }
     );
+
+    this.notificationsToItems();
   }
 
   private fillOrganizations(): void {
@@ -157,7 +193,22 @@ export class HeaderComponent implements OnInit {
         disabled: (element.id === this.currentUser.lastPickedOrganizationId)
       });
     });
+    this.orgItems.push({
+      label: 'Add new',
+      icon: 'fa fa-fw fa-plus',
+      command: (onclick) => { this.addNewOrganization(); },
+    });
+
   }
+
+  onDisplayChange(event: boolean) {
+    this.displayAddNewOrganization = event;
+  }
+
+  addNewOrganization() {
+    this.displayAddNewOrganization = true;
+  }
+
 
   private chengeLastPicOrganizations(item: Organization): void {
     // update user in beckend
@@ -168,12 +219,11 @@ export class HeaderComponent implements OnInit {
         this.currentUser.lastPickedOrganizationId = item.id;
         this.currentUser.lastPickedOrganization = item;
         this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
-        this.fillOrganizations();
         // notify user about changes
         this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
       },
         err => {
           this.toastrService.error('Organization by defaul was not updated.');
-        });
+      });
   }
 }

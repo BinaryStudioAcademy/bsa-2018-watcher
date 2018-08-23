@@ -1,5 +1,4 @@
-﻿
-namespace Watcher.Controllers
+﻿namespace Watcher.Controllers
 {
     using System.Threading.Tasks;
 
@@ -103,11 +102,7 @@ namespace Watcher.Controllers
                 return StatusCode(500);
             }
 
-            return NoContent();
+            return Ok(result);
         }
-
-
-
-
     }
 }

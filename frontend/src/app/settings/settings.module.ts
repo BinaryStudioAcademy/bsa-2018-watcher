@@ -4,13 +4,18 @@ import { SettingsComponent } from './settings.component';
 import { NotificationSettingsComponent } from './notification-settings/notification-settings.component';
 import { OrganizationProfileComponent } from './organization-profile/organization-profile.component';
 
-import { TabViewModule, InputTextModule, ButtonModule, ToggleButtonModule, InputTextareaModule } from 'primeng/primeng';
+import { TabViewModule, InputTextModule, ButtonModule, ToggleButtonModule,
+   InputTextareaModule, ProgressSpinnerModule} from 'primeng/primeng';
 import { InputSwitchModule, DropdownModule } from 'primeng/primeng';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { UserPictureComponent } from './user-picture/user-picture.component';
+import { ImageCropperModule } from 'ngx-img-cropper';
+import { DialogModule } from 'primeng/dialog';
+import { FileUploadModule } from 'primeng/fileupload';
+
 
 @NgModule({
   imports: [
@@ -24,7 +29,11 @@ import { UserPictureComponent } from './user-picture/user-picture.component';
     DropdownModule,
     ReactiveFormsModule,
     SettingsRoutingModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    ImageCropperModule,
+    DialogModule,
+    FileUploadModule,
+    ProgressSpinnerModule
   ],
   declarations: [
     SettingsComponent,

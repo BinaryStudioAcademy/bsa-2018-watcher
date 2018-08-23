@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace Watcher.Controllers
+﻿namespace Watcher.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
@@ -33,19 +32,19 @@ namespace Watcher.Controllers
             _usersService = service;
         }
         /// <summary>
-        /// Get Samples
+        /// Get Users
         /// </summary>
         /// <returns>
-        /// List of Dtos of Samples
+        /// List of Dtos of Users
         /// </returns>
         /// <response code="500">Internal error on server</response>
-        /// <response code="404">Samples not found</response>
-        /// <response code="403">You don`t have permission to create watch Samples</response>
+        /// <response code="404">Users not found</response>
+        /// <response code="403">You don`t have permission to create watch User</response>
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
         [HttpGet]
         [AllowAnonymous]
-        public virtual async Task<ActionResult<IEnumerable<SampleDto>>> Get()
+        public virtual async Task<ActionResult<IEnumerable<UserDto>>> Get()
         {
             var dtos = await _usersService.GetAllEntitiesAsync();
             if (!dtos.Any())
@@ -57,15 +56,38 @@ namespace Watcher.Controllers
         }
 
         /// <summary>
-        /// Get Sample by id
+        /// Find Users by display name, first name, last name or email
         /// </summary>
-        /// <param name="id">Sample identifier</param>
         /// <returns>
-        /// Dto of Sample
+        /// List of Dtos of Users
         /// </returns>
         /// <response code="500">Internal error on server</response>
-        /// <response code="404">Samples not found</response>
-        /// <response code="403">You don`t have permission to create watch Sample</response>
+        /// <response code="404">Users not found</response>
+        /// <response code="403">You don`t have permission to create watch Users</response>
+        /// <response code="200">Success</response>
+        [HttpGet("find/{query}")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<IEnumerable<UserDto>>> Find(string query)
+        {
+            var dtos = await _usersService.FindEntitiesAsync(query);
+            if (!dtos.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(dtos);
+        }
+
+        /// <summary>
+        /// Get User by id
+        /// </summary>
+        /// <param name="id">User identifier</param>
+        /// <returns>
+        /// Dto of User
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">User not found</response>
+        /// <response code="403">You don`t have permission to create watch User</response>
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
         [HttpGet("{id}")]
@@ -82,15 +104,15 @@ namespace Watcher.Controllers
         }
 
         /// <summary>
-        /// Add new Sample
+        /// Add new User
         /// </summary>
-        /// <param name="request">Sample create request</param>
+        /// <param name="request">User create request</param>
         /// <returns>
-        /// Dto of Sample
+        /// Dto of User
         /// </returns>
         /// <response code="500">Internal error on server</response>
-        /// <response code="404">Sample not found</response>
-        /// <response code="403">You don`t have permission to create Sample</response>
+        /// <response code="404">User not found</response>
+        /// <response code="403">You don`t have permission to create User</response>
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
         [HttpPost]
@@ -113,7 +135,7 @@ namespace Watcher.Controllers
         /// <summary>
         /// Temporary realization of Login method
         /// </summary>
-        /// <param name="firebaseUserDto">Sample create request</param>
+        /// <param name="firebaseUserDto">User create request</param>
         /// <returns>
         /// Parameter
         /// </returns>
@@ -126,16 +148,16 @@ namespace Watcher.Controllers
         }
 
         /// <summary>
-        /// Update Sample
+        /// Update User
         /// </summary>
-        /// <param name="id">Sample identifier</param>
-        /// <param name="request">Sample update request</param>
+        /// <param name="id">User identifier</param>
+        /// <param name="request">User update request</param>
         /// <returns>
         /// Action Result
         /// </returns>
         /// <response code="500">Internal error on server</response>
-        /// <response code="404">Sample not found</response>
-        /// <response code="403">You don`t have permission to update Sample</response>
+        /// <response code="404">User not found</response>
+        /// <response code="403">You don`t have permission to update User</response>
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
         [HttpPut("{id}")]
@@ -156,15 +178,15 @@ namespace Watcher.Controllers
         }
 
         /// <summary>
-        /// Delete Sample
+        /// Delete User
         /// </summary>
-        /// <param name="id">Sample identifier</param>
+        /// <param name="id">User identifier</param>
         /// <returns>
         /// Action Result
         /// </returns>
         /// <response code="500">Internal error on server</response>
-        /// <response code="404">Sample not found</response>
-        /// <response code="403">You don`t have permission to delete Sample</response>
+        /// <response code="404">User not found</response>
+        /// <response code="403">You don`t have permission to delete User</response>
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
         [HttpDelete("{id}")]
@@ -181,16 +203,16 @@ namespace Watcher.Controllers
 
 
         /// <summary>
-        /// Update Sample
+        /// Update User
         /// </summary>
-        /// <param name="userId">Sample identifier</param>
-        /// <param name="organizationId">Sample update request</param>
+        /// <param name="userId">User identifier</param>
+        /// <param name="organizationId">User update request</param>
         /// <returns>
         /// Action Result
         /// </returns>
         /// <response code="500">Internal error on server</response>
-        /// <response code="404">Sample not found</response>
-        /// <response code="403">You don`t have permission to update Sample</response>
+        /// <response code="404">User not found</response>
+        /// <response code="403">You don`t have permission to update User</response>
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
         [HttpPut("UpdateLastPickedOrganization/{userId}/{organizationId}")]

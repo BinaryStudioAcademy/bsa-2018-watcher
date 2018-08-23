@@ -1,53 +1,110 @@
-h3 
-    display: inline-block
-    padding: 10px 0px 0px 10px
-    margin: 0
+h3
+  display: inline-block
+  padding: 10px 0px 0px 10px
+  margin: 0
 
 hr
-    border: 0
-    height: 0
-    border-top: 1px solid rgba(0, 0, 0, 0.1)
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3)
+  border: 0
+  height: 0
+  border-top: 1px solid rgba(0, 0, 0, 0.1)
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3)
 
 input
-    font-size: 15px
+  font-size: 15px
 
 .container
-    padding-left: 20px
-    padding-top: 5px
-    
+  padding-left: 20px
+  padding-top: 5px
+
 .label
-    padding-left: 5px
-    padding-top: 10px
-    padding-bottom: 5px
-    font-size: 14px
+  padding-left: 5px
+  padding-top: 10px
+  padding-bottom: 5px
+  font-size: 14px
 
 .invalid
-    color: red
-    padding-left: 10px
-    padding-bottom: 20px
+  color: red
+  padding-left: 10px
+  padding-bottom: 20px
 
 .btn-edit
-    color: black
-    text-decoration: none
-    cursor: pointer
-    margin: 5px
+  color: black
+  text-decoration: none
+  cursor: pointer
+  margin: 5px
 
 .btn-edit:hover
-    color: gray
+  color: gray
 
 .btn-panel
-    padding: 10px 10px 10px 0px
+  padding: 10px 10px 10px 0px
 
 .btn-form
-    width: 80px
-    margin: 5px
+  width: 80px
+  margin: 5px
 
 .title
-    padding-bottom: 10px
-    font-size: 22px
-    font-weight: normal
+  padding-bottom: 10px
+  font-size: 22px
+  font-weight: normal
 
 .ui-g-12
-    padding: 0px 0px 10px 0px
-    margin-right: 20px
+  padding: 0px 0px 10px 0px
+  margin-right: 20px
+
+img
+  width: 150px
+  height: 150px
+  border-radius: 5px
+  border: 1px solid gray
+
+.centered-text
+  text-align: center
+
+figure
+  display: block
+  position: relative
+  float: left
+  overflow: hidden
+  margin: 0 20px 20px 0
+
+figcaption
+  position: absolute
+  background: black
+  background: rgba(0,0,0,0.75)
+  border-radius: 0px 0px 5px 5px
+  margin-bottom: 4px
+  color: white
+  padding: 10px 20px
+  width: 150px
+  opacity: 0
+  -webkit-transition: all 0.6s ease
+  -moz-transition:  all 0.6s ease
+  -o-transition:    all 0.6s ease
+
+
+figure:hover figcaption
+  opacity: 1
+
+.inputfile span
+  background: red !important
+
+figure:hover:before
+  opacity: 0
+
+.cap-bot:before
+  bottom: 10px
+  left: 10px
+
+.cap-bot figcaption
+  left: 0
+  bottom: -30%
+
+.cap-bot:hover figcaption
+  bottom: 0
+
+.crop-btn-panel
+  display: flex
+  justify-content: center
+  button
+    margin: 0px 20px 0px 20px

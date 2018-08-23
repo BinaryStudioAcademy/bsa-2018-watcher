@@ -5,10 +5,10 @@
 			<hr>
 		</div>
 	</div>
+	<div class="ui-g">
+		<div class="ui-g-12 ui-md-8 ui-lg-4">
+			<form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
-	<form class="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-		<div class="ui-g">
-			<div class="ui-g-12 ui-md-8 ui-lg-4">
 				<div class="label">Display Name</div>
 				<div class="ui-g ui-fluid">
 					<div class="ui-g-12">
@@ -47,23 +47,50 @@
 					Last Name is required.
 				</div>
 
+				<div class="label">Email</div>
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12">
+						<div class="ui-inputgroup">
+							<input type="text" disabled [value]="user.email" pInputText/>
+						</div>
+					</div>
+				</div>
+
 				<div class="label">Bio</div>
 				<div class="ui-g ui-fluid">
 					<div class="ui-g-12">
 						<textarea rows="5" formControlName="bio" pInputTextarea></textarea>
 					</div>
 				</div>
-			</div>
 
-			<div class="ui-g-12 ui-md-8 ui-lg-2">
-				<div class="label">Profile photo</div>
-				<user-picture [pictureUrl]="user.photoURL"></user-picture>
-			</div>
+
+				<div class="btn-panel">
+					<button pButton type="submit" [disabled]="!userForm.valid" label="Update" class="ui-button-raised ui-button-success" *ngIf="!isUpdating"></button>
+					<p-progressSpinner class="btn-spinner" *ngIf="isUpdating"></p-progressSpinner>
+				</div>
+			</form>
 		</div>
 
-		<div class="btn-panel">
-			<button pButton type="submit" [disabled]="!userForm.valid" label="Update" class="ui-button-raised ui-button-success"></button>
-		</div>
-	</form>
+		<div class="ui-g-12 ui-md-8 ui-lg-5">
+			<div class="label">Profile photo</div>
+			<figure class="cap-bot">
+				<img src="{{photoUrl}}" alt="profile photo">
+				<figcaption class="centered-text custom-upload-btn">
+					<span><i class="fa fa-camera"></i> Update profile photo</span>
+					<p-fileUpload #upload mode="basic" name="myfile[]" files="photosList" accept="image/*" (uploadHandler)="onImageSelected($event.files)"
+					 customUpload="true" maxFileSize="2000000" auto="true" chooseLabel="Change"></p-fileUpload>
+				</figcaption>
+			</figure>
 
+			<p-dialog [(visible)]="display" [showHeader]="false" appendTo="body" [closable]=false [modal]="true" [responsive]="true"
+			 [draggable]="false">
+				<img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+
+				<div class="btn-panel crop-btn-panel">
+					<button pButton class="ui-button-raised ui-button-primary" (click)="onCropSave()" label="Done"></button>
+					<button pButton class="ui-button-raised ui-button-warning" (click)="onCropCancel() " label="Cancel"></button>
+				</div>
+			</p-dialog>
+		</div>
+	</div>
 </div>

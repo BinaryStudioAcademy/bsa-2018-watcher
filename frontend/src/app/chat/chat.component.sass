@@ -1,9 +1,42 @@
+/deep/.chat-message-toast .ui-toast-message
+	background-color: rgba(0,0,0,0.7)
+	border: 0 none
+	.message
+		cursor: pointer
+		margin-right: 5px
+	.message-title
+		color: white
+		margin-bottom: 4px
+		font-weight: bolder
+	.message
+		cursor: pointer
+	.message-img
+		width: 40px
+		height: 40px
+		border-radius: 50%
+		margin: 7px 0
+	.message-content
+		color: #e8e5e5
+		word-wrap: break-word
+		line-height: 1.5em
+		max-height: 4.5em
+		overflow: hidden
+		text-overflow: ellipsis
+	.ui-toast-close-icon
+		color: white
+	.ui-toast-close-icon:hover
+		color: gray
+			
 /deep/.ui-accordion-header
 	margin: 0 !important
-
+	a
+		padding: 4px !important
+	
 /deep/.ui-accordion-content
 	padding: 0 !important
+	border-top: 0
 	height: 300px
+	overflow-x: hidden !important
 
 /deep/.ui-inputtext
 	border-radius: 0 !important
@@ -11,49 +44,69 @@
 /deep/.ui-button
 	border-radius: 0 !important
 
-.conversation-panel
-	position: fixed
-	bottom: 0
-	right: 190px
-	width: 250px
-
-	.conversation-new-panel-content
-		display: grid
-		height: 100%
-		grid-template-rows: auto auto 1fr auto
-
-	.conversation-panel-content
-		height: 100%
-		display: grid
-		grid-template-rows: 1fr auto
-
-	.conversation-message-list
-		overflow-y: auto	
-	
-	/deep/.ui-card
-		background-color: #f2f6fc
-		margin: 10px 5px 
-
 .chat-list-panel
 	position: fixed
 	bottom: 0
 	right: 20px
-	width: 150px	
-
-/deep/.ui-panelmenu
-	.ui-panelmenu-header-link
-		height: 38px
-		padding: 7px 14px !important
-
-	.ui-panelmenu-content
-		height: 300px
-		overflow-y: auto
+	width: 150px
+	/deep/.ui-listbox
+		border: 0
+	.chat-list-img
+		width: 25px
+		height: 25px
+		float: left
+		margin-right: 5px
+		border-radius: 50%
+	.chat-list-name
+		float: left
+		width: 90px
+		overflow: hidden
+		white-space: nowrap
+		text-overflow: ellipsis
 	
-.panel-close-icon
+	// /deep/.ui-listbox-item.ui-state-highlight
+		// 	background-color: #a5a5a5 !important
+
+.icon
     cursor: pointer
-    margin: 3px
-    float: right
+    margin: 4px
 
-.panel-close-icon:hover
-    	color: gray
+.icon:hover
+    color: gray
 
+.icon-right
+	float: right
+
+.field
+	margin-left: 3px
+	margin-top: 10px
+
+.title
+	float: right
+	width: 70%
+	overflow: hidden
+	white-space: nowrap
+	text-overflow: ellipsis
+
+.user-list
+	overflow-y: auto
+	max-height: 150px
+
+.user-list-img
+	width: 40px
+	height: 40px
+	float: left
+	margin-right: 5px
+	border-radius: 50%
+
+.user-list-item
+	border-top: 1px solid #d5d5d5
+	padding: 5px
+
+.message-counter
+	background-color: #CF513D
+	color: #ffffff
+	border-radius: 50%
+	padding: 2px 4px
+	font-size: 12px
+	line-height: 12px

@@ -1,16 +1,10 @@
-﻿using System.Collections.Generic;
-using Watcher.Common.Dtos;
-using Watcher.Common.Enums;
-
-namespace Watcher.Hubs
+﻿namespace Watcher.Hubs
 {
     using System;
-    using System.Security.Claims;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
-
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
-
+    
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
 
@@ -19,73 +13,95 @@ namespace Watcher.Hubs
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
         private readonly IOrganizationService _organizationService;
+        private readonly INotificationService _notificationService;
+
 
         private static Dictionary<string, List<string>> userConnections = new Dictionary<string, List<string>>();
 
-        public ChatHub(IChatsService chatsService, IMessagesService messagesService, IOrganizationService organizationService)
+        public ChatHub(IChatsService chatsService, 
+                        IMessagesService messagesService, 
+                        IOrganizationService organizationService, 
+                        INotificationService notificationService)
         {
             _chatsService = chatsService;
             _messagesService = messagesService;
             _organizationService = organizationService;
+            _notificationService = notificationService;
         }
 
         public async Task Send(MessageRequest messageRequest)
         {
-            MessageDto message = await _messagesService.CreateEntityAsync(messageRequest);
-            var createdMessage = await _messagesService.GetEntityByIdAsync(message.Id);
+            var message = await _messagesService.CreateEntityAsync(messageRequest);
+            if (message == null) return;
 
-            var usersInChat = await _chatsService.GetUsersByChatIdAsync(createdMessage.Chat.Id);
+            var createdMessage = await _messagesService.GetEntityByIdAsync(message.Id);
+            var usersInChat = await _chatsService.GetUsersByChatIdAsync(createdMessage.ChatId);
 
             foreach (var userDto in usersInChat)
             {
-                //if(userDto.Id != createdMessage.User.Id)
-                {
-                    await Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
-                }
+                await Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
             }
         }
 
-        public async Task InitializeChat(ChatRequest chatRequest, string userId)
+        public async Task InitializeChat(ChatRequest chatRequest)
         {
-            ChatDto chatDto = await _chatsService.CreateEntityAsync(chatRequest);
-            var createdChat = await _chatsService.GetEntityByIdAsync(chatDto.Id);
+            var createdChat = await _chatsService.CreateEntityAsync(chatRequest);
+            if (createdChat == null) return;
 
-            if(createdChat.Type == ChatType.BetweenUsers)
+            var chat = await _chatsService.GetEntityByIdAsync(createdChat.Id);
+
+            foreach (var user in chat.Users)
             {
-                foreach (var user in createdChat.Users)
-                {
-                    await Clients.User(user.Id).SendAsync("ChatCreated", createdChat);
-                }
-            }
-            else if (createdChat.Type == ChatType.InOrganization)
-            {
-                // TODO: Create chat for organization if haven`t created yet.
+                await Clients.User(user.Id).SendAsync("ChatCreated", chat);
             }
         }
 
-        public async Task AddUserToChat(int chatId, string userid)
+        public async Task UpdateChat(ChatUpdateRequest chat, int chatId)
         {
-            var users = await _chatsService.GetUsersByChatIdAsync(chatId);
+            var result = await _chatsService.UpdateEntityByIdAsync(chat, chatId);
+            if (!result) return;
 
-            var userDto = await _chatsService.AddUserToChat(chatId, userid);
+            var changedChat = await _chatsService.GetEntityByIdAsync(chatId);
 
-            if (userDto == null) return;
-
-            foreach (var user in users)
+            foreach (var user in changedChat.Users)
             {
-                await Clients.User(userDto.Id).SendAsync("UserAdded");
+                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+            }
+        }
+
+        public async Task AddUserToChat(int chatId, string userId)
+        {
+            var result = await _chatsService.AddUserToChat(chatId, userId);
+            if (!result) return;
+
+            var changedChat = await _chatsService.GetEntityByIdAsync(chatId);
+
+            foreach (var user in changedChat.Users)
+            {
+                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+            }
+        }
+
+        public async Task DeleteUserFromChat(int chatId, string userId)
+        {
+            var result = await _chatsService.DeleteUserFromChat(chatId, userId);
+            if (!result) return;
+
+            var changedChat = await _chatsService.GetEntityByIdAsync(chatId);
+
+            foreach (var user in changedChat.Users)
+            {
+                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
             }
         }
 
         public override async Task OnConnectedAsync()
         {
-            //await Clients.All.SendAsync("BroadcastMessage", Context.ConnectionId + "Connected");
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            //await Clients.All.SendAsync("BroadcastMessage", $"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
             await base.OnDisconnectedAsync(exception);
         }
     }

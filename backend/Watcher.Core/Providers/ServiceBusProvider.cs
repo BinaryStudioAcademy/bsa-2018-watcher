@@ -1,24 +1,43 @@
-﻿using Microsoft.Azure.ServiceBus;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Watcher.Core.Interfaces;
-
-namespace Watcher.Core.Providers
+﻿namespace Watcher.Core.Providers
 {
-    public class ServiceBusProvider : IServiceBusProvider
-    {
-        private readonly IQueueClient queueClient;
-        private readonly ILogger<ServiceBusProvider> _logger;
+    using System;
+    using System.Collections.Concurrent;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
-        public ServiceBusProvider(IConfiguration configuration, ILoggerFactory loggerFactory)
+    using Microsoft.AspNetCore.SignalR;
+    using Microsoft.Azure.ServiceBus;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+
+    using Watcher.Core.Hubs;
+    using Watcher.Core.Interfaces;
+
+    public class ServiceBusProvider : IServiceBusProvider, IDisposable
+    {
+        private readonly IQueueClient _queueClient;
+        private readonly ILogger<ServiceBusProvider> _logger;
+        private readonly IHubContext<DashboardsHub> _dashboardsHubContext;
+        private readonly IServiceScopeFactory _scopeFactory;
+
+        public ServiceBusProvider(IQueueClient queueClient, 
+                                  ILoggerFactory loggerFactory,
+                                  IServiceScopeFactory scopeFactory,
+                                  IHubContext<DashboardsHub> dashboardsHubContext)
         {
-            queueClient = new QueueClient(configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value);
+            SubscribedInstancesGuidIds = new ConcurrentBag<Guid>();
+            _dashboardsHubContext = dashboardsHubContext;
+            _queueClient = queueClient;
             _logger = loggerFactory?.CreateLogger<ServiceBusProvider>() ?? throw new ArgumentNullException(nameof(loggerFactory));
+            RegisterOnMessageHandlerAndReceiveMessages();
         }
+
+        public ConcurrentBag<Guid> SubscribedInstancesGuidIds { get; }
+
+        #region Subscribe
 
         public void RegisterOnMessageHandlerAndReceiveMessages()
         {
@@ -35,26 +54,51 @@ namespace Watcher.Core.Providers
             };
 
             // Register the function that will process messages
-            queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
+            _queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
         }
 
-        private async Task ProcessMessagesAsync(Message message, CancellationToken token)
+        private async Task<string> ProcessMessagesAsync(Message message, CancellationToken token)
         {
             // Process the message
             var m = Encoding.UTF8.GetString(message.Body);
-            // HandleMessageFromServiceBus();
-            
+
+            if (Guid.TryParse(m, out var instanceGuidId))
+            {
+                var any = SubscribedInstancesGuidIds.Any(i => i == instanceGuidId);
+                if (!any)
+                {
+                    SubscribedInstancesGuidIds.Add(instanceGuidId);
+                }
+            }
+
+            // Handle Message From Service Bus
             // Complete the message so that it is not received again.
             // This can be done only if the queueClient is created in ReceiveMode.PeekLock mode (which is default).
-            await queueClient.CompleteAsync(message.SystemProperties.LockToken);
+            await _queueClient.CompleteAsync(message.SystemProperties.LockToken);
 
-            //It's TEMPORARY FIX. Implement proper Dispose pattern implementation!!!!
-            await CloseClient();
+            await _dashboardsHubContext.Clients.All.SendAsync("Send", "Instance Id to subscribe" + m, token);
 
-            // Note: Use the cancellationToken passed as necessary to determine if the queueClient has already been closed.
-            // If queueClient has already been Closed, you may chose to not call CompleteAsync() or AbandonAsync() etc. calls 
-            // to avoid unnecessary exceptions.
+            Debug.WriteLine($"********************{m}***********************");
+
+            return m;
         }
+
+        #endregion
+
+        #region Publish
+        public async Task SendMessageToServiceBus(string message)
+        {
+            try
+            {
+                var messageBody = new Message(Encoding.UTF8.GetBytes(message));
+                await _queueClient.SendAsync(messageBody);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
 
         private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
         {
@@ -67,19 +111,21 @@ namespace Watcher.Core.Providers
             return Task.CompletedTask;
         }
 
-        #region Dispose
+        #region IDisposable Support
         // To detect redundant calls
-        private bool disposedValue = false; 
+        private bool disposedValue; 
                 
         public async Task CloseClient()
         {
             if (!disposedValue)
             {
-                await queueClient.CloseAsync();
-                
+                await _queueClient.CloseAsync();
+
                 disposedValue = true;
             }
         }
-        #endregion
+        
+        public void Dispose() => CloseClient().GetAwaiter().GetResult();
+        #endregion        
     }
 }

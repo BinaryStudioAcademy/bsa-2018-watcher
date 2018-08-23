@@ -7,14 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataAccumulator.WebAPI.Controllers
 {
+    using DataAccumulator.Interfaces;
+
     [Route("api/v1/[controller]")]
     public class ValuesController : Controller
     {
         private readonly IDataAccumulatorRepository<CollectedData> _repository;
+        private readonly IServiceBusProvider _serviceBusProvider;
 
-        public ValuesController(IDataAccumulatorRepository<CollectedData> repository)
+        public ValuesController(IDataAccumulatorRepository<CollectedData> repository,
+                                IServiceBusProvider serviceBusProvider)
         {
             _repository = repository;
+            _serviceBusProvider = serviceBusProvider;
         }
 
         // Call an initialization - GET api/v1/values/init
@@ -163,6 +168,21 @@ namespace DataAccumulator.WebAPI.Controllers
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
+        }
+
+        [HttpGet("Bus")]
+        public async Task<IActionResult> SendMessageToServiceBus([FromQuery] string message)
+        {
+            try
+            {
+                await _serviceBusProvider.SendMessageToServiceBus(message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+
+            return Ok();
         }
     }
 }

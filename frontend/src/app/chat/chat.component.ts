@@ -1,16 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { Component, OnInit, EventEmitter } from '@angular/core';
+import { SelectItem } from 'primeng/primeng';
+import { MessageService } from 'primeng/api';
 
-import { ChatHubService } from '../core/services/chat-hub.service';
+import { ChatHub } from '../core/hubs/chat.hub';
 import { AuthService } from '../core/services/auth.service';
-import { UserService } from '../core/services/user.service';
 import { ChatService } from '../core/services/chat.service';
 import { ToastrService } from '../core/services/toastr.service';
 
 import { Chat } from '../shared/models/chat.model';
-import { ChatType } from '../shared/models/chat-type.enum';
-import { ChatRequest } from '../shared/requests/chat-request';
-import { MessageRequest } from '../shared/requests/message-request';
 import { Message } from '../shared/models/message.model';
 import { User } from '../shared/models/user.model';
 
@@ -23,40 +20,30 @@ import { User } from '../shared/models/user.model';
 export class ChatComponent implements OnInit {
 
   constructor(
-    private chatHub: ChatHubService,
+    private chatHub: ChatHub,
     private authService: AuthService,
-    private userService: UserService,
     private chatService: ChatService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private messageService: MessageService) { }
 
-  currentUserId: string;
-  chatPanel: MenuItem[] = [];
-  chats: Chat[] = [];
+  public onDisplayChat = new EventEmitter<number>();
+  public onDisplayChatCreating = new EventEmitter<boolean>();
 
-  textMessage: string;
-  wantedUser: string;
-
-  choosedChat: Chat = {} as Chat;
-  newChat: ChatRequest = {} as ChatRequest;
-  userList: string[] = [];
-  isChatChoosed: boolean;
-  isNewChatChoosed: boolean;
-
+  chatList: SelectItem[] = [];
+  selectedChat: Chat;
+  currentUser: User;
+  unreadedMessageCount = 0;
 
   ngOnInit() {
-    this.newChat.users = [];
-    this.subscribeToChatCreated();
-    this.currentUserId = this.authService.getCurrentUser().id;
-    this.userService.get(this.currentUserId).subscribe(
-      value => {
-        this.chats = value.chats;
-        this.chatPanel = [
-          {
-            label: 'Chats',
-            icon: 'fa fa-envelope',
-            items: this.createChatItems()
-          }
-        ];
+    this.currentUser = this.authService.getCurrentUser();
+    this.chatService.getByUserId(this.currentUser.id).subscribe(
+      chats => {
+        chats.reverse();
+        chats.forEach(chat => {
+          this.chatList.push({ value: chat });
+          // this.unreadedMessageCount += this.calcNotReadMessages(chat);
+        });
+        this.subscribeToEvents();
       },
       err => {
         this.toastrService.error('Can`t get user`s chats');
@@ -64,92 +51,63 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  private subscribeToChatCreated() {
-    this.chatHub.chatCreated.subscribe((value: Chat) => {
-      this.chats.push(value);
-      this.choosedChat = value;
-      console.log('chat created');
-    });
+  openChat(chatId: number) {
+    this.onDisplayChat.emit(chatId);
   }
 
-  openCloseNewChatWindow() {
-    this.isNewChatChoosed ? this.isNewChatChoosed = false : this.isNewChatChoosed = true;
-    this.isChatChoosed = false;
+  selectChat() {
+    this.onDisplayChat.emit(this.selectedChat.id);
   }
 
-  openConversation(chatId: number) {
-    this.isNewChatChoosed = false;
-    this.chatService.get(chatId).subscribe((value: Chat) => {
-      this.choosedChat = value;
+  removeSelect() {
+    this.selectedChat = null;
+  }
+
+  openChatCreating(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.onDisplayChatCreating.emit();
+  }
+
+  getChatImage(chat: Chat) {
+    if (chat.users.length === 2) {
+      const photo = chat.users.find(u => u.id !== this.currentUser.id).photoURL;
+      if (photo) {
+        return photo;
+      } else {
+        return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
+      }
+    }
+    return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
+  }
+
+  calcNotReadMessages(chat: Chat): number {
+    return chat.messages.filter(item => !item.wasRead && item.user.id !== this.currentUser.id).length;
+  }
+
+  subscribeToEvents() {
+    this.chatHub.chatCreated.subscribe((chat: Chat) => {
+      this.chatList.unshift({ value: chat });
     });
 
-    this.isChatChoosed = true;
+    this.chatHub.messageReceived.subscribe(() => {
+      this.unreadedMessageCount++;
+    });
+
+    this.chatHub.chatChanged.subscribe((chat: Chat) => {
+      const index = this.chatList.findIndex(x => x.value.id === chat.id);
+      this.chatList.splice(index, 1, { value: chat });
+    });
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
-      this.choosedChat.messages.push(message);
-      console.log('message received');
+      if (message.user.id !== this.currentUser.id) {
+        this.messageService.add(
+          {
+            key: 'chat-message',
+            data: message,
+          }
+        );
+      }
     });
-  }
-
-  closeConversation() {
-    this.isChatChoosed = false;
-  }
-
-  createNewChat() {
-    this.isNewChatChoosed = true;
-    this.newChat.name = this.newChat.name || 'NewChat';
-
-    this.newChat.createdById = this.currentUserId;
-    this.chatHub.initializeChat(this.newChat, this.currentUserId);
-  }
-
-  addUser() {
-    if (!this.newChat.users.some(u => u.id === this.wantedUser)) {
-      this.userService.get(this.wantedUser).subscribe((value: User) => {
-        this.newChat.users.push(value);
-      },
-        err => {
-          this.toastrService.error('User don`t exist');
-        }
-      );
-    } else {
-      this.toastrService.error('User already added');
-    }
-  }
-
-  sendMessage() {
-    const newMessage: MessageRequest = {
-      text: this.textMessage,
-      userId: this.currentUserId,
-      chatId: this.choosedChat.id,
-      createdAt: new Date(Date.now())
-    } as MessageRequest;
-
-    const fakeMessage: Message = {
-      text: this.textMessage,
-      user: this.authService.getCurrentUser(),
-      createdAt: new Date(Date.now())
-    } as Message;
-    this.choosedChat.messages.push(fakeMessage);
-    this.chatHub.sendMessage(newMessage);
-    this.textMessage = '';
-  }
-
-  createChatItems(): MenuItem[] {
-    const items: MenuItem[] = [{
-      label: 'New chat',
-      icon: 'pi pi-fw pi-plus',
-      command: () => this.openCloseNewChatWindow()
-    }];
-
-    this.chats.forEach(chat => {
-      items.push({
-        label: chat.name,
-        icon: 'pi pi-fw pi-users',
-        command: () => this.openConversation(chat.id)
-      });
-    });
-
-    return items;
   }
 }

@@ -21,7 +21,7 @@ namespace Watcher.Controllers
         }
 
         // GET: /messages
-        [HttpGet()]
+        [HttpGet]
         public virtual async Task<ActionResult<IEnumerable<MessageDto>>> Get()
         {
             var dtos = await _messagesService.GetAllEntitiesAsync();
@@ -34,7 +34,7 @@ namespace Watcher.Controllers
         }
 
         // GET: /messages/chat/:id
-        [Route("messages/chat/{id}")]
+        [HttpGet("Chat/{id}", Name = "GetMessagesByChatID")]
         public virtual async Task<ActionResult<IEnumerable<MessageDto>>> GetByChatId(int id)
         {
             var dtos = await _messagesService.GetEntitiesByChatIdAsync(id);
@@ -47,8 +47,8 @@ namespace Watcher.Controllers
         }
 
         // GET: /messages/:id
-        [HttpGet("{id}")]
-        public virtual async Task<ActionResult<ChatDto>> GetById(int id)
+        [HttpGet("{id}", Name = "GetMessageByID")]
+        public virtual async Task<ActionResult<MessageDto>> GetById(int id)
         {
             var dto = await _messagesService.GetEntityByIdAsync(id);
             if (dto == null)
@@ -61,7 +61,7 @@ namespace Watcher.Controllers
 
         // POST: /messages
         [HttpPost]
-        public virtual async Task<ActionResult<ChatDto>> Create([FromBody] MessageRequest request)
+        public virtual async Task<ActionResult<MessageDto>> Create([FromBody] MessageRequest request)
         {
             if (!ModelState.IsValid)
             {

@@ -1,7 +1,6 @@
 ﻿namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
@@ -26,11 +25,42 @@
 
         public async Task<IEnumerable<ChatDto>> GetAllEntitiesAsync()
         {
-            var samples = await _uow.ChatsRepository.GetRangeAsync();
+            var chats = await _uow.ChatsRepository.GetRangeAsync(
+                include: c => c.Include(x => x.UserChats)
+                               .ThenInclude(x => x.User));
 
-            var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(samples);
+            var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats);
 
             return dtos;
+        }
+
+        public async Task<ChatDto> GetEntityByIdAsync(int id)
+        {
+            var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
+                                include: chats => chats.Include(c => c.CreatedBy)
+                                                        .Include(c => c.Messages)
+                                                            .ThenInclude(c => c.User)
+                                                        .Include(c => c.Organization)
+                                                        .Include(c => c.CreatedBy)
+                                                        .Include(c => c.UserChats)
+                                                            .ThenInclude(uc => uc.User));
+
+            if (chat == null) return null;
+
+            var dto = _mapper.Map<Chat, ChatDto>(chat);
+
+            return dto;
+        }
+
+        public async Task<ChatDto> GetLightEntityByIdAsync(int id)
+        {
+            var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id);
+
+            if (chat == null) return null;
+
+            var dto = _mapper.Map<Chat, ChatDto>(chat);
+
+            return dto;
         }
 
         public async Task<IEnumerable<ChatDto>> GetEntitiesByUserIdAsync(string id)
@@ -51,44 +81,28 @@
             return dtos;
         }
 
-        public async Task<UserDto> AddUserToChat(int chatId, string userId)
+        public async Task<bool> AddUserToChat(int chatId, string userId)
         {
-            User user = await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == userId);
-            Chat chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(c => c.Id == chatId);
+            var userChat = await _uow.ChatsRepository.AddUserChat(new UserChat() { ChatId = chatId, UserId = userId });
 
-            if (user == null || chat == null) return null;
+            var result = await _uow.SaveAsync();
 
-            UserChat userChat = await _uow.ChatsRepository.AddUserChat(new UserChat() { ChatId = chatId, UserId = userId });
-
-            await _uow.SaveAsync();
-
-            UserDto userDto = _mapper.Map<User, UserDto>(userChat.User);
-
-            return userDto;
+            return result;
         }
 
-        public async Task<ChatDto> GetEntityByIdAsync(int id)
+        public async Task<bool> DeleteUserFromChat(int chatId, string userId)
         {
-            var sample = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
-                include: chats => chats.Include(c => c.CreatedBy)
-                                                        .Include(c => c.Messages)
-                                                            .ThenInclude(c => c.User)
-                                                        .Include(c => c.Organization)
-                                                        .Include(c => c.CreatedBy)
-                                                        .Include(c => c.UserChats)
-                                                            .ThenInclude(uc => uc.User));
+            await _uow.ChatsRepository.DeleteUserChat(new UserChat() { ChatId = chatId, UserId = userId });
 
-            if (sample == null) return null;
+            var result = await _uow.SaveAsync();
 
-            var dto = _mapper.Map<Chat, ChatDto>(sample);
-
-            return dto;
+            return result;
         }
 
         public async Task<ChatDto> CreateEntityAsync(ChatRequest request)
         {
             var entity = _mapper.Map<ChatRequest, Chat>(request);
-            if(entity.Type == ChatType.BetweenUsers)
+            if (entity.Type == ChatType.BetweenUsers)
             {
                 entity.UserChats.Add(new UserChat
                 {

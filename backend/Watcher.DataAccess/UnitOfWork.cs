@@ -27,6 +27,8 @@
 
         private IResponseRepository _responseRepository;
 
+        private IRoleRepository _roleRepository;
+
         private INotificationSettingsRepository _notificationSettingsRepository;
 
         private IInstanceRepository _instanceRepository;
@@ -37,6 +39,8 @@
         private IMessagesRepository _messagesRepository;
 
         private IOrganizationInvitesRepository _organizationInvitesRepository;
+
+        private INotificationsRepository _notificationsRepository;
 
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
@@ -76,6 +80,8 @@
 
         public IResponseRepository ResponseRepository => _responseRepository ?? (_responseRepository = new ResponseRepository(_context, _mapper));
 
+        public IRoleRepository RoleRepository => _roleRepository ?? (_roleRepository = new RoleRepository(_context, _mapper));
+
         public IChatsRepository ChatsRepository => _chatsRepository ?? (_chatsRepository = new ChatsRepository(_context, _mapper));
 
         public IMessagesRepository MessagesRepository => _messagesRepository ?? (_messagesRepository = new MessagesRepository(_context, _mapper));
@@ -83,6 +89,18 @@
         public IOrganizationInvitesRepository OrganizationInvitesRepository =>
             _organizationInvitesRepository
             ?? (_organizationInvitesRepository = new OrganizationInvitesRepository(_context, _mapper));
+
+        public INotificationsRepository NotificationsRepository
+        {
+            get
+            {
+                if (_notificationsRepository == null)
+                {
+                    _notificationsRepository = new NotificationRepository(_context, _mapper);
+                }
+                return _notificationsRepository;
+            }
+        }
 
         public async Task<bool> SaveAsync()
         {

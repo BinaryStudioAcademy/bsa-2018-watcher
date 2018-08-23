@@ -1,17 +1,19 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { throwIfAlreadyLoaded } from './guards/module-import.guard';
 import { CommonModule } from '@angular/common';
-import {AuthService} from './services/auth.service';
-import {TokenService} from './services/token.service';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {TokensInterceptor} from './interceptors/tokens-interceptor';
+import { AuthService } from './services/auth.service';
+import { TokenService } from './services/token.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokensInterceptor } from './interceptors/tokens-interceptor';
 import { ToastrService } from './services/toastr.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import {ApiService} from './services/api.service';
-import {NotificationsService} from './services/notifications.service';
+import { ApiService } from './services/api.service';
 import { AuthGuard } from './guards/auth.guard';
 import { FeedbackService } from './services/feedback.service';
 import { ResponseService } from './services/response.service';
+import {DashboardsHub} from './hubs/dashboards.hub';
+import { RoleService } from './services/role.service';
+import { NotificationsHubService } from './hubs/notifications.hub';
 
 @NgModule({
   imports: [
@@ -21,14 +23,16 @@ import { ResponseService } from './services/response.service';
     AuthService,
     TokenService,
     ApiService,
-    NotificationsService,
     ToastrService,
     FeedbackService,
     ResponseService,
+    RoleService,
     ConfirmationService,
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },
-    AuthGuard
+    AuthGuard,
+    DashboardsHub,
+    NotificationsHubService
   ],
 
   declarations: []

@@ -6,5 +6,119 @@
       <hr>
     </div>
   </div>
-  
+
+  <p-table [value]="organizations" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th>NAME</th>
+        <th style="width:20%">DESCRIPTION</th>
+        <th style="width:22%">EMAIL</th>
+        <th style="width:17%">WEBSITE</th>
+        <th>CONTACT NUMBER</th>
+        <th style="width:7%">IS ACTIVE</th>
+        <th style="width:7%">THEME ID</th>
+        <th style="width:7%">EDIT</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-organization>
+      <tr>
+        <td class="center">{{organization.name}}</td>
+        <td class="center">{{organization.description}}</td>
+        <td class="center">{{organization.email}}</td>
+        <td class="center">
+          <a href="organization.webSite">{{organization.webSite}}</a>
+        </td>
+        <td class="center">{{organization.contactNumber}}</td>
+        <td class="center">
+          <i *ngIf="organization.isActive" class="fa fa-check-circle-o" style="font-size: 25px"></i>
+          <i *ngIf="!organization.isActive" class="fa fa-times-circle-o" style="font-size: 25px"></i>
+        </td>
+        <td class="center">{{organization.themeId}}</td>
+        <td>
+          <div class="center">
+            <button pButton type="button " label="Edit " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(organization)"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
 </div>
+
+<p-dialog header="Update organization" [(visible)]="display" [modal]="true" [responsive]="true" [width]="450" [minWidth]="300"
+  [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+
+  <form [formGroup]="organizationForm">
+
+    <div class="ui-g ui-fluid">
+      <p class="field">Name</p>
+      <input size="41" type="text" formControlName="name" pInputText placeholder="Name" />
+      <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
+        <label>Name is required.</label>
+      </div>
+    </div>
+
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-8 spacePad">
+        <p class="field">Contact number</p>
+        <input size="41" type="text" formControlName="contactNumber" pInputText placeholder="Contact number" />
+        <div class="invalid" *ngIf="organizationForm.get('contactNumber').errors && organizationForm.get('contactNumber').dirty">
+          <label>Wrong number format.</label>
+        </div>
+      </div>
+      <div class="ui-g-4">
+        <p class="center space">Is active </p>
+        <div class="center">
+          <p-checkbox formControlName="isActive" binary="true"></p-checkbox>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-g ui-fluid">
+      <p class="field">Email</p>
+      <input size="41" type="text" formControlName="email" pInputText placeholder="Email" />
+      <div class="invalid" *ngIf="organizationForm.get('email').errors && organizationForm.get('email').dirty">
+        <label>Wrong email format.</label>
+      </div>
+
+      <p class="field">Web site</p>
+      <input size="41" type="text" formControlName="webSite" pInputText placeholder="Web site" />
+      <div class="invalid" *ngIf="organizationForm.get('webSite').errors && organizationForm.get('webSite').dirty">
+        <label>Wrong url format.</label>
+      </div>
+
+      <p class="field">Description</p>
+      <textarea rows="3" [cols]="42" formControlName="description" pInputTextarea></textarea>
+    </div>
+  </form>
+
+  <p class="field ui-g ui-fluid">List of instances</p>
+  <div class="border">
+
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-3 center">Id</div>
+      <div class="ui-g-6 center">Title</div>
+      <div class="ui-g-3 ">Active</div>
+    </div>
+    <p-scrollPanel [style]="{width: '100%', height: '50px'}" styleClass="custom">
+
+      <div *ngFor="let instance of lstInstances" class="ui-g ui-fluid">
+        <div class="ui-g-3 center">{{instance.id}} </div>
+        <div class="ui-g-6 center">{{instance.title}} </div>
+        <div class="ui-g-3 ">
+          <p-checkbox [(ngModel)]="instance.isActive" binary="true"></p-checkbox>
+        </div>
+      </div>
+
+    </p-scrollPanel>
+
+  </div>
+
+  <p-footer>
+    <div class="center">
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
+      <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
+    </div>
+  </p-footer>
+
+</p-dialog>
