@@ -88,6 +88,12 @@ export class OrganizationProfileComponent implements OnInit {
           this.user.lastPickedOrganization = this.organization;
 
           // TODO: Update Organization in User.organizations on frontend
+          this.user.organizations = this.user.organizations.map(item => {
+            return item.id === this.organization.id ? this.organization : item;
+          });
+
+          // Update user in localStorage and notify all subscribers
+          this.authService.updateCurrentUser(this.user);
 
           this.toastrService.success('Organization was updated');
           this.isUpdating = false;
