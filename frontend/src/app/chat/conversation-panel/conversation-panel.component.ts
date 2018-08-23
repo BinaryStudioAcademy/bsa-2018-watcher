@@ -35,14 +35,14 @@ export class ConversationPanelComponent implements OnInit {
     private chatHub: ChatHub) { }
 
   ngOnInit() {
+    this.subscribeToEvents();
     this.currentUser = this.authService.getCurrentUser();
     this.onDisplay.subscribe((chatId: number) => {
+    this.display = true;
       this.chatService.get(chatId).subscribe((chat: Chat) => {
         this.chat = chat;
-        this.subscribeToEvents();
         this.scrollMessageListToBottom();
       });
-      this.display = true;
     });
   }
 
