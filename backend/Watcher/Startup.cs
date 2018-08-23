@@ -27,6 +27,8 @@ namespace Watcher
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
@@ -176,7 +178,13 @@ namespace Watcher
                         });
                 });
 
-            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
+            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true)
+                .AddJsonProtocol(options => options.PayloadSerializerSettings =
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
 
             if (UseAzureSignalR)
             {
