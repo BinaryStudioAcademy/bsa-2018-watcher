@@ -6,6 +6,7 @@
     <p-accordionTab>
       <p-header>
         Chats
+        <!-- <span class="message-counter">12</span> -->
         <i class="icon icon-right fa fa-plus" (click)="openChatCreating($event)"></i>
       </p-header>
       <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="selectChat()" (onDblClick)="removeSelect()">
