@@ -19,7 +19,7 @@ import { Chat } from '../../shared/models/chat.model';
 })
 export class ConversationPanelComponent implements OnInit {
 
-  @Input() onDisplay: EventEmitter<Chat>;
+  @Input() onDisplay: EventEmitter<number>;
   @ViewChildren('messageList') messageList: any;
 
   chat: Chat;
@@ -35,14 +35,14 @@ export class ConversationPanelComponent implements OnInit {
     private chatHub: ChatHub) { }
 
   ngOnInit() {
+    this.subscribeToEvents();
     this.currentUser = this.authService.getCurrentUser();
-    this.onDisplay.subscribe((data: Chat) => {
-      this.chatService.get(data.id).subscribe((chat: Chat) => {
+    this.onDisplay.subscribe((chatId: number) => {
+    this.display = true;
+      this.chatService.get(chatId).subscribe((chat: Chat) => {
         this.chat = chat;
-        this.subscribeToEvents();
         this.scrollMessageListToBottom();
       });
-      this.display = true;
     });
   }
 
