@@ -23,7 +23,6 @@ export class ChatHub {
     public chatChanged = new EventEmitter<Chat>();
 
     constructor(private authService: AuthService) {
-        this.buildConnection();
         this.startConnection();
     }
 
@@ -39,6 +38,8 @@ export class ChatHub {
     }
 
     private startConnection(): void {
+        this.buildConnection();
+        console.log('ChatHub trying to connect');
         this.hubConnection
             .start()
             .then(() => {
@@ -68,8 +69,8 @@ export class ChatHub {
 
         });
 
-        this.hubConnection.onclose(function (error) {
-            console.log('Connection closed!!!');
+        this.hubConnection.onclose((error: Error) => {
+            console.log('ChatHub connection closed!');
             console.error(error);
             this.startConnection();
         });
