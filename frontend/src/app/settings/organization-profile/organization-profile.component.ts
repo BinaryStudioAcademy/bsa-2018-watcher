@@ -29,13 +29,13 @@ export class OrganizationProfileComponent implements OnInit {
     private authService: AuthService,
     private toastrService: ToastrService) {
       this.cropperSettings = new CropperSettings();
-      this.cropperSettings.width = 200;
+      this.cropperSettings.width = 400;
       this.cropperSettings.height = 200;
-      this.cropperSettings.minWidth = 100;
+      this.cropperSettings.minWidth = 200;
       this.cropperSettings.minHeight = 100;
-      this.cropperSettings.croppedWidth = 70;
-      this.cropperSettings.croppedHeight = 70;
-      this.cropperSettings.canvasWidth = 400;
+      this.cropperSettings.croppedWidth = 150;
+      this.cropperSettings.croppedHeight = 75;
+      this.cropperSettings.canvasWidth = 800;
       this.cropperSettings.canvasHeight = 400;
       this.cropperSettings.noFileInput = true;
       this.cropperSettings.preserveSize = true;
@@ -54,6 +54,7 @@ export class OrganizationProfileComponent implements OnInit {
   cropperSettings: CropperSettings;
   display: Boolean = false;
   imageUrl = '';
+  imageType: string;
   data: any;
 
   user: User;
@@ -63,15 +64,12 @@ export class OrganizationProfileComponent implements OnInit {
   isCopying: Boolean = false;
   isSending: Boolean = false;
 
-  private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
-  private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
-
   ngOnInit() {
     this.authService.currentUser.subscribe(
       (userData) => {
         this.user = { ...userData };
         this.organization = this.user.lastPickedOrganization;
-
+        this.imageUrl = this.user.lastPickedOrganization.imageURL;
         if (this.organization.createdByUserId === this.user.id) {
           this.editable = true;
         }
@@ -171,6 +169,7 @@ export class OrganizationProfileComponent implements OnInit {
     const image: any = new Image();
     const reader: FileReader = new FileReader();
     const that = this;
+    this.imageType = upload[0].type;
     reader.onloadend = (eventLoad: any) => {
       image.src = eventLoad.target.result;
       that.cropper.setImage(image);
@@ -182,11 +181,13 @@ export class OrganizationProfileComponent implements OnInit {
   }
 
   onCropCancel() {
+    this.imageType = '';
     this.display = false;
   }
 
   onCropSave() {
     this.organization.imageURL = this.data.image;
+    this.organization.imageType = this.imageType;
     this.imageUrl = this.data.image;
     this.display = false;
   }

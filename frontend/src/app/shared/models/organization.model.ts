@@ -11,6 +11,7 @@ export interface Organization  {
    contactNumber: string;
    isActive: boolean;
    imageURL: string;
+   imageType: string;
    themeId: number;
    theme: Theme;
    chatId: number;
