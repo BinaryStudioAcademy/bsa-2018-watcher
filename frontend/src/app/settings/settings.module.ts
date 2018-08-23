@@ -4,7 +4,7 @@ import { SettingsComponent } from './settings.component';
 import { NotificationSettingsComponent } from './notification-settings/notification-settings.component';
 import { OrganizationProfileComponent } from './organization-profile/organization-profile.component';
 
-import { TabViewModule, InputTextModule, ButtonModule, ToggleButtonModule, InputTextareaModule } from 'primeng/primeng';
+import { TabViewModule, InputTextModule, ButtonModule, ToggleButtonModule, InputTextareaModule, InputMaskModule } from 'primeng/primeng';
 import { InputSwitchModule, DropdownModule } from 'primeng/primeng';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -31,6 +31,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     ToggleButtonModule,
     ImageCropperModule,
     DialogModule,
+    InputMaskModule,
     FileUploadModule
   ],
   declarations: [

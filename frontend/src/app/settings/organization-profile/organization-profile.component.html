@@ -36,74 +36,74 @@
         </div>
   </div>
 
-  <form class="grid-item orgData" [formGroup]="organizationForm" (ngSubmit)="onSubmit()" >
-    <div class="ui-g">
-      <div class="ui-g-12 ui-md-12 ui-lg-12">
-        <div class="label">Name</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input type="text" formControlName="name" pInputText placeholder="Name">
+  <div class="grid-item orgData" >
+      <div class="ui-g">
+          <div class="ui-g-12 ui-md-12 ui-lg-12">
+            <div class="label">Name*:</div>
+            <div class="ui-g ui-fluid">
+              <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                  <input [(ngModel)]="organization.name" type="text" pInputText placeholder="Company name"
+                  required id="cName" required minlength="4" #cName="ngModel" />
+                  <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
+                    <div *ngIf="cName.errors.required">Company name is required.</div>
+                    <div *ngIf="cName.errors.minlength">Company name must be at least 4 characters long.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+            <div class="label">Email:</div>
+            <div class="ui-g ui-fluid">
+              <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                  <input type="email" pInputText placeholder="Email" [(ngModel)]="organization.email" id="cEmail" #cEmail="ngModel" ngModel email />
+                  <div *ngIf="cEmail?.invalid && (cEmail?.dirty || cEmail?.touched)" class="alert alert-danger">
+                    <div *ngIf="cEmail.errors.required"> Email is required.</div>
+                    <div *ngIf="cEmail.errors.email">Email must be a valid email address</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+            <div class="label">Contact number:</div>
+            <div class="ui-g ui-fluid">
+              <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                    <p-inputMask type="phone" [(ngModel)]="organization.contactNumber" mask="+380 (99) 999-99-99"  placeholder="Contact number" 
+                    [(ngModel)]="contactNumber"></p-inputMask>
+                </div>
+              </div>
+            </div>
+      
+            <div class="label">Web site:</div>
+            <div class="ui-g ui-fluid">
+              <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                  <input type="text" pInputText placeholder="Web site"  [(ngModel)]="organization.webSite">
+                </div>
+              </div>
+            </div>
+      
+            <div class="label">Description:</div>
+            <div class="ui-g ui-fluid">
+              <div class="ui-g-12">
+                <textarea rows="5" pInputTextarea  [(ngModel)]="organization.description"></textarea>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
-          <label>Name is required.</label>
-        </div>
-
-        <div class="label">Email</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input type="text" formControlName="email" pInputText placeholder="Email">
+          <div class="btn-panel">
+            <button class="ui-button-raised ui-button-success button" pButton type="button" (click)="onSubmit()" label="Update"
+            [disabled]="cName?.invalid || cEmail?.invalid"></button>
             </div>
-          </div>
+        
         </div>
 
-        <div class="invalid" *ngIf="organizationForm.get('email').errors && organizationForm.get('email').dirty">
-          <label>Wrong email format.</label>
-        </div>
 
-        <div class="label">Contact number</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input type="text" formControlName="contactNumber" pInputText placeholder="Contact number">
-            </div>
-          </div>
-        </div>
 
-        <div class="invalid" *ngIf="organizationForm.get('contactNumber').errors && organizationForm.get('contactNumber').dirty">
-          <label>Wrong number format.</label>
-        </div>
-
-        <div class="label">Web site</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input type="text" formControlName="webSite" pInputText placeholder="Web site">
-            </div>
-          </div>
-        </div>
-
-        <div class="invalid" *ngIf="organizationForm.get('webSite').errors && organizationForm.get('webSite').dirty">
-          <label>Wrong url format.</label>
-        </div>
-
-        <div class="label">Description</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <textarea rows="5" formControlName="description" pInputTextarea></textarea>
-          </div>
-        </div>
-        <div class="btn-panel">
-          <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success"></button>
-        </div>
-      </div>
-    
-    </div>
-  </form>
+        
+  </div>
 
   <div class="grid-item invite">
     <div class="ui-g">
@@ -122,7 +122,7 @@
             </div>
           </div>
 
-          <div class="label">Copy link:</div>
+          <div class="label"></div>
           <div class="ui-g ui-fluid">
               <div class="btn-panel">
                   <button pButton label="Copy link" (click)="onCopy()"
@@ -145,7 +145,7 @@
             </div>
           </div>
 
-          <div class="label">Send:</div>
+          <div class="label"></div>
           <div class="ui-g ui-fluid">
               <div class="btn-panel">
                   <button pButton label="Send" (click)="onSentInviteToEmail()" class="ui-button-raised ui-button-success"

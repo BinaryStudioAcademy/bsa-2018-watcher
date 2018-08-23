@@ -61,47 +61,30 @@ export class OrganizationProfileComponent implements OnInit {
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
 
-  organizationForm = this.fb.group({
-    name: new FormControl({ value: '', disabled: true }, Validators.required),
-    email: new FormControl({ value: '', disabled: true }, Validators.email),
-    contactNumber: new FormControl({ value: '', disabled: true }, Validators.pattern(this.phoneRegex)),
-    webSite: new FormControl({ value: '', disabled: true }, Validators.pattern(this.urlRegex)),
-    description: new FormControl({ value: '', disabled: true })
-  });
-
   ngOnInit() {
     this.authService.currentUser.subscribe(
       (userData) => {
         this.user = { ...userData };
         this.organization = this.user.lastPickedOrganization;
-        this.subscribeOrganizationFormToData();
+
         if (this.organization.createdByUserId === this.user.id) {
           this.editable = true;
         }
+        debugger;
       });
-
-    Object.keys(this.organizationForm.controls).forEach(field => {
-      const control = this.organizationForm.get(field);
-      control.enable();
-    });
-  }
-
-  subscribeOrganizationFormToData() {
-    Object.keys(this.organizationForm.controls).forEach(field => {
-      const control = this.organizationForm.get(field);
-      control.setValue(this.organization[field]);
-      control.valueChanges.subscribe(value => {
-        this.organization[field] = value;
-      });
-    });
   }
 
   onSubmit() {
-    if (this.organizationForm.valid && this.editable) {
+    if (this.editable) {
+      debugger;
+      // Update Organization
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
-          const user = this.authService.getCurrentUser();
-          user.lastPickedOrganization = this.organization;
+          // Update lastPickedOrganization in User on frontend
+          this.user.lastPickedOrganization = this.organization;
+
+          // Update Organization in User.organizations on frontend
+
           this.toastrService.success('Organization was updated');
         },
         err => {
@@ -109,12 +92,7 @@ export class OrganizationProfileComponent implements OnInit {
         }
       );
     } else {
-      this.toastrService.error('Form was filled incorrectly');
-
-      Object.keys(this.organizationForm.controls).forEach(field => {
-        const control = this.organizationForm.get(field);
-        control.markAsDirty({ onlySelf: true });
-      });
+      this.toastrService.error('You do not have the right to change this organization.');
     }
   }
 
