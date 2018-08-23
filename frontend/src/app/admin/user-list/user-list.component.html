@@ -58,9 +58,28 @@
   <div class="ui-g ui-fluid">
     <div class="ui-g-6">
       <form [formGroup]="userForm">
-        <p class="field">Photo</p>
-        <textarea rows="5" [cols]="42" pInputTextarea></textarea>
+        <p class="field">Profile photo</p>
       </form>
+<div>
+      <figure class="cap-bot">
+          <img src="{{photoUrl}}" alt="profile photo">
+          <figcaption class="center custom-upload-btn">
+            <span><i class="fa fa-camera"></i> Update profile photo</span>
+            <p-fileUpload #upload mode="basic" name="myfile[]" files="photosList" accept="image/*" (uploadHandler)="onImageSelected($event.files)"
+             customUpload="true" maxFileSize="2000000" auto="true" chooseLabel="Change"></p-fileUpload> 
+          </figcaption>
+        </figure>
+  
+        <p-dialog [(visible)]="display" [showHeader]="false" appendTo="body" [closable]=false [modal]="true" [responsive]="true"
+         [draggable]="false">
+          <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+  
+          <div class="btn-panel crop-btn-panel">
+            <button pButton class="ui-button-raised ui-button-primary" (click)="onCropSave()" label="Done"></button>
+            <button pButton class="ui-button-raised ui-button-warning" (click)="onCropCancel() " label="Cancel"></button>
+          </div>
+        </p-dialog>
+      </div>
 
       <div class="inline">
         <p class="fieldRole">Role: </p>
@@ -96,7 +115,7 @@
       <p class="fieldOrg">List of other organizations</p>
     </div>
     <div class="ui-g-4">
-      <p-dropdown [options]="dropdownCompany" [(ngModel)]="selectedCompany" [style]="{'width':'150px'}" filter="true"></p-dropdown>
+      <p-dropdown [options]="dropdownCompany" [(ngModel)]="selectedCompany" appendTo="body" [style]="{'width':'150px'}" filter="true"></p-dropdown>
     </div>
     <div class="ui-g-2">
       <button pButton label="Invite" (click)="onSentInviteToEmail()" class="ui-button-primary ui-button-raised"></button>

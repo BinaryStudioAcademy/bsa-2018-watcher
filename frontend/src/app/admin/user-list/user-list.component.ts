@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
@@ -14,6 +14,9 @@ import { OrganizationInvite } from '../../shared/models/organization-invite.mode
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
 import { Role } from '../../shared/models/role.model';
 
+import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
+import { PathService } from '../../core/services/path.service';
+
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -25,7 +28,7 @@ export class UserListComponent implements OnInit {
   users: User[];
   user: User;
   currentUser: User;
-  display: boolean;
+  displayPopup: boolean;
   totalRecords: number;
   lstOrganizations: Organization[];
   lstUserCompany: Organization[];
@@ -37,6 +40,17 @@ export class UserListComponent implements OnInit {
   dropdownCompany: SelectItem[];
   lastOrganization: Organization;
 
+  data: any;
+  photoUrl: string;
+  photoType: string;
+  display: Boolean = false;
+
+  @ViewChild('cropper', undefined)
+
+  cropper: ImageCropperComponent;
+
+  cropperSettings: CropperSettings;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -44,18 +58,33 @@ export class UserListComponent implements OnInit {
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,
     private roleService: RoleService,
+    private pathService: PathService,
     private toastrService: ToastrService) {
 
-    this.display = false;
+    this.displayPopup = false;
     this.lstUserCompany = new Array<Organization>();
     this.dropdownRole = new Array<SelectItem>();
     this.dropdownCompany = new Array<SelectItem>();
+
+    this.cropperSettings = new CropperSettings();
+    this.cropperSettings.width = 200;
+    this.cropperSettings.height = 200;
+    this.cropperSettings.minWidth = 100;
+    this.cropperSettings.minHeight = 100;
+    this.cropperSettings.croppedWidth = 70;
+    this.cropperSettings.croppedHeight = 70;
+    this.cropperSettings.canvasWidth = 400;
+    this.cropperSettings.canvasHeight = 400;
+    this.cropperSettings.noFileInput = true;
+    this.cropperSettings.preserveSize = true;
+
+    this.data = {};
   }
 
   userForm = this.fb.group({
     displayName: new FormControl({ value: '', disabled: false }, Validators.required),
-    firstName: new FormControl({ value: '', disabled: false }),
-    lastName: new FormControl({ value: '', disabled: false }),
+    firstName: new FormControl({ value: '', disabled: false }, Validators.required),
+    lastName: new FormControl({ value: '', disabled: false }, Validators.required),
     bio: new FormControl({ value: '', disabled: false }),
     isActive: new FormControl({ value: true, disabled: false }, Validators.required)
   });
@@ -148,27 +177,26 @@ lastPickedCompany(id: number) {
 }
 
   showPopup(user: User) {
+    // debugger;
     this.user = user;
     this.subscribeOrganizationFormToData();
-    this.display = true;
+    this.displayPopup = true;
     this.lstUserCompany = user.organizations.map(x => Object.assign({}, x));
     if (user.lastPickedOrganizationId) {
       this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => this.lastOrganization = value);
-    this.lstUserCompany.push(this.lastOrganization);
+      this.lstUserCompany.push(this.lastOrganization);
   }
     this.selectedRole = user.role;
-    console.log(this.lstUserCompany);
-    console.log(user.organizations);
-    console.log(this.lastOrganization);
+    this.photoUrl = this.pathService.convertToUrl(this.user.photoURL);
   }
 
   onCancel() {
-    this.display = false;
+    this.displayPopup = false;
     this.user = null;
   }
 
   onSubmit() {
-    this.display = false;
+    this.displayPopup = false;
 
     if (this.userForm.valid) {
       Object.keys(this.userForm.controls).forEach(field => {
@@ -225,5 +253,32 @@ lastPickedCompany(id: number) {
       err => {
         this.toastrService.error('Organization Invite was not updated');
       });
+  }
+
+  onImageSelected(upload) {
+    // debugger;
+    const image: any = new Image();
+    const reader: FileReader = new FileReader();
+    const that = this;
+    this.photoType = upload[0].type;
+    reader.onloadend = (eventLoad: any) => {
+      image.src = eventLoad.target.result;
+      that.cropper.setImage(image);
+      this.display = true;
+    };
+    reader.readAsDataURL(upload[0]);
+    upload.splice(0, upload.length);
+  }
+
+  onCropCancel() {
+    this.photoType = '';
+    this.display = false;
+  }
+
+  onCropSave() {
+    this.user.photoURL = this.data.image;
+    this.user.photoType = this.photoType;
+    this.photoUrl = this.data.image;
+    this.display = false;
   }
 }
