@@ -32,6 +32,9 @@
     <None Update="MoveToFrontend\feedback.model.ts">
       <CustomToolNamespace>Dtos\FeedbackDto.cs</CustomToolNamespace>
     </None>
+    <None Update="MoveToFrontend\filter.model.ts">
+      <CustomToolNamespace>Dtos\Filter.cs</CustomToolNamespace>
+    </None>
     <None Update="MoveToFrontend\instance.model.ts">
       <CustomToolNamespace>Dtos\InstanceDto.cs</CustomToolNamespace>
     </None>

@@ -1,11 +1,15 @@
 ﻿namespace Watcher.Core.Services
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
     using System.Threading.Tasks;
 
     using AutoMapper;
 
     using Watcher.Common.Dtos;
+    using Watcher.Common.Enums;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Entities;
@@ -22,9 +26,14 @@
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<SampleDto>> GetAllEntitiesAsync()
+        public async Task<IEnumerable<SampleDto>> GetAllEntitiesAsync(Filter filter)
         {
-            var samples = await _uow.SamplesRepository.GetRangeAsync();
+            var orderExpression = CreateOrderByFunc(filter.OrderBy);
+            var filterExpression = CreateFilterExpression(filter.SearchString);
+            var samples = await _uow.SamplesRepository.GetRangeAsync(filter.Page,
+                                                                     filter.PageSize,
+                                                                     filterExpression,
+                                                                     orderExpression);
 
             var dtos = _mapper.Map<List<Sample>, List<SampleDto>>(samples);
 
@@ -79,6 +88,42 @@
             var result = await _uow.SaveAsync();
 
             return result;
+        }
+
+        private Expression<Func<Sample, bool>> CreateFilterExpression(string searchString)
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+                return null;
+
+            Func<Sample, bool> func = sample => sample.Name.Contains(searchString)
+                                                || sample.SampleField.ToString().Contains(searchString);
+
+            Expression<Func<Sample, bool>> expression = s => func(s);
+
+            return expression;
+        }
+
+        private Func<IQueryable<Sample>, IOrderedQueryable<Sample>> CreateOrderByFunc(OrderBy filter)
+        {
+            Func<IQueryable<Sample>, IOrderedQueryable<Sample>> orderByFunc;
+
+            switch (filter)
+            {
+                case OrderBy.Date:
+                    orderByFunc = o => o.OrderBy(s => s.CreationDate);
+                    break;
+                case OrderBy.Date_Desc:
+                    orderByFunc = o => o.OrderByDescending(s => s.CreationDate);
+                    break;
+                case OrderBy.Name_Desc:
+                    orderByFunc = o => o.OrderByDescending(s => s.Name);
+                    break;
+                default:
+                    orderByFunc = o => o.OrderBy(s => s.Name);
+                    break;
+            }
+
+            return orderByFunc;
         }
     }
 }
