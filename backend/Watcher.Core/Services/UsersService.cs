@@ -131,7 +131,7 @@ namespace Watcher.Core.Services
 
             var newPhotoUrl = await _fileStorageProvider.UploadFileFromStreamAsync(
                                   string.IsNullOrWhiteSpace(entity.PhotoURL)
-                                      ? "https://bsawatcherfiles.blob.core.windows.net/watcher/f6efd981-4e08-44f0-ab87-837720b372ef.png" // Standart photo path
+                                      ? "https://bsawatcherfiles.blob.core.windows.net/watcher/9c2c0291-728d-4e7b-bcb7-3b9432cb8733.png" // Standart photo path
                                       : entity.PhotoURL);
             
             entity.PhotoURL = newPhotoUrl;
