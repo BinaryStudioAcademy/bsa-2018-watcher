@@ -41,7 +41,7 @@ export class ChatComponent implements OnInit {
         chats.reverse();
         chats.forEach(chat => {
           this.chatList.push({ value: chat });
-          // this.unreadedMessageCount += this.calcNotReadMessages(chat);
+          this.unreadedMessageCount += chat.unreadMessagesCount;
         });
         this.subscribeToEvents();
       },
