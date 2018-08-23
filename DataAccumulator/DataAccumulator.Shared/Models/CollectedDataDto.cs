@@ -6,9 +6,8 @@ namespace DataAccumulator.Shared.Models
 {
     public class CollectedDataDto : ICollectedDataDto
     {
-        // Id to reference
+        // Id - CollectedData identification number
         public Guid Id { get; set; }
-
         // ClientId - Client identification number
         public Guid ClientId { get; set; }
 
