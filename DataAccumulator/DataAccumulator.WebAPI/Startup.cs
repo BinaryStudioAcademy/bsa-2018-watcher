@@ -45,13 +45,13 @@ namespace DataAccumulator
 
             services.AddMvc();
 
-            services.AddSingleton<IQueueClient>( s => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value) );
+            services.AddSingleton<IQueueClient>(s => new QueueClient(
+                Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, 
+                Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
 
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>();
-
-            services.AddTransient<IServiceBusProvider, ServiceBusProvider>();
 
             services.AddScoped<IDataAccumulatorService<CollectedDataDto>, DataAccumulatorService>();
             services.AddScoped<IDataAggregatorService<CollectedDataDto>, DataAggregatorService>();
@@ -76,7 +76,7 @@ namespace DataAccumulator
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime, IServiceProvider container)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
         {
             app.UseCors("CorsPolicy");
 
@@ -101,15 +101,19 @@ namespace DataAccumulator
                 var cosmosDbString = Configuration.GetConnectionString("AzureCosmosDbConnection");
                 if (!string.IsNullOrWhiteSpace(cosmosDbString))
                 {
-                    services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                    services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
                           options => new DataAccumulatorRepository(cosmosDbString, "DataAccumulatorDb"));
+                    services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>(
+                        options => new DataAggregatorRepository(cosmosDbString, "DataAccumulatorDb"));
                 }
             }
             else
             {
                 var mongoDbString = Configuration.GetConnectionString("MongoDbConnection");
-                services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
                           options => new DataAccumulatorRepository(mongoDbString, "DataAccumulatorDb"));
+                services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>(
+                    options => new DataAggregatorRepository(mongoDbString, "DataAccumulatorDb"));
             }
         }
         public MapperConfiguration MapperConfiguration()

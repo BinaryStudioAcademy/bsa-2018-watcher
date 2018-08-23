@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using DataAccumulator.DataAccessLayer.Data;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
-using DataAccumulator.Shared.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -16,9 +15,9 @@ namespace DataAccumulator.DataAccessLayer.Repositories
     {
         private readonly DataAccumulatorContext _context = null;
 
-        public DataAggregatorRepository(IOptions<Settings> settings)
+        public DataAggregatorRepository(string ConnectionString, string Database)
         {
-            _context = new DataAccumulatorContext(settings);
+            _context = new DataAccumulatorContext(ConnectionString, Database);
         }
 
         public async Task<IEnumerable<CollectedData>> GetAllEntities()
