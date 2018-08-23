@@ -13,6 +13,9 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { DropdownModule } from 'primeng/dropdown';
 
+import { ImageCropperModule } from 'ngx-img-cropper';
+import { FileUploadModule } from 'primeng/fileupload';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -28,7 +31,9 @@ import { DropdownModule } from 'primeng/dropdown';
     TableModule,
     CheckboxModule,
     ScrollPanelModule,
-    DropdownModule
+    DropdownModule,
+    ImageCropperModule,
+    FileUploadModule
   ],
   declarations: [
     AdminPageComponent,
