@@ -81,11 +81,11 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
-        public async Task AddEntity(CollectedData item)
+        public async Task AddEntity(CollectedData collectedData)
         {
             try
             {
-                await _context.Datasets.InsertOneAsync(item);
+                await _context.Datasets.InsertOneAsync(collectedData);
             }
             catch (Exception e)
             {
