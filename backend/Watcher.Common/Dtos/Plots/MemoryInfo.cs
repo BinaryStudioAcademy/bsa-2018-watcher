@@ -6,6 +6,7 @@ namespace Watcher.Common.Dtos.Plots
     public class MemoryInfo : ICollectedData
     {
         public Guid Id { get; set; }
+        public Guid ClientId { get; set; }
         public DateTime Time { get; set; }
 
         public float AvaliableRamBytes { get; set; }
