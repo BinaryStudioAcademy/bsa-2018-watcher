@@ -59,7 +59,6 @@
                 <div class="ui-inputgroup">
                   <input type="email" pInputText placeholder="Email" [(ngModel)]="organization.email" id="cEmail" #cEmail="ngModel" ngModel email />
                   <div *ngIf="cEmail?.invalid && (cEmail?.dirty || cEmail?.touched)" class="alert alert-danger">
-                    <div *ngIf="cEmail.errors.required"> Email is required.</div>
                     <div *ngIf="cEmail.errors.email">Email must be a valid email address</div>
                   </div>
                 </div>
@@ -80,7 +79,11 @@
             <div class="ui-g ui-fluid">
               <div class="ui-g-12">
                 <div class="ui-inputgroup">
-                  <input type="text" pInputText placeholder="Web site"  [(ngModel)]="organization.webSite">
+                  <input type="text" pInputText placeholder="Web site"  [(ngModel)]="organization.webSite" id="cWebSite" #cWebSite="ngModel"
+                  pattern="^(http|https|ftp)?(://)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([/?].*)?$" >
+                  <div *ngIf="cWebSite?.invalid && (cWebSite?.dirty || cWebSite?.touched)" class="alert alert-danger">
+                      <div *ngIf="cWebSite.errors.pattern">Email must be a valid email address</div>
+                    </div>
                 </div>
               </div>
             </div>
