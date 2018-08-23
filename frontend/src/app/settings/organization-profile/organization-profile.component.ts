@@ -70,20 +70,18 @@ export class OrganizationProfileComponent implements OnInit {
         if (this.organization.createdByUserId === this.user.id) {
           this.editable = true;
         }
-        debugger;
       });
   }
 
   onSubmit() {
     if (this.editable) {
-      debugger;
       // Update Organization
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
           // Update lastPickedOrganization in User on frontend
           this.user.lastPickedOrganization = this.organization;
 
-          // Update Organization in User.organizations on frontend
+          // TODO: Update Organization in User.organizations on frontend
 
           this.toastrService.success('Organization was updated');
         },
