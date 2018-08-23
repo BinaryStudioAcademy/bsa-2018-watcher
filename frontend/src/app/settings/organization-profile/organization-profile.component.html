@@ -130,13 +130,10 @@
           <div class="label">Send invite link to Email:</div>
           <div class="ui-g ui-fluid">
             <div class="inputEmail ui-g-12 ui-lg-12">
-              <input type="email" [(ngModel)]="inviteEmail" id="iEmail" #iEmail="ngModel" ngModel email="true" class="form-control" required minlength="6" pInputText placeholder="Email">
+              <input type="email" [(ngModel)]="inviteEmail" id="iEmail" #iEmail="ngModel" ngModel email="true" class="form-control" required pInputText placeholder="Email">
               <div *ngIf="iEmail?.invalid && (iEmail?.dirty || iEmail?.touched)" class="alert alert-danger">
-                  <div *ngIf="iEmail.errors.required">
-                      Email is required.
-                  </div>
-                  <div *ngIf="iEmail.errors.minlength">
-                      Email must be at least 4 characters long.
+                  <div *ngIf="iEmail.errors.email">
+                      Email is invalid.
                   </div>
               </div>
             </div>
