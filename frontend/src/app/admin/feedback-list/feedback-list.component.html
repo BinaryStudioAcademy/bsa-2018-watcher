@@ -59,13 +59,15 @@
 <p-dialog header="Create response" [(visible)]="display" [modal]="true" [responsive]="true" [width]="350" [minWidth]="200"
   [minY]="70" [maximizable]="false" [baseZIndex]="10000">
   <p class="field">Email</p>
-  <input type="text" disabled [value]="email"/> 
+  <input type="text" disabled [value]="email" />
   <p class="field">Text</p>
   <form [formGroup]="responseForm">
     <textarea rows="5" [cols]="42" formControlName="text" pInputTextarea></textarea>
   </form>
   <p-footer>
-    <button type="button" pButton icon="pi pi-check" class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
-    <button type="button" pButton icon="pi pi-close" (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+    <div class="center">
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
+      <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+    </div>
   </p-footer>
 </p-dialog>

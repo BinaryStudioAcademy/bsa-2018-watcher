@@ -17,6 +17,8 @@ namespace Watcher.Common.Dtos
 
         public string UserId { get; set; }
 
+        public bool WasRead { get; set; }
+
         public int NotificationSettingId { get; set; }
         public NotificationSettingDto NotificationSetting { get; set; }
     }

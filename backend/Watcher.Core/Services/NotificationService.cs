@@ -136,8 +136,8 @@
                         $"{dto.NotificationSetting.Type} Notification", receiver.Email,
                         dto.Text, "");
 
-                await _notificationsHub.Clients.User(notificationDto.UserId)
-                    .SendAsync("AddNotification", notificationDto);
+                await _notificationsHub.Clients.User(dto.UserId)
+                    .SendAsync("AddNotification", dto);
 
                 dtos.Add(dto);
 

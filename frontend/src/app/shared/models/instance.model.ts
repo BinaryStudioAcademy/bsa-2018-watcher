@@ -7,7 +7,7 @@ export interface Instance  {
    address: string;
    platform: string;
    isActive: boolean;
-   guidId: string;
+   guidId?: string;
    organization?: Organization;
    dashboards?: Dashboard[];
 }

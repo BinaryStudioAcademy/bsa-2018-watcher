@@ -21,10 +21,10 @@ import {
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
 import { query } from '@angular/core/src/render3/query';
+import { DownloadAppComponent } from '../download-app/download-app.component';
 import { AddNewOrganizationComponent } from './add-new-organization/add-new-organization.component';
 import { FormsModule } from '@angular/forms';
 import { ClickOutsideDirective } from '../core/directives/click-outside.directive';
-
 
 @NgModule({
   imports: [
@@ -43,14 +43,16 @@ import { ClickOutsideDirective } from '../core/directives/click-outside.directiv
     MessagesModule,
     MessageModule,
     PanelMenuModule,
-    ChatModule
+    ChatModule,
+    DialogModule,
   ],
   declarations: [
     ShellComponent,
     HeaderComponent,
     LeftSideMenuComponent,
     AddNewOrganizationComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    DownloadAppComponent
   ]
 })
 export class ShellModule { }

@@ -42,6 +42,11 @@ namespace Watcher.Core.Providers
             }
         }
 
+        public Task<string> UploadFileFromStreamAsync(string url, string containerName = "watcher")
+        {
+            throw new NotImplementedException();
+        }
+
         public Task DeleteFileAsync(string path)
         {
             try
@@ -80,7 +85,7 @@ namespace Watcher.Core.Providers
             return parent;
         }
 
-        public Task<string> UploadFileBase64Async(string base64string, string containerName)
+        public Task<string> UploadFileBase64Async(string base64string, string imageType = "png", string containerName = "watcher")
         {
             try
             {

@@ -1,7 +1,7 @@
 <div class="site-wrapper">
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
-      <div class="title">EDITING INSTANCE</div>
+      <div class="title">{{instanceTitle}}</div>
       <hr>
     </div>
   </div>
@@ -23,7 +23,8 @@
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-mg-6 ui-lg-6">
         <div class="ui-inputgroup">
-          <input type="text" formControlName="platform" pInputText placeholder="Platform">
+          <!-- <input type="text" formControlName="platform" pInputText placeholder="Platform"> -->
+          <p-dropdown [options]="platformsDropdown" [formGroup]="instanceForm" formControlName="platform"></p-dropdown>
         </div>
       </div>
     </div>
