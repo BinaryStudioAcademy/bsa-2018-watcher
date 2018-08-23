@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DataAccumulator.BusinessLayer.Interfaces;
+using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.Shared.Exceptions;
 using DataAccumulator.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,14 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace DataAccumulator.WebAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/v1/dataaccumulator")]
-    public class DataAccumulatorController : Controller
+    [Route("api/v1/dataaggregator")]
+    public class DataAggregatorController : Controller
     {
-        private readonly IDataAccumulatorService<CollectedDataDto> _dataAccumulatorService;
+        private readonly IDataAggregatorService<CollectedDataDto> _dataAggregatorService;
 
-        public DataAccumulatorController(IDataAccumulatorService<CollectedDataDto> dataAccumulatorService)
+        public DataAggregatorController(IDataAggregatorService<CollectedDataDto> dataAggregatorService)
         {
-            _dataAccumulatorService = dataAccumulatorService;
+            _dataAggregatorService = dataAggregatorService;
         }
 
         // GET: api/v1/dataaccumulator
@@ -24,7 +25,7 @@ namespace DataAccumulator.WebAPI.Controllers
         {
             try
             {
-                var collectedDataDtos = await _dataAccumulatorService.GetEntitiesAsync();
+                var collectedDataDtos = await _dataAggregatorService.GetEntitiesAsync();
                 return Ok(collectedDataDtos);
             }
             catch (BadRequestException e)
@@ -43,12 +44,12 @@ namespace DataAccumulator.WebAPI.Controllers
         }
 
         // GET: api/v1/dataaccumulator/5
-        [HttpGet("{id}", Name = "GetDataAccumulator")]
+        [HttpGet("{id}", Name = "GetDataAggregator")]
         public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var collectedDataDto = await _dataAccumulatorService.GetEntityAsync(id);
+                var collectedDataDto = await _dataAggregatorService.GetEntityAsync(id);
                 return Ok(collectedDataDto);
             }
             catch (NotFoundException e)
@@ -68,8 +69,8 @@ namespace DataAccumulator.WebAPI.Controllers
         {
             try
             {
-                var collectedData = await _dataAccumulatorService.AddEntityAsync(collectedDataDto);
-                return CreatedAtRoute("GetDataAccumulator", new { id = collectedDataDto.Id }, collectedData);
+                var collectedData = await _dataAggregatorService.AddEntityAsync(collectedDataDto);
+                return CreatedAtRoute("GetDataAggregator", new { id = collectedDataDto.Id }, collectedData);
             }
             catch (Exception e)
             {
@@ -85,7 +86,7 @@ namespace DataAccumulator.WebAPI.Controllers
             try
             {
                 collectedDataDto.Id = id;
-                await _dataAccumulatorService.UpdateEntityAsync(collectedDataDto);
+                await _dataAggregatorService.UpdateEntityAsync(collectedDataDto);
                 return NoContent();
             }
             catch (NotFoundException e)
@@ -105,7 +106,7 @@ namespace DataAccumulator.WebAPI.Controllers
         {
             try
             {
-                await _dataAccumulatorService.DeleteEntityAsync(id);
+                await _dataAggregatorService.DeleteEntityAsync(id);
                 return NoContent();
             }
             catch (NotFoundException e)
