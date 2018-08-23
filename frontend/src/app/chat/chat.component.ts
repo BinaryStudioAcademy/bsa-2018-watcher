@@ -32,6 +32,7 @@ export class ChatComponent implements OnInit {
   chatList: SelectItem[] = [];
   selectedChat: Chat;
   currentUser: User;
+  unreadedMessageCount = 0;
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -40,6 +41,7 @@ export class ChatComponent implements OnInit {
         chats.reverse();
         chats.forEach(chat => {
           this.chatList.push({ value: chat });
+          this.unreadedMessageCount += this.calcNotReadMessages(chat);
         });
         this.subscribeToEvents();
       },
@@ -76,14 +78,20 @@ export class ChatComponent implements OnInit {
         return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
       }
     }
-
-    // Default image for chat list
     return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
+  }
+
+  calcNotReadMessages(chat: Chat): number {
+    return chat.messages.filter(item => !item.wasRead && item.user.id !== this.currentUser.id).length;
   }
 
   subscribeToEvents() {
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
       this.chatList.unshift({ value: chat });
+    });
+
+    this.chatHub.messageReceived.subscribe(() => {
+      this.unreadedMessageCount++;
     });
 
     this.chatHub.chatChanged.subscribe((chat: Chat) => {
@@ -95,7 +103,6 @@ export class ChatComponent implements OnInit {
       if (message.user.id !== this.currentUser.id) {
         this.messageService.add(
           {
-            life: 100000,
             key: 'chat-message',
             data: message,
           }
