@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using DataAccumulator.DataAccessLayer.Data;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace DataAccumulator.DataAccessLayer.Repositories
 {
-    public class DataAccumulatorRepository : IDataAccumulatorRepository<CollectedData>
+    public class DataAggregatorRepository : IDataAggregatorRepository<CollectedData>
     {
         private readonly DataAccumulatorContext _context = null;
 
-        public DataAccumulatorRepository(string ConnectionString, string Database)
+        public DataAggregatorRepository(string ConnectionString, string Database)
         {
             _context = new DataAccumulatorContext(ConnectionString, Database);
         }
@@ -22,7 +24,8 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                return await _context.Datasets.Find(_ => true).ToListAsync();
+                return await _context.AggregatedCollectedData
+                    .Find(_ => true).ToListAsync();
             }
             catch (Exception e)
             {
@@ -37,25 +40,9 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             {
                 ObjectId internalId = GetInternalId(id);
 
-                var list = await _context.Datasets
+                return await _context.AggregatedCollectedData
                     .Find(data => data.Id == id || data.InternalId == internalId)
-                    .ToListAsync();
-                return list[list.Count - 1];
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        public async Task<CollectedData> GetEntity(ObjectId id)
-        {
-            try
-            {
-                var filter = Builders<CollectedData>.Filter.Eq(i => i.InternalId, id);
-
-                return await _context.Datasets.Find(filter).FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync();
             }
             catch (Exception e)
             {
@@ -69,7 +56,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                var query = _context.Datasets
+                var query = _context.AggregatedCollectedData
                     .Find(data => data.Time >= timeFrom && data.Time <= timeTo);
 
                 return await query.ToListAsync();
@@ -81,11 +68,12 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
-        public async Task AddEntity(CollectedData collectedData)
+        public async Task AddEntity(CollectedData item)
         {
             try
             {
-                await _context.Datasets.InsertOneAsync(collectedData);
+                await _context.AggregatedCollectedData
+                    .InsertOneAsync(item);
             }
             catch (Exception e)
             {
@@ -98,7 +86,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                ReplaceOneResult actionResult = await _context.Datasets
+                ReplaceOneResult actionResult = await _context.AggregatedCollectedData
                     .ReplaceOneAsync(data => data.Id.Equals(collectedData.Id), collectedData, new UpdateOptions { IsUpsert = true });
 
                 return actionResult.IsAcknowledged && actionResult.ModifiedCount > 0;
@@ -115,7 +103,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             try
             {
                 DeleteResult actionResult =
-                    await _context.Datasets
+                    await _context.AggregatedCollectedData
                         .DeleteOneAsync(Builders<CollectedData>.Filter.Eq("Id", id));
 
                 return actionResult.IsAcknowledged && actionResult.DeletedCount > 0;
@@ -131,7 +119,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                DeleteResult actionResult = await _context.Datasets
+                DeleteResult actionResult = await _context.AggregatedCollectedData
                     .DeleteManyAsync(new BsonDocument());
 
                 return actionResult.IsAcknowledged && actionResult.DeletedCount > 0;
@@ -145,24 +133,8 @@ namespace DataAccumulator.DataAccessLayer.Repositories
 
         public Task<bool> EntityExistsAsync(Guid id)
         {
-            return _context.Datasets.Find(entity => entity.Id == id).AnyAsync();
-        }
-
-        public Task<List<CollectedData>> GetPercentageInfoByEntityIdAsync(Guid id, int count)
-        {
-            try
-            {
-                return _context.Datasets.Find(data => data.Id == id)
-                                        .SortByDescending(cd => cd.Time)
-                                        .Limit(count)
-                                        .ToListAsync();
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            return _context.AggregatedCollectedData
+                .Find(entity => entity.Id == id).AnyAsync();
         }
 
         // It creates a sample compound index 
@@ -176,7 +148,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
                     .Ascending(item => item.ProcessesCount)
                     .Ascending(item => item.Time);
 
-                return await _context.Datasets
+                return await _context.AggregatedCollectedData
                     .Indexes
                     .CreateOneAsync(new CreateIndexModel<CollectedData>(keys));
             }
