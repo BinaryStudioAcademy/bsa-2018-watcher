@@ -63,9 +63,9 @@ namespace Watcher.Controllers
         /// <response code="200">Success</response>
         [HttpGet]
         [AllowAnonymous]
-        public virtual async Task<ActionResult<IEnumerable<SampleDto>>> Get()
+        public virtual async Task<ActionResult<IEnumerable<SampleDto>>> Get([FromQuery] Filter filter)
         {
-            var dtos = await _samplesService.GetAllEntitiesAsync();
+            var dtos = await _samplesService.GetAllEntitiesAsync(filter);
             if (!dtos.Any())
             {
                 return NoContent();

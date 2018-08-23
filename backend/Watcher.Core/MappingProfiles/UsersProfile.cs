@@ -30,7 +30,7 @@
 
             CreateMap<User, UserDto>()
                 .ForMember(d => d.Role, o => o.MapFrom(s => s.RoleId == 1 ? new Role(s.RoleId, "Admin") : new Role(s.RoleId, "User")))
-                .ForMember(d => d.Organizations, o => o.MapFrom(s => s.UserOrganizations))
+                .ForMember(d => d.Organizations, o => o.MapFrom(s => s.UserOrganizations.Select(uo => uo.Organization).ToList()))
                 .ForMember(d => d.LastPickedOrganization, o => o.MapFrom(s => s.LastPickedOrganization))
                 .ForMember(d => d.CreatedChats, o => o.UseValue(new List<ChartDto>()))
                 .ForMember(d => d.Chats, o => o.MapFrom(s => s.UserChats.Select(uc => uc.Chat)))

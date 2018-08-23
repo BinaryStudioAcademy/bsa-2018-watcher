@@ -18,6 +18,8 @@
 
             CreateMap<OrganizationDto, Organization>();
 
+            CreateMap<OrganizationUpdateRequest, Organization>();
+
             CreateMap<OrganizationRequest, Organization>();
 
             CreateMap<OrganizationRequest, Organization>()
@@ -26,7 +28,10 @@
 
 
             CreateMap<Organization, OrganizationDto>()
-                .ForMember(d => d.UsersId, o => o.MapFrom(s => s.UserOrganizations.Select(i => i.UserId)));
+                .ForMember(d => d.UsersId, o => o.MapFrom(s => s.UserOrganizations.Select(i => i.UserId).ToList()));
+
+
+            
         }
     }
 }

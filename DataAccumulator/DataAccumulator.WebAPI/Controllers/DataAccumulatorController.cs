@@ -11,9 +11,9 @@ namespace DataAccumulator.WebAPI.Controllers
     [Route("api/v1/dataaccumulator")]
     public class DataAccumulatorController : Controller
     {
-        private readonly IService<CollectedDataDto> _dataAccumulatorService;
+        private readonly IDataAccumulatorService<CollectedDataDto> _dataAccumulatorService;
 
-        public DataAccumulatorController(IService<CollectedDataDto> dataAccumulatorService)
+        public DataAccumulatorController(IDataAccumulatorService<CollectedDataDto> dataAccumulatorService)
         {
             _dataAccumulatorService = dataAccumulatorService;
         }
