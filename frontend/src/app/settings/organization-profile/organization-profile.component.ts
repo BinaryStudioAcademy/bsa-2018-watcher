@@ -34,6 +34,11 @@ export class OrganizationProfileComponent implements OnInit {
   inviteEmail: string;
   invite: OrganizationInvite;
 
+  isUpdating: Boolean = false;
+  isInviting: Boolean = false;
+  isCopying: Boolean = false;
+  isSending: Boolean = false;
+
   private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
   private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
 
@@ -87,14 +92,17 @@ export class OrganizationProfileComponent implements OnInit {
 
   onSubmit() {
     if (this.organizationForm.valid && this.editable) {
+      this.isUpdating = true;
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
           const user = this.authService.getCurrentUser();
           user.lastPickedOrganization = this.organization;
           this.toastrService.success('Organization was updated');
+          this.isUpdating = false;
         },
         err => {
           this.toastrService.error('Organization was not updated');
+          this.isUpdating = false;
         }
       );
     } else {
@@ -121,31 +129,37 @@ export class OrganizationProfileComponent implements OnInit {
       link: null,
       state: OrganizationInviteState.Pending
     };
-
+    this.isInviting = true;
     this.organizationInvitesService.create(invite).subscribe(
       value => {
         this.toastrService.success('Organization Invite was created');
         this.invite = value;
         this.inviteLink = `${environment.client_url}/user/invite/${value.link}`;
+        this.isInviting = false;
       },
       err => {
         this.toastrService.error('Organization Invite was not created');
+        this.isInviting = false;
       });
   }
 
   onSentInviteToEmail() {
     if (this.inviteEmail === null) { return; }
     this.invite.inviteEmail = this.inviteEmail;
+    this.isSending = true;
     this.organizationInvitesService.update(this.invite.id, this.invite).subscribe(
     value => {
       this.toastrService.success('Organization Invite was updated and sends to email.');
+      this.isSending = false;
     },
     err => {
       this.toastrService.error('Organization Invite was not updated');
+      this.isSending = false;
     });
   }
 
   onCopy() {
+    this.isCopying = true;
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';
@@ -157,5 +171,6 @@ export class OrganizationProfileComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
+    this.isCopying = false;
   }
 }
