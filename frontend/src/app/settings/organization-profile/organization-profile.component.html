@@ -69,8 +69,8 @@
             <div class="ui-g ui-fluid">
               <div class="ui-g-12">
                 <div class="ui-inputgroup">
-                    <p-inputMask type="phone" [(ngModel)]="organization.contactNumber" mask="+380 (99) 999-99-99"  placeholder="Contact number" 
-                    [(ngModel)]="contactNumber"></p-inputMask>
+                    <p-inputMask type="phone" [(ngModel)]="organization.contactNumber" mask="+380 (99) 999-99-99"  
+                    placeholder="Contact number" ></p-inputMask>
                 </div>
               </div>
             </div>
@@ -82,7 +82,7 @@
                   <input type="text" pInputText placeholder="Web site"  [(ngModel)]="organization.webSite" id="cWebSite" #cWebSite="ngModel"
                   pattern="^(http|https|ftp)?(://)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([/?].*)?$" >
                   <div *ngIf="cWebSite?.invalid && (cWebSite?.dirty || cWebSite?.touched)" class="alert alert-danger">
-                      <div *ngIf="cWebSite.errors.pattern">Email must be a valid email address</div>
+                      <div *ngIf="cWebSite.errors.pattern">Web site must be a valid.</div>
                     </div>
                 </div>
               </div>
@@ -99,7 +99,7 @@
           <div class="btn-panel btn-save">
             <p-progressSpinner class="btn-spinner" *ngIf="isUpdating"></p-progressSpinner>
             <button *ngIf="!isUpdating" class="ui-button-raised ui-button-success button" pButton type="button" (click)="onSubmit()" label="Update"
-            [disabled]="cName?.invalid || cEmail?.invalid"></button>
+            [disabled]="cName?.invalid || cEmail?.invalid || cWebSite?.invalid"></button>
             </div>
         </div>
         
