@@ -16,7 +16,7 @@ export class UserProfileComponent implements OnInit {
   data: any;
   photoUrl: string;
   photoType: string;
-  private isUpdating: Boolean = false;
+  isUpdating: Boolean = false;
 
   @ViewChild('cropper', undefined)
 
