@@ -74,7 +74,7 @@
 
                 // Repeat this message feed every period seconds
                 // await Task.Delay(TimeSpan.FromMilliseconds(_options.Value.Period), stoppingToken);
-                await Task.Delay(120_000, stoppingToken);
+                await Task.Delay(10_000, stoppingToken);
             }
 
             _logger.LogError("Watcher Service stopped! Unexpected error occurred!");
