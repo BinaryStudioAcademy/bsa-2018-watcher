@@ -73,8 +73,8 @@ export class UserListComponent implements OnInit {
     this.cropperSettings.minHeight = 100;
     this.cropperSettings.croppedWidth = 70;
     this.cropperSettings.croppedHeight = 70;
-    this.cropperSettings.canvasWidth = 400;
-    this.cropperSettings.canvasHeight = 400;
+    this.cropperSettings.canvasWidth = 500;
+    this.cropperSettings.canvasHeight = 500;
     this.cropperSettings.noFileInput = true;
     this.cropperSettings.preserveSize = true;
 
