@@ -6,16 +6,12 @@ using DataAccumulator.Shared.Interfaces;
 
 namespace DataAccumulator.BusinessLayer.Interfaces
 {
-    //interface IDataAccumulatorService
-    //{
-    //}
-
-    public interface IDataAccumulatorService<TEntity> where TEntity : ICollectedDataDto
+    public interface IDataAccumulatorService<TDto> where TDto : ICollectedDataDto
     {
-        Task<IEnumerable<TEntity>> GetEntitiesAsync();
-        Task<TEntity> GetEntityAsync(Guid id);
-        Task<TEntity> AddEntityAsync(TEntity entity);
-        Task<TEntity> UpdateEntityAsync(TEntity entity);
+        Task<IEnumerable<TDto>> GetEntitiesAsync();
+        Task<TDto> GetEntityAsync(Guid id);
+        Task<TDto> AddEntityAsync(TDto entity);
+        Task<TDto> UpdateEntityAsync(TDto entity);
         Task<bool> DeleteEntityAsync(Guid id);
     }
 }
