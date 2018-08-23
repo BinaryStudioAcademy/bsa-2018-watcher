@@ -179,12 +179,7 @@ namespace Watcher
                 });
 
             var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true)
-                .AddJsonProtocol(options => options.PayloadSerializerSettings =
-                new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
+                .AddJsonProtocol(options => options.PayloadSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             if (UseAzureSignalR)
             {
@@ -280,7 +275,7 @@ namespace Watcher
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (enviroment != EnvironmentName.Development)
+            if (enviroment != EnvironmentName.Production)
             {
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
