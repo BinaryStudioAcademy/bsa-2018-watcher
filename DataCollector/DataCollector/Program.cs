@@ -112,7 +112,7 @@ namespace DataCollector
             }
 
             sendDataItem /= count;
-            sendDataItem.Id = ClientIdentifier;
+            sendDataItem.ClientId = ClientIdentifier;
 
             Console.Clear();
             Console.WriteLine($"{DateTime.Now}\n Average info:\n{sendDataItem}");

@@ -1,8 +1,12 @@
-<p-dialog class="download-dialog" (onHide)="closeDialog()" appendTo="body" [(visible)]="display"
-    [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="999">
-        <h1>Download the app</h1>
-        <p>Enter this instance id in desktop app: </p>
-        <p class="guid">{{guid}}     <button pButton type="button" icon="fa fa-copy" class="ui-button-secondary" (click)="copyToClipboard(guid)"></button>        </p>
-        <a href="https://filestoragetestbsa2018.blob.core.windows.net/watcher/DataCollector.exe" 
-        pButton type="button" icon="fa fa-cloud-download" label="Download app"></a>
+<p-dialog class="download-dialog" header="Data collector" (onHide)="closeDialog()" appendTo="body" [(visible)]="display" [modal]="true" [responsive]="true"
+    [draggable]="false" [width]="380" [minWidth]="200" [maximizable]="false" [baseZIndex]="999">
+    <p>Enter this instance id in desktop app: </p>
+    <div class="ui-inputgroup">
+        <input pInputText type="text" placeholder="Guid id" [value]="guid" />
+        <button pButton type="button" label="Copy" class="ui-button-info" (click)="copyToClipboard(guid)"></button>
+    </div>
+    <a href="https://filestoragetestbsa2018.blob.core.windows.net/watcher/DataCollector.exe" 
+    pButton type="button"
+    label="Download">
+    </a>
 </p-dialog>

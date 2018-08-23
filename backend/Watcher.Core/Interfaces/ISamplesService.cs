@@ -8,7 +8,7 @@
 
     public interface ISamplesService
     {
-        Task<IEnumerable<SampleDto>> GetAllEntitiesAsync();
+        Task<IEnumerable<SampleDto>> GetAllEntitiesAsync(Filter filter);
         
         Task<SampleDto> GetEntityByIdAsync(int id);
 

@@ -10,7 +10,7 @@ using DataAccumulator.Shared.Models;
 
 namespace DataAccumulator.BusinessLayer.Services
 {
-    public class DataAccumulatorService : IService<CollectedDataDto>
+    public class DataAccumulatorService : IDataAccumulatorService<CollectedDataDto>
     {
         private readonly IMapper _mapper;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;

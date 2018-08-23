@@ -31,14 +31,14 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
-        public async Task<CollectedData> GetEntity(Guid id)
+        public async Task<CollectedData> GetEntity(Guid clientId)
         {
             try
             {
-                ObjectId internalId = GetInternalId(id);
+                ObjectId internalId = GetInternalId(clientId);
 
                 var list = await _context.Datasets
-                    .Find(data => data.Id == id || data.InternalId == internalId)
+                    .Find(data => data.ClientId == clientId || data.InternalId == internalId)
                     .ToListAsync();
                 return list[list.Count - 1];
             }
@@ -65,12 +65,12 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         }
 
         // Query by time
-        public async Task<IEnumerable<CollectedData>> GetEntity(DateTime time)
+        public async Task<IEnumerable<CollectedData>> GetEntities(DateTime timeFrom, DateTime timeTo)
         {
             try
             {
                 var query = _context.Datasets
-                    .Find(data => data.Time >= time);
+                    .Find(data => data.Time >= timeFrom && data.Time <= timeTo);
 
                 return await query.ToListAsync();
             }
@@ -81,11 +81,11 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
-        public async Task AddEntity(CollectedData item)
+        public async Task AddEntity(CollectedData collectedData)
         {
             try
             {
-                await _context.Datasets.InsertOneAsync(item);
+                await _context.Datasets.InsertOneAsync(collectedData);
             }
             catch (Exception e)
             {
@@ -148,11 +148,11 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             return _context.Datasets.Find(entity => entity.Id == id).AnyAsync();
         }
 
-        public Task<List<CollectedData>> GetPercentageInfoByEntityIdAsync(Guid id, int count)
+        public Task<List<CollectedData>> GetPercentageInfoByEntityIdAsync(Guid clientId, int count)
         {
             try
             {
-                return _context.Datasets.Find(data => data.Id == id)
+                return _context.Datasets.Find(data => data.ClientId == clientId)
                                         .SortByDescending(cd => cd.Time)
                                         .Limit(count)
                                         .ToListAsync();

@@ -113,7 +113,7 @@ namespace Watcher
             ConfigureFileStorage(services, Configuration);
 
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
-            services.AddHostedService<WatcherService>();
+            // services.AddHostedService<WatcherService>();
 
 
             InitializeAutomapper(services);
@@ -275,7 +275,7 @@ namespace Watcher
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (enviroment != EnvironmentName.Development)
+            if (enviroment == EnvironmentName.Production)
             {
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))

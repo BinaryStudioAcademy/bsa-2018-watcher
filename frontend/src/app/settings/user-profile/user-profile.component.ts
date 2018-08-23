@@ -16,6 +16,7 @@ export class UserProfileComponent implements OnInit {
   data: any;
   photoUrl: string;
   photoType: string;
+  isUpdating: Boolean = false;
 
   @ViewChild('cropper', undefined)
 
@@ -108,13 +109,16 @@ export class UserProfileComponent implements OnInit {
 
   onSubmit() {
     if (this.userForm.valid) {
+      this.isUpdating = true;
       this.userService.update(this.userId, this.user).subscribe(value => {
 
         this.authService.updateCurrentUser(this.user);
         this.toastrService.success('Profile was updated');
+        this.isUpdating = false;
       },
         err => {
           this.toastrService.error('Profile was not updated');
+          this.isUpdating = false;
         });
     } else {
       Object.keys(this.userForm.controls).forEach(field => {
