@@ -93,7 +93,7 @@
             </div>
           </div>
 
-          <div class="btn-panel">
+          <div class="btn-panel btn-save">
             <p-progressSpinner class="btn-spinner" *ngIf="isUpdating"></p-progressSpinner>
             <button *ngIf="!isUpdating" class="ui-button-raised ui-button-success button" pButton type="button" (click)="onSubmit()" label="Update"
             [disabled]="cName?.invalid || cEmail?.invalid"></button>
