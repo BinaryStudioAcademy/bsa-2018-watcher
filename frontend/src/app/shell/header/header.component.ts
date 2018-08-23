@@ -13,7 +13,7 @@ import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../core/services/notification.service';
 import { Notification } from '../../shared/models/notification.model';
 import { NotificationType } from '../../shared/models/notification-type.enum';
-import {NotificationsHubService} from '../../core/hubs/notifications.hub';
+import { NotificationsHubService } from '../../core/hubs/notifications.hub';
 import { PathService } from '../../core/services/path.service';
 
 @Component({

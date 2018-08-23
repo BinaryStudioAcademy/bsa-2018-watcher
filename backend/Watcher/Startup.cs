@@ -27,6 +27,8 @@ namespace Watcher
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
@@ -98,6 +100,7 @@ namespace Watcher
             services.AddTransient<IResponseService, ResponseService>();
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
             services.AddTransient<ICollectedDataService, CollectedDataService>();
+            services.AddTransient<IRoleService, RoleService>();
 
             services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
@@ -175,7 +178,13 @@ namespace Watcher
                         });
                 });
 
-            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true);
+            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true)
+                .AddJsonProtocol(options => options.PayloadSerializerSettings =
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
 
             if (UseAzureSignalR)
             {
@@ -271,7 +280,7 @@ namespace Watcher
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (enviroment == EnvironmentName.Development)
+            if (enviroment != EnvironmentName.Development)
             {
                 var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
@@ -308,6 +317,7 @@ namespace Watcher
                     cfg.AddProfile<MessageProfile>();
 
                     cfg.AddProfile<FeedbackProfile>();
+                    cfg.AddProfile<RoleProfile>();
                     cfg.AddProfile<ResponseProfile>();
                     cfg.AddProfile<InstancesProfile>();
                     cfg.AddProfile<OrganizationInvitesProfile>();

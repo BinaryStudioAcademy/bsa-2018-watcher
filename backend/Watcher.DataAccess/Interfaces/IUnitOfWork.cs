@@ -23,6 +23,8 @@
 
         IResponseRepository ResponseRepository { get; }
 
+        IRoleRepository RoleRepository { get; }
+
         INotificationSettingsRepository NotificationSettingsRepository { get; }
 
         IChatsRepository ChatsRepository { get; }

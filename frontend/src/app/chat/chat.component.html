@@ -6,9 +6,10 @@
     <p-accordionTab>
       <p-header>
         Chats
+        <!-- <span class="message-counter">12</span> -->
         <i class="icon icon-right fa fa-plus" (click)="openChatCreating($event)"></i>
       </p-header>
-      <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="openChat()" (onDblClick)="removeSelect()">
+      <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="selectChat()" (onDblClick)="removeSelect()">
         <ng-template let-chat pTemplate="item">
           <div class="ui-helper-clearfix">
             <img class="chat-list-img" src="{{getChatImage(chat?.value)}}"/>
@@ -19,3 +20,17 @@
     </p-accordionTab>
   </p-accordion>
 </div>
+
+<p-toast styleClass="chat-message-toast" [style]="{marginTop: '70px'}" position="top-right" key="chat-message" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div class="ui-g ui-fluid message" (click)="openChat(message.data?.chatId)">
+      <div class="ui-g-2 ui-g-nopad">
+          <img class="message-img" src="{{message.data.user.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}" />
+      </div>
+      <div class="ui-g-10">
+          <div class="message-title">New message from {{message.data.user.displayName}}</div>
+          <div class="message-content">{{message.data.text}}</div>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>

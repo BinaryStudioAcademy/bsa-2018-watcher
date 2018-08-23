@@ -16,6 +16,7 @@ export interface User  {
    bio: string;
    email: string;
    photoURL: string;
+   photoType: string;
    isActive: boolean;
    createdAt: Date;
    role: Role;

@@ -6,6 +6,7 @@ import { InstanceService } from '../../core/services/instance.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Instance } from '../../shared/models/instance.model';
 import { InstanceRequest } from '../models/instance-request.model';
+import { SelectItem } from '../../../../node_modules/primeng/api';
 
 @Component({
   selector: 'app-edit-instance',
@@ -19,13 +20,17 @@ export class EditInstanceComponent implements OnInit {
   instanceForm: FormGroup;
   instance: Instance;
   instanceTitle: string;
+  platformsDropdown: SelectItem[];
+  selectedPlatform: string;
 
   constructor(private activateRoute: ActivatedRoute,
     private fb: FormBuilder,
     private toastrService: ToastrService,
     private instanceService: InstanceService,
     private authService: AuthService,
-    private router: Router) { }
+    private router: Router) {
+      this.platformsDropdown = new Array<SelectItem>();
+    }
 
   ngOnInit() {
     const x = this.activateRoute.params.subscribe(params => {
@@ -47,24 +52,27 @@ export class EditInstanceComponent implements OnInit {
       this.organizationId = user.lastPickedOrganization.id;
     }
     this.instanceForm = this.getInstanceForm(this.instance);
+    this.fillDropdown();
+    this.instanceForm.controls['platform'].setValue(this.platformsDropdown[0].value);
   }
 
   getInstanceForm(instance: Instance) {
     let form: FormGroup;
     if (instance === undefined) {
+
       form = this.fb.group({
         title: new FormControl({ value: '', disabled: false }, Validators.required),
         platform: new FormControl({ value: '', disabled: false }, Validators.required),
         address: new FormControl({ value: '', disabled: false }, Validators.required)
       });
-      this.instanceTitle = 'NEW INSTANCE'
+      this.instanceTitle = 'NEW INSTANCE';
     } else {
       form = this.fb.group({
         title: new FormControl({ value: instance.title, disabled: false }, Validators.required),
         platform: new FormControl({ value: instance.platform, disabled: false }, Validators.required),
         address: new FormControl({ value: instance.address, disabled: false }, Validators.required)
       });
-      this.instanceTitle = 'EDIT INSTANCE'
+      this.instanceTitle = 'EDIT INSTANCE';
     }
     return form;
   }
@@ -109,5 +117,11 @@ export class EditInstanceComponent implements OnInit {
       organizationId: this.organizationId
     };
     return newInstance;
+  }
+
+  private fillDropdown(): void {
+    this.platformsDropdown.push(
+      {label: 'Windows', value: 'Windows'},
+      {label: 'Linux', value: 'Linux'});
   }
 }
