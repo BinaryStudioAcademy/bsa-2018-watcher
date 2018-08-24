@@ -1,5 +1,5 @@
-<button pButton type="button" label="Sign In" class="btnsign-in ui-button-secondary ui-button-raised" (click)="display = true;"></button>
-<button pButton type="button" label="Sign Up" class="btnsign-up ui-button-primary ui-button-raised" (click)="showDialogSignUp()"></button>
+<button *ngIf="showSignInOutBtn" pButton type="button" label="Sign In" class="btnsign-in ui-button-secondary ui-button-raised" (click)="display = true;"></button>
+<button *ngIf="showSignInOutBtn" pButton type="button" label="Sign Up" class="btnsign-up ui-button-primary ui-button-raised" (click)="showDialogSignUp()"></button>
 
 
 <p-dialog class="authorization-dialog" (onHide)="closeDialog()" [showHeader]="false" appendTo="body" [closable]=false [(visible)]="display"

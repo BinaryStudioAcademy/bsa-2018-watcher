@@ -16,7 +16,6 @@ export class AuthorizationComponent implements OnInit {
   @ViewChild('notRegisteredSignInTemplate') notRegisteredSignInTemplate;
 
   @Input() display = false;
-  @Input() redirectTo: string;
   @Input() showSignInOutBtn = true;
   isSignIn = true;
   isSuccessSignUp = false;

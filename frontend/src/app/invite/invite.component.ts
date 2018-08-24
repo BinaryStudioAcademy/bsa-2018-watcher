@@ -50,7 +50,6 @@ export class InviteComponent implements OnInit {
     this.organizationInvitesService.getByLink(this.link).subscribe(
       result => {
         this.invite = result;
-
         if (this.isAuthenticated) {
           if (this.user.id === this.invite.createdByUser.id) {  // You are already a member of the {org} organization!
             this.toastrService.confirm(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
