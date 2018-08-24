@@ -43,6 +43,14 @@ namespace DataAccumulator
                         .AllowCredentials());
             });
 
+            var serviceBusSection = Configuration.GetSection("ServiceBus");
+            services.Configure<AzureQueueSettings>(o =>
+                {
+                    o.ConnectionString = serviceBusSection["ConnectionString"];
+                    o.DataQueueName = serviceBusSection["DataQueueName"];
+                    o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
+                });
+
             services.AddMvc();
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>();
@@ -61,9 +69,19 @@ namespace DataAccumulator
 
             services.AddTransient<CollectedDataAggregatingJob>();
 
-            var serviceBusSection = Configuration.GetSection("ServiceBus");
             services.AddSingleton<IAzureQueueSender<InstanceCollectedDataMessage>, AzureQueueSender<InstanceCollectedDataMessage>>(
-                r => new AzureQueueSender<InstanceCollectedDataMessage>(new AzureQueueSettings(serviceBusSection["ConnectionString"], serviceBusSection["QueueName"])));
+                r => new AzureQueueSender<InstanceCollectedDataMessage>(
+                    new AzureQueueSettings(
+                        serviceBusSection["ConnectionString"], 
+                        serviceBusSection["DataQueueName"], 
+                        serviceBusSection["ErrorQueueName"])));
+
+            services.AddSingleton<IAzureQueueSender<InstanceErrorMessage>, AzureQueueSender<InstanceErrorMessage>>(
+                r => new AzureQueueSender<InstanceErrorMessage>(
+                    new AzureQueueSettings(
+                        serviceBusSection["ConnectionString"],
+                        serviceBusSection["ErrorQueueName"],
+                        serviceBusSection["DataQueueName"])));
 
 
             // repo initialization localhost while development env, azure in prod

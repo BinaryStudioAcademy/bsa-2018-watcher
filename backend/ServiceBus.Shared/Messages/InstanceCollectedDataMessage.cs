@@ -2,17 +2,13 @@
 {
     using System;
 
-    public class InstanceCollectedDataMessage
+    public class InstanceCollectedDataMessage : InstanceMessage
     {
-        public InstanceCollectedDataMessage() { }
-
-        public InstanceCollectedDataMessage(Guid collectedDataId, Guid instanceId)
+        public InstanceCollectedDataMessage(Guid collectedDataId, Guid instanceId) : base(instanceId)
         {
             CollectedDataId = collectedDataId;
-            InstanceId = instanceId;
         }
 
         public Guid CollectedDataId { get; set; }
-        public Guid InstanceId { get; set; }
     }
 }

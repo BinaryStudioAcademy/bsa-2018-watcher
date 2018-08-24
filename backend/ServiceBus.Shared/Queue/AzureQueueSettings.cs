@@ -4,14 +4,17 @@
     {
         public AzureQueueSettings() { }
 
-        public AzureQueueSettings(string connectionString, string queueName)
+        public AzureQueueSettings(string connectionString, string dataQueueName, string errorQueueName)
         {
             ConnectionString = connectionString;
-            QueueName = queueName;
+            DataQueueName = dataQueueName;
+            ErrorQueueName = errorQueueName;
         }
 
         public string ConnectionString { get; set; }
 
-        public string QueueName { get; set; }
+        public string DataQueueName { get; set; }
+
+        public string ErrorQueueName { get; set; }
     }
 }

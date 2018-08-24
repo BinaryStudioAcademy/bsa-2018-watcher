@@ -70,7 +70,6 @@ export class DashboardsHub {
   private registerOnServerEvents(): void {
 
     this.hubConnection.on('InstanceDataTick', (info: CollectedData) => {
-        debugger;
         this.infoSub.next(info);
       }
     );

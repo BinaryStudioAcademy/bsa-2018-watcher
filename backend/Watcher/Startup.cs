@@ -18,7 +18,6 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Azure.ServiceBus;
     using Microsoft.Azure.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -29,7 +28,6 @@
 
     using Newtonsoft.Json;
 
-    using ServiceBus.Shared.Messages;
     using ServiceBus.Shared.Queue;
 
     using Watcher.Common.Options;
@@ -85,7 +83,8 @@
             services.Configure<AzureQueueSettings>(o =>
                 {
                     o.ConnectionString = serviceBusSection["ConnectionString"];
-                    o.QueueName = serviceBusSection["QueueName"];
+                    o.DataQueueName = serviceBusSection["DataQueueName"];
+                    o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
                 });
 
             services.ConfigureSwagger(Configuration);
@@ -112,9 +111,11 @@
             services.AddTransient<ICollectedDataService, CollectedDataService>();
             services.AddTransient<IRoleService, RoleService>();
 
+            services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
-            services.AddSingleton<IAzureQueueReceiver<InstanceCollectedDataMessage>, AzureQueueReceiver<InstanceCollectedDataMessage>>(
-                r => new AzureQueueReceiver<InstanceCollectedDataMessage>(new AzureQueueSettings(serviceBusSection["ConnectionString"], serviceBusSection["QueueName"])));
+
+            //services.AddSingleton<IAzureQueueReceiver<InstanceCollectedDataMessage>, AzureQueueReceiver<InstanceCollectedDataMessage>>(
+            //    r => new AzureQueueReceiver<InstanceCollectedDataMessage>(new AzureQueueSettings(serviceBusSection["ConnectionString"], serviceBusSection["DataQueueName"])));
 
             // repo initialization localhost while development env, azure in prod
             ConfigureCosmosDb(services, Configuration);

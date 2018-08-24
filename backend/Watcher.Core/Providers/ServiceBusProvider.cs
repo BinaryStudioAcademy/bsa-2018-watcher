@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -13,6 +14,7 @@
     using Microsoft.Azure.ServiceBus;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
 
     using ServiceBus.Shared.Common;
     using ServiceBus.Shared.Messages;
@@ -22,27 +24,46 @@
     using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
 
-    public class ServiceBusProvider : IServiceBusProvider
+    public class ServiceBusProvider : IServiceBusProvider, IDisposable
     {
         private readonly ILogger<ServiceBusProvider> _logger;
-
-        private readonly IHubContext<DashboardsHub> _dashboardsHubContext;
-        private readonly IAzureQueueReceiver<InstanceCollectedDataMessage> _azureQueueReceiver;
-
         private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IHubContext<DashboardsHub> _dashboardsHubContext;
+        private readonly IOptions<AzureQueueSettings> _queueOptions;
+        private readonly IAzureQueueReceiver _azureQueueReceiver;
+
+        private readonly QueueClient _instanceDataQueueClient;
+        private readonly QueueClient _instanceErrorQueueClient;
 
         public ServiceBusProvider(
             ILoggerFactory loggerFactory,
             IServiceScopeFactory scopeFactory,
             IHubContext<DashboardsHub> dashboardsHubContext,
-            IAzureQueueReceiver<InstanceCollectedDataMessage> azureQueueReceiver)
+            IOptions<AzureQueueSettings> queueOptions,
+            IAzureQueueReceiver azureQueueReceiver)
         {
-            _dashboardsHubContext = dashboardsHubContext;
+            _logger = loggerFactory?.CreateLogger<ServiceBusProvider>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _scopeFactory = scopeFactory;
-            _logger = loggerFactory?.CreateLogger<ServiceBusProvider>()
-                      ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _dashboardsHubContext = dashboardsHubContext;
+            _queueOptions = queueOptions;
+            _instanceDataQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.DataQueueName);
+            _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
+
             _azureQueueReceiver = azureQueueReceiver;
-            _azureQueueReceiver.Receive(OnProcessAsync, ExceptionReceivedHandler, ExceptionWhileProcessingHandler, OnWait);
+            _azureQueueReceiver.Receive<InstanceCollectedDataMessage>(
+                _instanceDataQueueClient,
+                OnProcessAsync,
+                ExceptionReceivedHandler,
+                ExceptionWhileProcessingHandler,
+                OnWait);
+
+            // TODO: Check if I can use this method for other queue with diff MessageType
+            _azureQueueReceiver.Receive<InstanceErrorMessage>(
+                _instanceErrorQueueClient,
+                OnErrorProcessAsync,
+                ExceptionReceivedHandler,
+                ExceptionWhileProcessingHandler,
+                OnWait);
         }
 
         private void OnWait()
@@ -50,8 +71,27 @@
             Debug.WriteLine("*******************WAITING***********************");
         }
 
-        private async Task<MessageProcessResponse> OnProcessAsync(InstanceCollectedDataMessage arg)
+        private async Task<MessageProcessResponse> OnErrorProcessAsync(InstanceErrorMessage arg, CancellationToken stoppingToken)
         {
+            if (stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogError("Cancellation was requested, stopping token.");
+                return MessageProcessResponse.Abandon;
+            }
+
+            await _dashboardsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ErrorMessage);
+            _logger.LogError("ERROR Message to hub clients was sent.");
+            return MessageProcessResponse.Complete;
+        }
+
+        private async Task<MessageProcessResponse> OnProcessAsync(InstanceCollectedDataMessage arg, CancellationToken stoppingToken)
+        {
+            if (stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogError("Cancellation was requested, stopping token.");
+                return MessageProcessResponse.Abandon;
+            }
+
             CollectedDataDto dto = null;
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -66,11 +106,12 @@
                 }
                 else
                 {
-                    return MessageProcessResponse.Dead; // No such entity
+                    return MessageProcessResponse.Abandon; // No such entity
                 }
             }
 
             await _dashboardsHubContext.Clients.Group(dto.ClientId.ToString()).SendAsync("InstanceDataTick", dto);
+            _logger.LogError("DATA Message to hub clients was sent.");
             return MessageProcessResponse.Complete;
         }
 
@@ -87,6 +128,24 @@
         private void ExceptionWhileProcessingHandler(Exception ex)
         {
             _logger.LogError($"Message handler encountered an exception {ex.Message}.");
+        }
+
+        // To detect redundant calls
+        private bool disposedValue;
+
+        public async Task CloseClient()
+        {
+            if (!disposedValue)
+            {
+                await _instanceDataQueueClient.CloseAsync();
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            CloseClient().GetAwaiter().GetResult();
         }
     }
 }

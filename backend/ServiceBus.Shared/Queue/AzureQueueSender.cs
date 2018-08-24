@@ -14,7 +14,7 @@
 
         public AzureQueueSender(AzureQueueSettings settings)
         {
-            _client = new QueueClient(settings.ConnectionString, settings.QueueName);
+            _client = new QueueClient(settings.ConnectionString, settings.DataQueueName);
         }
         
         public Task SendAsync(T item)

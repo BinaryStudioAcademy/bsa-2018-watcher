@@ -7,15 +7,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataAccumulator.WebAPI.Controllers
 {
+    using ServiceBus.Shared.Messages;
+    using ServiceBus.Shared.Queue;
+
     [Produces("application/json")]
     [Route("api/v1/dataaccumulator")]
     public class DataAccumulatorController : Controller
     {
         private readonly IDataAccumulatorService<CollectedDataDto> _dataAccumulatorService;
+        private readonly IAzureQueueSender<InstanceErrorMessage> _azureQueueSender;
 
-        public DataAccumulatorController(IDataAccumulatorService<CollectedDataDto> dataAccumulatorService)
+        public DataAccumulatorController(IDataAccumulatorService<CollectedDataDto> dataAccumulatorService,
+                                         IAzureQueueSender<InstanceErrorMessage> azureQueueSender)
         {
             _dataAccumulatorService = dataAccumulatorService;
+            _azureQueueSender = azureQueueSender;
         }
 
         // GET: api/v1/dataaccumulator
@@ -78,7 +84,6 @@ namespace DataAccumulator.WebAPI.Controllers
             }
         }
 
-        // POST: api/v1/dataaccumulator
         [HttpPost("TestCreation")]
         public async Task<IActionResult> TestPost()
         {
@@ -92,6 +97,15 @@ namespace DataAccumulator.WebAPI.Controllers
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
+        }
+        
+        [HttpPost("TestError")]
+        public async Task<IActionResult> TestError()
+        {
+            var mess = new InstanceErrorMessage("Error Message from Accummulator", Guid.Parse("7dafb96f-46f3-48c4-9e97-787ec268136a"));
+            await _azureQueueSender.SendAsync(mess);
+
+            return Ok();
         }
 
         // PUT: api/v1/dataaccumulator/5
