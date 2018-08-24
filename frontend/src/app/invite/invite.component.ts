@@ -18,6 +18,8 @@ export class InviteComponent implements OnInit {
   invite: OrganizationInvite;
   createdByUserName: string;
   organizationName: string;
+
+  isAuthenticated: boolean;
   user: User;
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -32,26 +34,35 @@ export class InviteComponent implements OnInit {
        this.link = params['invite'];
     });
 
-    this.authService.currentUser.subscribe(
-      userData => {
-        this.user = { ...userData };
+    this.authService.isAuthenticated.subscribe(
+      authData => {
+        this.isAuthenticated = authData;
+        if (this.isAuthenticated) {
+          this.authService.currentUser.subscribe(
+            userData => {
+              this.user = { ...userData };
+            }
+          );
+        }
       }
     );
-
 
     this.organizationInvitesService.getByLink(this.link).subscribe(
       result => {
         this.invite = result;
-        if (this.user.id === this.invite.createdByUser.id) {  // You are already a member of the {org} organization!
-          this.toastrService.confirm(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
-            this.router.navigate(['user']);
-          });
-        }
-        if (this.user.organizations.some( // You are already a member of the {org} organization!
-          (x => x.id === this.invite.organizationId))) {
+
+        if (this.isAuthenticated) {
+          if (this.user.id === this.invite.createdByUser.id) {  // You are already a member of the {org} organization!
             this.toastrService.confirm(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
               this.router.navigate(['user']);
             });
+          }
+          if (this.user.organizations.some( // You are already a member of the {org} organization!
+            (x => x.id === this.invite.organizationId))) {
+              this.toastrService.confirm(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
+                this.router.navigate(['user']);
+              });
+          }
         }
         this.createdByUserName = this.invite.createdByUser.displayName;
         this.organizationName = this.invite.organization.name;
