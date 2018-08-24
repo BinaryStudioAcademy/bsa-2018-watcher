@@ -103,13 +103,13 @@ namespace Watcher.Core.Services
 
             //var test = !existingEntity.ImageURL.Equals(entity.ImageURL);
 
- 
+ /*
             if (existingEntity.ImageURL != null && !existingEntity.ImageURL.Equals(entity.ImageURL))
             {
                 await _fileStorageProvider.DeleteFileAsync(existingEntity.ImageURL);
             }
             entity.ImageURL = await _fileStorageProvider.UploadFileBase64Async(entity.ImageURL, request.ImageType); // TODO: change here for real image type
-
+*/
             // In returns updated entity, you could do smth with it or just leave as it is
             var updated = await _uow.OrganizationRepository.UpdateAsync(entity);
             var result = await _uow.SaveAsync();
