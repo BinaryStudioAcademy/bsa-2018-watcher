@@ -10,17 +10,23 @@ using DataAccumulator.Shared.Models;
 
 namespace DataAccumulator.BusinessLayer.Services
 {
+    using ServiceBus.Shared.Messages;
+    using ServiceBus.Shared.Queue;
+
     public class DataAccumulatorService : IDataAccumulatorService<CollectedDataDto>
     {
         private readonly IMapper _mapper;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;
 
-        public DataAccumulatorService(IMapper mapper, 
+        private readonly IAzureQueueSender<InstanceCollectedDataMessage> _azureQueueSender;
+
+        public DataAccumulatorService(IMapper mapper,
                                       IDataAccumulatorRepository<CollectedData> repository,
-                                      )
+                                      IAzureQueueSender<InstanceCollectedDataMessage> azureQueueSender)
         {
             _mapper = mapper;
             _repository = repository;
+            _azureQueueSender = azureQueueSender;
         }
 
         public async Task<IEnumerable<CollectedDataDto>> GetEntitiesAsync()
@@ -36,7 +42,7 @@ namespace DataAccumulator.BusinessLayer.Services
 
         public async Task<CollectedDataDto> GetEntityAsync(Guid entityId)
         {
-            var entity = await _repository.GetEntity(entityId);
+            var entity = await _repository.GetEntityByInstanceIdAsync(entityId);
             if (entity == null)
             {
                 throw new NotFoundException();
@@ -45,16 +51,19 @@ namespace DataAccumulator.BusinessLayer.Services
             return _mapper.Map<CollectedData, CollectedDataDto>(entity);
         }
 
-        public async Task<CollectedDataDto> AddEntityAsync(CollectedDataDto collectedDataDto)
+        public async Task<CollectedDataDto> AddEntityAsync(CollectedDataDto collectedDataDto = null)
         {
-            if (collectedDataDto.Id == Guid.Empty)
-            {
-                collectedDataDto.Id = Guid.NewGuid();
-            }
+            //if (collectedDataDto?.Id == Guid.Empty)
+            //{
+            //    collectedDataDto.Id = Guid.NewGuid();
+            //}
 
-            var mappedEntity = _mapper.Map<CollectedDataDto, CollectedData>(collectedDataDto);
+            // var mappedEntity = _mapper.Map<CollectedDataDto, CollectedData>(collectedDataDto);
+            var mappedEntity = GetFakeData(Guid.NewGuid(), Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"));
             await _repository.AddEntity(mappedEntity);
-            var a = mappedEntity.InternalId;
+
+            var message = new InstanceCollectedDataMessage(mappedEntity.Id, mappedEntity.ClientId);
+            await _azureQueueSender.SendAsync(message);
 
 
             return collectedDataDto;
@@ -62,7 +71,7 @@ namespace DataAccumulator.BusinessLayer.Services
 
         public async Task<CollectedDataDto> UpdateEntityAsync(CollectedDataDto collectedDataDto)
         {
-            var entity = await _repository.GetEntity(collectedDataDto.Id);
+            var entity = await _repository.GetEntityByInstanceIdAsync(collectedDataDto.Id);
             if (entity == null)
             {
                 throw new NotFoundException();
@@ -83,6 +92,49 @@ namespace DataAccumulator.BusinessLayer.Services
             }
 
             return await _repository.RemoveEntity(id);
+        }
+
+        public static CollectedData GetFakeData(Guid collectedDataId, Guid instanceId)
+        {
+            var processNames = new List<string>()
+                                   {
+                                       "Google_Chrome",
+                                       "Steam_updater",
+                                       "explorer",
+                                       "devenv",
+                                       "Telegram",
+                                       "slack",
+                                       "zoom",
+                                       "mongodbcompass"
+                                   };
+            var random = new Random();
+            var ProcessesCPU = new Dictionary<string, float>();
+            var ProcessesRAM = new Dictionary<string, float>();
+
+            int processes = random.Next(0, 7);
+            for (int i = 0; i < processes; i++)
+            {
+                ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
+                ProcessesRAM.Add(processNames[i], (float)random.NextDouble() * 1000);
+            }
+            var data = new CollectedData
+            {
+                Id = collectedDataId,
+                ClientId = instanceId, // Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"), // instanceId
+                Time = DateTime.UtcNow,
+                CpuUsagePercent = (float)Math.Round(random.NextDouble() * 100, 2),
+                RamUsagePercent = (float)Math.Round(random.NextDouble() * 100, 2),
+                InterruptsTimePercent = (float)Math.Round(random.NextDouble() * 100, 2),
+                LocalDiskFreeSpacePercent = (float)Math.Round(random.NextDouble() * 100, 2),
+                AvaliableRamBytes = random.Next(100, 4096),
+                InterruptsPerSeconds = random.Next(0, 100),
+                LocalDiskFreeMBytes = random.Next(0, 1000000000),
+                ProcessesCPU = ProcessesCPU,
+                ProcessesRAM = ProcessesRAM,
+                ProcessesCount = random.Next(0, 300)
+            };
+
+            return data;
         }
     }
 }

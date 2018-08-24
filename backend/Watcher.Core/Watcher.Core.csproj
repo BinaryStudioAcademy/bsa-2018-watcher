@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DataAccumulator\DataAccumulator.DataAccessLayer\DataAccumulator.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\ServiceBus.Shared\ServiceBus.Shared.csproj" />
     <ProjectReference Include="..\Watcher.Common\Watcher.Common.csproj" />
     <ProjectReference Include="..\Watcher.DataAccess\Watcher.DataAccess.csproj" />
   </ItemGroup>

@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
 
     using Microsoft.Azure.ServiceBus;
-    using Microsoft.Extensions.Options;
 
     using Newtonsoft.Json;
 
@@ -42,7 +41,7 @@
                         TMessage item = JsonConvert.DeserializeObject<TMessage>(data);
 
                         // Process message
-                        var result = onProcess(item);
+                        var result = await onProcess(item);
 
                         if (result == MessageProcessResponse.Complete)
                             await _client.CompleteAsync(message.SystemProperties.LockToken);

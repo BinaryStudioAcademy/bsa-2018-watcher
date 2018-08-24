@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\backend\ServiceBus.Shared\ServiceBus.Shared.csproj" />
     <ProjectReference Include="..\DataAccumulator.DataAccessLayer\DataAccumulator.DataAccessLayer.csproj" />
     <ProjectReference Include="..\DataAccumulator.Shared\DataAccumulator.Shared.csproj" />
   </ItemGroup>

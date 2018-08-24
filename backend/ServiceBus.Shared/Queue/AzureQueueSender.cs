@@ -10,13 +10,11 @@
 
     public class AzureQueueSender<T> : IAzureQueueSender<T> where T : class
     {
-        private AzureQueueSettings _settings;
         private QueueClient _client;
 
         public AzureQueueSender(AzureQueueSettings settings)
         {
-            _settings = settings;
-            Init();
+            _client = new QueueClient(settings.ConnectionString, settings.QueueName);
         }
         
         public Task SendAsync(T item)
@@ -40,11 +38,6 @@
             }
 
             return _client.SendAsync(message);
-        }
-
-        private void Init()
-        {
-            _client = new QueueClient(_settings.ConnectionString, _settings.QueueName);
         }
     }
 }

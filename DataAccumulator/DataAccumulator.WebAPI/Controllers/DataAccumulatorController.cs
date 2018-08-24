@@ -64,12 +64,12 @@ namespace DataAccumulator.WebAPI.Controllers
 
         // POST: api/v1/dataaccumulator
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CollectedDataDto collectedDataDto)
+        public async Task<IActionResult> Post(/*[FromBody]CollectedDataDto collectedDataDto*/)
         {
             try
             {
-                var collectedData = await _dataAccumulatorService.AddEntityAsync(collectedDataDto);
-                return CreatedAtRoute("GetDataAccumulator", new { id = collectedDataDto.Id }, collectedData);
+                var collectedData = await _dataAccumulatorService.AddEntityAsync();
+                return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
             }
             catch (Exception e)
             {

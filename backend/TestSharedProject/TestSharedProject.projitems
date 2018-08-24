@@ -5,9 +5,8 @@
     <HasSharedItems>true</HasSharedItems>
     <SharedGUID>a948fcb2-bccd-41d0-908f-e26e7bc26807</SharedGUID>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>TestSharedProject</Import_RootNamespace>
-  </PropertyGroup>
+  <PropertyGroup Label="Configuration" />
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Class1.cs" />
   </ItemGroup>
 </Project>

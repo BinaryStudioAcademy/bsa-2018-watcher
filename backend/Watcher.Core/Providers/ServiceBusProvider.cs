@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Core.Providers
 {
     using System;
+    using System.Diagnostics;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -36,6 +37,7 @@
             IAzureQueueReceiver<InstanceCollectedDataMessage> azureQueueReceiver)
         {
             _dashboardsHubContext = dashboardsHubContext;
+            _scopeFactory = scopeFactory;
             _logger = loggerFactory?.CreateLogger<ServiceBusProvider>()
                       ?? throw new ArgumentNullException(nameof(loggerFactory));
             _azureQueueReceiver = azureQueueReceiver;
@@ -44,12 +46,13 @@
 
         private void OnWait()
         {
-            throw new NotImplementedException();
+            Debug.WriteLine("*******************WAITING***********************");
         }
 
         private void OnError(Exception obj)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine("*******************ERROR***********************");
+            _logger.LogError(obj, "Error occurred while getting message from service Bus");
         }
 
         private async Task<MessageProcessResponse> OnProcessAsync(InstanceCollectedDataMessage arg)
