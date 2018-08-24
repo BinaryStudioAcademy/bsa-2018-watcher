@@ -43,6 +43,18 @@
             }
         }
 
+        public async Task MarkMessageAsRead(int messageId)
+        {
+            var result = await _messagesService.UpdateEntityByIdAsync(new MessageUpdateRequest { WasRead = true }, messageId);
+            if (!result) return;
+
+            //var usersInChat = await _chatsService.GetUsersByChatIdAsync(chatId);
+            //foreach (var userDto in usersInChat)
+            //{
+            //    await Clients.User(userDto.Id).SendAsync("MessageWasRead");
+            //}
+        }
+
         public async Task InitializeChat(ChatRequest chatRequest)
         {
             var createdChat = await _chatsService.CreateEntityAsync(chatRequest);

@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
@@ -52,22 +53,16 @@
             return dto;
         }
 
-        public async Task<ChatDto> GetLightEntityByIdAsync(int id)
-        {
-            var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id);
-
-            if (chat == null) return null;
-
-            var dto = _mapper.Map<Chat, ChatDto>(chat);
-
-            return dto;
-        }
-
         public async Task<IEnumerable<ChatDto>> GetEntitiesByUserIdAsync(string id)
         {
             var chats = await _uow.ChatsRepository.GetChatsByUserId(id);
-
-            var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats);
+            var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats,
+                opts: o => o.AfterMap((src, dest) => dest
+                    .ForEach(c =>
+                    {
+                        c.UnreadMessagesCount = CountUnreadedMessagesForUser(id, c.Messages);
+                        c.Messages = null;
+                    })));
 
             return dtos;
         }
@@ -154,6 +149,11 @@
             var result = await _uow.SaveAsync();
 
             return result;
+        }
+
+        private int CountUnreadedMessagesForUser(string userId, IList<MessageDto> messages)
+        {
+            return messages.Where(m => !m.WasRead && m.User.Id != userId).Count();
         }
     }
 }

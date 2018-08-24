@@ -29,8 +29,9 @@
             <img-cropper #cropper [image]="data" [settings]="cropperSettings" ></img-cropper>
     
             <div class="btn-panel crop-btn-panel">
-              <button pButton class="ui-button-raised ui-button-success" (click)="onCropCancel() " label="Cancel"></button>
-              <button pButton class="ui-button-raised ui-button-success" (click)="onCropSave()" label="Crop"></button>
+              <button pButton class="ui-button-raised ui-button-primary" (click)="onCropSave()" label="Done"></button>
+              <button pButton class="ui-button-raised ui-button-warning" (click)="onCropCancel() " label="Cancel"></button>
+              
             </div>
           </p-dialog>
         </div>
