@@ -165,6 +165,8 @@ lastPickedCompany(id: number) {
     webSite: '',
     contactNumber: '',
     isActive: true,
+    imageURL: '',
+    imageType: '',
     themeId: 0,
     theme: null,
     chatId: 0,

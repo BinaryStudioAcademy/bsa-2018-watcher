@@ -1,4 +1,4 @@
-<app-conversation-panel [onDisplay]="onDisplayChat"></app-conversation-panel>
+<app-conversation-panel [onDisplay]="onDisplayChat" (close)="selectedChat = null"></app-conversation-panel>
 <app-chat-create-popup [onDisplay]="onDisplayChatCreating"></app-chat-create-popup>
 
 <div class="chat-list-panel">
@@ -6,15 +6,23 @@
     <p-accordionTab>
       <p-header>
         Chats
-        <!-- <span *ngIf="unreadedMessageCount !== 0" class="message-counter">{{unreadedMessageCount}}</span> -->
+        <span *ngIf="totalUnreadMessages !== 0" class="message-counter">{{totalUnreadMessages}}</span>
         <i class="icon icon-right fa fa-plus" (click)="openChatCreating($event)"></i>
       </p-header>
       <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="selectChat()" (onDblClick)="removeSelect()">
         <ng-template let-chat pTemplate="item">
           <div class="ui-helper-clearfix">
-            <img class="chat-list-img" src="{{getChatImage(chat?.value)}}"/>
-            <span class="chat-list-name"> {{chat.value.name}}</span>
-            <!-- <span *ngIf="unreadedMessageCount !== 0" class="message-counter">{{calcNotReadMessages(chat?.value)}}</span> -->
+            <div class="ui-fluid ui-g">
+              <div class="ui-g-3 ui-g-nopad" style="position:relative">
+                <img class="chat-list-img" src="{{getChatImage(chat?.value)}}"/>
+                <span *ngIf="chat.value.unreadMessagesCount !== 0" class="message-counter counter-absolute">
+                  {{chat.value.unreadMessagesCount}}
+                </span>
+              </div>
+              <div class="ui-g-9 ui-g-nopad">
+                <span class="chat-list-name"> {{chat.value.name}}</span>  
+              </div> 
+            </div>
           </div>
         </ng-template>
       </p-listbox>

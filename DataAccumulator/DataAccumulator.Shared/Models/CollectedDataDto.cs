@@ -6,7 +6,10 @@ namespace DataAccumulator.Shared.Models
 {
     public class CollectedDataDto : ICollectedDataDto
     {
+        // Id - CollectedData identification number
         public Guid Id { get; set; }
+        // ClientId - Client identification number
+        public Guid ClientId { get; set; }
 
         public int ProcessesCount { get; set; }
         public Dictionary<string, float> ProcessesCPU { get; set; }

@@ -8,6 +8,7 @@ import {AuthService} from '../../core/services/auth.service';
 import {AfterContentChecked, AfterViewChecked} from '@angular/core';
 import {NavigationStart} from '@angular/router';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -36,6 +37,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   isFeedback: boolean;
   isInvite: boolean;
   menuItems: MenuItem[];
+  user: User;
 
   constructor(private router: Router,
               private instanceService: InstanceService,
@@ -51,14 +53,21 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   ngOnInit(): void {
     this.activeUrl = this.router.url;
-    this.organisationId = this.authService.getCurrentUser().lastPickedOrganizationId;
-    this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
-    this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-    this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
-    this.initMenuItems();
-    this.configureInstances(this.organisationId);
-    this.changeMenu();
-    this.subscribeRouteChanges();
+
+    this.authService.currentUser.subscribe(
+      user => {
+        this.user = user;
+        this.configureInstances(this.user.lastPickedOrganizationId);
+        this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
+        this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
+        this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
+        this.initMenuItems();
+        this.changeMenu();
+        this.subscribeRouteChanges();
+      }
+    );
+
+
   }
 
   ngAfterContentChecked(): void {

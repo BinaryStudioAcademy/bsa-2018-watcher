@@ -12,6 +12,8 @@ namespace Watcher.Common.Dtos
 
         public string Name { get; set; }
 
+        public int? UnreadMessagesCount { get; set; }
+        
         public ChatType Type { get; set; }
 
         public UserDto CreatedBy { get; set; }

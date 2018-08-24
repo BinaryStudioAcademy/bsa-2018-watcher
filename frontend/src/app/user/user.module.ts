@@ -10,7 +10,6 @@ import { InputTextModule,
          InputTextareaModule,
          ProgressSpinnerModule } from 'primeng/primeng';
 import { FeedbackComponent } from '../feedback/feedback.component';
-import { InviteComponent } from '../invite/invite.component';
 
 @NgModule({
   imports: [
@@ -24,6 +23,6 @@ import { InviteComponent } from '../invite/invite.component';
     InputTextModule,
     ProgressSpinnerModule
   ],
-  declarations: [ UserComponent, FeedbackComponent, InviteComponent ]
+  declarations: [ UserComponent, FeedbackComponent ]
 })
 export class UserModule { }

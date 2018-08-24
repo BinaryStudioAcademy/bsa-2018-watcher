@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { OrganizationService } from '../../core/services/organization.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
-import { usesServiceWorker } from '../../../../node_modules/@angular-devkit/build-angular/src/angular-cli-files/utilities/service-worker';
 import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
 import { environment } from '../../../environments/environment';
+import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-organization-profile',
@@ -21,11 +21,23 @@ import { environment } from '../../../environments/environment';
 export class OrganizationProfileComponent implements OnInit {
 
   constructor(
-    private fb: FormBuilder,
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,
     private authService: AuthService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService) {
+      this.cropperSettings = new CropperSettings();
+      this.cropperSettings.width = 400;
+      this.cropperSettings.height = 200;
+      this.cropperSettings.minWidth = 200;
+      this.cropperSettings.minHeight = 100;
+      this.cropperSettings.croppedWidth = 150;
+      this.cropperSettings.croppedHeight = 75;
+      this.cropperSettings.canvasWidth = 800;
+      this.cropperSettings.canvasHeight = 400;
+      this.cropperSettings.noFileInput = true;
+      this.cropperSettings.preserveSize = true;
+      this.data = {};
+    }
 
   editable: boolean;
   organization: Organization;
@@ -34,69 +46,50 @@ export class OrganizationProfileComponent implements OnInit {
   inviteEmail: string;
   invite: OrganizationInvite;
 
+  @ViewChild('cropper', undefined)
+  cropper: ImageCropperComponent;
+  cropperSettings: CropperSettings;
+  display: Boolean = false;
+  imageUrl = '';
+  imageType: string;
+  data: any;
+
+  user: User;
+
   isUpdating: Boolean = false;
   isInviting: Boolean = false;
   isCopying: Boolean = false;
   isSending: Boolean = false;
 
-  private phoneRegex = /\(?([0-9]{3})\)?[ .-]?[0-9]*$/;
-  private urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}/;
-
-  organizationForm = this.fb.group({
-    name: new FormControl({ value: '', disabled: true }, Validators.required),
-    email: new FormControl({ value: '', disabled: true }, Validators.email),
-    contactNumber: new FormControl({ value: '', disabled: true }, Validators.pattern(this.phoneRegex)),
-    webSite: new FormControl({ value: '', disabled: true }, Validators.pattern(this.urlRegex)),
-    description: new FormControl({ value: '', disabled: true })
-  });
-
   ngOnInit() {
-    const user = this.authService.getCurrentUser();
-    if (user == null || user.lastPickedOrganizationId == null) {
-      return;
-    }
-
-    if (user.lastPickedOrganization == null && user.lastPickedOrganizationId !== 0) {
-      this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => {
-        this.organization = value;
-        this.subscribeOrganizationFormToData();
-
-        // Only user who create organozation can edit it
-        if (this.organization.createdByUserId === user.id) {
+    this.authService.currentUser.subscribe(
+      (userData) => {
+        this.user = { ...userData };
+        this.organization = this.user.lastPickedOrganization;
+        this.imageUrl = this.user.lastPickedOrganization.imageURL;
+        if (this.organization.createdByUserId === this.user.id) {
           this.editable = true;
         }
       });
-    } else {
-      this.organization = user.lastPickedOrganization;
-      this.subscribeOrganizationFormToData();
-      if (this.organization.createdByUserId === user.id) {
-        this.editable = true;
-      }
-    }
-
-    Object.keys(this.organizationForm.controls).forEach(field => {
-      const control = this.organizationForm.get(field);
-      control.enable();
-    });
-  }
-
-  subscribeOrganizationFormToData() {
-    Object.keys(this.organizationForm.controls).forEach(field => {
-      const control = this.organizationForm.get(field);
-      control.setValue(this.organization[field]);
-      control.valueChanges.subscribe(value => {
-        this.organization[field] = value;
-      });
-    });
   }
 
   onSubmit() {
-    if (this.organizationForm.valid && this.editable) {
+    if (this.editable) {
+      // Update Organization
       this.isUpdating = true;
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
-          const user = this.authService.getCurrentUser();
-          user.lastPickedOrganization = this.organization;
+          // Update lastPickedOrganization in User on frontend
+          this.user.lastPickedOrganization = this.organization;
+
+          // TODO: Update Organization in User.organizations on frontend
+          this.user.organizations = this.user.organizations.map(item => {
+            return item.id === this.organization.id ? this.organization : item;
+          });
+
+          // Update user in localStorage and notify all subscribers
+          this.authService.updateCurrentUser(this.user);
+
           this.toastrService.success('Organization was updated');
           this.isUpdating = false;
         },
@@ -106,12 +99,7 @@ export class OrganizationProfileComponent implements OnInit {
         }
       );
     } else {
-      this.toastrService.error('Form was filled incorrectly');
-
-      Object.keys(this.organizationForm.controls).forEach(field => {
-        const control = this.organizationForm.get(field);
-        control.markAsDirty({ onlySelf: true });
-      });
+      this.toastrService.error('You do not have the right to change this organization.');
     }
   }
 
@@ -134,7 +122,7 @@ export class OrganizationProfileComponent implements OnInit {
       value => {
         this.toastrService.success('Organization Invite was created');
         this.invite = value;
-        this.inviteLink = `${environment.client_url}/user/invite/${value.link}`;
+        this.inviteLink = `${environment.client_url}/invite/${value.link}`;
         this.isInviting = false;
       },
       err => {
@@ -172,5 +160,32 @@ export class OrganizationProfileComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(selBox);
     this.isCopying = false;
+  }
+
+  onImageSelected(upload) {
+    const image: any = new Image();
+    const reader: FileReader = new FileReader();
+    const that = this;
+    this.imageType = upload[0].type;
+    reader.onloadend = (eventLoad: any) => {
+      image.src = eventLoad.target.result;
+      that.cropper.setImage(image);
+      this.display = true;
+    };
+
+    reader.readAsDataURL(upload[0]);
+    upload.splice(0, upload.length);
+  }
+
+  onCropCancel() {
+    this.imageType = '';
+    this.display = false;
+  }
+
+  onCropSave() {
+    this.organization.imageURL = this.data.image;
+    this.organization.imageType = this.imageType;
+    this.imageUrl = this.data.image;
+    this.display = false;
   }
 }

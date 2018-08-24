@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
-import { TokenService } from '../core/services/token.service';
+import { ReplaySubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-authorization',
@@ -16,7 +16,8 @@ export class AuthorizationComponent implements OnInit {
   @ViewChild('notRegisteredSignInTemplate') notRegisteredSignInTemplate;
 
   @Input() display = false;
-  @Input() redirectTo: string;
+  @Output() displayChange = new EventEmitter<boolean>();
+
   @Input() showSignInOutBtn = true;
   isSignIn = true;
   isSuccessSignUp = false;
@@ -31,9 +32,9 @@ export class AuthorizationComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private tokenService: TokenService,
     private router: Router
   ) {
+
   }
 
   ngOnInit() {
@@ -70,6 +71,7 @@ export class AuthorizationComponent implements OnInit {
     this.isSuccessSignUp = false;
     this.isSignIn = true;
     this.display = false;
+    this.displayChange.emit(this.display);
   }
 
   noRegistration(): void {
