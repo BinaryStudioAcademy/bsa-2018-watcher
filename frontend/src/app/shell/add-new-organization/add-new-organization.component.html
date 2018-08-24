@@ -60,7 +60,9 @@
   </div>
  <p-footer>
      <button class="ui-button-raised ui-button-success button" pButton type="button" (click)="onAdd()" label="Add"
-     [disabled]="cName?.invalid || cEmail?.invalid"></button>
+     [disabled]="cName?.invalid || cEmail?.invalid || isAdding">
+      <p-progressSpinner class="btn-spinner" *ngIf="isAdding" strokeWidth="5"></p-progressSpinner>
+     </button>
      <button class="ui-button-raised ui-button-danger button" pButton type="button" (click)="onClose()" label="Cancel"></button>
  </p-footer>
 </p-dialog>
