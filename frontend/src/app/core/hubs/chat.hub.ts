@@ -19,6 +19,7 @@ export class ChatHub {
     private hubName = 'chatsHub';
 
     public messageReceived = new EventEmitter<Message>();
+    public chatMessagesWasRead = new EventEmitter<number>();
     public chatCreated = new EventEmitter<Chat>();
     public chatChanged = new EventEmitter<Chat>();
 
@@ -66,7 +67,11 @@ export class ChatHub {
         this.hubConnection.on('ChatChanged', (data: any) => {
             this.chatChanged.emit(data);
             console.log('ChatChanged');
+        });
 
+        this.hubConnection.on('ChatChanged', (data: any) => {
+            this.chatChanged.emit(data);
+            console.log('ChatChanged');
         });
 
         this.hubConnection.onclose((error: Error) => {
@@ -78,6 +83,11 @@ export class ChatHub {
 
     public createNewChat(chat: ChatRequest) {
         this.hubConnection.invoke('InitializeChat', chat)
+            .catch(err => console.error(err));
+    }
+
+    public markMessageAsRead(messageId: number) {
+        this.hubConnection.invoke('MarkMessageAsRead', messageId)
             .catch(err => console.error(err));
     }
 
