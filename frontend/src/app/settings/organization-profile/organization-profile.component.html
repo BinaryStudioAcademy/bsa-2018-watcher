@@ -70,8 +70,9 @@
           </div>
         </div>
         <div class="btn-panel">
-          <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success" *ngIf="!isUpdating"></button>
-          <p-progressSpinner class="btn-spinner" *ngIf="isUpdating"></p-progressSpinner>
+          <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success" [disabled]="isUpdating">
+            <p-progressSpinner class="btn-spinner" *ngIf="isUpdating"></p-progressSpinner>
+          </button>
         </div>
       </div>
     
@@ -84,8 +85,9 @@
           <div class="label">Invitation to this organization:</div>
           <div class="ui-g ui-fluid">
               <div class="btn-panel">
-                <button (click)="onInvite()" pButton label="Invite" class="ui-button-raised ui-button-success" *ngIf="!isInviting"></button>
-                <p-progressSpinner class="btn-spinner" *ngIf="isInviting"></p-progressSpinner>
+                <button (click)="onInvite()" pButton label="Invite" class="ui-button-raised ui-button-success" [disabled]="isInviting">
+                  <p-progressSpinner class="btn-spinner" *ngIf="isInviting"></p-progressSpinner>
+                </button>
               </div>
           </div>
 
@@ -99,9 +101,11 @@
           <div class="label">Copy link:</div>
           <div class="ui-g ui-fluid">
               <div class="btn-panel">
-                  <button pButton label="Copy link" (click)="onCopy()"
-                  [disabled]="inviteLink === ''" *ngIf="!isCopying"></button>
+                <button pButton label="Copy link" (click)="onCopy()"
+                  [disabled]="inviteLink === '' || isCopying" *ngIf="!isCopying">
                   <p-progressSpinner class="btn-spinner" *ngIf="isCopying"></p-progressSpinner>
+                </button>
+                
               </div>
           </div>
 
@@ -123,9 +127,11 @@
           <div class="label">Send:</div>
           <div class="ui-g ui-fluid">
             <div class="btn-panel">
-                <button pButton label="Send" (click)="onSentInviteToEmail()" class="ui-button-raised ui-button-success"
-                [disabled]="inviteLink === '' || iEmail?.invalid" *ngIf="!isSending"></button>
+              <button pButton label="Send" (click)="onSentInviteToEmail()" class="ui-button-raised ui-button-success"
+                [disabled]="inviteLink === '' || iEmail?.invalid || isSending" *ngIf="!isSending">
                 <p-progressSpinner class="btn-spinner" *ngIf="isSending"></p-progressSpinner>
+              </button>
+              
             </div>
           </div>
 
