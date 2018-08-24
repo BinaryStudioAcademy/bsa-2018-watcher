@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { OrganizationService } from '../../core/services/organization.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
-import { usesServiceWorker } from '../../../../node_modules/@angular-devkit/build-angular/src/angular-cli-files/utilities/service-worker';
 import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
@@ -23,7 +21,6 @@ import { User } from '../../shared/models/user.model';
 export class OrganizationProfileComponent implements OnInit {
 
   constructor(
-    private fb: FormBuilder,
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,
     private authService: AuthService,
@@ -125,7 +122,7 @@ export class OrganizationProfileComponent implements OnInit {
       value => {
         this.toastrService.success('Organization Invite was created');
         this.invite = value;
-        this.inviteLink = `${environment.client_url}/user/invite/${value.link}`;
+        this.inviteLink = `${environment.client_url}/invite/${value.link}`;
         this.isInviting = false;
       },
       err => {
