@@ -38,11 +38,16 @@ export class ConversationPanelComponent implements OnInit {
     this.subscribeToEvents();
     this.currentUser = this.authService.getCurrentUser();
     this.onDisplay.subscribe((chatId: number) => {
-    this.display = true;
-      this.chatService.get(chatId).subscribe((chat: Chat) => {
-        this.chat = chat;
-        this.scrollMessageListToBottom();
-      });
+      if (!chatId) {
+        this.display = false;
+        return;
+      }
+      this.display = true;
+        this.chatService.get(chatId).subscribe((chat: Chat) => {
+          this.chat = chat;
+          this.markMessagesAsRead();
+          this.scrollMessageListToBottom();
+        });
     });
   }
 
@@ -81,6 +86,14 @@ export class ConversationPanelComponent implements OnInit {
 
     this.chatHub.sendMessage(newMessage);
     this.textMessage = '';
+  }
+
+  markMessagesAsRead() {
+    this.chat.messages.forEach( m => {
+      if (!m.wasRead) {
+        this.chatHub.markMessageAsRead(m.id);
+      }
+    });
   }
 
   private scrollMessageListToBottom(): void {
