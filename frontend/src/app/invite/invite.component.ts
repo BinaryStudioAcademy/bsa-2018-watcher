@@ -22,6 +22,8 @@ export class InviteComponent implements OnInit {
   isAuthenticated: boolean;
   user: User;
 
+  showLoginForm = false;
+
   constructor(private activatedRoute: ActivatedRoute,
               private authService: AuthService,
               private router: Router,
@@ -75,15 +77,23 @@ export class InviteComponent implements OnInit {
   }
 
   onAccept() {
-    this.invite.invitedUserId = this.user.id;
-    this.invite.state = OrganizationInviteState.Accepted;
-    this.updateInvite();
+    if (this.isAuthenticated) {
+      this.invite.invitedUserId = this.user.id;
+      this.invite.state = OrganizationInviteState.Accepted;
+      this.updateInvite();
+    } else { // show login form
+      this.showLoginForm = true;
+    }
   }
 
-  onReject() {
-    this.invite.invitedUserId = this.user.id;
-    this.invite.state = OrganizationInviteState.Declined;
-    this.updateInvite();
+  onReject() { // only Authenticated User
+    if (this.isAuthenticated) {
+      this.invite.invitedUserId = this.user.id;
+      this.invite.state = OrganizationInviteState.Declined;
+      this.updateInvite();
+    } else { // show login form
+      this.showLoginForm = true;
+    }
   }
 
   updateInvite() {
