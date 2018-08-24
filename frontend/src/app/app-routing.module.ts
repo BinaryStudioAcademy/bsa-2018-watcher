@@ -4,6 +4,7 @@ import {LandingComponent} from './landing/landing.component';
 import { HomeGuard } from './core/guards/home.guard';
 import { NotexistGuard } from './core/guards/notexist.guard';
 import { ShellComponent } from './shell/shell.component';
+import { InviteComponent } from './invite/invite.component';
 
 
 const routes: Routes = [
@@ -14,7 +15,8 @@ const routes: Routes = [
     path: 'user/',
     component: ShellComponent,
     canActivate: [NotexistGuard]
-  }
+  },
+  { path: 'invite/:invite', component: InviteComponent }
 ];
 
 @NgModule({
