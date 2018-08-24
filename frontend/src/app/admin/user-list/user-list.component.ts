@@ -142,13 +142,15 @@ export class UserListComponent implements OnInit {
     if (this.user.lastPickedOrganizationId === company.id) {
       this.user.lastPickedOrganizationId = 0;
       this.user.lastPickedOrganization = null;
-    } else {
-      const index = this.user.organizations.indexOf(company);
-      this.user.organizations.splice(index, 1);
     }
+    console.log(this.user.organizations);
+    const index = this.user.organizations.indexOf(company);
+    this.user.organizations.splice(index, 1);
+    console.log(index);
+    console.log(this.user.organizations);
     this.userService.update(this.user.id, this.user).subscribe(
         value => {
-          this.toastrService.success(`Now last picked organization - ${this.user.organizations[0].name}`);
+          this.toastrService.success(`Now last picked organization - not selected.`);
         },
         error => {
           this.toastrService.error(`Error ocured status: ${error.message}`);
@@ -156,40 +158,20 @@ export class UserListComponent implements OnInit {
       );
   }
 
-lastPickedCompany(id: number) {
-  const company: Organization = {
-    id: id,
-    name: 'last picked',
-    description: '',
-    email: 'last picked',
-    webSite: '',
-    contactNumber: '',
-    isActive: true,
-    imageURL: '',
-    imageType: '',
-    themeId: 0,
-    theme: null,
-    chatId: 0,
-    createdByUserId: '',
-    usersId: null,
-    instances: null,
-    notifications: null
-   };
-   return company;
-}
-
   showPopup(user: User) {
     // debugger;
+    // console.log(this.currentUser.organizations);
     this.user = user;
     this.subscribeOrganizationFormToData();
     this.displayPopup = true;
     this.lstUserCompany = user.organizations.map(x => Object.assign({}, x));
-    if (user.lastPickedOrganizationId) {
+    /*if (user.lastPickedOrganizationId) {
       this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => this.lastOrganization = value);
       this.lstUserCompany.push(this.lastOrganization);
-  }
+  }*/
     this.selectedRole = user.role;
     this.photoUrl = this.pathService.convertToUrl(this.user.photoURL);
+    console.log(user.organizations);
   }
 
   onCancel() {
