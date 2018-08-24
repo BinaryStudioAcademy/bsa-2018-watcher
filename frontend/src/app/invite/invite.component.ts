@@ -36,23 +36,18 @@ export class InviteComponent implements OnInit {
        this.link = params['invite'];
     });
 
-    this.authService.isAuthenticated.subscribe(
-      authData => {
-        this.isAuthenticated = authData;
-        if (this.isAuthenticated) {
-          this.authService.currentUser.subscribe(
-            userData => {
-              this.user = { ...userData };
-            }
-          );
-        }
+    this.authService.currentUser.subscribe(
+      userData => {
+        this.user = { ...userData };
       }
     );
+
+
 
     this.organizationInvitesService.getByLink(this.link).subscribe(
       result => {
         this.invite = result;
-        if (this.isAuthenticated) {
+        if (this.user.id) {
           if (this.user.id === this.invite.createdByUser.id) {  // You are already a member of the {org} organization!
             this.toastrService.confirm(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
               this.router.navigate(['user']);
@@ -77,7 +72,7 @@ export class InviteComponent implements OnInit {
   }
 
   onAccept() {
-    if (this.isAuthenticated) {
+    if (this.user.id) {
       this.invite.invitedUserId = this.user.id;
       this.invite.state = OrganizationInviteState.Accepted;
       this.updateInvite();
