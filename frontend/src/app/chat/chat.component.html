@@ -1,4 +1,4 @@
-<app-conversation-panel [onDisplay]="onDisplayChat"></app-conversation-panel>
+<app-conversation-panel [onDisplay]="onDisplayChat" (close)="selectedChat = null"></app-conversation-panel>
 <app-chat-create-popup [onDisplay]="onDisplayChatCreating"></app-chat-create-popup>
 
 <div class="chat-list-panel">

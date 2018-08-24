@@ -91,6 +91,7 @@ export class ChatComponent implements OnInit {
       this.chatList.unshift({ value: chat });
 
       if (chat.createdBy.id === this.currentUser.id) {
+        this.selectedChat = this.chatList[0].value;
         this.openChat(chat.id);
       }
     });
@@ -105,9 +106,15 @@ export class ChatComponent implements OnInit {
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
       if (message.user.id !== this.currentUser.id) {
-        this.totalUnreadMessages++;
-        this.selectedChat.unreadMessagesCount++;
         this.sendNotify(message);
+
+        // Don`t count unread if chat is open
+        if (this.selectedChat && this.selectedChat.id === message.chatId) {
+        } else {
+          this.totalUnreadMessages++;
+          const index = this.chatList.findIndex(x => x.value.id === message.chatId);
+          this.chatList[index].value.unreadMessagesCount++;
+        }
       }
     });
   }

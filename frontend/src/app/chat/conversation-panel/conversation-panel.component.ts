@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, ViewChildren } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChildren } from '@angular/core';
 
 import { ChatService } from '../../core/services/chat.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -20,6 +20,7 @@ import { Chat } from '../../shared/models/chat.model';
 export class ConversationPanelComponent implements OnInit {
 
   @Input() onDisplay: EventEmitter<number>;
+  @Output() close = new EventEmitter();
   @ViewChildren('messageList') messageList: any;
 
   chat: Chat;
@@ -56,6 +57,7 @@ export class ConversationPanelComponent implements OnInit {
       if (this.chat && this.chat.id === message.chatId) {
         this.chat.messages.push(message);
         this.scrollMessageListToBottom();
+        this.markMessagesAsRead();
       }
     });
   }
@@ -70,6 +72,7 @@ export class ConversationPanelComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
     this.display = false;
+    this.close.emit();
   }
 
   sendMessage() {

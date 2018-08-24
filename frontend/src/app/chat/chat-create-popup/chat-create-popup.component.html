@@ -21,7 +21,7 @@
         </div>
       </ng-template>
     </p-autoComplete>
-    <p class="field">Members:</p>
+    <p *ngIf="users?.length" class="field">Members:</p>
     <div class="user-list">
       <div *ngFor="let user of users">
         <div class="ui-helper-clearfix user-list-item">
