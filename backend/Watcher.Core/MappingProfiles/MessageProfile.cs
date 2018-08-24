@@ -13,8 +13,11 @@ namespace Watcher.Core.MappingProfiles
         public MessageProfile()
         {
             CreateMap<Message, Message>()
-                .ForMember(d => d.Id, o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
-
+                .ForMember(d => d.Id, o => o.Ignore())
+                .ForMember(d => d.CreatedAt, o => o.Ignore())
+                .ForMember(d => d.ChatId, o => o.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                
             CreateMap<Message, MessageDto>();
 
             CreateMap<Message, MessageDto>()

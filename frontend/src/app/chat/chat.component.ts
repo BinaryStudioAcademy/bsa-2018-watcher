@@ -32,7 +32,7 @@ export class ChatComponent implements OnInit {
   chatList: SelectItem[] = [];
   selectedChat: Chat;
   currentUser: User;
-  unreadedMessageCount = 0;
+  totalUnreadMessages = 0;
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -41,7 +41,7 @@ export class ChatComponent implements OnInit {
         chats.reverse();
         chats.forEach(chat => {
           this.chatList.push({ value: chat });
-          // this.unreadedMessageCount += this.calcNotReadMessages(chat);
+          this.totalUnreadMessages += chat.unreadMessagesCount;
         });
         this.subscribeToEvents();
       },
@@ -52,62 +52,80 @@ export class ChatComponent implements OnInit {
   }
 
   openChat(chatId: number) {
+    this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
+    this.selectedChat.unreadMessagesCount = 0;
     this.onDisplayChat.emit(chatId);
   }
 
   selectChat() {
+    this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
+    this.selectedChat.unreadMessagesCount = 0;
     this.onDisplayChat.emit(this.selectedChat.id);
   }
 
   removeSelect() {
+    this.onDisplayChat.emit();
     this.selectedChat = null;
   }
 
   openChatCreating(event) {
     event.stopPropagation();
     event.preventDefault();
-    this.onDisplayChatCreating.emit();
+    this.onDisplayChatCreating.emit(true);
   }
 
   getChatImage(chat: Chat) {
     if (chat.users.length === 2) {
       const photo = chat.users.find(u => u.id !== this.currentUser.id).photoURL;
-      if (photo) {
-        return photo;
-      } else {
-        return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
-      }
+      return photo || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
+    }
+
+    if (chat.users.length === 1) {
+      return chat.users[0].photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
     }
     return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
-  }
-
-  calcNotReadMessages(chat: Chat): number {
-    return chat.messages.filter(item => !item.wasRead && item.user.id !== this.currentUser.id).length;
   }
 
   subscribeToEvents() {
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
       this.chatList.unshift({ value: chat });
-    });
 
-    this.chatHub.messageReceived.subscribe(() => {
-      this.unreadedMessageCount++;
+      if (chat.createdBy.id === this.currentUser.id) {
+        this.selectedChat = this.chatList[0].value;
+        this.openChat(chat.id);
+      }
     });
 
     this.chatHub.chatChanged.subscribe((chat: Chat) => {
       const index = this.chatList.findIndex(x => x.value.id === chat.id);
+
+      // Save amount of unreaded messages and replace chat
+      chat.unreadMessagesCount = this.chatList[index].value.unreadMessagesCount;
       this.chatList.splice(index, 1, { value: chat });
     });
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
       if (message.user.id !== this.currentUser.id) {
-        this.messageService.add(
-          {
-            key: 'chat-message',
-            data: message,
-          }
-        );
+        this.sendNotify(message);
+
+        // Don`t count unread if chat is open
+        if (this.selectedChat && this.selectedChat.id === message.chatId) {
+        } else {
+          this.totalUnreadMessages++;
+          const index = this.chatList.findIndex(x => x.value.id === message.chatId);
+          this.chatList[index].value.unreadMessagesCount++;
+        }
       }
     });
+  }
+
+  sendNotify(message: Message) {
+    this.messageService.add(
+      {
+        key: 'chat-message',
+        data: message,
+        life: 8000
+      }
+    );
   }
 }
