@@ -153,7 +153,7 @@
 
         private int CountUnreadedMessagesForUser(string userId, IList<MessageDto> messages)
         {
-            return messages.Where(m => m.WasRead && m.User.Id != userId).Count();
+            return messages.Where(m => !m.WasRead && m.User.Id != userId).Count();
         }
     }
 }
