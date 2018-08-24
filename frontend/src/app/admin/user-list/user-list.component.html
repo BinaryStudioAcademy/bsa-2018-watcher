@@ -113,7 +113,7 @@
   <div class="ui-g ui-fluid">
     <!--<div class="inline"> </div> appendTo="body"-->
     <div class="ui-g-6">
-      <p class="fieldOrg">List of other organizations</p>
+      <p class="fieldOrgs">List of other organizations</p>
     </div>
     <div class="ui-g-4">
       <p-dropdown  [options]="dropdownCompany" [(ngModel)]="selectedCompany" [style]="{'width':'150px', position:'fixed'}" filter="true"></p-dropdown>
@@ -127,17 +127,16 @@
   <div class="border">
 
     <div class="ui-g ui-fluid">
-      <div class="ui-g-4 center">Name</div>
-      <div class="ui-g-5 center">Email</div>
+      <div class="ui-g-3 center">Name</div>
+      <div class="ui-g-6 center">Email</div>
       <div class="ui-g-3 "></div>
     </div>
 
-    <div class="ui-g ui-fluid" *ngIf="lstUserCompany">
-      <p-scrollPanel [style]="{width: '457px', height: '50px'}" styleClass="custom">
-        <!--width: 464px;-->
-        <div *ngFor="let organization of lstUserCompany" class="ui-g ui-fluid">
-          <div class="ui-g-4 center fieldOrg">{{organization?.name}} </div>
-          <div class="ui-g-5 center fieldOrg">{{organization?.email}} </div>
+    <div class=" ui-fluid" *ngIf="lstUserCompany">
+      <p-scrollPanel [style]="{width: '457px', height: '67px'}" styleClass="custom" scrollMode="native">
+        <div *ngFor="let organization of lstUserCompany" class=" ui-fluid">
+          <div class="ui-g-3 center fieldOrg">{{organization?.name}} </div>
+          <div class="ui-g-6 center fieldOrg">{{organization?.email}} </div>
           <div class="ui-g-3 center">
             <button pButton label="Unassign" (click)="onUnassign(organization)" class="ui-button-raised ui-button-danger"></button>
           </div>

@@ -102,8 +102,6 @@ export class OrganizationListComponent implements OnInit {
     const email = this.organizationForm.get('email').value;
     if (this.organizationForm.valid && this.uniqueFields(name, email)) {
       this.organization.theme = null;
-      this.organization.imageType = null;
-      this.organization.imageURL = null;
       Object.keys(this.organizationForm.controls).forEach(field => {
         this.organization[field] = this.organizationForm.get(field).value;
         });

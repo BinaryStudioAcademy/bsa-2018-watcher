@@ -30,7 +30,19 @@ namespace Watcher.Core.Services
 
         public async Task<IEnumerable<UserDto>> GetAllEntitiesAsync()
         {
-            var users = await _uow.UsersRepository.GetRangeAsync();
+            var users = await _uow.UsersRepository.GetRangeAsync(
+           include: userS => userS.Include(u => u.Role)
+               // .Include(u => u.CreatedChats)
+                .Include(u => u.Feedbacks)
+                .Include(u => u.Responses)
+               // .Include(u => u.Messages)
+               // .Include(u => u.Notifications)
+               // .Include(u => u.NotificationSettings)
+                .Include(u => u.LastPickedOrganization)
+                .Include(u => u.UserOrganizations)
+                .ThenInclude(uo => uo.Organization));
+               // .Include(u => u.UserChats)
+               // .ThenInclude(uc => uc.Chat)
 
             var dtos = _mapper.Map<List<User>, List<UserDto>>(users);
 
