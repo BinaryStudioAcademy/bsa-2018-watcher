@@ -6,7 +6,7 @@ import {AuthGuard} from '../core/guards/auth.guard';
 const routes: Routes = [{
   path: 'user',
   component: ShellComponent,
-  //canActivate: [AuthGuard],
+  canActivate: [AuthGuard],
   children: [{
     path: '',
     loadChildren: '../user/user.module#UserModule'

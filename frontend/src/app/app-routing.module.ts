@@ -9,11 +9,11 @@ import { ShellComponent } from './shell/shell.component';
 const routes: Routes = [
   { path: '',
     component: LandingComponent,
-    //canActivate: [HomeGuard]
+    canActivate: [HomeGuard]
   }, {
     path: 'user/',
     component: ShellComponent,
-    //canActivate: [NotexistGuard]
+    canActivate: [NotexistGuard]
   }
 ];
 
