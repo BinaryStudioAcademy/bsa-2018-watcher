@@ -74,7 +74,7 @@ namespace Watcher.Core.Providers
             // Check if file if supported image format
             if (!ImageHelper.ImageFormats.TryGetValue(imageType, out var imageFormat))
             {
-                return "https://bsawatcherfiles.blob.core.windows.net/watcher/f6efd981-4e08-44f0-ab87-837720b372ef.png"; // Return base pic
+                return "https://bsawatcherfiles.blob.core.windows.net/watcher/9c2c0291-728d-4e7b-bcb7-3b9432cb8733.png"; // Return base pic
             }
 
             var filename = $"{Guid.NewGuid()}.{imageFormat}";
