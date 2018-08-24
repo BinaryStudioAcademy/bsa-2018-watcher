@@ -22,6 +22,7 @@ export class EditInstanceComponent implements OnInit {
   instanceTitle: string;
   platformsDropdown: SelectItem[];
   selectedPlatform: string;
+  isSaving: Boolean = false;
 
   constructor(private activateRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -79,6 +80,7 @@ export class EditInstanceComponent implements OnInit {
 
   onSubmit() {
     if (this.instanceForm.valid) {
+      this.isSaving = true;
       const request: InstanceRequest = this.getNewInstance();
       if (this.id) {
         this.instanceService.update(request, this.id).subscribe((res: Response) => {
@@ -94,17 +96,20 @@ export class EditInstanceComponent implements OnInit {
             organization: this.instance.organization
           };
           this.instanceService.instanceEdited.emit(updatedInstance);
+          this.isSaving = false;
           this.router.navigate([`/user/instances/${updatedInstance.id}/${updatedInstance.guidId}/dashboards`]);
         });
       } else {
         this.instanceService.create(request).subscribe((res: Instance) => {
           this.toastrService.success('created instance');
           this.instanceService.instanceAdded.emit(res);
+          this.isSaving = false;
           this.router.navigate([`/user/instances/${res.id}/${res.guidId}/dashboards`]);
         });
       }
     } else {
       this.toastrService.error('Invalid form');
+      this.isSaving = false;
     }
   }
 

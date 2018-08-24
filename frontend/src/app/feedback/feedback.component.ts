@@ -10,6 +10,7 @@ import { LongAnswerType } from '../shared/models/long-answer-type.enum';
 import { ShortAnswerType } from '../shared/models/short-answer-type.enum';
 import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 
+
 @Component({
   selector: 'app-feedback',
   templateUrl: './feedback.component.html',
@@ -23,6 +24,7 @@ export class FeedbackComponent implements OnInit {
   feedback: Feedback;
   feedbacks: Feedback[];
   user: User;
+  isSubmiting: Boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -49,6 +51,7 @@ export class FeedbackComponent implements OnInit {
   }
 
   async onSubmit() {
+    this.isSubmiting = true;
     const text =  this.feedbackForm.get('suggestions').value;
     const willUse = this.feedbackForm.get('willUse').value;
     const informatively = this.feedbackForm.get('informatively').value;
@@ -56,6 +59,7 @@ export class FeedbackComponent implements OnInit {
     const quickness = this.feedbackForm.get('quickness').value;
     if (!willUse && !informatively && !friendliness && !quickness && (!text || text === ' ')) {
       this.toastrService.warning('All fields are empty.');
+      this.isSubmiting = false;
       return;
     }
     const newFeedback: Feedback = {
@@ -77,9 +81,11 @@ export class FeedbackComponent implements OnInit {
           if (!this.user.email) {
             this.toastrService.info('If you want to receive emails, fill out the email field in Settings.');
           }
+          this.isSubmiting = false;
         },
         error => {
           this.toastrService.error(`Error ocured status: ${error}`);
+          this.isSubmiting = false;
         });
     if (await this.toastrService.confirm('Would you want to enter one more feedback?')) {
       this.feedbackForm.reset();
