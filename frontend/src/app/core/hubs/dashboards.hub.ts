@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HubConnection} from '@aspnet/signalr';
+import {HubConnection} from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import {environment} from '../../../environments/environment';
 import {from, Observable, Subject} from 'rxjs';
@@ -70,6 +70,7 @@ export class DashboardsHub {
   private registerOnServerEvents(): void {
 
     this.hubConnection.on('InstanceDataTick', (info: CollectedData) => {
+        debugger;
         this.infoSub.next(info);
       }
     );

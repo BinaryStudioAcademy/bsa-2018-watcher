@@ -64,7 +64,23 @@ namespace DataAccumulator.WebAPI.Controllers
 
         // POST: api/v1/dataaccumulator
         [HttpPost]
-        public async Task<IActionResult> Post(/*[FromBody]CollectedDataDto collectedDataDto*/)
+        public async Task<IActionResult> Post([FromBody]CollectedDataDto collectedDataDto)
+        {
+            try
+            {
+                var collectedData = await _dataAccumulatorService.AddEntityAsync(collectedDataDto);
+                return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500);
+            }
+        }
+
+        // POST: api/v1/dataaccumulator
+        [HttpPost("TestCreation")]
+        public async Task<IActionResult> TestPost()
         {
             try
             {

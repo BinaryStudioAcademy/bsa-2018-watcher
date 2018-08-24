@@ -10,7 +10,9 @@ namespace DataAccumulator.BusinessLayer.Interfaces
     {
         Task<IEnumerable<TDto>> GetEntitiesAsync();
         Task<TDto> GetEntityAsync(Guid id);
-        Task<TDto> AddEntityAsync(TDto entity = default(TDto));
+        Task<TDto> AddEntityAsync(TDto entity);
+        Task<TDto> AddEntityAsync();
+
         Task<TDto> UpdateEntityAsync(TDto entity);
         Task<bool> DeleteEntityAsync(Guid id);
     }

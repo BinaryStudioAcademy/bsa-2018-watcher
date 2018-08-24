@@ -15,14 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Watcher.Tests", "Watcher.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccumulator.DataAccessLayer", "..\DataAccumulator\DataAccumulator.DataAccessLayer\DataAccumulator.DataAccessLayer.csproj", "{6BAEA851-F472-4217-B22B-DB0DCCC4A848}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TestSharedProject", "TestSharedProject\TestSharedProject.shproj", "{A948FCB2-BCCD-41D0-908F-E26E7BC26807}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBus.Shared", "ServiceBus.Shared\ServiceBus.Shared.csproj", "{C3D113EE-A15B-46B7-9120-BAE8FAA6F088}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		TestSharedProject\TestSharedProject.projitems*{a948fcb2-bccd-41d0-908f-e26e7bc26807}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

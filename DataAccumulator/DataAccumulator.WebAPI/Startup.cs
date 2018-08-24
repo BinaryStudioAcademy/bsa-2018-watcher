@@ -44,14 +44,6 @@ namespace DataAccumulator
             });
 
             services.AddMvc();
-
-            var serviceBusSection = Configuration.GetSection("ServiceBus");
-
-            //services.AddSingleton<IQueueClient>(s => new QueueClient(
-            //    Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, 
-            //    Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
-            // services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
-
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>();
 
@@ -68,6 +60,8 @@ namespace DataAccumulator
                 });
 
             services.AddTransient<CollectedDataAggregatingJob>();
+
+            var serviceBusSection = Configuration.GetSection("ServiceBus");
             services.AddSingleton<IAzureQueueSender<InstanceCollectedDataMessage>, AzureQueueSender<InstanceCollectedDataMessage>>(
                 r => new AzureQueueSender<InstanceCollectedDataMessage>(new AzureQueueSettings(serviceBusSection["ConnectionString"], serviceBusSection["QueueName"])));
 
@@ -103,11 +97,12 @@ namespace DataAccumulator
             string connectionString = Configuration.GetConnectionString(enviroment == EnvironmentName.Production ? "AzureCosmosDbConnection" : "MongoDbConnection");
 
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-                options => new DataAccumulatorRepository(connectionString, "DataAccumulatorDb"));
+                options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage"));
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>(
-                options => new DataAggregatorRepository(connectionString, "DataAccumulatorDb"));
+                options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage"));
 
         }
+
         public MapperConfiguration MapperConfiguration()
         {
             var config = new MapperConfiguration(cfg =>

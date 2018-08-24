@@ -1,6 +1,4 @@
-﻿using Watcher.Core.Hubs;
-
-namespace Watcher
+﻿namespace Watcher
 {
     using System;
     using System.Collections.Generic;
@@ -9,10 +7,11 @@ namespace Watcher
     using System.Threading.Tasks;
 
     using AutoMapper;
-    
+
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.DataAccessLayer.Interfaces;
     using DataAccumulator.DataAccessLayer.Repositories;
+
     using FluentValidation.AspNetCore;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,6 +26,7 @@ namespace Watcher
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
+
     using Newtonsoft.Json;
 
     using ServiceBus.Shared.Messages;
@@ -34,6 +34,7 @@ namespace Watcher
 
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
+    using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
     using Watcher.Core.MappingProfiles;
     using Watcher.Core.Providers;
@@ -69,7 +70,7 @@ namespace Watcher
                 }));
 
             services.Configure<TimeServiceConfiguration>(Configuration.GetSection("TimeService"));
-            
+
             var securitySection = Configuration.GetSection("Security");
             services.Configure<WatcherTokenOptions>(o =>
                 {
@@ -111,11 +112,10 @@ namespace Watcher
             services.AddTransient<ICollectedDataService, CollectedDataService>();
             services.AddTransient<IRoleService, RoleService>();
 
-            // services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
             services.AddSingleton<IAzureQueueReceiver<InstanceCollectedDataMessage>, AzureQueueReceiver<InstanceCollectedDataMessage>>(
                 r => new AzureQueueReceiver<InstanceCollectedDataMessage>(new AzureQueueSettings(serviceBusSection["ConnectionString"], serviceBusSection["QueueName"])));
-             
+
             // repo initialization localhost while development env, azure in prod
             ConfigureCosmosDb(services, Configuration);
 
@@ -173,7 +173,7 @@ namespace Watcher
 
             services.AddAuthorization(o =>
                 {
-                    // TODO: create Pilicies
+                    // TODO: create Policy
 
                     o.AddPolicy("SomePolicy", b =>
                         {
@@ -225,7 +225,7 @@ namespace Watcher
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
 
-            string imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+            var imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
             Directory.CreateDirectory(imageFolder);
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -264,21 +264,10 @@ namespace Watcher
         public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (enviroment == EnvironmentName.Production)
-            {
-                var cosmosDbString = Configuration.GetConnectionString("AzureMongoDbConnection");
-                if (!string.IsNullOrWhiteSpace(cosmosDbString))
-                {
-                    services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-                          options => new DataAccumulatorRepository(cosmosDbString, "bsa-watcher-data-storage"));
-                }
-            }
-            else
-            {
-                var mongoDbString = Configuration.GetConnectionString("MongoDbConnection");
-                services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-                          options => new DataAccumulatorRepository(mongoDbString, "DataAccumulatorDb"));
-            }
+            string connectionString = configuration.GetConnectionString(enviroment == EnvironmentName.Production ? "AzureCosmosDbConnection" : "MongoDbConnection");
+
+            services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
+                  options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage"));
         }
 
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
@@ -286,7 +275,7 @@ namespace Watcher
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (enviroment == EnvironmentName.Production)
             {
-                var fileStorageString = Configuration.GetConnectionString("AzureFileStorageConnection");
+                var fileStorageString = configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
                 {
                     services.AddScoped<IFileStorageProvider, FileStorageProvider>(

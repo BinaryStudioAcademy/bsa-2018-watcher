@@ -51,15 +51,14 @@ namespace DataAccumulator.BusinessLayer.Services
             return _mapper.Map<CollectedData, CollectedDataDto>(entity);
         }
 
-        public async Task<CollectedDataDto> AddEntityAsync(CollectedDataDto collectedDataDto = null)
+        public async Task<CollectedDataDto> AddEntityAsync(CollectedDataDto collectedDataDto)
         {
-            //if (collectedDataDto?.Id == Guid.Empty)
-            //{
-            //    collectedDataDto.Id = Guid.NewGuid();
-            //}
+            if (collectedDataDto?.Id == Guid.Empty)
+            {
+                collectedDataDto.Id = Guid.NewGuid();
+            }
 
-            // var mappedEntity = _mapper.Map<CollectedDataDto, CollectedData>(collectedDataDto);
-            var mappedEntity = GetFakeData(Guid.NewGuid(), Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"));
+            var mappedEntity = _mapper.Map<CollectedDataDto, CollectedData>(collectedDataDto);
             await _repository.AddEntity(mappedEntity);
 
             var message = new InstanceCollectedDataMessage(mappedEntity.Id, mappedEntity.ClientId);
@@ -67,6 +66,18 @@ namespace DataAccumulator.BusinessLayer.Services
 
 
             return collectedDataDto;
+        }
+
+        public async Task<CollectedDataDto> AddEntityAsync()
+        {
+            var mappedEntity = GetFakeData(Guid.NewGuid(), Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"));
+            await _repository.AddEntity(mappedEntity);
+
+            var message = new InstanceCollectedDataMessage(mappedEntity.Id, mappedEntity.ClientId);
+            await _azureQueueSender.SendAsync(message);
+
+
+            return null;
         }
 
         public async Task<CollectedDataDto> UpdateEntityAsync(CollectedDataDto collectedDataDto)

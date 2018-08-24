@@ -5,16 +5,11 @@ using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
-    using System.Net.Http;
-
-    using Microsoft.WindowsAzure.Storage.Blob;
-
     using Watcher.Common.Helpers.Utils;
 
     public class LocalFileStorageProvider : IFileStorageProvider
     {
-        public LocalFileStorageProvider()
-        { }
+        public LocalFileStorageProvider() { }
 
         public Task<string> UploadFileAsync(string path, string containerName = "watcher")
         {
