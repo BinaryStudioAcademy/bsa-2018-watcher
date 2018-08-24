@@ -15,7 +15,9 @@ namespace DataAccumulator.BusinessLayer.Services
         private readonly IMapper _mapper;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;
 
-        public DataAccumulatorService(IMapper mapper, IDataAccumulatorRepository<CollectedData> repository)
+        public DataAccumulatorService(IMapper mapper, 
+                                      IDataAccumulatorRepository<CollectedData> repository,
+                                      )
         {
             _mapper = mapper;
             _repository = repository;
@@ -52,6 +54,8 @@ namespace DataAccumulator.BusinessLayer.Services
 
             var mappedEntity = _mapper.Map<CollectedDataDto, CollectedData>(collectedDataDto);
             await _repository.AddEntity(mappedEntity);
+            var a = mappedEntity.InternalId;
+
 
             return collectedDataDto;
         }

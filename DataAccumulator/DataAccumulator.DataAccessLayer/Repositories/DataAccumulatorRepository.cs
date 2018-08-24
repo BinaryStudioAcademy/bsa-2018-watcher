@@ -31,7 +31,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
-        public async Task<CollectedData> GetEntity(Guid clientId)
+        public async Task<CollectedData> GetEntityByInstanceIdAsync(Guid clientId)
         {
             try
             {
@@ -49,7 +49,22 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
-        public async Task<CollectedData> GetEntity(ObjectId id)
+        public async Task<CollectedData> GetEntityIdAsync(Guid id)
+        {
+            try
+            {
+                var filter = Builders<CollectedData>.Filter.Eq(i => i.Id, id);
+
+                return await _context.Datasets.Find(filter).FirstOrDefaultAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<CollectedData> GetEntityByInternalIdAsync(ObjectId id)
         {
             try
             {

@@ -28,7 +28,10 @@ namespace Watcher
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
+
+    using ServiceBus.Shared.Messages;
+    using ServiceBus.Shared.Queue;
+
     using Watcher.Common.Options;
     using Watcher.Common.Validators;
     using Watcher.Core.Interfaces;
@@ -40,7 +43,6 @@ namespace Watcher
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
     using Watcher.Hubs;
-    using Watcher.Services;
     using Watcher.Utils;
 
     public class Startup
@@ -78,6 +80,13 @@ namespace Watcher
                     o.Security_Key = securitySection["Security_Key"];
                 });
 
+            var serviceBusSection = Configuration.GetSection("ServiceBus");
+            services.Configure<AzureQueueSettings>(o =>
+                {
+                    o.ConnectionString = serviceBusSection["ConnectionString"];
+                    o.QueueName = serviceBusSection["QueueName"];
+                });
+
             services.ConfigureSwagger(Configuration);
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -102,11 +111,11 @@ namespace Watcher
             services.AddTransient<ICollectedDataService, CollectedDataService>();
             services.AddTransient<IRoleService, RoleService>();
 
-            services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
+            // services.AddSingleton<IQueueClient, QueueClient>(q => new QueueClient(Configuration.GetSection("SERVICE_BUS_CONNECTION_STRING").Value, Configuration.GetSection("SERVICE_BUS_QUEUE_NAME").Value));
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
-
-             // services.AddScoped<IService<DataAccumulator.Shared.Models.CollectedDataDto>, DataAccumulatorService>();
-
+            services.AddSingleton<IAzureQueueReceiver<InstanceCollectedDataMessage>, AzureQueueReceiver<InstanceCollectedDataMessage>>(
+                r => new AzureQueueReceiver<InstanceCollectedDataMessage>(new AzureQueueSettings(serviceBusSection["ConnectionString"], serviceBusSection["QueueName"])));
+             
             // repo initialization localhost while development env, azure in prod
             ConfigureCosmosDb(services, Configuration);
 
