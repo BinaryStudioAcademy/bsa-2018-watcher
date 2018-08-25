@@ -30,7 +30,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
   private regexAdminUrl = /\/admin/;
 
-  currentQuery: string;
+  currentQuery = '';
   currentGuidId: string;
   showDownloadModal: boolean;
   isSearching: boolean;
@@ -60,7 +60,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
         this.configureInstances(this.user.lastPickedOrganizationId);
         this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
         this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-        this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
         this.initMenuItems();
         this.changeMenu();
         this.subscribeRouteChanges();
@@ -95,6 +94,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
     this.instanceItems = [{
       label: 'Create Instance',
+      title: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
       routerLink: ['instances/create'],
     }];
@@ -178,12 +178,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     this.onSearchChange(this.currentQuery);
   }
 
-  onInstanceRemoved(id: number) {
-    // console.log(`id is ${id}`);
-    // const index: number = this.instanceItems.findIndex(inst => inst.title === id.toString());
-    // console.log(`index is ${index}`);
-  }
-
   onInstanceEdited(instance: Instance) {
     const item: MenuItem = this.instanceToMenuItem(instance);
     const index: number = this.instanceItems.findIndex(inst => inst.title === instance.id.toString());
@@ -263,7 +257,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     });
   }
   onClose(): void {
-    console.log('emits onclose');
     this.showDownloadModal = false;
   }
 }

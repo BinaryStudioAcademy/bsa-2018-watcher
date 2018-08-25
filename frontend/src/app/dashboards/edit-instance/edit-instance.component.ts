@@ -40,6 +40,7 @@ export class EditInstanceComponent implements OnInit {
         this.instanceService.getOne(this.id).subscribe((data: Instance) => {
           if (data) {
             this.instance = data;
+            console.log(this.instance.guidId);
             this.instanceForm = this.getInstanceForm(this.instance);
           }
         });
@@ -64,14 +65,16 @@ export class EditInstanceComponent implements OnInit {
       form = this.fb.group({
         title: new FormControl({ value: '', disabled: false }, Validators.required),
         platform: new FormControl({ value: '', disabled: false }, Validators.required),
-        address: new FormControl({ value: '', disabled: false }, Validators.required)
+        address: new FormControl({ value: '', disabled: false }, Validators.required),
+        guid: new FormControl({value: '', disabled: false})
       });
       this.instanceTitle = 'NEW INSTANCE';
     } else {
       form = this.fb.group({
         title: new FormControl({ value: instance.title, disabled: false }, Validators.required),
         platform: new FormControl({ value: instance.platform, disabled: false }, Validators.required),
-        address: new FormControl({ value: instance.address, disabled: false }, Validators.required)
+        address: new FormControl({ value: instance.address, disabled: false }, Validators.required),
+        guid: new FormControl({value: instance.guidId, disabled: false})
       });
       this.instanceTitle = 'EDIT INSTANCE';
     }
@@ -83,6 +86,7 @@ export class EditInstanceComponent implements OnInit {
       this.isSaving = true;
       const request: InstanceRequest = this.getNewInstance();
       if (this.id) {
+        request.guidId = this.instance.guidId;
         this.instanceService.update(request, this.id).subscribe((res: Response) => {
           this.toastrService.success('updated instance');
           const updatedInstance: Instance = {
@@ -90,14 +94,17 @@ export class EditInstanceComponent implements OnInit {
             address: request.address,
             id: this.id,
             platform: request.platform,
+            guidId: request.guidId,
             isActive: true,
-            guidId: this.instance.guidId,
             dashboards: this.instance.dashboards,
             organization: this.instance.organization
           };
+          console.log('asdsadsa');
+          console.log('GUID');
+          console.log(this.instance.guidId);
           this.instanceService.instanceEdited.emit(updatedInstance);
           this.isSaving = false;
-          this.router.navigate([`/user/instances/${updatedInstance.id}/${updatedInstance.guidId}/dashboards`]);
+          this.router.navigate([`/user/instances/${updatedInstance.id}/${this.instance.guidId}/dashboards`]);
         });
       } else {
         this.instanceService.create(request).subscribe((res: Instance) => {
@@ -128,5 +135,20 @@ export class EditInstanceComponent implements OnInit {
     this.platformsDropdown.push(
       {label: 'Windows', value: 'Windows'},
       {label: 'Linux', value: 'Linux'});
+  }
+
+  copyToClipboard(message: string): void {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = message;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this.toastrService.info(`Copied to clipboard`);
   }
 }
