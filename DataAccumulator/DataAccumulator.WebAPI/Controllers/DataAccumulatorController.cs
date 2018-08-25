@@ -7,15 +7,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataAccumulator.WebAPI.Controllers
 {
+    using ServiceBus.Shared.Messages;
+    using ServiceBus.Shared.Queue;
+
     [Produces("application/json")]
     [Route("api/v1/dataaccumulator")]
     public class DataAccumulatorController : Controller
     {
         private readonly IDataAccumulatorService<CollectedDataDto> _dataAccumulatorService;
+        private readonly IServiceBusProvider _serviceBusProvider;
 
-        public DataAccumulatorController(IDataAccumulatorService<CollectedDataDto> dataAccumulatorService)
+        public DataAccumulatorController(IDataAccumulatorService<CollectedDataDto> dataAccumulatorService,
+                                         IServiceBusProvider serviceBusProvider)
         {
             _dataAccumulatorService = dataAccumulatorService;
+            _serviceBusProvider = serviceBusProvider;
         }
 
         // GET: api/v1/dataaccumulator
@@ -69,13 +75,37 @@ namespace DataAccumulator.WebAPI.Controllers
             try
             {
                 var collectedData = await _dataAccumulatorService.AddEntityAsync(collectedDataDto);
-                return CreatedAtRoute("GetDataAccumulator", new { id = collectedDataDto.Id }, collectedData);
+                return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
+        }
+
+        [HttpPost("TestCreation")]
+        public async Task<IActionResult> TestPost()
+        {
+            try
+            {
+                var collectedData = await _dataAccumulatorService.AddEntityAsync();
+                return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500);
+            }
+        }
+        
+        [HttpPost("TestError")]
+        public async Task<IActionResult> TestError()
+        {
+            var mess = new InstanceErrorMessage("Error Message from Accummulator", Guid.Parse("7dafb96f-46f3-48c4-9e97-787ec268136a"));
+            await _serviceBusProvider.SendErrorMessage(mess);
+
+            return Ok();
         }
 
         // PUT: api/v1/dataaccumulator/5

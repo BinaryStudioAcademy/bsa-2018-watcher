@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using DataAccumulator.DataAggregator;
+
 using DataAccumulator.DataAggregator.Interfaces;
-using DataAccumulator.DataAggregator.Services;
 using DataAccumulator.Shared.Models;
 using Quartz;
 

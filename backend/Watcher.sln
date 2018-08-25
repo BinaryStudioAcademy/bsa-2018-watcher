@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Watcher.Tests", "Watcher.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccumulator.DataAccessLayer", "..\DataAccumulator\DataAccumulator.DataAccessLayer\DataAccumulator.DataAccessLayer.csproj", "{6BAEA851-F472-4217-B22B-DB0DCCC4A848}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBus.Shared", "ServiceBus.Shared\ServiceBus.Shared.csproj", "{C3D113EE-A15B-46B7-9120-BAE8FAA6F088}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{6BAEA851-F472-4217-B22B-DB0DCCC4A848}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BAEA851-F472-4217-B22B-DB0DCCC4A848}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BAEA851-F472-4217-B22B-DB0DCCC4A848}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3D113EE-A15B-46B7-9120-BAE8FAA6F088}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3D113EE-A15B-46B7-9120-BAE8FAA6F088}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3D113EE-A15B-46B7-9120-BAE8FAA6F088}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3D113EE-A15B-46B7-9120-BAE8FAA6F088}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

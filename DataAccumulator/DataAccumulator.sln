@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccumulator.DataAccessL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccumulator.BusinessLayer", "DataAccumulator.BusinessLayer\DataAccumulator.BusinessLayer.csproj", "{C2B4AAB8-19C8-4A86-B9E7-53F22BC73C2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccumulator.DataAggregator", "DataAccumulator.DataAggregator\DataAccumulator.DataAggregator.csproj", "{9AED2F7A-4C2D-4A14-8E44-E0CA155FB95F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccumulator.DataAggregator", "DataAccumulator.DataAggregator\DataAccumulator.DataAggregator.csproj", "{9AED2F7A-4C2D-4A14-8E44-E0CA155FB95F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBus.Shared", "..\backend\ServiceBus.Shared\ServiceBus.Shared.csproj", "{C1CC0684-7709-45B5-B19B-250C02D45F41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{9AED2F7A-4C2D-4A14-8E44-E0CA155FB95F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AED2F7A-4C2D-4A14-8E44-E0CA155FB95F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AED2F7A-4C2D-4A14-8E44-E0CA155FB95F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1CC0684-7709-45B5-B19B-250C02D45F41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1CC0684-7709-45B5-B19B-250C02D45F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1CC0684-7709-45B5-B19B-250C02D45F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1CC0684-7709-45B5-B19B-250C02D45F41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

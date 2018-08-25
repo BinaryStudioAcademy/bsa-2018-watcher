@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using DataAccumulator.Shared.Interfaces;
 
@@ -11,6 +10,8 @@ namespace DataAccumulator.BusinessLayer.Interfaces
         Task<IEnumerable<TDto>> GetEntitiesAsync();
         Task<TDto> GetEntityAsync(Guid id);
         Task<TDto> AddEntityAsync(TDto entity);
+        Task<TDto> AddEntityAsync();
+
         Task<TDto> UpdateEntityAsync(TDto entity);
         Task<bool> DeleteEntityAsync(Guid id);
     }
