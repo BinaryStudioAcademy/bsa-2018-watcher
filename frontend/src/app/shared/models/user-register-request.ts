@@ -6,6 +6,7 @@ export interface UserRegisterRequest {
   refreshToken: string;
   isNewUser: boolean;
   companyName: string;
+  invitedOrganizationId: number;
   lastName: string;
   firstName: string;
 }
