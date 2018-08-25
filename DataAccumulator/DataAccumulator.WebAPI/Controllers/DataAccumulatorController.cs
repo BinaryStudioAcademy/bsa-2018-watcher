@@ -15,13 +15,13 @@ namespace DataAccumulator.WebAPI.Controllers
     public class DataAccumulatorController : Controller
     {
         private readonly IDataAccumulatorService<CollectedDataDto> _dataAccumulatorService;
-        private readonly IAzureQueueSender<InstanceErrorMessage> _azureQueueSender;
+        private readonly IServiceBusProvider _serviceBusProvider;
 
         public DataAccumulatorController(IDataAccumulatorService<CollectedDataDto> dataAccumulatorService,
-                                         IAzureQueueSender<InstanceErrorMessage> azureQueueSender)
+                                         IServiceBusProvider serviceBusProvider)
         {
             _dataAccumulatorService = dataAccumulatorService;
-            _azureQueueSender = azureQueueSender;
+            _serviceBusProvider = serviceBusProvider;
         }
 
         // GET: api/v1/dataaccumulator
@@ -103,7 +103,7 @@ namespace DataAccumulator.WebAPI.Controllers
         public async Task<IActionResult> TestError()
         {
             var mess = new InstanceErrorMessage("Error Message from Accummulator", Guid.Parse("7dafb96f-46f3-48c4-9e97-787ec268136a"));
-            await _azureQueueSender.SendAsync(mess);
+            await _serviceBusProvider.SendErrorMessage(mess);
 
             return Ok();
         }

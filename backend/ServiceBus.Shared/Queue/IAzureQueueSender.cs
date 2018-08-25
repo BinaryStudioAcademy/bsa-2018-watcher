@@ -3,10 +3,14 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IAzureQueueSender<T>
-    {
-        Task SendAsync(T item);
+    using Microsoft.Azure.ServiceBus;
 
-        Task SendAsync(T item, Dictionary<string, object> properties);
+    using ServiceBus.Shared.Messages;
+
+    public interface IAzureQueueSender
+    {
+        Task SendAsync<T>(QueueClient client, T item) where T : InstanceMessage; 
+
+        Task SendAsync<T>(QueueClient client, T item, Dictionary<string, object> properties) where T : InstanceMessage;
     }
 }

@@ -56,8 +56,7 @@
                 ExceptionReceivedHandler,
                 ExceptionWhileProcessingHandler,
                 OnWait);
-
-            // TODO: Check if I can use this method for other queue with diff MessageType
+            
             _azureQueueReceiver.Receive<InstanceErrorMessage>(
                 _instanceErrorQueueClient,
                 OnErrorProcessAsync,
@@ -130,6 +129,8 @@
             _logger.LogError($"Message handler encountered an exception {ex.Message}.");
         }
 
+        #region Disposable Support
+
         // To detect redundant calls
         private bool disposedValue;
 
@@ -138,6 +139,7 @@
             if (!disposedValue)
             {
                 await _instanceDataQueueClient.CloseAsync();
+                await _instanceErrorQueueClient.CloseAsync();
 
                 disposedValue = true;
             }
@@ -147,5 +149,7 @@
         {
             CloseClient().GetAwaiter().GetResult();
         }
+
+        #endregion
     }
 }

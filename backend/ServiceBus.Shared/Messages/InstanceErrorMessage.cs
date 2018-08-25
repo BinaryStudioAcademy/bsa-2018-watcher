@@ -5,6 +5,8 @@ namespace ServiceBus.Shared.Messages
 
     public class InstanceErrorMessage : InstanceMessage
     {
+        public InstanceErrorMessage() { }
+
         public InstanceErrorMessage(string errorMessage, Guid instanceId) : base(instanceId)
         {
             ErrorMessage = errorMessage;

@@ -8,28 +8,25 @@
 
     using Newtonsoft.Json;
 
-    public class AzureQueueSender<T> : IAzureQueueSender<T> where T : class
+    using ServiceBus.Shared.Messages;
+
+    public class AzureQueueSender : IAzureQueueSender
     {
-        private QueueClient _client;
-
-        public AzureQueueSender(AzureQueueSettings settings)
-        {
-            _client = new QueueClient(settings.ConnectionString, settings.DataQueueName);
-        }
+        public AzureQueueSender() { }
         
-        public Task SendAsync(T item)
+        public Task SendAsync<T>(QueueClient client, T item) where T : InstanceMessage
         {
-            return SendAsync(item, null);
+            return SendAsync(client, item, null);
         }
 
-        public Task SendAsync(T item, Dictionary<string, object> properties)
+        public Task SendAsync<T>(QueueClient client, T item, Dictionary<string, object> properties) where T : InstanceMessage
         {
             var json = JsonConvert.SerializeObject(item);
             var message = new Message(Encoding.UTF8.GetBytes(json));
 
             if (properties == null)
             {
-                return _client.SendAsync(message);
+                return client.SendAsync(message);
             }
 
             foreach (var prop in properties)
@@ -37,7 +34,7 @@
                 message.UserProperties.Add(prop.Key, prop.Value);
             }
 
-            return _client.SendAsync(message);
+            return client.SendAsync(message);
         }
     }
 }

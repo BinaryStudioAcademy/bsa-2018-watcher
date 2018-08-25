@@ -113,10 +113,7 @@
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
-
-            //services.AddSingleton<IAzureQueueReceiver<InstanceCollectedDataMessage>, AzureQueueReceiver<InstanceCollectedDataMessage>>(
-            //    r => new AzureQueueReceiver<InstanceCollectedDataMessage>(new AzureQueueSettings(serviceBusSection["ConnectionString"], serviceBusSection["DataQueueName"])));
-
+            
             // repo initialization localhost while development env, azure in prod
             ConfigureCosmosDb(services, Configuration);
 

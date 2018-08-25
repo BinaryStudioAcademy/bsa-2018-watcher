@@ -19,6 +19,8 @@ using Quartz.Spi;
 
 namespace DataAccumulator
 {
+    using DataAccumulator.BusinessLayer.Providers;
+
     using ServiceBus.Shared.Messages;
     using ServiceBus.Shared.Queue;
 
@@ -69,20 +71,8 @@ namespace DataAccumulator
 
             services.AddTransient<CollectedDataAggregatingJob>();
 
-            services.AddSingleton<IAzureQueueSender<InstanceCollectedDataMessage>, AzureQueueSender<InstanceCollectedDataMessage>>(
-                r => new AzureQueueSender<InstanceCollectedDataMessage>(
-                    new AzureQueueSettings(
-                        serviceBusSection["ConnectionString"], 
-                        serviceBusSection["DataQueueName"], 
-                        serviceBusSection["ErrorQueueName"])));
-
-            services.AddSingleton<IAzureQueueSender<InstanceErrorMessage>, AzureQueueSender<InstanceErrorMessage>>(
-                r => new AzureQueueSender<InstanceErrorMessage>(
-                    new AzureQueueSettings(
-                        serviceBusSection["ConnectionString"],
-                        serviceBusSection["ErrorQueueName"],
-                        serviceBusSection["DataQueueName"])));
-
+            services.AddTransient<IAzureQueueSender, AzureQueueSender>();
+            services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
 
             // repo initialization localhost while development env, azure in prod
             ConfigureCosmosDb(services, Configuration);

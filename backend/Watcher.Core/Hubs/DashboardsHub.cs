@@ -6,16 +6,20 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.Extensions.Logging;
 
     using Watcher.Core.Interfaces;
 
     public class DashboardsHub : Hub
     {
         private readonly IServiceBusProvider _serviceBusProvider;
+        private readonly ILogger<DashboardsHub> _logger;
 
-        public DashboardsHub(IServiceBusProvider serviceBusProvider)
+        public DashboardsHub(IServiceBusProvider serviceBusProvider,
+                             ILogger<DashboardsHub> logger)
         {
             _serviceBusProvider = serviceBusProvider;
+            _logger = logger;
         }
 
         /// <summary>
@@ -24,8 +28,6 @@
         /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous connect.</returns>
         public override Task OnConnectedAsync()
         {
-            Groups.AddToGroupAsync(Context.ConnectionId, "Market Data Feed");
-            Clients.All.SendAsync("BroadcastMessage", Context.ConnectionId + "Connected");
             return base.OnConnectedAsync();
         }
 
@@ -38,11 +40,10 @@
         /// <returns>
         /// A <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous disconnect.
         /// </returns>
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public override Task OnDisconnectedAsync(Exception exception)
         {
-            await Clients.All.SendAsync("BroadcastMessage", $"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Market Data Feed");
-            await base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
+            _logger.LogError($"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
+            return base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
         }
 
         [Authorize]

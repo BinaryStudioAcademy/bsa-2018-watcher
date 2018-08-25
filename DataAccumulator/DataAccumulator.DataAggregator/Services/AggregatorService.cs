@@ -58,7 +58,5 @@ namespace DataAccumulator.DataAggregator.Services
 
             return collectedDataDto;
         }
-
-       
     }
 }

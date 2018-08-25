@@ -11,22 +11,20 @@ using DataAccumulator.Shared.Models;
 namespace DataAccumulator.BusinessLayer.Services
 {
     using ServiceBus.Shared.Messages;
-    using ServiceBus.Shared.Queue;
 
     public class DataAccumulatorService : IDataAccumulatorService<CollectedDataDto>
     {
         private readonly IMapper _mapper;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;
-
-        private readonly IAzureQueueSender<InstanceCollectedDataMessage> _azureQueueSender;
+        private readonly IServiceBusProvider _serviceBusProvider;
 
         public DataAccumulatorService(IMapper mapper,
                                       IDataAccumulatorRepository<CollectedData> repository,
-                                      IAzureQueueSender<InstanceCollectedDataMessage> azureQueueSender)
+                                      IServiceBusProvider serviceBusProvider)
         {
             _mapper = mapper;
             _repository = repository;
-            _azureQueueSender = azureQueueSender;
+            _serviceBusProvider = serviceBusProvider;
         }
 
         public async Task<IEnumerable<CollectedDataDto>> GetEntitiesAsync()
@@ -61,8 +59,12 @@ namespace DataAccumulator.BusinessLayer.Services
             var mappedEntity = _mapper.Map<CollectedDataDto, CollectedData>(collectedDataDto);
             await _repository.AddEntity(mappedEntity);
 
-            var message = new InstanceCollectedDataMessage(mappedEntity.Id, mappedEntity.ClientId);
-            await _azureQueueSender.SendAsync(message);
+            var message = new InstanceCollectedDataMessage
+            {
+                CollectedDataId = mappedEntity.Id,
+                InstanceId = mappedEntity.ClientId
+            };
+            await _serviceBusProvider.SendDataMessage(message);
 
 
             return collectedDataDto;
@@ -72,10 +74,8 @@ namespace DataAccumulator.BusinessLayer.Services
         {
             var mappedEntity = GetFakeData(Guid.NewGuid(), Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"));
             await _repository.AddEntity(mappedEntity);
-
-            var message = new InstanceCollectedDataMessage(mappedEntity.Id, mappedEntity.ClientId);
-            await _azureQueueSender.SendAsync(message);
-
+            
+            await _serviceBusProvider.SendDataMessage(mappedEntity.ClientId, mappedEntity.Id);
 
             return null;
         }
