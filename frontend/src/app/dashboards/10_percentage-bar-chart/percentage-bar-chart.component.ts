@@ -43,10 +43,10 @@ export class PercentageBarChartComponent implements OnInit {
       name: 'Disk Free Space',
       value: 3
     },
-    {
-      name: 'Interrupts',
-      value: 4
-    }
+    // {
+    //   name: 'Interrupts',
+    //   value: 4
+    // }
   ];
 
    constructor(private dashboardsHub: DashboardsHub) {
@@ -69,7 +69,7 @@ export class PercentageBarChartComponent implements OnInit {
     this.data[0].value = Math.floor(data.cpuUsagePercent);
     this.data[1].value = Math.floor(data.ramUsagePercent);
     this.data[2].value = Math.floor(data.localDiskFreeSpacePercent);
-    this.data[3].value = Math.floor(data.interruptsTimePercent);
+    // this.data[3].value = Math.floor(data.interruptsTimePercent);
     this.data = [...this.data];
   }
 

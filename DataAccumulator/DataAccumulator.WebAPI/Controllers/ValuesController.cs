@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataAccumulator.WebAPI.Controllers
 {
-    using DataAccumulator.Interfaces;
+    using DataAccumulator.BusinessLayer.Interfaces;
 
     [Route("api/v1/[controller]")]
     public class ValuesController : Controller
@@ -168,21 +168,6 @@ namespace DataAccumulator.WebAPI.Controllers
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
-        }
-
-        [HttpGet("Bus")]
-        public async Task<IActionResult> SendMessageToServiceBus([FromQuery] string message)
-        {
-            try
-            {
-                await _serviceBusProvider.SendMessageToServiceBus(message);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-
-            return Ok();
         }
     }
 }

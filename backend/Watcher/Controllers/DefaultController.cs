@@ -50,20 +50,20 @@ namespace Watcher.Controllers
             return Ok();
         }
 
-        [HttpGet("RegisterToMessages")]
-        public async Task<IActionResult> RegisterToMessages()
-        {
-            try
-            {
-                _serviceBusProvider.RegisterOnMessageHandlerAndReceiveMessages();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
+        //[HttpGet("RegisterToMessages")]
+        //public async Task<IActionResult> RegisterToMessages()
+        //{
+        //    try
+        //    {
+        //        _serviceBusProvider.RegisterOnMessageHandlerAndReceiveMessages();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e);
+        //    }
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
         // [WatcherAuthorize("Admin")]
         [Authorize(Roles = "User")]

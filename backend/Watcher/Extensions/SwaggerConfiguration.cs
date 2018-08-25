@@ -9,12 +9,15 @@
 
     using Swashbuckle.AspNetCore.Swagger;
 
+    using Watcher.Utils;
+
     public static class SwaggerConfiguration
     {
         public static IServiceCollection ConfigureSwagger(this IServiceCollection services, IConfiguration configs)
         {
             services.AddSwaggerGen(options =>
             {
+                options.OperationFilter<FormFileOperationFilter>();
                 options.SwaggerDoc("v1", new Info
                 {
 
