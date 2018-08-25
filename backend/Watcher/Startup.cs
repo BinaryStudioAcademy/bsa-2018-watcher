@@ -86,7 +86,7 @@
                     o.DataQueueName = serviceBusSection["DataQueueName"];
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
                 });
-
+            
             services.ConfigureSwagger(Configuration);
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -122,6 +122,12 @@
             // It's Singleton so we can't consume Scoped services & Transient services that consume Scoped services
             // services.AddHostedService<WatcherService>();
 
+            var imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+            Directory.CreateDirectory(imageFolder);
+
+            services.AddSingleton<IFileProvider>(
+                new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")));
 
             InitializeAutomapper(services);
 
@@ -207,7 +213,7 @@
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceBusProvider provider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceBusProvider provider, IFileProvider fileProvider)
         {
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
@@ -217,25 +223,22 @@
             UpdateDatabase(app);
 
             app.UseCors("CorsPolicy");
-
             app.UseHsts();
             app.UseConfiguredSwagger();
             app.UseHttpsRedirection();
-            app.UseDefaultFiles();
 
-            var imageFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-            Directory.CreateDirectory(imageFolder);
+            app.UseDefaultFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(imageFolder),
+                FileProvider = fileProvider
             });
+            app.UseFileServer();
 
             app.UseAuthentication();
 
             app.UseWatcherAuth();
 
             app.UseMvc();
-            app.UseFileServer();
 
             if (UseAzureSignalR)
             {
