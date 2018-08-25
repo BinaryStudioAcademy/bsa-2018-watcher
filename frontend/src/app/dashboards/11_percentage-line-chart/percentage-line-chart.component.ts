@@ -53,10 +53,10 @@ export class PercentageLineChartComponent implements OnInit, OnChanges {
       name: 'Disk Free Space',
       series: []
     },
-    {
-      name: 'Interrupts',
-      series: []
-    },
+    // {
+    //   name: 'Interrupts',
+    //   series: []
+    // },
   ];
 
   constructor(private dashboardsService: DashboardService,
@@ -78,7 +78,7 @@ export class PercentageLineChartComponent implements OnInit, OnChanges {
       const infoToInsert = info.map(p => this.toSeriesData(p));
 
       for (const inf of infoToInsert) {
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 3; i++) {
           this.data[i].series.push(inf[i]);
         }
       }
@@ -89,14 +89,14 @@ export class PercentageLineChartComponent implements OnInit, OnChanges {
 
   toSeriesData(info: PercentageInfo | CollectedData): SeriesItem[] {
     const items: SeriesItem[] = [];
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
       items.push({name: new Date(info.time), value: 0});
     }
 
     items[0].value = Math.floor(info.cpuUsagePercent);
     items[1].value = Math.floor(info.ramUsagePercent);
     items[2].value = Math.floor(info.localDiskFreeSpacePercent);
-    items[3].value = Math.floor(info.interruptsTimePercent);
+    // items[3].value = Math.floor(info.interruptsTimePercent);
 
     return items;
   }
@@ -104,7 +104,7 @@ export class PercentageLineChartComponent implements OnInit, OnChanges {
   subscribeToCollectedData(): void {
     this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
       const infoToInsert = this.toSeriesData(latestData);
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 3; i++) {
         if (this.data[i].series > 20) {
           this.data[i].series.shift();
         }

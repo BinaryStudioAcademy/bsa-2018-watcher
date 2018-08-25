@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DataAccumulator.BusinessLayer.Interfaces;
-using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.Shared.Exceptions;
 using DataAccumulator.Shared.Models;
 using Microsoft.AspNetCore.Mvc;

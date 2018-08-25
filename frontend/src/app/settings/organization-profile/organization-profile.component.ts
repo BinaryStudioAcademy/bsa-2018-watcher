@@ -20,6 +20,7 @@ import { User } from '../../shared/models/user.model';
 })
 export class OrganizationProfileComponent implements OnInit {
 
+
   constructor(
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,
@@ -65,7 +66,9 @@ export class OrganizationProfileComponent implements OnInit {
     this.authService.currentUser.subscribe(
       (userData) => {
         this.user = { ...userData };
-        this.organization = this.user.lastPickedOrganization;
+        if (this.user.lastPickedOrganization !== undefined) {
+          this.organization = this.user.lastPickedOrganization;
+        }
         this.imageUrl = this.user.lastPickedOrganization.imageURL;
         if (this.organization.createdByUserId === this.user.id) {
           this.editable = true;

@@ -9,30 +9,53 @@ namespace Watcher.Core.Providers
 {
     using System.Net.Http;
 
+    using Microsoft.AspNetCore.Http;
+
     using Watcher.Common.Helpers.Utils;
 
     public class FileStorageProvider : IFileStorageProvider
     {
-        private CloudStorageAccount StorageAccount;
+        private CloudStorageAccount _storageAccount;
 
-        public FileStorageProvider(string ConnectionString)
+        public FileStorageProvider(string connectionString)
         {
-            StorageAccount = CloudStorageAccount.Parse(ConnectionString);
+            _storageAccount = CloudStorageAccount.Parse(connectionString);
+        }
+
+        public async Task<string> UploadFormFileAsync(IFormFile formFile)
+        {
+            var client = _storageAccount.CreateCloudBlobClient();
+
+            var container = client.GetContainerReference("watcher");
+
+            if (await container.ExistsAsync() == false)
+            {
+                await container.CreateAsync();
+            }
+            
+            var blob = container.GetBlockBlobReference("CollectorInstaller.exe");
+            await SetPublicContainerPermissions(container);
+
+            using (var stream = formFile.OpenReadStream())
+            {
+                await blob.UploadFromStreamAsync(stream);
+            }
+
+            return blob.Uri.ToString();
         }
 
         public async Task<string> UploadFileAsync(string path, string containerName = "watcher")
         {
-            var client = StorageAccount.CreateCloudBlobClient();
+            var client = _storageAccount.CreateCloudBlobClient();
 
             var container = client.GetContainerReference(containerName.ToLower());
 
-            if ((await container.ExistsAsync()) == false)
+            if (await container.ExistsAsync() == false)
             {
                 await container.CreateAsync();
             }
 
             var filename = Guid.NewGuid() + Path.GetExtension(path);
-
             var blob = container.GetBlockBlobReference(filename);
 
             await SetPublicContainerPermissions(container);
@@ -44,7 +67,7 @@ namespace Watcher.Core.Providers
 
         public async Task<string> UploadFileFromStreamAsync(string url, string containerName = "watcher")
         {
-            var client = StorageAccount.CreateCloudBlobClient();
+            var client = _storageAccount.CreateCloudBlobClient();
 
             var container = client.GetContainerReference(containerName.ToLower());
 
@@ -81,7 +104,7 @@ namespace Watcher.Core.Providers
 
             var base64 = base64string.Split(',')[1];
             var imageInBytes = Convert.FromBase64String(base64);
-            var client = StorageAccount.CreateCloudBlobClient();
+            var client = _storageAccount.CreateCloudBlobClient();
 
             var container = client.GetContainerReference(containerName.ToLower());
 
@@ -101,21 +124,21 @@ namespace Watcher.Core.Providers
 
         public async Task DeleteFileAsync(string path)
         {
-            var client = StorageAccount.CreateCloudBlobClient();
+            var client = _storageAccount.CreateCloudBlobClient();
             var blob = await client.GetBlobReferenceFromServerAsync(new Uri(path));
 
             //will throw exception if there is no blob
             await blob.DeleteAsync();
         }
 
-        private async Task SetPublicContainerPermissions(CloudBlobContainer container)
+        private Task SetPublicContainerPermissions(CloudBlobContainer container)
         {
             var permissions = new BlobContainerPermissions
             {
                 PublicAccess = BlobContainerPublicAccessType.Blob
             };
 
-            await container.SetPermissionsAsync(permissions);
+            return container.SetPermissionsAsync(permissions);
         }
     }
 }

@@ -5,16 +5,26 @@ using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
-    using System.Net.Http;
-
-    using Microsoft.WindowsAzure.Storage.Blob;
+    using Microsoft.AspNetCore.Http;
 
     using Watcher.Common.Helpers.Utils;
 
     public class LocalFileStorageProvider : IFileStorageProvider
     {
-        public LocalFileStorageProvider()
-        { }
+        public LocalFileStorageProvider() { }
+
+        public async Task<string> UploadFormFileAsync(IFormFile formFile)
+        {
+            var fileName = Guid.NewGuid() + Path.GetExtension(formFile.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+
+            return path;
+        }
 
         public Task<string> UploadFileAsync(string path, string containerName = "watcher")
         {
