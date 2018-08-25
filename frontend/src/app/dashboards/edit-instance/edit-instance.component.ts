@@ -86,6 +86,7 @@ export class EditInstanceComponent implements OnInit {
       this.isSaving = true;
       const request: InstanceRequest = this.getNewInstance();
       if (this.id) {
+        request.guidId = this.instance.guidId;
         this.instanceService.update(request, this.id).subscribe((res: Response) => {
           this.toastrService.success('updated instance');
           const updatedInstance: Instance = {
@@ -93,14 +94,17 @@ export class EditInstanceComponent implements OnInit {
             address: request.address,
             id: this.id,
             platform: request.platform,
+            guidId: request.guidId,
             isActive: true,
-            guidId: this.instance.guidId,
             dashboards: this.instance.dashboards,
             organization: this.instance.organization
           };
+          console.log('asdsadsa');
+          console.log('GUID');
+          console.log(this.instance.guidId);
           this.instanceService.instanceEdited.emit(updatedInstance);
           this.isSaving = false;
-          this.router.navigate([`/user/instances/${updatedInstance.id}/${updatedInstance.guidId}/dashboards`]);
+          this.router.navigate([`/user/instances/${updatedInstance.id}/${this.instance.guidId}/dashboards`]);
         });
       } else {
         this.instanceService.create(request).subscribe((res: Instance) => {
