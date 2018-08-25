@@ -39,6 +39,7 @@ export class EditInstanceComponent implements OnInit {
         this.instanceService.getOne(this.id).subscribe((data: Instance) => {
           if (data) {
             this.instance = data;
+            console.log(this.instance.guidId);
             this.instanceForm = this.getInstanceForm(this.instance);
           }
         });
@@ -63,14 +64,16 @@ export class EditInstanceComponent implements OnInit {
       form = this.fb.group({
         title: new FormControl({ value: '', disabled: false }, Validators.required),
         platform: new FormControl({ value: '', disabled: false }, Validators.required),
-        address: new FormControl({ value: '', disabled: false }, Validators.required)
+        address: new FormControl({ value: '', disabled: false }, Validators.required),
+        guid: new FormControl({value: '', disabled: false})
       });
       this.instanceTitle = 'NEW INSTANCE';
     } else {
       form = this.fb.group({
         title: new FormControl({ value: instance.title, disabled: false }, Validators.required),
         platform: new FormControl({ value: instance.platform, disabled: false }, Validators.required),
-        address: new FormControl({ value: instance.address, disabled: false }, Validators.required)
+        address: new FormControl({ value: instance.address, disabled: false }, Validators.required),
+        guid: new FormControl({value: instance.guidId, disabled: false})
       });
       this.instanceTitle = 'EDIT INSTANCE';
     }
@@ -123,5 +126,20 @@ export class EditInstanceComponent implements OnInit {
     this.platformsDropdown.push(
       {label: 'Windows', value: 'Windows'},
       {label: 'Linux', value: 'Linux'});
+  }
+
+  copyToClipboard(message: string): void {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = message;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this.toastrService.info(`Copied to clipboard`);
   }
 }
