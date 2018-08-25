@@ -159,6 +159,7 @@ export class OrganizationProfileComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
+    this.toastrService.success('Invitation link was copied to clipboard');
     this.isCopying = false;
   }
 
