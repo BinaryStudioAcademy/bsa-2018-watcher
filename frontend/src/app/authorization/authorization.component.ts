@@ -22,6 +22,8 @@ export class AuthorizationComponent implements OnInit {
   @Input() showSignInOutBtn = true;
   @Input() invitedOrganization: Organization = null;
 
+  @Output() successfulSignIn = new EventEmitter();
+
   isDisabledCompanyName = false;
 
   isSignIn = true;
@@ -96,6 +98,7 @@ export class AuthorizationComponent implements OnInit {
         if (result) {
           this.closeDialog();
           this.signInPostProcessing(result);
+          this.successfulSignIn.emit(); // for invite
         }
         this.isFetching = false;
         this.fetchExistingData();
@@ -119,6 +122,7 @@ export class AuthorizationComponent implements OnInit {
         if (result) {
           this.closeDialog();
           this.signInPostProcessing(result);
+          this.successfulSignIn.emit(); // for invite
         }
         this.isFetching = false;
         this.fetchExistingData();
@@ -143,6 +147,7 @@ export class AuthorizationComponent implements OnInit {
         if (result) {
           this.closeDialog();
           this.signInPostProcessing(result);
+          this.successfulSignIn.emit(); // for invite
         }
         this.isFetching = false;
         this.fetchExistingData();

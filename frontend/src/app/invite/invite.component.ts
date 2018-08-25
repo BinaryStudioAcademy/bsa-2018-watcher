@@ -85,13 +85,9 @@ export class InviteComponent implements OnInit {
   }
 
   onReject() { // only Authenticated User
-    if (this.isAuthenticated) {
-      this.invite.invitedUserId = this.user.id;
-      this.invite.state = OrganizationInviteState.Declined;
-      this.updateInvite();
-    } else { // show login form
-      this.showLoginForm = true;
-    }
+    this.invite.invitedUserId = this.user.id;
+    this.invite.state = OrganizationInviteState.Declined;
+    this.updateInvite();
   }
 
   updateInvite() {
@@ -112,6 +108,10 @@ export class InviteComponent implements OnInit {
     );
 
     this.router.navigate(['user']);
+  }
+
+  successfulSignIn() {
+    this.onAccept();
   }
 
 }
