@@ -128,7 +128,7 @@
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
         [HttpPut("{id}")]
-        public virtual async Task<ActionResult> Update([FromRoute] int id, [FromBody] OrganizationRequest request)
+        public virtual async Task<ActionResult> Update([FromRoute] int id, [FromBody] OrganizationUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {

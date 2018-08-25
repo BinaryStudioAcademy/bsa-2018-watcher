@@ -14,7 +14,7 @@
 
         Task<OrganizationDto> CreateEntityAsync(OrganizationRequest request);
 
-        Task<bool> UpdateEntityByIdAsync(OrganizationRequest request, int id);
+        Task<bool> UpdateEntityByIdAsync(OrganizationUpdateRequest request, int id);
 
         Task<bool> DeleteEntityByIdAsync(int id);
     }

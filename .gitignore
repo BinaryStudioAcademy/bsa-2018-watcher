@@ -331,3 +331,5 @@ ASALocalRun/
 
 # Angular Environment Files
 **src/environments/
+
+backend/Watcher/wwwroot/images/

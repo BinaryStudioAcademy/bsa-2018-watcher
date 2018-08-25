@@ -55,11 +55,30 @@ input
   display: grid
   grid-column-gap: 0px
   grid-template-columns: auto auto
+  grid-template-rows: 200px auto
 
 .grid-item 
   padding: 20px
 
-  .alert-danger
+.logo 
+    grid-column-start: 1
+    grid-column-end: 2
+    grid-row-start: 1
+    grid-row-end: 1
+
+.orgData
+    grid-column-start: 1
+    grid-column-end: 1
+    grid-row-start: 2
+    grid-row-end: 2
+
+.invite
+    grid-column-start: 2
+    grid-column-end: 2
+    grid-row-start: 1
+    grid-row-end: 1
+
+.alert-danger
     font-size: small
     font-weight: 500
     color: red
@@ -69,3 +88,81 @@ input
 
 .inputEmail
     position: relative
+
+
+
+img
+  width: 300px
+  height: 150px
+  border-radius: 5px
+  border: 1px solid gray
+
+.centered-text
+  text-align: center
+
+figure
+  display: block
+  position: relative
+  float: left
+  overflow: hidden
+  margin: 0 20px 20px 0
+
+figcaption
+  position: absolute
+  background: black
+  background: rgba(0,0,0,0.75)
+  border-radius: 0px 0px 5px 5px
+  margin-bottom: 8px
+  color: white
+  padding: 10px 20px
+  width: 300px
+  opacity: 0
+  -webkit-transition: all 0.6s ease
+  -moz-transition:  all 0.6s ease
+  -o-transition:    all 0.6s ease
+
+
+figure:hover figcaption
+  opacity: 1
+
+.inputfile span
+  background: red !important
+
+figure:hover:before
+  opacity: 0
+
+.cap-bot:before
+  bottom: 10px
+  left: 10px
+
+.cap-bot figcaption
+  left: 0
+  bottom: -17%
+
+.cap-bot:hover figcaption
+  bottom: 0
+
+.crop-btn-panel
+  display: flex
+  justify-content: space-around
+
+.imageLogo
+    width: 300px
+    height: 150px
+
+
+.ui-inputgroup
+    position: relative
+    display: inline-block
+    width: 100%
+
+.alert-danger
+    font-size: small
+    font-weight: 500
+    color: red
+    position: absolute
+    top: 34px
+    width: 100%
+
+.btn-save
+    margin-top: 20px

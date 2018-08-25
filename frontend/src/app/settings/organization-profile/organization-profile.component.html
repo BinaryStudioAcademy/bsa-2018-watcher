@@ -7,78 +7,103 @@
     </div>
   </div>
 
+
+
 <div class="grid-container">
-  <form class="grid-item" [formGroup]="organizationForm" (ngSubmit)="onSubmit()" >
-    <div class="ui-g">
-      <div class="ui-g-12 ui-md-12 ui-lg-12">
-        <div class="label">Name</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input type="text" formControlName="name" pInputText placeholder="Name">
-            </div>
-          </div>
-        </div>
 
-        <div class="invalid" *ngIf="organizationForm.get('name').errors && organizationForm.get('name').dirty">
-          <label>Name is required.</label>
-        </div>
-
-        <div class="label">Email</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input type="text" formControlName="email" pInputText placeholder="Email">
-            </div>
-          </div>
-        </div>
-
-        <div class="invalid" *ngIf="organizationForm.get('email').errors && organizationForm.get('email').dirty">
-          <label>Wrong email format.</label>
-        </div>
-
-        <div class="label">Contact number</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input type="text" formControlName="contactNumber" pInputText placeholder="Contact number">
-            </div>
-          </div>
-        </div>
-
-        <div class="invalid" *ngIf="organizationForm.get('contactNumber').errors && organizationForm.get('contactNumber').dirty">
-          <label>Wrong number format.</label>
-        </div>
-
-        <div class="label">Web site</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input type="text" formControlName="webSite" pInputText placeholder="Web site">
-            </div>
-          </div>
-        </div>
-
-        <div class="invalid" *ngIf="organizationForm.get('webSite').errors && organizationForm.get('webSite').dirty">
-          <label>Wrong url format.</label>
-        </div>
-
-        <div class="label">Description</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <textarea rows="5" formControlName="description" pInputTextarea></textarea>
-          </div>
-        </div>
-        <div class="btn-panel">
-          <button pButton type="submit" label="Update" class="ui-button-raised ui-button-success" *ngIf="!isUpdating"></button>
-          <p-progressSpinner class="btn-spinner" *ngIf="isUpdating"></p-progressSpinner>
-        </div>
-      </div>
+  <div class="grid-item logo">
+      <div class="ui-g-12 ui-md-8 ui-lg-5">
+          <div class="label">Organization logo</div>
+          <figure class="cap-bot">
+          <img class="imageLogo" src="{{imageUrl}}">
+            <figcaption class="centered-text custom-upload-btn">
+              <span ><i class="fa fa-camera"></i> Update logo</span>
+              <p-fileUpload #upload mode="basic" name="myfile[]" files="photosList" 
+              accept="image/*" (uploadHandler)="onImageSelected($event.files)" 
+              customUpload="true" maxFileSize="2000000" auto="true" chooseLabel="Change"></p-fileUpload>
+            </figcaption>
+          </figure>
     
-    </div>
-  </form>
+          <p-dialog  [(visible)]="display" [showHeader]="false" appendTo="body" [closable]=false
+          [modal]="true" [responsive]="true" [draggable]="false">
+            <img-cropper #cropper [image]="data" [settings]="cropperSettings" ></img-cropper>
+    
+            <div class="btn-panel crop-btn-panel">
+              <button pButton class="ui-button-raised ui-button-success" (click)="onCropCancel() " label="Cancel"></button>
+              <button pButton class="ui-button-raised ui-button-success" (click)="onCropSave()" label="Crop"></button>
+            </div>
+          </p-dialog>
+        </div>
+  </div>
 
-  <div class="grid-item">
+  <div class="grid-item orgData" >
+      <div class="ui-g">
+          <div class="ui-g-12 ui-md-12 ui-lg-12">
+            <div class="label">Name*:</div>
+            <div class="ui-g ui-fluid">
+              <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                  <input [(ngModel)]="organization.name" type="text" pInputText placeholder="Company name"
+                  required id="cName" required minlength="4" #cName="ngModel" />
+                  <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
+                    <div *ngIf="cName.errors.required">Company name is required.</div>
+                    <div *ngIf="cName.errors.minlength">Company name must be at least 4 characters long.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+            <div class="label">Email:</div>
+            <div class="ui-g ui-fluid">
+              <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                  <input type="email" pInputText placeholder="Email" [(ngModel)]="organization.email" id="cEmail" #cEmail="ngModel" ngModel email />
+                  <div *ngIf="cEmail?.invalid && (cEmail?.dirty || cEmail?.touched)" class="alert alert-danger">
+                    <div *ngIf="cEmail.errors.email">Email must be a valid email address</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+            <div class="label">Contact number:</div>
+            <div class="ui-g ui-fluid">
+              <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                    <p-inputMask type="phone" [(ngModel)]="organization.contactNumber" mask="+380 (99) 999-99-99"  
+                    placeholder="Contact number" ></p-inputMask>
+                </div>
+              </div>
+            </div>
+      
+            <div class="label">Web site:</div>
+            <div class="ui-g ui-fluid">
+              <div class="ui-g-12">
+                <div class="ui-inputgroup">
+                  <input type="text" pInputText placeholder="Web site"  [(ngModel)]="organization.webSite" id="cWebSite" #cWebSite="ngModel"
+                  pattern="^(http|https|ftp)?(://)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([/?].*)?$" >
+                  <div *ngIf="cWebSite?.invalid && (cWebSite?.dirty || cWebSite?.touched)" class="alert alert-danger">
+                      <div *ngIf="cWebSite.errors.pattern">Web site must be a valid.</div>
+                    </div>
+                </div>
+              </div>
+            </div>
+      
+            <div class="label">Description:</div>
+            <div class="ui-g ui-fluid">
+              <div class="ui-g-12">
+                <textarea rows="5" pInputTextarea  [(ngModel)]="organization.description"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-panel btn-save">
+            <p-progressSpinner class="btn-spinner" *ngIf="isUpdating"></p-progressSpinner>
+            <button *ngIf="!isUpdating" class="ui-button-raised ui-button-success button" pButton type="button" (click)="onSubmit()" label="Update"
+            [disabled]="cName?.invalid || cEmail?.invalid || cWebSite?.invalid"></button>
+            </div>
+        </div>
+        
+  </div>
     <div class="ui-g">
         <div class="ui-g-12 ui-md-12 ui-lg-12">
           <div class="label">Invitation to this organization:</div>
@@ -96,7 +121,7 @@
             </div>
           </div>
 
-          <div class="label">Copy link:</div>
+          <div class="label"></div>
           <div class="ui-g ui-fluid">
               <div class="btn-panel">
                   <button pButton label="Copy link" (click)="onCopy()"
@@ -108,19 +133,16 @@
           <div class="label">Send invite link to Email:</div>
           <div class="ui-g ui-fluid">
             <div class="inputEmail ui-g-12 ui-lg-12">
-              <input type="email" [(ngModel)]="inviteEmail" id="iEmail" #iEmail="ngModel" ngModel email="true" class="form-control" required minlength="6" pInputText placeholder="Email">
+              <input type="email" [(ngModel)]="inviteEmail" id="iEmail" #iEmail="ngModel" ngModel email="true" class="form-control" required pInputText placeholder="Email">
               <div *ngIf="iEmail?.invalid && (iEmail?.dirty || iEmail?.touched)" class="alert alert-danger">
-                  <div *ngIf="iEmail.errors.required">
-                      Email is required.
-                  </div>
-                  <div *ngIf="iEmail.errors.minlength">
-                      Email must be at least 4 characters long.
+                  <div *ngIf="iEmail.errors.email">
+                      Email is invalid.
                   </div>
               </div>
             </div>
           </div>
 
-          <div class="label">Send:</div>
+          <div class="label"></div>
           <div class="ui-g ui-fluid">
             <div class="btn-panel">
                 <button pButton label="Send" (click)="onSentInviteToEmail()" class="ui-button-raised ui-button-success"
@@ -133,4 +155,3 @@
       </div>
     </div>
   </div>
-</div>
