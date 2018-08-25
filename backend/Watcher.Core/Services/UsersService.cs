@@ -109,15 +109,11 @@ namespace Watcher.Core.Services
             var dto = _mapper.Map<User, UserDto>(user);
 
             return dto;
-
-
-
         }
 
         public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request) // TODO: Need refactoring :)
         {
             var user = await GetEntityByIdAsync(request.Uid);
-            Organization defaultOrganization = null;
 
             if (user != null)
             {
@@ -125,29 +121,6 @@ namespace Watcher.Core.Services
             }
 
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
-
-            if (request.InvitedOrganizationId != 0)
-            {
-                 defaultOrganization = await _uow.OrganizationRepository.GetFirstOrDefaultAsync(x => x.Id == request.InvitedOrganizationId);
-            }
-
-            if (defaultOrganization == null)
-            {
-                defaultOrganization = new Organization
-                {
-                    Name = request.CompanyName ?? "Default",
-                    IsActive = true,
-                    CreatedByUserId = entity.Id
-                };
-                entity.UserOrganizations.Add(
-                   new UserOrganization
-                   {
-                       Organization = defaultOrganization,
-                       UserId = entity.Id
-                   });
-            }
-
-
             entity.NotificationSettings = CreateNotificationSetting();
 
             var newPhotoUrl = await _fileStorageProvider.UploadFileFromStreamAsync(
@@ -162,19 +135,39 @@ namespace Watcher.Core.Services
 
             if (result)
             {
-                if (request.InvitedOrganizationId != 0)
+                if (request.InvitedOrganizationId == 0)
                 {
-                    createdUser.LastPickedOrganizationId = defaultOrganization.Id;
+
+                    var defaultOrganization = new Organization
+                    {
+                        Name = request.CompanyName ?? "Default",
+                        IsActive = true,
+                        CreatedByUserId = entity.Id
+                    };
                     createdUser.UserOrganizations.Add(
-                      new UserOrganization
-                      {
-                          OrganizationId = defaultOrganization.Id,
-                          UserId = entity.Id
-                      });
-                }
-                else
-                {
+                        new UserOrganization
+                        {
+                            Organization = defaultOrganization,
+                            UserId = createdUser.Id
+                        });
+
                     createdUser.LastPickedOrganization = defaultOrganization;
+                }
+                else // invited user
+                {
+                    var invitedOrganization = await _uow.OrganizationRepository.
+                        GetFirstOrDefaultAsync(x => x.Id == request.InvitedOrganizationId,
+                        include: org => org.Include(uo => uo.UserOrganizations));
+
+                    createdUser.UserOrganizations.Add(
+                         new UserOrganization
+                         {
+                             OrganizationId = invitedOrganization.Id,
+                             UserId = createdUser.Id
+                         });
+                    result &= await _uow.SaveAsync();
+
+                    createdUser.LastPickedOrganizationId = invitedOrganization.Id;
                 }
                 result &= await _uow.SaveAsync();
             }
@@ -184,9 +177,8 @@ namespace Watcher.Core.Services
                 return null;
             }
 
-            var dto = _mapper.Map<User, UserDto>(entity);
-
-            return dto;
+            var resul = await GetEntityByIdAsync(entity.Id);
+            return resul;
         }
 
         public async Task<bool> UpdateEntityByIdAsync(UserUpdateRequest request, string id)
