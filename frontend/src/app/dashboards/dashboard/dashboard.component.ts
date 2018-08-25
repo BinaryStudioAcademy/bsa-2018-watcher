@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ConfirmationService} from 'primeng/primeng';
+import {ConfirmationService, MenuItemContent} from 'primeng/primeng';
 import {MessageService} from 'primeng/api';
 import {DashboardService} from '../../core/services/dashboard.service';
 import {Dashboard} from '../../shared/models/dashboard.model';
@@ -98,6 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const lastItem: DashboardMenuItem = {
       icon: 'fa fa-plus',
       command: (onlick) => {
+        this.activeDashboardItem = lastItem;
         this.showCreatePopup(true);
       },
       id: 'lastTab'
@@ -185,7 +186,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   showCreatePopup(creation: boolean): void {
     this.creation = creation;
-    // if we are adding new textbox needs to be clear
+    console.log(this.creation);
+    console.log('CREATION ON SHOW');
+    // if we are adding new, textbox needs to be clear
     this.editTitle = creation ? '' : this.activeDashboardItem.label;
     this.displayEditDashboard = true;
   }
@@ -230,6 +233,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         this.dashboardMenuItems[index] = x;
         this.activeDashboardItem = this.dashboardMenuItems[index];
+      } else {
+        this.activeDashboardItem = null;
       }
     }
     this.creation = false;
