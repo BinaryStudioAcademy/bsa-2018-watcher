@@ -11,12 +11,14 @@ namespace DataAccumulator.DataAccessLayer.Interfaces
     {
         Task<IEnumerable<CollectedData>> GetAllEntities();
 
-        Task<CollectedData> GetEntity(Guid id);
+        Task<CollectedData> GetEntityByInstanceIdAsync(Guid id);
 
-        Task<CollectedData> GetEntity(ObjectId id);
+        Task<CollectedData> GetEntityIdAsync(Guid id);
+
+        Task<CollectedData> GetEntityByInternalIdAsync(ObjectId id);
 
         // query after multiple parameters
-        Task<IEnumerable<CollectedData>> GetEntity(DateTime time);
+        Task<IEnumerable<CollectedData>> GetEntities(DateTime timeFrom, DateTime timeTo);
 
         // add new entity
         Task AddEntity(CollectedData item);

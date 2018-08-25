@@ -44,7 +44,11 @@
       <div class="ui-g ui-fluid">
         <div class="ui-g-12">
           <div class="ui-inputgroup">
-            <input type="text" pInputText placeholder="Web site"  [(ngModel)]="webSite">
+            <input type="text" pInputText placeholder="Web site"  [(ngModel)]="webSite" id="cWebSite" #cWebSite="ngModel"
+            pattern="^(http|https|ftp)?(://)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([/?].*)?$" >
+            <div *ngIf="cWebSite?.invalid && (cWebSite?.dirty || cWebSite?.touched)" class="alert alert-danger">
+                <div *ngIf="cWebSite.errors.pattern">Web site must be a valid.</div>
+              </div>
           </div>
         </div>
       </div>
@@ -60,7 +64,9 @@
   </div>
  <p-footer>
      <button class="ui-button-raised ui-button-success button" pButton type="button" (click)="onAdd()" label="Add"
-     [disabled]="cName?.invalid || cEmail?.invalid"></button>
+     [disabled]="cName?.invalid || cEmail?.invalid || cWebSite?.invalid || isAdding">
+      <p-progressSpinner class="btn-spinner" *ngIf="isAdding" strokeWidth="5"></p-progressSpinner>
+     </button>
      <button class="ui-button-raised ui-button-danger button" pButton type="button" (click)="onClose()" label="Cancel"></button>
  </p-footer>
 </p-dialog>

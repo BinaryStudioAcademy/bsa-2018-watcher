@@ -15,6 +15,8 @@ import { PathService } from '../../core/services/path.service';
 export class UserProfileComponent implements OnInit {
   data: any;
   photoUrl: string;
+  photoType: string;
+  isUpdating: Boolean = false;
 
   @ViewChild('cropper', undefined)
 
@@ -83,35 +85,40 @@ export class UserProfileComponent implements OnInit {
     const image: any = new Image();
     const reader: FileReader = new FileReader();
     const that = this;
+    this.photoType = upload[0].type;
     reader.onloadend = (eventLoad: any) => {
       image.src = eventLoad.target.result;
       that.cropper.setImage(image);
       this.display = true;
     };
-
     reader.readAsDataURL(upload[0]);
     upload.splice(0, upload.length);
   }
 
   onCropCancel() {
+    this.photoType = '';
     this.display = false;
   }
 
   onCropSave() {
     this.user.photoURL = this.data.image;
+    this.user.photoType = this.photoType;
     this.photoUrl = this.data.image;
     this.display = false;
   }
 
   onSubmit() {
     if (this.userForm.valid) {
+      this.isUpdating = true;
       this.userService.update(this.userId, this.user).subscribe(value => {
 
         this.authService.updateCurrentUser(this.user);
         this.toastrService.success('Profile was updated');
+        this.isUpdating = false;
       },
         err => {
           this.toastrService.error('Profile was not updated');
+          this.isUpdating = false;
         });
     } else {
       Object.keys(this.userForm.controls).forEach(field => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, ViewChildren } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChildren } from '@angular/core';
 
 import { ChatService } from '../../core/services/chat.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -19,7 +19,8 @@ import { Chat } from '../../shared/models/chat.model';
 })
 export class ConversationPanelComponent implements OnInit {
 
-  @Input() onDisplay: EventEmitter<Chat>;
+  @Input() onDisplay: EventEmitter<number>;
+  @Output() close = new EventEmitter();
   @ViewChildren('messageList') messageList: any;
 
   chat: Chat;
@@ -35,14 +36,19 @@ export class ConversationPanelComponent implements OnInit {
     private chatHub: ChatHub) { }
 
   ngOnInit() {
+    this.subscribeToEvents();
     this.currentUser = this.authService.getCurrentUser();
-    this.onDisplay.subscribe((data: Chat) => {
-      this.chatService.get(data.id).subscribe((chat: Chat) => {
-        this.chat = chat;
-        this.subscribeToEvents();
-        this.scrollMessageListToBottom();
-      });
+    this.onDisplay.subscribe((chatId: number) => {
+      if (!chatId) {
+        this.display = false;
+        return;
+      }
       this.display = true;
+        this.chatService.get(chatId).subscribe((chat: Chat) => {
+          this.chat = chat;
+          this.markMessagesAsRead();
+          this.scrollMessageListToBottom();
+        });
     });
   }
 
@@ -51,6 +57,7 @@ export class ConversationPanelComponent implements OnInit {
       if (this.chat && this.chat.id === message.chatId) {
         this.chat.messages.push(message);
         this.scrollMessageListToBottom();
+        this.markMessagesAsRead();
       }
     });
   }
@@ -65,6 +72,7 @@ export class ConversationPanelComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
     this.display = false;
+    this.close.emit();
   }
 
   sendMessage() {
@@ -81,6 +89,14 @@ export class ConversationPanelComponent implements OnInit {
 
     this.chatHub.sendMessage(newMessage);
     this.textMessage = '';
+  }
+
+  markMessagesAsRead() {
+    this.chat.messages.forEach( m => {
+      if (!m.wasRead) {
+        this.chatHub.markMessageAsRead(m.id);
+      }
+    });
   }
 
   private scrollMessageListToBottom(): void {

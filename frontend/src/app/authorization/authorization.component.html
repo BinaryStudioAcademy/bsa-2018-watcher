@@ -1,5 +1,5 @@
-<button pButton type="button" label="Sign In" class="btnsign-in ui-button-secondary ui-button-raised" (click)="display = true;"></button>
-<button pButton type="button" label="Sign Up" class="btnsign-up ui-button-primary ui-button-raised" (click)="showDialogSignUp()"></button>
+<button *ngIf="showSignInOutBtn" pButton type="button" label="Sign In" class="btnsign-in ui-button-secondary ui-button-raised" (click)="display = true;"></button>
+<button *ngIf="showSignInOutBtn" pButton type="button" label="Sign Up" class="btnsign-up ui-button-primary ui-button-raised" (click)="showDialogSignUp()"></button>
 
 
 <p-dialog class="authorization-dialog" (onHide)="closeDialog()" [showHeader]="false" appendTo="body" [closable]=false [(visible)]="display"
@@ -92,7 +92,7 @@
             </div>
         </div>
         <div class="auth-input">
-            <input placeholder="Company" pInputText type="text" class="form-control" id="cName" required minlength="4" #cName="ngModel"
+            <input placeholder="Company" [disabled]="isDisabledCompanyName" pInputText type="text" class="form-control" id="cName" required minlength="4" #cName="ngModel"
                 [(ngModel)]="companyName" />
             <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
                 <div *ngIf="cName.errors.required">

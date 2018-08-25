@@ -11,6 +11,10 @@ import { TabViewModule, InputTextModule, ButtonModule, ToggleButtonModule, Input
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { DropdownModule } from 'primeng/dropdown';
+
+import { ImageCropperModule } from 'ngx-img-cropper';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   imports: [
@@ -26,7 +30,10 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     ReactiveFormsModule,
     TableModule,
     CheckboxModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    DropdownModule,
+    ImageCropperModule,
+    FileUploadModule
   ],
   declarations: [
     AdminPageComponent,

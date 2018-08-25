@@ -328,3 +328,8 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+# Angular Environment Files
+**src/environments/
+
+backend/Watcher/wwwroot/images/

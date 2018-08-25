@@ -27,6 +27,8 @@
 
         private IResponseRepository _responseRepository;
 
+        private IRoleRepository _roleRepository;
+
         private INotificationSettingsRepository _notificationSettingsRepository;
 
         private IInstanceRepository _instanceRepository;
@@ -77,6 +79,8 @@
         public IChartsRepository ChartsRepository => chartsRepository ?? (chartsRepository = new ChartsRepository(_context, _mapper));
 
         public IResponseRepository ResponseRepository => _responseRepository ?? (_responseRepository = new ResponseRepository(_context, _mapper));
+
+        public IRoleRepository RoleRepository => _roleRepository ?? (_roleRepository = new RoleRepository(_context, _mapper));
 
         public IChatsRepository ChatsRepository => _chatsRepository ?? (_chatsRepository = new ChatsRepository(_context, _mapper));
 

@@ -5,10 +5,26 @@ using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
+    using Microsoft.AspNetCore.Http;
+
+    using Watcher.Common.Helpers.Utils;
+
     public class LocalFileStorageProvider : IFileStorageProvider
     {
-        public LocalFileStorageProvider()
-        { }
+        public LocalFileStorageProvider() { }
+
+        public async Task<string> UploadFormFileAsync(IFormFile formFile)
+        {
+            var fileName = Guid.NewGuid() + Path.GetExtension(formFile.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+
+            return path;
+        }
 
         public Task<string> UploadFileAsync(string path, string containerName = "watcher")
         {
@@ -40,6 +56,13 @@ namespace Watcher.Core.Providers
             {
                 return Task.FromException<string>(ex);
             }
+        }
+
+        public Task<string> UploadFileFromStreamAsync(string url, string containerName = "watcher")
+        {
+            var imagePath = FileHelpers.DownloadImageFromUrl(url);
+            var imageUri = ConvertToUri(imagePath);
+            return Task.FromResult(imageUri);
         }
 
         public Task DeleteFileAsync(string path)
@@ -80,7 +103,7 @@ namespace Watcher.Core.Providers
             return parent;
         }
 
-        public Task<string> UploadFileBase64Async(string base64string, string containerName)
+        public Task<string> UploadFileBase64Async(string base64string, string imageType = "png", string containerName = "watcher")
         {
             try
             {

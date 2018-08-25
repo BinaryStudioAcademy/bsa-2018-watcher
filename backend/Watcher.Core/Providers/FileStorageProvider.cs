@@ -7,28 +7,55 @@ using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
 {
+    using System.Net.Http;
+
+    using Microsoft.AspNetCore.Http;
+
+    using Watcher.Common.Helpers.Utils;
+
     public class FileStorageProvider : IFileStorageProvider
     {
-        private CloudStorageAccount StorageAccount;
+        private CloudStorageAccount _storageAccount;
 
-        public FileStorageProvider(string ConnectionString)
+        public FileStorageProvider(string connectionString)
         {
-            this.StorageAccount = CloudStorageAccount.Parse(ConnectionString);
+            _storageAccount = CloudStorageAccount.Parse(connectionString);
+        }
+
+        public async Task<string> UploadFormFileAsync(IFormFile formFile)
+        {
+            var client = _storageAccount.CreateCloudBlobClient();
+
+            var container = client.GetContainerReference("watcher");
+
+            if (await container.ExistsAsync() == false)
+            {
+                await container.CreateAsync();
+            }
+            
+            var blob = container.GetBlockBlobReference("CollectorInstaller.exe");
+            await SetPublicContainerPermissions(container);
+
+            using (var stream = formFile.OpenReadStream())
+            {
+                await blob.UploadFromStreamAsync(stream);
+            }
+
+            return blob.Uri.ToString();
         }
 
         public async Task<string> UploadFileAsync(string path, string containerName = "watcher")
         {
-            var client = StorageAccount.CreateCloudBlobClient();
+            var client = _storageAccount.CreateCloudBlobClient();
 
             var container = client.GetContainerReference(containerName.ToLower());
 
-            if ((await container.ExistsAsync()) == false)
+            if (await container.ExistsAsync() == false)
             {
                 await container.CreateAsync();
             }
 
-            var filename = Guid.NewGuid().ToString()+Path.GetExtension(path);
-
+            var filename = Guid.NewGuid() + Path.GetExtension(path);
             var blob = container.GetBlockBlobReference(filename);
 
             await SetPublicContainerPermissions(container);
@@ -38,46 +65,80 @@ namespace Watcher.Core.Providers
             return blob.Uri.ToString();
         }
 
+        public async Task<string> UploadFileFromStreamAsync(string url, string containerName = "watcher")
+        {
+            var client = _storageAccount.CreateCloudBlobClient();
+
+            var container = client.GetContainerReference(containerName.ToLower());
+
+            if ((await container.ExistsAsync()) == false)
+            {
+                await container.CreateAsync();
+            }
+
+            var filename = Guid.NewGuid() + Path.GetExtension(url);
+            CloudBlockBlob blob = null;
+            using (var httpClient = new HttpClient())
+            {
+                var stream = await httpClient.GetStreamAsync(url);
+
+                blob = container.GetBlockBlobReference(filename);
+
+                await SetPublicContainerPermissions(container);
+
+                await blob.UploadFromStreamAsync(stream);
+            }
+
+            return blob.Uri.ToString();
+        }
+
+        public async Task<string> UploadFileBase64Async(string base64string, string imageType = "image/png", string containerName = "watcher")
+        {
+            // Check if file if supported image format
+            if (!ImageHelper.ImageFormats.TryGetValue(imageType, out var imageFormat))
+            {
+                return "https://bsawatcherfiles.blob.core.windows.net/watcher/9c2c0291-728d-4e7b-bcb7-3b9432cb8733.png"; // Return base pic
+            }
+
+            var filename = $"{Guid.NewGuid()}.{imageFormat}";
+
+            var base64 = base64string.Split(',')[1];
+            var imageInBytes = Convert.FromBase64String(base64);
+            var client = _storageAccount.CreateCloudBlobClient();
+
+            var container = client.GetContainerReference(containerName.ToLower());
+
+            if (await container.ExistsAsync() == false)
+            {
+                await container.CreateAsync();
+            }
+
+            var blob = container.GetBlockBlobReference(filename);
+
+            await SetPublicContainerPermissions(container);
+
+            await blob.UploadFromByteArrayAsync(imageInBytes, 0, imageInBytes.Length);
+
+            return blob.Uri.ToString();
+        }
+
         public async Task DeleteFileAsync(string path)
         {
-            var client = StorageAccount.CreateCloudBlobClient();
+            var client = _storageAccount.CreateCloudBlobClient();
             var blob = await client.GetBlobReferenceFromServerAsync(new Uri(path));
+
             //will throw exception if there is no blob
             await blob.DeleteAsync();
         }
 
-        private async Task SetPublicContainerPermissions(CloudBlobContainer container)
+        private Task SetPublicContainerPermissions(CloudBlobContainer container)
         {
-            BlobContainerPermissions permissions = new BlobContainerPermissions
+            var permissions = new BlobContainerPermissions
             {
                 PublicAccess = BlobContainerPublicAccessType.Blob
             };
-            await container.SetPermissionsAsync(permissions);
-        }
 
-        public async Task<string> UploadFileBase64Async(string base64string, string containerName)
-        {
-            string base64 = base64string.Split(',')[1];
-            string parent = string.Copy(Directory.GetCurrentDirectory());
-            while (new DirectoryInfo(parent).Name != "Watcher")
-            {
-                parent = Directory.GetParent(parent).FullName;
-            }
-
-            var directory = new DirectoryInfo(Path.Combine(parent, "wwwroot", "images"));
-            if (!directory.Exists) directory.Create();
-
-            string filename = Guid.NewGuid().ToString() + ".png";
-
-            File.WriteAllBytes(Path.Combine(directory.FullName, filename), Convert.FromBase64String(base64));
-            var file = new FileInfo(directory + @"\\" + filename);
-
-            string filePath = file.FullName;
-
-            var azureUri = await UploadFileAsync(filePath);
-
-            file.Delete();
-            return azureUri;       
+            return container.SetPermissionsAsync(permissions);
         }
     }
 }

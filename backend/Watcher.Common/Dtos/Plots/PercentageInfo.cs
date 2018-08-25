@@ -8,6 +8,7 @@ namespace Watcher.Common.Dtos.Plots
         public PercentageInfo() { }
         
         public Guid Id { get; set; }
+        public Guid ClientId { get; set; }
         public DateTime Time { get; set; }
 
         public float CpuUsagePercent { get; set; }

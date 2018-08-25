@@ -1,0 +1,12 @@
+<p-dialog class="download-dialog" header="Data collector" (onHide)="closeDialog()" appendTo="body" [(visible)]="display" [modal]="true" [responsive]="true"
+    [draggable]="false" [width]="380" [minWidth]="200" [maximizable]="false" [baseZIndex]="999">
+    <p>Enter this instance id in desktop app: </p>
+    <div class="ui-inputgroup">
+        <input pInputText readonly type="text" placeholder="Guid id" [value]="guid" />
+        <button pButton type="button" label="Copy" class="ui-button-info" (click)="copyToClipboard(guid)"></button>
+    </div>
+    <a href="https://filestoragetestbsa2018.blob.core.windows.net/watcher/DataCollector.exe" 
+    pButton type="button"
+    label="Download" (click)="closeDialog()">
+    </a>
+</p-dialog>

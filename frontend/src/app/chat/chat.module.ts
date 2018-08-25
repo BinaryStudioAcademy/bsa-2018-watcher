@@ -9,9 +9,9 @@ import {
   CardModule,
   ListboxModule,
   AccordionModule,
-  AutoCompleteModule
+  AutoCompleteModule,
 } from 'primeng/primeng';
-import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { ToastModule } from 'primeng/toast';
 
 import { ChatComponent } from './chat.component';
 import { ConversationPanelComponent } from './conversation-panel/conversation-panel.component';
@@ -27,12 +27,17 @@ import { ChatCreatePopupComponent } from './chat-create-popup/chat-create-popup.
     ReactiveFormsModule,
     FormsModule,
     ButtonModule,
-    ScrollPanelModule,
     ListboxModule,
     DialogModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    ToastModule
   ],
-  declarations: [ChatComponent, ConversationPanelComponent, ConversationSettingsPopupComponent, ChatCreatePopupComponent],
+  declarations: [
+    ChatComponent,
+    ConversationPanelComponent,
+    ConversationSettingsPopupComponent,
+    ChatCreatePopupComponent
+  ],
   exports: [ChatComponent]
 })
 export class ChatModule { }

@@ -6,7 +6,7 @@
       <p-header>
         <i class="icon icon-right fa fa-close" (click)="closePanel($event)"></i>
         <i class="icon icon-right fa fa-cog" style="z-index:999;" (click)="openSettings($event)"></i>
-        <div class="title">{{chat?.name}}</div>
+        <div class="title text-overflow">{{chat?.name}}</div>
       </p-header>
       <div class="conversation-panel-content ui-fluid">
         <div #messageList class="conversation-message-list">
@@ -16,8 +16,8 @@
                   <img class="message-user-img" src="{{message?.user?.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}"/>
               </div>
               <div class="ui-g-9 ui-g-nopad">
-                <strong>{{message?.user?.displayName}}</strong>
-                <div class="">{{message?.text}}</div>
+                <strong class="text-overflow">{{message?.user?.displayName}}</strong>
+                <div>{{message?.text}}</div>
               </div>
             </div>
           </div>

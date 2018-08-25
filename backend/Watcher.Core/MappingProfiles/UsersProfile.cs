@@ -30,7 +30,7 @@
 
             CreateMap<User, UserDto>()
                 .ForMember(d => d.Role, o => o.MapFrom(s => s.RoleId == 1 ? new Role(s.RoleId, "Admin") : new Role(s.RoleId, "User")))
-                .ForMember(d => d.Organizations, o => o.MapFrom(s => s.UserOrganizations))
+                .ForMember(d => d.Organizations, o => o.MapFrom(s => s.UserOrganizations.Select(uo => uo.Organization).ToList()))
                 .ForMember(d => d.LastPickedOrganization, o => o.MapFrom(s => s.LastPickedOrganization))
                 .ForMember(d => d.CreatedChats, o => o.UseValue(new List<ChartDto>()))
                 .ForMember(d => d.Chats, o => o.MapFrom(s => s.UserChats.Select(uc => uc.Chat)))
@@ -68,8 +68,9 @@
                 .ForMember(d => d.IsActive, o => o.UseValue(true))
                 .ForMember(d => d.RoleId, o => o.UseValue(2))
                 .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
-                .ForMember(d => d.UserOrganizations, o => o.UseValue(new List<UserOrganization>()));
-                
+                .ForMember(d => d.UserOrganizations, o => o.UseValue(new List<UserOrganization>()))
+                .ForMember(d => d.CreatedOrganizations, o => o.UseValue(new List<Organization>()));
+
             CreateMap<ClaimsPrincipal, User>().ForMember(d => d.Id, o => o.UseValue(0))
                 .ForMember(d => d.RoleId, o => o.UseValue(2));
 

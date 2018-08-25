@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
-import { TokenService } from '../core/services/token.service';
+import { ReplaySubject, Observable } from 'rxjs';
+import { Organization } from '../shared/models/organization.model';
 
 @Component({
   selector: 'app-authorization',
@@ -15,9 +16,16 @@ export class AuthorizationComponent implements OnInit {
   @ViewChild('userDetailsTemplate') userDetailsTemplate;
   @ViewChild('notRegisteredSignInTemplate') notRegisteredSignInTemplate;
 
-  @Input() display = false;
-  @Input() redirectTo: string;
+  @Input() display = false; // two-way binding
+  @Output() displayChange = new EventEmitter<boolean>();
+
   @Input() showSignInOutBtn = true;
+  @Input() invitedOrganization: Organization = null;
+
+  @Output() successfulSignIn = new EventEmitter();
+
+  isDisabledCompanyName = false;
+
   isSignIn = true;
   isSuccessSignUp = false;
   isNotRegisteredSignIn = false;
@@ -31,18 +39,23 @@ export class AuthorizationComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private tokenService: TokenService,
     private router: Router
   ) {
+
   }
 
   ngOnInit() {
+
   }
 
   loadTemplate() {
     if (this.isSignIn) {
       return this.signInTemplate;
     } else if (this.isSuccessSignUp) {
+      if (this.invitedOrganization !== null) { // data from invitr
+        this.companyName = this.invitedOrganization.name;
+        this.isDisabledCompanyName = true;
+      }
       return this.userDetailsTemplate;
     } else if (this.isNotRegisteredSignIn) {
       return this.notRegisteredSignInTemplate;
@@ -70,6 +83,7 @@ export class AuthorizationComponent implements OnInit {
     this.isSuccessSignUp = false;
     this.isSignIn = true;
     this.display = false;
+    this.displayChange.emit(this.display);
   }
 
   noRegistration(): void {
@@ -84,6 +98,7 @@ export class AuthorizationComponent implements OnInit {
         if (result) {
           this.closeDialog();
           this.signInPostProcessing(result);
+          this.successfulSignIn.emit(); // for invite
         }
         this.isFetching = false;
         this.fetchExistingData();
@@ -107,6 +122,7 @@ export class AuthorizationComponent implements OnInit {
         if (result) {
           this.closeDialog();
           this.signInPostProcessing(result);
+          this.successfulSignIn.emit(); // for invite
         }
         this.isFetching = false;
         this.fetchExistingData();
@@ -131,6 +147,7 @@ export class AuthorizationComponent implements OnInit {
         if (result) {
           this.closeDialog();
           this.signInPostProcessing(result);
+          this.successfulSignIn.emit(); // for invite
         }
         this.isFetching = false;
         this.fetchExistingData();
@@ -148,7 +165,14 @@ export class AuthorizationComponent implements OnInit {
   }
 
   async saveUserDetails(): Promise<void> {
-    await this.authService.signUpWithProvider(this.companyName, this.firstName, this.lastName, this.userEmail)
+
+    let invitedOrganizationid = 0;
+    if (this.invitedOrganization !== null) {
+      invitedOrganizationid = this.invitedOrganization.id;
+    }
+
+    await this.authService.signUpWithProvider(this.companyName, this.firstName, this.lastName,
+                                               this.userEmail, invitedOrganizationid)
       .then(res => {
         this.closeDialog();
         this.signInPostProcessing(true);

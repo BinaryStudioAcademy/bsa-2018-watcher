@@ -1,7 +1,7 @@
 <div class="site-wrapper">
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
-      <div class="title">EDITING INSTANCE</div>
+      <div class="title">{{instanceTitle}}</div>
       <hr>
     </div>
   </div>
@@ -10,7 +10,7 @@
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-mg-6 ui-lg-6">
         <div class="ui-inputgroup">
-          <input type="text" formControlName="title" pInputText placeholder="Title">
+          <input pInputText type="text" formControlName="title" pInputText placeholder="Title">
         </div>
       </div>
     </div>
@@ -23,7 +23,7 @@
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-mg-6 ui-lg-6">
         <div class="ui-inputgroup">
-          <input type="text" formControlName="platform" pInputText placeholder="Platform">
+          <p-dropdown [options]="platformsDropdown" [formGroup]="instanceForm" formControlName="platform"></p-dropdown>
         </div>
       </div>
     </div>
@@ -36,17 +36,29 @@
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-mg-6 ui-lg-6">
         <div class="ui-inputgroup">
-          <input type="text" formControlName="address" pInputText placeholder="Address">
+          <input pInputText type="text" formControlName="address" pInputText placeholder="Address">
         </div>
       </div>
     </div>
 
     <div class="invalid" *ngIf="instanceForm.get('address').errors && (instanceForm.get('address').touched ||instanceForm.get('address').dirty)">
         <label>Address is required.</label>
+    </div>
+    
+    <div *ngIf="id" class="label">Identifier:</div>
+    <div *ngIf="id" class="ui-g ui-fluid">
+      <div class="ui-g-12 ui-mg-6 ui-lg-6">
+        <div class="ui-inputgroup identifier">
+          <input pInputText type="text" readonly formControlName="guid" pInputText placeholder="Identifier">
+          <button pButton type="button" label="Copy" class="ui-button-info" (click)="copyToClipboard(this.instance.guidId)"></button>
+        </div>
       </div>
+    </div>
 
     <div class="btn-panel">
-      <button pButton type="submit" label="Save" class="ui-button-raised ui-button-success"></button>
+      <button pButton type="submit" label="Save" class="ui-button-raised ui-button-success btn-inline-flex" [disabled]="isSaving">
+        <p-progressSpinner class="btn-spinner" *ngIf="isSaving" strokeWidth="5"></p-progressSpinner>
+      </button>
     </div>
   </form>
 </div>

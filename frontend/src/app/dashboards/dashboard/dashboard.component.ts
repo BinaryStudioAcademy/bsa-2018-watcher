@@ -20,11 +20,10 @@ import {PercentageInfo} from '../models/percentage-info';
 })
 
 export class DashboardComponent implements OnInit, OnDestroy {
-  private instanceId: number;
+  private subscription: Subscription;
   private instanceGuidId: string;
 
-  private subscription: Subscription;
-
+  instanceId: number;
   dashboards: Dashboard[] = [];
   dashboardMenuItems: DashboardMenuItem[] = [];
   activeDashboardItem: DashboardMenuItem = {};

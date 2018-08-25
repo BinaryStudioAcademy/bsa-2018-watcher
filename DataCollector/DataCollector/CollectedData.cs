@@ -14,7 +14,11 @@ namespace DataCollector
             ProcessesRam = new Dictionary<string, float>();
         }
 
+        // Id to reference
         public Guid Id { get; set; }
+        // ClientId - Client identification number
+        public Guid ClientId { get; set; }
+
         public int ProcessesCount { get; set; }
         public Dictionary<string, float> ProcessesCpu { get; set; }
         public Dictionary<string, float> ProcessesRam { get; set; }
@@ -92,7 +96,7 @@ namespace DataCollector
         public override string ToString()
         {
             var str = new StringBuilder();
-            str.Append($"Instance id: {Id}\n");
+            str.Append($"Instance id: {ClientId}\n");
             str.Append($"Processes count: {ProcessesCount}\n");
             str.Append($"CPU usage: {CpuUsagePercent}%\n");
             str.Append($"Ram avalaible: {AvaliableRamBytes} MB\n");

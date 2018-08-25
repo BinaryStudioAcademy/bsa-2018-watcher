@@ -20,6 +20,8 @@
 
         public bool IsActive { get; set; }
 
+        public string ImageURL { get; set; }
+
         public string CreatedByUserId { get; set; }
         public User CreatedByUser { get; set; }
 

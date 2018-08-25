@@ -32,6 +32,7 @@
                 .RuleFor(o => o.LastName, f => f.Name.LastName())
                 .RuleFor(o => o.DisplayName, f => f.Name.FirstName())
                 .RuleFor(o => o.Email, f => f.Internet.Email())
+                .RuleFor(o => o.PhotoURL, f => f.Internet.Avatar())
                 .RuleFor(o => o.IsActive, true)
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
                 .RuleFor(o => o.RoleId, f => f.PickRandom(roles).Id);

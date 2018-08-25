@@ -24,20 +24,23 @@ namespace Watcher.Controllers
         private readonly ILogger<DefaultController> _logger;
 
         private readonly IServiceBusProvider _serviceBusProvider;
-        
+        private readonly IFileStorageProvider _provider;
+
         public DefaultController(ILogger<DefaultController> logger,
-                                 IServiceBusProvider serviceBusProvider)
+                                 IServiceBusProvider serviceBusProvider,
+                                 IFileStorageProvider provider)
         {
             _logger = logger;
             _serviceBusProvider = serviceBusProvider;
+            _provider = provider;
         }
-        
-        [HttpGet("RegisterToMessages")]
-        public async Task<IActionResult> RegisterToMessages()
+
+        [HttpPost("Upload64Image")]
+        public async Task<IActionResult> Upload64Image([FromBody] string base64StingImage)
         {
             try
             {
-                _serviceBusProvider.RegisterOnMessageHandlerAndReceiveMessages();
+                await _provider.UploadFileBase64Async(base64StingImage, containerName: "watcher");
             }
             catch (Exception e)
             {
@@ -46,6 +49,21 @@ namespace Watcher.Controllers
 
             return Ok();
         }
+
+        //[HttpGet("RegisterToMessages")]
+        //public async Task<IActionResult> RegisterToMessages()
+        //{
+        //    try
+        //    {
+        //        _serviceBusProvider.RegisterOnMessageHandlerAndReceiveMessages();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e);
+        //    }
+
+        //    return Ok();
+        //}
 
         // [WatcherAuthorize("Admin")]
         [Authorize(Roles = "User")]

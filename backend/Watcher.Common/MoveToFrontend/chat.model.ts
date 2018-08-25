@@ -8,6 +8,7 @@ import { User } from './user.model';
 export interface Chat  {
    id: number;
    name: string;
+   unreadMessagesCount: number;
    type: ChatType;
    createdBy: User;
    organization: Organization;

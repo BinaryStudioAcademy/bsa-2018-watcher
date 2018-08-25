@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnChanges} from '@angular/core';
 import {MenuItem} from 'primeng/api';
 import {Router, RouterEvent} from '@angular/router';
 import {InstanceService} from '../../core/services/instance.service';
@@ -8,6 +8,7 @@ import {AuthService} from '../../core/services/auth.service';
 import {AfterContentChecked, AfterViewChecked} from '@angular/core';
 import {NavigationStart} from '@angular/router';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -29,10 +30,14 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
   private regexAdminUrl = /\/admin/;
 
+  currentQuery = '';
+  currentGuidId: string;
+  showDownloadModal: boolean;
   isSearching: boolean;
   isFeedback: boolean;
   isInvite: boolean;
   menuItems: MenuItem[];
+  user: User;
 
   constructor(private router: Router,
               private instanceService: InstanceService,
@@ -48,14 +53,20 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   ngOnInit(): void {
     this.activeUrl = this.router.url;
-    this.organisationId = this.authService.getCurrentUser().lastPickedOrganizationId;
-    this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
-    this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-    this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
-    this.initMenuItems();
-    this.configureInstances(this.organisationId);
-    this.changeMenu();
-    this.subscribeRouteChanges();
+
+    this.authService.currentUser.subscribe(
+      user => {
+        this.user = user;
+        this.configureInstances(this.user.lastPickedOrganizationId);
+        this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
+        this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
+        this.initMenuItems();
+        this.changeMenu();
+        this.subscribeRouteChanges();
+      }
+    );
+
+
   }
 
   ngAfterContentChecked(): void {
@@ -83,8 +94,9 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
     this.instanceItems = [{
       label: 'Create Instance',
+      title: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
-      routerLink: ['instances/create']
+      routerLink: ['instances/create'],
     }];
 
     this.adminItems = [{
@@ -122,8 +134,8 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
         // this.router.navigate([`/user/instances/${instance.id}/dashboards`]);
       },
       items: [{
-        label: 'Update',
-        icon: 'fa fa-refresh',
+        label: 'Edit',
+        icon: 'fa fa-pencil',
         routerLink: [`instances/${instance.id}/edit`],
         styleClass: 'instance-options'
       }, {
@@ -137,8 +149,12 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       }, {
         label: 'Download app',
         icon: 'fa fa-download',
-        routerLink: [`instances/${instance.id}/download`],
-        styleClass: 'instance-options'
+        styleClass: 'instance-options',
+        command: () => {
+          console.log(this.showDownloadModal);
+          this.showDownloadModal = true;
+          this.currentGuidId = instance.guidId;
+        }
       }]
     };
     return item;
@@ -151,6 +167,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
         this.toastrService.success('Deleted instance');
         this.instanceItems.splice(index, 1);
         this.router.navigate([`instances`]);
+        this.onSearchChange(this.currentQuery);
       });
     }
   }
@@ -158,18 +175,14 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   onInstanceAdded(instance: Instance) {
     const item: MenuItem = this.instanceToMenuItem(instance);
     this.instanceItems.push(item);
-  }
-
-  onInstanceRemoved(id: number) {
-    // console.log(`id is ${id}`);
-    // const index: number = this.instanceItems.findIndex(inst => inst.title === id.toString());
-    // console.log(`index is ${index}`);
+    this.onSearchChange(this.currentQuery);
   }
 
   onInstanceEdited(instance: Instance) {
     const item: MenuItem = this.instanceToMenuItem(instance);
     const index: number = this.instanceItems.findIndex(inst => inst.title === instance.id.toString());
     this.instanceItems[index] = item;
+    this.onSearchChange(this.currentQuery);
   }
 
   private subscribeRouteChanges(): void {
@@ -229,5 +242,21 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   private getSettingByUrl(url: string): Element {
     return document.querySelector(`div.ui-panelmenu-header a[href="${url}"]`);
+  }
+
+  onSearchChange(searchQuery: string): void {
+    this.currentQuery = searchQuery;
+    this.instanceItems = this.instanceItems.map( (menuitem: MenuItem) => {
+      if (!menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase())) {
+        menuitem.visible = false;
+      } else {
+        menuitem.visible = true;
+      }
+      if (menuitem.label === this.menuItems[0].label) { menuitem.visible = true; }
+      return menuitem;
+    });
+  }
+  onClose(): void {
+    this.showDownloadModal = false;
   }
 }
