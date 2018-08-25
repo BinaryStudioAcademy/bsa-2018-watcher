@@ -158,6 +158,19 @@
             return result;
         }
 
+        public async Task<bool> UpdateEntitiesAsync(IEnumerable<NotificationUpdateRequest> requests)
+        {
+            var entities = _mapper.Map<IEnumerable<NotificationUpdateRequest>, IEnumerable<Notification>>(requests);
+
+            foreach (Notification notification in entities)
+                await _uow.NotificationsRepository.UpdateAsync(notification);
+
+            // In returns updated entity, you could do smth with it or just leave as it is
+            var result = await _uow.SaveAsync();
+
+            return result;
+        }
+
         public async Task<bool> DeleteEntityByIdAsync(int id)
         {
             await _uow.NotificationsRepository.DeleteAsync(id);

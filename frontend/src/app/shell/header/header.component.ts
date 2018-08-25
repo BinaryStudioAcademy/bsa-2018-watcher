@@ -102,8 +102,9 @@ export class HeaderComponent implements OnInit {
     notReadNotifications = this.notifications.filter(item => item.wasRead === false);
     notReadNotifications.forEach(item => {
       item.wasRead = true;
-      this.notificationsService.update(item.id, item).subscribe(value => this.notificationsNumber--);
     });
+
+    this.notificationsService.updateAll(notReadNotifications).subscribe(value => this.notificationsNumber = 0);
   }
 
   close(): void {
