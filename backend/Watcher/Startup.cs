@@ -191,7 +191,7 @@
                         });
                 });
 
-            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true)
+            var addSignalRBuilder = services.AddSignalR(o => o.EnableDetailedErrors = true) // .AddAzureService()
                 .AddJsonProtocol(options => options.PayloadSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             if (UseAzureSignalR)
@@ -213,7 +213,7 @@
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceBusProvider provider, IFileProvider fileProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IFileProvider fileProvider)
         {
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
@@ -260,6 +260,8 @@
             }
 
             app.UseMvc();
+
+            var provider = app.ApplicationServices.GetService<IServiceBusProvider>();
         }
 
         public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
