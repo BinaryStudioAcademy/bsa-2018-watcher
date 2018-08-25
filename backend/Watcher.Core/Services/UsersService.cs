@@ -114,9 +114,10 @@ namespace Watcher.Core.Services
 
         }
 
-        public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
+        public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request) // TODO: Need refactoring :)
         {
             var user = await GetEntityByIdAsync(request.Uid);
+            Organization defaultOrganization = null;
 
             if (user != null)
             {
@@ -125,21 +126,29 @@ namespace Watcher.Core.Services
 
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
 
-            var defaultOrganization = new Organization
+            if (request.InvitedOrganizationId != 0)
             {
-                Name = request.CompanyName ?? "Default",
-                IsActive = true,
-                CreatedByUserId = entity.Id
-            };
+                 defaultOrganization = await _uow.OrganizationRepository.GetFirstOrDefaultAsync(x => x.Id == request.InvitedOrganizationId);
+            }
+
+            if (defaultOrganization == null)
+            {
+                defaultOrganization = new Organization
+                {
+                    Name = request.CompanyName ?? "Default",
+                    IsActive = true,
+                    CreatedByUserId = entity.Id
+                };
+                entity.UserOrganizations.Add(
+                   new UserOrganization
+                   {
+                       Organization = defaultOrganization,
+                       UserId = entity.Id
+                   });
+            }
+
 
             entity.NotificationSettings = CreateNotificationSetting();
-
-            entity.UserOrganizations.Add(
-               new UserOrganization
-               {
-                   Organization = defaultOrganization,
-                   UserId = entity.Id
-               });
 
             var newPhotoUrl = await _fileStorageProvider.UploadFileFromStreamAsync(
                                   string.IsNullOrWhiteSpace(entity.PhotoURL)
@@ -153,7 +162,20 @@ namespace Watcher.Core.Services
 
             if (result)
             {
-                createdUser.LastPickedOrganization = defaultOrganization;
+                if (request.InvitedOrganizationId != 0)
+                {
+                    createdUser.LastPickedOrganizationId = defaultOrganization.Id;
+                    createdUser.UserOrganizations.Add(
+                      new UserOrganization
+                      {
+                          OrganizationId = defaultOrganization.Id,
+                          UserId = entity.Id
+                      });
+                }
+                else
+                {
+                    createdUser.LastPickedOrganization = defaultOrganization;
+                }
                 result &= await _uow.SaveAsync();
             }
 

@@ -50,8 +50,7 @@ export class AuthorizationComponent implements OnInit {
     if (this.isSignIn) {
       return this.signInTemplate;
     } else if (this.isSuccessSignUp) {
-
-      if (this.invitedOrganization !== null) {
+      if (this.invitedOrganization !== null) { // data from invitr
         this.companyName = this.invitedOrganization.name;
         this.isDisabledCompanyName = true;
       }
