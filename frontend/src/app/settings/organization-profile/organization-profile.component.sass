@@ -39,6 +39,14 @@ input
 .btn-panel
     padding: 0px 10px 0px 0px
 
+.btn-panel
+  button
+    display: inline-flex
+
+.btn-panel .btn-spinner
+  margin-top: 2px
+  margin-left: 5px
+
 .btn-form
     width: 80px
     margin: 0px
@@ -144,7 +152,9 @@ figure:hover:before
 
 .crop-btn-panel
   display: flex
-  justify-content: space-around
+  justify-content: center
+  button
+    margin: 0px 20px 0px 20px
 
 .imageLogo
     width: 300px
@@ -166,3 +176,6 @@ figure:hover:before
 
 .btn-save
     margin-top: 20px
+
+@keyframes ui-progress-spinner-color
+  100%, 0% {stroke: #000000}

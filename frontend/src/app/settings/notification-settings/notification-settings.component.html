@@ -25,7 +25,9 @@
         <p-inputSwitch [disabled]="selectedNotificationSetting.isDisable" [(ngModel)]="selectedNotificationSetting.isEmailable"></p-inputSwitch>
       </div>
       <div class="grid-item">
-        <button (click)="onSave()" pButton label="Update" class="ui-button-raised ui-button-success"></button>
+        <button (click)="onSave()" pButton label="Update" class="ui-button-raised ui-button-success btn-inline-flex" [disabled]="isSaving">
+          <p-progressSpinner class="btn-spinner" *ngIf="isSaving"></p-progressSpinner>
+        </button>
       </div>
     </div>
   </div>

@@ -103,12 +103,18 @@ namespace Watcher.Core.Services
 
             //var test = !existingEntity.ImageURL.Equals(entity.ImageURL);
 
- 
-            if (existingEntity.ImageURL != null && !existingEntity.ImageURL.Equals(entity.ImageURL))
-            {
-                await _fileStorageProvider.DeleteFileAsync(existingEntity.ImageURL);
-            }
-            entity.ImageURL = await _fileStorageProvider.UploadFileBase64Async(entity.ImageURL, request.ImageType); // TODO: change here for real image type
+            /* Here error when I updated organization.
+            {System.NullReferenceException: Object reference not set to an instance of an object.
+           at Watcher.Core.Providers.LocalFileStorageProvider.UploadFileBase64Async(String base64string, String imageType, String containerName) 
+           in C:\Users\Eugene\Documents\GitHub\bsa-2018-watcher\backend\Watcher.Core\Providers\LocalFileStorageProvider.cs:line 100}
+
+
+                       if (existingEntity.ImageURL != null && !existingEntity.ImageURL.Equals(entity.ImageURL))
+                       {
+                           await _fileStorageProvider.DeleteFileAsync(existingEntity.ImageURL);
+                       }
+                       entity.ImageURL = await _fileStorageProvider.UploadFileBase64Async(entity.ImageURL, request.ImageType); // TODO: change here for real image type
+           */
 
             // In returns updated entity, you could do smth with it or just leave as it is
             var updated = await _uow.OrganizationRepository.UpdateAsync(entity);

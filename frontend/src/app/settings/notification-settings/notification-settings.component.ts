@@ -16,7 +16,7 @@ export class NotificationSettingsComponent implements OnInit {
   dropdown: SelectItem[];
   notificationSettings: NotificationSetting[];
   selectedNotificationSetting: NotificationSetting;
-
+  isSaving: Boolean = false;
 
   constructor(private service: NotificationSettingsService,
               private authService: AuthService,
@@ -58,10 +58,12 @@ export class NotificationSettingsComponent implements OnInit {
       this.toastrService.confirm(`Are you sure you want to disable all notifications
        ${NotificationType[this.selectedNotificationSetting.type]} type?`).then((value) => {
         if (value) {
+          this.isSaving = true;
           this.updateSetting();
         }
       });
     } else {
+      this.isSaving = true;
       this.updateSetting();
     }
   }
@@ -73,9 +75,11 @@ export class NotificationSettingsComponent implements OnInit {
           // TODO: Update User 1 Notification setting form array
           // user.notificationSettings = selectedNotificationSetting;
           this.toastrService.success('Notification setting was updated.');
+          this.isSaving = false;
         },
         err => {
           this.toastrService.error('Notification setting was not updated.');
+          this.isSaving = false;
         });
   }
 

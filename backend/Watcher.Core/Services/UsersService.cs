@@ -30,7 +30,19 @@ namespace Watcher.Core.Services
 
         public async Task<IEnumerable<UserDto>> GetAllEntitiesAsync()
         {
-            var users = await _uow.UsersRepository.GetRangeAsync();
+            var users = await _uow.UsersRepository.GetRangeAsync(
+           include: userS => userS.Include(u => u.Role)
+               // .Include(u => u.CreatedChats)
+                .Include(u => u.Feedbacks)
+                .Include(u => u.Responses)
+               // .Include(u => u.Messages)
+               // .Include(u => u.Notifications)
+               // .Include(u => u.NotificationSettings)
+                .Include(u => u.LastPickedOrganization)
+                .Include(u => u.UserOrganizations)
+                .ThenInclude(uo => uo.Organization));
+               // .Include(u => u.UserChats)
+               // .ThenInclude(uc => uc.Chat)
 
             var dtos = _mapper.Map<List<User>, List<UserDto>>(users);
 
@@ -97,12 +109,9 @@ namespace Watcher.Core.Services
             var dto = _mapper.Map<User, UserDto>(user);
 
             return dto;
-
-
-
         }
 
-        public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request)
+        public async Task<UserDto> CreateEntityAsync(UserRegisterRequest request) // TODO: Need refactoring :)
         {
             var user = await GetEntityByIdAsync(request.Uid);
 
@@ -112,22 +121,7 @@ namespace Watcher.Core.Services
             }
 
             var entity = _mapper.Map<UserRegisterRequest, User>(request);
-
-            var defaultOrganization = new Organization
-            {
-                Name = request.CompanyName ?? "Default",
-                IsActive = true,
-                CreatedByUserId = entity.Id
-            };
-
             entity.NotificationSettings = CreateNotificationSetting();
-
-            entity.UserOrganizations.Add(
-               new UserOrganization
-               {
-                   Organization = defaultOrganization,
-                   UserId = entity.Id
-               });
 
             var newPhotoUrl = await _fileStorageProvider.UploadFileFromStreamAsync(
                                   string.IsNullOrWhiteSpace(entity.PhotoURL)
@@ -141,7 +135,40 @@ namespace Watcher.Core.Services
 
             if (result)
             {
-                createdUser.LastPickedOrganization = defaultOrganization;
+                if (request.InvitedOrganizationId == 0)
+                {
+
+                    var defaultOrganization = new Organization
+                    {
+                        Name = request.CompanyName ?? "Default",
+                        IsActive = true,
+                        CreatedByUserId = entity.Id
+                    };
+                    createdUser.UserOrganizations.Add(
+                        new UserOrganization
+                        {
+                            Organization = defaultOrganization,
+                            UserId = createdUser.Id
+                        });
+
+                    createdUser.LastPickedOrganization = defaultOrganization;
+                }
+                else // invited user
+                {
+                    var invitedOrganization = await _uow.OrganizationRepository.
+                        GetFirstOrDefaultAsync(x => x.Id == request.InvitedOrganizationId,
+                        include: org => org.Include(uo => uo.UserOrganizations));
+
+                    createdUser.UserOrganizations.Add(
+                         new UserOrganization
+                         {
+                             OrganizationId = invitedOrganization.Id,
+                             UserId = createdUser.Id
+                         });
+                    result &= await _uow.SaveAsync();
+
+                    createdUser.LastPickedOrganizationId = invitedOrganization.Id;
+                }
                 result &= await _uow.SaveAsync();
             }
 
@@ -150,9 +177,8 @@ namespace Watcher.Core.Services
                 return null;
             }
 
-            var dto = _mapper.Map<User, UserDto>(entity);
-
-            return dto;
+            var resul = await GetEntityByIdAsync(entity.Id);
+            return resul;
         }
 
         public async Task<bool> UpdateEntityByIdAsync(UserUpdateRequest request, string id)
