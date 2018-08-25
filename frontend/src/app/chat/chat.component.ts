@@ -31,6 +31,7 @@ export class ChatComponent implements OnInit {
 
   chatList: SelectItem[] = [];
   selectedChat: Chat;
+  isSelectedChatCollapsed: boolean;
   currentUser: User;
   totalUnreadMessages = 0;
 
@@ -74,6 +75,14 @@ export class ChatComponent implements OnInit {
     this.onDisplayChatCreating.emit(true);
   }
 
+  onCollapseChat(isCollapse) {
+    this.isSelectedChatCollapsed = isCollapse;
+    if (!isCollapse) {
+      this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
+      this.selectedChat.unreadMessagesCount = 0;
+    }
+  }
+
   getChatImage(chat: Chat) {
     if (chat.users.length === 2) {
       const photo = chat.users.find(u => u.id !== this.currentUser.id).photoURL;
@@ -108,8 +117,8 @@ export class ChatComponent implements OnInit {
       if (message.user.id !== this.currentUser.id) {
         this.sendNotify(message);
 
-        // Don`t count unread if chat is open
-        if (this.selectedChat && this.selectedChat.id === message.chatId) {
+        // Don`t count unread if chat is open and not collapse
+        if (this.selectedChat && !this.isSelectedChatCollapsed && this.selectedChat.id === message.chatId) {
         } else {
           this.totalUnreadMessages++;
           const index = this.chatList.findIndex(x => x.value.id === message.chatId);
