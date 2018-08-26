@@ -37,6 +37,6 @@ namespace DataAccumulator.DataAccessLayer.Interfaces
         // check if entity exists
         Task<bool> EntityExistsAsync(Guid id);
 
-        Task<List<CollectedData>> GetPercentageInfoByEntityIdAsync(Guid id, int count);
+        Task<List<CollectedData>> GetPercentageInfoByInstanceIdAsync(Guid id, int count);
     }
 }
