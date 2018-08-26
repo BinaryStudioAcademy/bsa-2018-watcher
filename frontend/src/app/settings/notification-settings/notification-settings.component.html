@@ -33,4 +33,25 @@
     </div>
   </div>
 
+  <h3>Rowspan</h3>
+  <p-table [value]="notificationSettings">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Disable</th>
+        <th>Mute</th>
+        <th>Emailable</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+      <tr>
+        <td *ngIf="rowGroupMetadata[rowData.type].index === rowIndex" [attr.rowspan]="rowGroupMetadata[rowData.type].size">
+            {{rowData.type}}
+        </td>
+        <td>{{rowData.isDisable}}</td>
+        <td>{{rowData.isMute}}</td>
+        <td>{{rowData.isEmailable}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
 </div>
