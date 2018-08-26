@@ -1,4 +1,4 @@
-<app-conversation-panel [onDisplay]="onDisplayChat" (close)="selectedChat = null"></app-conversation-panel>
+<app-conversation-panel [onDisplay]="onDisplayChat" (close)="selectedChat=null" (collapse)="onCollapseChat($event)"></app-conversation-panel>
 <app-chat-create-popup [onDisplay]="onDisplayChatCreating"></app-chat-create-popup>
 
 <div class="chat-list-panel">
@@ -11,17 +11,16 @@
       </p-header>
       <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="selectChat()" (onDblClick)="removeSelect()">
         <ng-template let-chat pTemplate="item">
-          <div class="ui-helper-clearfix">
-            <div class="ui-fluid ui-g">
-              <div class="ui-g-3 ui-g-nopad" style="position:relative">
-                <img class="chat-list-img" src="{{getChatImage(chat?.value)}}"/>
-                <span *ngIf="chat.value.unreadMessagesCount !== 0" class="message-counter counter-absolute">
-                  {{chat.value.unreadMessagesCount}}
-                </span>
-              </div>
-              <div class="ui-g-9 ui-g-nopad">
-                <span class="chat-list-name"> {{chat.value.name}}</span>  
-              </div> 
+
+          <div class="ui-helper-clearfix ui-fluid ui-g">
+            <div class="ui-g-3 ui-g-nopad" style="position:relative">
+              <img class="chat-list-img" src="{{getChatImage(chat?.value)}}" />
+              <span *ngIf="chat.value.unreadMessagesCount !== 0" class="message-counter counter-absolute">
+                {{chat.value.unreadMessagesCount}}
+              </span>
+            </div>
+            <div class="ui-g-9 ui-g-nopad">
+              <span class="chat-list-name text-overflow">{{chat.value.name}}</span>
             </div>
           </div>
         </ng-template>
@@ -34,11 +33,11 @@
   <ng-template let-message pTemplate="message">
     <div class="ui-g ui-fluid message" (click)="openChat(message.data?.chatId)">
       <div class="ui-g-2 ui-g-nopad">
-          <img class="message-img" src="{{message.data.user.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}" />
+        <img class="message-img" src="{{message.data.user.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}"/>
       </div>
       <div class="ui-g-10">
-          <div class="message-title">New message from {{message.data.user.displayName}}</div>
-          <div class="message-content">{{message.data.text}}</div>
+        <div class="message-title">New message from {{message.data.user.displayName}}</div>
+        <div class="message-content">{{message.data.text}}</div>
       </div>
     </div>
   </ng-template>
