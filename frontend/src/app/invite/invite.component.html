@@ -1,14 +1,36 @@
-<app-authorization [showSignInOutBtn]="false" [(display)]="showLoginForm" [invitedOrganization]="organization"
-(successfulSignIn)="successfulSignIn()" ></app-authorization>
-  <div class="center">
+<header id="header">
+  <div class="container">
+      <h1>
+          <a (click)="scrollTo('startbanner')">Watcher</a>
+      </h1>
+  </div>
+</header>
+
+<div class="content">
+  <app-authorization [showSignInOutBtn]="false" [(display)]="showLoginForm" [invitedOrganization]="organization"
+  (successfulSignIn)="successfulSignIn()" ></app-authorization>
     <div>
-      <h3>INVITE</h3>
-      <hr>
-      <div>User {{createdByUserName}} granted you access to the organization {{organizationName}}.</div>
+      <div>
+        <h3>INVITE</h3>
+        <hr>
+        <div>User {{createdByUserName}} granted you access to the organization {{organizationName}}.</div>
+      </div>
+      <div class="btn-panel">
+        <button pButton type="submit" label="Accept" (click)="onAccept()" class="ui-button-raised ui-button-success"></button>
+        <button pButton type="submit" label="Reject" (click)="onReject()" class="ui-button-raised ui-button-danger"></button>
+      </div> 
     </div>
-    <div class="btn-panel">
-      <button pButton type="submit" label="Accept" (click)="onAccept()" class="ui-button-raised ui-button-success"></button>
-      <button pButton type="submit" label="Reject" (click)="onReject()" class="ui-button-raised ui-button-danger"></button>
-    </div> 
   </div>
 
+  <footer class="footer-distributed ">
+    <div class="footer-right ">
+        <a href="#"><i class="fa fa-facebook "></i></a>
+        <a href="#"><i class="fa fa-twitter "></i></a>
+        <a href="#"><i class="fa fa-linkedin "></i></a>
+        <a href="#"><i class="fa fa-github "></i></a>
+    </div>
+
+    <div class="footer-left ">
+        <p>Watcher © 2018</p>
+    </div>
+</footer>
