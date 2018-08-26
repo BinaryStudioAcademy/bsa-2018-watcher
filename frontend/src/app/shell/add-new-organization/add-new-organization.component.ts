@@ -24,7 +24,6 @@ export class AddNewOrganizationComponent implements OnInit {
   contactNumber = '';
   webSite = '';
   description = '';
-  isAdding: Boolean = false;
 
   constructor(  private organizationService: OrganizationService,
                 private authService: AuthService,
@@ -44,7 +43,6 @@ export class AddNewOrganizationComponent implements OnInit {
   }
 
   onAdd() {
-    this.isAdding = true;
     const org = <Organization>{};
     org.name = this.name;
     org.email = this.email;
@@ -64,11 +62,9 @@ export class AddNewOrganizationComponent implements OnInit {
 
         this.toastrService.success(`${value.name} organization Successfully established,
           and it was set as the default organization.`);
-        this.isAdding = false;
       },
       err => {
         this.toastrService.error(`Error The organization was not created!`);
-        this.isAdding = false;
       }
     );
     this.onClose();

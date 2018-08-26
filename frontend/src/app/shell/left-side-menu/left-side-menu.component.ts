@@ -26,7 +26,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   private regexSettingsUrl: RegExp = /\/user\/settings/;
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
-  private regexInviteUrl: RegExp = /\/user\/invite/;
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
   private regexAdminUrl = /\/admin/;
 
@@ -35,7 +34,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   showDownloadModal: boolean;
   isSearching: boolean;
   isFeedback: boolean;
-  isInvite: boolean;
   menuItems: MenuItem[];
   user: User;
 
@@ -196,12 +194,8 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       this.menuItems = this.settingsItems;
       this.isSearching = false;
       this.isFeedback = false;
-      this.isInvite = false;
     } else if (this.activeUrl.match(this.regexFeedbackUrl)) {
       this.isFeedback = true;
-    } else if (this.activeUrl.match(this.regexInviteUrl)) {
-      this.isInvite = true;
-      this.isInvite = false;
     } else if (this.activeUrl.match(this.regexAdminUrl)) {
       this.menuItems = this.adminItems;
       this.isSearching = false;
