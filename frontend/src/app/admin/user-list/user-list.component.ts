@@ -41,6 +41,7 @@ export class UserListComponent implements OnInit {
   dropdownRole: SelectItem[];
   dropdownCompany: SelectItem[];
   lastOrganization: Organization;
+  lstUnassign: Boolean[];
 
   data: any;
   photoUrl: string;
@@ -68,6 +69,7 @@ export class UserListComponent implements OnInit {
     this.lstUserCompany = new Array<Organization>();
     this.dropdownRole = new Array<SelectItem>();
     this.dropdownCompany = new Array<SelectItem>();
+    this.lstUnassign = Array<Boolean>();
 
     this.cropperSettings = new CropperSettings();
     this.cropperSettings.width = 200;
@@ -136,16 +138,17 @@ export class UserListComponent implements OnInit {
     isAssign(id: number) {
       return this.lstOrganizationId.includes(id);
     }*/
-  findWithAttr(array, attr1, value1,  attr2, value2) {
-      for (let i = 0; i < array.length; i += 1) {
-          if (array[i][attr1] === value1 && array[i][attr2] === value2) {
-              return array[i];
-          }
+  findWithAttr(array, attr1, value1, attr2, value2) {
+    for (let i = 0; i < array.length; i += 1) {
+      if (array[i][attr1] === value1 && array[i][attr2] === value2) {
+        return array[i];
       }
-      return null;
+    }
+    return null;
   }
 
-  onUnassign(company: Organization) {
+  onUnassign(company: Organization, i: number) {
+    this.lstUnassign[i] = true;
     if (this.lstUserCompany.length <= 1) {
       this.toastrService.warning('The user must have at least one organization.');
       return;
@@ -157,7 +160,8 @@ export class UserListComponent implements OnInit {
     this.userOrganizationService.delete(company.id, this.user.id).subscribe(
       value => {
         this.toastrService.success(`Now last picked organization - not selected.`);
-        if (this.user.id === this.currentUser.id) {console.log('I am here');
+        if (this.user.id === this.currentUser.id) {
+          console.log('I am here');
           const index = this.currentUser.organizations.indexOf(company);
           this.currentUser.organizations.splice(index, 1);
           this.authService.updateCurrentUser(this.currentUser);
@@ -175,17 +179,18 @@ export class UserListComponent implements OnInit {
     this.subscribeOrganizationFormToData();
     this.displayPopup = true;
     this.lstUserCompany = user.organizations.map(x => Object.assign({}, x));
-    /*if (user.lastPickedOrganizationId) {
-      this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => this.lastOrganization = value);
-      this.lstUserCompany.push(this.lastOrganization);
-  }*/
     this.selectedRole = user.role;
     this.photoUrl = this.pathService.convertToUrl(this.user.photoURL);
+
+    for (let i = 0; i < this.lstUserCompany.length; i += 1) {
+      this.lstUnassign.push(false);
+    }
   }
 
   onCancel() {
     this.displayPopup = false;
     this.user = null;
+    this.lstUnassign = [];
   }
 
   onSubmit() {
@@ -224,16 +229,16 @@ export class UserListComponent implements OnInit {
       state: OrganizationInviteState.Pending
     };
     this.invite = invite;
-/*
-    this.organizationInvitesService.create(invite).subscribe(
-      value => {
-        this.toastrService.success('Organization Invite was created');
-        this.invite = value;
-      },
-      error => {
-        // this.toastrService.error('Organization Invite was not created');
-        this.toastrService.error(`Error ocured status: ${error.message}`);
-      });*/
+    /*
+        this.organizationInvitesService.create(invite).subscribe(
+          value => {
+            this.toastrService.success('Organization Invite was created');
+            this.invite = value;
+          },
+          error => {
+            // this.toastrService.error('Organization Invite was not created');
+            this.toastrService.error(`Error ocured status: ${error.message}`);
+          });*/
   }
 
   onSentInviteToEmail() {
@@ -241,9 +246,9 @@ export class UserListComponent implements OnInit {
     this.onInvite(this.selectedCompany.id);
 
     this.invite.inviteEmail = this.user.email;
-   /* this.invite.state = OrganizationInviteState.Pending; console.log(this.invite.inviteEmail );
-    this.invite.createdByUserId = this.authService.getCurrentUser().id;
-    this.invite.organizationId = this.selectedCompany.id;*/
+    /* this.invite.state = OrganizationInviteState.Pending; console.log(this.invite.inviteEmail );
+     this.invite.createdByUserId = this.authService.getCurrentUser().id;
+     this.invite.organizationId = this.selectedCompany.id;*/
     this.organizationInvitesService.createdAndSend(this.invite).subscribe(
       value => {
         this.toastrService.success('Organization Invite was created and sends to email.');

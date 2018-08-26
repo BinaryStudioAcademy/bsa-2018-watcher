@@ -134,11 +134,11 @@
 
     <div class=" ui-fluid" *ngIf="lstUserCompany">
       <p-scrollPanel [style]="{width: '457px', height: '67px'}" styleClass="custom" >
-        <div *ngFor="let organization of lstUserCompany" class=" ui-fluid">
+        <div *ngFor="let organization of lstUserCompany; let i = index" class=" ui-fluid">
           <div class="ui-g-3 center fieldOrg">{{organization?.name}} </div>
           <div class="ui-g-6 center fieldOrg">{{organization?.email}} </div>
           <div class="ui-g-3 center">
-            <button pButton label="Unassign" (click)="onUnassign(organization)" class="ui-button-raised ui-button-danger"></button>
+            <button pButton label="Unassign" [disabled]="lstUnassign[i]" (click)="onUnassign(organization, i)" class="ui-button-raised ui-button-danger"></button>
           </div>
         </div>
       </p-scrollPanel>
