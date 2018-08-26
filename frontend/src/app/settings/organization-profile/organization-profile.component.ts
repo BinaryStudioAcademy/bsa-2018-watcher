@@ -20,6 +20,7 @@ import { User } from '../../shared/models/user.model';
 })
 export class OrganizationProfileComponent implements OnInit {
 
+
   constructor(
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,
@@ -58,14 +59,15 @@ export class OrganizationProfileComponent implements OnInit {
 
   isUpdating: Boolean = false;
   isInviting: Boolean = false;
-  isCopying: Boolean = false;
   isSending: Boolean = false;
 
   ngOnInit() {
     this.authService.currentUser.subscribe(
       (userData) => {
         this.user = { ...userData };
-        this.organization = this.user.lastPickedOrganization;
+        if (this.user.lastPickedOrganization !== undefined) {
+          this.organization = this.user.lastPickedOrganization;
+        }
         this.imageUrl = this.user.lastPickedOrganization.imageURL;
         if (this.organization.createdByUserId === this.user.id) {
           this.editable = true;
@@ -147,7 +149,6 @@ export class OrganizationProfileComponent implements OnInit {
   }
 
   onCopy() {
-    this.isCopying = true;
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';
@@ -159,7 +160,7 @@ export class OrganizationProfileComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
-    this.isCopying = false;
+    this.toastrService.success('Invitation link was copied to clipboard');
   }
 
   onImageSelected(upload) {

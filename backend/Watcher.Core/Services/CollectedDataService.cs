@@ -32,7 +32,7 @@ namespace Watcher.Core.Services
 
         public async Task<MemoryInfo> GetInstanceMemoryInfo(Guid id)
         {
-            var entity = await _repository.GetEntity(id);
+            var entity = await _repository.GetEntityByInstanceIdAsync(id);
             if (entity == null)
             {
                 return null;
@@ -54,7 +54,7 @@ namespace Watcher.Core.Services
 
         public async Task<ProcessesCpuInfo> GetInstanceProcessCpuInfo(Guid id)
         {
-            var entity = await _repository.GetEntity(id);
+            var entity = await _repository.GetEntityByInstanceIdAsync(id);
             if (entity == null)
             {
                 return null;
@@ -65,7 +65,7 @@ namespace Watcher.Core.Services
 
         public async Task<ProcessesRamInfo> GetInstanceProcessRamInfo(Guid id)
         {
-            var entity = await _repository.GetEntity(id);
+            var entity = await _repository.GetEntityByInstanceIdAsync(id);
             if (entity == null)
             {
                 return null;
@@ -84,7 +84,7 @@ namespace Watcher.Core.Services
 
         public async Task<CollectedDataDto> UpdateEntityAsync(CollectedDataDto collectedDataDto)
         {
-            var entity = await _repository.GetEntity(collectedDataDto.Id);
+            var entity = await _repository.GetEntityByInstanceIdAsync(collectedDataDto.Id);
             if (entity == null)
             {
                 return null;

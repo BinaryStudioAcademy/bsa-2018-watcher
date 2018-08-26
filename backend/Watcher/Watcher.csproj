@@ -17,6 +17,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="7.6.104" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
@@ -27,18 +28,21 @@
     <PackageReference Include="Serilog.Sinks.AzureTableStorage" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.1.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.Azure.SignalR" Version="1.0.0-*" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\DataAccumulator\DataAccumulator.DataAccessLayer\DataAccumulator.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\ServiceBus.Shared\ServiceBus.Shared.csproj" />
     <ProjectReference Include="..\Watcher.Common\Watcher.Common.csproj" />
     <ProjectReference Include="..\Watcher.Core\Watcher.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

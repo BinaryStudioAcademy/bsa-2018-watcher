@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
-using DataAccumulator.DataAccessLayer.Repositories;
 using DataAccumulator.DataAggregator.Interfaces;
 using DataAccumulator.Shared.Exceptions;
 using DataAccumulator.Shared.Models;
@@ -60,7 +58,5 @@ namespace DataAccumulator.DataAggregator.Services
 
             return collectedDataDto;
         }
-
-       
     }
 }

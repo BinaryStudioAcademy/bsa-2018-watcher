@@ -4,7 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
-import { InputTextModule, ButtonModule, RadioButtonModule, InputTextareaModule } from 'primeng/primeng';
+import { InputTextModule,
+         ButtonModule,
+         RadioButtonModule,
+         InputTextareaModule,
+         ProgressSpinnerModule } from 'primeng/primeng';
 import { FeedbackComponent } from '../feedback/feedback.component';
 
 @NgModule({
@@ -16,7 +20,8 @@ import { FeedbackComponent } from '../feedback/feedback.component';
     InputTextareaModule,
     ButtonModule,
     RadioButtonModule,
-    InputTextModule
+    InputTextModule,
+    ProgressSpinnerModule
   ],
   declarations: [ UserComponent, FeedbackComponent ]
 })

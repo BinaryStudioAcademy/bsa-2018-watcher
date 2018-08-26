@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../../shared/models/user.model';
 import { ApiService } from './api.service';
+import { UserDto } from '../../shared/models/user-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,8 @@ export class UserService {
 
   constructor(private apiService: ApiService) { }
 
-  public update(id: string, user: User): Observable<Object> {
-    return this.apiService.put(`/${this.ctrlUrl}/${id}`, user);
+  public update(id: string, user: UserDto): Observable<Object> {
+    return this.apiService.put(`/${this.ctrlUrl}/UpdateProfile/${id}`, user);
   }
 
   public get(id: string): Observable<User> {

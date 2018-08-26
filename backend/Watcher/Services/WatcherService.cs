@@ -62,10 +62,7 @@
             {
                 try
                 {
-                    foreach (var id in _serviceBusProvider.SubscribedInstancesGuidIds)
-                    {
-                        await GenerateAndSendCollectedData(id, stoppingToken);
-                    }
+                   // await GenerateAndSendCollectedData(id, stoppingToken);
                 }
                 catch (Exception e)
                 {
@@ -92,7 +89,7 @@
 
                 await repo.AddEntity(data);
 
-                data = await repo.GetEntity(data.InternalId);
+                data = await repo.GetEntityByInternalIdAsync(data.InternalId);
 
                 dto = mapper.Map<CollectedData, CollectedDataDto>(data);
             }

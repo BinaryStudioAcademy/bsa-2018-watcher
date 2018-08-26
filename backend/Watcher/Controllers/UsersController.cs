@@ -178,6 +178,36 @@
         }
 
         /// <summary>
+        /// Update User profile
+        /// </summary>
+        /// <param name="id">User identifier</param>
+        /// <param name="request">User update request</param>
+        /// <returns>
+        /// Action Result
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">User not found</response>
+        /// <response code="403">You don`t have permission to update User</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
+        [HttpPut("UpdateProfile/{id}")]
+        public virtual async Task<ActionResult> UpdateProfile([FromRoute] string id, [FromBody] UserProfileDto request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _usersService.UpdateProfileByIdAsync(request, id);
+            if (!result)
+            {
+                return StatusCode(500);
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
         /// Delete User
         /// </summary>
         /// <param name="id">User identifier</param>

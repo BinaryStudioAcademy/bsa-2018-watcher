@@ -68,8 +68,9 @@
                 .ForMember(d => d.IsActive, o => o.UseValue(true))
                 .ForMember(d => d.RoleId, o => o.UseValue(2))
                 .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
-                .ForMember(d => d.UserOrganizations, o => o.UseValue(new List<UserOrganization>()));
-                
+                .ForMember(d => d.UserOrganizations, o => o.UseValue(new List<UserOrganization>()))
+                .ForMember(d => d.CreatedOrganizations, o => o.UseValue(new List<Organization>()));
+
             CreateMap<ClaimsPrincipal, User>().ForMember(d => d.Id, o => o.UseValue(0))
                 .ForMember(d => d.RoleId, o => o.UseValue(2));
 

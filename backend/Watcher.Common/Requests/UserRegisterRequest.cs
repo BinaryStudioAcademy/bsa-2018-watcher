@@ -26,11 +26,14 @@
 
         [Required]
         public string CompanyName { get; set; }
-        [Required]
 
+        [Required]
+        public int InvitedOrganizationId { get; set; }
+
+        [Required]
         public string FirstName { get; set; }
-        [Required]
 
+        [Required]
         public string LastName { get; set; }
 
     }

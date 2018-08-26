@@ -7,15 +7,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataAccumulator.WebAPI.Controllers
 {
+    using Microsoft.Extensions.Logging;
+
+    using Serilog.Context;
+
+    using ServiceBus.Shared.Messages;
+
     [Produces("application/json")]
     [Route("api/v1/dataaccumulator")]
-    public class DataAccumulatorController : Controller
+    public class DataAccumulatorController : ControllerBase
     {
+        private readonly ILogger<DataAccumulatorController> _logger;
         private readonly IDataAccumulatorService<CollectedDataDto> _dataAccumulatorService;
+        private readonly IServiceBusProvider _serviceBusProvider;
 
-        public DataAccumulatorController(IDataAccumulatorService<CollectedDataDto> dataAccumulatorService)
+        public DataAccumulatorController(ILogger<DataAccumulatorController> logger,
+                                         IDataAccumulatorService<CollectedDataDto> dataAccumulatorService,
+                                         IServiceBusProvider serviceBusProvider)
         {
+            _logger = logger;
             _dataAccumulatorService = dataAccumulatorService;
+            _serviceBusProvider = serviceBusProvider;
         }
 
         // GET: api/v1/dataaccumulator
@@ -37,8 +49,9 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -57,8 +70,9 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -69,13 +83,39 @@ namespace DataAccumulator.WebAPI.Controllers
             try
             {
                 var collectedData = await _dataAccumulatorService.AddEntityAsync(collectedDataDto);
-                return CreatedAtRoute("GetDataAccumulator", new { id = collectedDataDto.Id }, collectedData);
+                return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
             }
+        }
+
+        [HttpPost("TestCreation")]
+        public async Task<IActionResult> TestPost()
+        {
+            try
+            {
+                var collectedData = await _dataAccumulatorService.AddEntityAsync();
+                return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+                Console.WriteLine(e);
+                return StatusCode(500, e.Message);
+            }
+        }
+        
+        [HttpPost("TestError")]
+        public async Task<IActionResult> TestError()
+        {
+            var mess = new InstanceErrorMessage("Error Message from Accummulator", Guid.Parse("7dafb96f-46f3-48c4-9e97-787ec268136a"));
+            await _serviceBusProvider.SendErrorMessage(mess);
+
+            return Ok();
         }
 
         // PUT: api/v1/dataaccumulator/5
@@ -94,8 +134,8 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                return StatusCode(500);
+                LogError(e);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -114,8 +154,18 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        private void LogError(Exception ex)
+        {
+            var eventId = new EventId(500, "An unhandled exception");
+            using (LogContext.PushProperty("LogEventId", eventId.Id))
+            {
+                _logger.LogError(eventId, ex, "An unhandled exception has occurred: " + ex.Message);
             }
         }
     }

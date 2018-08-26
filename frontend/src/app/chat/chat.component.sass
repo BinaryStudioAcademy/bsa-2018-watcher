@@ -24,17 +24,17 @@
 		color: white
 	.ui-toast-close-icon:hover
 		color: gray
-			
-/deep/.ui-accordion-header
-	margin: 0 !important
-	a
-		padding: 4px !important
-	
-/deep/.ui-accordion-content
-	padding: 0 !important
-	border-top: 0
-	height: 300px
-	overflow-x: hidden !important
+
+/deep/.ui-accordion
+	.ui-accordion-header
+		margin: 0 !important
+		a
+			padding: 4px !important
+	.ui-accordion-content
+		padding: 0 !important
+		border-top: 0
+		height: 300px
+		overflow-x: hidden
 
 /deep/.ui-inputtext
 	border-radius: 0 !important
@@ -50,20 +50,19 @@
 	/deep/.ui-listbox
 		border: 0
 	/deep/.ui-listbox-list
-		width: 150px
+		overflow-x: hidden
 	.chat-list-img
 		width: 30px
 		height: 30px
 		border-radius: 50%
 	.chat-list-name
-		overflow: hidden
 		white-space: nowrap
-		text-overflow: ellipsis
 		line-height: 30px
 
 .icon
-    cursor: pointer
-    margin: 4px
+	cursor: pointer
+	margin: 4px
+	font-size: 120%
 
 .icon:hover
     color: gray
@@ -74,10 +73,6 @@
 .field
 	margin-left: 3px
 	margin-top: 10px
-
-.title
-	float: right
-	width: 70%
 
 .text-overflow
 	overflow: hidden
@@ -104,6 +99,7 @@
 	border-radius: 50%
 	padding: 0px 4px
 	font-size: 12px
+	height: fit-content
 
 .counter-absolute
 	position: absolute

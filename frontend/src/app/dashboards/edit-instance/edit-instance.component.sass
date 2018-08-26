@@ -5,17 +5,10 @@
 i
     font-family: fontawesome
 
-.ui-inputgroup
-
 input
     width: 75%
-    border-radius: 3px 3px 3px 3px
-    border: 1px solid #a6a6a6
-    height: 30px
-    display: inline-block
-    margin-right: 10px
+    height: 35px
     font-size: 15px
-    padding-left: .5em
 
 .title
     padding-bottom: 10px
@@ -37,6 +30,12 @@ hr
     padding-left: 10px
     padding-top: 10px
 
+.identifier
+    input
+        width: 60%
+    button
+        width: 15%
+
 .btn-panel
     padding: 10px
 
@@ -49,4 +48,14 @@ hr
     color: red
     padding-left: 10px
     padding-bottom: 20px
+
+
+/deep/body p-dropdown.ng-dirty.ng-invalid > .ui-dropdown
+    border: 1px solid #707070
+
+/deep/body p-dropdown.ng-dirty.ng-invalid > .ui-dropdown:hover
+    border: 1px solid black
+
+.ui-button-text
+    margin-left: 9px
 
