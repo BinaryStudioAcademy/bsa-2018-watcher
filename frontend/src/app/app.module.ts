@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
 import { LandingComponent } from './landing/landing.component';
+import { InviteComponent } from './invite/invite.component';
 import { CoreModule } from './core/core.module';
 import { AuthorizationComponent } from './authorization/authorization.component';
 import { AdminModule } from './admin/admin.module';
@@ -28,14 +29,19 @@ import { ShellModule } from './shell/shell.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { NotificationComponent } from './notification/notification/notification.component';
 import { NotificationBlockComponent } from './notification/notification-block/notification-block.component';
+import { CustomConfirmDialogComponent } from './notification/custom-confirm-dialog/custom-confirm-dialog.component';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingComponent,
+    InviteComponent,
     AuthorizationComponent,
     NotificationBlockComponent,
-    NotificationComponent
+    NotificationComponent,
+    CustomConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

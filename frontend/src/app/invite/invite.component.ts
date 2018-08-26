@@ -6,6 +6,7 @@ import { OrganizationInvitesService } from '../core/services/organization-ivites
 import { OrganizationInvite } from '../shared/models/organization-invite.model';
 import { OrganizationInviteState } from '../shared/models/organization-invite-state.enum';
 import { User } from '../shared/models/user.model';
+import { Organization } from '../shared/models/organization.model';
 
 @Component({
   selector: 'app-invite',
@@ -18,7 +19,12 @@ export class InviteComponent implements OnInit {
   invite: OrganizationInvite;
   createdByUserName: string;
   organizationName: string;
+  organization: Organization;
+
+  isAuthenticated: boolean;
   user: User;
+
+  showLoginForm = false;
 
   constructor(private activatedRoute: ActivatedRoute,
               private authService: AuthService,
@@ -39,25 +45,29 @@ export class InviteComponent implements OnInit {
     );
 
 
+
     this.organizationInvitesService.getByLink(this.link).subscribe(
       result => {
         this.invite = result;
-        if (this.user.id === this.invite.createdByUser.id) {  // You are already a member of the {org} organization!
-          this.toastrService.confirm(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
-            this.router.navigate(['user']);
-          });
-        }
-        if (this.user.organizations.some( // You are already a member of the {org} organization!
-          (x => x.id === this.invite.organizationId))) {
-            this.toastrService.confirm(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
+        this.organization = this.invite.organization;
+        if (this.user.id) {
+          if (this.user.id === this.invite.createdByUser.id) {  // You are already a member of the {org} organization!
+            this.toastrService.notice(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
               this.router.navigate(['user']);
             });
+          }
+          if (this.user.organizations.some( // You are already a member of the {org} organization!
+            (x => x.id === this.invite.organizationId))) {
+              this.toastrService.notice(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
+                this.router.navigate(['user']);
+              });
+          }
         }
         this.createdByUserName = this.invite.createdByUser.displayName;
         this.organizationName = this.invite.organization.name;
       },
       err => { // This invitу is not valid.
-        this.toastrService.confirm('This invitу is not valid.').then((value) => {
+        this.toastrService.notice('This invitу is not valid.').then((value) => {
           this.router.navigate(['user']);
         });
       }
@@ -65,12 +75,16 @@ export class InviteComponent implements OnInit {
   }
 
   onAccept() {
-    this.invite.invitedUserId = this.user.id;
-    this.invite.state = OrganizationInviteState.Accepted;
-    this.updateInvite();
+    if (this.user.id) {
+      this.invite.invitedUserId = this.user.id;
+      this.invite.state = OrganizationInviteState.Accepted;
+      this.updateInvite();
+    } else { // show login form
+      this.showLoginForm = true;
+    }
   }
 
-  onReject() {
+  onReject() { // only Authenticated User
     this.invite.invitedUserId = this.user.id;
     this.invite.state = OrganizationInviteState.Declined;
     this.updateInvite();
@@ -94,6 +108,10 @@ export class InviteComponent implements OnInit {
     );
 
     this.router.navigate(['user']);
+  }
+
+  successfulSignIn() {
+    this.onAccept();
   }
 
 }

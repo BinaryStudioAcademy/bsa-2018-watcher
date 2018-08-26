@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
 import { User } from '../../shared/models/user.model';
+import { Spinner } from 'primeng/spinner';
 
 @Component({
   selector: 'app-add-new-organization',

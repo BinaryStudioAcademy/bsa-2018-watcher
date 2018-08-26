@@ -12,11 +12,11 @@
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th style="width:7%">CREATED AT</th>
-        <th style="width:10%">PHOTO</th>
+        <th style="width:8%">PHOTO</th>
         <th style="width:8%">DISPLAY NAME</th>
         <th style="width:8%">FIRST NAME</th>
         <th style="width:8%">LAST NAME</th>
-        <th style="width:10%">BIO</th>
+        <th style="width:14%">BIO</th>
         <th style="width:22%">EMAIL</th>
         <th> COMPANY ID</th>
         <th style="width:6%">IS ACTIVE</th>
@@ -28,7 +28,8 @@
       <tr>
         <td class="center">{{user.createdAt | date:'longDate'}}</td>
         <td class="center">
-          <img *ngIf="user.photoURL" src="user.photoURL" alt="PHOTO" />
+          <div class="small-photo ">
+          <img *ngIf="user.photoURL" src="{{user.photoURL}}" alt="profile photo" class="small-photo"/> </div>
         </td>
         <td class="center">{{user.displayName}}</td>
         <td class="center">{{user.firstName}}</td>
@@ -53,14 +54,33 @@
 </div>
 
 
-<p-dialog header="Update user" [(visible)]="display" [modal]="true" [responsive]="true" [width]="500" [minWidth]="350" [minY]="70"
-  [maximizable]="false" [baseZIndex]="10000">
+<p-dialog header="Update user" [(visible)]="displayPopup" [modal]="true" [responsive]="true" [width]="500" [minWidth]="350" [minY]="70"
+  [maximizable]="false" [baseZIndex]="10000" [contentStyle]="{'overflow':'visible'}"><!--[contentStyle]="{'overflow': 'hidden'}" -->
   <div class="ui-g ui-fluid">
     <div class="ui-g-6">
       <form [formGroup]="userForm">
-        <p class="field">Photo</p>
-        <textarea rows="5" [cols]="42" pInputTextarea></textarea>
+        <p class="field center">Profile photo</p>
       </form>
+<div >
+      <figure class="cap-bot ">
+         <div class="img1"> <img src="{{photoUrl}}" alt="profile photo" class="img1"></div>
+          <figcaption class="center custom-upload-btn">
+            <span><i class="fa fa-camera"></i> Update profile photo</span>
+            <p-fileUpload #upload mode="basic" name="myfile[]" files="photosList" accept="image/*" (uploadHandler)="onImageSelected($event.files)"
+             customUpload="true" maxFileSize="2000000" auto="true" chooseLabel="Change"></p-fileUpload> 
+          </figcaption>
+        </figure>
+  
+        <p-dialog [(visible)]="display" [showHeader]="false" [closable]=false [modal]="true" [responsive]="true"
+        [draggable]="false">
+         <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+        
+         <div class="btn-panel crop-btn-panel">
+           <button pButton class="ui-button-raised ui-button-primary" (click)="onCropSave()" label="Done"></button>
+           <button pButton class="ui-button-raised ui-button-warning" (click)="onCropCancel() " label="Cancel"></button>
+         </div>
+        </p-dialog>
+      </div>
 
       <div class="inline">
         <p class="fieldRole">Role: </p>
@@ -91,12 +111,12 @@
   </div>
 
   <div class="ui-g ui-fluid">
-    <!--<div class="inline"> </div>-->
+    <!--<div class="inline"> </div> appendTo="body"  , position:'fixed'-->
     <div class="ui-g-6">
-      <p class="fieldOrg">List of other organizations</p>
+      <p class="fieldOrgs">List of other organizations</p>
     </div>
     <div class="ui-g-4">
-      <p-dropdown [options]="dropdownCompany" [(ngModel)]="selectedCompany" [style]="{'width':'150px'}" filter="true"></p-dropdown>
+      <p-dropdown  [options]="dropdownCompany" [(ngModel)]="selectedCompany" [style]="{'width':'150px'}" filter="true"></p-dropdown>
     </div>
     <div class="ui-g-2">
       <button pButton label="Invite" (click)="onSentInviteToEmail()" class="ui-button-primary ui-button-raised"></button>
@@ -107,19 +127,18 @@
   <div class="border">
 
     <div class="ui-g ui-fluid">
-      <div class="ui-g-4 center">Name</div>
-      <div class="ui-g-5 center">Email</div>
+      <div class="ui-g-3 center">Name</div>
+      <div class="ui-g-6 center">Email</div>
       <div class="ui-g-3 "></div>
     </div>
 
-    <div class="ui-g ui-fluid" *ngIf="lstUserCompany">
-      <p-scrollPanel [style]="{width: '100%', height: '50px'}" styleClass="custom">
-        <!--width: 464px;-->
-        <div *ngFor="let organization of lstUserCompany" class="ui-g ui-fluid">
-          <div class="ui-g-4 center fieldOrg">{{organization?.name}} </div>
-          <div class="ui-g-5 center fieldOrg">{{organization?.email}} </div>
+    <div class=" ui-fluid" *ngIf="lstUserCompany">
+      <p-scrollPanel [style]="{width: '457px', height: '67px'}" styleClass="custom" >
+        <div *ngFor="let organization of lstUserCompany; let i = index" class=" ui-fluid">
+          <div class="ui-g-3 center fieldOrg">{{organization?.name}} </div>
+          <div class="ui-g-6 center fieldOrg">{{organization?.email}} </div>
           <div class="ui-g-3 center">
-            <button pButton label="Unassign" (click)="onUnassign(organization)" class="ui-button-raised ui-button-danger"></button>
+            <button pButton label="Unassign" [disabled]="lstUnassign[i]" (click)="onUnassign(organization, i)" class="ui-button-raised ui-button-danger"></button>
           </div>
         </div>
       </p-scrollPanel>
@@ -130,8 +149,9 @@
   <p-footer>
     <div class="center">
       <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
-      <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-secondary"></button>
+      <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
     </div>
   </p-footer>
 
 </p-dialog>
+

@@ -65,7 +65,10 @@
 
 
 				<div class="btn-panel">
-					<button pButton type="submit" [disabled]="!userForm.valid" label="Update" class="ui-button-raised ui-button-success"></button>
+					<button pButton type="submit" label="&nbsp;" [disabled]="!userForm.valid || isUpdating" class="ui-button-raised ui-button-success btn-inline-flex">
+							<p-progressSpinner class="btn-spinner" *ngIf="isUpdating" strokeWidth="5"></p-progressSpinner>
+							<span class="ui-button-text" *ngIf="!isUpdating">Update</span>
+		            </button>
 				</div>
 			</form>
 		</div>

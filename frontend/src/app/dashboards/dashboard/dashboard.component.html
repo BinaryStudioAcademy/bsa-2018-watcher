@@ -9,7 +9,7 @@
   </div>
   <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
   <div class="workspace" *ngIf="instanceId">
-    <div class="dashboard-options">
+    <div *ngIf="activeDashboardItem && dashboardMenuItems.length > 1" class="dashboard-options">
       <button pButton type="button"
               label="Add Item"
               class="btnedit ui-button-success ui-button-raised "

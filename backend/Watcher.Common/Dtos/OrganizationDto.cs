@@ -22,6 +22,8 @@ namespace Watcher.Common.Dtos
 
         public bool IsActive { get; set; }
 
+        public string ImageURL { get; set; }
+
         public int? ThemeId { get; set; }
 
         public ThemeDto Theme { get; set; }

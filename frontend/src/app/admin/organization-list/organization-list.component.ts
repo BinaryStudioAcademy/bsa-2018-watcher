@@ -88,10 +88,19 @@ export class OrganizationListComponent implements OnInit {
     return newInstance;
   }
 
+  uniqueFields(name: string, email: string) {
+    let flag = true;
+    this.organizations.forEach(o => {
+      if ((o.name === name || o.email === email) && o.id !== this.organization.id) {
+        flag = false; }});
+    return flag;
+  }
+
   onSubmit() {
     this.display = false;
-
-    if (this.organizationForm.valid) {
+    const name = this.organizationForm.get('name').value;
+    const email = this.organizationForm.get('email').value;
+    if (this.organizationForm.valid && this.uniqueFields(name, email)) {
       this.organization.theme = null;
       Object.keys(this.organizationForm.controls).forEach(field => {
         this.organization[field] = this.organizationForm.get(field).value;

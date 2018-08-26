@@ -19,10 +19,15 @@ export class ChatHub {
     private hubName = 'chatsHub';
 
     public messageReceived = new EventEmitter<Message>();
+    public chatMessagesWasRead = new EventEmitter<number>();
     public chatCreated = new EventEmitter<Chat>();
     public chatChanged = new EventEmitter<Chat>();
 
     constructor(private authService: AuthService) {
+        this.startConnection();
+    }
+
+    private buildConnection() {
         const firebaseToken = this.authService.getFirebaseToken();
         const watcherToken = this.authService.getWatcherToken();
         const connPath = `${environment.server_url}/${this.hubName}?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
@@ -31,11 +36,11 @@ export class ChatHub {
             .withUrl(connPath)
             .configureLogging(signalR.LogLevel.Information)
             .build();
-
-        this.startConnection();
     }
 
     private startConnection(): void {
+        this.buildConnection();
+        console.log('ChatHub trying to connect');
         this.hubConnection
             .start()
             .then(() => {
@@ -51,43 +56,58 @@ export class ChatHub {
     private registerOnEvents(): void {
         this.hubConnection.on('ReceiveMessage', (data: any) => {
             this.messageReceived.emit(data);
-            console.log(data);
+            console.log('Message Received');
         });
 
         this.hubConnection.on('ChatCreated', (data: any) => {
             this.chatCreated.emit(data);
-            console.log(data);
+            console.log('Chat created');
         });
 
         this.hubConnection.on('ChatChanged', (data: any) => {
             this.chatChanged.emit(data);
-            console.log(data);
+            console.log('ChatChanged');
         });
 
-        this.hubConnection.onclose(function (error) {
-            console.log('Connection closed!!!');
+        this.hubConnection.on('ChatChanged', (data: any) => {
+            this.chatChanged.emit(data);
+            console.log('ChatChanged');
+        });
+
+        this.hubConnection.onclose((error: Error) => {
+            console.log('ChatHub connection closed!');
             console.error(error);
             this.startConnection();
         });
     }
 
     public createNewChat(chat: ChatRequest) {
-        this.hubConnection.invoke('InitializeChat', chat);
+        this.hubConnection.invoke('InitializeChat', chat)
+            .catch(err => console.error(err));
+    }
+
+    public markMessageAsRead(messageId: number) {
+        this.hubConnection.invoke('MarkMessageAsRead', messageId)
+            .catch(err => console.error(err));
     }
 
     public updateChat(chat: ChatUpdateRequest, chatId: number) {
-        this.hubConnection.invoke('UpdateChat', chat, chatId);
+        this.hubConnection.invoke('UpdateChat', chat, chatId)
+            .catch(err => console.error(err));
     }
 
     public sendMessage(message: MessageRequest) {
-        this.hubConnection.invoke('Send', message);
+        this.hubConnection.invoke('Send', message)
+            .catch(err => console.error(err));
     }
 
     public addUserToChat(userId: string, chatId: number) {
-        this.hubConnection.invoke('AddUserToChat', chatId, userId);
+        this.hubConnection.invoke('AddUserToChat', chatId, userId)
+            .catch(err => console.error(err));
     }
 
     public deleteUserFromChat(userId: string, chatId: number) {
-        this.hubConnection.invoke('DeleteUserFromChat', chatId, userId);
+        this.hubConnection.invoke('DeleteUserFromChat', chatId, userId)
+            .catch(err => console.error(err));
     }
 }

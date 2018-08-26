@@ -1,27 +1,32 @@
 <app-conversation-settings-popup [onDisplay]="onDisplaySettings"></app-conversation-settings-popup>
 
 <div class="conversation-panel" [hidden]="!display">
-  <p-accordion>
-    <p-accordionTab [selected]="true">
+  <p-accordion (onClose)="collapseExtend()" (onOpen)="collapseExtend()">
+    <p-accordionTab [selected]="display">
       <p-header>
         <i class="icon icon-right fa fa-close" (click)="closePanel($event)"></i>
-        <i class="icon icon-right fa fa-cog" style="z-index:999;" (click)="openSettings($event)"></i>
-        <div class="title">{{chat?.name}}</div>
+        <i class="icon icon-right fa fa-cog" (click)="openSettings($event)"></i>
+        <div class="conversation-panel-header">
+          <div class="conversation-name text-overflow">{{chat?.name}}</div>
+          <span *ngIf="unreadMessages !== 0" class="message-counter">{{unreadMessages}}</span>        
+        </div>
       </p-header>
+
       <div class="conversation-panel-content ui-fluid">
-        <div #messageList class="conversation-message-list">
+        <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="conversation-message-list">
           <div *ngFor="let message of chat?.messages" class="message" [ngClass]="{'received-message': message?.user?.id != currentUser?.id}">
             <div class="ui-g">
               <div class="ui-g-3 ui-g-nopad">
                   <img class="message-user-img" src="{{message?.user?.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}"/>
               </div>
               <div class="ui-g-9 ui-g-nopad">
-                <strong>{{message?.user?.displayName}}</strong>
-                <div class="">{{message?.text}}</div>
+                <strong class="text-overflow">{{message?.user?.displayName}}</strong>
+                <div>{{message?.text}}</div>
               </div>
             </div>
           </div>
         </div>
+
         <div class="ui-inputgroup">
           <input type="text" pInputText [(ngModel)]="textMessage" (keyup.enter)="sendMessage()" placeholder="Write message">
           <button pButton icon="fa fa-send" (click)="sendMessage()"></button>

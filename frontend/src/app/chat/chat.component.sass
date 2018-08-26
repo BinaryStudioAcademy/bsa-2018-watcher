@@ -1,13 +1,40 @@
-/deep/.ui-accordion-header
-	margin: 0 !important
-	a
-		padding: 4px !important
-	
-/deep/.ui-accordion-content
-	padding: 0 !important
-	border-top: 0
-	height: 300px
-	overflow-x: hidden !important
+/deep/.chat-message-toast .ui-toast-message
+	background-color: rgba(0,0,0,0.7)
+	border: 0 none
+	.message
+		cursor: pointer
+		margin-right: 5px
+	.message-title
+		color: white
+		margin-bottom: 4px
+		font-weight: bolder
+	.message-img
+		width: 40px
+		height: 40px
+		border-radius: 50%
+		margin: 7px 0
+	.message-content
+		color: #e8e5e5
+		word-wrap: break-word
+		line-height: 1.5em
+		max-height: 4.5em
+		overflow: hidden
+		text-overflow: ellipsis
+	.ui-toast-close-icon
+		color: white
+	.ui-toast-close-icon:hover
+		color: gray
+
+/deep/.ui-accordion
+	.ui-accordion-header
+		margin: 0 !important
+		a
+			padding: 4px !important
+	.ui-accordion-content
+		padding: 0 !important
+		border-top: 0
+		height: 300px
+		overflow-x: hidden
 
 /deep/.ui-inputtext
 	border-radius: 0 !important
@@ -22,25 +49,20 @@
 	width: 150px
 	/deep/.ui-listbox
 		border: 0
+	/deep/.ui-listbox-list
+		overflow-x: hidden
 	.chat-list-img
-		width: 25px
-		height: 25px
-		float: left
-		margin-right: 5px
+		width: 30px
+		height: 30px
 		border-radius: 50%
 	.chat-list-name
-		float: left
-		width: 90px
-		overflow: hidden
 		white-space: nowrap
-		text-overflow: ellipsis
-	
-	// /deep/.ui-listbox-item.ui-state-highlight
-		// 	background-color: #a5a5a5 !important
+		line-height: 30px
 
 .icon
-    cursor: pointer
-    margin: 4px
+	cursor: pointer
+	margin: 4px
+	font-size: 120%
 
 .icon:hover
     color: gray
@@ -52,11 +74,8 @@
 	margin-left: 3px
 	margin-top: 10px
 
-.title
-	float: right
-	width: 70%
+.text-overflow
 	overflow: hidden
-	white-space: nowrap
 	text-overflow: ellipsis
 
 .user-list
@@ -73,3 +92,19 @@
 .user-list-item
 	border-top: 1px solid #d5d5d5
 	padding: 5px
+
+.message-counter
+	background-color: #CF513D
+	color: #ffffff
+	border-radius: 50%
+	padding: 0px 4px
+	font-size: 12px
+	height: fit-content
+
+.counter-absolute
+	position: absolute
+	z-index: 10
+	right: 0px
+	top: -2px
+	padding: 0px 3px
+	font-size: 10px

@@ -15,6 +15,8 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
+    using Serilog.Context;
+
     using Watcher.Common.Dtos.Plots;
     using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
@@ -62,10 +64,7 @@
             {
                 try
                 {
-                    foreach (var id in _serviceBusProvider.SubscribedInstancesGuidIds)
-                    {
-                        await GenerateAndSendCollectedData(id, stoppingToken);
-                    }
+                   // await GenerateAndSendCollectedData(id, stoppingToken);
                 }
                 catch (Exception e)
                 {
@@ -74,10 +73,14 @@
 
                 // Repeat this message feed every period seconds
                 // await Task.Delay(TimeSpan.FromMilliseconds(_options.Value.Period), stoppingToken);
-                await Task.Delay(120_000, stoppingToken);
+                await Task.Delay(10_000, stoppingToken);
             }
-
-            _logger.LogError("Watcher Service stopped! Unexpected error occurred!");
+            
+            using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+            using (LogContext.PushProperty("Source", this.GetType().Name))
+            {
+                _logger.LogError("Watcher Service stopped! Unexpected error occurred!");
+            }
         }
 
         private async Task GenerateAndSendCollectedData(Guid instanceId, CancellationToken stoppingToken)
@@ -92,7 +95,7 @@
 
                 await repo.AddEntity(data);
 
-                data = await repo.GetEntity(data.InternalId);
+                data = await repo.GetEntityByInternalIdAsync(data.InternalId);
 
                 dto = mapper.Map<CollectedData, CollectedDataDto>(data);
             }

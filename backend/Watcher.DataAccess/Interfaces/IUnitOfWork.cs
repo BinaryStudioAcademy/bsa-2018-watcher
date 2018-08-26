@@ -19,6 +19,8 @@
 
         IOrganizationRepository OrganizationRepository { get; }
 
+        IUserOrganizationRepository UserOrganizationRepository { get; }
+
         IFeedbackRepository FeedbackRepository { get; }
 
         IResponseRepository ResponseRepository { get; }

@@ -40,7 +40,7 @@ namespace Watcher.Controllers
         {
             try
             {
-                await _provider.UploadFileBase64Async(base64StingImage, "watcher");
+                await _provider.UploadFileBase64Async(base64StingImage, containerName: "watcher");
             }
             catch (Exception e)
             {
@@ -50,20 +50,20 @@ namespace Watcher.Controllers
             return Ok();
         }
 
-        [HttpGet("RegisterToMessages")]
-        public async Task<IActionResult> RegisterToMessages()
-        {
-            try
-            {
-                _serviceBusProvider.RegisterOnMessageHandlerAndReceiveMessages();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
+        //[HttpGet("RegisterToMessages")]
+        //public async Task<IActionResult> RegisterToMessages()
+        //{
+        //    try
+        //    {
+        //        _serviceBusProvider.RegisterOnMessageHandlerAndReceiveMessages();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e);
+        //    }
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
         // [WatcherAuthorize("Admin")]
         [Authorize(Roles = "User")]

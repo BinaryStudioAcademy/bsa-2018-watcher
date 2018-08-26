@@ -7,15 +7,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataAccumulator.WebAPI.Controllers
 {
+    using Microsoft.Extensions.Logging;
+
+    using ServiceBus.Shared.Messages;
+
     [Produces("application/json")]
     [Route("api/v1/dataaccumulator")]
-    public class DataAccumulatorController : Controller
+    public class DataAccumulatorController : ControllerBase
     {
-        private readonly IService<CollectedDataDto> _dataAccumulatorService;
+        private readonly ILogger<DataAccumulatorController> _logger;
+        private readonly IDataAccumulatorService<CollectedDataDto> _dataAccumulatorService;
+        private readonly IServiceBusProvider _serviceBusProvider;
 
-        public DataAccumulatorController(IService<CollectedDataDto> dataAccumulatorService)
+        public DataAccumulatorController(ILogger<DataAccumulatorController> logger,
+                                         IDataAccumulatorService<CollectedDataDto> dataAccumulatorService,
+                                         IServiceBusProvider serviceBusProvider)
         {
+            _logger = logger;
             _dataAccumulatorService = dataAccumulatorService;
+            _serviceBusProvider = serviceBusProvider;
         }
 
         // GET: api/v1/dataaccumulator
@@ -35,11 +45,6 @@ namespace DataAccumulator.WebAPI.Controllers
             {
                 return NotFound();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return StatusCode(500);
-            }
         }
 
         // GET: api/v1/dataaccumulator/5
@@ -55,27 +60,30 @@ namespace DataAccumulator.WebAPI.Controllers
             {
                 return NotFound();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return StatusCode(500);
-            }
         }
 
         // POST: api/v1/dataaccumulator
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CollectedDataDto collectedDataDto)
         {
-            try
-            {
-                var collectedData = await _dataAccumulatorService.AddEntityAsync(collectedDataDto);
-                return CreatedAtRoute("GetDataAccumulator", new { id = collectedDataDto.Id }, collectedData);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return StatusCode(500);
-            }
+            var collectedData = await _dataAccumulatorService.AddEntityAsync(collectedDataDto);
+            return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
+        }
+
+        [HttpPost("TestCreation")]
+        public async Task<IActionResult> TestPost()
+        {
+            var collectedData = await _dataAccumulatorService.AddEntityAsync();
+            return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
+        }
+
+        [HttpPost("TestError")]
+        public async Task<IActionResult> TestError()
+        {
+            var mess = new InstanceErrorMessage("Error Message from Accummulator", Guid.Parse("7dafb96f-46f3-48c4-9e97-787ec268136a"));
+            await _serviceBusProvider.SendErrorMessage(mess);
+
+            return Ok();
         }
 
         // PUT: api/v1/dataaccumulator/5
@@ -92,11 +100,6 @@ namespace DataAccumulator.WebAPI.Controllers
             {
                 return NotFound();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return StatusCode(500);
-            }
         }
 
         // DELETE: api/v1/dataaccumulator/5
@@ -111,11 +114,6 @@ namespace DataAccumulator.WebAPI.Controllers
             catch (NotFoundException e)
             {
                 return NotFound();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return StatusCode(500);
             }
         }
     }

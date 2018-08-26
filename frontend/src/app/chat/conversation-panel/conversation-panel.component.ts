@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, ViewChildren } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { ChatService } from '../../core/services/chat.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -19,15 +19,18 @@ import { Chat } from '../../shared/models/chat.model';
 })
 export class ConversationPanelComponent implements OnInit {
 
-  @Input() onDisplay: EventEmitter<Chat>;
-  @ViewChildren('messageList') messageList: any;
-
+  @Input() onDisplay: EventEmitter<number>;
+  @Output() collapse = new EventEmitter<boolean>();
+  @Output() close = new EventEmitter();
   chat: Chat;
   currentUser: User;
 
   display: boolean;
+  isCollapse: boolean;
   onDisplaySettings = new EventEmitter<Chat>();
+
   textMessage: string;
+  unreadMessages: number;
 
   constructor(
     private authService: AuthService,
@@ -36,23 +39,42 @@ export class ConversationPanelComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    this.onDisplay.subscribe((data: Chat) => {
-      this.chatService.get(data.id).subscribe((chat: Chat) => {
-        this.chat = chat;
-        this.subscribeToEvents();
-        this.scrollMessageListToBottom();
-      });
-      this.display = true;
-    });
+    this.subscribeToEvents();
   }
 
   subscribeToEvents() {
+    this.onDisplay.subscribe((chatId: number) => {
+      if (!chatId) {
+        this.display = false;
+        return;
+      }
+      this.chatService.get(chatId).subscribe((chat: Chat) => {
+        this.chat = chat;
+        this.markMessagesAsRead();
+        this.unreadMessages = 0;
+        this.display = true;
+      });
+    });
+
     this.chatHub.messageReceived.subscribe((message: Message) => {
       if (this.chat && this.chat.id === message.chatId) {
+        if (this.isCollapse) {
+          this.unreadMessages++;
+        }
         this.chat.messages.push(message);
-        this.scrollMessageListToBottom();
+        this.markMessagesAsRead();
       }
     });
+  }
+
+  collapseExtend() {
+    if (this.isCollapse) {
+      this.isCollapse = false;
+      this.unreadMessages = 0;
+    } else {
+      this.isCollapse = true;
+    }
+    this.collapse.emit(this.isCollapse);
   }
 
   openSettings(event) {
@@ -65,6 +87,8 @@ export class ConversationPanelComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
     this.display = false;
+    this.isCollapse = false;
+    this.close.emit();
   }
 
   sendMessage() {
@@ -83,10 +107,10 @@ export class ConversationPanelComponent implements OnInit {
     this.textMessage = '';
   }
 
-  private scrollMessageListToBottom(): void {
-    setTimeout(() => {
-      if (this.messageList) {
-        this.messageList.toArray()[0].nativeElement.scrollTop = this.messageList.toArray()[0].nativeElement.scrollHeight;
+  markMessagesAsRead() {
+    this.chat.messages.forEach(m => {
+      if (!m.wasRead) {
+        this.chatHub.markMessageAsRead(m.id);
       }
     });
   }

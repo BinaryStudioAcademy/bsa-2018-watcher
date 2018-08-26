@@ -16,7 +16,8 @@ import {
   PanelMenuModule,
   InputTextModule,
   InputTextareaModule,
-  InputMaskModule
+  InputMaskModule,
+  ProgressSpinnerModule
 } from 'primeng/primeng';
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
@@ -45,6 +46,7 @@ import { ClickOutsideDirective } from '../shared/directives/click-outside.direct
     PanelMenuModule,
     ChatModule,
     DialogModule,
+    ProgressSpinnerModule
   ],
   declarations: [
     ShellComponent,

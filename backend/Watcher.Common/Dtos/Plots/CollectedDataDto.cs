@@ -9,9 +9,12 @@ namespace Watcher.Common.Dtos.Plots
     [ExportClassToTypescript]
     public class CollectedDataDto : ICollectedData
     {
+        // Id - CollectedData identification number
         public Guid Id { get; set; }
-        public DateTime Time { get; set; }
+        // ClientId - Client identification number
+        public Guid ClientId { get; set; }
 
+        public DateTime Time { get; set; }
         public int ProcessesCount { get; set; }
         public Dictionary<string, float> ProcessesCPU { get; set; }
         public Dictionary<string, float> ProcessesRAM { get; set; }

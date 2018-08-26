@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../shared/models/user.model';
@@ -9,10 +9,15 @@ import { OrganizationService } from '../../core/services/organization.service';
 import { RoleService } from '../../core/services/role.service';
 import { SelectItem } from 'primeng/api';
 
+import { UserOrganizationService } from '../../core/services/user-organization.service';
+import { UserOrganization } from '../../shared/models/user-organization.model';
 import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
 import { Role } from '../../shared/models/role.model';
+
+import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
+import { PathService } from '../../core/services/path.service';
 
 @Component({
   selector: 'app-user-list',
@@ -25,7 +30,7 @@ export class UserListComponent implements OnInit {
   users: User[];
   user: User;
   currentUser: User;
-  display: boolean;
+  displayPopup: boolean;
   totalRecords: number;
   lstOrganizations: Organization[];
   lstUserCompany: Organization[];
@@ -36,6 +41,18 @@ export class UserListComponent implements OnInit {
   dropdownRole: SelectItem[];
   dropdownCompany: SelectItem[];
   lastOrganization: Organization;
+  lstUnassign: Boolean[];
+
+  data: any;
+  photoUrl: string;
+  photoType: string;
+  display: Boolean = false;
+
+  @ViewChild('cropper', undefined)
+
+  cropper: ImageCropperComponent;
+
+  cropperSettings: CropperSettings;
 
   constructor(
     private fb: FormBuilder,
@@ -44,18 +61,35 @@ export class UserListComponent implements OnInit {
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,
     private roleService: RoleService,
+    private pathService: PathService,
+    private userOrganizationService: UserOrganizationService,
     private toastrService: ToastrService) {
 
-    this.display = false;
+    this.displayPopup = false;
     this.lstUserCompany = new Array<Organization>();
     this.dropdownRole = new Array<SelectItem>();
     this.dropdownCompany = new Array<SelectItem>();
+    this.lstUnassign = Array<Boolean>();
+
+    this.cropperSettings = new CropperSettings();
+    this.cropperSettings.width = 200;
+    this.cropperSettings.height = 200;
+    this.cropperSettings.minWidth = 100;
+    this.cropperSettings.minHeight = 100;
+    this.cropperSettings.croppedWidth = 70;
+    this.cropperSettings.croppedHeight = 70;
+    this.cropperSettings.canvasWidth = 500;
+    this.cropperSettings.canvasHeight = 500;
+    this.cropperSettings.noFileInput = true;
+    this.cropperSettings.preserveSize = true;
+
+    this.data = {};
   }
 
   userForm = this.fb.group({
     displayName: new FormControl({ value: '', disabled: false }, Validators.required),
-    firstName: new FormControl({ value: '', disabled: false }),
-    lastName: new FormControl({ value: '', disabled: false }),
+    firstName: new FormControl({ value: '', disabled: false }, Validators.required),
+    lastName: new FormControl({ value: '', disabled: false }, Validators.required),
     bio: new FormControl({ value: '', disabled: false }),
     isActive: new FormControl({ value: true, disabled: false }, Validators.required)
   });
@@ -84,13 +118,13 @@ export class UserListComponent implements OnInit {
 
   private fillDropdownRole(): void {
     this.lstRoles.forEach(element => {
-      this.dropdownRole.push({label: element.name, value: element});
+      this.dropdownRole.push({ label: element.name, value: element });
     });
   }
 
   private fillDropdownCompany(): void {
     this.lstOrganizations.forEach(element => {
-      this.dropdownCompany.push({label: element.name, value: element});
+      this.dropdownCompany.push({ label: element.name, value: element });
     });
   }
 
@@ -100,12 +134,21 @@ export class UserListComponent implements OnInit {
       control.setValue(this.user[field]);
     });
   }
-/*
-  isAssign(id: number) {
-    return this.lstOrganizationId.includes(id);
-  }*/
+  /*
+    isAssign(id: number) {
+      return this.lstOrganizationId.includes(id);
+    }*/
+  findWithAttr(array, attr1, value1, attr2, value2) {
+    for (let i = 0; i < array.length; i += 1) {
+      if (array[i][attr1] === value1 && array[i][attr2] === value2) {
+        return array[i];
+      }
+    }
+    return null;
+  }
 
-  onUnassign(company: Organization) {
+  onUnassign(company: Organization, i: number) {
+    this.lstUnassign[i] = true;
     if (this.lstUserCompany.length <= 1) {
       this.toastrService.warning('The user must have at least one organization.');
       return;
@@ -113,62 +156,45 @@ export class UserListComponent implements OnInit {
     if (this.user.lastPickedOrganizationId === company.id) {
       this.user.lastPickedOrganizationId = 0;
       this.user.lastPickedOrganization = null;
-    } else {
-      const index = this.user.organizations.indexOf(company);
-      this.user.organizations.splice(index, 1);
     }
-    this.userService.update(this.user.id, this.user).subscribe(
-        value => {
-          this.toastrService.success(`Now last picked organization - ${this.user.organizations[0].name}`);
-        },
-        error => {
-          this.toastrService.error(`Error ocured status: ${error.message}`);
+    this.userOrganizationService.delete(company.id, this.user.id).subscribe(
+      value => {
+        this.toastrService.success(`Now last picked organization - not selected.`);
+        if (this.user.id === this.currentUser.id) {
+          console.log('I am here');
+          const index = this.currentUser.organizations.indexOf(company);
+          this.currentUser.organizations.splice(index, 1);
+          this.authService.updateCurrentUser(this.currentUser);
         }
-      );
+      },
+      error => {
+        this.toastrService.error(`Error ocured status: ${error.message}`);
+      }
+    );
   }
-
-lastPickedCompany(id: number) {
-  const company: Organization = {
-    id: id,
-    name: 'last picked',
-    description: '',
-    email: 'last picked',
-    webSite: '',
-    contactNumber: '',
-    isActive: true,
-    themeId: 0,
-    theme: null,
-    chatId: 0,
-    createdByUserId: '',
-    usersId: null,
-    instances: null,
-    notifications: null
-   };
-   return company;
-}
 
   showPopup(user: User) {
+    // debugger;
     this.user = user;
     this.subscribeOrganizationFormToData();
-    this.display = true;
+    this.displayPopup = true;
     this.lstUserCompany = user.organizations.map(x => Object.assign({}, x));
-    if (user.lastPickedOrganizationId) {
-      this.organizationService.get(user.lastPickedOrganizationId).subscribe((value: Organization) => this.lastOrganization = value);
-    this.lstUserCompany.push(this.lastOrganization);
-  }
     this.selectedRole = user.role;
-    console.log(this.lstUserCompany);
-    console.log(user.organizations);
-    console.log(this.lastOrganization);
+    this.photoUrl = this.pathService.convertToUrl(this.user.photoURL);
+
+    for (let i = 0; i < this.lstUserCompany.length; i += 1) {
+      this.lstUnassign.push(false);
+    }
   }
 
   onCancel() {
-    this.display = false;
+    this.displayPopup = false;
     this.user = null;
+    this.lstUnassign = [];
   }
 
   onSubmit() {
-    this.display = false;
+    this.displayPopup = false;
 
     if (this.userForm.valid) {
       Object.keys(this.userForm.controls).forEach(field => {
@@ -202,28 +228,60 @@ lastPickedCompany(id: number) {
       link: null,
       state: OrganizationInviteState.Pending
     };
-
-    this.organizationInvitesService.create(invite).subscribe(
-      value => {
-        this.toastrService.success('Organization Invite was created');
-        this.invite = value;
-      },
-      error => {
-        // this.toastrService.error('Organization Invite was not created');
-        this.toastrService.error(`Error ocured status: ${error.message}`);
-      });
+    this.invite = invite;
+    /*
+        this.organizationInvitesService.create(invite).subscribe(
+          value => {
+            this.toastrService.success('Organization Invite was created');
+            this.invite = value;
+          },
+          error => {
+            // this.toastrService.error('Organization Invite was not created');
+            this.toastrService.error(`Error ocured status: ${error.message}`);
+          });*/
   }
 
   onSentInviteToEmail() {
     if (this.user.email === null) { return; }
     this.onInvite(this.selectedCompany.id);
+
     this.invite.inviteEmail = this.user.email;
-    this.organizationInvitesService.update(this.invite.id, this.invite).subscribe(
+    /* this.invite.state = OrganizationInviteState.Pending; console.log(this.invite.inviteEmail );
+     this.invite.createdByUserId = this.authService.getCurrentUser().id;
+     this.invite.organizationId = this.selectedCompany.id;*/
+    this.organizationInvitesService.createdAndSend(this.invite).subscribe(
       value => {
-        this.toastrService.success('Organization Invite was updated and sends to email.');
+        this.toastrService.success('Organization Invite was created and sends to email.');
       },
-      err => {
-        this.toastrService.error('Organization Invite was not updated');
+      error => {
+        this.toastrService.error(`Error ocured status: ${error.message}`);
       });
+  }
+
+  onImageSelected(upload) {
+    // debugger;
+    const image: any = new Image();
+    const reader: FileReader = new FileReader();
+    const that = this;
+    this.photoType = upload[0].type;
+    reader.onloadend = (eventLoad: any) => {
+      image.src = eventLoad.target.result;
+      that.cropper.setImage(image);
+      this.display = true;
+    };
+    reader.readAsDataURL(upload[0]);
+    upload.splice(0, upload.length);
+  }
+
+  onCropCancel() {
+    this.photoType = '';
+    this.display = false;
+  }
+
+  onCropSave() {
+    this.user.photoURL = this.data.image;
+    this.user.photoType = this.photoType;
+    this.photoUrl = this.data.image;
+    this.display = false;
   }
 }

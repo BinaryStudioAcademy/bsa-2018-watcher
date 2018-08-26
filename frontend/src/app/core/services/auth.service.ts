@@ -114,6 +114,7 @@ export class AuthService {
       photoUrl: credential.user.photoURL,
       isNewUser: credential.additionalUserInfo.isNewUser,
       companyName: '',
+      invitedOrganizationId: 0,
       firstName: firstName,
       lastName: lastName
     };
@@ -200,12 +201,13 @@ export class AuthService {
       });
   }
 
-  async signUpWithProvider(companyName: string, firstName: string, lastName: string, email: string): Promise<void> {
+  async signUpWithProvider(companyName: string, firstName: string, lastName: string, email: string,
+                            inviitedOrganizationId: number = 0): Promise<void> {
     this.userRegisterRequest.companyName = companyName;
     this.userRegisterRequest.firstName = firstName;
     this.userRegisterRequest.lastName = lastName;
     this.userRegisterRequest.email = email;
-
+    this.userRegisterRequest.invitedOrganizationId = inviitedOrganizationId;
     await this.register()
       .then(() => {
       })
