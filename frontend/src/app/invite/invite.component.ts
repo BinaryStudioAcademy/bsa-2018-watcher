@@ -52,13 +52,13 @@ export class InviteComponent implements OnInit {
         this.organization = this.invite.organization;
         if (this.user.id) {
           if (this.user.id === this.invite.createdByUser.id) {  // You are already a member of the {org} organization!
-            this.toastrService.confirm(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
+            this.toastrService.notice(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
               this.router.navigate(['user']);
             });
           }
           if (this.user.organizations.some( // You are already a member of the {org} organization!
             (x => x.id === this.invite.organizationId))) {
-              this.toastrService.confirm(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
+              this.toastrService.notice(`You are already a member of the ${this.invite.organization.name} organization!`).then((value) => {
                 this.router.navigate(['user']);
               });
           }
@@ -67,7 +67,7 @@ export class InviteComponent implements OnInit {
         this.organizationName = this.invite.organization.name;
       },
       err => { // This invitу is not valid.
-        this.toastrService.confirm('This invitу is not valid.').then((value) => {
+        this.toastrService.notice('This invitу is not valid.').then((value) => {
           this.router.navigate(['user']);
         });
       }
