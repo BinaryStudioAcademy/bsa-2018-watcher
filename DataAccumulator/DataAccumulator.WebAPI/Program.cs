@@ -7,7 +7,6 @@ namespace DataAccumulator
     using System.IO;
 
     using Microsoft.Extensions.Configuration;
-    using Microsoft.WindowsAzure.Storage;
 
     using Serilog;
     using Serilog.Events;
@@ -38,19 +37,17 @@ namespace DataAccumulator
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Production)
             {
-                var connectionString = Configuration.GetConnectionString("LogsConnection");
-                var storageAccount = CloudStorageAccount.Parse(connectionString);
+                var connectionString = Configuration.GetConnectionString("MsSqlDbConnection");
                 Log.Logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(Configuration)
                     .Enrich.FromLogContext()
                     .WriteTo.Console(outputTemplate: outputTemplate)
-                    .WriteTo.AzureTableStorageWithProperties(storageAccount,
-                        LogEventLevel.Warning,
-                        storageTableName: "logs-table",
-                        writeInBatches: true,
-                        batchPostingLimit: 100,
-                        period: new TimeSpan(0, 0, 3),
-                        propertyColumns: new[] { "LogEventId" }).CreateLogger();
+                    .WriteTo.MSSqlServer(
+                        connectionString,
+                        "Logs",
+                        LogEventLevel.Warning, 
+                        autoCreateSqlTable: true)
+                    .CreateLogger();
             }
             else
             {
@@ -63,7 +60,7 @@ namespace DataAccumulator
 
             try
             {
-                Log.Information("Starting BSA Watcher Web App...");
+                Log.Error("Starting BSA Data Accumulator...");
 
                 BuildWebHost(args).Run();
 
@@ -71,7 +68,7 @@ namespace DataAccumulator
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly");
+                Log.Fatal(ex, "BSA Data Accumulator Host terminated unexpectedly");
                 return 1;
             }
             finally

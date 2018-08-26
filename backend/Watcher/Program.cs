@@ -54,7 +54,8 @@
                         writeInBatches: true,
                         batchPostingLimit: 100,
                         period: new TimeSpan(0, 0, 3),
-                        propertyColumns: new[] { "LogEventId" }).CreateLogger();
+                        propertyColumns: new[] { "LogEventId" })
+                    .CreateLogger();
             }
             else
             {
