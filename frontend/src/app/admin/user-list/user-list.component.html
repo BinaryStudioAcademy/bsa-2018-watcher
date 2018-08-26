@@ -133,7 +133,7 @@
     </div>
 
     <div class=" ui-fluid" *ngIf="lstUserCompany">
-      <p-scrollPanel [style]="{width: '457px', height: '67px'}" styleClass="custom" scrollMode="native">
+      <p-scrollPanel [style]="{width: '457px', height: '67px'}" styleClass="custom" >
         <div *ngFor="let organization of lstUserCompany" class=" ui-fluid">
           <div class="ui-g-3 center fieldOrg">{{organization?.name}} </div>
           <div class="ui-g-6 center fieldOrg">{{organization?.email}} </div>

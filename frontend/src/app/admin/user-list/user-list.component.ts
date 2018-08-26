@@ -9,6 +9,8 @@ import { OrganizationService } from '../../core/services/organization.service';
 import { RoleService } from '../../core/services/role.service';
 import { SelectItem } from 'primeng/api';
 
+import { UserOrganizationService } from '../../core/services/user-organization.service';
+import { UserOrganization } from '../../shared/models/user-organization.model';
 import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
@@ -59,6 +61,7 @@ export class UserListComponent implements OnInit {
     private organizationInvitesService: OrganizationInvitesService,
     private roleService: RoleService,
     private pathService: PathService,
+    private userOrganizationService: UserOrganizationService,
     private toastrService: ToastrService) {
 
     this.displayPopup = false;
@@ -113,13 +116,13 @@ export class UserListComponent implements OnInit {
 
   private fillDropdownRole(): void {
     this.lstRoles.forEach(element => {
-      this.dropdownRole.push({label: element.name, value: element});
+      this.dropdownRole.push({ label: element.name, value: element });
     });
   }
 
   private fillDropdownCompany(): void {
     this.lstOrganizations.forEach(element => {
-      this.dropdownCompany.push({label: element.name, value: element});
+      this.dropdownCompany.push({ label: element.name, value: element });
     });
   }
 
@@ -129,10 +132,18 @@ export class UserListComponent implements OnInit {
       control.setValue(this.user[field]);
     });
   }
-/*
-  isAssign(id: number) {
-    return this.lstOrganizationId.includes(id);
-  }*/
+  /*
+    isAssign(id: number) {
+      return this.lstOrganizationId.includes(id);
+    }*/
+  findWithAttr(array, attr1, value1,  attr2, value2) {
+      for (let i = 0; i < array.length; i += 1) {
+          if (array[i][attr1] === value1 && array[i][attr2] === value2) {
+              return array[i];
+          }
+      }
+      return null;
+  }
 
   onUnassign(company: Organization) {
     if (this.lstUserCompany.length <= 1) {
@@ -143,24 +154,23 @@ export class UserListComponent implements OnInit {
       this.user.lastPickedOrganizationId = 0;
       this.user.lastPickedOrganization = null;
     }
-    console.log(this.user.organizations);
-    const index = this.user.organizations.indexOf(company);
-    this.user.organizations.splice(index, 1);
-    console.log(index);
-    console.log(this.user.organizations);
-    this.userService.update(this.user.id, this.user).subscribe(
-        value => {
-          this.toastrService.success(`Now last picked organization - not selected.`);
-        },
-        error => {
-          this.toastrService.error(`Error ocured status: ${error.message}`);
+    this.userOrganizationService.delete(company.id, this.user.id).subscribe(
+      value => {
+        this.toastrService.success(`Now last picked organization - not selected.`);
+        if (this.user.id === this.currentUser.id) {console.log('I am here');
+          const index = this.currentUser.organizations.indexOf(company);
+          this.currentUser.organizations.splice(index, 1);
+          this.authService.updateCurrentUser(this.currentUser);
         }
-      );
+      },
+      error => {
+        this.toastrService.error(`Error ocured status: ${error.message}`);
+      }
+    );
   }
 
   showPopup(user: User) {
     // debugger;
-    // console.log(this.currentUser.organizations);
     this.user = user;
     this.subscribeOrganizationFormToData();
     this.displayPopup = true;
@@ -171,7 +181,6 @@ export class UserListComponent implements OnInit {
   }*/
     this.selectedRole = user.role;
     this.photoUrl = this.pathService.convertToUrl(this.user.photoURL);
-    console.log(user.organizations);
   }
 
   onCancel() {

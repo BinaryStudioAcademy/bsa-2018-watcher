@@ -24,6 +24,7 @@
         private IDashboardsRepository _dashboardsRepository;
         private IOrganizationRepository _organizationRepository;
         private IFeedbackRepository _feedbackRepository;
+        private IUserOrganizationRepository _userOrganizationRepository;
 
         private IResponseRepository _responseRepository;
 
@@ -69,6 +70,8 @@
         public IDashboardsRepository DashboardsRepository => _dashboardsRepository ?? (_dashboardsRepository = new DashboardsRepository(_context, _mapper));
 
         public IOrganizationRepository OrganizationRepository => _organizationRepository ?? (_organizationRepository = new OrganizationRepository(_context, _mapper));
+
+        public IUserOrganizationRepository UserOrganizationRepository => _userOrganizationRepository ?? (_userOrganizationRepository = new UserOrganizationRepository(_context, _mapper));
 
         public IFeedbackRepository FeedbackRepository => _feedbackRepository ?? (_feedbackRepository = new FeedbackRepository(_context, _mapper));
 
