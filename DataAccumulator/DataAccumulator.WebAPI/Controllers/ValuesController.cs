@@ -14,7 +14,7 @@ namespace DataAccumulator.WebAPI.Controllers
     using Microsoft.Extensions.Logging;
 
     [Route("api/v1/[controller]")]
-    public class ValuesController : Controller
+    public class ValuesController : ControllerBase
     {
         private readonly ILogger<ValuesController> _logger;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;

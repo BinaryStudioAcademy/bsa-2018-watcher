@@ -7,19 +7,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataAccumulator.WebAPI.Controllers
 {
+    using Microsoft.Extensions.Logging;
+
+    using Serilog.Context;
+
     using ServiceBus.Shared.Messages;
-    using ServiceBus.Shared.Queue;
 
     [Produces("application/json")]
     [Route("api/v1/dataaccumulator")]
-    public class DataAccumulatorController : Controller
+    public class DataAccumulatorController : ControllerBase
     {
+        private readonly ILogger<DataAccumulatorController> _logger;
         private readonly IDataAccumulatorService<CollectedDataDto> _dataAccumulatorService;
         private readonly IServiceBusProvider _serviceBusProvider;
 
-        public DataAccumulatorController(IDataAccumulatorService<CollectedDataDto> dataAccumulatorService,
+        public DataAccumulatorController(ILogger<DataAccumulatorController> logger,
+                                         IDataAccumulatorService<CollectedDataDto> dataAccumulatorService,
                                          IServiceBusProvider serviceBusProvider)
         {
+            _logger = logger;
             _dataAccumulatorService = dataAccumulatorService;
             _serviceBusProvider = serviceBusProvider;
         }
@@ -43,8 +49,9 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -63,8 +70,9 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -79,8 +87,9 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -94,8 +103,9 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
             }
         }
         
@@ -124,8 +134,8 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                return StatusCode(500);
+                LogError(e);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -144,8 +154,18 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        private void LogError(Exception ex)
+        {
+            var eventId = new EventId(500, "An unhandled exception");
+            using (LogContext.PushProperty("LogEventId", eventId.Id))
+            {
+                _logger.LogError(eventId, ex, "An unhandled exception has occurred: " + ex.Message);
             }
         }
     }
