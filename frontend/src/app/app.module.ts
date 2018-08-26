@@ -29,6 +29,8 @@ import { ShellModule } from './shell/shell.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { NotificationComponent } from './notification/notification/notification.component';
 import { NotificationBlockComponent } from './notification/notification-block/notification-block.component';
+import { CustomConfirmDialogComponent } from './notification/custom-confirm-dialog/custom-confirm-dialog.component';
+
 
 
 @NgModule({
@@ -38,7 +40,8 @@ import { NotificationBlockComponent } from './notification/notification-block/no
     InviteComponent,
     AuthorizationComponent,
     NotificationBlockComponent,
-    NotificationComponent
+    NotificationComponent,
+    CustomConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

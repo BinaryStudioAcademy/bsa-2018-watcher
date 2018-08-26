@@ -32,20 +32,56 @@ export class ToastrService {
     this.message('error', 'Error', message);
   }
 
-  confirm(message = 'Are you sure?') {
+  confirm(header = 'Are you sure?', message = '', acceptLabel = 'Yes!', rejectLabel = 'Cancel') {
     return new Promise((resolve, reject) => {
       this.confirmationService.confirm({
-          message: message,
-          header: 'Confirmation',
-          icon: 'fa fa-question-circle',
-          accept: () => {
-            resolve(true);
-          },
-          reject: () => {
-            resolve(false);
-          }
+        key: 'confirm',
+        header: header,
+        message: message,
+        acceptLabel: acceptLabel,
+        rejectLabel: rejectLabel,
+        accept: () => {
+          resolve(true);
+        },
+        reject: () => {
+          resolve(false);
+        }
       });
-  });
+    });
+  }
 
+  notice(header = 'Something happened!', message = '', acceptLabel = 'Ok') {
+    return new Promise((resolve, reject) => {
+      this.confirmationService.confirm({
+        key: 'notice',
+        header: header,
+        message: message,
+        acceptLabel: acceptLabel,
+        accept: () => {
+          resolve(true);
+        },
+        reject: () => {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  question(header = 'Do you want ... ?', message = '', acceptLabel = 'Yes', rejectLabel = 'No') {
+    return new Promise((resolve, reject) => {
+      this.confirmationService.confirm({
+        key: 'question',
+        header: header,
+        message: message,
+        rejectLabel: rejectLabel,
+        acceptLabel: acceptLabel,
+        accept: () => {
+          resolve(true);
+        },
+        reject: () => {
+          resolve(false);
+        }
+      });
+    });
   }
 }

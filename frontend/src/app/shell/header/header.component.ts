@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit {
   currentUser: User;
 
   userItems: MenuItem[];
+  adminItems: MenuItem[];
   cogItems: MenuItem[];
   orgItems: MenuItem[];
   notifications: Notification[];
@@ -46,8 +47,8 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private notificationsService: NotificationService,
     private pathService: PathService) {
-      this.conectToNotificationsHub();
-      this.subscribeToNotificationsEvents();
+    this.conectToNotificationsHub();
+    this.subscribeToNotificationsEvents();
   }
 
   onFeedback(): void {
@@ -83,7 +84,7 @@ export class HeaderComponent implements OnInit {
 
       value.forEach(item => {
         item.type = NotificationType[item.notificationSetting.type].toLowerCase();
-        if (item.type !== 'chat')  {
+        if (item.type !== 'chat') {
           this.notifications.unshift(item);
         }
       });
@@ -92,8 +93,8 @@ export class HeaderComponent implements OnInit {
 
   calcNotReadNotification(allNotifications: Notification[]): number {
     return allNotifications.filter(item => item.wasRead === false &&
-                                  item.notificationSetting.isMute === false &&
-                                  NotificationType[item.notificationSetting.type] !== 'Chat').length;
+      item.notificationSetting.isMute === false &&
+      NotificationType[item.notificationSetting.type] !== 'Chat').length;
   }
 
   markAsRead(): void {
@@ -102,8 +103,9 @@ export class HeaderComponent implements OnInit {
     notReadNotifications = this.notifications.filter(item => item.wasRead === false);
     notReadNotifications.forEach(item => {
       item.wasRead = true;
-      this.notificationsService.update(item.id, item).subscribe(value => this.notificationsNumber--);
     });
+
+    this.notificationsService.updateAll(notReadNotifications).subscribe(value => this.notificationsNumber = 0);
   }
 
   close(): void {
@@ -136,11 +138,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.userItems = [
-      {
-        label: 'Admin',
-        icon: 'fa fa-fw fa-user',
-        routerLink: ['/admin/organization-list'],
-      },
+      /* {
+         label: 'Admin',
+         icon: 'fa fa-fw fa-user',
+         routerLink: ['/admin/organization-list'],
+       },*/
       {
         label: 'Logout',
         icon: 'fa fa-fw fa-sign-out',
@@ -151,6 +153,20 @@ export class HeaderComponent implements OnInit {
         }
       }
     ];
+
+    this.adminItems = [{
+      label: 'Organizations',
+      icon: 'fa fa-fw fa-list',
+      routerLink: ['/admin/organization-list']
+    }, {
+      label: 'Users',
+      icon: 'fa fa-fw fa-group',
+      routerLink: ['/admin/user-list']
+    }, {
+      label: 'Feedbacks',
+      icon: 'fa fa-fw fa-bullhorn',
+      routerLink: ['/admin/feedback-list']
+    }];
 
     this.cogItems = [{
       label: 'Profile',
@@ -201,6 +217,13 @@ export class HeaderComponent implements OnInit {
 
   }
 
+  isAdmin() {
+    if (this.currentUser.role.name === 'Admin') {
+      return true;
+    }
+    return false;
+  }
+
   onDisplayChange(event: boolean) {
     this.displayAddNewOrganization = event;
   }
@@ -224,6 +247,6 @@ export class HeaderComponent implements OnInit {
       },
         err => {
           this.toastrService.error('Organization by defaul was not updated.');
-      });
+        });
   }
 }

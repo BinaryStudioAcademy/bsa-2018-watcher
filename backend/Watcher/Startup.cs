@@ -110,6 +110,7 @@
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
             services.AddTransient<ICollectedDataService, CollectedDataService>();
             services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IUserOrganizationService, UserOrganizationService>();
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
@@ -304,6 +305,7 @@
                     cfg.AddProfile<UsersProfile>();
                     cfg.AddProfile<DashboardsProfile>();
                     cfg.AddProfile<OrganizationProfile>();
+                    cfg.AddProfile<UserOrganizationProfile>();
 
                     cfg.AddProfile<NotificationSettingsProfile>();
 

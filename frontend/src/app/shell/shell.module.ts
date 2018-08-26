@@ -25,7 +25,7 @@ import { query } from '@angular/core/src/render3/query';
 import { DownloadAppComponent } from '../download-app/download-app.component';
 import { AddNewOrganizationComponent } from './add-new-organization/add-new-organization.component';
 import { FormsModule } from '@angular/forms';
-import { ClickOutsideDirective } from '../core/directives/click-outside.directive';
+import { ClickOutsideDirective } from '../shared/directives/click-outside.directive';
 
 @NgModule({
   imports: [

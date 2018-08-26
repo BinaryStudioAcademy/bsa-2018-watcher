@@ -32,7 +32,7 @@ export class NotificationBlockComponent implements OnInit {
       console.log('message');
       value.type = NotificationType[value.notificationSetting.type].toLowerCase();
 
-      if (value.type === 'chat') {
+      if (value.type === 'chat' || value.notificationSetting.isMute) {
         return;
       }
 

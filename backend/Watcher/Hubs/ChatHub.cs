@@ -39,7 +39,7 @@
 
             foreach (var userDto in usersInChat)
             {
-                await Clients.User(userDto.Id).SendAsync("ReceiveMessage", createdMessage);
+                await Clients.Client(Context.ConnectionId).SendAsync("ReceiveMessage", createdMessage);
             }
         }
 

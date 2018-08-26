@@ -43,7 +43,7 @@ namespace Watcher.Core.Services
 
         public async Task<List<PercentageInfo>> GetInstancePercentageInfo(Guid id, int count)
         {
-            var entity = await _repository.GetPercentageInfoByEntityIdAsync(id, count);
+            var entity = await _repository.GetPercentageInfoByInstanceIdAsync(id, count);
             if (entity == null)
             {
                 return null;
