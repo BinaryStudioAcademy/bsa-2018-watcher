@@ -9,8 +9,6 @@ namespace DataAccumulator.WebAPI.Controllers
 {
     using Microsoft.Extensions.Logging;
 
-    using Serilog.Context;
-
     using ServiceBus.Shared.Messages;
 
     [Produces("application/json")]
@@ -47,12 +45,6 @@ namespace DataAccumulator.WebAPI.Controllers
             {
                 return NotFound();
             }
-            catch (Exception e)
-            {
-                LogError(e);
-                Console.WriteLine(e);
-                return StatusCode(500, e.Message);
-            }
         }
 
         // GET: api/v1/dataaccumulator/5
@@ -68,47 +60,23 @@ namespace DataAccumulator.WebAPI.Controllers
             {
                 return NotFound();
             }
-            catch (Exception e)
-            {
-                LogError(e);
-                Console.WriteLine(e);
-                return StatusCode(500, e.Message);
-            }
         }
 
         // POST: api/v1/dataaccumulator
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CollectedDataDto collectedDataDto)
         {
-            try
-            {
-                var collectedData = await _dataAccumulatorService.AddEntityAsync(collectedDataDto);
-                return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-                Console.WriteLine(e);
-                return StatusCode(500, e.Message);
-            }
+            var collectedData = await _dataAccumulatorService.AddEntityAsync(collectedDataDto);
+            return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
         }
 
         [HttpPost("TestCreation")]
         public async Task<IActionResult> TestPost()
         {
-            try
-            {
-                var collectedData = await _dataAccumulatorService.AddEntityAsync();
-                return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-                Console.WriteLine(e);
-                return StatusCode(500, e.Message);
-            }
+            var collectedData = await _dataAccumulatorService.AddEntityAsync();
+            return CreatedAtRoute("GetDataAccumulator", new { id = 213 }, collectedData);
         }
-        
+
         [HttpPost("TestError")]
         public async Task<IActionResult> TestError()
         {
@@ -132,11 +100,6 @@ namespace DataAccumulator.WebAPI.Controllers
             {
                 return NotFound();
             }
-            catch (Exception e)
-            {
-                LogError(e);
-                return StatusCode(500, e.Message);
-            }
         }
 
         // DELETE: api/v1/dataaccumulator/5
@@ -151,21 +114,6 @@ namespace DataAccumulator.WebAPI.Controllers
             catch (NotFoundException e)
             {
                 return NotFound();
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-                Console.WriteLine(e);
-                return StatusCode(500, e.Message);
-            }
-        }
-
-        private void LogError(Exception ex)
-        {
-            var eventId = new EventId(500, "An unhandled exception");
-            using (LogContext.PushProperty("LogEventId", eventId.Id))
-            {
-                _logger.LogError(eventId, ex, "An unhandled exception has occurred: " + ex.Message);
             }
         }
     }

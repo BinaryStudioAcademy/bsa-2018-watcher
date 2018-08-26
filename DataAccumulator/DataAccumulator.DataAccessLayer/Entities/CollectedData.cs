@@ -14,8 +14,11 @@ namespace DataAccumulator.DataAccessLayer.Entities
         public ObjectId InternalId { get; set; }
 
         // Id - CollectedData identification number
+        [BsonRepresentation(BsonType.String)]
         public Guid Id { get; set; }
         // ClientId - Client identification number
+
+        [BsonRepresentation(BsonType.String)]
         public Guid ClientId { get; set; }
 
         public int ProcessesCount { get; set; }

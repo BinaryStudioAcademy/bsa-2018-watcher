@@ -16,6 +16,8 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
 
+    using Serilog.Context;
+
     using ServiceBus.Shared.Common;
     using ServiceBus.Shared.Messages;
     using ServiceBus.Shared.Queue;
@@ -74,7 +76,12 @@
         {
             if (stoppingToken.IsCancellationRequested)
             {
-                _logger.LogError("Cancellation was requested, stopping token.");
+                using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+                using (LogContext.PushProperty("Source", this.GetType().Name))
+                {
+                    _logger.LogError("Cancellation was requested, stopping token.");
+                }
+
                 return MessageProcessResponse.Abandon;
             }
 
@@ -87,7 +94,12 @@
         {
             if (stoppingToken.IsCancellationRequested)
             {
-                _logger.LogError("Cancellation was requested, stopping token.");
+                using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+                using (LogContext.PushProperty("Source", this.GetType().Name))
+                {
+                    _logger.LogError("Cancellation was requested, stopping token.");
+                }
+
                 return MessageProcessResponse.Abandon;
             }
 

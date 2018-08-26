@@ -7,6 +7,7 @@ namespace DataAccumulator
     using System.IO;
 
     using Microsoft.Extensions.Configuration;
+    using Microsoft.WindowsAzure.Storage;
 
     using Serilog;
     using Serilog.Events;
@@ -37,16 +38,19 @@ namespace DataAccumulator
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Production)
             {
-                var connectionString = Configuration.GetConnectionString("MsSqlDbConnection");
+                var connectionString = Configuration.GetConnectionString("LogsConnection");
+                var storageAccount = CloudStorageAccount.Parse(connectionString);
                 Log.Logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(Configuration)
                     .Enrich.FromLogContext()
                     .WriteTo.Console(outputTemplate: outputTemplate)
-                    .WriteTo.MSSqlServer(
-                        connectionString,
-                        "Logs",
-                        LogEventLevel.Warning, 
-                        autoCreateSqlTable: true)
+                    .WriteTo.AzureTableStorageWithProperties(storageAccount,
+                        LogEventLevel.Warning,
+                        storageTableName: "logs-table",
+                        writeInBatches: true,
+                        batchPostingLimit: 100,
+                        period: new TimeSpan(0, 0, 3),
+                        propertyColumns: new[] { "LogEventId", "ClassName", "Source" })
                     .CreateLogger();
             }
             else

@@ -87,7 +87,7 @@ export class FeedbackComponent implements OnInit {
           this.toastrService.error(`Error ocured status: ${error.message}`);
           this.isSubmiting = false;
         });
-    if (await this.toastrService.confirm('Would you want to enter one more feedback?')) {
+    if (await this.toastrService.question('Would you want to enter one more feedback?')) {
       this.feedbackForm.reset();
     } else {
       this.router.navigate(['/user']);

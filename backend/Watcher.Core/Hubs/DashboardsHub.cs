@@ -8,6 +8,8 @@
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Logging;
 
+    using Serilog.Context;
+
     using Watcher.Core.Interfaces;
 
     public class DashboardsHub : Hub
@@ -42,7 +44,12 @@
         /// </returns>
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            _logger.LogError($"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
+            using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+            using (LogContext.PushProperty("Source", exception?.Source))
+            {
+                _logger.LogError($"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
+            }
+
             return base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
         }
 
