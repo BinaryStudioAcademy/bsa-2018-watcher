@@ -223,7 +223,8 @@ export class UserListComponent implements OnInit {
       link: null,
       state: OrganizationInviteState.Pending
     };
-
+    this.invite = invite;
+/*
     this.organizationInvitesService.create(invite).subscribe(
       value => {
         this.toastrService.success('Organization Invite was created');
@@ -232,19 +233,23 @@ export class UserListComponent implements OnInit {
       error => {
         // this.toastrService.error('Organization Invite was not created');
         this.toastrService.error(`Error ocured status: ${error.message}`);
-      });
+      });*/
   }
 
   onSentInviteToEmail() {
     if (this.user.email === null) { return; }
     this.onInvite(this.selectedCompany.id);
+
     this.invite.inviteEmail = this.user.email;
-    this.organizationInvitesService.update(this.invite.id, this.invite).subscribe(
+   /* this.invite.state = OrganizationInviteState.Pending; console.log(this.invite.inviteEmail );
+    this.invite.createdByUserId = this.authService.getCurrentUser().id;
+    this.invite.organizationId = this.selectedCompany.id;*/
+    this.organizationInvitesService.createdAndSend(this.invite).subscribe(
       value => {
-        this.toastrService.success('Organization Invite was updated and sends to email.');
+        this.toastrService.success('Organization Invite was created and sends to email.');
       },
-      err => {
-        this.toastrService.error('Organization Invite was not updated');
+      error => {
+        this.toastrService.error(`Error ocured status: ${error.message}`);
       });
   }
 
