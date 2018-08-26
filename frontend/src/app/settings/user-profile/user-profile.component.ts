@@ -6,6 +6,7 @@ import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { PathService } from '../../core/services/path.service';
+import { UserDto } from '../../shared/models/user-dto.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -110,8 +111,17 @@ export class UserProfileComponent implements OnInit {
   onSubmit() {
     if (this.userForm.valid) {
       this.isUpdating = true;
-      this.userService.update(this.userId, this.user).subscribe(value => {
-
+      const userDto: UserDto = {
+        id: this.user.id,
+        email: this.user.email,
+        displayName: this.user.displayName,
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        bio: this.user.bio,
+        photoURL: this.user.photoURL,
+        photoType: this.user.photoType
+      };
+      this.userService.update(this.userId, userDto).subscribe(value => {
         this.authService.updateCurrentUser(this.user);
         this.toastrService.success('Profile was updated');
         this.isUpdating = false;

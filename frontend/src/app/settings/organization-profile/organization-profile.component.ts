@@ -59,7 +59,6 @@ export class OrganizationProfileComponent implements OnInit {
 
   isUpdating: Boolean = false;
   isInviting: Boolean = false;
-  isCopying: Boolean = false;
   isSending: Boolean = false;
 
   ngOnInit() {
@@ -150,7 +149,6 @@ export class OrganizationProfileComponent implements OnInit {
   }
 
   onCopy() {
-    this.isCopying = true;
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';
@@ -163,7 +161,6 @@ export class OrganizationProfileComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(selBox);
     this.toastrService.success('Invitation link was copied to clipboard');
-    this.isCopying = false;
   }
 
   onImageSelected(upload) {
