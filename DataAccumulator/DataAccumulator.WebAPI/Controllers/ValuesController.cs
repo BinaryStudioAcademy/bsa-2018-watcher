@@ -9,17 +9,40 @@ namespace DataAccumulator.WebAPI.Controllers
 {
     using DataAccumulator.BusinessLayer.Interfaces;
 
+    using Microsoft.Extensions.Logging;
+
     [Route("api/v1/[controller]")]
     public class ValuesController : Controller
     {
+        private readonly ILogger<ValuesController> _logger;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;
         private readonly IServiceBusProvider _serviceBusProvider;
 
-        public ValuesController(IDataAccumulatorRepository<CollectedData> repository,
+        public ValuesController(ILogger<ValuesController> logger, 
+                                IDataAccumulatorRepository<CollectedData> repository,
                                 IServiceBusProvider serviceBusProvider)
         {
+            _logger = logger;
             _repository = repository;
             _serviceBusProvider = serviceBusProvider;
+        }
+
+        [HttpGet("AllInOrder")]
+        public IEnumerable<string> LogAllInOrder()
+        {
+            var bgubE = new EventId(100, "Debug Event 1");
+            var intoE = new EventId(200, "Information Event 1");
+            var warnE = new EventId(300, "Warning Event 1");
+            var errE = new EventId(400, "Error Event 1");
+            var critE = new EventId(500, "Crit Event 1");
+
+
+            _logger.LogDebug(bgubE, "Debug");
+            _logger.LogInformation(intoE, "Information");
+            _logger.LogWarning(warnE, "Warning");
+            _logger.LogError(errE, "Error");
+            _logger.LogCritical(critE, "Crit");
+            return new[] { "value1", "value2" };
         }
 
         // Call an initialization - GET api/v1/values/init
