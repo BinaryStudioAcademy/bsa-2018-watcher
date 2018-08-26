@@ -87,6 +87,7 @@ export class ConversationPanelComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
     this.display = false;
+    this.isCollapse = false;
     this.close.emit();
   }
 
