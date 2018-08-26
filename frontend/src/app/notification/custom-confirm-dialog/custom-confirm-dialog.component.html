@@ -1,4 +1,4 @@
-<p-confirmDialog key="confirm" #confirm>
+<p-confirmDialog class="custom-dialog-container" key="confirm" #confirm>
   <p-footer>
     <i class="fa fa-exclamation-circle fa-4x" style="color:orange"></i>
     <h3>{{confirm.header}}</h3>
@@ -8,11 +8,11 @@
   </p-footer>
 </p-confirmDialog>
 
-<p-confirmDialog key="notice" #notice>
-    <p-footer>
-      <i class="fa fa-exclamation-circle fa-4x" style="color:#007ad9"></i>
-      <h3>{{notice.header}}</h3>
-      <p class="message">{{notice.message}}</p>
-      <button type="button" class="ui-button-info" label="{{notice.acceptLabel}}" pButton (click)="notice.accept()"></button>
-    </p-footer>
-  </p-confirmDialog>
+<p-confirmDialog class="custom-dialog-container" key="notice" #notice>
+  <p-footer>
+    <i class="fa fa-exclamation-circle fa-4x" style="color:#007ad9"></i>
+    <h3>{{notice.header}}</h3>
+    <p class="message">{{notice.message}}</p>
+    <button type="button" class="ui-button-info" label="{{notice.acceptLabel}}" pButton (click)="notice.accept()"></button>
+  </p-footer>
+</p-confirmDialog>

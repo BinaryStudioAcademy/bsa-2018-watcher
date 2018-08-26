@@ -24,6 +24,10 @@ export class OrganizationInvitesService {
     return this.apiService.post(`/${this.ctrlUrl}`, organizationInvite);
   }
 
+  createdAndSend(organizationInvite: OrganizationInvite): Observable<OrganizationInvite> {
+    return this.apiService.post(`/${this.ctrlUrl}/CreatedAndSend`, organizationInvite);
+  }
+
   update(id: number, organization: OrganizationInvite): Observable<boolean> {
     return this.apiService.put(`/${this.ctrlUrl}/${id}`, organization);
   }
