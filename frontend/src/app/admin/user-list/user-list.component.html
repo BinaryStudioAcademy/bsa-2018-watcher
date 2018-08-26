@@ -55,7 +55,7 @@
 
 
 <p-dialog header="Update user" [(visible)]="displayPopup" [modal]="true" [responsive]="true" [width]="500" [minWidth]="350" [minY]="70"
-  [maximizable]="false" [baseZIndex]="10000" ><!--[contentStyle]="{'overflow': 'hidden'}" -->
+  [maximizable]="false" [baseZIndex]="10000" [contentStyle]="{'overflow':'visible'}"><!--[contentStyle]="{'overflow': 'hidden'}" -->
   <div class="ui-g ui-fluid">
     <div class="ui-g-6">
       <form [formGroup]="userForm">
@@ -111,12 +111,12 @@
   </div>
 
   <div class="ui-g ui-fluid">
-    <!--<div class="inline"> </div> appendTo="body"-->
+    <!--<div class="inline"> </div> appendTo="body"  , position:'fixed'-->
     <div class="ui-g-6">
       <p class="fieldOrgs">List of other organizations</p>
     </div>
     <div class="ui-g-4">
-      <p-dropdown  [options]="dropdownCompany" [(ngModel)]="selectedCompany" [style]="{'width':'150px', position:'fixed'}" filter="true"></p-dropdown>
+      <p-dropdown  [options]="dropdownCompany" [(ngModel)]="selectedCompany" [style]="{'width':'150px'}" filter="true"></p-dropdown>
     </div>
     <div class="ui-g-2">
       <button pButton label="Invite" (click)="onSentInviteToEmail()" class="ui-button-primary ui-button-raised"></button>
