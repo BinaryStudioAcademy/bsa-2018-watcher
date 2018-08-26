@@ -48,6 +48,11 @@
                     //    rollOnFileSizeLimit: true,
                     //    shared: true,
                     //    flushToDiskInterval: TimeSpan.FromSeconds(1))
+                    //.WriteTo.MSSqlServer(
+                    //    connectionString,
+                    //    "Logs",
+                    //    LogEventLevel.Warning, 
+                    //    autoCreateSqlTable: true)
                     .WriteTo.AzureTableStorageWithProperties(storageAccount,
                         LogEventLevel.Warning,
                         storageTableName: "logs-table",

@@ -13,6 +13,7 @@ import { FeedbackService } from './services/feedback.service';
 import { ResponseService } from './services/response.service';
 import {DashboardsHub} from './hubs/dashboards.hub';
 import { RoleService } from './services/role.service';
+import { UserOrganizationService } from './services/user-organization.service';
 import { NotificationsHubService } from './hubs/notifications.hub';
 
 @NgModule({
@@ -27,6 +28,7 @@ import { NotificationsHubService } from './hubs/notifications.hub';
     FeedbackService,
     ResponseService,
     RoleService,
+    UserOrganizationService,
     ConfirmationService,
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },

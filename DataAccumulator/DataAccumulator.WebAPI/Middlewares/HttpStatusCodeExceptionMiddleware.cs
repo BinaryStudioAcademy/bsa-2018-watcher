@@ -42,11 +42,14 @@
                 if (context.Response.HasStarted)
                 {
                     var name = "response has already started";
-                    var eventId = new EventId(5009, name);
+                    var eventId = new EventId(509, name);
                     using (LogContext.PushProperty("LogEventId", eventId.Id))
+                    using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+                    using (LogContext.PushProperty("Source", ex.Source))
                     {
-                        _logger.LogError(eventId, "Error: the {name}, the http status code middleware will not be executed.", name);
+                        _logger.LogError(eventId, ex, "Error: the {name}, the http status code middleware will not be executed.", name);
                     }
+
                     throw;
                 }
 
@@ -57,6 +60,8 @@
 
                 var errorEventId = new EventId(500, "An unhandled exception");
                 using (LogContext.PushProperty("LogEventId", errorEventId.Id))
+                using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+                using (LogContext.PushProperty("Source", ex.Source))
                 {
                     _logger.LogError(errorEventId, ex, "An unhandled exception has occurred: " + ex.Message);
                 }
