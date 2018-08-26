@@ -1,4 +1,6 @@
-﻿namespace Watcher.Controllers
+﻿using System;
+
+namespace Watcher.Controllers
 {
     using System.Threading.Tasks;
 
@@ -22,6 +24,9 @@
         /// The Organizations Service service
         /// </summary>
         private readonly IOrganizationInvitesService _service;
+        private readonly IEmailProvider _emailProvider;
+        private readonly IUsersService _usersService;
+        private readonly IOrganizationService _organizationService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrganizationInvitesController"/> class. 
@@ -29,9 +34,12 @@
         /// <param name="service">
         /// Organizations service
         /// </param>
-        public OrganizationInvitesController(IOrganizationInvitesService service)
+        public OrganizationInvitesController(IOrganizationInvitesService service, IEmailProvider emailProvider, IUsersService usersService, IOrganizationService organizationService)
         {
             _service = service;
+            _emailProvider = emailProvider;
+            _usersService = usersService;
+            _organizationService = organizationService;
         }
 
         /// <summary>
@@ -71,6 +79,32 @@
             if (dto == null)
             {
                 return StatusCode(500);
+            }
+
+            return Ok(dto);
+        }
+
+        [Route("CreatedAndSend")]
+        [HttpPost]
+        public virtual async Task<ActionResult<OrganizationInviteDto>> CreatedAndSend([FromBody] OrganizationInviteRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var dto = await _service.CreateEntityAsync(request);
+            if (dto == null)
+            {
+                return StatusCode(500);
+            }
+            if (String.IsNullOrWhiteSpace(request.InviteEmail) != true)
+            {
+                var fromUser = await _usersService.GetEntityByIdAsync(request.CreatedByUserId);
+                var company = await _organizationService.GetEntityByIdAsync(request.OrganizationId);
+                string body = $"User {fromUser.DisplayName} granted you access to the organization {company.Name}. \n ";
+                body += $"Your invite link: https://bsa-watcher.azurewebsites.net/invite/{request.Link}";
+                await _emailProvider.SendMessageOneToOne("invite@watcher.com", "WATCHER Invite", request.InviteEmail, body, "");
             }
 
             return Ok(dto);

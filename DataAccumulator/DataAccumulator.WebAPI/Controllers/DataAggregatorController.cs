@@ -7,14 +7,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataAccumulator.WebAPI.Controllers
 {
+    using Microsoft.Extensions.Logging;
+
+    using Serilog.Context;
+
     [Produces("application/json")]
     [Route("api/v1/dataaggregator")]
-    public class DataAggregatorController : Controller
+    public class DataAggregatorController : ControllerBase
     {
+        private readonly ILogger<DataAggregatorController> _logger;
         private readonly IDataAggregatorService<CollectedDataDto> _dataAggregatorService;
 
-        public DataAggregatorController(IDataAggregatorService<CollectedDataDto> dataAggregatorService)
+        public DataAggregatorController(ILogger<DataAggregatorController> logger,
+                                        IDataAggregatorService<CollectedDataDto> dataAggregatorService)
         {
+            _logger = logger;
             _dataAggregatorService = dataAggregatorService;
         }
 
@@ -37,6 +44,7 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
@@ -57,6 +65,7 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
@@ -73,6 +82,7 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
@@ -94,6 +104,7 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
                 return StatusCode(500);
             }
@@ -114,8 +125,18 @@ namespace DataAccumulator.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                LogError(e);
                 Console.WriteLine(e);
                 return StatusCode(500);
+            }
+        }
+
+        private void LogError(Exception ex)
+        {
+            var eventId = new EventId(500, "An unhandled exception");
+            using (LogContext.PushProperty("LogEventId", eventId.Id))
+            {
+                _logger.LogError(eventId, ex, "An unhandled exception has occurred: " + ex.Message);
             }
         }
     }

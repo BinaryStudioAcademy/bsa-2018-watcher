@@ -35,12 +35,12 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                ObjectId internalId = GetInternalId(clientId);
+                var internalId = GetInternalId(clientId);
 
-                var list = await _context.Datasets
-                    .Find(data => data.ClientId == clientId || data.InternalId == internalId)
-                    .ToListAsync();
-                return list[list.Count - 1];
+                var data = await _context.Datasets
+                               .Find(d => d.ClientId == clientId || d.InternalId == internalId)
+                               .FirstOrDefaultAsync();
+                return data;
             }
             catch (Exception e)
             {

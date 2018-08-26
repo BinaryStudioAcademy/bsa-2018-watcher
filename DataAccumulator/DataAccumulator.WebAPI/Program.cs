@@ -50,7 +50,8 @@ namespace DataAccumulator
                         writeInBatches: true,
                         batchPostingLimit: 100,
                         period: new TimeSpan(0, 0, 3),
-                        propertyColumns: new[] { "LogEventId" }).CreateLogger();
+                        propertyColumns: new[] { "LogEventId", "ClassName", "Source" })
+                    .CreateLogger();
             }
             else
             {
@@ -63,7 +64,7 @@ namespace DataAccumulator
 
             try
             {
-                Log.Information("Starting BSA Watcher Web App...");
+                Log.Error("Starting BSA Data Accumulator...");
 
                 BuildWebHost(args).Run();
 
@@ -71,7 +72,7 @@ namespace DataAccumulator
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly");
+                Log.Fatal(ex, "BSA Data Accumulator Host terminated unexpectedly");
                 return 1;
             }
             finally

@@ -28,10 +28,6 @@
       </div>
     </div>
 
-    <div class="invalid" *ngIf="instanceForm.get('platform').errors && (instanceForm.get('platform').touched ||instanceForm.get('platform').dirty)">
-        <label>Platform is required.</label>
-      </div>
-
     <div class="label">Address:</div>
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-mg-6 ui-lg-6">
@@ -56,8 +52,9 @@
     </div>
 
     <div class="btn-panel">
-      <button pButton type="submit" label="Save" class="ui-button-raised ui-button-success btn-inline-flex" [disabled]="isSaving">
+      <button pButton type="submit" label="&nbsp;" [disabled]="isSaving" class="ui-button-raised ui-button-success btn-inline-flex">
         <p-progressSpinner class="btn-spinner" *ngIf="isSaving" strokeWidth="5"></p-progressSpinner>
+        <span class="ui-button-text" *ngIf="!isSaving">Save</span>
       </button>
     </div>
   </form>
