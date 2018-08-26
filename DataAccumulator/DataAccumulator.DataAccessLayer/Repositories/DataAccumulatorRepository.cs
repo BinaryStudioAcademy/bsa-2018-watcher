@@ -31,6 +31,23 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
+        public Task<List<CollectedData>> GetPercentageInfoByInstanceIdAsync(Guid clientId, int count)
+        {
+            try
+            {
+                return _context.Datasets.Find(data => data.ClientId == clientId)
+                    .SortByDescending(cd => cd.Time)
+                    .Limit(count)
+                    .ToListAsync();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public async Task<CollectedData> GetEntityByInstanceIdAsync(Guid clientId)
         {
             try
@@ -161,23 +178,6 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         public Task<bool> EntityExistsAsync(Guid id)
         {
             return _context.Datasets.Find(entity => entity.Id == id).AnyAsync();
-        }
-
-        public Task<List<CollectedData>> GetPercentageInfoByEntityIdAsync(Guid clientId, int count)
-        {
-            try
-            {
-                return _context.Datasets.Find(data => data.ClientId == clientId)
-                                        .SortByDescending(cd => cd.Time)
-                                        .Limit(count)
-                                        .ToListAsync();
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
         }
 
         // It creates a sample compound index 
