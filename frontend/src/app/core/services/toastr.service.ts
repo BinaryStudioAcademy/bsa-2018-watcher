@@ -32,7 +32,7 @@ export class ToastrService {
     this.message('error', 'Error', message);
   }
 
-  confirm(header = 'Are you sure?', message = '', acceptLabel = 'Yes, delete it!', rejectLabel = 'Cancel') {
+  confirm(header = 'Are you sure?', message = '', acceptLabel = 'Yes!', rejectLabel = 'Cancel') {
     return new Promise((resolve, reject) => {
       this.confirmationService.confirm({
         key: 'confirm',
@@ -56,6 +56,24 @@ export class ToastrService {
         key: 'notice',
         header: header,
         message: message,
+        acceptLabel: acceptLabel,
+        accept: () => {
+          resolve(true);
+        },
+        reject: () => {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  question(header = 'Do you want ... ?', message = '', acceptLabel = 'Yes', rejectLabel = 'No') {
+    return new Promise((resolve, reject) => {
+      this.confirmationService.confirm({
+        key: 'question',
+        header: header,
+        message: message,
+        rejectLabel: rejectLabel,
         acceptLabel: acceptLabel,
         accept: () => {
           resolve(true);

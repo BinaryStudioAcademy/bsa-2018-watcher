@@ -16,3 +16,13 @@
     <button type="button" class="ui-button-info" label="{{notice.acceptLabel}}" pButton (click)="notice.accept()"></button>
   </p-footer>
 </p-confirmDialog>
+
+<p-confirmDialog class="custom-dialog-container" key="question" #question>
+  <p-footer>
+    <i class="fa fa-question-circle fa-4x" style="color:#007ad9"></i>
+    <h3>{{question.header}}</h3>
+    <p class="message">{{question.message}}</p>
+    <button *ngIf="question.rejectVisible" type="button" class="ui-button-secondary" label="{{question.rejectLabel}}" pButton (click)="question.reject()"></button>
+    <button *ngIf="question.acceptVisible" type="button" class="ui-button-info" label="{{question.acceptLabel}}" pButton (click)="question.accept()"></button>
+  </p-footer>
+</p-confirmDialog>
