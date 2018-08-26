@@ -3,8 +3,8 @@
     <i class="fa fa-exclamation-circle fa-4x" style="color:orange"></i>
     <h3>{{confirm.header}}</h3>
     <p class="message">{{confirm.message}}</p>
-    <button type="button" class="ui-button-secondary" label="{{confirm.rejectLabel}}" pButton (click)="confirm.reject()"></button>
-    <button type="button" class="ui-button-danger" label="{{confirm.acceptLabel}}" pButton (click)="confirm.accept()"></button>
+    <button *ngIf="confirm.rejectVisible" type="button" class="ui-button-secondary" label="{{confirm.rejectLabel}}" pButton (click)="confirm.reject()"></button>
+    <button *ngIf="confirm.acceptVisible" type="button" class="ui-button-danger" label="{{confirm.acceptLabel}}" pButton (click)="confirm.accept()"></button>
   </p-footer>
 </p-confirmDialog>
 
