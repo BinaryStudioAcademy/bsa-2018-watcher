@@ -53,20 +53,17 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   ngOnInit(): void {
     this.activeUrl = this.router.url;
-
     this.authService.currentUser.subscribe(
       user => {
         this.user = user;
         this.configureInstances(this.user.lastPickedOrganizationId);
-        this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
-        this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
         this.initMenuItems();
         this.changeMenu();
         this.subscribeRouteChanges();
       }
     );
-
-
+    this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
+    this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
   }
 
   ngAfterContentChecked(): void {

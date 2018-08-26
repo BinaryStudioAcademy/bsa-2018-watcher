@@ -6,11 +6,13 @@
     overflow-x: hidden
     overflow-y: auto
     width: 250px
-    box-shadow: 0 0 5px 0 rgba(0,0,0,.3)
     background: #ffffff
+    border-right: 1px solid #e3e9ea
+
 
 .panelMenuContainer
     top: 60px
+
 
 /deep/ .menu 
     .ui-panelmenu .ui-panelmenu-panel
@@ -28,6 +30,12 @@
         font-size: 1.3em 
         font-weight: 500
 
+    span.ui-menuitem-text
+        width: 200px
+        display: inline-block
+        text-overflow: ellipsis 
+        overflow: hidden
+
     .ui-panelmenu .ui-panelmenu-header > a  
         background-color: #fff
         width: 100%
@@ -36,10 +44,13 @@
         padding: 10px 0 0 15px
         cursor: pointer
         border-top: 1px solid #e3e9ea
+        border-right: 1px solid transparent
+        border-bottom: 1px solid #e3e9ea
         box-sizing: border-box    
-    
+
 .search 
     position: relative
+    display: flex
     padding: .7em
 
 input
@@ -67,3 +78,7 @@ i
 
 /deep/body .ui-panelmenu .ui-panelmenu-content .ui-menuitem .ui-menuitem-link
     padding: 0.714em 1.4em !important
+    span.ui-menuitem-text
+        width: 170px
+
+    
