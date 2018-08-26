@@ -79,7 +79,7 @@
             }
 
             await _dashboardsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ErrorMessage);
-            _logger.LogError("ERROR Message to hub clients was sent.");
+            _logger.LogInformation("Error Message with to Dashboards hub clients was sent.");
             return MessageProcessResponse.Complete;
         }
 
@@ -110,7 +110,7 @@
             }
 
             await _dashboardsHubContext.Clients.Group(dto.ClientId.ToString()).SendAsync("InstanceDataTick", dto);
-            _logger.LogError("DATA Message to hub clients was sent.");
+            _logger.LogInformation("Information Message with instanceData to Dashboards hub clients was sent.");
             return MessageProcessResponse.Complete;
         }
 

@@ -57,7 +57,7 @@
                     var eventId = new EventId((int)httpException.StatusCode);
                     using (LogContext.PushProperty("LogEventId", eventId.Id))
                     {
-                        _logger.LogError(eventId, httpException, "Http Exception was thrown in application");
+                        _logger.LogInformation(eventId, httpException, "Http Exception was thrown in application");
                     }
 
                     // TODO: uncomment in case we need to deserialize error objects on the client

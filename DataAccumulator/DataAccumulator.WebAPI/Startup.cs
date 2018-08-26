@@ -21,7 +21,8 @@ namespace DataAccumulator
 {
     using DataAccumulator.BusinessLayer.Providers;
 
-    using ServiceBus.Shared.Messages;
+    using Microsoft.AspNetCore.Mvc;
+
     using ServiceBus.Shared.Queue;
 
     public class Startup
@@ -53,7 +54,6 @@ namespace DataAccumulator
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
                 });
 
-            services.AddMvc();
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>();
 
@@ -79,18 +79,18 @@ namespace DataAccumulator
 
             var mapper = MapperConfiguration().CreateMapper();
             services.AddTransient(_ => mapper);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
         {
+            app.UseDeveloperExceptionPage();
+            app.UseDatabaseErrorPage();
+
             app.UseCors("CorsPolicy");
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
+            
             app.UseMvc();
 
             app.UseQuartz((quartz) =>
