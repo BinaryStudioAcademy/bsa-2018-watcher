@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataAccumulator.WebAPI.Controllers
 {
+    using System.Diagnostics;
+
     using DataAccumulator.BusinessLayer.Interfaces;
 
     using Microsoft.Extensions.Logging;
 
     [Route("api/v1/[controller]")]
-    public class ValuesController : Controller
+    public class ValuesController : ControllerBase
     {
         private readonly ILogger<ValuesController> _logger;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;
@@ -28,6 +30,7 @@ namespace DataAccumulator.WebAPI.Controllers
         [HttpGet("AllInOrder")]
         public IEnumerable<string> LogAllInOrder()
         {
+            Debug.WriteLine("*************************************************************VALUES**********************************************");
             var bgubE = new EventId(100, "Debug Event 1");
             var intoE = new EventId(200, "Information Event 1");
             var warnE = new EventId(300, "Warning Event 1");

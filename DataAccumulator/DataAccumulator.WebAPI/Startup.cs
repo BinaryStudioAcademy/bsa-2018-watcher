@@ -20,6 +20,7 @@ using Quartz.Spi;
 namespace DataAccumulator
 {
     using DataAccumulator.BusinessLayer.Providers;
+    using DataAccumulator.WebAPI.Extensions;
 
     using Microsoft.AspNetCore.Mvc;
 
@@ -88,6 +89,8 @@ namespace DataAccumulator
         {
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
+
+            app.UseHttpStatusCodeExceptionMiddleware();
 
             app.UseCors("CorsPolicy");
             
