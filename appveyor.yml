@@ -16,7 +16,7 @@ before_build:
   - cmd: cd ../DataAccumulator
   - cmd: dotnet restore --verbosity m
 build_script:
-  # output will be in ./DataAccumulator/DataAccumulator/bin/Release/netcoreapp2.1/publish/
+  # output will be in ./DataAccumulator/DataAccumulator.WebAPI/bin/Release/netcoreapp2.1/publish/
   - cmd: dotnet publish -c Release
   # output will be in ./backend/Watcher/bin/Release/netcoreapp2.1/publish/
   - cmd: cd ../backend
@@ -30,7 +30,7 @@ artifacts:
  - path: '\backend\Watcher\bin\Release\netcoreapp2.1\publish'
    name: api
 
- - path: '\DataAccumulator\DataAccumulator\bin\Release\netcoreapp2.1\publish'
+ - path: '\DataAccumulator\DataAccumulator.WebAPI\bin\Release\netcoreapp2.1\publish'
    name: dataaccumulator
 notifications:
   - provider: Slack
