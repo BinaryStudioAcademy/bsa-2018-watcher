@@ -16,7 +16,6 @@ namespace DataAccumulator.WebAPI.Controllers
     {
         private readonly ILogger<ValuesController> _logger;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;
-        private readonly IServiceBusProvider _serviceBusProvider;
 
         public ValuesController(ILogger<ValuesController> logger, 
                                 IDataAccumulatorRepository<CollectedData> repository,
@@ -24,7 +23,6 @@ namespace DataAccumulator.WebAPI.Controllers
         {
             _logger = logger;
             _repository = repository;
-            _serviceBusProvider = serviceBusProvider;
         }
 
         [HttpGet("AllInOrder")]
