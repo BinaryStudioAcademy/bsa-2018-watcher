@@ -26,7 +26,7 @@
       </div>
       <div class="grid-item">
         <button pButton label="&nbsp;" (click)="onSave()" [disabled]="isSaving" class="ui-button-raised ui-button-success btn-inline-flex">
-          <p-progressSpinner class="btn-spinner" *ngIf="isSaving"></p-progressSpinner>
+          <p-progressSpinner class="btn-spinner" *ngIf="isSaving" strokeWidth="5"></p-progressSpinner>
           <span class="ui-button-text" *ngIf="!isSaving">Update</span>
         </button>
       </div>
