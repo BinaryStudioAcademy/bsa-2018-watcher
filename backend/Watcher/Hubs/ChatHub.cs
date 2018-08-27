@@ -130,7 +130,7 @@ namespace Watcher.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            //RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
 
