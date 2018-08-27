@@ -214,6 +214,7 @@ namespace Watcher.Core.Services
             entity.LastName = request.LastName;
             entity.DisplayName = request.DisplayName;
             entity.Email = request.Email;
+            entity.EmailForNotifications = request.EmailForNotifications;
 
             if (string.IsNullOrWhiteSpace(existingEntity.PhotoURL))
             {
