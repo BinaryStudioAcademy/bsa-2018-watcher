@@ -6,52 +6,36 @@
     </div>
   </div>
 
-  <div *ngIf="selectedNotificationSetting" class="inputs">
-    <div class="grid-container">
-      <div class="grid-item"><span>Type:</span></div>
-      <div class="grid-item">
-        <p-dropdown [options]="dropdown" [(ngModel)]="selectedNotificationSetting"></p-dropdown>
-      </div>
-      <div class="grid-item"><span>Disable:</span></div>
-      <div class="grid-item align-center">
-        <p-inputSwitch [(ngModel)]="selectedNotificationSetting.isDisable"></p-inputSwitch>
-      </div>
-      <div class="grid-item"><span>Mute:</span></div>
-      <div class="grid-item align-center">
-        <p-inputSwitch [disabled]="selectedNotificationSetting.isDisable" [(ngModel)]="selectedNotificationSetting.isMute"></p-inputSwitch>
-      </div>
-      <div class="grid-item"><span>Emailable:</span></div>
-      <div class="grid-item align-center">
-        <p-inputSwitch [disabled]="selectedNotificationSetting.isDisable" [(ngModel)]="selectedNotificationSetting.isEmailable"></p-inputSwitch>
-      </div>
-      <div class="grid-item">
-        <button pButton label="&nbsp;" (click)="onSave()" [disabled]="isSaving" class="ui-button-raised ui-button-success btn-inline-flex">
-          <p-progressSpinner class="btn-spinner" *ngIf="isSaving" strokeWidth="5"></p-progressSpinner>
-          <span class="ui-button-text" *ngIf="!isSaving">Update</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <h3>Rowspan</h3>
   <p-table [value]="notificationSettings">
     <ng-template pTemplate="header">
       <tr>
+        <th>Type</th>
         <th>Disable</th>
         <th>Mute</th>
         <th>Emailable</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+    <ng-template pTemplate="body" let-rowData>
       <tr>
-        <td *ngIf="rowGroupMetadata[rowData.type].index === rowIndex" [attr.rowspan]="rowGroupMetadata[rowData.type].size">
-            {{rowData.type}}
+        <td><b>{{notificationTypes[rowData.type]}}</b></td>
+        <td>
+          <p-checkbox binary="rowData.isDisable" [(ngModel)]="rowData.isDisable" (ngModelChange)="onDisable(rowData.id)"></p-checkbox>
         </td>
-        <td>{{rowData.isDisable}}</td>
-        <td>{{rowData.isMute}}</td>
-        <td>{{rowData.isEmailable}}</td>
+        <td>
+          <p-checkbox binary="rowData.isMute" [(ngModel)]="rowData.isMute" [disabled]="rowData.isDisable"></p-checkbox>
+        </td>
+        <td>
+          <p-checkbox binary="rowData.isEmailable" [(ngModel)]="rowData.isEmailable" [disabled]="rowData.isDisable"></p-checkbox>
+        </td>
       </tr>
     </ng-template>
   </p-table>
+
+  <div class="btn-panel">
+    <button pButton label="&nbsp;" (click)="onSave()" [disabled]="isSaving" class="ui-button-raised ui-button-success btn-inline-flex">
+      <p-progressSpinner class="btn-spinner" *ngIf="isSaving" strokeWidth="5"></p-progressSpinner>
+      <span class="ui-button-text" *ngIf="!isSaving">Update</span>
+    </button>
+  </div>
 
 </div>
