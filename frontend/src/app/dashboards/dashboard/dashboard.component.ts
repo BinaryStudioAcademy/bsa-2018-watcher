@@ -233,7 +233,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.dashboardMenuItems[index] = x;
         this.activeDashboardItem = this.dashboardMenuItems[index];
       } else {
-        this.activeDashboardItem = null;
+        this.activeDashboardItem = undefined;
       }
     }
     this.creation = false;
