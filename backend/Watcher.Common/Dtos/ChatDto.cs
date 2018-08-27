@@ -12,6 +12,8 @@ namespace Watcher.Common.Dtos
 
         public string Name { get; set; }
 
+        public bool IsActive { get; set; }
+
         public int? UnreadMessagesCount { get; set; }
         
         public ChatType Type { get; set; }

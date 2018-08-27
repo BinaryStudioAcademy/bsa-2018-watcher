@@ -28,7 +28,7 @@
         {
             var chats = await _uow.ChatsRepository.GetRangeAsync(
                 include: c => c.Include(x => x.UserChats)
-                               .ThenInclude(x => x.User));
+                               .ThenInclude(x => x.User), filter: chat => chat.IsActive);
 
             var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats);
 
@@ -37,7 +37,7 @@
 
         public async Task<ChatDto> GetEntityByIdAsync(int id)
         {
-            var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
+            var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id && s.IsActive,
                                 include: chats => chats.Include(c => c.CreatedBy)
                                                         .Include(c => c.Messages)
                                                             .ThenInclude(c => c.User)
@@ -55,7 +55,7 @@
 
         public async Task<IEnumerable<ChatDto>> GetEntitiesByUserIdAsync(string id)
         {
-            var chats = await _uow.ChatsRepository.GetChatsByUserId(id);
+            var chats = await _uow.ChatsRepository.GetChatsByUserId(id, chat => chat.IsActive);
             var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats,
                 opts: o => o.AfterMap((src, dest) => dest
                     .ForEach(c =>
@@ -97,6 +97,8 @@
         public async Task<ChatDto> CreateEntityAsync(ChatRequest request)
         {
             var entity = _mapper.Map<ChatRequest, Chat>(request);
+            entity.IsActive = true;
+
             if (entity.Type == ChatType.BetweenUsers)
             {
                 entity.UserChats.Add(new UserChat
@@ -153,7 +155,7 @@
 
         private int CountUnreadedMessagesForUser(string userId, IList<MessageDto> messages)
         {
-            return messages.Where(m => !m.WasRead && m.User.Id != userId).Count();
+            return messages.Count(m => !m.WasRead && m.User.Id != userId);
         }
     }
 }
