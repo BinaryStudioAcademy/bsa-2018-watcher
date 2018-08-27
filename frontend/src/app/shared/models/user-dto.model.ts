@@ -5,6 +5,7 @@ export interface UserDto  {
     lastName: string;
     bio: string;
     email: string;
+    emailForNotifications: string;
     photoURL: string;
     photoType: string;
  }

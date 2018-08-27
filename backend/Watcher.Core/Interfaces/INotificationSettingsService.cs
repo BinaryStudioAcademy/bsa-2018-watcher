@@ -12,6 +12,8 @@
 
         Task<bool> UpdateEntityByIdAsync(NotificationSettingRequest request, int id);
 
+        Task<bool> UpdateEntitiesAsync(IEnumerable<NotificationSettingUpdateRequest> requests);
+
         Task<NotificationSetting> CreateEntityAsync(NotificationSettingRequest request, string userId);
 
     }

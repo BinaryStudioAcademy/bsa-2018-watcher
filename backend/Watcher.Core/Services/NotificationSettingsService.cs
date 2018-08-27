@@ -1,4 +1,6 @@
-﻿namespace Watcher.Core.Services
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -29,6 +31,19 @@
             var dto = _mapper.Map<IEnumerable<NotificationSetting>, IEnumerable<NotificationSettingDto>>(entity);
 
             return dto;
+        }
+
+        public async Task<bool> UpdateEntitiesAsync(IEnumerable<NotificationSettingUpdateRequest> requests)
+        {
+            var entities = _mapper.Map<IEnumerable<NotificationSettingUpdateRequest>, IEnumerable<NotificationSetting>>(requests);
+
+            foreach (NotificationSetting notificationSetting in entities)
+                await _uow.NotificationSettingsRepository.UpdateAsync(notificationSetting);
+
+            // In returns updated entity, you could do smth with it or just leave as it is
+            var result = await _uow.SaveAsync();
+
+            return result;
         }
 
         public async Task<NotificationSetting> CreateEntityAsync(NotificationSettingRequest request, string userId)

@@ -22,6 +22,8 @@
         [Required]
         public string Email { get; set; }
 
+        public string EmailForNotifications { get; set; }
+
         [Required]
         public bool IsActive { get; set; }
 

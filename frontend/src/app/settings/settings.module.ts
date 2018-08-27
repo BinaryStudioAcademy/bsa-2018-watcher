@@ -15,7 +15,8 @@ import { UserPictureComponent } from './user-picture/user-picture.component';
 import { ImageCropperModule } from 'ngx-img-cropper';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
-
+import { TableModule } from 'primeng/table';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   imports: [
@@ -34,7 +35,9 @@ import { FileUploadModule } from 'primeng/fileupload';
     DialogModule,
     FileUploadModule,
     InputMaskModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    TableModule,
+    CheckboxModule
   ],
   declarations: [
     SettingsComponent,

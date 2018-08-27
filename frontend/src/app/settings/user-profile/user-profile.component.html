@@ -56,6 +56,19 @@
 					</div>
 				</div>
 
+				<div class="label">Email for notifications</div>
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12">
+						<div class="ui-inputgroup">
+							<input type="text" formControlName="emailForNotifications" pInputText placeholder="Email for notifications">
+						</div>
+					</div>
+				</div>
+
+				<div class="invalid" *ngIf="userForm.get('emailForNotifications').errors && userForm.get('emailForNotifications').dirty">
+					Email for notifications is invalid.
+				</div>
+
 				<div class="label">Bio</div>
 				<div class="ui-g ui-fluid">
 					<div class="ui-g-12">
