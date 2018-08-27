@@ -15,7 +15,7 @@ export class SystemToastrService {
             {
                 key: 'system-message',
                 life: 8000,
-                severity: 'info',
+                severity: severity,
                 data: notification
             }
         );
@@ -32,7 +32,7 @@ export class SystemToastrService {
     }
 
     send(notification: Notification) {
-        if (!notification || !notification.type) {
+        if (!notification) {
             return;
         }
 

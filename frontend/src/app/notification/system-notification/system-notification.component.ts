@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ChatService } from '../../core/services/chat.service';
 
 @Component({
   selector: 'app-system-notification',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SystemNotificationComponent implements OnInit {
 
-  constructor() { }
+  constructor(private chatService: ChatService) { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  openChat(id) {
+    this.chatService.openChatClick.emit(id);
   }
-
 }
