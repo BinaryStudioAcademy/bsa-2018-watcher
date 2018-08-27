@@ -1,3 +1,4 @@
+
 .header
     background-color: rgb(0,0,0)
     box-sizing: border-box
@@ -106,17 +107,12 @@
 .notifications-popup
     background-color: #FFFFFC
     position: absolute
-
     margin-top: 5px
-
     border-radius: 2px
-
     width: 250px
     height: 200px
     z-index: 99999
-
     overflow: auto
-
     box-shadow: 0 0 10px #D4D4CE
 
 .withoutNotification
@@ -208,3 +204,46 @@
     margin-top: 20px
     display: flexbox
     text-transform: uppercase
+
+/deep/.user-overlay
+    font-size: 15px
+    width: 350px
+    h3
+        margin-bottom: 0
+        margin-top: 10px
+        height: 20px
+
+    .secondary-text
+        font-size: 12px
+
+    .organization
+        margin-top: 8px
+        .fa-fw
+            width: 1em
+            margin-right: 5px
+
+    .logout,
+    .edit
+        margin-top: 5px
+        margin-bottom: 5px
+        margin-left: 20%
+        cursor: pointer
+        text-decoration: none
+        color: black
+        display: inline-block
+        width: 20%
+         
+    .ui-button.ui-button-text-icon-left .ui-button-text,
+        padding: 0
+    .ui-button
+        width: 100%  
+        height: 30px  
+        font-size: 15px
+
+.user-overlay-photo
+    margin-left: 8%
+    margin-top: 15px
+    width: 84%
+    border-radius: 100%
+    vertical-align: middle
+    border: 0 none

@@ -40,7 +40,6 @@ export class EditInstanceComponent implements OnInit {
         this.instanceService.getOne(this.id).subscribe((data: Instance) => {
           if (data) {
             this.instance = data;
-            console.log(this.instance.guidId);
             this.instanceForm = this.getInstanceForm(this.instance);
           }
         });
@@ -99,9 +98,6 @@ export class EditInstanceComponent implements OnInit {
             dashboards: this.instance.dashboards,
             organization: this.instance.organization
           };
-          console.log('asdsadsa');
-          console.log('GUID');
-          console.log(this.instance.guidId);
           this.instanceService.instanceEdited.emit(updatedInstance);
           this.isSaving = false;
           this.router.navigate([`/user/instances/${updatedInstance.id}/${this.instance.guidId}/dashboards`]);
