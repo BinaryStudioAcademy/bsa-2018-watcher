@@ -21,6 +21,12 @@ import {MarketChartComponent} from './08_market_chart/market-chart.component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import { PercentageBarChartComponent } from './10_percentage-bar-chart/percentage-bar-chart.component';
 import { PercentageLineChartComponent } from './11_percentage-line-chart/percentage-line-chart.component';
+import {NgxUIModule} from '@swimlane/ngx-ui';
+import {ChartDashboardComponent} from './charts/chart-dashboard/chart-dashboard.component';
+import {ChartBuilderComponent} from './charts/chart-builder/chart-builder.component';
+import {ChartComponent} from './charts/chart/chart.component';
+import {DataService} from './services/data.service';
+import {ChartsComponent} from './charts/charts.component';
 
 
 @NgModule({
@@ -37,7 +43,10 @@ import { PercentageLineChartComponent } from './11_percentage-line-chart/percent
     ToastModule,
     MessageModule,
     ReactiveFormsModule,
+
+    NgxUIModule,
     NgxChartsModule,
+    // NgxDnDModule,
 
     DashboardRoutingModule,
     DropdownModule
@@ -55,8 +64,14 @@ import { PercentageLineChartComponent } from './11_percentage-line-chart/percent
     DonutChartComponent,
     MarketChartComponent,
     PercentageBarChartComponent,
-    PercentageLineChartComponent
+    PercentageLineChartComponent,
+
+    ChartsComponent,
+    ChartComponent,
+    ChartBuilderComponent,
+    ChartDashboardComponent
   ],
+  providers: [DataService],
   exports: []
 })
 export class DashboardsModule {

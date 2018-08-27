@@ -21,6 +21,8 @@
 
         Task<bool> UpdateEntityByIdAsync(NotificationUpdateRequest request, int id);
 
+        Task<bool> UpdateEntitiesAsync(IEnumerable<NotificationUpdateRequest> requests);
+
         Task<bool> DeleteEntityByIdAsync(int id);
     }
 }

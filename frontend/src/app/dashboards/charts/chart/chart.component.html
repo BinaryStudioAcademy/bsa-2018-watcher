@@ -1,0 +1,314 @@
+<h1>{{chart.title}}</h1>
+
+<ngx-charts-bar-vertical
+  *ngIf="chartType.name === 'bar-vertical'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [gradient]="chart.gradient"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [showGridLines]="chart.showGridLines"
+  (select)="onSelect($event)"
+  (deactivate)="onSelect()">
+</ngx-charts-bar-vertical>
+
+<ngx-charts-bar-horizontal
+  *ngIf="chartType.name === 'bar-horizontal'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [gradient]="chart.gradient"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [showGridLines]="chart.showGridLines"
+  (select)="onSelect($event)"
+  (deactivate)="onSelect()">
+</ngx-charts-bar-horizontal>
+
+<ngx-charts-pie-chart
+  *ngIf="chartType.name === 'pie'"
+  [scheme]="chart.colorScheme"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [explodeSlices]="false"
+  [labels]="chart.showXAxisLabel"
+  [doughnut]="false"
+  [gradient]="chart.gradient"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  (select)="onSelect($event)"
+  (deactivate)="onSelect()">
+</ngx-charts-pie-chart>
+
+<ngx-charts-pie-grid
+  *ngIf="chartType.name === 'pie-grid'"
+  [scheme]="chart.colorScheme"
+  [results]="data"
+  (select)="onSelect($event)"
+  (deactivate)="onSelect()">
+</ngx-charts-pie-grid>
+
+<ngx-charts-tree-map
+  *ngIf="chartType.name === 'tree-map'"
+  [scheme]="chart.colorScheme"
+  [results]="data"
+  [gradient]="chart.gradient"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  (select)="onSelect($event)"
+  (deactivate)="onSelect()">
+</ngx-charts-tree-map>
+
+<ngx-charts-number-card
+  *ngIf="chartType.name === 'number-cards'"
+  [scheme]="chart.colorScheme"
+  [results]="data"
+  (select)="onSelect($event)"
+  (deactivate)="onSelect()">
+</ngx-charts-number-card>
+
+<ngx-charts-gauge
+  *ngIf="chartType.name === 'guage'"
+  [scheme]="chart.colorScheme"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [units]="chart.yAxisLabel"
+  (select)="onSelect($event)"
+  (deactivate)="onSelect()">
+</ngx-charts-gauge>
+
+<ngx-charts-bar-vertical-2d
+  *ngIf="chartType.name === 'bar-vertical-2d'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [gradient]="chart.gradient"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [showGridLines]="chart.showGridLines"
+  xxxbarPadding="chart.barPadding"
+  xxxgroupPadding="chart.groupPadding"
+  [roundDomains]="chart.roundDomains">
+</ngx-charts-bar-vertical-2d>
+
+<ngx-charts-bar-horizontal-2d
+  *ngIf="chartType.name === 'bar-horizontal-2d'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [gradient]="chart.gradient"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [showGridLines]="chart.showGridLines"
+  [roundDomains]="chart.roundDomains">
+</ngx-charts-bar-horizontal-2d>
+<ngx-charts-bar-vertical-stacked
+  *ngIf="chartType.name === 'bar-vertical-stacked'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [gradient]="chart.gradient"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [showGridLines]="chart.showGridLines"
+  [roundDomains]="chart.roundDomains">
+</ngx-charts-bar-vertical-stacked>
+<ngx-charts-bar-horizontal-stacked
+  *ngIf="chartType.name === 'bar-horizontal-stacked'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [gradient]="chart.gradient"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [showGridLines]="chart.showGridLines"
+  [roundDomains]="chart.roundDomains">
+</ngx-charts-bar-horizontal-stacked>
+<ngx-charts-bar-vertical-normalized
+  *ngIf="chartType.name === 'bar-vertical-normalized'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [gradient]="chart.gradient"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [showGridLines]="chart.showGridLines"
+  [roundDomains]="chart.roundDomains">
+</ngx-charts-bar-vertical-normalized>
+<ngx-charts-bar-horizontal-normalized
+  *ngIf="chartType.name === 'bar-horizontal-normalized'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [gradient]="chart.gradient"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [showGridLines]="chart.showGridLines"
+  [roundDomains]="chart.roundDomains">
+</ngx-charts-bar-horizontal-normalized>
+<ngx-charts-polar-chart
+  *ngIf="chartType.name === 'polar-chart'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [gradient]="chart.gradient"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [autoScale]="chart.autoScale"
+  [showGridLines]="chart.showGridLines"
+  [rangeFillOpacity]="chart.rangeFillOpacity"
+  [roundDomains]="chart.roundDomains"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [curve]="chart.curveClosed"
+  [showSeriesOnHover]="chart.showSeriesOnHover">
+</ngx-charts-polar-chart>
+
+<ngx-charts-line-chart
+  *ngIf="chartType.name === 'line-chart'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [gradient]="chart.gradient"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [autoScale]="chart.autoScale"
+  [showGridLines]="chart.showGridLines"
+  [curve]="chart.curve"
+  [rangeFillOpacity]="chart.rangeFillOpacity"
+  [roundDomains]="chart.roundDomains"
+  [tooltipDisabled]="chart.tooltipDisabled">
+</ngx-charts-line-chart>
+
+<ngx-charts-heat-map
+  *ngIf="chartType.name === 'heat-map'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [results]="data"
+  [legend]="chart.showLegend"
+  [gradient]="chart.gradient"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [tooltipDisabled]="chart.tooltipDisabled">
+</ngx-charts-heat-map>
+
+<!-- ngx-charts-bubble-chart
+  *ngIf="chartType.name === 'bubble-chart'"
+  class="chart-container"
+  [results]="data"
+  [showGridLines]="chart.showGridLines"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [autoScale]="chart.autoScale"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [roundDomains]="chart.roundDomains"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [minRadius]="3"
+  [maxRadius]="20">
+</ngx-charts-bubble-chart -->
+
+<div class="svg-saver-container">
+  Download:
+  <ngx-button (click)="svgSaver.asSvg()">SVG</ngx-button>
+  <ngx-button (click)="svgSaver.asPng()">PNG</ngx-button>
+</div>
+
+

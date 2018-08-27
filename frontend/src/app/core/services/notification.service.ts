@@ -19,4 +19,8 @@ export class NotificationService {
   public update(id: number, notification: Notification): Observable<Object> {
     return this.apiService.put(`/${this.ctrlUrl}/${id}`, notification);
   }
+
+  public updateAll(notifications: Notification[]): Observable<Object> {
+    return this.apiService.put(`/${this.ctrlUrl}`, notifications);
+  }
 }

@@ -12,8 +12,6 @@ hr
 
 /deep/ .ui-tabmenuitem
   #lastTab
-    /deep/ .ui-state-active
-      background-color: red !important
     /deep/ .ui-menuitem-text
       color: #007ad9
     /deep/ .ui-menuitem-icon
@@ -21,11 +19,10 @@ hr
       margin-left: 11px
   #lastTab a:active
     color: red !important
-
-/deep/.ui-tabmenuitem.ui-state-active 
+/deep/ .ui-tabmenuitem.ui-state-active
   #lastTab
-  /deep/.ui-menuitem-icon
-    color: white
+    /deep/ .ui-menuitem-icon
+      color: white
 
 nav
   ul
