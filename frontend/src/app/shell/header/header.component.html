@@ -60,12 +60,25 @@
     <button #btn type="button" pButton icon="fa fa-sitemap" (click)="org.toggle($event)"></button>
     <app-add-new-organization [(display)]="displayAddNewOrganization" (displayChange)="onDisplayChange($event)"></app-add-new-organization>
 
-
-    <p-tieredMenu #user [model]="userItems" [popup]="true"></p-tieredMenu>
-    <a class="user-info" (click)="user.toggle($event)">
+    <a class="user-info" (click)="op1.toggle($event)">
       <span>{{ currentUser?.displayName }}</span>
       <img src="{{currentUser?.photoURL}}" class="user-photo" alt="" />
-      <i class="fa fa-sort-desc"></i>
     </a>
+
+    <p-overlayPanel #op1 styleClass="user-overlay">
+      <div class="ui-g">
+          <div class="ui-g-4">
+            <img src="{{currentUser?.photoURL}}" class="user-overlay-photo" alt="User photo" />
+          </div>
+          <div class="ui-g-8">
+            <h3>{{ currentUser?.displayName }}</h3>
+            <p class="secondary-text">{{ currentUser?.email }}</p>
+            <p class="secondary-text">{{ currentUser?.role.name }}</p>
+            <p class="organization"><i class="fa fa-fw fa-building-o"></i>{{currentUser?.lastPickedOrganization?.name}}</p>
+          </div>
+          <a class="edit" (click)="userpage()"><i class="fa fa-edit"></i>edit</a>
+          <a class="logout" (click)="logout()"><i class="fa fa-fw fa-sign-out"></i>logout</a>
+      </div>
+  </p-overlayPanel>
   </div>
 </div>
