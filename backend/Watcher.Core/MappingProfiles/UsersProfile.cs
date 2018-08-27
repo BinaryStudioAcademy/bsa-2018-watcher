@@ -37,6 +37,7 @@
                 .ForMember(d => d.Feedbacks, o => o.UseValue(new List<FeedbackDto>()))
                 .ForMember(d => d.Messages, o => o.UseValue(new List<MessageDto>()))
                 .ForMember(d => d.PhotoURL, o => o.MapFrom(s => s.PhotoURL))
+                .ForMember(d => d.EmailForNotifications, o => o.MapFrom(s => s.EmailForNotifications))
                 .ForMember(d => d.NotificationSettings, o => o.MapFrom(s => s.NotificationSettings))
                 .ForMember(d => d.Notifications, o => o.MapFrom(s => s.Notifications))
                 .ForMember(d => d.Responses, o => o.UseValue(new List<ResponseDto>()));
@@ -67,6 +68,7 @@
                 .ForMember(d => d.CreatedAt, o => o.UseValue(DateTime.UtcNow))
                 .ForMember(d => d.IsActive, o => o.UseValue(true))
                 .ForMember(d => d.RoleId, o => o.UseValue(2))
+                .ForMember(d => d.EmailForNotifications, o => o.MapFrom(s => s.Email))
                 .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
                 .ForMember(d => d.UserOrganizations, o => o.UseValue(new List<UserOrganization>()))
                 .ForMember(d => d.CreatedOrganizations, o => o.UseValue(new List<Organization>()));
