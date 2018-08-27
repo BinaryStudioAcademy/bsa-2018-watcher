@@ -116,14 +116,14 @@ namespace Watcher.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            //using (LogContext.PushProperty("ClassName", this.GetType().FullName))
-            //using (LogContext.PushProperty("Source", this.GetType().Name))
-            //{
-            //    foreach (var claim in Context.User.Claims)
-            //    {
-            //        _logger.LogError($"Claims {claim.Type}, {claim.Value}");
-            //    }
-            //}
+            using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+            using (LogContext.PushProperty("Source", this.GetType().Name))
+            {
+                foreach (var claim in Context.User.Claims)
+                {
+                    _logger.LogError($"Claims {claim.Type}, {claim.Value}");
+                }
+            }
             AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             await base.OnConnectedAsync();
         }
