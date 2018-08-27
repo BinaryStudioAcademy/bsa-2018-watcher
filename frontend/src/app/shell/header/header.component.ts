@@ -31,6 +31,7 @@ export class HeaderComponent implements OnInit {
   isNotificationShow: boolean;
 
   currentUser: User;
+  currentOrganizationName: string;
 
   userItems: MenuItem[];
   adminItems: MenuItem[];
@@ -136,24 +137,17 @@ export class HeaderComponent implements OnInit {
     this.notificationsHubService.connectToSignalR();
   }
 
-  ngOnInit() {
-    this.userItems = [
-      /* {
-         label: 'Admin',
-         icon: 'fa fa-fw fa-user',
-         routerLink: ['/admin/organization-list'],
-       },*/
-      {
-        label: 'Logout',
-        icon: 'fa fa-fw fa-sign-out',
-        command: (onclick) => {
-          if (this.authService.isLoggedIn()) {
-            this.authService.logout();
-          }
-        }
-      }
-    ];
+  logout(): void {
+    if (this.authService.isLoggedIn()) {
+      this.authService.logout();
+    }
+  }
 
+  userpage(): void {
+    this.router.navigate(['/user/settings/user-profile']);
+  }
+
+  ngOnInit() {
     this.adminItems = [{
       label: 'Organizations',
       icon: 'fa fa-fw fa-list',
@@ -204,10 +198,7 @@ export class HeaderComponent implements OnInit {
         label: element.name,
         id: element.id.toString(),
         icon: 'fa fa-fw fa-building',
-        command: (onclick) => {
-          this.chengeLastPicOrganizations(element);
-          this.router.navigate([`/user/instances`]);
-        },
+        command: (onclick) => { this.chengeLastPicOrganizations(element); },
         styleClass: (element.id === this.currentUser.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
         disabled: (element.id === this.currentUser.lastPickedOrganizationId)
       });
@@ -217,6 +208,7 @@ export class HeaderComponent implements OnInit {
       icon: 'fa fa-fw fa-plus',
       command: (onclick) => { this.addNewOrganization(); },
     });
+
   }
 
   isAdmin() {
