@@ -53,6 +53,7 @@ export class UserProfileComponent implements OnInit {
   public userForm = this.fb.group({
     displayName: new FormControl({ value: '', disabled: true }, Validators.required),
     firstName: new FormControl({ value: '', disabled: true }, Validators.required),
+    emailForNotifications: new FormControl({ value: '', disabled: true }, Validators.email),
     lastName: new FormControl({ value: '', disabled: true }, Validators.required),
     bio: new FormControl({ value: '', disabled: true })
   });
@@ -114,6 +115,7 @@ export class UserProfileComponent implements OnInit {
       const userDto: UserDto = {
         id: this.user.id,
         email: this.user.email,
+        emailForNotifications: this.user.emailForNotifications,
         displayName: this.user.displayName,
         firstName: this.user.firstName,
         lastName: this.user.lastName,
@@ -121,6 +123,8 @@ export class UserProfileComponent implements OnInit {
         photoURL: this.user.photoURL,
         photoType: this.user.photoType
       };
+      // tslint:disable-next-line:no-debugger
+      debugger;
       this.userService.update(this.userId, userDto).subscribe(value => {
         this.authService.updateCurrentUser(this.user);
         this.toastrService.success('Profile was updated');

@@ -28,6 +28,7 @@
             findEntity.LastName = entity.LastName;
             findEntity.DisplayName = entity.DisplayName;
             findEntity.Email = entity.Email;
+            findEntity.EmailForNotifications = entity.EmailForNotifications;
             findEntity.PhotoURL = entity.PhotoURL;
 
             return findEntity;
