@@ -124,7 +124,7 @@ namespace Watcher.Hubs
                     _logger.LogError($"Claims {claim.Type}, {claim.Value}");
                 }
             }
-            AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            //AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
