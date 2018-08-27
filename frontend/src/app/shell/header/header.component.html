@@ -9,7 +9,7 @@
 
     <div class="notifications-block" appClickOutside (clickOutside)="close()">
       <div class="toolbar-item">
-        <button #btn type="button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
+        <button #btn type="button" id="bell-button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
         <span *ngIf="notificationsNumber !== 0" class="topbar-badge">{{ notificationsNumber }}</span>
       </div>
 
