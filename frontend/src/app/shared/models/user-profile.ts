@@ -1,5 +1,6 @@
 export interface UserProfile {
     email: string | null;
+    emailForNotifications: string | null;
     first_name?: string | null;
     last_name?: string | null;
     given_name?: string | null;
