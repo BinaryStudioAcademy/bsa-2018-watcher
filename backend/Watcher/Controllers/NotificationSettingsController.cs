@@ -87,6 +87,23 @@ namespace Watcher.Controllers
             return NoContent();
         }
 
+        [HttpPut]
+        public virtual async Task<ActionResult> Update([FromBody] IEnumerable<NotificationSettingUpdateRequest> requests)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _service.UpdateEntitiesAsync(requests);
+            if (!result)
+            {
+                return StatusCode(500);
+            }
+
+            return NoContent();
+        }
+
         /// <summary>
         /// Delete Sample
         /// </summary>

@@ -15,6 +15,10 @@ export class NotificationSettingsService {
     return this.apiService.put(`/${this.ctrlUrl}/${id}`, entity);
   }
 
+  public updateAll(entities: NotificationSetting[]): Observable<Object> {
+    return this.apiService.put(`/${this.ctrlUrl}`, entities);
+  }
+
   public getByUserId(userId: string): Observable<NotificationSetting[]> {
     return this.apiService.get(`/${this.ctrlUrl}/${userId}`) as Observable<NotificationSetting[]>;
   }
