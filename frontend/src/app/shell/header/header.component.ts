@@ -214,6 +214,10 @@ export class HeaderComponent implements OnInit {
     return false;
   }
 
+  redirectToAdminPage() {
+    this.router.navigate(['/admin/organization-list']);
+  }
+
   onDisplayChange(event: boolean) {
     this.displayAddNewOrganization = event;
   }

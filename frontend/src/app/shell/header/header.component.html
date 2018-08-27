@@ -66,9 +66,9 @@
           </div>
           <div class="ui-g-8">
             <h3>{{ currentUser?.displayName }}</h3>
-            <p>{{ currentUser?.email }}</p>
-            <p>{{currentUser?.lastPickedOrganization?.name}}</p>
-            <button type="button" pButton class="ui-button-secondary" icon="fa fa-fw fa-sign-out" label="logout" (click)="logout()">logout</button>
+            <p class="email">{{ currentUser?.email }}</p>
+            <p class="organization"><i class="fa fa-fw fa-building-o"></i>{{currentUser?.lastPickedOrganization?.name}}</p>
+            <button type="button" pButton class="ui-button-secondary logout" icon="fa fa-fw fa-sign-out" label="logout" (click)="logout()"></button>
           </div>
       </div>
   </p-overlayPanel>
