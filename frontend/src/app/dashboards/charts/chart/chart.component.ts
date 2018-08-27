@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, EventEmitter, Output, HostBinding, ViewEncapsulation} from '@angular/core';
 import * as SvgSaver from 'svgsaver';
-import {Universe, Chart, Filter, Data, Query} from '../models/data.models';
+import { CustomChart, CustomData} from '../models';
 
 const EMPTY = [];
 
@@ -11,23 +11,23 @@ const EMPTY = [];
   encapsulation: ViewEncapsulation.None
 })
 export class ChartComponent implements OnInit {
-  @Output() select: EventEmitter<{ chart: Chart, value?: any }> = new EventEmitter();
+  @Output() select: EventEmitter<{ chart: CustomChart, value?: any }> = new EventEmitter();
 
-  @Input() chart: Chart;
+  @Input() chart: CustomChart;
   @Input() chartType: any;
-  @Input() data: Data[];
+  @Input() data: CustomData[];
 
   svgSaver = new SvgSaver();
 
-  @Input() set activeEntries(value: Data[]) {
+  @Input() set activeEntries(value: CustomData[]) {
     this._activeEntries = value;
   }
 
-  get activeEntries(): Data[] {
+  get activeEntries(): CustomData[] {
     return this.hasActiveEntries ? this._activeEntries : EMPTY;
   }
 
-  private _activeEntries: Data[];
+  private _activeEntries: CustomData[];
 
   @HostBinding('class.has-active-entries')
   get hasActiveEntries() {
@@ -40,7 +40,7 @@ export class ChartComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSelect(data: Data) {
+  onSelect(data: CustomData) {
     if (data) {
       const value = typeof data === 'object' ? data.name : data;
       if (this.chart.xFilter) {

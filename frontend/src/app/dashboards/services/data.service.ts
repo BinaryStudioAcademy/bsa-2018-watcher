@@ -2,7 +2,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import * as universe from 'universe';
 import * as papaparse from 'papaparse';
 import { nest } from 'd3-collection';
-import {Universe, Chart, Filter, Data, Query } from '../charts/models/data.models';
+import {Universe, CustomData, CustomQuery } from '../charts/models';
+import {Nameable} from '../charts/models';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import {Universe, Chart, Filter, Data, Query } from '../charts/models/data.model
 export class DataService {
 
   private _dataText: string;
-  private _parsed: {data: Data[], errors: any[], meta: any};
+  private _parsed: {data: CustomData[], errors: any[], meta: any};
 
   universeUpdated: EventEmitter<Universe> = new EventEmitter();
 
@@ -18,7 +19,7 @@ export class DataService {
 
   dataUniverse: Universe;
 
-  get rawData(): Data[] {
+  get rawData(): CustomData[] {
     return this._parsed.data;
   }
 
@@ -39,7 +40,7 @@ export class DataService {
 
   constructor() { }
 
-  async updateData(dataText: string): Promise<Data[]> {
+  async updateData(dataText: string): Promise<CustomData[]> {
     this._parsed = papaparse.parse(dataText, {
       header: true,
       dynamicTyping: true,
@@ -57,7 +58,7 @@ export class DataService {
     return this.rawData;
   }
 
-  async createQuery(groupBy: string, valueKey: string, aggragate = 'sum'): Promise<Query> {
+  async createQuery(groupBy: string, valueKey: string, aggragate = 'sum'): Promise<CustomQuery> {
     let select: any = { $count: true };
     aggragate = '$' + aggragate;
 
@@ -76,7 +77,7 @@ export class DataService {
     });
   }
 
-  getChartSeriesFromQuery(query: Query, yKey: string = 'count', aggragate = 'sum'): Data[] {
+  getChartSeriesFromQuery(query: CustomQuery, yKey: string = 'count', aggragate = 'sum'): CustomData[] {
     let data: any = query.data.map(d => {
       let value =  d.value[yKey];
       if (typeof value === 'object') {
@@ -93,7 +94,7 @@ export class DataService {
     if (data.length > 0 && Array.isArray(data[0].name)) {
       // @ts-ignore
       data = nest()
-        .key(datum => (datum as Nameble).name[0])
+        .key(datum => (datum as Nameable).name[0])
         .entries(data)
         .map(d => {
           const series = d.values.map(dd => {
@@ -111,8 +112,4 @@ export class DataService {
 
     return data;
   }
-}
-
-export interface Nameble {
-  name: string[];
 }

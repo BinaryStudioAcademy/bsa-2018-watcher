@@ -3,13 +3,10 @@ import {colorSets} from '@swimlane/ngx-charts/release/utils/color-sets';
 import * as shape from 'd3-shape';
 import * as chroma from 'chroma-js';
 
-// import {ChartType, Chart, Filter, Data, Query} from '../data.models';
-// import {DataService} from '../data.service';
-import {chartTypes} from './chartTypes';
-import {Chart, ChartType, Data} from '../models/data.models';
+import {CustomChart, CustomChartType, CustomData} from '../models';
 import {DataService} from '../../services/data.service';
-import {toCapitalizedWords} from '../models/utils';
-// import {toCapitalizedWords} from '../utils';
+import {toCapitalizedWords} from '../models';
+import {customChartTypes} from './customChartTypes';
 
 const defaultOptions = {
   view: undefined,
@@ -32,7 +29,7 @@ const defaultOptions = {
   showSeriesOnHover: true,
   curve: shape.curveLinear,
   curveClosed: shape.curveCardinalClosed
-} as Chart;
+} as CustomChart;
 
 @Component({
   selector: 'app-chart-builder',
@@ -40,10 +37,10 @@ const defaultOptions = {
   styleUrls: ['./chart-builder.component.sass']
 })
 export class ChartBuilderComponent implements OnInit {
-  chartTypes = chartTypes;
+  chartTypes = customChartTypes;
 
   dataDims: string[] = [null, null, null, null, 'count'];
-  chartOptions: Chart;
+  chartOptions: CustomChart;
   colors: string;
   colorsRight: string;
   steps: number;
@@ -53,14 +50,14 @@ export class ChartBuilderComponent implements OnInit {
   lightnessRight: boolean;
   diverging: boolean;
   theme: string;
-  chartType: ChartType = chartTypes[0];
+  chartType: CustomChartType = customChartTypes[0];
 
-  data: Data[] = [];
+  data: CustomData[] = [];
   headerValues: any[] = [];
 
   aggragates = ['count', 'sum', 'avg', 'max', 'min'];
 
-  @Output() addChart: EventEmitter<Chart> = new EventEmitter();
+  @Output() addChart: EventEmitter<CustomChart> = new EventEmitter();
 
   get hasChartSelected(): boolean {
     return this.chartType && !!this.chartType.name;
@@ -124,7 +121,7 @@ export class ChartBuilderComponent implements OnInit {
   }
 
   clearAll(): any {
-    this.chartType = chartTypes[0];
+    this.chartType = customChartTypes[0];
     this.theme = 'dark';
     this.colors = '#a8385d,#7aa3e5,#a27ea8,#aae3f5,#adcded,#a95963,#8796c0,#7ed3ed,#50abcc,#ad6886';
     this.colorsRight = 'darkred, deeppink, orange, lightyellow';
@@ -135,7 +132,7 @@ export class ChartBuilderComponent implements OnInit {
     this.lightnessRight = false;
     this.bezier = false;
     this.lightness = false;
-    this.chartOptions = {...defaultOptions} as Chart;
+    this.chartOptions = {...defaultOptions} as CustomChart;
     return this.updateColorScheme();
   }
 
@@ -153,7 +150,7 @@ export class ChartBuilderComponent implements OnInit {
     return this.addChart.emit(chart);
   }
 
-  setChartType(chartType: ChartType): void {
+  setChartType(chartType: CustomChartType): void {
     this.chartType = chartType;
     this.dataDims = chartType.dimLabels.map((l, i) => l ? this.dataDims[i] : null);
     return this.setChartLabels();

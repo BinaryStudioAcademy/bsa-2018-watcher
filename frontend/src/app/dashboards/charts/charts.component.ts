@@ -3,9 +3,13 @@ import { colorSets } from '@swimlane/ngx-charts/release/utils/color-sets';
 import SvgSaver from 'svgsaver';
 
 import { TabsComponent, TabComponent } from '@swimlane/ngx-ui';
-import {Chart, Data, Filter, Query} from './models/data.models';
-import {toCapitalizedWords} from './models/utils';
-import {gapminder} from './models/data';
+import {
+  CustomChart,
+  CustomData,
+  Filter,
+  CustomQuery,
+  gapminder,
+  toCapitalizedWords} from './models';
 import {DataService} from '../services/data.service';
 
 @Component({
@@ -15,7 +19,7 @@ import {DataService} from '../services/data.service';
   encapsulation: ViewEncapsulation.None
 })
 export class ChartsComponent implements OnInit {
-  charts: Chart[] = [];
+  charts: CustomChart[] = [];
   filters: Filter[] = [];
 
   @ViewChild('tabs') tabs: TabsComponent;
@@ -24,7 +28,7 @@ export class ChartsComponent implements OnInit {
 
   _dataText = ' ';
   errors: any[] = [];
-  rawData: Data[] = [];
+  rawData: CustomData[] = [];
 
   get dataText(): string {
     return this._dataText || ' ';
@@ -73,7 +77,7 @@ export class ChartsComponent implements OnInit {
     this.filters = [];
   }
 
-  async addChartToDashboard(chart: Chart) {
+  async addChartToDashboard(chart: CustomChart) {
     this.charts.push(chart);
 
     // todo: assumes single series chart
@@ -104,7 +108,7 @@ export class ChartsComponent implements OnInit {
     this._dataText = value;
   }
 
-  private addFilter(query: Query): Filter {
+  private addFilter(query: CustomQuery): Filter {
     const key = query.column.key;
     let filter = this.filters.find(c => c.key === key);
     if (!filter) {

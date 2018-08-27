@@ -1,14 +1,12 @@
-// import { toCapitalizedWords } from '../utils';
+import {CustomChartType} from '../models';
 
-import {ChartType} from '../models/data.models';
-
-function createChartType({title, ...obj}): ChartType {
+function createChartType({title, ...obj}): CustomChartType {
   return {
     title,
     name: titleToName(title),
     dimLabels: ['Group by', 'Name', 'Value', null],
     ...obj
-  } as ChartType;
+  } as CustomChartType;
 
   function titleToName(s: string) {
     return s.toLowerCase().replace(/\ /g, '-');
@@ -84,7 +82,7 @@ const lineChartLables = ([group, name, value, value2, agg]) => {
 };
 
 
-export const chartTypes = [
+export const customChartTypes = [
   createChartType({
     title: 'Bar Vertical',
     dimLabels: singleDimLables,

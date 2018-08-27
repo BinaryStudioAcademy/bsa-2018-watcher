@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, NgZone } from '@angular/core';
-import { Universe, Chart, Filter, Data, Query } from '../models/data.models';
+import { CustomChart, Filter} from '../models';
 import {DataService} from '../../services/data.service';
 
 @Component({
@@ -9,7 +9,7 @@ import {DataService} from '../../services/data.service';
 })
 export class ChartDashboardComponent implements OnInit {
 
-  @Input() charts: Chart[] = [];
+  @Input() charts: CustomChart[] = [];
   @Input() filters: Filter[] = [];
 
   constructor(private ngZone: NgZone, private dataService: DataService) { }
