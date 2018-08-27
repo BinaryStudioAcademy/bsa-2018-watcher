@@ -78,6 +78,13 @@ namespace Watcher.Core.Services
 
             var dto = _mapper.Map<Message, MessageDto>(entity);
 
+            await _notificationService.CreateEntityAsync(new NotificationDto()
+            {
+                CreatedAt = DateTime.Now,
+                Text = "Halo",
+                UserId = request.UserId
+            }, NotificationType.Warning);
+
             return dto;
         }
 
