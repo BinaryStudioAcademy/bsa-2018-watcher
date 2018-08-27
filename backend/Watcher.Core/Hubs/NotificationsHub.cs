@@ -24,13 +24,13 @@
 
         public override Task OnConnectedAsync()
         {
-            AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            //AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             return base.OnConnectedAsync();
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            //RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             return base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
         }
 
