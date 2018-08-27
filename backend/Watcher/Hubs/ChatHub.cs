@@ -126,8 +126,6 @@ namespace Watcher.Hubs
 
         public void AddUserConnection(string userId, string connectionId)
         {
-            if (userId == null) return;
-
             if (UsersConnections.ContainsKey(userId))
                 UsersConnections[userId].Add(connectionId);
             else
@@ -138,8 +136,6 @@ namespace Watcher.Hubs
 
         public bool RemoveUserConnection(string userId, string connectionId)
         {
-            if (userId == null) return false;
-
             return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
         }
     }
