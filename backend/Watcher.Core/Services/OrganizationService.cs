@@ -39,6 +39,19 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<IEnumerable<OrganizationDto>> GetRangeOfEntitiesAsync(int page, int pageSize)
+        {
+            var entities = await _uow.OrganizationRepository.GetRangeAsync(include: x => x
+                .Include(o => o.Theme)
+                .Include(o => o.Notifications)
+                .Include(o => o.Instances)
+                .Include(o => o.UserOrganizations), index: page, count: pageSize);
+
+            var dtos = _mapper.Map<List<Organization>, List<OrganizationDto>>(entities);
+
+            return dtos;
+        }
+
         public async Task<OrganizationDto> GetEntityByIdAsync(int id)
         {
             var entity = await _uow.OrganizationRepository
