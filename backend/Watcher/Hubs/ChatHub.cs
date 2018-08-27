@@ -117,7 +117,7 @@ namespace Watcher.Hubs
         public override async Task OnConnectedAsync()
         {
             using (LogContext.PushProperty("ClassName", this.GetType().FullName))
-            using (LogContext.PushProperty("Source", this.GetType().Name))
+            using (LogContext.PushProperty("Source", "Claims"))
             {
                 foreach (var claim in Context.User.Claims)
                 {
