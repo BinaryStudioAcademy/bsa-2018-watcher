@@ -1,4 +1,6 @@
-﻿namespace Watcher.Hubs
+﻿using System.Security.Claims;
+
+namespace Watcher.Hubs
 {
     using System;
     using System.Collections.Generic;
@@ -15,8 +17,7 @@
         private readonly IOrganizationService _organizationService;
         private readonly INotificationService _notificationService;
 
-
-        private static Dictionary<string, List<string>> userConnections = new Dictionary<string, List<string>>();
+        private static readonly Dictionary<string, List<string>> UsersConnections = new Dictionary<string, List<string>>();
 
         public ChatHub(IChatsService chatsService, 
                         IMessagesService messagesService, 
@@ -39,7 +40,9 @@
 
             foreach (var userDto in usersInChat)
             {
-                await Clients.Client(Context.ConnectionId).SendAsync("ReceiveMessage", createdMessage);
+                if (!UsersConnections.ContainsKey(userDto.Id)) continue;
+                foreach (string connectionId in UsersConnections[userDto.Id])
+                    await Clients.Client(connectionId).SendAsync("ReceiveMessage", createdMessage);
             }
         }
 
@@ -47,12 +50,6 @@
         {
             var result = await _messagesService.UpdateEntityByIdAsync(new MessageUpdateRequest { WasRead = true }, messageId);
             if (!result) return;
-
-            //var usersInChat = await _chatsService.GetUsersByChatIdAsync(chatId);
-            //foreach (var userDto in usersInChat)
-            //{
-            //    await Clients.User(userDto.Id).SendAsync("MessageWasRead");
-            //}
         }
 
         public async Task InitializeChat(ChatRequest chatRequest)
@@ -64,7 +61,9 @@
 
             foreach (var user in chat.Users)
             {
-                await Clients.User(user.Id).SendAsync("ChatCreated", chat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatCreated", chat);
             }
         }
 
@@ -77,7 +76,9 @@
 
             foreach (var user in changedChat.Users)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
@@ -90,7 +91,9 @@
 
             foreach (var user in changedChat.Users)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
@@ -103,18 +106,37 @@
 
             foreach (var user in changedChat.Users)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
         public override async Task OnConnectedAsync()
         {
+            AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
+        }
+
+        public void AddUserConnection(string userId, string connectionId)
+        {
+            if (UsersConnections.ContainsKey(userId))
+                UsersConnections[userId].Add(connectionId);
+            else
+            {
+                UsersConnections.Add(userId, new List<string> { connectionId });
+            }
+        }
+
+        public bool RemoveUserConnection(string userId, string connectionId)
+        {
+            return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
         }
     }
 }
