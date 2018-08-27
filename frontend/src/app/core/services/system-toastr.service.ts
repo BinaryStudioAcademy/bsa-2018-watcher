@@ -24,9 +24,10 @@ export class SystemToastrService {
     chat(message: Message): void {
         this.messageService.add(
             {
-                key: 'chat-message',
-                data: message,
-                life: 8000
+                key: 'system-message',
+                life: 8000,
+                severity: 'chat',
+                data: message
             }
         );
     }

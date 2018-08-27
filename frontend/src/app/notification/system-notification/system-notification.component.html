@@ -1,19 +1,7 @@
-<p-toast class="system-notification" position="top-right" key="chat-message" [baseZIndex]="5000">
-  <ng-template let-message pTemplate="message">
-    <div class="message-container action" (click)="openChat(message.data?.chatId)">
-      <img class="message-img" src="{{'http://localhost:29878/images/profilePhoto.png'}}" />
-      <div class="message-content">
-        <span class="message-title text-overflow">Chat message from {{message.data.user.displayName}}</span>
-        <div class="message-text">{{message.data.text}}</div>
-        <div class="message-date text-overflow">12.09.1996</div>
-      </div>
-    </div>
-  </ng-template>
-</p-toast>
-
 <p-toast class="system-notification" position="top-right" key="system-message" [baseZIndex]="5000">
   <ng-template let-message pTemplate="message">
-    <div class="message-container">
+    
+    <div *ngIf="message.severity != 'chat'" class="message-container">
       <span class="message-img icon-style fa fa-3x" 
       [ngClass]="{'warning': message.severity == 'warning','error': message.severity == 'error','info': message.severity == 'info'}">
     </span>
@@ -23,5 +11,15 @@
         <div class="message-date text-overflow">{{message.data.createdAt | date:'short'}}</div>
       </div>
     </div>
+
+    <div *ngIf="message.severity == 'chat'" class="message-container action" (click)="openChat(message.data?.chatId)">
+      <img class="message-img" src="{{'http://localhost:29878/images/profilePhoto.png'}}" />
+      <div class="message-content">
+        <span class="message-title text-overflow">Chat message from {{message.data.user.displayName}}</span>
+        <div class="message-text">{{message.data.text}}</div>
+        <div class="message-date text-overflow">{{message.data.createdAt | date:'short'}}</div>
+      </div>
+    </div>
+
   </ng-template>
 </p-toast>
