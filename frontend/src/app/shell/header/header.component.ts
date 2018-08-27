@@ -31,6 +31,7 @@ export class HeaderComponent implements OnInit {
   isNotificationShow: boolean;
 
   currentUser: User;
+  currentOrganizationName: string;
 
   userItems: MenuItem[];
   adminItems: MenuItem[];
@@ -136,24 +137,13 @@ export class HeaderComponent implements OnInit {
     this.notificationsHubService.connectToSignalR();
   }
 
-  ngOnInit() {
-    this.userItems = [
-      /* {
-         label: 'Admin',
-         icon: 'fa fa-fw fa-user',
-         routerLink: ['/admin/organization-list'],
-       },*/
-      {
-        label: 'Logout',
-        icon: 'fa fa-fw fa-sign-out',
-        command: (onclick) => {
-          if (this.authService.isLoggedIn()) {
-            this.authService.logout();
-          }
-        }
-      }
-    ];
+  logout(): void {
+    if (this.authService.isLoggedIn()) {
+      this.authService.logout();
+    }
+  }
 
+  ngOnInit() {
     this.adminItems = [{
       label: 'Organizations',
       icon: 'fa fa-fw fa-list',
