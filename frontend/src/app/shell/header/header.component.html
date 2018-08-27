@@ -66,10 +66,12 @@
           </div>
           <div class="ui-g-8">
             <h3>{{ currentUser?.displayName }}</h3>
-            <p class="email">{{ currentUser?.email }}</p>
+            <p class="secondary-text">{{ currentUser?.email }}</p>
+            <p class="secondary-text">{{ currentUser?.role.name }}</p>
             <p class="organization"><i class="fa fa-fw fa-building-o"></i>{{currentUser?.lastPickedOrganization?.name}}</p>
-            <button type="button" pButton class="ui-button-secondary logout" icon="fa fa-fw fa-sign-out" label="logout" (click)="logout()"></button>
           </div>
+          <a class="edit" (click)="userpage()"><i class="fa fa-edit"></i>edit</a>
+          <a class="logout" (click)="logout()"><i class="fa fa-fw fa-sign-out"></i>logout</a>
       </div>
   </p-overlayPanel>
   </div>

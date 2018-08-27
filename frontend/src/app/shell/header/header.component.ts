@@ -143,6 +143,10 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  userpage(): void {
+    this.router.navigate(['/user/settings/user-profile']);
+  }
+
   ngOnInit() {
     this.adminItems = [{
       label: 'Organizations',
@@ -194,10 +198,7 @@ export class HeaderComponent implements OnInit {
         label: element.name,
         id: element.id.toString(),
         icon: 'fa fa-fw fa-building',
-        command: (onclick) => {
-          this.chengeLastPicOrganizations(element);
-          this.router.navigate([`/user/instances`]);
-        },
+        command: (onclick) => { this.chengeLastPicOrganizations(element); },
         styleClass: (element.id === this.currentUser.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
         disabled: (element.id === this.currentUser.lastPickedOrganizationId)
       });
@@ -207,6 +208,7 @@ export class HeaderComponent implements OnInit {
       icon: 'fa fa-fw fa-plus',
       command: (onclick) => { this.addNewOrganization(); },
     });
+
   }
 
   isAdmin() {
@@ -214,10 +216,6 @@ export class HeaderComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  redirectToAdminPage() {
-    this.router.navigate(['/admin/organization-list']);
   }
 
   onDisplayChange(event: boolean) {
