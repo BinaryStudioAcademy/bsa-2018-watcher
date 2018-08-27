@@ -6,10 +6,13 @@ import { ChatHub } from '../core/hubs/chat.hub';
 import { AuthService } from '../core/services/auth.service';
 import { ChatService } from '../core/services/chat.service';
 import { ToastrService } from '../core/services/toastr.service';
+import { SystemToastrService } from '../core/services/system-toastr.service';
 
 import { Chat } from '../shared/models/chat.model';
 import { Message } from '../shared/models/message.model';
 import { User } from '../shared/models/user.model';
+import { Notification } from '../shared/models/notification.model';
+import { NotificationType } from '../shared/models/notification-type.enum';
 
 
 @Component({
@@ -24,7 +27,8 @@ export class ChatComponent implements OnInit {
     private authService: AuthService,
     private chatService: ChatService,
     private toastrService: ToastrService,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private systemToastrService: SystemToastrService) { }
 
   public onDisplayChat = new EventEmitter<number>();
   public onDisplayChatCreating = new EventEmitter<boolean>();
@@ -70,6 +74,36 @@ export class ChatComponent implements OnInit {
   }
 
   openChatCreating(event) {
+    const mes: Message = {
+      chatId: 89,
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt',
+      user: this.authService.getCurrentUser(),
+      createdAt: new Date(),
+    } as Message;
+
+    const not: Notification = {
+      createdAt: new Date(),
+      text: 'Simple notify',
+      type: NotificationType.Info
+    } as Notification;
+
+    const not2: Notification = {
+      createdAt: new Date(),
+      text: 'Simple notify2',
+      type: NotificationType.Error
+    } as Notification;
+
+    const not3: Notification = {
+      createdAt: new Date(),
+      text: 'Simple notify3',
+      type: NotificationType.Warning
+    } as Notification;
+    this.systemToastrService.send(not2);
+    this.systemToastrService.send(not);
+    this.systemToastrService.send(not3);
+    this.systemToastrService.chat(mes);
+
+
     event.stopPropagation();
     event.preventDefault();
     this.onDisplayChatCreating.emit(true);
@@ -83,18 +117,6 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  getChatImage(chat: Chat) {
-    if (chat.users.length === 2) {
-      const photo = chat.users.find(u => u.id !== this.currentUser.id).photoURL;
-      return photo || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
-    }
-
-    if (chat.users.length === 1) {
-      return chat.users[0].photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
-    }
-    return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
-  }
-
   subscribeToEvents() {
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
       this.chatList.unshift({ value: chat });
@@ -103,6 +125,10 @@ export class ChatComponent implements OnInit {
         this.selectedChat = this.chatList[0].value;
         this.openChat(chat.id);
       }
+    });
+
+    this.chatService.openChatClick.subscribe((id: number) => {
+      this.openChat(id);
     });
 
     this.chatHub.chatChanged.subscribe((chat: Chat) => {
@@ -115,7 +141,7 @@ export class ChatComponent implements OnInit {
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
       if (message.user.id !== this.currentUser.id) {
-        this.sendNotify(message);
+        this.systemToastrService.chat(message);
 
         // Don`t count unread if chat is open and not collapse
         if (this.selectedChat && !this.isSelectedChatCollapsed && this.selectedChat.id === message.chatId) {
@@ -128,13 +154,15 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  sendNotify(message: Message) {
-    this.messageService.add(
-      {
-        key: 'chat-message',
-        data: message,
-        life: 8000
-      }
-    );
+  getChatImage(chat: Chat) {
+    if (chat.users.length === 2) {
+      const photo = chat.users.find(u => u.id !== this.currentUser.id).photoURL;
+      return photo || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
+    }
+
+    if (chat.users.length === 1) {
+      return chat.users[0].photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
+    }
+    return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
   }
 }
