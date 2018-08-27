@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Watcher.Common.Interfaces.Entities;
 
-    public class Dashboard : Entity<int>
+    public class Dashboard : Entity<int>, IDeletable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }

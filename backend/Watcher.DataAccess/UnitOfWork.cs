@@ -113,12 +113,30 @@
                     p => p.State == EntityState.Modified || p.State == EntityState.Deleted
                                                          || p.State == EntityState.Added);
                 if (changes == 0) return true;
+                OnBeforeSaving();
                 return await _context.SaveChangesAsync() > 0;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 return false;
+            }
+        }
+
+        private void OnBeforeSaving()
+        {
+            foreach (var entry in _context.ChangeTracker.Entries())
+            {
+                switch(entry.State)
+                {
+                    case EntityState.Added:
+                        entry.CurrentValues["IsDeleted"] = false;
+                        break;
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Modified;
+                        entry.CurrentValues["IsDeleted"] = true;
+                        break;
+                }
             }
         }
 

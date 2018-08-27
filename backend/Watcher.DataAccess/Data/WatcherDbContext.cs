@@ -1,8 +1,11 @@
 ﻿namespace Watcher.DataAccess.Data
 {
     using Microsoft.EntityFrameworkCore;
-
+    using System.Linq.Expressions;
+    using System.Linq;
+    using Watcher.Common.Interfaces.Entities;
     using Watcher.DataAccess.Entities;
+
 
 
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
@@ -16,6 +19,22 @@
         {
             // TODO: Make your configs here...
             base.OnModelCreating(modelBuilder);
+
+            foreach (var entity in modelBuilder.Model.GetEntityTypes().Where(e => e is IDeletable))
+            {
+                entity.GetOrAddProperty("IsDeleted", typeof(bool));
+
+                var parameter = Expression.Parameter(entity.ClrType);
+
+                var propertyMethodInfo = typeof(EF).GetMethod("Property").MakeGenericMethod(typeof(bool));
+                var isDeletedProperty = Expression.Call(propertyMethodInfo, parameter, Expression.Constant("IsDeleted"));
+
+                BinaryExpression compareExpression = Expression.MakeBinary(ExpressionType.Equal, isDeletedProperty, Expression.Constant(false));
+
+                var lambda = Expression.Lambda(compareExpression, parameter);
+
+                modelBuilder.Entity(entity.ClrType).HasQueryFilter(lambda);
+            }
 
             modelBuilder.Entity<UserOrganization>()
                 .HasKey(uo => new { uo.UserId, uo.OrganizationId });
