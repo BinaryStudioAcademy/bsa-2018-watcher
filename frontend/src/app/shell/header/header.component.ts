@@ -73,9 +73,23 @@ export class HeaderComponent implements OnInit {
 
   bellClick(): void {
     this.isNotificationShow = !this.isNotificationShow;
-    if (!this.isNotificationShow) { return; }
-
+    if (this.isNotificationShow) {
+      this.forceActiveButtonState('bell-button');
+    } else {
+      this.removeActiveButttonState('bell-button');
+      return;
+    }
     this.notificationsToItems();
+  }
+
+  forceActiveButtonState(id: string): void {
+    const btn = document.getElementById(id);
+    btn.style.backgroundColor = '#0088f3';
+  }
+
+  removeActiveButttonState(id: string): void {
+    const btn = document.getElementById(id);
+    btn.style.backgroundColor = '#313232';
   }
 
   notificationsToItems(): void {
@@ -111,6 +125,7 @@ export class HeaderComponent implements OnInit {
 
   close(): void {
     this.isNotificationShow = false;
+    this.removeActiveButttonState('bell-button');
   }
 
   // TODO: methods for SignalR Tests
@@ -186,7 +201,6 @@ export class HeaderComponent implements OnInit {
         this.fillOrganizations();
       }
     );
-
     this.notificationsToItems();
   }
 
