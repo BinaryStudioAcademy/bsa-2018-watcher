@@ -30,6 +30,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { NotificationComponent } from './notification/notification/notification.component';
 import { NotificationBlockComponent } from './notification/notification-block/notification-block.component';
 import { CustomConfirmDialogComponent } from './notification/custom-confirm-dialog/custom-confirm-dialog.component';
+import { SystemNotificationComponent } from './notification/system-notification/system-notification.component';
 
 
 
@@ -41,7 +42,8 @@ import { CustomConfirmDialogComponent } from './notification/custom-confirm-dial
     AuthorizationComponent,
     NotificationBlockComponent,
     NotificationComponent,
-    CustomConfirmDialogComponent
+    CustomConfirmDialogComponent,
+    SystemNotificationComponent
   ],
   imports: [
     BrowserModule,
