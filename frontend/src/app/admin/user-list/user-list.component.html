@@ -29,7 +29,8 @@
         <td class="center">{{user.createdAt | date:'longDate'}}</td>
         <td class="center">
           <div class="small-photo ">
-          <img *ngIf="user.photoURL" src="{{user.photoURL}}" alt="profile photo" class="small-photo"/> </div>
+            <img *ngIf="user.photoURL" src="{{user.photoURL}}" alt="profile photo" class="small-photo" /> 
+          </div>
         </td>
         <td class="center">{{user.displayName}}</td>
         <td class="center">{{user.firstName}}</td>
@@ -54,31 +55,34 @@
 </div>
 
 
-<p-dialog header="Update user" [(visible)]="displayPopup" [modal]="true" [responsive]="true" [width]="500" [minWidth]="350" [minY]="70"
-  [maximizable]="false" [baseZIndex]="10000" [contentStyle]="{'overflow':'visible'}"><!--[contentStyle]="{'overflow': 'hidden'}" -->
+<p-dialog header="Update user" [(visible)]="displayPopup" [modal]="true" [responsive]="true" [width]="500" [minWidth]="350"
+  [minY]="70" [maximizable]="false" [baseZIndex]="10000" [contentStyle]="{'overflow':'visible'}">
+  <!--[contentStyle]="{'overflow': 'hidden'}" -->
   <div class="ui-g ui-fluid">
     <div class="ui-g-6">
       <form [formGroup]="userForm">
         <p class="field center">Profile photo</p>
       </form>
-<div >
-      <figure class="cap-bot ">
-         <div class="img1"> <img src="{{photoUrl}}" alt="profile photo" class="img1"></div>
+      <div>
+        <figure class="cap-bot ">
+          <div class="img1">
+            <img src="{{photoUrl}}" alt="profile photo" class="img1">
+          </div>
           <figcaption class="center custom-upload-btn">
-            <span><i class="fa fa-camera"></i> Update profile photo</span>
+            <span>
+              <i class="fa fa-camera"></i> Update profile photo</span>
             <p-fileUpload #upload mode="basic" name="myfile[]" files="photosList" accept="image/*" (uploadHandler)="onImageSelected($event.files)"
-             customUpload="true" maxFileSize="2000000" auto="true" chooseLabel="Change"></p-fileUpload> 
+              customUpload="true" maxFileSize="2000000" auto="true" chooseLabel="Change"></p-fileUpload>
           </figcaption>
         </figure>
-  
-        <p-dialog [(visible)]="display" [showHeader]="false" [closable]=false [modal]="true" [responsive]="true"
-        [draggable]="false">
-         <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
-        
-         <div class="btn-panel crop-btn-panel">
-           <button pButton class="ui-button-raised ui-button-primary" (click)="onCropSave()" label="Done"></button>
-           <button pButton class="ui-button-raised ui-button-warning" (click)="onCropCancel() " label="Cancel"></button>
-         </div>
+
+        <p-dialog [(visible)]="display" [showHeader]="false" [closable]=false [modal]="true" [responsive]="true" [draggable]="false">
+          <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+
+          <div class="btn-panel crop-btn-panel">
+            <button pButton class="ui-button-raised ui-button-primary" (click)="onCropSave()" label="Done"></button>
+            <button pButton class="ui-button-raised ui-button-warning" (click)="onCropCancel() " label="Cancel"></button>
+          </div>
         </p-dialog>
       </div>
 
@@ -116,7 +120,7 @@
       <p class="fieldOrgs">List of other organizations</p>
     </div>
     <div class="ui-g-4">
-      <p-dropdown  [options]="dropdownCompany" [(ngModel)]="selectedCompany" [style]="{'width':'150px'}" filter="true"></p-dropdown>
+      <p-dropdown [options]="dropdownCompany" [(ngModel)]="selectedCompany" [style]="{'width':'150px'}" filter="true"></p-dropdown>
     </div>
     <div class="ui-g-2">
       <button pButton label="Invite" (click)="onSentInviteToEmail()" class="ui-button-primary ui-button-raised"></button>
@@ -133,7 +137,7 @@
     </div>
 
     <div class=" ui-fluid" *ngIf="lstUserCompany">
-      <p-scrollPanel [style]="{width: '457px', height: '67px'}" styleClass="custom" >
+      <p-scrollPanel [style]="{width: '457px', height: '67px'}" styleClass="custom">
         <div *ngFor="let organization of lstUserCompany; let i = index" class=" ui-fluid">
           <div class="ui-g-3 center fieldOrg">{{organization?.name}} </div>
           <div class="ui-g-6 center fieldOrg">{{organization?.email}} </div>
@@ -154,4 +158,3 @@
   </p-footer>
 
 </p-dialog>
-

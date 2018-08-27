@@ -1,4 +1,7 @@
 ﻿using System.Security.Claims;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
+using Watcher.Core.Providers;
 
 namespace Watcher.Hubs
 {
@@ -14,20 +17,19 @@ namespace Watcher.Hubs
     {
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
-        private readonly IOrganizationService _organizationService;
-        private readonly INotificationService _notificationService;
+        private readonly ILogger<ChatHub> _logger;
 
         private static readonly Dictionary<string, List<string>> UsersConnections = new Dictionary<string, List<string>>();
 
-        public ChatHub(IChatsService chatsService, 
+        public ChatHub(ILoggerFactory loggerFactory,
+                        IChatsService chatsService, 
                         IMessagesService messagesService, 
                         IOrganizationService organizationService, 
                         INotificationService notificationService)
         {
+            _logger = loggerFactory?.CreateLogger<ChatHub>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _chatsService = chatsService;
             _messagesService = messagesService;
-            _organizationService = organizationService;
-            _notificationService = notificationService;
         }
 
         public async Task Send(MessageRequest messageRequest)
@@ -40,9 +42,9 @@ namespace Watcher.Hubs
 
             foreach (var userDto in usersInChat)
             {
-                //if (!UsersConnections.ContainsKey(userDto.Id)) continue;
-                //foreach (string connectionId in UsersConnections[userDto.Id])
-                //    await Clients.Client(connectionId).SendAsync("ReceiveMessage", createdMessage);
+                if (!UsersConnections.ContainsKey(userDto.Id)) continue;
+                foreach (string connectionId in UsersConnections[userDto.Id])
+                    await Clients.Client(connectionId).SendAsync("ReceiveMessage", createdMessage);
             }
         }
 
@@ -61,9 +63,9 @@ namespace Watcher.Hubs
 
             foreach (var user in chat.Users)
             {
-                //if (!UsersConnections.ContainsKey(user.Id)) continue;
-                //foreach (string connectionId in UsersConnections[user.Id])
-                //    await Clients.Client(connectionId).SendAsync("ChatCreated", chat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatCreated", chat);
             }
         }
 
@@ -76,9 +78,9 @@ namespace Watcher.Hubs
 
             foreach (var user in changedChat.Users)
             {
-                //if (!UsersConnections.ContainsKey(user.Id)) continue;
-                //foreach (string connectionId in UsersConnections[user.Id])
-                //    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
@@ -91,9 +93,9 @@ namespace Watcher.Hubs
 
             foreach (var user in changedChat.Users)
             {
-                //if (!UsersConnections.ContainsKey(user.Id)) continue;
-                //foreach (string connectionId in UsersConnections[user.Id])
-                //    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
@@ -106,14 +108,22 @@ namespace Watcher.Hubs
 
             foreach (var user in changedChat.Users)
             {
-                //if (!UsersConnections.ContainsKey(user.Id)) continue;
-                //foreach (string connectionId in UsersConnections[user.Id])
-                //    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
         public override async Task OnConnectedAsync()
         {
+            using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+            using (LogContext.PushProperty("Source", "Claims"))
+            {
+                foreach (var claim in Context.User.Claims)
+                {
+                    _logger.LogError($"Claims {claim.Type}, {claim.Value}");
+                }
+            }
             //AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             await base.OnConnectedAsync();
         }
@@ -126,8 +136,6 @@ namespace Watcher.Hubs
 
         public void AddUserConnection(string userId, string connectionId)
         {
-            if (userId == null) return;
-
             if (UsersConnections.ContainsKey(userId))
                 UsersConnections[userId].Add(connectionId);
             else
@@ -138,8 +146,6 @@ namespace Watcher.Hubs
 
         public bool RemoveUserConnection(string userId, string connectionId)
         {
-            if (userId == null) return false;
-
             return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
         }
     }
