@@ -1,5 +1,11 @@
 <div class="header">
-  <a routerLink="/user" class="logo">Watcher</a>
+ 
+  <div class="img-logo-wr">
+      <img routerLink="/user" *ngIf="currentUser.lastPickedOrganization.imageURL" src="{{currentUser.lastPickedOrganization.imageURL}}" alt="logo organization" class="img-logo" />
+      <a routerLink="/user" class="logo">{{currentUser.lastPickedOrganization.name}}</a> 
+  </div>
+  
+  
   <p-growl [(value)]="msgs"></p-growl>
 
   <div class="ui-toolbar-group-right">
