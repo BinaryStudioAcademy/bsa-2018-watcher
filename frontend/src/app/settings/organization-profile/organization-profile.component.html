@@ -132,7 +132,7 @@
                 <div class="ui-g ui-fluid">
                     <div class="ui-g-12 ui-lg-12">
 
-                        <div class=" inputEmail view-inline">
+                        <div class="small-space inputEmail view-inline">
                             <input type="email" [(ngModel)]="inviteEmail" id="iEmail" #iEmail="ngModel" ngModel email="true" class="form-control" required
                                 pInputText placeholder="Email">
                             <div *ngIf="iEmail?.invalid && (iEmail?.dirty || iEmail?.touched)" class="alert alert-danger">
@@ -141,13 +141,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="small-space btn-panel view-inline">
-                            <button pButton label="&nbsp;" (click)="onSentInviteToEmail()" class="ui-button-raised ui-button-success btn-inline-flex"
+                        <!-- <div class=" btn-panel ">  </div>-->
+                            <button pButton label="&nbsp;" (click)="onSentInviteToEmail()" class="view-inline ui-button-raised ui-button-success btn-inline-flex"
                                 [disabled]="inviteLink === '' || iEmail?.invalid || isSending">
                                 <p-progressSpinner class="btn-spinner" *ngIf="isSending" strokeWidth="5"></p-progressSpinner>
                                 <span class="ui-button-text" *ngIf="!isSending" style="margin-left: 8px;">Send</span>
                             </button>
-                        </div>
+                        
 
                     </div>
                 </div>
