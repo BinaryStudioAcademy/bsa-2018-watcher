@@ -29,7 +29,6 @@ namespace Watcher.Controllers
         /// The Responses Service service
         /// </summary>
         private readonly IResponseService _responseService;
-        private readonly IEmailProvider _emailProvider;
         private readonly INotificationService _notificationService;
 
         /// <summary>
@@ -39,10 +38,9 @@ namespace Watcher.Controllers
         /// Responses service
         /// </param>
         /// <param name="provider"></param>
-        public ResponsesController(IResponseService service, IEmailProvider provider, INotificationService notificationService)
+        public ResponsesController(IResponseService service, INotificationService notificationService)
         {
             _responseService = service;
-            _emailProvider = provider;
             _notificationService = notificationService;
         }
 
@@ -121,14 +119,9 @@ namespace Watcher.Controllers
                 return StatusCode(500);
             }
            
-            if (!string.IsNullOrEmpty(request.User.Email))
-            {
-                await _emailProvider.SendMessageOneToOne("watcher@net.com", "Thanks for feedback", request.Feedback.User.Email,
-                    request.Text, "");
-            }
             var notificationDto = new NotificationDto();
             notificationDto.CreatedAt = request.CreatedAt;
-            notificationDto.Text = "The response to your feedback has been sent to your email.";
+            notificationDto.Text = request.Text;
             var userFeedback = request.Feedback.User;
             notificationDto.UserId = userFeedback.Id;
             notificationDto.OrganizationId = userFeedback.LastPickedOrganizationId;
