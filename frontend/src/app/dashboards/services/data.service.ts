@@ -91,8 +91,9 @@ export class DataService {
     }); // .filter(d => d.value !== 0);
 
     if (data.length > 0 && Array.isArray(data[0].name)) {
+      // @ts-ignore
       data = nest()
-        .key(d => d.name[0])
+        .key(datum => (datum as Nameble).name[0])
         .entries(data)
         .map(d => {
           const series = d.values.map(dd => {
@@ -110,4 +111,8 @@ export class DataService {
 
     return data;
   }
+}
+
+export interface Nameble {
+  name: string[];
 }
