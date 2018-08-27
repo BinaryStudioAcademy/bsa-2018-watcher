@@ -15,6 +15,7 @@ export interface User  {
    lastName: string;
    bio: string;
    email: string;
+   emailForNotifications: string;
    photoURL: string;
    photoType: string;
    isActive: boolean;

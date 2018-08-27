@@ -194,7 +194,10 @@ export class HeaderComponent implements OnInit {
         label: element.name,
         id: element.id.toString(),
         icon: 'fa fa-fw fa-building',
-        command: (onclick) => { this.chengeLastPicOrganizations(element); },
+        command: (onclick) => {
+          this.chengeLastPicOrganizations(element);
+          this.router.navigate([`/user/instances`]);
+        },
         styleClass: (element.id === this.currentUser.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
         disabled: (element.id === this.currentUser.lastPickedOrganizationId)
       });
@@ -204,7 +207,6 @@ export class HeaderComponent implements OnInit {
       icon: 'fa fa-fw fa-plus',
       command: (onclick) => { this.addNewOrganization(); },
     });
-
   }
 
   isAdmin() {

@@ -38,17 +38,8 @@ export class NotificationSettingsComponent implements OnInit {
   onDisable(id: number): void {
     const disablingNotificationSettings = this.notificationSettings.find(item => item.id === id);
 
-    if (disablingNotificationSettings.isDisable === false) { return; }
-
-    this.toastrService.confirm(`Are you sure you want to disable all notifications
-       ${NotificationType[disablingNotificationSettings.type]} type?`).then((value) => {
-        if (!value) {
-          disablingNotificationSettings.isDisable = false;
-        } else {
-          disablingNotificationSettings.isMute = false;
-          disablingNotificationSettings.isEmailable = false;
-        }
-      });
+    disablingNotificationSettings.isMute = false;
+    disablingNotificationSettings.isEmailable = false;
   }
 
   onSave() {

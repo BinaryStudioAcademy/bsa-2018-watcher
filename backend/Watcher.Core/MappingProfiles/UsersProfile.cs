@@ -26,7 +26,8 @@
                 d => d.Id,
                 o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
 
-            CreateMap<UserDto, User>();
+            CreateMap<UserDto, User>()
+                 .ForMember(d => d.EmailForNotifications, o => o.MapFrom(s => s.EmailForNotifications));
 
             CreateMap<User, UserDto>()
                 .ForMember(d => d.Role, o => o.MapFrom(s => s.RoleId == 1 ? new Role(s.RoleId, "Admin") : new Role(s.RoleId, "User")))
@@ -37,6 +38,7 @@
                 .ForMember(d => d.Feedbacks, o => o.UseValue(new List<FeedbackDto>()))
                 .ForMember(d => d.Messages, o => o.UseValue(new List<MessageDto>()))
                 .ForMember(d => d.PhotoURL, o => o.MapFrom(s => s.PhotoURL))
+                .ForMember(d => d.EmailForNotifications, o => o.MapFrom(s => s.EmailForNotifications))
                 .ForMember(d => d.NotificationSettings, o => o.MapFrom(s => s.NotificationSettings))
                 .ForMember(d => d.Notifications, o => o.MapFrom(s => s.Notifications))
                 .ForMember(d => d.Responses, o => o.UseValue(new List<ResponseDto>()));
@@ -67,6 +69,7 @@
                 .ForMember(d => d.CreatedAt, o => o.UseValue(DateTime.UtcNow))
                 .ForMember(d => d.IsActive, o => o.UseValue(true))
                 .ForMember(d => d.RoleId, o => o.UseValue(2))
+                .ForMember(d => d.EmailForNotifications, o => o.MapFrom(s => s.Email))
                 .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
                 .ForMember(d => d.UserOrganizations, o => o.UseValue(new List<UserOrganization>()))
                 .ForMember(d => d.CreatedOrganizations, o => o.UseValue(new List<Organization>()));
