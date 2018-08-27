@@ -76,7 +76,6 @@ export class HeaderComponent implements OnInit {
     if (this.isNotificationShow) {
       this.forceActiveButtonState('bell-button');
     } else {
-      console.log('REMOVE');
       this.removeActiveButttonState('bell-button');
       return;
     }
@@ -126,6 +125,7 @@ export class HeaderComponent implements OnInit {
 
   close(): void {
     this.isNotificationShow = false;
+    this.removeActiveButttonState('bell-button');
   }
 
   // TODO: methods for SignalR Tests
