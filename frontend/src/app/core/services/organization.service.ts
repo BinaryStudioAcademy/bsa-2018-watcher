@@ -20,6 +20,10 @@ export class OrganizationService {
     return this.apiService.get(`/${this.ctrlUrl}/${id}`);
   }
 
+  getRange(page: number, pageSize: number) : Observable<Organization[]> {
+    return this.apiService.get(`/${this.ctrlUrl}/table?page=${page}&pageSize=${pageSize}`);
+  }
+
   create(organization: Organization): Observable<Organization> {
     return this.apiService.post(`/${this.ctrlUrl}`, organization);
   }

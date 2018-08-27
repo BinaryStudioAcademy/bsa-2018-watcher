@@ -9,6 +9,7 @@ import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
 import { Instance } from '../../shared/models/instance.model';
 import { InstanceRequest } from '../../dashboards/models/instance-request.model';
+import { LazyLoadEvent } from '../../../../node_modules/primeng/api';
 
 @Component({
   selector: 'app-organization-list',
@@ -51,7 +52,7 @@ export class OrganizationListComponent implements OnInit {
       return;
     }
 
-    this.organizationService.getAll().subscribe((value: Organization[]) => {
+    this.organizationService.getRange(1, 5).subscribe((value: Organization[]) => {
       this.organizations = value;
       this.totalRecords = value.length;
     });
@@ -94,6 +95,12 @@ export class OrganizationListComponent implements OnInit {
       if ((o.name === name || o.email === email) && o.id !== this.organization.id) {
         flag = false; }});
     return flag;
+  }
+
+  loadOrganizationsLazy(event: LazyLoadEvent) {
+    this.organizationService.getRange(event.first, event.rows).subscribe((value: Organization[]) => {
+      this.organizations = value;
+    });;
   }
 
   onSubmit() {
