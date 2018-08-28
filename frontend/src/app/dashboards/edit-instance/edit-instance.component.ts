@@ -30,8 +30,8 @@ export class EditInstanceComponent implements OnInit {
     private instanceService: InstanceService,
     private authService: AuthService,
     private router: Router) {
-      this.platformsDropdown = new Array<SelectItem>();
-    }
+    this.platformsDropdown = [];
+  }
 
   ngOnInit() {
     const x = this.activateRoute.params.subscribe(params => {
@@ -60,23 +60,24 @@ export class EditInstanceComponent implements OnInit {
 
   getInstanceForm(instance: Instance) {
     let form: FormGroup;
-    if (instance === undefined) {
 
-      form = this.fb.group({
-        title: new FormControl({ value: '', disabled: false }, Validators.required),
-        platform: new FormControl({ value: '', disabled: false }, Validators.required),
-        address: new FormControl({ value: '', disabled: false }, Validators.required),
-        guid: new FormControl({value: '', disabled: false})
-      });
-      this.instanceTitle = 'NEW INSTANCE';
-    } else {
+    if (instance) {
       form = this.fb.group({
         title: new FormControl({ value: instance.title, disabled: false }, Validators.required),
         platform: new FormControl({ value: instance.platform, disabled: false }, Validators.required),
         address: new FormControl({ value: instance.address, disabled: false }, Validators.required),
-        guid: new FormControl({value: instance.guidId, disabled: false})
+        guid: new FormControl({ value: instance.guidId, disabled: false })
       });
       this.instanceTitle = 'EDIT INSTANCE';
+
+    } else {
+      form = this.fb.group({
+        title: new FormControl({ value: '', disabled: false }, Validators.required),
+        platform: new FormControl({ value: '', disabled: false }, Validators.required),
+        address: new FormControl({ value: '', disabled: false }, Validators.required),
+        guid: new FormControl({ value: '', disabled: false })
+      });
+      this.instanceTitle = 'NEW INSTANCE';
     }
     return form;
   }
@@ -89,6 +90,7 @@ export class EditInstanceComponent implements OnInit {
         request.guidId = this.instance.guidId;
         this.instanceService.update(request, this.id).subscribe((res: Response) => {
           this.toastrService.success('updated instance');
+
           const updatedInstance: Instance = {
             title: request.title,
             address: request.address,
@@ -99,19 +101,17 @@ export class EditInstanceComponent implements OnInit {
             dashboards: this.instance.dashboards,
             organization: this.instance.organization
           };
-          console.log('asdsadsa');
-          console.log('GUID');
-          console.log(this.instance.guidId);
+
           this.instanceService.instanceEdited.emit(updatedInstance);
-          this.isSaving = false;
           this.router.navigate([`/user/instances/${updatedInstance.id}/${this.instance.guidId}/dashboards`]);
+          this.isSaving = false;
         });
       } else {
         this.instanceService.create(request).subscribe((res: Instance) => {
           this.toastrService.success('created instance');
           this.instanceService.instanceAdded.emit(res);
-          this.isSaving = false;
           this.router.navigate([`/user/instances/${res.id}/${res.guidId}/dashboards`]);
+          this.isSaving = false;
         });
       }
     } else {
@@ -133,8 +133,8 @@ export class EditInstanceComponent implements OnInit {
 
   private fillDropdown(): void {
     this.platformsDropdown.push(
-      {label: 'Windows', value: 'Windows'},
-      {label: 'Linux', value: 'Linux'});
+      { label: 'Windows', value: 'Windows' },
+      { label: 'Linux', value: 'Linux' });
   }
 
   copyToClipboard(message: string): void {

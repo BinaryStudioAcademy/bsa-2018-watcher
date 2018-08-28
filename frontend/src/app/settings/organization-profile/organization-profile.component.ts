@@ -73,7 +73,6 @@ export class OrganizationProfileComponent implements OnInit {
           this.editable = true;
         }
       });
-    this.onInvite();
   }
 
   onSubmit() {

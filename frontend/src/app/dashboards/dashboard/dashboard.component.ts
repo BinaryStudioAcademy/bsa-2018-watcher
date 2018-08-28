@@ -81,6 +81,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  getSignalRClaims() {
+    this.dashboardsHub.getSignalRClaims();
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

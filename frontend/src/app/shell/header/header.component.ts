@@ -15,6 +15,7 @@ import { Notification } from '../../shared/models/notification.model';
 import { NotificationType } from '../../shared/models/notification-type.enum';
 import { NotificationsHubService } from '../../core/hubs/notifications.hub';
 import { PathService } from '../../core/services/path.service';
+import {TokenService} from '../../core/services/token.service';
 
 @Component({
   selector: 'app-header',
@@ -31,6 +32,8 @@ export class HeaderComponent implements OnInit {
   isNotificationShow: boolean;
 
   currentUser: User;
+  currentOrganizationName: string;
+  private regexInstancesdUrl: RegExp = /\/user\/instances/;
 
   userItems: MenuItem[];
   adminItems: MenuItem[];
@@ -39,7 +42,9 @@ export class HeaderComponent implements OnInit {
   notifications: Notification[];
   displayAddNewOrganization = false;
 
-  constructor(private notificationsHubService: NotificationsHubService,
+  constructor(
+    private tokenService: TokenService,
+    private notificationsHubService: NotificationsHubService,
     private messageService: MessageService,
     private userService: UserService,
     private toastrService: ToastrService,
@@ -72,9 +77,23 @@ export class HeaderComponent implements OnInit {
 
   bellClick(): void {
     this.isNotificationShow = !this.isNotificationShow;
-    if (!this.isNotificationShow) { return; }
-
+    if (this.isNotificationShow) {
+      this.forceActiveButtonState('bell-button');
+    } else {
+      this.removeActiveButttonState('bell-button');
+      return;
+    }
     this.notificationsToItems();
+  }
+
+  forceActiveButtonState(id: string): void {
+    const btn = document.getElementById(id);
+    btn.style.backgroundColor = '#0088f3';
+  }
+
+  removeActiveButttonState(id: string): void {
+    const btn = document.getElementById(id);
+    btn.style.backgroundColor = '#313232';
   }
 
   notificationsToItems(): void {
@@ -110,6 +129,7 @@ export class HeaderComponent implements OnInit {
 
   close(): void {
     this.isNotificationShow = false;
+    this.removeActiveButttonState('bell-button');
   }
 
   // TODO: methods for SignalR Tests
@@ -136,24 +156,17 @@ export class HeaderComponent implements OnInit {
     this.notificationsHubService.connectToSignalR();
   }
 
-  ngOnInit() {
-    this.userItems = [
-      /* {
-         label: 'Admin',
-         icon: 'fa fa-fw fa-user',
-         routerLink: ['/admin/organization-list'],
-       },*/
-      {
-        label: 'Logout',
-        icon: 'fa fa-fw fa-sign-out',
-        command: (onclick) => {
-          if (this.authService.isLoggedIn()) {
-            this.authService.logout();
-          }
-        }
-      }
-    ];
+  logout(): void {
+    if (this.authService.isLoggedIn()) {
+      this.authService.logout();
+    }
+  }
 
+  openUserProfile(): void {
+    this.router.navigate(['/user/settings/user-profile']);
+  }
+
+  ngOnInit() {
     this.adminItems = [{
       label: 'Organizations',
       icon: 'fa fa-fw fa-list',
@@ -192,7 +205,6 @@ export class HeaderComponent implements OnInit {
         this.fillOrganizations();
       }
     );
-
     this.notificationsToItems();
   }
 
@@ -205,8 +217,10 @@ export class HeaderComponent implements OnInit {
         id: element.id.toString(),
         icon: 'fa fa-fw fa-building',
         command: (onclick) => {
-          this.chengeLastPicOrganizations(element);
-          this.router.navigate([`/user/instances`]);
+          this.changeLastPicOrganizations(element);
+          if (this.isInstancesRoute()) {
+            this.router.navigate(['/user/instances']);
+          }
         },
         styleClass: (element.id === this.currentUser.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
         disabled: (element.id === this.currentUser.lastPickedOrganizationId)
@@ -219,11 +233,26 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  isInstancesRoute(): boolean {
+    console.log(this.router.url);
+    if (this.router.url.match(this.regexInstancesdUrl)) {
+      return true;
+    }
+    return false;
+  }
+
   isAdmin() {
     if (this.currentUser.role.name === 'Admin') {
       return true;
     }
     return false;
+  }
+
+  getUserClaims() {
+    this.tokenService.getUserClaims()
+      .subscribe(value => {
+        console.log(value);
+      });
   }
 
   onDisplayChange(event: boolean) {
@@ -235,7 +264,7 @@ export class HeaderComponent implements OnInit {
   }
 
 
-  private chengeLastPicOrganizations(item: Organization): void {
+  private changeLastPicOrganizations(item: Organization): void {
     // update user in beckend
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
       .subscribe(value => {

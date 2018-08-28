@@ -9,4 +9,8 @@
     <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccumulator.Shared\DataAccumulator.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
