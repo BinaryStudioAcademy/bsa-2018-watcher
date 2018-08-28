@@ -31,6 +31,7 @@
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            // Build fail
             if (Context.User.FindFirstValue("unique_name") != null)
                 RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             return base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
