@@ -36,17 +36,18 @@
 
         public void AddUserConnection(string userId, string connectionId)
         {
-            if (UsersConnections.ContainsKey(userId))
-                UsersConnections[userId].Add(connectionId);
-            else
-            {
-                UsersConnections.Add(userId, new List<string> { connectionId });
-            }
+            //if (UsersConnections.ContainsKey(userId))
+            //    UsersConnections[userId].Add(connectionId);
+            //else
+            //{
+            //    UsersConnections.Add(userId, new List<string> { connectionId });
+            //}
         }
 
         public bool RemoveUserConnection(string userId, string connectionId)
         {
-            return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
+            return true;
+            //return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
         }
     }
 }

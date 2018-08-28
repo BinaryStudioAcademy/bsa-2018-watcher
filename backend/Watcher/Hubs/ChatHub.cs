@@ -50,8 +50,8 @@ namespace Watcher.Hubs
 
         public async Task MarkMessageAsRead(int messageId)
         {
-            //var result = await _messagesService.UpdateEntityByIdAsync(new MessageUpdateRequest { WasRead = true }, messageId);
-            //if (!result) return;
+            var result = await _messagesService.UpdateEntityByIdAsync(new MessageUpdateRequest { WasRead = true }, messageId);
+            if (!result) return;
         }
 
         public async Task InitializeChat(ChatRequest chatRequest)
@@ -136,17 +136,18 @@ namespace Watcher.Hubs
 
         public void AddUserConnection(string userId, string connectionId)
         {
-            if (UsersConnections.ContainsKey(userId))
-                UsersConnections[userId].Add(connectionId);
-            else
-            {
-                UsersConnections.Add(userId, new List<string> { connectionId });
-            }
+            //if (UsersConnections.ContainsKey(userId))
+            //    UsersConnections[userId].Add(connectionId);
+            //else
+            //{
+            //    UsersConnections.Add(userId, new List<string> { connectionId });
+            //}
         }
 
         public bool RemoveUserConnection(string userId, string connectionId)
         {
-            return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
+            return true;
+            //return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
         }
     }
 }
