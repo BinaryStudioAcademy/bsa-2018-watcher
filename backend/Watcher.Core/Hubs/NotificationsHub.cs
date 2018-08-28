@@ -36,6 +36,8 @@
 
         public void AddUserConnection(string userId, string connectionId)
         {
+            if(string.IsNullOrWhiteSpace(userId)) return;
+            
             if (UsersConnections.ContainsKey(userId))
                 UsersConnections[userId].Add(connectionId);
             else

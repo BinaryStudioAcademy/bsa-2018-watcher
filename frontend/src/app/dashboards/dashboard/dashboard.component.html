@@ -26,9 +26,19 @@
               [disabled]="activeDashboardItem == null"
               (click)="delete()"></button>
     </div>
-
-    <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">
-      <app-charts></app-charts>
+    <div class="content" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">
+      <div class="charts-area" *ngIf="!isEditMode">
+          <app-chart-dashboard [charts]="charts"
+                               [filters]="filters">
+          </app-chart-dashboard>
+      </div>
+      <div class="edit-chart-area" *ngIf="isEditMode">
+          <app-chart-builder (addChart)="addChartToDashboard($event)"></app-chart-builder>
+      </div>
+      <!--<router-outlet></router-outlet>-->
+    </div>
+    <!--<div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">-->
+      <!--<app-charts></app-charts>-->
       <!--<div class="dashboard-item">-->
         <!--<app-percentage-bar-chart [dataToPlot]="percentageInfoToDisplaySingle"></app-percentage-bar-chart>-->
       <!--</div>-->
@@ -60,7 +70,7 @@
       <!--<div class="dashboard-item">-->
         <!--<app-donut-chart></app-donut-chart>-->
       <!--</div>-->
-    </div>
+    <!--</div>-->
   </div>
 
   <div *ngIf="!instanceId" class="placeholder">

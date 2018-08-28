@@ -92,7 +92,6 @@ export class DataService {
     }); // .filter(d => d.value !== 0);
 
     if (data.length > 0 && Array.isArray(data[0].name)) {
-      // @ts-ignore
       data = nest()
         .key(datum => (datum as Nameable).name[0])
         .entries(data)

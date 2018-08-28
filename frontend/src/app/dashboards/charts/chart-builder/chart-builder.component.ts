@@ -68,7 +68,8 @@ export class ChartBuilderComponent implements OnInit {
       !this.chartType.dimLabels.some((l, i) => l ? !this.dataDims[i] : false);
   }
 
-  constructor(private ngZone: NgZone, private dataService: DataService) {
+  constructor(private ngZone: NgZone,
+              private dataService: DataService) {
     dataService.universeUpdated.subscribe(() => {
       this.clearAll();
 

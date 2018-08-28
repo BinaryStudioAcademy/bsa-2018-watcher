@@ -8,11 +8,11 @@ import {DataService} from '../../services/data.service';
   styleUrls: ['./chart-dashboard.component.sass']
 })
 export class ChartDashboardComponent implements OnInit {
-
   @Input() charts: CustomChart[] = [];
   @Input() filters: Filter[] = [];
 
-  constructor(private ngZone: NgZone, private dataService: DataService) { }
+  constructor(private ngZone: NgZone,
+              private dataService: DataService) { }
 
   ngOnInit() {
   }

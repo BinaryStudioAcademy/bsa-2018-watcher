@@ -226,13 +226,6 @@ export class HeaderComponent implements OnInit {
     return false;
   }
 
-  isAdmin() {
-    if (this.currentUser.role.name === 'Admin') {
-      return true;
-    }
-    return false;
-  }
-
   onDisplayChange(event: boolean) {
     this.displayAddNewOrganization = event;
   }

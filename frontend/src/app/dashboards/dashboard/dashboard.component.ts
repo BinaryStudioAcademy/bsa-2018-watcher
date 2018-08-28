@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {ConfirmationService, MenuItemContent} from 'primeng/primeng';
 import {MessageService} from 'primeng/api';
 import {DashboardService} from '../../core/services/dashboard.service';
@@ -11,6 +11,8 @@ import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 import {PercentageInfo} from '../models/percentage-info';
+import {CustomChart, CustomData, CustomQuery, Filter, gapminder, toCapitalizedWords} from '../charts/models';
+import {DataService} from '../services/data.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,9 +22,10 @@ import {PercentageInfo} from '../models/percentage-info';
 })
 
 export class DashboardComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
+  private paramsSubscription: Subscription;
   private instanceGuidId: string;
 
+  isEditMode = false;
   instanceId: number;
   dashboards: Dashboard[] = [];
   dashboardMenuItems: DashboardMenuItem[] = [];
@@ -43,11 +46,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.percentageInfoToDisplaySingle = info;
   }
 
+  charts: CustomChart[] = [];
+  filters: Filter[] = [];
+
+  errors: any[] = [];
+  rawData: CustomData[] = [];
+
   constructor(private dashboardsService: DashboardService,
               private instanceService: InstanceService,
               private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
-              private activateRoute: ActivatedRoute) {
+              private activateRoute: ActivatedRoute,
+              private ngZone: NgZone,
+              private dataService: DataService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -55,34 +66,92 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     await this.dashboardsHub.connectToSignalR();
 
-    this.subscription = this.activateRoute.params.subscribe(params => {
+    this.paramsSubscription = this.activateRoute.params.subscribe(params => {
       if (this.instanceGuidId) {
         this.dashboardsHub.unSubscribeFromInstanceById(this.instanceGuidId);
       }
-      this.instanceId = params['insId'];
-      this.instanceGuidId = params['guidId'];
 
+      this.instanceId = params.insId;
+      this.instanceGuidId = params.guidId;
       this.dashboardMenuItems = [];
-      if (this.instanceId && this.instanceId !== 0) {
-        this.getDashboardsByInstanceId(this.instanceId);
-
-        this.dashboardsHub.getInitialPercentageInfoByInstanceId(this.instanceId)
-          .subscribe(info => {
-            if (info && info.length > 0) {
-              this.PercentageInfoToDisplaySingle = info[info.length - 1];
-              this.PercentageInfoToDisplay = info;
-            }
-            this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
-          }, err => {
-            console.error(err);
-            this.toastrService.error('Cant fetch instance collected Data');
-          });
+      if (!this.instanceId) {
+        return;
       }
+
+      this.getDashboardsByInstanceId(this.instanceId);
+      this.dashboardsHub.getInitialPercentageInfoByInstanceId(this.instanceId)
+        .subscribe(info => {
+          if (info && info.length > 0) {
+            this.PercentageInfoToDisplaySingle = info[info.length - 1];
+            this.PercentageInfoToDisplay = info;
+          }
+          this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
+        }, err => {
+          console.error(err);
+          this.toastrService.error('Cant fetch instance collected Data');
+        });
     });
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.paramsSubscription.unsubscribe();
+  }
+
+  async addChartToDashboard(chart: CustomChart) {
+    this.charts.push(chart);
+
+    // todo: assumes single series chart
+    const x = this.dataService.createQuery(chart.dataDims[0], chart.dataDims[2], chart.dataDims[4]);
+    const y = this.dataService.createQuery(chart.dataDims[2], 'count');
+
+    const qs = await Promise.all([x, y]);
+
+    chart.xQuery = qs[0];
+    chart.yQuery = qs[1];
+
+    chart.xFilter = this.addFilter(chart.xQuery);
+    chart.yFilter = this.addFilter(chart.yQuery);
+
+    this.isEditMode = false;
+  }
+
+  private addFilter(query: CustomQuery): Filter {
+    const key = query.column.key;
+    let filter = this.filters.find(c => c.key === key);
+    if (!filter) {
+      const values = query.column.values;
+      const minValue = Math.min(...values);
+      const maxValue = Math.max(...values);
+
+      const type = (values.length < 6 || isNaN(minValue) || isNaN(maxValue)) ? 'cat' : 'value';
+
+      let range = [];
+      let rangeIndex = {};
+      if (type === 'value') {
+        range = [minValue, maxValue];
+      } else {
+        range = query.column.values.slice(0);
+        rangeIndex = range.reduce((acc, cur) => {
+          acc[cur] = true;
+          return acc;
+        }, rangeIndex);
+      }
+
+      filter = {
+        type,
+        label: toCapitalizedWords(key),
+        key,
+        minValue,
+        maxValue,
+        query,
+        step: 1,
+        values,
+        rangeIndex,
+        range
+      };
+      this.filters.push(filter);
+    }
+    return filter;
   }
 
   onInstanceRemoved(id: number) {
@@ -94,6 +163,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   getDashboardsByInstanceId(id: number): void {
     this.loading = true;
+    const plusItem = this.createPlusItem();
+    this.dashboardMenuItems.push(plusItem);
+    this.dashboardsService.getAllByInstance(id)
+      .subscribe((value = []) => {
+        if (value && value.length > 0) {
+          this.dashboards = value;
+          // Fill Dashboard Menu Items
+          this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
+          this.activeDashboardItem = this.dashboardMenuItems[0];
+        }
+        this.loading = false;
+        this.toastrService.success('Successfully got instance info from server');
+      }, error => this.toastrService.error(error.toString()));
+  }
+
+  createPlusItem(): DashboardMenuItem {
     const lastItem: DashboardMenuItem = {
       icon: 'fa fa-plus',
       command: (onlick) => {
@@ -102,18 +187,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       },
       id: 'lastTab'
     };
-    this.dashboardMenuItems.push(lastItem);
-    this.dashboardsService.getAllByInstance(id)
-      .subscribe(value => {
-        this.dashboards = value;
-        if (this.dashboards && this.dashboards.length > 0) {
-          // Fill Dashboard Menu Items
-          this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
-          this.activeDashboardItem = this.dashboardMenuItems[0];
-        }
-        this.loading = false;
-        this.toastrService.success('Successfully got instance info from server');
-      }, error => this.toastrService.error(error.toString()));
+
+    return lastItem;
   }
 
   createDashboard(newDashboard: DashboardRequest): void {
@@ -193,6 +268,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   showAddItemPopup(): void {
+    this.isEditMode = true;
   }
 
 
@@ -246,6 +322,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       dashId: dashboard.id,
       createdAt: dashboard.createdAt,
       charts: dashboard.charts,
+      // routerLink: `/user/instances/${this.instanceId}/${this.instanceGuidId}/dashboards/${dashboard.id}`,
       command: (onclick) => {
         this.activeDashboardItem = item;
       }

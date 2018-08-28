@@ -74,6 +74,11 @@ export class DashboardsHub {
       }
     );
 
+    this.hubConnection.on('UserClaimsData', (info: CollectedData) => {
+        this.infoSub.next(info);
+      }
+    );
+
     this.hubConnection.on('Send', (item: string) => {
       console.log(`Message from Service Bus: ${item}`);
     });

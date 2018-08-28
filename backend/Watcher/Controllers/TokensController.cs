@@ -1,5 +1,6 @@
 ﻿namespace Watcher.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -77,6 +78,14 @@
             }
 
             return Ok(token);
+        }
+
+        [Authorize]
+        [HttpGet("Claims")]
+        public IActionResult GetClaims()
+        {
+            var claims = User.Claims.Select(u => new { u.Type, u.Value });
+            return Ok(claims);
         }
     }
 }
