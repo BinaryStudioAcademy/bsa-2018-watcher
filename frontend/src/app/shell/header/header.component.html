@@ -67,24 +67,19 @@
     </a>
 
     <p-overlayPanel #op1 styleClass="user-overlay">
-      <div class="ui-g">
-        <div class="ui-g-4">
-          <img src="{{currentUser?.photoURL}}" class="user-overlay-photo" alt="User photo" (click)="userpage()"/>
+      <div class="user-info-wrp">
+        <div class="text-center user-photo-wrp">
+          <img src="{{currentUser?.photoURL}}" class="user-photo" alt="User photo" (click)="openUserProfile()"/>
         </div>
-        <div class="ui-g-8 user-overlay-info">
-          <h3>{{ currentUser?.displayName }}</h3>
-          <p class="secondary-text">{{ currentUser?.email }}</p>
-          <p class="secondary-text">{{ currentUser?.role.name }}</p>
-          <p class="organization"><i class="fa fa-fw fa-building-o"></i>{{currentUser?.lastPickedOrganization?.name}}</p>
+        <div class="user-overlay-info">
+          <div class="user-name">{{ currentUser?.displayName }}</div>
+          <p class="user-email">{{ currentUser?.email }}</p>
+          <p class="user-organization"><i class="fa fa-fw fa-building-o"></i>{{currentUser?.lastPickedOrganization?.name}}</p>
         </div>
-        <div class="ui-g-12 overlay-bottom-buttons">
-          <div class="ui-g-4">
-            <a class="edit" (click)="userpage()"><i class="fa fa-edit"></i>edit</a>
-          </div>
-          <div class="ui-g-8">
-            <a class="logout" (click)="logout()"><i class="fa fa-fw fa-sign-out"></i>logout</a>
-          </div>
-        </div>
+      </div>
+      <div class="overlay-buttons">
+        <a class="overlay-btn edit-btn" (click)="openUserProfile()"><i class="fa fa-edit icon-btn"></i>Edit</a>
+        <a class="overlay-btn logout-btn" (click)="logout()"><i class="fa fa-fw fa-sign-out icon-btn"></i>Logout</a>
       </div>
     </p-overlayPanel>
   </div>

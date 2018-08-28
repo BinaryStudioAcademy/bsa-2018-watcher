@@ -158,7 +158,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  userpage(): void {
+  openUserProfile(): void {
     this.router.navigate(['/user/settings/user-profile']);
   }
 
