@@ -16,6 +16,7 @@ import { NotificationType } from '../../shared/models/notification-type.enum';
 import { NotificationsHubService } from '../../core/hubs/notifications.hub';
 import { PathService } from '../../core/services/path.service';
 import {TokenService} from '../../core/services/token.service';
+import { OverlayPanel } from 'primeng/components/overlaypanel/overlaypanel';
 
 @Component({
   selector: 'app-header',
@@ -162,8 +163,9 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  openUserProfile(): void {
+  openUserProfile(panel: OverlayPanel): void {
     this.router.navigate(['/user/settings/user-profile']);
+    panel.hide();
   }
 
   ngOnInit() {
