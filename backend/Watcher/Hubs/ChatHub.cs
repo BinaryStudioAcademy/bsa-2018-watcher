@@ -1,4 +1,7 @@
 ﻿using System.Security.Claims;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
+using Watcher.Core.Providers;
 
 namespace Watcher.Hubs
 {
@@ -14,20 +17,17 @@ namespace Watcher.Hubs
     {
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
-        private readonly IOrganizationService _organizationService;
-        private readonly INotificationService _notificationService;
+        private readonly ILogger<ChatHub> _logger;
 
         private static readonly Dictionary<string, List<string>> UsersConnections = new Dictionary<string, List<string>>();
 
-        public ChatHub(IChatsService chatsService,
-                        IMessagesService messagesService,
-                        IOrganizationService organizationService,
-                        INotificationService notificationService)
+        public ChatHub(ILoggerFactory loggerFactory,
+                        IChatsService chatsService, 
+                        IMessagesService messagesService)
         {
+            _logger = loggerFactory?.CreateLogger<ChatHub>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _chatsService = chatsService;
             _messagesService = messagesService;
-            _organizationService = organizationService;
-            _notificationService = notificationService;
         }
 
         public async Task Send(MessageRequest messageRequest)
@@ -66,7 +66,7 @@ namespace Watcher.Hubs
                     await Clients.Client(connectionId).SendAsync("ChatCreated", chat);
             }
         }
-
+      
         public async Task UpdateChat(ChatUpdateRequest chat, int chatId)
         {
             var result = await _chatsService.UpdateEntityByIdAsync(chat, chatId);
@@ -114,13 +114,15 @@ namespace Watcher.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            if (Context.User.Identity.Name != null)
+                AddUserConnection(Context.User.Identity.Name, Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            if (Context.User.Identity.Name != null)
+                RemoveUserConnection(Context.User.Identity.Name, Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
 

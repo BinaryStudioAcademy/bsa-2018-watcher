@@ -12,7 +12,9 @@
 
     using Serilog.Context;
 
+    using Watcher.Common.Helpers.Extensions;
     using Watcher.Core.Interfaces;
+    using Watcher.DataAccess.Entities;
 
     public class DashboardsHub : Hub
     {
@@ -62,8 +64,14 @@
         [Authorize]
         public Task GetClaims()
         {
+            var id = Context.User.GetUserId();
+            var mail = Context.User.GetUserEmail();
+            var role = Context.User.GetUserRole();
+            var IdUserRole = Context.User.IsInRole("User");
+            var IsAdminRole = Context.User.IsInRole("Admin");
+
             var claims = Context.User.Claims.Select(u => new { u.Type, u.Value });
-            return Clients.User(Context.ConnectionId).SendAsync("UserClaimsData", $"User with Id sent you message:  ");
+            return Clients.Client(Context.ConnectionId).SendAsync("UserClaimsData", claims);
         }
 
         [Authorize]

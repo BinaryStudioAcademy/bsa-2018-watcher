@@ -18,6 +18,10 @@ export class TokenService {
     return this.apiService.get(`/${this.ctrlUrl}/User`);
   }
 
+  getUserClaims(): Observable<any> {
+    return this.apiService.get(`/${this.ctrlUrl}/Claims`);
+  }
+
   register(request: UserRegisterRequest): Observable<Token>  {
     return this.apiService.post(`/${this.ctrlUrl}/Register`, request);
   }

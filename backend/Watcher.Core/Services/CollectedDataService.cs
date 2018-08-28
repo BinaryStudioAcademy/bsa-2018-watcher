@@ -123,9 +123,8 @@ namespace Watcher.Core.Services
             var random = new Random();
             var ProcessesCPU = new Dictionary<string, float>();
             var ProcessesRAM = new Dictionary<string, float>();
-
-            int processes = random.Next(0, 7);
-            for (int i = 0; i < processes; i++)
+            
+            for (int i = 0; i < 7; i++)
             {
                 ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
                 ProcessesRAM.Add(processNames[i], (float)random.NextDouble() * 1000);

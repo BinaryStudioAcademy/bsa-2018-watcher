@@ -5,12 +5,19 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using DataAccumulator.DataAccessLayer.Entities;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+
+    using MongoDB.Bson;
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Dtos.Plots;
     using Watcher.Core.Interfaces;
+    using Watcher.Core.Services;
+
+    using IMapper = AutoMapper.IMapper;
 
     /// <summary>   
     /// Controller to Manage Samples
@@ -28,6 +35,8 @@
 
         private readonly IInstanceService _instanceService;
 
+        private readonly IMapper _mapper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectedDataController"/> class. 
         /// </summary>
@@ -36,9 +45,11 @@
         /// </param>
         /// <param name="instanceService"></param>
         public CollectedDataController(ICollectedDataService service,
-                                        IInstanceService instanceService)
+                                       IMapper mapper,
+                                       IInstanceService instanceService)
         {
             _collectedDataService = service;
+            _mapper = mapper;
             _instanceService = instanceService;
         }
 
@@ -118,6 +129,22 @@
             }
 
             return Ok(dto);
+        }
+
+        [HttpGet("Builder")]
+        [AllowAnonymous]
+        public virtual ActionResult<IEnumerable<CollectedDataDto>> GetDataForBuilder()
+        {
+            var data = new List<CollectedDataDto>(20);
+            for (var i = 0; i < 20; i++)
+            {
+                var entity = CollectedDataService.GetFakeData(Guid.Empty);
+                entity.Id = Guid.NewGuid();
+                var dto = _mapper.Map<CollectedData, CollectedDataDto>(entity);
+                data.Add(dto);
+            }
+
+            return Ok(data);
         }
     }
 }
