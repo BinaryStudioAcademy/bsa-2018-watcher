@@ -25,7 +25,7 @@ export class NotificationsHubService {
   connectToSignalR(): void {
     this.createConnection();
     this.registerOnServerEvents();
-    this.startHubConnection();
+    this.startNotificationHubConnection();
   }
 
   send(userId: string, item: string): string {
@@ -80,13 +80,13 @@ export class NotificationsHubService {
     this.hubConnection.onclose(function (error) {
       console.log('CONNECTION CLOSED!!!');
       console.error(error);
-      this.startHubConnection();
+      this.startNotificationHubConnection();
     });
   }
 
 
   // Reconnect loop
-  private startHubConnection(): void {
+  private startNotificationHubConnection(): void {
     console.log('Connecting to Hub!!!');
     this.hubConnection.start()
       .then(() => {
@@ -96,7 +96,7 @@ export class NotificationsHubService {
       })
       .catch(function (err) {
         console.error(err);
-        // setTimeout(this.startHubConnection(), 3000);
+        setTimeout(this.startNotificationHubConnection(), 3000);
       });
   }
 }
