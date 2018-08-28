@@ -96,7 +96,7 @@ export class NotificationsHubService {
       })
       .catch(function (err) {
         console.error(err);
-        setTimeout(this.startHubConnection(), 3000);
+        // setTimeout(this.startHubConnection(), 3000);
       });
   }
 }

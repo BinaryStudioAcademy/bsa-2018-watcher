@@ -50,8 +50,8 @@ namespace Watcher.Hubs
 
         public async Task MarkMessageAsRead(int messageId)
         {
-            var result = await _messagesService.UpdateEntityByIdAsync(new MessageUpdateRequest { WasRead = true }, messageId);
-            if (!result) return;
+            //var result = await _messagesService.UpdateEntityByIdAsync(new MessageUpdateRequest { WasRead = true }, messageId);
+            //if (!result) return;
         }
 
         public async Task InitializeChat(ChatRequest chatRequest)
@@ -124,13 +124,13 @@ namespace Watcher.Hubs
                     _logger.LogError($"Claims {claim.Type}, {claim.Value}");
                 }
             }
-            //AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            //RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
 

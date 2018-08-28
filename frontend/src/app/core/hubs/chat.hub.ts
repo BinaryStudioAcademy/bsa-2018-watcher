@@ -49,7 +49,7 @@ export class ChatHub {
             })
             .catch(err => {
                 console.log('Error while establishing connection...');
-                setTimeout(this.startConnection(), 5000);
+                // setTimeout(this.startConnection(), 5000);
             });
     }
 
