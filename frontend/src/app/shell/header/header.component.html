@@ -1,7 +1,7 @@
 <div class="header">
  
-  <div class="img-logo-wr">
-      <img routerLink="/user" *ngIf="currentUser.lastPickedOrganization.imageURL" src="{{currentUser.lastPickedOrganization.imageURL}}" alt="logo organization" class="img-logo" />
+  <div class="logo-wr">
+      <a routerLink="/user" class="logo">WATCHER |</a> 
       <a routerLink="/user" class="logo">{{currentUser.lastPickedOrganization.name}}</a> 
   </div>
   
