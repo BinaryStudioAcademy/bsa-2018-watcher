@@ -20,28 +20,6 @@
             // TODO: Make your configs here...
             base.OnModelCreating(modelBuilder);
 
-            //foreach (var entity in modelBuilder.Model.GetEntityTypes().Where(e => e is ISoftDeletable))
-            //{
-            //    var type = entity;
-                
-            //    modelBuilder.Entity(entity.ClrType).HasQueryFilter(q => )
-
-            //    entity.GetOrAddProperty("IsDeleted", typeof(bool));               
-
-
-
-            //    var parameter = Expression.Parameter(entity.ClrType);
-
-            //    var propertyMethodInfo = typeof(EF).GetMethod("Property").MakeGenericMethod(typeof(bool));
-            //    var isDeletedProperty = Expression.Call(propertyMethodInfo, parameter, Expression.Constant("IsDeleted"));
-
-            //    BinaryExpression compareExpression = Expression.MakeBinary(ExpressionType.Equal, isDeletedProperty, Expression.Constant(false));
-
-            //    var lambda = Expression.Lambda(compareExpression, parameter);
-
-            //    //modelBuilder.Entity(entity.ClrType).HasQueryFilter(lambda);
-            //}
-
             modelBuilder.Entity<UserOrganization>()
                 .HasKey(uo => new { uo.UserId, uo.OrganizationId });
 
@@ -49,14 +27,12 @@
                 .HasKey(uc => new { uc.UserId, uc.ChatId });
 
             modelBuilder.Entity<Feedback>()
-                .HasQueryFilter(f => EF.Property<bool>(f, "IsDeleted") == false)
                 .HasOne(f => f.Response)
                 .WithOne(r => r.Feedback)
                 .HasForeignKey<Feedback>(r => r.ResponseId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<NotificationSetting>()
-                .HasQueryFilter(f => EF.Property<bool>(f, "IsDeleted") == false)
                 .HasMany(ns => ns.Notifications)
                 .WithOne(n => n.NotificationSetting);
 
@@ -86,7 +62,6 @@
                 .WithOne(u => u.User)
                 .OnDelete(DeleteBehavior.Cascade);
             
-
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Feedbacks)
                 .WithOne(f => f.User)
@@ -124,8 +99,7 @@
                .WithOne(f => f.Organization)
                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Instance>()
-                .HasQueryFilter(instance => EF.Property<bool>(instance, "IsDeleted") == false);
+
 
             modelBuilder.Seed();
         }

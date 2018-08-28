@@ -90,6 +90,10 @@
 
 			var items = await query.Skip((index - 1) * count).Take(count).ToListAsync();
 
+            if (items is IEnumerable<ISoftDeletable>)
+            {
+                items = items.Where(i => ((ISoftDeletable)i).IsDeleted == false).ToList();
+            }
             return items;
 		}
 
@@ -129,6 +133,11 @@
 			{
 				query = query.Where(predicate);
 			}
+
+            if (query is IEnumerable<ISoftDeletable>)
+            {
+                query = query.Where(q => ((ISoftDeletable)q).IsDeleted == false);
+            }
 
 			if (include != null)
 			{
@@ -217,13 +226,13 @@
 
 		public void Delete(TEntity entityToDelete)
 		{
-			if (Context.Entry(entityToDelete).State == EntityState.Detached)
-			{
-				DbSet.Attach(entityToDelete);
-			}
+            if (Context.Entry(entityToDelete).State == EntityState.Detached)
+            {
+                DbSet.Attach(entityToDelete);
+            }
 
-			DbSet.Remove(entityToDelete);
-		}
+            DbSet.Remove(entityToDelete);
+        }
 
 		public async Task DeleteManyAsync(Expression<Func<TEntity, bool>> predicate = null,
 										  Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
