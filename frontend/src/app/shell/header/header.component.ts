@@ -16,7 +16,6 @@ import { NotificationType } from '../../shared/models/notification-type.enum';
 import { NotificationsHubService } from '../../core/hubs/notifications.hub';
 import { PathService } from '../../core/services/path.service';
 import {TokenService} from '../../core/services/token.service';
-import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 
 @Component({
   selector: 'app-header',
@@ -44,7 +43,6 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private tokenService: TokenService,
-    private dashboardsHub: DashboardsHub,
     private notificationsHubService: NotificationsHubService,
     private messageService: MessageService,
     private userService: UserService,

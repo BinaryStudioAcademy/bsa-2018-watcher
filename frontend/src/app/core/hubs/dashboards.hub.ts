@@ -82,11 +82,7 @@ export class DashboardsHub {
     );
 
     this.hubConnection.on('UserClaimsData', (claimsData: any[]) => {
-        // {type: string, value: string}[]
       console.log(claimsData);
-        // for (let i = 0; i < claimsData.length; i++) {
-        //   console.log(`Type: ${claimsData[i].type}  -  Value: ${claimsData[i].value}`);
-        // }
       }
     );
 
@@ -108,7 +104,7 @@ export class DashboardsHub {
     return this.hubConnection.start()
       .then(() => {
         this.connectionEstablishedSub.next(true);
-        this.getSignalRClaims();
+        // this.getSignalRClaims();
       })
       .catch(function (err) {
         console.error(err);

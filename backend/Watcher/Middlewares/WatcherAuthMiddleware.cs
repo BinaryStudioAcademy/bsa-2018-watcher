@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Middlewares
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Security.Claims;
@@ -10,7 +11,9 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using Microsoft.IdentityModel.JsonWebTokens;
 
+    using Watcher.Common.Helpers.Comparers;
     using Watcher.Common.Options;
     using Watcher.Core.Auth;
 
@@ -47,14 +50,31 @@
 
                 if (jwt != null)
                 {
-                    var role = jwt.Claims.Any(c => c.Type == "role");
-                    var name = jwt.Claims.Any(c => c.Type == "unique_name");
-                    if (role && name)
-                    {
-                        var identity = TokenUtil.CreateDefaultClaimsIdentity(jwt.Claims);
+                    var claimsToAdd = new List<Claim>(jwt.Claims.Count());
 
-                        context.User.AddIdentity(identity);
+                    var role = jwt.Claims.FirstOrDefault(c => c.Type == "role");
+                    if (role != null)
+                    {
+                        claimsToAdd.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role.Value, role.ValueType, role.Issuer));
                     }
+                    var email = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email);
+                    if (email != null)
+                    {
+                        claimsToAdd.Add(new Claim(ClaimTypes.Email, email.Value, email.ValueType, email.Issuer));
+                    }
+                    var name = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.UniqueName);
+                    if (name != null)
+                    {
+                        claimsToAdd.Add(new Claim(ClaimsIdentity.DefaultNameClaimType, name.Value, name.ValueType, name.Issuer));
+                    }
+
+                    var comparer = new ClaimsEqualityComparer();
+                    var cls = jwt.Claims.Except(new[] { role, email, name }, comparer);
+                    claimsToAdd.AddRange(cls);
+
+                    var identity = TokenUtil.CreateDefaultClaimsIdentity(claimsToAdd);
+
+                    context.User.AddIdentity(identity);
 
                     await _next.Invoke(context);
                 }
