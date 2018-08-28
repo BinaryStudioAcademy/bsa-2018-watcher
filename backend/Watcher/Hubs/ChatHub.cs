@@ -129,7 +129,8 @@
                 }
             }
         }
-        
+
+        [Authorize]
         public override async Task OnConnectedAsync()
         {
             if (Context.User.GetUserId() != null)
