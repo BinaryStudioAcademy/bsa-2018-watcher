@@ -92,7 +92,7 @@ export class HeaderComponent implements OnInit {
 
   removeActiveButttonState(id: string): void {
     const btn = document.getElementById(id);
-    btn.style.backgroundColor = '';
+    btn.style.backgroundColor = '#313232';
   }
 
   notificationsToItems(): void {
@@ -161,7 +161,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  userpage(): void {
+  openUserProfile(): void {
     this.router.navigate(['/user/settings/user-profile']);
   }
 
