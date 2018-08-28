@@ -4,7 +4,7 @@ import { FeedbackService } from '../core/services/feedback.service';
 import { AuthService } from '../core/services/auth.service';
 import { ToastrService } from '../core/services/toastr.service';
 import { Feedback } from '../shared/models/feedback.model';
-import { UserService } from '../core/services/user.service';
+// import { UserService } from '../core/services/user.service';
 import { User } from '../shared/models/user.model';
 import { LongAnswerType } from '../shared/models/long-answer-type.enum';
 import { ShortAnswerType } from '../shared/models/short-answer-type.enum';
@@ -22,7 +22,7 @@ import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 export class FeedbackComponent implements OnInit {
 
   feedback: Feedback;
-  feedbacks: Feedback[];
+  // feedbacks: Feedback[];
   user: User;
   isSubmiting: Boolean = false;
 
@@ -30,24 +30,35 @@ export class FeedbackComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private feedbackService: FeedbackService,
-    private userService: UserService,
+    // private userService: UserService,
     private toastrService: ToastrService,
     private router: Router) { }
 
   feedbackForm = this.fb.group({
     suggestions: new FormControl({ value: ' ', disabled: false }),
-    willUse: new FormControl({ value: ShortAnswerType, disabled: false }),
-    informatively: new FormControl({ value: LongAnswerType, disabled: false }),
-    friendliness: new FormControl({ value: LongAnswerType, disabled: false }),
-    quickness: new FormControl({ value: LongAnswerType, disabled: false })
+    willUse: new FormControl({ value: ShortAnswerType[ShortAnswerType.Abstain], disabled: false }),
+    informatively: new FormControl({ value: LongAnswerType[LongAnswerType.Abstain], disabled: false }),
+    friendliness: new FormControl({ value: LongAnswerType[LongAnswerType.Abstain], disabled: false }),
+    quickness: new FormControl({ value: LongAnswerType[LongAnswerType.Abstain], disabled: false })
   });
+
+  restForm() {
+    this.feedbackForm.reset({
+      suggestions: { value: ' ', disabled: false },
+      willUse: { value: ShortAnswerType[ShortAnswerType.Abstain], disabled: false },
+      informatively: { value: LongAnswerType[LongAnswerType.Abstain], disabled: false },
+      friendliness: { value: LongAnswerType[LongAnswerType.Abstain], disabled: false },
+      quickness: { value: LongAnswerType[LongAnswerType.Abstain], disabled: false }
+    });
+  }
 
   ngOnInit() {
     this.user = this.authService.getCurrentUser();
     if (this.user == null) {
       return;
     }
-    this.feedbackService.getAll().subscribe((value: Feedback[]) => this.feedbacks = value);
+
+    // this.feedbackService.getAll().subscribe((value: Feedback[]) => this.feedbacks = value);
   }
 
   async onSubmit() {
@@ -73,7 +84,7 @@ export class FeedbackComponent implements OnInit {
       quickness: quickness,
       response: null
     };
-    // console.log(newFeedback);
+    console.log(newFeedback);
     this.feedbackService.create(newFeedback).
       subscribe(
         value => {
@@ -88,7 +99,7 @@ export class FeedbackComponent implements OnInit {
           this.isSubmiting = false;
         });
     if (await this.toastrService.question('Would you want to enter one more feedback?')) {
-      this.feedbackForm.reset();
+      this.restForm();
     } else {
       this.router.navigate(['/user']);
     }

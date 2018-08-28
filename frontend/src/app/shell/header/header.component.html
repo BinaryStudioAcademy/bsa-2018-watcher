@@ -1,10 +1,8 @@
 <div class="header">
  
-  <div class="img-logo-wr">
-      <img routerLink="/user" *ngIf="currentUser.lastPickedOrganization.imageURL" src="{{currentUser.lastPickedOrganization.imageURL}}" alt="logo organization" class="img-logo" />
-      <a routerLink="/user" class="logo">{{currentUser.lastPickedOrganization.name}}</a> 
-  </div>
-  
+  <div class="logo-wr">
+      <a routerLink="/user" class="logo">WATCHER | {{currentUser.lastPickedOrganization.name}}</a> 
+  </div>  
   
   <p-growl [(value)]="msgs"></p-growl>
 
@@ -15,7 +13,7 @@
 
     <div class="notifications-block" appClickOutside (clickOutside)="close()">
       <div class="toolbar-item">
-        <button #btn type="button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
+        <button #btn type="button" id="bell-button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
         <span *ngIf="notificationsNumber !== 0" class="topbar-badge">{{ notificationsNumber }}</span>
       </div>
 
@@ -60,25 +58,31 @@
     <button #btn type="button" pButton icon="fa fa-sitemap" (click)="org.toggle($event)"></button>
     <app-add-new-organization [(display)]="displayAddNewOrganization" (displayChange)="onDisplayChange($event)"></app-add-new-organization>
 
+    <!--<div class="toolbar-item">-->
+      <!--<button #btn type="button" pButton icon="fa fa-fw fa-cog" (click)="getUserClaims()"></button>-->
+    <!--</div>-->
+
     <a class="user-info" (click)="op1.toggle($event)">
       <span>{{ currentUser?.displayName }}</span>
       <img src="{{currentUser?.photoURL}}" class="user-photo" alt="" />
     </a>
 
-    <p-overlayPanel #op1 styleClass="user-overlay">
-      <div class="ui-g">
-          <div class="ui-g-4">
-            <img src="{{currentUser?.photoURL}}" class="user-overlay-photo" alt="User photo" />
-          </div>
-          <div class="ui-g-8">
-            <h3>{{ currentUser?.displayName }}</h3>
-            <p class="secondary-text">{{ currentUser?.email }}</p>
-            <p class="secondary-text">{{ currentUser?.role.name }}</p>
-            <p class="organization"><i class="fa fa-fw fa-building-o"></i>{{currentUser?.lastPickedOrganization?.name}}</p>
-          </div>
-          <a class="edit" (click)="userpage()"><i class="fa fa-edit"></i>edit</a>
-          <a class="logout" (click)="logout()"><i class="fa fa-fw fa-sign-out"></i>logout</a>
+    <p-overlayPanel #op1 styleClass="user-overlay" appendTo="user-info">
+      <div class="user-info-wrp">
+        <div class="text-center user-photo-wrp">
+          <img src="{{currentUser?.photoURL}}" class="user-photo" alt="User photo" (click)="openUserProfile()"/>
+        </div>
+        <div class="user-overlay-info">
+          <div class="user-name">{{ currentUser?.displayName }}</div>
+          <p class="user-email">{{ currentUser?.email }}</p>
+          <p class="user-email">{{ currentUser?.role.name }}</p>
+          <p class="user-organization"><i class="fa fa-fw fa-building-o"></i>{{currentUser?.lastPickedOrganization?.name}}</p>
+        </div>
       </div>
-  </p-overlayPanel>
+      <div class="overlay-buttons">
+        <a class="overlay-btn edit-btn" (click)="openUserProfile()"><i class="fa fa-edit icon-btn"></i>Edit</a>
+        <a class="overlay-btn logout-btn" (click)="logout()"><i class="fa fa-fw fa-sign-out icon-btn"></i>Logout</a>
+      </div>
+    </p-overlayPanel>
   </div>
 </div>

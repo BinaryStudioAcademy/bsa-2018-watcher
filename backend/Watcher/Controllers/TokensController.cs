@@ -1,10 +1,12 @@
 ﻿namespace Watcher.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using Watcher.Common.Helpers.Extensions;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
 
@@ -77,6 +79,20 @@
             }
 
             return Ok(token);
+        }
+
+        [Authorize]
+        [HttpGet("Claims")]
+        public IActionResult GetClaims()
+        {
+            var id = User.GetUserId();
+            var mail = User.GetUserEmail();
+            var role = User.GetUserRole();
+            var IdUserRole = User.IsInRole("User");
+            var IsAdminRole = User.IsInRole("Admin");
+
+            var claims = User.Claims.Select(u => new { u.Type, u.Value });
+            return Ok(claims);
         }
     }
 }

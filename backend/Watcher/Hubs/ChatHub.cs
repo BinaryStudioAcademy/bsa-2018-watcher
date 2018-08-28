@@ -23,9 +23,7 @@ namespace Watcher.Hubs
 
         public ChatHub(ILoggerFactory loggerFactory,
                         IChatsService chatsService, 
-                        IMessagesService messagesService, 
-                        IOrganizationService organizationService, 
-                        INotificationService notificationService)
+                        IMessagesService messagesService)
         {
             _logger = loggerFactory?.CreateLogger<ChatHub>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _chatsService = chatsService;
@@ -116,21 +114,15 @@ namespace Watcher.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            using (LogContext.PushProperty("ClassName", this.GetType().FullName))
-            using (LogContext.PushProperty("Source", "Claims"))
-            {
-                foreach (var claim in Context.User.Claims)
-                {
-                    _logger.LogError($"Claims {claim.Type}, {claim.Value}");
-                }
-            }
-            //AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            if (Context.User.Identity.Name != null)
+                AddUserConnection(Context.User.Identity.Name, Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            //RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            if (Context.User.Identity.Name != null)
+                RemoveUserConnection(Context.User.Identity.Name, Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
 
