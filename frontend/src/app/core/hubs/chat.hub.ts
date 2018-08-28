@@ -22,6 +22,7 @@ export class ChatHub {
     public chatMessagesWasRead = new EventEmitter<number>();
     public chatCreated = new EventEmitter<Chat>();
     public chatChanged = new EventEmitter<Chat>();
+    public chatDeleted = new EventEmitter<Chat>();
 
     constructor(private authService: AuthService) {
         this.startConnection();
@@ -74,6 +75,11 @@ export class ChatHub {
             console.log('ChatChanged');
         });
 
+        this.hubConnection.on('ChatDeleted', (data: any) => {
+            this.chatDeleted.emit(data);
+            console.log('ChatDeleted');
+        });
+
         this.hubConnection.onclose((error: Error) => {
             console.log('ChatHub connection closed!');
             console.error(error);
@@ -108,6 +114,11 @@ export class ChatHub {
 
     public deleteUserFromChat(userId: string, chatId: number) {
         this.hubConnection.invoke('DeleteUserFromChat', chatId, userId)
+            .catch(err => console.error(err));
+    }
+
+    public deleteChat(chatId: number) {
+        this.hubConnection.invoke('DeleteChat', chatId)
             .catch(err => console.error(err));
     }
 }

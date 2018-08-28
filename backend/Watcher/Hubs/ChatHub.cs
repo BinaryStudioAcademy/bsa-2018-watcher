@@ -112,6 +112,22 @@ namespace Watcher.Hubs
             }
         }
 
+        public async Task DeleteChat(int id)
+        {
+            var deleteChat = await _chatsService.GetEntityByIdAsync(id);
+
+            var result = await _chatsService.DeleteEntityByIdAsync(id);
+            if (result)
+            {
+                foreach (var user in deleteChat.Users)
+                {
+                    if (!UsersConnections.ContainsKey(user.Id)) continue;
+                    foreach (string connectionId in UsersConnections[user.Id])
+                        await Clients.Client(connectionId).SendAsync("ChatDeleted", deleteChat);
+                }
+            }
+        }
+
         public override async Task OnConnectedAsync()
         {
             if (Context.User.Identity.Name != null)

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DataAccumulator.BusinessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Entities;
+using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
 using DataAccumulator.Shared.Exceptions;
 using DataAccumulator.Shared.Models;
@@ -13,9 +14,9 @@ namespace DataAccumulator.BusinessLayer.Services
     public class DataAggregatorService : IDataAggregatorService<CollectedDataDto>
     {
         private readonly IMapper _mapper;
-        private readonly DataAggregatorRepository _repository;
+        private readonly IDataAggregatorRepository<CollectedData> _repository;
 
-        public DataAggregatorService(IMapper mapper, DataAggregatorRepository repository)
+        public DataAggregatorService(IMapper mapper, IDataAggregatorRepository<CollectedData> repository)
         {
             _mapper = mapper;
             _repository = repository;

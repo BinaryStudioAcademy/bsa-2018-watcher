@@ -119,6 +119,12 @@ export class ChatComponent implements OnInit {
         }
       }
     });
+
+    this.chatHub.chatDeleted.subscribe((chat: Chat) => {
+      const indexOfChat = this.chatList.map(item => item.value.id).indexOf(chat.id);
+      this.chatList.splice(indexOfChat, 1);
+      this.onDisplayChat.emit();
+    });
   }
 
   getChatImage(chat: Chat) {
