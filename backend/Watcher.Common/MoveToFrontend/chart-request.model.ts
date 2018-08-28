@@ -1,12 +1,14 @@
-﻿import { ChartType } from './chart-type.enum';
+﻿
+import { ChartType } from './chart-type.enum';
 
-export interface Chart  {
-   id: number;
+export interface ChartRequest  {
    type: ChartType;
    source: string;
    showCommon: string;
    threshold: number;
    mostLoaded: string;
+   dashboardId: number;
 }
+
 
 

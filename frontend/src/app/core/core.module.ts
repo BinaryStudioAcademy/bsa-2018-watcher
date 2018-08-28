@@ -13,6 +13,7 @@ import { FeedbackService } from './services/feedback.service';
 import { ResponseService } from './services/response.service';
 import {DashboardsHub} from './hubs/dashboards.hub';
 import { RoleService } from './services/role.service';
+import { ChartService } from './services/chart.service';
 import { UserOrganizationService } from './services/user-organization.service';
 import { NotificationsHubService } from './hubs/notifications.hub';
 
@@ -28,6 +29,7 @@ import { NotificationsHubService } from './hubs/notifications.hub';
     FeedbackService,
     ResponseService,
     RoleService,
+    ChartService,
     UserOrganizationService,
     ConfirmationService,
     MessageService,

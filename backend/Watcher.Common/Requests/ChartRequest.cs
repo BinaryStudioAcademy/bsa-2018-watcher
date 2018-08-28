@@ -1,7 +1,10 @@
-﻿namespace Watcher.Common.Requests
+﻿using Watcher.Common.MoveToFrontend;
+
+namespace Watcher.Common.Requests
 {
     using Watcher.Common.Enums;
 
+    [ExportClassToTypescript]
     public class ChartRequest
     {
         public ChartRequest() { }

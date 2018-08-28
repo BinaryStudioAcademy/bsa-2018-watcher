@@ -1,18 +1,22 @@
-import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
-import {ConfirmationService, MenuItemContent} from 'primeng/primeng';
-import {MessageService} from 'primeng/api';
-import {DashboardService} from '../../core/services/dashboard.service';
-import {Dashboard} from '../../shared/models/dashboard.model';
-import {ToastrService} from '../../core/services/toastr.service';
-import {DashboardMenuItem} from '../models';
-import {DashboardRequest} from '../../shared/models/dashboard-request.model';
-import {ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {InstanceService} from '../../core/services/instance.service';
-import {DashboardsHub} from '../../core/hubs/dashboards.hub';
-import {PercentageInfo} from '../models/percentage-info';
-import {CustomChart, CustomData, CustomQuery, Filter, gapminder, toCapitalizedWords} from '../charts/models';
-import {DataService} from '../services/data.service';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ConfirmationService, MenuItemContent } from 'primeng/primeng';
+import { MessageService } from 'primeng/api';
+import { DashboardService } from '../../core/services/dashboard.service';
+import { Dashboard } from '../../shared/models/dashboard.model';
+import { ToastrService } from '../../core/services/toastr.service';
+import { DashboardMenuItem } from '../models';
+import { DashboardRequest } from '../../shared/models/dashboard-request.model';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { InstanceService } from '../../core/services/instance.service';
+import { DashboardsHub } from '../../core/hubs/dashboards.hub';
+import { PercentageInfo } from '../models/percentage-info';
+import { CustomChart, CustomData, CustomQuery, Filter, gapminder, toCapitalizedWords } from '../charts/models';
+import { DataService } from '../services/data.service';
+
+import { ChartType } from '../../shared/models/chart-type.enum';
+import { ChartRequest } from '../../shared/requests/chart-request.model';
+import { ChartService } from '../../core/services/chart.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,6 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   displayEditDashboard = false;
   percentageInfoToDisplay: PercentageInfo[];
   percentageInfoToDisplaySingle: PercentageInfo;
+  popupAddChart: Boolean = false;
 
   set PercentageInfoToDisplay(info: PercentageInfo[]) {
     this.percentageInfoToDisplay = info;
@@ -53,12 +58,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   rawData: CustomData[] = [];
 
   constructor(private dashboardsService: DashboardService,
-              private instanceService: InstanceService,
-              private dashboardsHub: DashboardsHub,
-              private toastrService: ToastrService,
-              private activateRoute: ActivatedRoute,
-              private ngZone: NgZone,
-              private dataService: DataService) {
+    private instanceService: InstanceService,
+    private dashboardsHub: DashboardsHub,
+    private toastrService: ToastrService,
+    private chartService: ChartService,
+    private activateRoute: ActivatedRoute,
+    private ngZone: NgZone,
+    private dataService: DataService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -194,12 +200,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   createDashboard(newDashboard: DashboardRequest): void {
     this.dashboardsService.create(newDashboard)
       .subscribe((dto) => {
-          const item: DashboardMenuItem = this.transformToMenuItem(dto);
-          this.dashboardMenuItems.unshift(item);
-          this.activeDashboardItem = this.dashboardMenuItems[0];
-          this.loading = false;
-          this.toastrService.success('Added new dashboard');
-        },
+        const item: DashboardMenuItem = this.transformToMenuItem(dto);
+        this.dashboardMenuItems.unshift(item);
+        this.activeDashboardItem = this.dashboardMenuItems[0];
+        this.loading = false;
+        this.toastrService.success('Added new dashboard');
+      },
         error => {
           this.loading = false;
           this.toastrService.error(`Error ocured status: ${error}`);
@@ -230,21 +236,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   deleteDashboard(dashboard: DashboardMenuItem): void {
     this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
-          console.log(res);
-          // Search and delete selected Item
-          const index = this.dashboardMenuItems.findIndex(d => d === this.activeDashboardItem);
-          this.dashboardMenuItems.splice(index, 1);
+        console.log(res);
+        // Search and delete selected Item
+        const index = this.dashboardMenuItems.findIndex(d => d === this.activeDashboardItem);
+        this.dashboardMenuItems.splice(index, 1);
 
-          // [0] - is + button
-          if (this.dashboardMenuItems.length > 1) {
-            this.activeDashboardItem = this.dashboardMenuItems[0];
-          } else {
-            this.activeDashboardItem = null;
-          }
+        // [0] - is + button
+        if (this.dashboardMenuItems.length > 1) {
+          this.activeDashboardItem = this.dashboardMenuItems[0];
+        } else {
+          this.activeDashboardItem = null;
+        }
 
-          this.loading = false;
-          this.toastrService.success('Deleted dashboard');
-        },
+        this.loading = false;
+        this.toastrService.success('Deleted dashboard');
+      },
         error => {
           this.loading = false;
           this.toastrService.error(`Error occured status: ${error}`);
@@ -275,7 +281,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
-      const newdash: DashboardRequest = {title: title, instanceId: this.instanceId};
+      const newdash: DashboardRequest = { title: title, instanceId: this.instanceId };
       this.createDashboard(newdash);
       let index = 0;
       // switching to new tab
@@ -328,5 +334,66 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     };
     return item;
+  }
+
+
+
+  showPopupAddChart() {
+    this.popupAddChart = true;
+  }
+
+  onCancel() {
+    this.popupAddChart = false;
+  }
+
+  createChart() {
+    const chart: ChartRequest = {
+      type: ChartType.Multiple, // if ChartType.Plot -> Bad request
+      source: 'source',
+      showCommon: 'showCommon1',
+      threshold: 16,
+      mostLoaded: 'mostLoaded',
+      dashboardId: 102// this.activeDashboardItem.dashId
+    };
+    console.log(chart);
+    return chart;
+  }
+
+  onCreateChart() {
+    this.popupAddChart = false;
+
+    if (true) {
+      this.chartService.create(this.createChart()).subscribe(
+        value => {
+          this.toastrService.success('Chart was created');
+          // this.activeDashboardItem.charts.push(value);
+        },
+        error => {
+          // this.toastrService.error('Organization Invite was not created');
+          this.toastrService.error(`Error ocured status: ${error.message}`);
+        });
+    }
+  }
+
+  onEditChart(chart: ChartRequest) {
+    this.chartService.update(111, this.createChart()).subscribe(
+      value => {
+        this.toastrService.success('The chart was updated');
+      },
+      error => {
+        // this.toastrService.error('Organization Invite was not created');
+        this.toastrService.error(`Error ocured status: ${error.message}`);
+      });
+  }
+
+  onDeleteChart(id: number) {
+    this.chartService.delete( 111 ).subscribe(
+      value => {
+        this.toastrService.success('The chart was deleted');
+      },
+      error => {
+        // this.toastrService.error('Organization Invite was not created');
+        this.toastrService.error(`Error ocured status: ${error.message}`);
+      });
   }
 }
