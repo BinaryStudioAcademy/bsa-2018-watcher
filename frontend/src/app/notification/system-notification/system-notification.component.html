@@ -15,7 +15,7 @@
       </div>
   
       <div *ngIf="message.severity == 'chat'" class="message-container action" (click)="openChat(message.data?.chatId)">
-        <img class="message-img" src="{{'http://localhost:29878/images/profilePhoto.png'}}" />
+        <img class="message-img" src="{{message.data.user.photoURL}}" />
         <div class="message-content">
           <span class="message-title text-overflow">Chat message from {{message.data.user.displayName}}</span>
           <div class="message-text">{{message.data.text}}</div>
