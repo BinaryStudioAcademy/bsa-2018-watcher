@@ -12,6 +12,7 @@ import { ShortAnswerType } from '../../shared/models/short-answer-type.enum';
 import { ResponseService } from '../../core/services/response.service';
 import { ValueTransformer } from '@angular/compiler/src/util';
 import { ForShow } from '../forShow.model';
+import { LazyLoadEvent } from '../../../../node_modules/primeng/api';
 
 @Component({
   selector: 'app-feedback-list',
@@ -51,9 +52,11 @@ export class FeedbackListComponent implements OnInit {
     if (this.user == null) {
       return;
     }
+
+    this.feedbackService.getNumber().subscribe((value: number) => this.totalRecords = value);
+
     this.feedbackService.getAll().subscribe((value: Feedback[]) => {
       this.sortByDueDate(value);
-      this.totalRecords = value.length;
       this.feedbacks = value;
       this.fillLstFeedbacks();
     });
@@ -85,6 +88,16 @@ export class FeedbackListComponent implements OnInit {
   onCancel() {
     this.display = false;
     this.feedback = null;
+  }
+
+  loadFeedbacksLazy(event: LazyLoadEvent) {
+    const currentPage = event.first / event.rows + 1;
+    this.feedbackService.getRange(currentPage, event.rows).subscribe((value: Feedback[]) => {
+      this.sortByDueDate(value);
+      this.feedbacks = value;
+      this.lstFeedbacks = [];
+      this.fillLstFeedbacks();
+    });;
   }
 
   onSubmit() {

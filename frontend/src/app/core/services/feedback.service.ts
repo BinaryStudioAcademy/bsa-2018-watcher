@@ -1,29 +1,36 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Feedback } from '../../shared/models/feedback.model';
+import { ApiService } from './api.service';
 
 @Injectable(/*{
   providedIn: 'root'
 }*/)
 export class FeedbackService {
+  private readonly ctrlUrl = 'feedbacks';
 
-  URL = environment.server_url + '/Feedbacks';
-
-  constructor(private http: HttpClient) {
+  constructor(private apiService: ApiService) {
   }
 
   getAll(): Observable<Feedback[]> {
-    return this.http.get<Feedback[]>(this.URL);
+    return this.apiService.get(`/${this.ctrlUrl}`);
+  }
+
+  getRange(page: number, pageSize: number) : Observable<Feedback[]> {
+    return this.apiService.get(`/${this.ctrlUrl}/table?page=${page}&pageSize=${pageSize}`);
+  }
+
+  getNumber(): Observable<number> {
+    return this.apiService.get(`/${this.ctrlUrl}/number`);
   }
 
   get(id: number): Observable<Feedback> {
-    return this.http.get<Feedback>(`${this.URL}/${id}`);
+    return this.apiService.get(`/${this.ctrlUrl}/${id}`);
   }
 
   create(feedback: Feedback) {
-    return this.http.post<Feedback>(this.URL, feedback);
+    return this.apiService.post(`/${this.ctrlUrl}`, feedback);
   }
 
 }
