@@ -70,7 +70,7 @@
     <p-overlayPanel #op1 styleClass="user-overlay">
       <div class="user-info-wrp">
         <div class="text-center user-photo-wrp">
-          <img src="{{currentUser?.photoURL}}" class="user-photo" alt="User photo" (click)="openUserProfile()"/>
+          <img src="{{currentUser?.photoURL}}" class="user-photo" alt="User photo" (click)="openUserProfile(op1)"/>
         </div>
         <div class="user-overlay-info">
           <div class="user-name">{{ currentUser?.displayName }}</div>
