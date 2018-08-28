@@ -42,9 +42,9 @@ namespace Watcher.Hubs
 
             foreach (var userDto in usersInChat)
             {
-                if (!UsersConnections.ContainsKey(userDto.Id)) continue;
-                foreach (string connectionId in UsersConnections[userDto.Id])
-                    await Clients.Client(connectionId).SendAsync("ReceiveMessage", createdMessage);
+                //if (!UsersConnections.ContainsKey(userDto.Id)) continue;
+                //foreach (string connectionId in UsersConnections[userDto.Id])
+                //    await Clients.Client(connectionId).SendAsync("ReceiveMessage", createdMessage);
             }
         }
 
@@ -63,9 +63,9 @@ namespace Watcher.Hubs
 
             foreach (var user in chat.Users)
             {
-                if (!UsersConnections.ContainsKey(user.Id)) continue;
-                foreach (string connectionId in UsersConnections[user.Id])
-                    await Clients.Client(connectionId).SendAsync("ChatCreated", chat);
+                //if (!UsersConnections.ContainsKey(user.Id)) continue;
+                //foreach (string connectionId in UsersConnections[user.Id])
+                //    await Clients.Client(connectionId).SendAsync("ChatCreated", chat);
             }
         }
 
@@ -78,9 +78,9 @@ namespace Watcher.Hubs
 
             foreach (var user in changedChat.Users)
             {
-                if (!UsersConnections.ContainsKey(user.Id)) continue;
-                foreach (string connectionId in UsersConnections[user.Id])
-                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
+                //if (!UsersConnections.ContainsKey(user.Id)) continue;
+                //foreach (string connectionId in UsersConnections[user.Id])
+                //    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
@@ -93,9 +93,9 @@ namespace Watcher.Hubs
 
             foreach (var user in changedChat.Users)
             {
-                if (!UsersConnections.ContainsKey(user.Id)) continue;
-                foreach (string connectionId in UsersConnections[user.Id])
-                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
+                //if (!UsersConnections.ContainsKey(user.Id)) continue;
+                //foreach (string connectionId in UsersConnections[user.Id])
+                //    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
@@ -108,9 +108,9 @@ namespace Watcher.Hubs
 
             foreach (var user in changedChat.Users)
             {
-                if (!UsersConnections.ContainsKey(user.Id)) continue;
-                foreach (string connectionId in UsersConnections[user.Id])
-                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
+                //if (!UsersConnections.ContainsKey(user.Id)) continue;
+                //foreach (string connectionId in UsersConnections[user.Id])
+                //    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
@@ -124,13 +124,13 @@ namespace Watcher.Hubs
                     _logger.LogError($"Claims {claim.Type}, {claim.Value}");
                 }
             }
-            AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            //AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            //RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
 
