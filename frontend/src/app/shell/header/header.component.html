@@ -13,40 +13,12 @@
     <p-tieredMenu #admin [model]="adminItems" [popup]="true"></p-tieredMenu>
     <button #btn type="button" *ngIf="isAdmin()" pButton icon="fa fa-fw fa-user" (click)="admin.toggle($event)"></button>
 
-    <div class="notifications-block" appClickOutside (clickOutside)="close()">
+    <div class="notifications-block" appClickOutside (clickOutside)="closeNotificationBlock()">
       <div class="toolbar-item">
         <button #btn type="button" id="bell-button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
-        <span *ngIf="notificationsNumber !== 0" class="topbar-badge">{{ notificationsNumber }}</span>
+        <span *ngIf="unreadedNotification" class="topbar-badge">{{ unreadedNotification }}</span>
       </div>
-
-      <div class="notifications-popup" *ngIf="isNotificationShow">
-        <div class="withoutNotification" *ngIf="notifications.length == 0">
-          <p>
-            You don`t have notifications yet.
-          </p>
-        </div>
-        <div *ngIf="notifications.length !== 0">
-          <div class="markAsRead">
-            <a (click)="markAsRead()">Mark as read</a>
-          </div>
-
-          <div class="notification-card" *ngFor="let notification of notifications">
-            <div class="notification-type {{notification.type}}"></div>
-            <div class="notification-text">{{notification.text}}</div>
-            <div class="info-block">
-              <div class="short-info">
-                <p class="time">{{notification.createdAt | date:'dd/MM/yy HH:mm'}}</p>
-                <p>Type: {{notification.type}}</p>
-              </div>
-              <div class="readIndicator">
-                <i *ngIf="notification.wasRead" class="fa fa-check-square"></i>
-                <i *ngIf="!notification.wasRead" class="fa fa-check"></i>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
+      <app-notification-block [onDisplay]="onDisplayNotificationBlock" (counterChanged)="changeCounter($event)"></app-notification-block>
     </div>
 
     <div class="toolbar-item">
