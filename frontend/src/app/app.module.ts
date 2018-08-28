@@ -28,10 +28,8 @@ import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdia
 import { ShellModule } from './shell/shell.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { NotificationComponent } from './notification/notification/notification.component';
-import { NotificationBlockComponent } from './notification/notification-block/notification-block.component';
 import { CustomConfirmDialogComponent } from './notification/custom-confirm-dialog/custom-confirm-dialog.component';
 import { SystemNotificationComponent } from './notification/system-notification/system-notification.component';
-
 
 
 @NgModule({
@@ -40,7 +38,6 @@ import { SystemNotificationComponent } from './notification/system-notification/
     LandingComponent,
     InviteComponent,
     AuthorizationComponent,
-    NotificationBlockComponent,
     NotificationComponent,
     CustomConfirmDialogComponent,
     SystemNotificationComponent
