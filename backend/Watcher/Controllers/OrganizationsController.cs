@@ -110,7 +110,6 @@
             return Ok(dtos);
         }
 
-
         /// <summary>
         /// Get Organization by id
         /// </summary>
