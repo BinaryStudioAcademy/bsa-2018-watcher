@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit {
 
   currentUser: User;
   currentOrganizationName: string;
+  private regexInstancesdUrl: RegExp = /\/user\/instances/;
 
   userItems: MenuItem[];
   adminItems: MenuItem[];
@@ -215,7 +216,12 @@ export class HeaderComponent implements OnInit {
         label: element.name,
         id: element.id.toString(),
         icon: 'fa fa-fw fa-building',
-        command: (onclick) => { this.chengeLastPicOrganizations(element); },
+        command: (onclick) => {
+          this.changeLastPicOrganizations(element);
+          if (this.isInstancesRoute()) {
+            this.router.navigate(['/user/instances']);
+          }
+        },
         styleClass: (element.id === this.currentUser.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
         disabled: (element.id === this.currentUser.lastPickedOrganizationId)
       });
@@ -225,7 +231,14 @@ export class HeaderComponent implements OnInit {
       icon: 'fa fa-fw fa-plus',
       command: (onclick) => { this.addNewOrganization(); },
     });
+  }
 
+  isInstancesRoute(): boolean {
+    console.log(this.router.url);
+    if (this.router.url.match(this.regexInstancesdUrl)) {
+      return true;
+    }
+    return false;
   }
 
   isAdmin() {
@@ -251,7 +264,7 @@ export class HeaderComponent implements OnInit {
   }
 
 
-  private chengeLastPicOrganizations(item: Organization): void {
+  private changeLastPicOrganizations(item: Organization): void {
     // update user in beckend
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
       .subscribe(value => {
