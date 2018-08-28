@@ -20,5 +20,10 @@ namespace DataAccumulator.DataAccessLayer.Data
         {
             get { return _database.GetCollection<CollectedData>("CollectedData"); }
         }
+
+        public IMongoCollection<CollectedData> AggregatedCollectedData
+        {
+            get { return _database.GetCollection<CollectedData>("AggregatedCollectedData"); }
+        }
     }
 }

@@ -21,8 +21,6 @@ namespace DataAccumulator.DataAccessLayer.Entities
         [BsonRepresentation(BsonType.String)]
         public Guid ClientId { get; set; }
 
-        public CollectedDataType CollectedDataType { get; set; }
-
         public int ProcessesCount { get; set; }
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
