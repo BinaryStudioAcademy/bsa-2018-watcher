@@ -90,13 +90,13 @@ export class NotificationsHubService {
     console.log('Connecting to Hub!!!');
     this.hubConnection.start()
       .then(() => {
-        console.log('CONNECTION STARTED!!!');
+        console.log('Notification hub connected');
         this.connectionIsEstablished = true;
         this.connectionEstablished.emit(true);
       })
       .catch(function (err) {
-        console.error(err);
-        setTimeout(this.startNotificationHubConnection(), 3000);
+        console.error('Error while establishing connection (Notification hub)...');
+        setTimeout(this.startNotificationHubConnection(), 5000);
       });
   }
 }
