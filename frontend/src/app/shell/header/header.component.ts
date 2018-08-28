@@ -1,12 +1,13 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Router } from '@angular/router';
+import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 
 import { PathService } from '../../core/services/path.service';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../core/services/auth.service';
 import { UserService } from '../../core/services/user.service';
 import { ToastrService } from '../../core/services/toastr.service';
+import {TokenService} from '../../core/services/token.service';
 
 import { Organization } from '../../shared/models/organization.model';
 import { User } from '../../shared/models/user.model';
@@ -34,6 +35,7 @@ export class HeaderComponent implements OnInit {
   displayAddNewOrganization = false;
 
   constructor(
+    private tokenService: TokenService,
     private userService: UserService,
     private toastrService: ToastrService,
     private router: Router,
@@ -82,7 +84,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  userpage(): void {
+  openUserProfile(): void {
     this.router.navigate(['/user/settings/user-profile']);
   }
 
@@ -153,6 +155,13 @@ export class HeaderComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  getUserClaims() {
+    this.tokenService.getUserClaims()
+      .subscribe(value => {
+        console.log(value);
+      });
   }
 
   onDisplayChange(event: boolean) {
