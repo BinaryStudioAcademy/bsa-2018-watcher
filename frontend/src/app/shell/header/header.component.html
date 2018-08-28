@@ -69,7 +69,7 @@
     <p-overlayPanel #op1 styleClass="user-overlay">
       <div class="ui-g">
         <div class="ui-g-4">
-          <img src="{{currentUser?.photoURL}}" class="user-overlay-photo" alt="User photo" />
+          <img src="{{currentUser?.photoURL}}" class="user-overlay-photo" alt="User photo" (click)="userpage()"/>
         </div>
         <div class="ui-g-8 user-overlay-info">
           <h3>{{ currentUser?.displayName }}</h3>
