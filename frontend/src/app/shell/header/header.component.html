@@ -67,7 +67,7 @@
       <img src="{{currentUser?.photoURL}}" class="user-photo" alt="" />
     </a>
 
-    <p-overlayPanel #op1 styleClass="user-overlay" appendTo="user-info">
+    <p-overlayPanel #op1 styleClass="user-overlay">
       <div class="user-info-wrp">
         <div class="text-center user-photo-wrp">
           <img src="{{currentUser?.photoURL}}" class="user-photo" alt="User photo" (click)="openUserProfile()"/>
@@ -80,7 +80,7 @@
         </div>
       </div>
       <div class="overlay-buttons">
-        <a class="overlay-btn edit-btn" (click)="openUserProfile()"><i class="fa fa-edit icon-btn"></i>Edit</a>
+        <a class="overlay-btn edit-btn" (click)="openUserProfile(op1);"><i class="fa fa-edit icon-btn"></i>Edit</a>
         <a class="overlay-btn logout-btn" (click)="logout()"><i class="fa fa-fw fa-sign-out icon-btn"></i>Logout</a>
       </div>
     </p-overlayPanel>
