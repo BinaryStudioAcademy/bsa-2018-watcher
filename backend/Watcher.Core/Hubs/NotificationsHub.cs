@@ -24,30 +24,31 @@
 
         public override Task OnConnectedAsync()
         {
-            //AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            if (Context.User.Identity.Name != null)
+                AddUserConnection(Context.User.Identity.Name, Context.ConnectionId);
             return base.OnConnectedAsync();
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            //RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            if (Context.User.Identity.Name != null)
+                RemoveUserConnection(Context.User.Identity.Name, Context.ConnectionId);
             return base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
         }
 
         public void AddUserConnection(string userId, string connectionId)
         {
-            //if (UsersConnections.ContainsKey(userId))
-            //    UsersConnections[userId].Add(connectionId);
-            //else
-            //{
-            //    UsersConnections.Add(userId, new List<string> { connectionId });
-            //}
+            if (UsersConnections.ContainsKey(userId))
+                UsersConnections[userId].Add(connectionId);
+            else
+            {
+                UsersConnections.Add(userId, new List<string> { connectionId });
+            }
         }
 
         public bool RemoveUserConnection(string userId, string connectionId)
         {
-            return true;
-            //return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
+            return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
         }
     }
 }
