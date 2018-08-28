@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAccumulator.Shared.Models
+namespace DataAccumulator.DataAccessLayer.Entities
 {
     public enum CollectedDataType
     {
