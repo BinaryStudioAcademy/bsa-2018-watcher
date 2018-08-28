@@ -55,7 +55,7 @@ export class FeedbackListComponent implements OnInit {
 
     this.feedbackService.getNumber().subscribe((value: number) => this.totalRecords = value);
 
-    this.feedbackService.getAll().subscribe((value: Feedback[]) => {
+    this.feedbackService.getRange(1, 5).subscribe((value: Feedback[]) => {
       this.sortByDueDate(value);
       this.feedbacks = value;
       this.fillLstFeedbacks();

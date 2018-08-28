@@ -32,7 +32,8 @@ namespace Watcher.Core.Services
                 .Include(o => o.Theme)
                 .Include(o => o.Notifications)
                 .Include(o => o.Instances)
-                .Include(o => o.UserOrganizations));
+                .Include(o => o.UserOrganizations),
+                count: await _uow.OrganizationRepository.CountAsync(o => o.Id >= 0));
 
             var dtos = _mapper.Map<List<Organization>, List<OrganizationDto>>(entities);
 
@@ -63,7 +64,7 @@ namespace Watcher.Core.Services
         {
             var entity = await _uow.OrganizationRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: o => o.Id == id, 
+                    predicate: o => o.Id == id,
                     include: x => x
                         .Include(o => o.Theme)
                         .Include(o => o.Notifications)
