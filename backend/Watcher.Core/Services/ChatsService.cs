@@ -146,7 +146,11 @@
 
         public async Task<bool> DeleteEntityByIdAsync(int id)
         {
-            await _uow.ChatsRepository.DeleteAsync(id);
+            var entity = await _uow.ChatsRepository.GetFirstOrDefaultAsync(c => c.Id == id);
+            entity.IsActive = false;
+
+            // In returns updated entity, you could do smth with it or just leave as it is
+            var updated = await _uow.ChatsRepository.UpdateAsync(entity);
 
             var result = await _uow.SaveAsync();
 

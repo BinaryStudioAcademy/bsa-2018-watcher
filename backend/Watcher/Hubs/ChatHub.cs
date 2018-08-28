@@ -112,15 +112,33 @@ namespace Watcher.Hubs
             }
         }
 
+        public async Task DeleteChat(int id)
+        {
+            var deleteChat = await _chatsService.GetEntityByIdAsync(id);
+
+            var result = await _chatsService.DeleteEntityByIdAsync(id);
+            if (result)
+            {
+                foreach (var user in deleteChat.Users)
+                {
+                    if (!UsersConnections.ContainsKey(user.Id)) continue;
+                    foreach (string connectionId in UsersConnections[user.Id])
+                        await Clients.Client(connectionId).SendAsync("ChatDeleted", deleteChat);
+                }
+            }
+        }
+
         public override async Task OnConnectedAsync()
         {
-            AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            if (Context.User.Identity.Name != null)
+                AddUserConnection(Context.User.Identity.Name, Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            if (Context.User.Identity.Name != null)
+                RemoveUserConnection(Context.User.Identity.Name, Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
 

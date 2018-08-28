@@ -9,6 +9,7 @@ import { ChatHub } from '../../core/hubs/chat.hub';
 import { ChatUpdateRequest } from '../../shared/requests/chat-update-request';
 import { User } from '../../shared/models/user.model';
 import { Chat } from '../../shared/models/chat.model';
+import { ChatService } from '../../core/services/chat.service';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class ConversationSettingsPopupComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private toastrService: ToastrService,
-    private chatHub: ChatHub) { }
+    private chatHub: ChatHub,
+    private chatService: ChatService) { }
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -89,6 +91,13 @@ export class ConversationSettingsPopupComponent implements OnInit {
     };
 
     this.chatHub.updateChat(updatedChat, this.chat.id);
+    this.display = false;
+  }
+
+  deleteChat(id: number) {
+    console.log(id);
+
+    this.chatHub.deleteChat(this.chat.id);
     this.display = false;
   }
 
