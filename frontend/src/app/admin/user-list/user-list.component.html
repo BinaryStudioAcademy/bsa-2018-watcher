@@ -8,7 +8,7 @@
   </div>
 
 
-  <p-table [value]="users" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
+  <p-table [value]="users" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]" [lazy]="true" (onLazyLoad)="loadUsersLazy($event)">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th style="width:7%">CREATED AT</th>

@@ -11,6 +11,10 @@
     {
         Task<IEnumerable<UserDto>> GetAllEntitiesAsync();
 
+        Task<IEnumerable<UserDto>> GetRangeOfEntitiesAsync(int page, int pageSize);
+
+        Task<int> GetNumberOfEntitiesAsync();
+
         Task<IEnumerable<UserDto>> FindEntitiesAsync(string query);
 
         Task<UserDto> GetEntityByIdAsync(string id);
