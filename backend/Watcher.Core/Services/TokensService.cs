@@ -33,7 +33,7 @@
 
         public Task<TokenDto> CreateTokenAsync(ClaimsPrincipal user)
         {
-            var uid = user.GetUserName();
+            var uid = user.GetUserId();
             var email = user.GetUserEmail();
 
             var loginRequest = new UserLoginRequest(uid, email);

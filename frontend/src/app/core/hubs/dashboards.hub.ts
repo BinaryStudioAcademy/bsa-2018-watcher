@@ -34,6 +34,13 @@ export class DashboardsHub {
     return this.startHubConnection();
   }
 
+  getSignalRClaims() {
+    if (this.hubConnection) {
+      this.hubConnection.invoke('GetClaims')
+        .catch(err => console.error(err));
+    }
+  }
+
   subscribeToInstanceById(instanceGuidId: string): void {
     if (this.hubConnection) {
       this.hubConnection.invoke('SubscribeToInstanceById', instanceGuidId)
@@ -74,8 +81,8 @@ export class DashboardsHub {
       }
     );
 
-    this.hubConnection.on('UserClaimsData', (info: CollectedData) => {
-        this.infoSub.next(info);
+    this.hubConnection.on('UserClaimsData', (claimsData: any[]) => {
+      console.log(claimsData);
       }
     );
 
@@ -97,6 +104,7 @@ export class DashboardsHub {
     return this.hubConnection.start()
       .then(() => {
         this.connectionEstablishedSub.next(true);
+        // this.getSignalRClaims();
       })
       .catch(function (err) {
         console.error(err);
