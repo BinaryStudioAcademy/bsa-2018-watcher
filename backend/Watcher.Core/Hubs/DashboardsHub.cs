@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Core.Hubs
 {
     using System;
+    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -10,7 +11,9 @@
 
     using Serilog.Context;
 
+    using Watcher.Common.Helpers.Extensions;
     using Watcher.Core.Interfaces;
+    using Watcher.DataAccess.Entities;
 
     public class DashboardsHub : Hub
     {
@@ -51,6 +54,19 @@
             }
 
             return base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
+        }
+
+        [Authorize]
+        public Task GetClaims()
+        {
+            var id = Context.User.GetUserId();
+            var mail = Context.User.GetUserEmail();
+            var role = Context.User.GetUserRole();
+            var IdUserRole = Context.User.IsInRole("User");
+            var IsAdminRole = Context.User.IsInRole("Admin");
+
+            var claims = Context.User.Claims.Select(u => new { u.Type, u.Value });
+            return Clients.Client(Context.ConnectionId).SendAsync("UserClaimsData", claims);
         }
 
         [Authorize]

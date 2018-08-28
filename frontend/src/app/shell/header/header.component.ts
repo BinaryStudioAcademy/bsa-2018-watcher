@@ -15,6 +15,7 @@ import { Notification } from '../../shared/models/notification.model';
 import { NotificationType } from '../../shared/models/notification-type.enum';
 import { NotificationsHubService } from '../../core/hubs/notifications.hub';
 import { PathService } from '../../core/services/path.service';
+import {TokenService} from '../../core/services/token.service';
 
 @Component({
   selector: 'app-header',
@@ -40,7 +41,9 @@ export class HeaderComponent implements OnInit {
   notifications: Notification[];
   displayAddNewOrganization = false;
 
-  constructor(private notificationsHubService: NotificationsHubService,
+  constructor(
+    private tokenService: TokenService,
+    private notificationsHubService: NotificationsHubService,
     private messageService: MessageService,
     private userService: UserService,
     private toastrService: ToastrService,
@@ -230,6 +233,13 @@ export class HeaderComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  getUserClaims() {
+    this.tokenService.getUserClaims()
+      .subscribe(value => {
+        console.log(value);
+      });
   }
 
   onDisplayChange(event: boolean) {
