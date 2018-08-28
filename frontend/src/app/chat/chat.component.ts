@@ -11,8 +11,6 @@ import { SystemToastrService } from '../core/services/system-toastr.service';
 import { Chat } from '../shared/models/chat.model';
 import { Message } from '../shared/models/message.model';
 import { User } from '../shared/models/user.model';
-import { Notification } from '../shared/models/notification.model';
-import { NotificationType } from '../shared/models/notification-type.enum';
 
 
 @Component({
@@ -27,7 +25,6 @@ export class ChatComponent implements OnInit {
     private authService: AuthService,
     private chatService: ChatService,
     private toastrService: ToastrService,
-    private messageService: MessageService,
     private systemToastrService: SystemToastrService) { }
 
   public onDisplayChat = new EventEmitter<number>();
@@ -74,36 +71,6 @@ export class ChatComponent implements OnInit {
   }
 
   openChatCreating(event) {
-    const mes: Message = {
-      chatId: 89,
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt',
-      user: this.authService.getCurrentUser(),
-      createdAt: new Date(),
-    } as Message;
-
-    const not: Notification = {
-      createdAt: new Date(),
-      text: 'Simple notify',
-      type: NotificationType.Info
-    } as Notification;
-
-    const not2: Notification = {
-      createdAt: new Date(),
-      text: 'Simple notify2',
-      type: NotificationType.Error
-    } as Notification;
-
-    const not3: Notification = {
-      createdAt: new Date(),
-      text: 'Simple notify3',
-      type: NotificationType.Warning
-    } as Notification;
-    this.systemToastrService.send(not2);
-    this.systemToastrService.send(not);
-    this.systemToastrService.send(not3);
-    this.systemToastrService.chat(mes);
-
-
     event.stopPropagation();
     event.preventDefault();
     this.onDisplayChatCreating.emit(true);
@@ -155,14 +122,17 @@ export class ChatComponent implements OnInit {
   }
 
   getChatImage(chat: Chat) {
+    const groupeImg = 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
+    const partnerImg = 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
+
     if (chat.users.length === 2) {
       const photo = chat.users.find(u => u.id !== this.currentUser.id).photoURL;
-      return photo || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
+      return photo || partnerImg;
     }
 
     if (chat.users.length === 1) {
-      return chat.users[0].photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
+      return chat.users[0].photoURL || partnerImg;
     }
-    return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
+    return groupeImg;
   }
 }

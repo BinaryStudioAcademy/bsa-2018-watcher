@@ -3,6 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NotificationsHubService } from '../../core/hubs/notifications.hub';
 import { NotificationService } from '../../core/services/notification.service';
 import { AuthService } from '../../core/services/auth.service';
+import { SystemToastrService } from '../../core/services/system-toastr.service';
 
 import { NotificationType } from '../../shared/models/notification-type.enum';
 import { Notification } from '../../shared/models/notification.model';
@@ -27,9 +28,11 @@ export class NotificationBlockComponent implements OnInit {
   notifications: Notification[] = [];
   type = NotificationType;
 
-  constructor(private notificationsHubService: NotificationsHubService,
+  constructor(
+    private notificationsHubService: NotificationsHubService,
     private authService: AuthService,
-    private notificationsService: NotificationService) { }
+    private notificationsService: NotificationService,
+    private systemToastrService: SystemToastrService) { }
 
   ngOnInit() {
     this.loadNotifications();
@@ -54,6 +57,9 @@ export class NotificationBlockComponent implements OnInit {
     this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
       if (!value.notificationSetting.isDisable) {
         this.notificationCounter++;
+        if (!value.notificationSetting.isMute) {
+          this.systemToastrService.send(value);
+        }
       }
       this.notifications.unshift(value);
     });
@@ -64,33 +70,6 @@ export class NotificationBlockComponent implements OnInit {
       this.notifications = value;
       this.notificationCounter = this.calcNotReadNotifications(value);
     });
-
-    const not: Notification = {
-      id: 2,
-      createdAt: new Date(),
-      text: 'Simple notify',
-      type: NotificationType.Info,
-      wasRead: false
-    } as Notification;
-
-    const not2: Notification = {
-      id: 1,
-      createdAt: new Date(),
-      text: 'Simple notify2',
-      type: NotificationType.Error,
-      wasRead: true
-    } as Notification;
-
-    const not3: Notification = {
-      id: 3,
-      createdAt: new Date(),
-      text: 'Simple notify3',
-      type: NotificationType.Warning,
-      wasRead: false
-    } as Notification;
-
-    this.notifications.push(not, not2, not3);
-    this.notificationCounter = this.calcNotReadNotifications(this.notifications);
   }
 
   calcNotReadNotifications(allNotifications: Notification[]): number {
