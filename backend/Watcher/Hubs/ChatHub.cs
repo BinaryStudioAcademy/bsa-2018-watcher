@@ -66,7 +66,7 @@ namespace Watcher.Hubs
                     await Clients.Client(connectionId).SendAsync("ChatCreated", chat);
             }
         }
-
+      
         public async Task UpdateChat(ChatUpdateRequest chat, int chatId)
         {
             var result = await _chatsService.UpdateEntityByIdAsync(chat, chatId);
