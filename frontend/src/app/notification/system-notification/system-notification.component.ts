@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../../core/services/chat.service';
+import { NotificationType } from '../../shared/models/notification-type.enum';
 
 @Component({
   selector: 'app-system-notification',
@@ -9,6 +10,7 @@ import { ChatService } from '../../core/services/chat.service';
 export class SystemNotificationComponent implements OnInit {
 
   constructor(private chatService: ChatService) { }
+  type = NotificationType;
 
   ngOnInit() { }
 

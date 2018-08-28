@@ -10,12 +10,11 @@ export class SystemToastrService {
 
     constructor(private messageService: MessageService) { }
 
-    private systemNotify(notification: Notification, severity: string) {
+    send(notification: Notification) {
         this.messageService.add(
             {
                 key: 'system-message',
                 life: 8000,
-                severity: severity,
                 data: notification
             }
         );
@@ -30,29 +29,5 @@ export class SystemToastrService {
                 data: message
             }
         );
-    }
-
-    send(notification: Notification) {
-        if (!notification) {
-            return;
-        }
-
-        switch (notification.notificationSetting.type) {
-            case NotificationType.Error:
-                this.systemNotify(notification, 'error');
-                break;
-
-            case NotificationType.Warning:
-                this.systemNotify(notification, 'warning');
-                break;
-
-            case NotificationType.Info:
-                this.systemNotify(notification, 'info');
-                break;
-
-            default:
-                this.systemNotify(notification, 'info');
-                break;
-        }
     }
 }

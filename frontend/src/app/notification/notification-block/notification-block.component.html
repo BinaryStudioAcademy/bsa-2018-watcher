@@ -1,4 +1,4 @@
-<div class="ui-widget notifications-popup" *ngIf="visible">
+<div class="notifications-wrapper">
   <div class="notifications-empty" *ngIf="notifications.length == 0">
     You don`t have notifications yet.
   </div>
@@ -12,11 +12,10 @@
         <div class="action-icon read-icon fa fa-fw fa-eye" *ngIf="!notification.wasRead" (click)="markAsRead(notification.id)"></div>
         <div class="action-icon close-icon fa fa-fw fa-times" (click)="remove(notification.id)"></div>
 
-        <span class="message-img icon-style fa fa-3x"
+        <span class="message-img icon-style fa fa-3x info"
           [ngClass]="{
-            'warning': notification.notificationSetting.type == type.Warning,
-            'error': notification.notificationSetting.type == type.Error,
-            'info': notification.notificationSetting.type == type.Info}">
+            'warning': notification?.notificationSetting?.type == type.Warning,
+            'error': notification?.notificationSetting?.type == type.Error}">
         </span>
         <div class="message-content" [ngClass]="{'unread-message': !notification.wasRead}">
           <span class="message-title text-overflow" style="width:240px">System message</span>
