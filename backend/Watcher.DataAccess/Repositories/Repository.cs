@@ -88,7 +88,9 @@
 			if (index == 0) index = 1;
 			if (count == 0) count = 10;
 
-			return await query.Skip((index - 1) * count).Take(count).ToListAsync();
+			var items = await query.Skip((index - 1) * count).Take(count).ToListAsync();
+
+            return items;
 		}
 
 		/// <summary>

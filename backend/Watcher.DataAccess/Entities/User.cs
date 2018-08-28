@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Watcher.Common.Interfaces.Entities;
 
-    public class User : Entity<string>
+    public class User : Entity<string>, ISoftDeletable
     {
         public User() { }
 
@@ -29,6 +30,9 @@
 
         [Required]
         public DateTime CreatedAt { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
 
         public string PhotoURL { get; set; }
 

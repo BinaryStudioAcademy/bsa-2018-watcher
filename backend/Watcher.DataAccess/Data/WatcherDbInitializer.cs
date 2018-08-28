@@ -22,8 +22,8 @@
             Faker.GlobalUniqueIndex = 0;
 
             var roles = new Role[] {
-                new Role { Id = 1, Name = "Admin"},
-                new Role { Id = 2, Name = "User"}
+                new Role { Id = 1, Name = "Admin", IsDeleted = false},
+                new Role { Id = 2, Name = "User", IsDeleted = false}
             };
 
             var userFaker = new Faker<User>()
@@ -35,7 +35,8 @@
                 .RuleFor(o => o.PhotoURL, f => f.Internet.Avatar())
                 .RuleFor(o => o.IsActive, true)
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
-                .RuleFor(o => o.RoleId, f => f.PickRandom(roles).Id);
+                .RuleFor(o => o.RoleId, f => f.PickRandom(roles).Id)
+                .RuleFor(o => o.IsDeleted, false);
 
             var users = userFaker.Generate(amount).ToArray();
 
@@ -45,7 +46,8 @@
              .RuleFor(o => o.IsMute, f => f.PickRandom(true, false))
              .RuleFor(o => o.IsEmailable, f => f.PickRandom(true, false))
              .RuleFor(o => o.UserId, f => f.PickRandom(users).Id)
-             .RuleFor(o => o.Type, f => f.Random.Enum<NotificationType>());
+             .RuleFor(o => o.Type, f => f.Random.Enum<NotificationType>())
+             .RuleFor(o => o.IsDeleted, false);
 
             var notificationSettings = notificationSettingFaker.Generate(amount).ToArray();
 
@@ -53,7 +55,8 @@
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.Name, f => f.Lorem.Word())
                 .RuleFor(o => o.Type, f => ChatType.BetweenUsers)
-                .RuleFor(o => o.CreatedById, f => f.PickRandom(users).Id);
+                .RuleFor(o => o.CreatedById, f => f.PickRandom(users).Id)
+                .RuleFor(o => o.IsDeleted, false);
 
             var userChats = userChatFaker.Generate(amount).ToArray();
 
@@ -63,7 +66,8 @@
                 .RuleFor(o => o.WasRead, f => f.PickRandom(true, false))
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
                 .RuleFor(o => o.ChatId, f => f.PickRandom(userChats).Id)
-                .RuleFor(o => o.UserId, f => f.PickRandom(users).Id);
+                .RuleFor(o => o.UserId, f => f.PickRandom(users).Id)
+                .RuleFor(o => o.IsDeleted, false);
 
             var messages = messageFaker.Generate(amount).ToArray();
 
@@ -71,7 +75,8 @@
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.Text, f => f.Lorem.Sentence())
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
-                .RuleFor(o => o.UserId, f => f.PickRandom(users).Id);
+                .RuleFor(o => o.UserId, f => f.PickRandom(users).Id)
+                .RuleFor(o => o.IsDeleted, false);
 
             var feedbacks = feedbackFaker.Generate(amount).ToArray();
 
@@ -80,7 +85,8 @@
                 .RuleFor(o => o.Text, f => f.Lorem.Sentence())
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
                 .RuleFor(o => o.UserId, f => f.PickRandom(users).Id)
-                .RuleFor(o => o.FeedbackId, f => f.PickRandom(feedbacks).Id);
+                .RuleFor(o => o.FeedbackId, f => f.PickRandom(feedbacks).Id)
+                .RuleFor(o => o.IsDeleted, false);
 
             var responces = responceFaker.Generate(amount).ToArray();
 
@@ -88,7 +94,8 @@
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.Name, f => f.PickRandom("Theme" + f.Random.Number(999)))
                 .RuleFor(o => o.BackgroundColor, f => f.PickRandom("White", "Gray", "Yellow"))
-                .RuleFor(o => o.FontFamily, f => f.PickRandom("Helvetica", "Univers", "Frutiger", "Trade"));
+                .RuleFor(o => o.FontFamily, f => f.PickRandom("Helvetica", "Univers", "Frutiger", "Trade"))
+                .RuleFor(o => o.IsDeleted, false);
 
             var themes = themeFaker.Generate(amount).ToArray();
 
@@ -101,8 +108,9 @@
                 .RuleFor(o => o.ContactNumber, f => f.Phone.PhoneNumber())
                 .RuleFor(o => o.Description, f => f.Lorem.Sentences(Randomizer.Seed.Next(5), " "))
                 .RuleFor(o => o.CreatedByUserId, f => f.PickRandom(users).Id)
-                .RuleFor(o => o.ThemeId, f => f.PickRandom(themes).Id);
-            
+                .RuleFor(o => o.ThemeId, f => f.PickRandom(themes).Id)
+                .RuleFor(o => o.IsDeleted, false);
+
             var organizations = organizationFaker.Generate(amount).ToArray();
 
             var instanceFaker = new Faker<Instance>()
@@ -111,7 +119,8 @@
                 .RuleFor(o => o.Title, f => f.PickRandom("Instance" + f.Random.Number(999)))
                 .RuleFor(o => o.Address, f => f.Internet.Mac())
                 .RuleFor(o => o.IsActive, true)
-                .RuleFor(o => o.OrganizationId, f => f.PickRandom(organizations).Id);
+                .RuleFor(o => o.OrganizationId, f => f.PickRandom(organizations).Id)
+                .RuleFor(o => o.IsDeleted, false);
 
             var instances = instanceFaker.Generate(amount).ToArray();
 
@@ -119,7 +128,8 @@
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.Title, f => f.PickRandom("Title" + f.Random.Number(999)))
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
-                .RuleFor(o => o.InstanceId, f => f.PickRandom(instances).Id);
+                .RuleFor(o => o.InstanceId, f => f.PickRandom(instances).Id)
+                .RuleFor(o => o.IsDeleted, false);
 
             var dashboards = dashboardFaker.Generate(amount).ToArray();
 
@@ -130,7 +140,8 @@
                 .RuleFor(o => o.MostLoaded, f => f.PickRandom("MostLoaded1", "MostLoaded2", "MostLoaded3"))
                 .RuleFor(o => o.Threshold, f => f.Random.Number(100))
                 .RuleFor(o => o.Type, f => f.Random.Enum<ChartType>())
-                .RuleFor(o => o.DashboardId, f => f.PickRandom(dashboards).Id);
+                .RuleFor(o => o.DashboardId, f => f.PickRandom(dashboards).Id)
+                .RuleFor(o => o.IsDeleted, false);
 
             var charts = chartFaker.Generate(amount).ToArray();
 
@@ -139,8 +150,9 @@
                 .RuleFor(o => o.Text, f => f.Lorem.Sentence())
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
                 .RuleFor(o => o.UserId, f => f.PickRandom(users).Id)
-                .RuleFor(o => o.NotificationSettingId, f => f.PickRandom(notificationSettings).Id);
-                
+                .RuleFor(o => o.NotificationSettingId, f => f.PickRandom(notificationSettings).Id)
+                .RuleFor(o => o.IsDeleted, false);
+
             var notifications = notificationFaker.Generate(amount).ToArray();
 
             var userOrganizations = users.Select(x =>

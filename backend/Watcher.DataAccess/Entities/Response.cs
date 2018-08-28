@@ -2,8 +2,9 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using Watcher.Common.Interfaces.Entities;
 
-    public class Response : Entity<int>
+    public class Response : Entity<int>, ISoftDeletable
     {
         public override int Id { get; set; }
 
@@ -18,5 +19,8 @@
 
         public int FeedbackId { get; set; }
         public Feedback Feedback { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

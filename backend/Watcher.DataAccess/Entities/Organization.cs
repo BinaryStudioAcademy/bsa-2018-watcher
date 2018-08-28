@@ -2,8 +2,9 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Watcher.Common.Interfaces.Entities;
 
-    public class Organization : Entity<int>
+    public class Organization : Entity<int>, ISoftDeletable
     {
         public override int Id { get; set; }
 
@@ -29,6 +30,9 @@
         public Theme Theme { get; set; }
 
         public Chat Chat { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
 
         public IList<UserOrganization> UserOrganizations { get; set; }
 

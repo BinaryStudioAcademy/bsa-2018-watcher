@@ -4,8 +4,9 @@
     using System.ComponentModel.DataAnnotations;
 
     using Watcher.Common.Enums;
+    using Watcher.Common.Interfaces.Entities;
 
-    public class NotificationSetting : Entity<int>
+    public class NotificationSetting : Entity<int>, ISoftDeletable
     {
         public override int Id { get; set; }
 
@@ -26,5 +27,8 @@
         public User User { get; set; }
 
         public IList<Notification> Notifications { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

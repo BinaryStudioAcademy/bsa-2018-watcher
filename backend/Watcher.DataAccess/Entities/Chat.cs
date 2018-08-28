@@ -5,8 +5,9 @@
     using System.ComponentModel.DataAnnotations.Schema;
 
     using Watcher.Common.Enums;
+    using Watcher.Common.Interfaces.Entities;
 
-    public class Chat : Entity<int>
+    public class Chat : Entity<int>, ISoftDeletable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
@@ -26,5 +27,8 @@
         public IList<Message> Messages { get; set; }
 
         public IList<UserChat> UserChats { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

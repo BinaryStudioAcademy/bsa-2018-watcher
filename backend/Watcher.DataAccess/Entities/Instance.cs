@@ -6,7 +6,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using Watcher.Common.Interfaces.Entities;
     
-    public class Instance : Entity<int>, IDeletable
+    public class Instance : Entity<int>, ISoftDeletable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
@@ -28,5 +28,8 @@
         public Organization Organization { get; set; }
         
         public IList<Dashboard> Dashboards { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

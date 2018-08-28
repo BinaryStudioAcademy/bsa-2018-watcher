@@ -1,11 +1,13 @@
-﻿namespace Watcher.DataAccess.Entities
+﻿using Watcher.Common.Interfaces.Entities;
+
+namespace Watcher.DataAccess.Entities
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     using Common.Enums;
     
-    public class Chart : Entity<int>
+    public class Chart : Entity<int>, ISoftDeletable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
@@ -24,5 +26,8 @@
 
         public int DashboardId { get; set; }
         public Dashboard Dashboard { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }
