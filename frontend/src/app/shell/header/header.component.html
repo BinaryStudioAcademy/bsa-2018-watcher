@@ -67,7 +67,7 @@
       <img src="{{currentUser?.photoURL}}" class="user-photo" alt="" />
     </a>
 
-    <p-overlayPanel #op1 styleClass="user-overlay" [appendTo]="user-info">
+    <p-overlayPanel #op1 styleClass="user-overlay" appendTo="user-info">
       <div class="user-info-wrp">
         <div class="text-center user-photo-wrp">
           <img src="{{currentUser?.photoURL}}" class="user-photo" alt="User photo" (click)="openUserProfile()"/>
