@@ -271,7 +271,7 @@
             string connectionString = configuration.GetConnectionString(enviroment == EnvironmentName.Production ? "AzureCosmosDbConnection" : "MongoDbConnection");
 
             services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-                  options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage"));
+                  options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
         }
 
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
