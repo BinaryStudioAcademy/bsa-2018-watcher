@@ -32,6 +32,24 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<IEnumerable<FeedbackDto>> GetRangeOfEntitiesAsync(int page, int pageSize)
+        {
+            var entities = await _uow.FeedbackRepository.GetRangeAsync(include: x => x
+                .Include(o => o.User)
+                .Include(o => o.Response), index: page, count: pageSize);
+
+            var dtos = _mapper.Map<List<Feedback>, List<FeedbackDto>>(entities);
+
+            return dtos;
+        }
+
+        public async Task<int> GetNumberOfEntitiesAsync()
+        {
+            var entities = await _uow.FeedbackRepository.CountAsync(o => o.Id >= 0);
+
+            return entities;
+        }
+
         public async Task<FeedbackDto> GetEntityByIdAsync(int id)
         {
             var entity = await _uow.FeedbackRepository
