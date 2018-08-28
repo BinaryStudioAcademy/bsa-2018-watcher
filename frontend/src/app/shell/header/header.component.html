@@ -1,10 +1,8 @@
 <div class="header">
  
-  <div class="img-logo-wr">
-      <img routerLink="/user" *ngIf="currentUser.lastPickedOrganization.imageURL" src="{{currentUser.lastPickedOrganization.imageURL}}" alt="logo organization" class="img-logo" />
-      <a routerLink="/user" class="logo">{{currentUser.lastPickedOrganization.name}}</a> 
-  </div>
-  
+  <div class="logo-wr">
+      <a routerLink="/user" class="logo">WATCHER | {{currentUser.lastPickedOrganization.name}}</a> 
+  </div>  
   
   <p-growl [(value)]="msgs"></p-growl>
 
