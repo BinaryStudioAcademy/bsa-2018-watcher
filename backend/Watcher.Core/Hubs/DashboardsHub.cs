@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Core.Hubs
 {
     using System;
+    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -51,6 +52,13 @@
             }
 
             return base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
+        }
+
+        [Authorize]
+        public Task GetClaims()
+        {
+            var claims = Context.User.Claims.Select(u => new { u.Type, u.Value });
+            return Clients.Client(Context.ConnectionId).SendAsync("UserClaimsData", claims);
         }
 
         [Authorize]

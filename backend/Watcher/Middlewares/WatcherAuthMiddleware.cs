@@ -51,7 +51,7 @@
                     var name = jwt.Claims.Any(c => c.Type == "unique_name");
                     if (role && name)
                     {
-                        var identity = new ClaimsIdentity(jwt.Claims, "Token", "unique_name", "role");
+                        var identity = TokenUtil.CreateDefaultClaimsIdentity(jwt.Claims);
 
                         context.User.AddIdentity(identity);
                     }
