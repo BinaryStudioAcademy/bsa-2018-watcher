@@ -37,7 +37,7 @@ export class SystemToastrService {
             return;
         }
 
-        switch (notification.type) {
+        switch (notification.notificationSetting.type) {
             case NotificationType.Error:
                 this.systemNotify(notification, 'error');
                 break;

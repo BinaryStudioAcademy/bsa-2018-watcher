@@ -6,6 +6,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { SystemToastrService } from '../../core/services/system-toastr.service';
 
 import { NotificationType } from '../../shared/models/notification-type.enum';
+import { NotificationSetting } from '../../shared/models/notification-setting.model';
 import { Notification } from '../../shared/models/notification.model';
 
 
@@ -90,7 +91,6 @@ export class NotificationBlockComponent implements OnInit {
     this.notificationCounter--;
     const notify = this.notifications.find(item => item.id === id);
     notify.wasRead = true;
-
     this.notificationsService.update(id, notify).subscribe();
   }
 
