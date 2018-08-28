@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using DataAccumulator.DataAccessLayer.Data;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
-using DataAccumulator.Shared.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -15,21 +14,18 @@ namespace DataAccumulator.DataAccessLayer.Repositories
     public class DataAggregatorRepository : IDataAggregatorRepository<CollectedData>
     {
         private readonly DataAccumulatorContext _context = null;
-        private readonly CollectedDataType _collectedDataType;
 
-        public DataAggregatorRepository(string ConnectionString, string Database, CollectedDataType collectedDataType)
+        public DataAggregatorRepository(string ConnectionString, string Database)
         {
             _context = new DataAccumulatorContext(ConnectionString, Database);
-            _collectedDataType = collectedDataType;
         }
 
         public async Task<IEnumerable<CollectedData>> GetAllEntities()
         {
             try
             {
-                return await _context.Datasets
-                    .Find(data => data.CollectedDataType == _collectedDataType)
-                    .ToListAsync();
+                return await _context.AggregatedCollectedData
+                    .Find(_ => true).ToListAsync();
             }
             catch (Exception e)
             {
@@ -42,11 +38,11 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                var data = await _context.Datasets
-                    .Find(d => d.CollectedDataType == _collectedDataType && d.Id == id)
-                    .FirstOrDefaultAsync();
+                ObjectId internalId = GetInternalId(id);
 
-                return data;
+                return await _context.AggregatedCollectedData
+                    .Find(data => data.Id == id || data.InternalId == internalId)
+                    .FirstOrDefaultAsync();
             }
             catch (Exception e)
             {
@@ -60,8 +56,8 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                var query = _context.Datasets
-                    .Find(d => d.CollectedDataType == _collectedDataType && d.Time >= timeFrom && d.Time <= timeTo);
+                var query = _context.AggregatedCollectedData
+                    .Find(data => data.Time >= timeFrom && data.Time <= timeTo);
 
                 return await query.ToListAsync();
             }
@@ -72,13 +68,12 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
-        public async Task AddEntity(CollectedData collectedData)
+        public async Task AddEntity(CollectedData item)
         {
             try
             {
-                collectedData.CollectedDataType = _collectedDataType;
-                await _context.Datasets
-                    .InsertOneAsync(collectedData);
+                await _context.AggregatedCollectedData
+                    .InsertOneAsync(item);
             }
             catch (Exception e)
             {
@@ -91,8 +86,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                collectedData.CollectedDataType = _collectedDataType;
-                ReplaceOneResult actionResult = await _context.Datasets
+                ReplaceOneResult actionResult = await _context.AggregatedCollectedData
                     .ReplaceOneAsync(data => data.Id.Equals(collectedData.Id), collectedData, new UpdateOptions { IsUpsert = true });
 
                 return actionResult.IsAcknowledged && actionResult.ModifiedCount > 0;
@@ -109,7 +103,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             try
             {
                 DeleteResult actionResult =
-                    await _context.Datasets
+                    await _context.AggregatedCollectedData
                         .DeleteOneAsync(Builders<CollectedData>.Filter.Eq("Id", id));
 
                 return actionResult.IsAcknowledged && actionResult.DeletedCount > 0;
@@ -125,7 +119,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                DeleteResult actionResult = await _context.Datasets
+                DeleteResult actionResult = await _context.AggregatedCollectedData
                     .DeleteManyAsync(new BsonDocument());
 
                 return actionResult.IsAcknowledged && actionResult.DeletedCount > 0;
@@ -139,7 +133,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
 
         public Task<bool> EntityExistsAsync(Guid id)
         {
-            return _context.Datasets
+            return _context.AggregatedCollectedData
                 .Find(entity => entity.Id == id).AnyAsync();
         }
 
@@ -154,7 +148,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
                     .Ascending(item => item.ProcessesCount)
                     .Ascending(item => item.Time);
 
-                return await _context.Datasets
+                return await _context.AggregatedCollectedData
                     .Indexes
                     .CreateOneAsync(new CreateIndexModel<CollectedData>(keys));
             }
