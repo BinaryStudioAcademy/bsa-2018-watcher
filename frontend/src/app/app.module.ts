@@ -27,7 +27,6 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
 import { ShellModule } from './shell/shell.module';
 import { NotificationsModule } from './notifications/notifications.module';
-import { NotificationComponent } from './notification/notification/notification.component';
 import { CustomConfirmDialogComponent } from './notification/custom-confirm-dialog/custom-confirm-dialog.component';
 import { SystemNotificationComponent } from './notification/system-notification/system-notification.component';
 
@@ -38,7 +37,6 @@ import { SystemNotificationComponent } from './notification/system-notification/
     LandingComponent,
     InviteComponent,
     AuthorizationComponent,
-    NotificationComponent,
     CustomConfirmDialogComponent,
     SystemNotificationComponent
   ],
@@ -67,7 +65,6 @@ import { SystemNotificationComponent } from './notification/system-notification/
     NotificationsModule,
     ShellModule
   ],
-  entryComponents: [NotificationComponent],
   providers: [AuthService],
   bootstrap: [AppComponent]
 })
