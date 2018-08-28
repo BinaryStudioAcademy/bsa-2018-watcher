@@ -20,6 +20,7 @@ export class NotificationsHubService {
   connectionEstablished = new EventEmitter<Boolean>();
 
   constructor(private authService: AuthService) {
+    this.connectToSignalR();
   }
 
   connectToSignalR(): void {

@@ -14,7 +14,6 @@ import { ResponseService } from './services/response.service';
 import {DashboardsHub} from './hubs/dashboards.hub';
 import { RoleService } from './services/role.service';
 import { UserOrganizationService } from './services/user-organization.service';
-import { NotificationsHubService } from './hubs/notifications.hub';
 
 @NgModule({
   imports: [
@@ -33,8 +32,7 @@ import { NotificationsHubService } from './hubs/notifications.hub';
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },
     AuthGuard,
-    DashboardsHub,
-    NotificationsHubService
+    DashboardsHub
   ],
 
   declarations: []
