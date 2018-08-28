@@ -6,7 +6,6 @@ import { AuthService } from '../../core/services/auth.service';
 import { SystemToastrService } from '../../core/services/system-toastr.service';
 
 import { NotificationType } from '../../shared/models/notification-type.enum';
-import { NotificationSetting } from '../../shared/models/notification-setting.model';
 import { Notification } from '../../shared/models/notification.model';
 
 
@@ -20,11 +19,9 @@ import { Notification } from '../../shared/models/notification.model';
 })
 export class NotificationBlockComponent implements OnInit {
 
-  @Input() onDisplay: EventEmitter<boolean>;
   @Output() counterChanged = new EventEmitter<number>();
 
   private _unreadedNotifications = 0;
-  visible: boolean;
 
   notifications: Notification[] = [];
   type = NotificationType;
@@ -51,10 +48,6 @@ export class NotificationBlockComponent implements OnInit {
   }
 
   private subscribeToEvents(): void {
-    this.onDisplay.subscribe((data: boolean) => {
-      this.visible = data;
-    });
-
     this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
       if (!value.notificationSetting.isDisable) {
         this.notificationCounter++;

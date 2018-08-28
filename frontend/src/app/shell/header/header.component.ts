@@ -21,9 +21,7 @@ import { User } from '../../shared/models/user.model';
 })
 export class HeaderComponent implements OnInit {
 
-  onDisplayNotificationBlock = new EventEmitter<boolean>();
-  isNotificationBlockShow: boolean;
-  unreadedNotification = 0;
+  notificationCounter = 0;
 
   currentUser: User;
   currentOrganizationName: string;
@@ -46,36 +44,8 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/user/feedback']);
   }
 
-  bellClick(): void {
-    this.isNotificationBlockShow = !this.isNotificationBlockShow;
-    this.onDisplayNotificationBlock.emit(this.isNotificationBlockShow);
-
-    if (this.isNotificationBlockShow) {
-      this.forceActiveButtonState('bell-button');
-    } else {
-      this.removeActiveButttonState('bell-button');
-      return;
-    }
-  }
-
   changeCounter(number) {
-    this.unreadedNotification = number;
-  }
-
-  closeNotificationBlock() {
-    this.isNotificationBlockShow = false;
-    this.onDisplayNotificationBlock.emit(this.isNotificationBlockShow);
-    this.removeActiveButttonState('bell-button');
-  }
-
-  forceActiveButtonState(id: string): void {
-    const btn = document.getElementById(id);
-    btn.style.backgroundColor = '#0088f3';
-  }
-
-  removeActiveButttonState(id: string): void {
-    const btn = document.getElementById(id);
-    btn.style.backgroundColor = '#313232';
+    this.notificationCounter = number;
   }
 
   logout(): void {

@@ -11,13 +11,13 @@
     <p-tieredMenu #admin [model]="adminItems" [popup]="true"></p-tieredMenu>
     <button #btn type="button" *ngIf="isAdmin()" pButton icon="fa fa-fw fa-user" (click)="admin.toggle($event)"></button>
 
-    <div class="notifications-block" appClickOutside (clickOutside)="closeNotificationBlock()">
-      <div class="toolbar-item">
-        <button #btn type="button" id="bell-button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
-        <span *ngIf="unreadedNotification" class="topbar-badge">{{ unreadedNotification }}</span>
-      </div>
-      <app-notification-block [onDisplay]="onDisplayNotificationBlock" (counterChanged)="changeCounter($event)"></app-notification-block>
+    <div class="toolbar-item">
+      <button type="button" pButton icon="fa fa-fw fa-bell-o" (click)="notificationBlock.toggle($event)"></button>
+      <span *ngIf="notificationCounter" class="topbar-badge">{{ notificationCounter }}</span>
     </div>
+    <p-overlayPanel #notificationBlock class="notifications-block">
+      <app-notification-block (counterChanged)="changeCounter($event)"></app-notification-block>
+    </p-overlayPanel>
 
     <div class="toolbar-item">
       <button #btn type="button" pButton icon="fa fa-fw fa-bullhorn" (click)="onFeedback()"></button>
