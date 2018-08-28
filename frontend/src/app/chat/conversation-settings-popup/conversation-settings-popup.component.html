@@ -32,8 +32,8 @@
   </div>
 
   <p-footer>
-    <div style="text-align: center">
       <button type="button" pButton class="ui-button-success" (click)="updateChat()" label="Update" [disabled]="!chatSettingsForm.valid"></button>
-    </div>
+
+      <button type="button" pButton class="ui-button-danger" (click)="deleteChat(chat.id)" label="Delete" [disabled]="chat?.createdBy?.id !== currentUser?.id"></button>
   </p-footer>
 </p-dialog>

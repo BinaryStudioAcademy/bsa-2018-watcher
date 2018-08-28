@@ -1,4 +1,9 @@
-﻿namespace Watcher.Hubs
+﻿using System.Security.Claims;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
+using Watcher.Core.Providers;
+
+namespace Watcher.Hubs
 {
     using System;
     using System.Collections.Generic;
@@ -12,21 +17,17 @@
     {
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
-        private readonly IOrganizationService _organizationService;
-        private readonly INotificationService _notificationService;
+        private readonly ILogger<ChatHub> _logger;
 
+        private static readonly Dictionary<string, List<string>> UsersConnections = new Dictionary<string, List<string>>();
 
-        private static Dictionary<string, List<string>> userConnections = new Dictionary<string, List<string>>();
-
-        public ChatHub(IChatsService chatsService, 
-                        IMessagesService messagesService, 
-                        IOrganizationService organizationService, 
-                        INotificationService notificationService)
+        public ChatHub(ILoggerFactory loggerFactory,
+                        IChatsService chatsService, 
+                        IMessagesService messagesService)
         {
+            _logger = loggerFactory?.CreateLogger<ChatHub>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _chatsService = chatsService;
             _messagesService = messagesService;
-            _organizationService = organizationService;
-            _notificationService = notificationService;
         }
 
         public async Task Send(MessageRequest messageRequest)
@@ -39,7 +40,9 @@
 
             foreach (var userDto in usersInChat)
             {
-                await Clients.Client(Context.ConnectionId).SendAsync("ReceiveMessage", createdMessage);
+                if (!UsersConnections.ContainsKey(userDto.Id)) continue;
+                foreach (string connectionId in UsersConnections[userDto.Id])
+                    await Clients.Client(connectionId).SendAsync("ReceiveMessage", createdMessage);
             }
         }
 
@@ -47,12 +50,6 @@
         {
             var result = await _messagesService.UpdateEntityByIdAsync(new MessageUpdateRequest { WasRead = true }, messageId);
             if (!result) return;
-
-            //var usersInChat = await _chatsService.GetUsersByChatIdAsync(chatId);
-            //foreach (var userDto in usersInChat)
-            //{
-            //    await Clients.User(userDto.Id).SendAsync("MessageWasRead");
-            //}
         }
 
         public async Task InitializeChat(ChatRequest chatRequest)
@@ -64,7 +61,9 @@
 
             foreach (var user in chat.Users)
             {
-                await Clients.User(user.Id).SendAsync("ChatCreated", chat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatCreated", chat);
             }
         }
 
@@ -77,7 +76,9 @@
 
             foreach (var user in changedChat.Users)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
@@ -90,7 +91,9 @@
 
             foreach (var user in changedChat.Users)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
             }
         }
 
@@ -103,18 +106,55 @@
 
             foreach (var user in changedChat.Users)
             {
-                await Clients.User(user.Id).SendAsync("ChatChanged", changedChat);
+                if (!UsersConnections.ContainsKey(user.Id)) continue;
+                foreach (string connectionId in UsersConnections[user.Id])
+                    await Clients.Client(connectionId).SendAsync("ChatChanged", changedChat);
+            }
+        }
+
+        public async Task DeleteChat(int id)
+        {
+            var deleteChat = await _chatsService.GetEntityByIdAsync(id);
+
+            var result = await _chatsService.DeleteEntityByIdAsync(id);
+            if (result)
+            {
+                foreach (var user in deleteChat.Users)
+                {
+                    if (!UsersConnections.ContainsKey(user.Id)) continue;
+                    foreach (string connectionId in UsersConnections[user.Id])
+                        await Clients.Client(connectionId).SendAsync("ChatDeleted", deleteChat);
+                }
             }
         }
 
         public override async Task OnConnectedAsync()
         {
+            if (Context.User.Identity.Name != null)
+                AddUserConnection(Context.User.Identity.Name, Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            if (Context.User.Identity.Name != null)
+                RemoveUserConnection(Context.User.Identity.Name, Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
+        }
+
+        public void AddUserConnection(string userId, string connectionId)
+        {
+            if (UsersConnections.ContainsKey(userId))
+                UsersConnections[userId].Add(connectionId);
+            else
+            {
+                UsersConnections.Add(userId, new List<string> { connectionId });
+            }
+        }
+
+        public bool RemoveUserConnection(string userId, string connectionId)
+        {
+            return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
         }
     }
 }

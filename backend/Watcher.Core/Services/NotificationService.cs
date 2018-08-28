@@ -136,11 +136,13 @@
                         $"{dto.NotificationSetting.Type} Notification", receiver.Email,
                         dto.Text, "");
 
-                await _notificationsHub.Clients.User(dto.UserId)
-                    .SendAsync("AddNotification", dto);
-
                 dtos.Add(dto);
 
+                if (!NotificationsHub.UsersConnections.ContainsKey(dto.UserId)) continue;
+
+                //foreach (string connectionId in NotificationsHub.UsersConnections[dto.UserId])
+                //    await _notificationsHub.Clients.Client(connectionId)
+                //        .SendAsync("AddNotification", dto);
             }
 
             return dtos;

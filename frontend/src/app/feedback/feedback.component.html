@@ -10,15 +10,18 @@
 
   <div class="ui-g container">
     <div class="ui-g-12">
-      <div class="ui-g-3 ">
+      <div class="ui-g-4 ">
       </div>
-      <div class="ui-g-3 ">
+      <div class="ui-g-2 ">
+        Abstain
+      </div>
+      <div class="ui-g-2 ">
         Unsatisfied
       </div>
-      <div class="ui-g-3 ">
+      <div class="ui-g-2 ">
         Neutral
       </div>
-      <div class="ui-g-3 ">
+      <div class="ui-g-2 ">
         Satisfied
       </div>
     </div>
@@ -27,16 +30,19 @@
   <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
     <div class="ui-g container">
       <div class="ui-g-12">
-        <div class="ui-g-3 ">
+        <div class="ui-g-4 ">
           Informatively
+        </div> 
+        <div class="ui-g-2 ">
+          <p-radioButton name="informatively" formControlName="informatively" value="Abstain"></p-radioButton>
         </div>
-        <div class="ui-g-3 ">
+        <div class="ui-g-2 ">
           <p-radioButton name="informatively" formControlName="informatively" value="Unsatisfied"></p-radioButton>
         </div>
-        <div class="ui-g-3 ">
+        <div class="ui-g-2 ">
           <p-radioButton name="informatively" formControlName="informatively" value="Neutral"></p-radioButton>
         </div>
-        <div class="ui-g-3 ">
+        <div class="ui-g-2 ">
           <p-radioButton name="informatively" formControlName="informatively" value="Satisfied"></p-radioButton>
         </div>
       </div>
@@ -44,16 +50,19 @@
 
     <div class="ui-g container">
       <div class="ui-g-12">
-        <div class="ui-g-3">
+        <div class="ui-g-4">
           Friendliness
         </div>
-        <div class="ui-g-3 ">
+        <div class="ui-g-2 ">
+          <p-radioButton name="friendliness" formControlName="friendliness" value="Abstain"></p-radioButton>
+        </div>
+        <div class="ui-g-2 ">
           <p-radioButton name="friendliness" formControlName="friendliness" value="Unsatisfied"></p-radioButton>
         </div>
-        <div class="ui-g-3 ">
+        <div class="ui-g-2 ">
           <p-radioButton name="friendliness" formControlName="friendliness" value="Neutral"></p-radioButton>
         </div>
-        <div class="ui-g-3 ">
+        <div class="ui-g-2 ">
           <p-radioButton name="friendliness" formControlName="friendliness" value="Satisfied"></p-radioButton>
         </div>
       </div>
@@ -61,16 +70,19 @@
 
     <div class="ui-g container">
       <div class="ui-g-12">
-        <div class="ui-g-3 ">
+        <div class="ui-g-4 ">
           Quickness
         </div>
-        <div class="ui-g-3 ">
+        <div class="ui-g-2 ">
+          <p-radioButton name="quickness"  formControlName="quickness" value="Abstain"></p-radioButton>
+        </div>
+        <div class="ui-g-2 ">
           <p-radioButton name="quickness" formControlName="quickness" value="Unsatisfied"></p-radioButton>
         </div>
-        <div class="ui-g-3 ">
+        <div class="ui-g-2 ">
           <p-radioButton name="quickness" formControlName="quickness" value="Neutral"></p-radioButton>
         </div>
-        <div class="ui-g-3 ">
+        <div class="ui-g-2 ">
           <p-radioButton name="quickness" formControlName="quickness" value="Satisfied"></p-radioButton>
         </div>
       </div>
@@ -79,6 +91,9 @@
     <div class="label">Would you use Watcher in the future?</div>
     <div class="ui-g">
       <div class="ui-g-12">
+        <p>
+          <p-radioButton name="willUse" formControlName="willUse" value="Abstain"></p-radioButton> Abstain </p>
+        <p>
         <p>
           <p-radioButton name="willUse" formControlName="willUse" value="yes"></p-radioButton> Yes </p>
         <p>
@@ -95,7 +110,7 @@
       </div>
     </div>
     <div class="btn-panel">
-      <button pButton type="submit" label="Submit feedback" class="ui-button-raised ui-button-success"></button>
+      <button pButton type="submit" label="Submit" class="ui-button-raised ui-button-success"></button>
     </div>
   </form>
 </div>
