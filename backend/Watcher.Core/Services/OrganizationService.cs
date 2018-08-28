@@ -52,6 +52,13 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<int> GetNumberOfEntitiesAsync()
+        {
+            var entities = await _uow.OrganizationRepository.CountAsync(o => o.Id >= 0);
+
+            return entities;
+        }
+
         public async Task<OrganizationDto> GetEntityByIdAsync(int id)
         {
             var entity = await _uow.OrganizationRepository

@@ -52,9 +52,10 @@ export class OrganizationListComponent implements OnInit {
       return;
     }
 
+    this.organizationService.getNumber().subscribe((value: number) => this.totalRecords = value);
+
     this.organizationService.getRange(1, 5).subscribe((value: Organization[]) => {
       this.organizations = value;
-      this.totalRecords = value.length;
     });
   }
 
@@ -98,7 +99,8 @@ export class OrganizationListComponent implements OnInit {
   }
 
   loadOrganizationsLazy(event: LazyLoadEvent) {
-    this.organizationService.getRange(event.first, event.rows).subscribe((value: Organization[]) => {
+    const currentPage = event.first / event.rows + 1;
+    this.organizationService.getRange(currentPage, event.rows).subscribe((value: Organization[]) => {
       this.organizations = value;
     });;
   }
