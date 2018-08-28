@@ -4,9 +4,9 @@
 	/deep/.ui-toast
 		width: 390px
 		.ui-toast-message
-			background-color: white		
+			background-color: white
 			border: 0 none
-			box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.25)
+			box-shadow: 2px 2px 5px 0px #c2c1c1
 		.ui-toast-message-content
 			padding: 0
 		.ui-toast-close-icon
@@ -14,6 +14,8 @@
 		.ui-toast-close-icon:hover
 			color: gray
 
+.unread-message
+	background-color: #E7E7E7
 .message-container
 	display: grid
 	grid-template-columns: auto 1fr
@@ -33,11 +35,14 @@
 		width: 100px
 	.message-text
 		color: black
-		word-wrap: break-word
 		line-height: 1.5em
 		max-height: 3em
 		overflow: hidden
-		text-overflow: ellipsis
+		display: -webkit-box
+		-webkit-line-clamp: 2
+		/* autoprefixer: off */
+		-webkit-box-orient: vertical
+		/* autoprefixer: on */
 	.message-date
 		margin-top: 5px
 		margin-bottom: 3px
