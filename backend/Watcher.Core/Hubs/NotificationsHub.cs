@@ -2,12 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Security.Claims;
     using System.Threading.Tasks;
-    
+
+
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.AspNetCore.Authorization;
 
     using Watcher.Common.Dtos;
+    using Watcher.Common.Helpers.Extensions;
 
     public class NotificationsHub : Hub
     {
@@ -24,15 +26,15 @@
 
         public override Task OnConnectedAsync()
         {
-            if (Context.User.Identity.Name != null)
-                AddUserConnection(Context.User.Identity.Name, Context.ConnectionId);
+            if (Context.User.GetUserId() != null)
+                AddUserConnection(Context.User.GetUserId(), Context.ConnectionId);
             return base.OnConnectedAsync();
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            if (Context.User.Identity.Name != null)
-                RemoveUserConnection(Context.User.Identity.Name, Context.ConnectionId);
+            if (Context.User.GetUserId() != null)
+                RemoveUserConnection(Context.User.GetUserId(), Context.ConnectionId);
             return base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
         }
 

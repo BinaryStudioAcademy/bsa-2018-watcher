@@ -1,5 +1,3 @@
-
-
 .header
     background-color: rgb(0,0,0)
     box-sizing: border-box
@@ -14,6 +12,12 @@
     width: 100%
     z-index: 9997
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.3)    
+
+.notifications-block
+    /deep/.ui-overlaypanel
+        left: unset !important
+        right: 15px
+        top: 60px !important
 
 .menu-button
     background-color: #20272a
@@ -103,89 +107,6 @@
     color: red
     font-weight: 900
 
-.notifications-block
-    display: inline
-
-.notifications-popup
-    background-color: #FFFFFC
-    position: absolute
-    margin-top: 5px
-    border-radius: 2px
-    width: 250px
-    height: 200px
-    z-index: 99999
-    overflow: auto
-    box-shadow: 0 0 10px #D4D4CE
-
-.withoutNotification
-    width: 100%
-    height: 100%
-
-    display: flex
-    justify-content: center
-    align-items: center
-
-    font-size: 12px
-    color: #90979C
-
-.markAsRead
-    display: flex
-    justify-content: flex-end
-
-.markAsRead a
-    font-size: 12px
-    text-decoration: underline
-    margin-top: 5px
-    margin-right: 5px
-    cursor: pointer
-
-.notification-card
-    margin: 5px
-    padding: 7px
-    border: 1px solid #D4D4CE
-
-    position: relative
-
-.notification-card:hover
-        box-shadow: 0 0 10px #D4D4CE
-
-.notification-type
-    width: 100%
-    height: 5px
-    margin-bottom: 3px
-    border-radius: 3px
-
-.system
-    background-color: #4000E8
-
-.info
-    background-color: #2E65FF
-
-.warning
-    background-color: #FFA82A
-
-.error
-    background-color: #FF3D00
-
-.notification-text
-    border-radius: 2px
-    padding-top: 10px
-    padding-bottom: 10px
-    font-size: 12px
-
-    border-bottom: 1px solid #DCDDFF
-
-.info-block
-    display: flex
-    justify-content: space-between
-    margin-top: 3px
-    color: green
-
-.info-block .short-info
-    color: #000
-    font-size: 10px
-    color: #2E65FF
-
 .logo-wr
     height: 40px
     margin-left: 16px
@@ -215,6 +136,8 @@
     font-size: 15px
     padding: 0
     top: 60px !important
+    right: 0 !important
+
     
     .user-info-wrp
         display: flex
@@ -228,7 +151,7 @@
         margin-right: 0
 
     .user-organization
-        margin-top: 2px
+        margin-top: 17.5px
         margin-right: 0
         .fa-fw
             width: 1em // ???

@@ -9,6 +9,10 @@ namespace Watcher.Core.Interfaces
     {
         Task<IEnumerable<FeedbackDto>> GetAllEntitiesAsync();
 
+        Task<IEnumerable<FeedbackDto>> GetRangeOfEntitiesAsync(int page, int pageSize);
+
+        Task<int> GetNumberOfEntitiesAsync();
+
         Task<FeedbackDto> GetEntityByIdAsync(int id);
 
         Task<FeedbackDto> CreateEntityAsync(FeedbackRequest request);
