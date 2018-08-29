@@ -373,7 +373,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           // this.activeDashboardItem.charts.push(value);
         },
         error => {
-          // this.toastrService.error('Organization Invite was not created');
           this.toastrService.error(`Error ocured status: ${error.message}`);
         });
     }
@@ -385,7 +384,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.toastrService.success('The chart was updated');
       },
       error => {
-        // this.toastrService.error('Organization Invite was not created');
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
   }
@@ -396,7 +394,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.toastrService.success('The chart was deleted');
       },
       error => {
-        // this.toastrService.error('Organization Invite was not created');
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
   }
