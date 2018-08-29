@@ -11,7 +11,7 @@ import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 import {PercentageInfo} from '../models/percentage-info';
-import {CustomChart, CustomData, CustomQuery, Filter, gapminder, toCapitalizedWords} from '../charts/models';
+import {CustomChart, CustomChartType, CustomData, CustomQuery, Filter, gapminder, toCapitalizedWords} from '../charts/models';
 import {DataService} from '../services/data.service';
 
 import {ChartType} from '../../shared/models/chart-type.enum';
@@ -22,6 +22,32 @@ import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { single1, multi } from '../models/data';
 import {CollectedDataService} from '../../core/services/collected-data.service';
 import {CollectedData} from '../../shared/models/collected-data.model';
+import {customChartTypes} from '../charts/chart-builder/customChartTypes';
+import {colorSets} from '@swimlane/ngx-charts/release/utils';
+import * as shape from 'd3-shape';
+
+const defaultOptions = {
+  view: undefined,
+  colorScheme: colorSets.find(s => s.name === 'cool'),
+  schemeType: 'ordinal',
+  showLegend: true,
+  legendTitle: 'Legend',
+  gradient: false,
+  showXAxis: true,
+  showYAxis: true,
+  showXAxisLabel: true,
+  showYAxisLabel: true,
+  yAxisLabel: '',
+  xAxisLabel: '',
+  autoScale: true,
+  showGridLines: true,
+  rangeFillOpacity: 0.5,
+  roundDomains: false,
+  tooltipDisabled: false,
+  showSeriesOnHover: true,
+  curve: shape.curveLinear,
+  curveClosed: shape.curveCardinalClosed
+} as CustomChart;
 
 @Component({
   selector: 'app-dashboard',
@@ -29,7 +55,6 @@ import {CollectedData} from '../../shared/models/collected-data.model';
   styleUrls: ['./dashboard.component.sass'],
   providers: [ToastrService, ConfirmationService, DashboardService, MessageService]
 })
-
 export class DashboardComponent implements OnInit, OnDestroy {
   private paramsSubscription: Subscription;
   private instanceGuidId: string;
@@ -44,10 +69,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   creation: boolean;
   loading = false;
   displayEditDashboard = false;
+  collectedDataForChart: CollectedData[];
   percentageInfoToDisplay: PercentageInfo[];
   percentageInfoToDisplaySingle: PercentageInfo;
-  collectedDataForChart: CollectedData[];
-  dataForChart: any;
   popupAddChart: Boolean = false;
   dropdownType: SelectItem[];
   dropdownSource: SelectItem[];
@@ -73,6 +97,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   showLabels = true;
   explodeSlices = false;
   doughnut = false;
+
+  // Inputs for Chart
+  chartOptions: CustomChart = defaultOptions;
+  dataForChart: CustomData[];
+  chartType: CustomChartType = customChartTypes[0];
+  showPreview = false;
 
   set PercentageInfoToDisplay(info: PercentageInfo[]) {
     this.percentageInfoToDisplay = info;
@@ -107,10 +137,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ];
 
     this.dropdownSource = [
-      {label: 'CPU', value: 'Bar vertical'},
-      {label: 'RAM', value: 'Line chart'},
-      {label: 'DISC', value: 'Pie'},
-      {label: 'Guage', value: 'Guage'}
+      {label: 'CPU', value: 'cpuUsagePercent'},
+      {label: 'RAM', value: 'ramUsagePercent'},
+      {label: 'DISC', value: 'localDiskFreeSpacePercent'}
     ];
   }
 
@@ -120,14 +149,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   });
 
   processData(): void {
+    debugger;
     this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
+    // TODO: set this data as property to trigger
+    this.showPreview = true;
+    return this.ngZone.run(() => {
+    });
 
-      this.xAxisLabel = this.chartForm.get('xAxisLabel').value;
+    /*
+    this.xAxisLabel = this.chartForm.get('xAxisLabel').value;
       this.yAxisLabel = this.chartForm.get('yAxisLabel').value;
       if (this.selectedType === 'Line chart') {
         Object.assign(this, {multi});
       } else {
         Object.assign(this, {single1}); }
+        */
   }
 
   async ngOnInit(): Promise<void> {

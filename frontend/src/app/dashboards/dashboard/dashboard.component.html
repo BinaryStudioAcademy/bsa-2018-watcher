@@ -115,14 +115,21 @@
       </form></div>
     <div class="ui-g-9">
       <p class="field center">Visualization</p>
-      <div class="view-chart">
-         <div *ngIf="selectedType==='Bar vertical'">
-            <ngx-charts-bar-vertical
-          [view]="view"
-          [scheme]="colorScheme"
-          [results]="single1"
-          [gradient]="gradient"
-          [xAxis]="showXAxis"
+      <div class="view-chart" *ngIf="showPreview">
+        <app-chart
+          [chart]="chartOptions"
+          [data]="dataForChart"
+          [chartType]="chartType">
+        </app-chart>
+      </div>
+    <!--   <div class="view-chart">
+          <div *ngIf="selectedType==='Bar vertical'">
+             <ngx-charts-bar-vertical
+           [view]="view"
+           [scheme]="colorScheme"
+           [results]="single1"
+           [gradient]="gradient"
+         [xAxis]="showXAxis"
           [yAxis]="showYAxis"
           [legend]="showLegend"
           [showXAxisLabel]="showXAxisLabel"
@@ -178,7 +185,7 @@
         </ngx-charts-gauge>
         </div>
 
-      </div>
+      </div>-->
     </div>
   </div>
   <p-footer>
