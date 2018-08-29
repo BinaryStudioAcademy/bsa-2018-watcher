@@ -5,15 +5,21 @@
 
     public static class ClaimsPrincipalExtensions
     {
-        public static string GetUserName(this ClaimsPrincipal user)
+        public static string GetUserId(this ClaimsPrincipal user)
         {
-            var name = user.Claims.FirstOrDefault(c => c.Type == "unique_name");
+            var name = user.Claims.FirstOrDefault(c => c.Type == ClaimsIdentity.DefaultNameClaimType);
             return name?.Value;
         }
 
         public static string GetUserEmail(this ClaimsPrincipal user)
         {
-            var email = user.Claims.FirstOrDefault(c => c.Type == "email");
+            var email = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            return email?.Value;
+        }
+
+        public static string GetUserRole(this ClaimsPrincipal user)
+        {
+            var email = user.Claims.FirstOrDefault(c => c.Type == ClaimsIdentity.DefaultRoleClaimType);
             return email?.Value;
         }
     }

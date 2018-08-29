@@ -12,17 +12,21 @@ namespace DataAccumulator.DataAccessLayer.Repositories
     public class DataAccumulatorRepository : IDataAccumulatorRepository<CollectedData>
     {
         private readonly DataAccumulatorContext _context = null;
+        private readonly CollectedDataType _collectedDataType;
 
-        public DataAccumulatorRepository(string ConnectionString, string Database)
+        public DataAccumulatorRepository(string ConnectionString, string Database, CollectedDataType collectedDataType)
         {
             _context = new DataAccumulatorContext(ConnectionString, Database);
+            _collectedDataType = collectedDataType;
         }
 
         public async Task<IEnumerable<CollectedData>> GetAllEntities()
         {
             try
             {
-                return await _context.Datasets.Find(_ => true).ToListAsync();
+                return await _context.Datasets
+                    .Find(data => data.CollectedDataType == _collectedDataType)
+                    .ToListAsync();
             }
             catch (Exception e)
             {
@@ -35,7 +39,8 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                return _context.Datasets.Find(data => data.ClientId == clientId)
+                return _context.Datasets
+                    .Find(data => data.CollectedDataType == _collectedDataType && data.ClientId == clientId)
                     .SortByDescending(cd => cd.Time)
                     .Limit(count)
                     .ToListAsync();
@@ -55,8 +60,9 @@ namespace DataAccumulator.DataAccessLayer.Repositories
                 var internalId = GetInternalId(clientId);
 
                 var data = await _context.Datasets
-                               .Find(d => d.ClientId == clientId || d.InternalId == internalId)
-                               .FirstOrDefaultAsync();
+                    .Find(d => d.CollectedDataType == _collectedDataType && d.ClientId == clientId)
+                    .FirstOrDefaultAsync();
+
                 return data;
             }
             catch (Exception e)
@@ -70,9 +76,11 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                var filter = Builders<CollectedData>.Filter.Eq(i => i.Id, id);
+                var data = await _context.Datasets
+                    .Find(d => d.CollectedDataType == _collectedDataType && d.Id == id)
+                    .FirstOrDefaultAsync();
 
-                return await _context.Datasets.Find(filter).FirstOrDefaultAsync();
+                return data;
             }
             catch (Exception e)
             {
@@ -85,9 +93,11 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                var filter = Builders<CollectedData>.Filter.Eq(i => i.InternalId, id);
+                var data = await _context.Datasets
+                    .Find(d => d.CollectedDataType == _collectedDataType && d.InternalId == id)
+                    .FirstOrDefaultAsync();
 
-                return await _context.Datasets.Find(filter).FirstOrDefaultAsync();
+                return data;
             }
             catch (Exception e)
             {
@@ -102,7 +112,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             try
             {
                 var query = _context.Datasets
-                    .Find(data => data.Time >= timeFrom && data.Time <= timeTo);
+                    .Find(d => d.CollectedDataType == _collectedDataType && d.Time >= timeFrom && d.Time <= timeTo);
 
                 return await query.ToListAsync();
             }
@@ -117,7 +127,9 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                await _context.Datasets.InsertOneAsync(collectedData);
+                collectedData.CollectedDataType = _collectedDataType;
+                await _context.Datasets
+                    .InsertOneAsync(collectedData);
             }
             catch (Exception e)
             {
@@ -130,6 +142,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
+                collectedData.CollectedDataType = _collectedDataType;
                 ReplaceOneResult actionResult = await _context.Datasets
                     .ReplaceOneAsync(data => data.Id.Equals(collectedData.Id), collectedData, new UpdateOptions { IsUpsert = true });
 

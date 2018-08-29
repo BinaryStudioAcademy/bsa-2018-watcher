@@ -1,33 +1,26 @@
-﻿using System.Security.Claims;
-using Microsoft.Extensions.Logging;
-using Serilog.Context;
-using Watcher.Core.Providers;
-
-namespace Watcher.Hubs
+﻿namespace Watcher.Hubs
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.SignalR;
-    
+    using Microsoft.AspNetCore.Authorization;
+
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
+    using Watcher.Common.Helpers.Extensions;
 
     public class ChatHub : Hub
     {
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
-        private readonly ILogger<ChatHub> _logger;
 
         private static readonly Dictionary<string, List<string>> UsersConnections = new Dictionary<string, List<string>>();
 
-        public ChatHub(ILoggerFactory loggerFactory,
-                        IChatsService chatsService, 
-                        IMessagesService messagesService, 
-                        IOrganizationService organizationService, 
-                        INotificationService notificationService)
+        public ChatHub(IChatsService chatsService, 
+                        IMessagesService messagesService)
         {
-            _logger = loggerFactory?.CreateLogger<ChatHub>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _chatsService = chatsService;
             _messagesService = messagesService;
         }
@@ -114,23 +107,33 @@ namespace Watcher.Hubs
             }
         }
 
-        public override async Task OnConnectedAsync()
+        public async Task DeleteChat(int id)
         {
-            using (LogContext.PushProperty("ClassName", this.GetType().FullName))
-            using (LogContext.PushProperty("Source", "Claims"))
+            var deleteChat = await _chatsService.GetEntityByIdAsync(id);
+
+            var result = await _chatsService.DeleteEntityByIdAsync(id);
+            if (result)
             {
-                foreach (var claim in Context.User.Claims)
+                foreach (var user in deleteChat.Users)
                 {
-                    _logger.LogError($"Claims {claim.Type}, {claim.Value}");
+                    if (!UsersConnections.ContainsKey(user.Id)) continue;
+                    foreach (string connectionId in UsersConnections[user.Id])
+                        await Clients.Client(connectionId).SendAsync("ChatDeleted", deleteChat);
                 }
             }
-            //AddUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            if (Context.User.GetUserId() != null)
+                AddUserConnection(Context.User.GetUserId(), Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            //RemoveUserConnection(Context.User.FindFirstValue("unique_name"), Context.ConnectionId);
+            if (Context.User.GetUserId() != null)
+                RemoveUserConnection(Context.User.GetUserId(), Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
 

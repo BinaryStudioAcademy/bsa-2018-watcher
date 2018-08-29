@@ -28,6 +28,8 @@ import { DownloadAppComponent } from '../download-app/download-app.component';
 import { AddNewOrganizationComponent } from './add-new-organization/add-new-organization.component';
 import { FormsModule } from '@angular/forms';
 import { ClickOutsideDirective } from '../shared/directives/click-outside.directive';
+import { NotificationBlockComponent } from '../notification/notification-block/notification-block.component';
+
 
 @NgModule({
   imports: [
@@ -58,7 +60,8 @@ import { ClickOutsideDirective } from '../shared/directives/click-outside.direct
     LeftSideMenuComponent,
     AddNewOrganizationComponent,
     ClickOutsideDirective,
-    DownloadAppComponent
+    DownloadAppComponent,
+    NotificationBlockComponent
   ]
 })
 export class ShellModule { }

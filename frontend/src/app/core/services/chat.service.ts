@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Chat } from '../../shared/models/chat.model';
@@ -8,6 +8,7 @@ import { Chat } from '../../shared/models/chat.model';
 })
 export class ChatService {
   private readonly ctrlUrl = 'chats';
+  openChatClick = new EventEmitter<number>();
 
   constructor(private apiService: ApiService) {
   }

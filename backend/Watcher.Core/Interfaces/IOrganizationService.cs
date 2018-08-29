@@ -10,6 +10,10 @@
     {
         Task<IEnumerable<OrganizationDto>> GetAllEntitiesAsync();
 
+        Task<IEnumerable<OrganizationDto>> GetRangeOfEntitiesAsync(int page, int pageSize);
+
+        Task<int> GetNumberOfEntitiesAsync();
+
         Task<OrganizationDto> GetEntityByIdAsync(int id);
 
         Task<OrganizationDto> CreateEntityAsync(OrganizationRequest request);

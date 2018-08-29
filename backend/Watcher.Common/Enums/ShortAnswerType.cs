@@ -5,7 +5,7 @@ namespace Watcher.Common.Enums
     [ExportEnumToTypescript]
     public enum ShortAnswerType
     {
-        Null,
+        Abstain,
         Yes,
         Maybe,
         No

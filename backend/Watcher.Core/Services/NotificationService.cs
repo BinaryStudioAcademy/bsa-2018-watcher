@@ -140,9 +140,9 @@
 
                 if (!NotificationsHub.UsersConnections.ContainsKey(dto.UserId)) continue;
 
-                foreach (string connectionId in NotificationsHub.UsersConnections[dto.UserId])
-                    await _notificationsHub.Clients.Client(connectionId)
-                        .SendAsync("AddNotification", dto);
+                //foreach (string connectionId in NotificationsHub.UsersConnections[dto.UserId])
+                //    await _notificationsHub.Clients.Client(connectionId)
+                //        .SendAsync("AddNotification", dto);
             }
 
             return dtos;

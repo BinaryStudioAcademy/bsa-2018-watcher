@@ -20,12 +20,13 @@ export class NotificationsHubService {
   connectionEstablished = new EventEmitter<Boolean>();
 
   constructor(private authService: AuthService) {
+    this.connectToSignalR();
   }
 
   connectToSignalR(): void {
     this.createConnection();
     this.registerOnServerEvents();
-    this.startHubConnection();
+    this.startNotificationHubConnection();
   }
 
   send(userId: string, item: string): string {
@@ -80,23 +81,23 @@ export class NotificationsHubService {
     this.hubConnection.onclose(function (error) {
       console.log('CONNECTION CLOSED!!!');
       console.error(error);
-      this.startHubConnection();
+      this.startNotificationHubConnection();
     });
   }
 
 
   // Reconnect loop
-  private startHubConnection(): void {
+  private startNotificationHubConnection(): void {
     console.log('Connecting to Hub!!!');
     this.hubConnection.start()
       .then(() => {
-        console.log('CONNECTION STARTED!!!');
+        console.log('Notification hub connected');
         this.connectionIsEstablished = true;
         this.connectionEstablished.emit(true);
       })
       .catch(function (err) {
-        console.error(err);
-        setTimeout(this.startHubConnection(), 3000);
+        console.error('Error while establishing connection (Notification hub)...');
+        setTimeout(this.startNotificationHubConnection(), 5000);
       });
   }
 }

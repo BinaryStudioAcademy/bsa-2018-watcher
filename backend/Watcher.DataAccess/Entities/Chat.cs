@@ -18,6 +18,9 @@
         [Required]
         public ChatType Type { get; set; }
 
+        [Required]
+        public bool IsActive { get; set; }
+
         public string CreatedById { get; set; }
         public User CreatedBy { get; set; }
 

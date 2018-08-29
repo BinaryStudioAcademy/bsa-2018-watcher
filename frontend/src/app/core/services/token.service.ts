@@ -4,7 +4,6 @@ import {Observable} from 'rxjs';
 import {UserRegisterRequest} from '../../shared/models/user-register-request';
 import {Token} from '../../shared/models/token.model';
 import {UserLoginRequest} from '../../shared/models/user-login-request';
-import {User} from '../../shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +15,10 @@ export class TokenService {
 
   getUserByTokens(): Observable<Token> {
     return this.apiService.get(`/${this.ctrlUrl}/User`);
+  }
+
+  getUserClaims(): Observable<any> {
+    return this.apiService.get(`/${this.ctrlUrl}/Claims`);
   }
 
   register(request: UserRegisterRequest): Observable<Token>  {
