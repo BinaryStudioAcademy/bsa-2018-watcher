@@ -102,24 +102,22 @@
       <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" [style]="{'width':'172px'}"></p-dropdown>
       <p>{{selectedType}}</p>
       <p class="field">Select source: </p>
-      <p-dropdown [options]="dropdownType" [(ngModel)]="selectedSource" [style]="{'width':'172px'}"></p-dropdown>
+      <p-dropdown [options]="dropdownSource" [(ngModel)]="selectedSource" [style]="{'width':'172px'}"></p-dropdown>
       <p class="field">Is single:
         <p-checkbox formControlName="isSingle" binary="true"></p-checkbox>
       </p>
-      <p class="field">Step count: </p>
-      <p class="field center">Styles</p>
-      <form [formGroup]="userForm">
-      <p class="field">Y axis label: </p>
-      <input size="22" type="text" formControlName="xAxisLabel" pInputText />
-      <p class="field">X axis label: </p>
-      <input size="22" type="text" formControlName="yAxisLabel" pInputText />
-    </form>
-    </div>
+      <p class="field center">Styles</p> <div></div>
+       <form [formGroup]="chartForm">
+        <p class="field">Y axis label: </p>
+        <input size="22" type="text" formControlName="xAxisLabel" pInputText />
+        <p class="field">X axis label: </p>
+        <input size="22" type="text" formControlName="yAxisLabel" pInputText />
+      </form></div>
     <div class="ui-g-9">
-      <button type="button" pButton (click)="onView()" label="Visualization" class="center ui-button-warning"></button>
-      <!-- <p class="field center">Visualization</p> -->
-      <div class="view-chart"> 
-          <ngx-charts-bar-vertical
+      <p class="field center">Visualization</p>
+      <div class="view-chart">
+         <div *ngIf="selectedType==='Bar vertical'">
+            <ngx-charts-bar-vertical
           [view]="view"
           [scheme]="colorScheme"
           [results]="single1"
@@ -133,6 +131,53 @@
           [yAxisLabel]="yAxisLabel"
           (select)="onSelect($event)">
         </ngx-charts-bar-vertical>
+    </div>
+    <div *ngIf="selectedType==='Line chart'">
+        <ngx-charts-line-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="multi"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [autoScale]="autoScale"
+        (select)="onSelect($event)">
+          </ngx-charts-line-chart> 
+        </div>
+      <div *ngIf="selectedType==='Pie'">
+        <ngx-charts-pie-chart
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single1"
+        [legend]="showLegend"
+        [explodeSlices]="explodeSlices"
+        [labels]="showLabels"
+        [doughnut]="doughnut"
+        [gradient]="gradient"
+        (select)="onSelect($event)">
+          </ngx-charts-pie-chart>
+          </div>
+       <div *ngIf="selectedType==='Guage'">
+          <ngx-charts-gauge
+          [view]="view"
+          [scheme]="colorScheme"
+          [results]="single1"
+          [min]="0"
+          [max]="100"
+          [angleSpan]="240"
+          [startAngle]="-120"
+          [units]="'alerts'"
+          [bigSegments]="10"
+          [smallSegments]="5"
+          (select)="onSelect($event)">
+        </ngx-charts-gauge>
+        </div>
+
       </div>
     </div>
   </div>

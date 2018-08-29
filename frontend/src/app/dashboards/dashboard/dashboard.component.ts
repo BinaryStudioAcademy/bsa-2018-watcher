@@ -19,7 +19,7 @@ import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {ChartService} from '../../core/services/chart.service';
 import {SelectItem} from 'primeng/api';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { single1 } from '../models/data';
+import { single1, multi } from '../models/data';
 import {CollectedDataService} from '../../core/services/collected-data.service';
 import {CollectedData} from '../../shared/models/collected-data.model';
 
@@ -69,6 +69,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
 
+  autoScale = true;
+  showLabels = true;
+  explodeSlices = false;
+  doughnut = false;
+
   set PercentageInfoToDisplay(info: PercentageInfo[]) {
     this.percentageInfoToDisplay = info;
   }
@@ -90,7 +95,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private toastrService: ToastrService,
               private chartService: ChartService,
               private activateRoute: ActivatedRoute,
-    private fb: FormBuilder,
+              private fb: FormBuilder,
               private ngZone: NgZone,
               private dataService: DataService) {
 
@@ -109,14 +114,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ];
   }
 
-  processData(): void {
-    this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
-  }
-
   chartForm = this.fb.group({
     xAxisLabel: new FormControl({ value: 'x', disabled: false }),
     yAxisLabel: new FormControl({ value: 'y', disabled: false })
   });
+
+  processData(): void {
+    this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
+
+      this.xAxisLabel = this.chartForm.get('xAxisLabel').value;
+      this.yAxisLabel = this.chartForm.get('yAxisLabel').value;
+      if (this.selectedType === 'Line chart') {
+        Object.assign(this, {multi});
+      } else {
+        Object.assign(this, {single1}); }
+  }
 
   async ngOnInit(): Promise<void> {
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
@@ -414,11 +426,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return item;
   }
 
-  onView() {
-    this.xAxisLabel = this.chartForm.get('xAxisLabel').value;
-    this.yAxisLabel = this.chartForm.get('yAxisLabel').value;
-    Object.assign(this,  {single1} );
-  }
+
   showPopupAddChart() {
     this.popupAddChart = true;
 
@@ -427,13 +435,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onCancel() {
     this.popupAddChart = false;
+    this.selectedSource = null;
+    this.selectedType = null;
+    this.chartForm.get('xAxisLabel').setValue('x');
+    this.chartForm.get('yAxisLabel').setValue('y');
   }
 
-  createChart() {
+  createChart(source: string, type: string) {
     const chart: ChartRequest = {
-      type: ChartType.Multiple, // if ChartType.Plot -> Bad request
-      source: 'source',
-      showCommon: 'showCommon1',
+      type: ChartType.Single, // if ChartType.Plot -> Bad request
+      source: source,
+      showCommon: type,
       threshold: 16,
       mostLoaded: 'mostLoaded',
       dashboardId: 102// this.activeDashboardItem.dashId
@@ -446,7 +458,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.popupAddChart = false;
 
     if (true) {
-      this.chartService.create(this.createChart()).subscribe(
+      this.chartService.create(this.createChart(this.selectedSource, this.selectedType)).subscribe(
         value => {
           this.toastrService.success('Chart was created');
           // this.activeDashboardItem.charts.push(value);
@@ -456,7 +468,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     }
   }
-
+/*
   onEditChart(chart: ChartRequest) {
     this.chartService.update(111, this.createChart()).subscribe(
       value => {
@@ -465,7 +477,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       error => {
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
-  }
+  }*/
 
   onDeleteChart(id: number) {
     this.chartService.delete(111).subscribe(
