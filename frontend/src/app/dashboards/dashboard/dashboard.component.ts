@@ -1,6 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ConfirmationService, MenuItemContent } from 'primeng/primeng';
-import { MessageService } from 'primeng/api';
+import { MessageService, MenuItem } from 'primeng/api';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { Dashboard } from '../../shared/models/dashboard.model';
 import { ToastrService } from '../../core/services/toastr.service';
@@ -17,6 +17,7 @@ import { DataService } from '../services/data.service';
 import { ChartType } from '../../shared/models/chart-type.enum';
 import { ChartRequest } from '../../shared/requests/chart-request.model';
 import { ChartService } from '../../core/services/chart.service';
+import { SelectItem } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard',
@@ -42,6 +43,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   percentageInfoToDisplay: PercentageInfo[];
   percentageInfoToDisplaySingle: PercentageInfo;
   popupAddChart: Boolean = false;
+  dropdownType: SelectItem[];
+  selectedType: string;
+  cogItems: MenuItem[];
 
   set PercentageInfoToDisplay(info: PercentageInfo[]) {
     this.percentageInfoToDisplay = info;
@@ -65,6 +69,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private activateRoute: ActivatedRoute,
     private ngZone: NgZone,
     private dataService: DataService) {
+
+      this.dropdownType = [
+        {label: 'Bar vertical', value: 'Bar vertical'},
+        {label: 'Line chart', value: 'Line chart'},
+        {label: 'Pie', value: 'Pie'},
+        {label: 'Guage', value: 'Guage'}
+      ];
   }
 
   async ngOnInit(): Promise<void> {
@@ -97,6 +108,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.toastrService.error('Cant fetch instance collected Data');
         });
     });
+
+    this.cogItems = [{
+      label: 'Add item',
+      icon: 'fa fa-fw fa-plus',
+      command: (event?: any) => this.showPopupAddChart(),
+    },
+    {
+      label: 'Edit',
+      icon: 'fa fa-fw fa-edit',
+      command: (event?: any) => this.showCreatePopup(false),
+    },
+    {
+      label: 'Delete',
+      icon: 'fa fa-fw fa-remove',
+      command: (event?: any) => this.delete(),
+    }
+    ];
   }
 
   getSignalRClaims() {

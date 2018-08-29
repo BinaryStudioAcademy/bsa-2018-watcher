@@ -6,21 +6,26 @@
       <hr *ngIf="!instanceId">
     </div>
   </div>
+  <!--Item showAddItemPopup() -->
   <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
   <div class="workspace" *ngIf="instanceId">
     <div *ngIf="activeDashboardItem && dashboardMenuItems.length > 1" class="dashboard-options">
-      <button pButton type="button" label="Add chart" class="btnedit ui-button-success ui-button-raised " [disabled]="activeDashboardItem == null"
-        (click)="showPopupAddChart()"></button> <!--Item showAddItemPopup() -->
+      <!-- <button pButton type="button" label="Add chart" class="btnedit ui-button-success ui-button-raised " [disabled]="activeDashboardItem == null"
+        (click)="showPopupAddChart()"></button>    
       <button pButton type="button" label="Edit " class="btnedit ui-button-primary ui-button-raised " [disabled]="activeDashboardItem == null"
         (click)="showCreatePopup(false)"></button>
       <button pButton type="button" label="Delete " class="btnedit ui-button-danger ui-button-raised " [disabled]="activeDashboardItem == null"
-        (click)="delete()"></button>
+        (click)="delete()"></button> -->
+      <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
+      <button #btn type="button" class="gear" pButton icon="fa fa-fw fa-gear" (click)="cog.toggle($event)"></button>
     </div>
-    <div class="placeholder">
-        <div>
-          <i class="fa fa-plus"></i> Create a chart</div>
+    <div>
+      <p class="text-pl">Click * -> Add chart or plot</p>
+      <div class="img-example">
+        <img *ngIf="imgURL" src="" alt="example" class="img-example" />
       </div>
-    
+    </div>
+
     <div class="content" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">
       <div class="charts-area" *ngIf="!isEditMode">
         <app-chart-dashboard [charts]="charts" [filters]="filters">
@@ -75,7 +80,7 @@
     <div>
       <i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity</div>
   </div>
-  
+
 </div>
 
 <p-confirmDialog header="Confirmation " icon="pi pi-exclamation-triangle " width="425 " #cd>
@@ -87,16 +92,36 @@
 <p-toast position="bottom-right" life="500"></p-toast>
 
 
-<p-dialog header="Create chart" [(visible)]="popupAddChart" [modal]="true" [responsive]="true" [width]="600" [minWidth]="450"
-  [minY]="70" [maximizable]="false" [baseZIndex]="10000" >
-  <!-- <div class="ui-g ui-fluid"> [contentStyle]="{'overflow':'visible'}"
-    <div class="ui-g-12">   </div> -->
-    <app-chart-builder (addChart)="addChartToDashboard($event)"></app-chart-builder>
-    <p-footer>
-      <div class="center">
-        <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()" label="Save"></button>
-        <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
-      </div>
-    </p-footer>
+<p-dialog header="Create chart" [(visible)]="popupAddChart" [modal]="true" [responsive]="true" [width]="800" [minWidth]="650"
+  [minY]="70" [maximizable]="false" [baseZIndex]="10000" [contentStyle]="{'overflow':'visible'}">
+  <!--  -->
+  <!-- <app-chart-builder (addChart)="addChartToDashboard($event)"></app-chart-builder>-->
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-3">
+      <p class="field">Select chart type: </p>
+      <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" [style]="{'width':'172px'}"></p-dropdown>
+      <p>{{selectedType}}</p>
+      <p class="field">Select source: </p>
+      <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" [style]="{'width':'172px'}"></p-dropdown>
+      <p class="field">Is single:
+        <p-checkbox formControlName="isSingle" binary="true"></p-checkbox>
+      </p>
+      <p class="field">Step count: </p>
+      <p class="field center">Styles</p>
+      <p class="field">Legend title: </p>
+      <p class="field">Y axis label: </p>
+      <p class="field">X axis label: </p>
+    </div>
+    <div class="ui-g-9">
+      <p class="field center">Visualization</p>
+      <div class="view-chart"> </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="center">
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()" label="Save"></button>
+      <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
+    </div>
+  </p-footer>
 
 </p-dialog>
