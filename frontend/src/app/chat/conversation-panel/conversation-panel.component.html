@@ -1,6 +1,6 @@
 <app-conversation-settings-popup [onDisplay]="onDisplaySettings"></app-conversation-settings-popup>
 
-<div class="conversation-panel" [hidden]="!display">
+<div class="conversation-panel ui-shadow" [hidden]="!display">
   <p-accordion (onClose)="collapseExtend()" (onOpen)="collapseExtend()">
     <p-accordionTab [selected]="display">
       <p-header>
@@ -20,8 +20,9 @@
                   <img class="message-user-img" src="{{message?.user?.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}"/>
               </div>
               <div class="ui-g-9 ui-g-nopad">
-                <strong class="text-overflow">{{message?.user?.displayName}}</strong>
-                <div>{{message?.text}}</div>
+                <strong class="message-name text-overflow text-inline">{{message?.user?.displayName}}</strong>
+                <div class="message-text">{{message?.text}}</div>
+                <div class="message-date">{{message?.createdAt | date:'short'}}</div>
               </div>
             </div>
           </div>

@@ -17,24 +17,33 @@
 		grid-template-rows: 1fr auto
 	.conversation-message-list
 		overflow-y: auto
+		overflow-x: hidden
+		padding: 5px 0px
+		.message-user-img
+    		width: 30px
+    		height: 30px
+    		margin-right: 5px
+    		border-radius: 50%
+		.message-name
+			color: #575757
+			margin-bottom: 5px
+			font-weight: bolder
+			overflow-wrap: break-word
+		.message-date
+			text-align: right
+			color: #727272
+			font-size: 0.8em
+		.message-text
+			word-wrap: break-word
+			font-size: 0.9em
 		.message
 			float: right
+			width: 70%
 			margin: 2px 5px
 			padding: 5px
 			border-radius: 5px
-			word-wrap: break-word
-			font-size: 0.9em
-			width: 70%
-            font-size: 0.9em
-            word-wrap: break-word
 			background-color: #E3E3E3
 		.received-message
 			float: left
 			border: 3px solid #E3E3E3
 			background-color: #FFF
-
-.message-user-img
-    width: 30px
-    height: 30px
-    margin-right: 5px
-    border-radius: 50%

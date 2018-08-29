@@ -2,11 +2,14 @@
 	.ui-accordion-header
 		margin: 0 !important
 		a
+			border-top-left-radius: 3px
+			border-top-right-radius: 3px
 			padding: 4px !important
 	.ui-accordion-content
 		padding: 0 !important
-		border-top: 0
+		border: 0 !important
 		height: 300px
+		width: 100%
 		overflow-x: hidden
 
 /deep/.ui-inputtext
@@ -20,10 +23,6 @@
 	bottom: 0
 	right: 20px
 	width: 150px
-	/deep/.ui-listbox
-		border: 0
-	/deep/.ui-listbox-list
-		overflow-x: hidden
 	.chat-list-img
 		width: 30px
 		height: 30px
@@ -31,6 +30,14 @@
 	.chat-list-name
 		white-space: nowrap
 		line-height: 30px
+	/deep/.ui-listbox
+		border: 0
+		min-width: unset
+		.ui-listbox-list
+			width: 100%
+			overflow-x: hidden
+		.ui-listbox-item
+			padding: 0.25em
 
 .icon
 	cursor: pointer
@@ -50,7 +57,6 @@
 .text-overflow
 	overflow: hidden
 	text-overflow: ellipsis
-	white-space: nowrap
 
 .user-list
 	overflow-y: auto
