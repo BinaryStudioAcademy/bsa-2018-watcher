@@ -102,7 +102,7 @@
       <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" [style]="{'width':'172px'}"></p-dropdown>
       <p>{{selectedType}}</p>
       <p class="field">Select source: </p>
-      <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" [style]="{'width':'172px'}"></p-dropdown>
+      <p-dropdown [options]="dropdownType" [(ngModel)]="selectedSource" [style]="{'width':'172px'}"></p-dropdown>
       <p class="field">Is single:
         <p-checkbox formControlName="isSingle" binary="true"></p-checkbox>
       </p>
@@ -138,6 +138,7 @@
   </div>
   <p-footer>
     <div class="center">
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="processData()" label="Preview"></button>
       <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()" label="Save"></button>
       <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
     </div>

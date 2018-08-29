@@ -16,6 +16,7 @@ import { RoleService } from './services/role.service';
 import { ChartService } from './services/chart.service';
 import { UserOrganizationService } from './services/user-organization.service';
 import { NotificationsHubService } from './hubs/notifications.hub';
+import {CollectedDataService} from './services/collected-data.service';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { NotificationsHubService } from './hubs/notifications.hub';
     ResponseService,
     RoleService,
     ChartService,
+    CollectedDataService,
     UserOrganizationService,
     ConfirmationService,
     MessageService,

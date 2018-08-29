@@ -1,25 +1,27 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { ConfirmationService, MenuItemContent } from 'primeng/primeng';
-import { MessageService, MenuItem } from 'primeng/api';
-import { DashboardService } from '../../core/services/dashboard.service';
-import { Dashboard } from '../../shared/models/dashboard.model';
-import { ToastrService } from '../../core/services/toastr.service';
-import { DashboardMenuItem } from '../models';
-import { DashboardRequest } from '../../shared/models/dashboard-request.model';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { InstanceService } from '../../core/services/instance.service';
-import { DashboardsHub } from '../../core/hubs/dashboards.hub';
-import { PercentageInfo } from '../models/percentage-info';
-import { CustomChart, CustomData, CustomQuery, Filter, gapminder, toCapitalizedWords } from '../charts/models';
-import { DataService } from '../services/data.service';
+import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {ConfirmationService, MenuItemContent} from 'primeng/primeng';
+import {MessageService, MenuItem} from 'primeng/api';
+import {DashboardService} from '../../core/services/dashboard.service';
+import {Dashboard} from '../../shared/models/dashboard.model';
+import {ToastrService} from '../../core/services/toastr.service';
+import {DashboardMenuItem} from '../models';
+import {DashboardRequest} from '../../shared/models/dashboard-request.model';
+import {ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {InstanceService} from '../../core/services/instance.service';
+import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+import {PercentageInfo} from '../models/percentage-info';
+import {CustomChart, CustomData, CustomQuery, Filter, gapminder, toCapitalizedWords} from '../charts/models';
+import {DataService} from '../services/data.service';
 
-import { ChartType } from '../../shared/models/chart-type.enum';
-import { ChartRequest } from '../../shared/requests/chart-request.model';
-import { ChartService } from '../../core/services/chart.service';
-import { SelectItem } from 'primeng/api';
+import {ChartType} from '../../shared/models/chart-type.enum';
+import {ChartRequest} from '../../shared/requests/chart-request.model';
+import {ChartService} from '../../core/services/chart.service';
+import {SelectItem} from 'primeng/api';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { single1 } from '../models/data';
+import {CollectedDataService} from '../../core/services/collected-data.service';
+import {CollectedData} from '../../shared/models/collected-data.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,9 +46,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   displayEditDashboard = false;
   percentageInfoToDisplay: PercentageInfo[];
   percentageInfoToDisplaySingle: PercentageInfo;
+  collectedDataForChart: CollectedData[];
+  dataForChart: any;
   popupAddChart: Boolean = false;
   dropdownType: SelectItem[];
+  dropdownSource: SelectItem[];
   selectedType: string;
+  selectedSource: string;
   cogItems: MenuItem[];
 
   single1: any[];
@@ -78,22 +84,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
   rawData: CustomData[] = [];
 
   constructor(private dashboardsService: DashboardService,
-    private instanceService: InstanceService,
-    private dashboardsHub: DashboardsHub,
-    private toastrService: ToastrService,
-    private chartService: ChartService,
-    private activateRoute: ActivatedRoute,
+              private collectedDataService: CollectedDataService,
+              private instanceService: InstanceService,
+              private dashboardsHub: DashboardsHub,
+              private toastrService: ToastrService,
+              private chartService: ChartService,
+              private activateRoute: ActivatedRoute,
     private fb: FormBuilder,
-    private ngZone: NgZone,
-    private dataService: DataService) {
+              private ngZone: NgZone,
+              private dataService: DataService) {
 
-      this.dropdownType = [
-        {label: 'Bar vertical', value: 'Bar vertical'},
-        {label: 'Line chart', value: 'Line chart'},
-        {label: 'Pie', value: 'Pie'},
-        {label: 'Guage', value: 'Guage'}
-      ];
+    this.dropdownType = [
+      {label: 'Bar vertical', value: 'Bar vertical'},
+      {label: 'Line chart', value: 'Line chart'},
+      {label: 'Pie', value: 'Pie'},
+      {label: 'Guage', value: 'Guage'}
+    ];
 
+    this.dropdownSource = [
+      {label: 'CPU', value: 'Bar vertical'},
+      {label: 'RAM', value: 'Line chart'},
+      {label: 'DISC', value: 'Pie'},
+      {label: 'Guage', value: 'Guage'}
+    ];
+  }
+
+  processData(): void {
+    this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
   }
 
   chartForm = this.fb.group({
@@ -132,21 +149,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     });
 
+    this.collectedDataService.getBuilderData()
+      .subscribe(value => {
+        console.log(value);
+        this.collectedDataForChart = value;
+      });
+
     this.cogItems = [{
       label: 'Add item',
       icon: 'fa fa-fw fa-plus',
       command: (event?: any) => this.showPopupAddChart(),
     },
-    {
-      label: 'Edit',
-      icon: 'fa fa-fw fa-edit',
-      command: (event?: any) => this.showCreatePopup(false),
-    },
-    {
-      label: 'Delete',
-      icon: 'fa fa-fw fa-remove',
-      command: (event?: any) => this.delete(),
-    }
+      {
+        label: 'Edit',
+        icon: 'fa fa-fw fa-edit',
+        command: (event?: any) => this.showCreatePopup(false),
+      },
+      {
+        label: 'Delete',
+        icon: 'fa fa-fw fa-remove',
+        command: (event?: any) => this.delete(),
+      }
     ];
   }
 
@@ -255,12 +278,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   createDashboard(newDashboard: DashboardRequest): void {
     this.dashboardsService.create(newDashboard)
       .subscribe((dto) => {
-        const item: DashboardMenuItem = this.transformToMenuItem(dto);
-        this.dashboardMenuItems.unshift(item);
-        this.activeDashboardItem = this.dashboardMenuItems[0];
-        this.loading = false;
-        this.toastrService.success('Added new dashboard');
-      },
+          const item: DashboardMenuItem = this.transformToMenuItem(dto);
+          this.dashboardMenuItems.unshift(item);
+          this.activeDashboardItem = this.dashboardMenuItems[0];
+          this.loading = false;
+          this.toastrService.success('Added new dashboard');
+        },
         error => {
           this.loading = false;
           this.toastrService.error(`Error ocured status: ${error}`);
@@ -291,21 +314,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   deleteDashboard(dashboard: DashboardMenuItem): void {
     this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
-        console.log(res);
-        // Search and delete selected Item
-        const index = this.dashboardMenuItems.findIndex(d => d === this.activeDashboardItem);
-        this.dashboardMenuItems.splice(index, 1);
+          console.log(res);
+          // Search and delete selected Item
+          const index = this.dashboardMenuItems.findIndex(d => d === this.activeDashboardItem);
+          this.dashboardMenuItems.splice(index, 1);
 
-        // [0] - is + button
-        if (this.dashboardMenuItems.length > 1) {
-          this.activeDashboardItem = this.dashboardMenuItems[0];
-        } else {
-          this.activeDashboardItem = null;
-        }
+          // [0] - is + button
+          if (this.dashboardMenuItems.length > 1) {
+            this.activeDashboardItem = this.dashboardMenuItems[0];
+          } else {
+            this.activeDashboardItem = null;
+          }
 
-        this.loading = false;
-        this.toastrService.success('Deleted dashboard');
-      },
+          this.loading = false;
+          this.toastrService.success('Deleted dashboard');
+        },
         error => {
           this.loading = false;
           this.toastrService.error(`Error occured status: ${error}`);
@@ -336,7 +359,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
-      const newdash: DashboardRequest = { title: title, instanceId: this.instanceId };
+      const newdash: DashboardRequest = {title: title, instanceId: this.instanceId};
       this.createDashboard(newdash);
       let index = 0;
       // switching to new tab
@@ -396,7 +419,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.yAxisLabel = this.chartForm.get('yAxisLabel').value;
     Object.assign(this,  {single1} );
   }
-
   showPopupAddChart() {
     this.popupAddChart = true;
 
@@ -446,7 +468,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onDeleteChart(id: number) {
-    this.chartService.delete( 111 ).subscribe(
+    this.chartService.delete(111).subscribe(
       value => {
         this.toastrService.success('The chart was deleted');
       },
