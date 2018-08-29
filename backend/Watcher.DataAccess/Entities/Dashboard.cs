@@ -27,9 +27,12 @@
 
         public void OnDelete()
         {
-            foreach (var chart in Charts)
+            if (Charts != null)
             {
-                chart.OnDelete();
+                foreach (var chart in Charts)
+                {
+                    chart.OnDelete();
+                }
             }
 
             IsDeleted = true;

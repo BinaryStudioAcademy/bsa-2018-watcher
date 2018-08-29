@@ -33,9 +33,12 @@
 
         public void OnDelete()
         {
-            foreach (var message in Messages)
+            if (Messages != null)
             {
-                message.OnDelete();
+                foreach (var message in Messages)
+                {
+                    message.OnDelete();
+                }
             }
 
             IsDeleted = true;

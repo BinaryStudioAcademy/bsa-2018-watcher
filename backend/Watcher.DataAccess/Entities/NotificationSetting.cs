@@ -33,9 +33,12 @@
 
         public void OnDelete()
         {
-            foreach (var notification in Notifications)
-            {
-                notification.OnDelete();
+            if(Notifications != null)
+            { 
+                foreach (var notification in Notifications)
+                {
+                    notification.OnDelete();
+                }
             }
 
             IsDeleted = true;

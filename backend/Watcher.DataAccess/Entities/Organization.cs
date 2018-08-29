@@ -44,19 +44,28 @@
 
         public void OnDelete()
         {
-            foreach (var instance in Instances)
+            if (Instances != null)
             {
-                instance.OnDelete();
+                foreach (var instance in Instances)
+                {
+                    instance.OnDelete();
+                }
             }
 
-            foreach (var notification in Notifications)
+            if (Notifications != null)
             {
-                notification.OnDelete();
+                foreach (var notification in Notifications)
+                {
+                    notification.OnDelete();
+                }
             }
 
-            foreach (var organizationInvite in OrganizationInvites)
+            if (OrganizationInvites != null)
             {
-                organizationInvite.OnDelete();
+                foreach (var organizationInvite in OrganizationInvites)
+                {
+                    organizationInvite.OnDelete();
+                }
             }
 
             IsDeleted = true;

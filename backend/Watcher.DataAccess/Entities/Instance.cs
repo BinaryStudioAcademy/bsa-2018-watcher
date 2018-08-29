@@ -34,9 +34,12 @@
 
         public void OnDelete()
         {
-            foreach (var dashboard in Dashboards)
+            if (Dashboards != null)
             {
-                dashboard.OnDelete();
+                foreach (var dashboard in Dashboards)
+                {
+                    dashboard.OnDelete();
+                }
             }
 
             IsDeleted = true;
