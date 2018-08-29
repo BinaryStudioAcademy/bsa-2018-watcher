@@ -25,7 +25,6 @@
             await Clients.User(notificationDto.UserId).SendAsync("AddNotification", notificationDto);
         }
 
-        [Authorize]
         public override Task OnConnectedAsync()
         {
             if (Context.User.GetUserId() != null)
@@ -33,7 +32,6 @@
             return base.OnConnectedAsync();
         }
 
-        [Authorize]
         public override Task OnDisconnectedAsync(Exception exception)
         {
             if (Context.User.GetUserId() != null)

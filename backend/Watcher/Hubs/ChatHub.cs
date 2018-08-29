@@ -130,7 +130,6 @@
             }
         }
 
-        [Authorize]
         public override async Task OnConnectedAsync()
         {
             if (Context.User.GetUserId() != null)
@@ -138,7 +137,6 @@
             await base.OnConnectedAsync();
         }
 
-        [Authorize]
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             if (Context.User.GetUserId() != null)
