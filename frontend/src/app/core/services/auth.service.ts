@@ -269,6 +269,7 @@ export class AuthService {
 
     return true;
   }
+
   async refreshToken() {
     const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
     localStorage.removeItem('firebaseToken');
