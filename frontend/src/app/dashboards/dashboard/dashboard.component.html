@@ -102,7 +102,7 @@
       <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" [style]="{'width':'172px'}"></p-dropdown>
       <p>{{selectedType}}</p>
       <p class="field">Select source: </p>
-      <p-dropdown [options]="dropdownType" [(ngModel)]="selectedSource" [style]="{'width':'172px'}"></p-dropdown>
+      <p-dropdown [options]="dropdownSource" [(ngModel)]="selectedSource" [style]="{'width':'172px'}"></p-dropdown>
       <p class="field">Is single:
         <p-checkbox formControlName="isSingle" binary="true"></p-checkbox>
       </p>
@@ -114,7 +114,13 @@
     </div>
     <div class="ui-g-9">
       <p class="field center">Visualization</p>
-      <div class="view-chart"> </div>
+      <div class="view-chart" *ngIf="showPreview">
+        <app-chart
+          [chart]="chartOptions"
+          [data]="dataForChart"
+          [chartType]="chartType">
+        </app-chart>
+      </div>
     </div>
   </div>
   <p-footer>

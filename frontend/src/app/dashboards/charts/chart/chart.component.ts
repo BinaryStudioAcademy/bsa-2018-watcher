@@ -1,6 +1,6 @@
-import {Component, OnInit, Input, EventEmitter, Output, HostBinding, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import * as SvgSaver from 'svgsaver';
-import { CustomChart, CustomData} from '../models';
+import {CustomChart, CustomData} from '../models';
 
 const EMPTY = [];
 
@@ -8,7 +8,8 @@ const EMPTY = [];
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.sass'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class ChartComponent implements OnInit {
   @Output() select: EventEmitter<{ chart: CustomChart, value?: any }> = new EventEmitter();

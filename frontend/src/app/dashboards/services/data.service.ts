@@ -49,13 +49,13 @@ export class DataService {
   }
 
   // dataSource - property to show on the chart
-  prepareData(chartType: string, dataSource: string, dataToTransform: CollectedData[]): NumberSeriesItem {
+  prepareData(chartType: string, dataSource: string, dataToTransform: CollectedData[]): CustomData[] {
     if (chartType === 'Bar vertical') {
       const data: NumberSeriesItem = this.mapToSeriesItem(dataToTransform[0], dataSource);
-      return data;
+      return [data];
     } else {
       const data: NumberSeriesItem = this.mapToSeriesItem(dataToTransform[0], dataSource);
-      return data;
+      return [data];
     }
   }
 
