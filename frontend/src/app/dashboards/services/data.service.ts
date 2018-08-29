@@ -4,12 +4,15 @@ import * as papaparse from 'papaparse';
 import { nest } from 'd3-collection';
 import {Universe, CustomData, CustomQuery } from '../charts/models';
 import {Nameable} from '../charts/models';
+import {CollectedData} from '../../shared/models/collected-data.model';
+import {ApiService} from '../../core/services/api.service';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-
+  private readonly ctrlUrl = '/CollectedData';
   private _dataText: string;
   private _parsed: {data: CustomData[], errors: any[], meta: any};
 
@@ -19,9 +22,12 @@ export class DataService {
 
   dataUniverse: Universe;
 
-  get rawData(): CustomData[] {
-    return this._parsed.data;
+  rawData(): Observable<CollectedData[]> {
+    return this.apiService.get(`${this.ctrlUrl}/Builder`) as Observable<CollectedData[]>;
+    // return this._parsed.data;
   }
+
+
 
   get errors(): any[] {
     return this._parsed.errors;
@@ -38,9 +44,10 @@ export class DataService {
     }));
   }
 
-  constructor() { }
+  constructor(private apiService: ApiService) {
+  }
 
-  async updateData(dataText: string): Promise<CustomData[]> {
+  async updateData(dataText: string): Promise<CollectedData[]> {
     this._parsed = papaparse.parse(dataText, {
       header: true,
       dynamicTyping: true,
@@ -49,13 +56,13 @@ export class DataService {
 
     if (this._parsed.meta.aborted || this._parsed.data.length === 0) {
       this._dataText = '';
-      return this.rawData;
+      return this.rawData().toPromise();
     }
 
     this.dataUniverse = await universe(this._parsed.data);
 
     this.universeUpdated.emit(this.dataUniverse);
-    return this.rawData;
+    return this.rawData().toPromise();
   }
 
   async createQuery(groupBy: string, valueKey: string, aggragate = 'sum'): Promise<CustomQuery> {

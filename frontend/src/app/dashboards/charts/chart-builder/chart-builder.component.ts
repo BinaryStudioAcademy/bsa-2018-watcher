@@ -7,6 +7,7 @@ import {CustomChart, CustomChartType, CustomData} from '../models';
 import {DataService} from '../../services/data.service';
 import {toCapitalizedWords} from '../models';
 import {customChartTypes} from './customChartTypes';
+import {CollectedData} from '../../../shared/models/collected-data.model';
 
 const defaultOptions = {
   view: undefined,
@@ -55,6 +56,8 @@ export class ChartBuilderComponent implements OnInit {
   data: CustomData[] = [];
   headerValues: any[] = [];
 
+  collectedData: CollectedData[] = [];
+
   aggragates = ['count', 'sum', 'avg', 'max', 'min'];
 
   @Output() addChart: EventEmitter<CustomChart> = new EventEmitter();
@@ -83,6 +86,13 @@ export class ChartBuilderComponent implements OnInit {
         this.processData();
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.dataDims = [null, null, null, null, 'count'];
+    this.clearAll();
+
+    this.collectedDataService.getBuilderData().subscribe();
   }
 
   setChartLabels(): any {
@@ -114,11 +124,6 @@ export class ChartBuilderComponent implements OnInit {
 
     return this.ngZone.run(() => {
     });
-  }
-
-  ngOnInit(): void {
-    this.dataDims = [null, null, null, null, 'count'];
-    this.clearAll();
   }
 
   clearAll(): any {
