@@ -1,29 +1,29 @@
-import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
-import {ConfirmationService, MenuItemContent} from 'primeng/primeng';
-import {MessageService, MenuItem} from 'primeng/api';
-import {DashboardService} from '../../core/services/dashboard.service';
-import {Dashboard} from '../../shared/models/dashboard.model';
-import {ToastrService} from '../../core/services/toastr.service';
-import {DashboardMenuItem} from '../models';
-import {DashboardRequest} from '../../shared/models/dashboard-request.model';
-import {ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {InstanceService} from '../../core/services/instance.service';
-import {DashboardsHub} from '../../core/hubs/dashboards.hub';
-import {PercentageInfo} from '../models/percentage-info';
-import {CustomChart, CustomChartType, CustomData, CustomQuery, Filter, gapminder, toCapitalizedWords} from '../charts/models';
-import {DataService} from '../services/data.service';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ConfirmationService, MenuItemContent } from 'primeng/primeng';
+import { MessageService, MenuItem } from 'primeng/api';
+import { DashboardService } from '../../core/services/dashboard.service';
+import { Dashboard } from '../../shared/models/dashboard.model';
+import { ToastrService } from '../../core/services/toastr.service';
+import { DashboardMenuItem } from '../models';
+import { DashboardRequest } from '../../shared/models/dashboard-request.model';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { InstanceService } from '../../core/services/instance.service';
+import { DashboardsHub } from '../../core/hubs/dashboards.hub';
+import { PercentageInfo } from '../models/percentage-info';
+import { CustomChart, CustomChartType, CustomData, CustomQuery, Filter, gapminder, toCapitalizedWords } from '../charts/models';
+import { DataService } from '../services/data.service';
 
-import {ChartType} from '../../shared/models/chart-type.enum';
-import {ChartRequest} from '../../shared/requests/chart-request.model';
-import {ChartService} from '../../core/services/chart.service';
-import {SelectItem} from 'primeng/api';
+import { ChartType } from '../../shared/models/chart-type.enum';
+import { ChartRequest } from '../../shared/requests/chart-request.model';
+import { ChartService } from '../../core/services/chart.service';
+import { SelectItem } from 'primeng/api';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { single1, multi } from '../models';
-import {CollectedDataService} from '../../core/services/collected-data.service';
-import {CollectedData} from '../../shared/models/collected-data.model';
-import {customChartTypes} from '../charts/chart-builder/customChartTypes';
-import {colorSets} from '@swimlane/ngx-charts/release/utils';
+import { CollectedDataService } from '../../core/services/collected-data.service';
+import { CollectedData } from '../../shared/models/collected-data.model';
+import { customChartTypes } from '../charts/chart-builder/customChartTypes';
+import { colorSets } from '@swimlane/ngx-charts/release/utils';
 import * as shape from 'd3-shape';
 
 const defaultOptions = {
@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   dropdownType: SelectItem[];
   dropdownSource: SelectItem[];
   selectedType: string;
-  selectedSource: string;
+  selectedSource: string[] = [];
   cogItems: MenuItem[];
 
   single1: any[];
@@ -86,9 +86,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   gradient = false;
   showLegend = true;
   showXAxisLabel = true;
-  xAxisLabel = 'x';
+  xAxisLabel = '';
   showYAxisLabel = true;
-  yAxisLabel = 'y';
+  yAxisLabel = '';
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
@@ -119,33 +119,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
   rawData: CustomData[] = [];
 
   constructor(private dashboardsService: DashboardService,
-              private collectedDataService: CollectedDataService,
-              private instanceService: InstanceService,
-              private dashboardsHub: DashboardsHub,
-              private toastrService: ToastrService,
-              private chartService: ChartService,
-              private activateRoute: ActivatedRoute,
-              private fb: FormBuilder,
-              private ngZone: NgZone,
-              private dataService: DataService) {
+    private collectedDataService: CollectedDataService,
+    private instanceService: InstanceService,
+    private dashboardsHub: DashboardsHub,
+    private toastrService: ToastrService,
+    private chartService: ChartService,
+    private activateRoute: ActivatedRoute,
+    private fb: FormBuilder,
+    private ngZone: NgZone,
+    private dataService: DataService) {
 
     this.dropdownType = [
-      {label: 'Bar vertical', value: 'bar-vertical'},
-      {label: 'Line chart', value: 'line-chart'},
-      {label: 'Pie', value: 'pie'},
-      {label: 'Guage', value: 'guage'}
+      { label: 'Bar vertical', value: 'bar-vertical' },
+      { label: 'Line chart', value: 'line-chart' },
+      { label: 'Pie', value: 'pie' },
+      { label: 'Guage', value: 'guage' }
     ];
 
     this.dropdownSource = [
-      {label: 'CPU', value: 'cpuUsagePercent'},
-      {label: 'RAM', value: 'ramUsagePercent'},
-      {label: 'DISC', value: 'localDiskFreeSpacePercent'}
+      { label: 'CPU', value: 'cpuUsagePercent' },
+      { label: 'RAM', value: 'ramUsagePercent' },
+      { label: 'DISC', value: 'localDiskFreeSpacePercent' }
     ];
   }
 
   chartForm = this.fb.group({
-    xAxisLabel: new FormControl({ value: 'x', disabled: false }),
-    yAxisLabel: new FormControl({ value: 'y', disabled: false })
+    xAxisLabel: new FormControl({ value: '', disabled: false }),
+    yAxisLabel: new FormControl({ value: '', disabled: false })
   });
 
   processData(): void {
@@ -153,16 +153,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value;
     this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
     this.chartType.name = this.selectedType;
-    this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
+    this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource[0], this.collectedDataForChart);
     // TODO: set this data as property to trigger
     this.showPreview = true;
+    if (this.selectedType === 'bar-vertical') {
+      this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Parameters';
+      this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
+    } else if (this.selectedType === 'line-chart') {
+      this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Time';
+      this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
+    } else if (this.selectedType === 'guage') {
+      this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Process';
+    }
 
-    this.xAxisLabel = this.chartForm.get('xAxisLabel').value;
-      this.yAxisLabel = this.chartForm.get('yAxisLabel').value;
-      if (this.selectedType === 'Line chart') {
-        Object.assign(this, {multi});
-      } else {
-        Object.assign(this, {single1}); }
+    /*this.xAxisLabel = this.chartForm.get('xAxisLabel').value;
+    this.yAxisLabel = this.chartForm.get('yAxisLabel').value;*/
+    if (this.selectedType === 'Line chart') {
+      Object.assign(this, { multi });
+    } else {
+      Object.assign(this, { single1 });
+    }
   }
 
   async ngOnInit(): Promise<void> {
@@ -206,16 +216,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       icon: 'fa fa-fw fa-plus',
       command: (event?: any) => this.showPopupAddChart(),
     },
-      {
-        label: 'Edit',
-        icon: 'fa fa-fw fa-edit',
-        command: (event?: any) => this.showCreatePopup(false),
-      },
-      {
-        label: 'Delete',
-        icon: 'fa fa-fw fa-remove',
-        command: (event?: any) => this.delete(),
-      }
+    {
+      label: 'Edit',
+      icon: 'fa fa-fw fa-edit',
+      command: (event?: any) => this.showCreatePopup(false),
+    },
+    {
+      label: 'Delete',
+      icon: 'fa fa-fw fa-remove',
+      command: (event?: any) => this.delete(),
+    }
     ];
   }
 
@@ -268,12 +278,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   createDashboard(newDashboard: DashboardRequest): void {
     this.dashboardsService.create(newDashboard)
       .subscribe((dto) => {
-          const item: DashboardMenuItem = this.transformToMenuItem(dto);
-          this.dashboardMenuItems.unshift(item);
-          this.activeDashboardItem = this.dashboardMenuItems[0];
-          this.loading = false;
-          this.toastrService.success('Added new dashboard');
-        },
+        const item: DashboardMenuItem = this.transformToMenuItem(dto);
+        this.dashboardMenuItems.unshift(item);
+        this.activeDashboardItem = this.dashboardMenuItems[0];
+        this.loading = false;
+        this.toastrService.success('Added new dashboard');
+      },
         error => {
           this.loading = false;
           this.toastrService.error(`Error ocured status: ${error}`);
@@ -304,21 +314,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   deleteDashboard(dashboard: DashboardMenuItem): void {
     this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
-          console.log(res);
-          // Search and delete selected Item
-          const index = this.dashboardMenuItems.findIndex(d => d === this.activeDashboardItem);
-          this.dashboardMenuItems.splice(index, 1);
+        console.log(res);
+        // Search and delete selected Item
+        const index = this.dashboardMenuItems.findIndex(d => d === this.activeDashboardItem);
+        this.dashboardMenuItems.splice(index, 1);
 
-          // [0] - is + button
-          if (this.dashboardMenuItems.length > 1) {
-            this.activeDashboardItem = this.dashboardMenuItems[0];
-          } else {
-            this.activeDashboardItem = null;
-          }
+        // [0] - is + button
+        if (this.dashboardMenuItems.length > 1) {
+          this.activeDashboardItem = this.dashboardMenuItems[0];
+        } else {
+          this.activeDashboardItem = null;
+        }
 
-          this.loading = false;
-          this.toastrService.success('Deleted dashboard');
-        },
+        this.loading = false;
+        this.toastrService.success('Deleted dashboard');
+      },
         error => {
           this.loading = false;
           this.toastrService.error(`Error occured status: ${error}`);
@@ -348,7 +358,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
-      const newdash: DashboardRequest = {title: title, instanceId: this.instanceId};
+      const newdash: DashboardRequest = { title: title, instanceId: this.instanceId };
       this.createDashboard(newdash);
       let index = 0;
       // switching to new tab
@@ -407,7 +417,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   showPopupAddChart() {
     this.popupAddChart = true;
 
-
   }
 
 
@@ -415,8 +424,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.popupAddChart = false;
     this.selectedSource = null;
     this.selectedType = null;
-    this.chartForm.get('xAxisLabel').setValue('x');
-    this.chartForm.get('yAxisLabel').setValue('y');
+    this.chartForm.reset();
   }
 
   createChart(source: string, type: string) {
@@ -436,7 +444,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.popupAddChart = false;
 
     if (true) {
-      this.chartService.create(this.createChart(this.selectedSource, this.selectedType)).subscribe(
+      this.chartService.create(this.createChart(this.selectedSource[0], this.selectedType)).subscribe(
         value => {
           this.toastrService.success('Chart was created');
           // this.activeDashboardItem.charts.push(value);
@@ -446,17 +454,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     }
   }
-
-  onEditChart(chart: ChartRequest) {
-    this.chartService.update(111, this.createChart()).subscribe(
-      value => {
-        this.toastrService.success('The chart was updated');
-      },
-      error => {
-        this.toastrService.error(`Error ocured status: ${error.message}`);
-      });
-  }
-
+  /*
+    onEditChart(chart: ChartRequest) {
+      this.chartService.update(111, this.createChart()).subscribe(
+        value => {
+          this.toastrService.success('The chart was updated');
+        },
+        error => {
+          this.toastrService.error(`Error ocured status: ${error.message}`);
+        });
+    }
+  */
 
   onDeleteChart(id: number) {
     this.chartService.delete(111).subscribe(
