@@ -9,7 +9,7 @@
 
     public interface IChatsRepository : IRepository<Chat, int>
     {
-        Task<List<Chat>> GetChatsByUserId(string id, Expression<Func<Chat, bool>> filter = null);
+        Task<List<Chat>> GetChatsByUserId(string id);
 
         Task<List<User>> GetUsersByChatId(int id);
 

@@ -21,7 +21,7 @@
         {
         }
 
-        public async Task<List<Chat>> GetChatsByUserId(string id, Expression<Func<Chat, bool>> filter = null)
+        public async Task<List<Chat>> GetChatsByUserId(string id)
         {
             IQueryable<Chat> chats = Context.UserChat
                 .Where(uc => uc.UserId == id)
@@ -29,11 +29,6 @@
                 .Include(uc => uc.Messages)
                 .Include(uc => uc.UserChats)
                     .ThenInclude(uc => uc.User);
-
-            if (filter != null)
-            {
-                chats = chats.Where(filter);
-            }
 
             return await chats.ToListAsync();
         }

@@ -76,10 +76,6 @@
                 .HasOne(c => c.Organization)
                 .WithOne(o => o.Chat);
 
-            modelBuilder.Entity<Chat>()
-                .Property(c => c.IsActive)
-                .HasDefaultValue(true);
-
             modelBuilder.Entity<OrganizationInvite>()
                 .HasOne(u => u.Organization)
                 .WithMany(o => o.OrganizationInvites)
