@@ -18,6 +18,8 @@ import { ChartType } from '../../shared/models/chart-type.enum';
 import { ChartRequest } from '../../shared/requests/chart-request.model';
 import { ChartService } from '../../core/services/chart.service';
 import { SelectItem } from 'primeng/api';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { single1 } from '../models/data';
 
 @Component({
   selector: 'app-dashboard',
@@ -47,6 +49,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedType: string;
   cogItems: MenuItem[];
 
+  single1: any[];
+  view: any[] = [564, 282];
+  showXAxis = true;
+  showYAxis = true;
+  gradient = false;
+  showLegend = true;
+  showXAxisLabel = true;
+  xAxisLabel = 'x';
+  showYAxisLabel = true;
+  yAxisLabel = 'y';
+  colorScheme = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
+
   set PercentageInfoToDisplay(info: PercentageInfo[]) {
     this.percentageInfoToDisplay = info;
   }
@@ -67,6 +83,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private toastrService: ToastrService,
     private chartService: ChartService,
     private activateRoute: ActivatedRoute,
+    private fb: FormBuilder,
     private ngZone: NgZone,
     private dataService: DataService) {
 
@@ -76,7 +93,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         {label: 'Pie', value: 'Pie'},
         {label: 'Guage', value: 'Guage'}
       ];
+
   }
+
+  chartForm = this.fb.group({
+    xAxisLabel: new FormControl({ value: 'x', disabled: false }),
+    yAxisLabel: new FormControl({ value: 'y', disabled: false })
+  });
 
   async ngOnInit(): Promise<void> {
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
@@ -368,10 +391,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return item;
   }
 
-
+  onView() {
+    this.xAxisLabel = this.chartForm.get('xAxisLabel').value;
+    this.yAxisLabel = this.chartForm.get('yAxisLabel').value;
+    Object.assign(this,  {single1} );
+  }
 
   showPopupAddChart() {
     this.popupAddChart = true;
+
+
   }
 
   onCancel() {

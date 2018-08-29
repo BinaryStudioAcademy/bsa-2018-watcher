@@ -22,7 +22,7 @@
     <div>
       <p class="text-pl">Click * -> Add chart or plot</p>
       <div class="img-example">
-        <img *ngIf="imgURL" src="" alt="example" class="img-example" />
+        <img src="C:\Users\Eugene\Desktop\Tanya\image.png" alt="example" class="img-example" />
       </div>
     </div>
 
@@ -108,13 +108,32 @@
       </p>
       <p class="field">Step count: </p>
       <p class="field center">Styles</p>
-      <p class="field">Legend title: </p>
+      <form [formGroup]="userForm">
       <p class="field">Y axis label: </p>
+      <input size="22" type="text" formControlName="xAxisLabel" pInputText />
       <p class="field">X axis label: </p>
+      <input size="22" type="text" formControlName="yAxisLabel" pInputText />
+    </form>
     </div>
     <div class="ui-g-9">
-      <p class="field center">Visualization</p>
-      <div class="view-chart"> </div>
+      <button type="button" pButton (click)="onView()" label="Visualization" class="center ui-button-warning"></button>
+      <!-- <p class="field center">Visualization</p> -->
+      <div class="view-chart"> 
+          <ngx-charts-bar-vertical
+          [view]="view"
+          [scheme]="colorScheme"
+          [results]="single1"
+          [gradient]="gradient"
+          [xAxis]="showXAxis"
+          [yAxis]="showYAxis"
+          [legend]="showLegend"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          (select)="onSelect($event)">
+        </ngx-charts-bar-vertical>
+      </div>
     </div>
   </div>
   <p-footer>
