@@ -136,9 +136,10 @@
         public virtual ActionResult<IEnumerable<CollectedDataDto>> GetDataForBuilder()
         {
             var data = new List<CollectedDataDto>(20);
+            var dateTime = DateTime.UtcNow;
             for (var i = 0; i < 20; i++)
             {
-                var entity = CollectedDataService.GetFakeData(Guid.Empty);
+                var entity = CollectedDataService.GetFakeData(Guid.Empty, dateTime.AddSeconds(15 * i));
                 entity.Id = Guid.NewGuid();
                 var dto = _mapper.Map<CollectedData, CollectedDataDto>(entity);
                 data.Add(dto);

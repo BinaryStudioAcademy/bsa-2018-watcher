@@ -2,7 +2,9 @@
 
 <ngx-charts-bar-vertical
   *ngIf="chartType.name === 'bar-vertical'"
+  [view]="chart.view"
   class="chart-container"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -24,6 +26,7 @@
 
 <ngx-charts-bar-horizontal
   *ngIf="chartType.name === 'bar-horizontal'"
+  [view]="chart.view"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -46,6 +49,7 @@
 
 <ngx-charts-pie-chart
   *ngIf="chartType.name === 'pie'"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"
@@ -62,6 +66,7 @@
 
 <ngx-charts-pie-grid
   *ngIf="chartType.name === 'pie-grid'"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data"
   (select)="onSelect($event)"
@@ -70,6 +75,7 @@
 
 <ngx-charts-tree-map
   *ngIf="chartType.name === 'tree-map'"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data"
   [gradient]="chart.gradient"
@@ -80,6 +86,7 @@
 
 <ngx-charts-number-card
   *ngIf="chartType.name === 'number-cards'"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data"
   (select)="onSelect($event)"
@@ -88,6 +95,7 @@
 
 <ngx-charts-gauge
   *ngIf="chartType.name === 'guage'"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"
@@ -99,6 +107,7 @@
 <ngx-charts-bar-vertical-2d
   *ngIf="chartType.name === 'bar-vertical-2d'"
   class="chart-container"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -122,6 +131,7 @@
 <ngx-charts-bar-horizontal-2d
   *ngIf="chartType.name === 'bar-horizontal-2d'"
   class="chart-container"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -142,6 +152,7 @@
 <ngx-charts-bar-vertical-stacked
   *ngIf="chartType.name === 'bar-vertical-stacked'"
   class="chart-container"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -162,6 +173,7 @@
 <ngx-charts-bar-horizontal-stacked
   *ngIf="chartType.name === 'bar-horizontal-stacked'"
   class="chart-container"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -181,6 +193,7 @@
 <ngx-charts-bar-vertical-normalized
   *ngIf="chartType.name === 'bar-vertical-normalized'"
   class="chart-container"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -201,6 +214,7 @@
 <ngx-charts-bar-horizontal-normalized
   *ngIf="chartType.name === 'bar-horizontal-normalized'"
   class="chart-container"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -221,6 +235,7 @@
 <ngx-charts-polar-chart
   *ngIf="chartType.name === 'polar-chart'"
   class="chart-container"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -246,6 +261,7 @@
 <ngx-charts-line-chart
   *ngIf="chartType.name === 'line-chart'"
   class="chart-container"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -264,11 +280,14 @@
   [curve]="chart.curve"
   [rangeFillOpacity]="chart.rangeFillOpacity"
   [roundDomains]="chart.roundDomains"
-  [tooltipDisabled]="chart.tooltipDisabled">
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [yScaleMin]="0"
+  [yScaleMax]="100">
 </ngx-charts-line-chart>
 
 <ngx-charts-heat-map
   *ngIf="chartType.name === 'heat-map'"
+  [view]="chart.view"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [results]="data"

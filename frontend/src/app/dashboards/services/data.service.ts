@@ -9,6 +9,7 @@ import {ApiService} from '../../core/services/api.service';
 import {Observable} from 'rxjs';
 import {NumberSeriesItem, SeriesItem} from '../models/series-item';
 import {PercentageInfo} from '../models/percentage-info';
+import {MultiChartItem} from '../models/multi-chart-item';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +51,11 @@ export class DataService {
 
   // dataSource - property to show on the chart
   prepareData(chartType: string, dataSource: string, dataToTransform: CollectedData[]): CustomData[] {
-    if (chartType === 'Bar vertical') {
+    if (chartType === 'line-chart') {
+      const data: MultiChartItem = this.mapToMultiData(dataToTransform, dataSource);
+      return [data];
+    }
+    if (chartType === 'bar-vertical') {
       const data: NumberSeriesItem = this.mapToSeriesItem(dataToTransform[0], dataSource);
       return [data];
     } else {
@@ -59,23 +64,40 @@ export class DataService {
     }
   }
 
+  mapToMultiData(data: CollectedData[], property: string): MultiChartItem {
+    const item: MultiChartItem = {
+      name: property,
+      series: []
+    };
+
+    item.series = data.map(p => this.mapToLineChartSeriesItem(p, property));
+
+    // const dataToInsert: SeriesItem[]
+    // for (const inf of dataToInsert) {
+    //   item.series.push(inf);
+    // }
+
+    return item;
+  }
+
   mapToSeriesItem(data: CollectedData, property: string): NumberSeriesItem {
     const seriesItem: NumberSeriesItem = {
       value: data[property],
       name: property
     };
-
-
     return seriesItem;
-
-    // this.data[0].value = Math.floor(data.cpuUsagePercent);
-    // this.data[1].value = Math.floor(data.ramUsagePercent);
-    // this.data[2].value = Math.floor(data.localDiskFreeSpacePercent);
-
-    // this.data = [...this.data];
   }
 
-  toSeriesData(info: PercentageInfo | CollectedData): SeriesItem[] {
+  mapToLineChartSeriesItem(data: CollectedData, property: string): SeriesItem {
+    const seriesItem: SeriesItem = {
+      value: data[property],
+      name: new Date(data.time)
+    };
+
+    return seriesItem;
+  }
+
+  toSeriesData(info: PercentageInfo | CollectedData, property: string): SeriesItem[] {
     const items: SeriesItem[] = [];
     for (let i = 0; i < 3; i++) {
       items.push({name: new Date(info.time), value: 0});
@@ -84,7 +106,6 @@ export class DataService {
     items[0].value = Math.floor(info.cpuUsagePercent);
     items[1].value = Math.floor(info.ramUsagePercent);
     items[2].value = Math.floor(info.localDiskFreeSpacePercent);
-    // items[3].value = Math.floor(info.interruptsTimePercent);
 
     return items;
   }

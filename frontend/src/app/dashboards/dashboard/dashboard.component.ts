@@ -19,7 +19,7 @@ import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {ChartService} from '../../core/services/chart.service';
 import {SelectItem} from 'primeng/api';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
-import { single1, multi } from '../models/data';
+import { single1, multi } from '../models';
 import {CollectedDataService} from '../../core/services/collected-data.service';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {customChartTypes} from '../charts/chart-builder/customChartTypes';
@@ -27,7 +27,7 @@ import {colorSets} from '@swimlane/ngx-charts/release/utils';
 import * as shape from 'd3-shape';
 
 const defaultOptions = {
-  view: undefined,
+  view: [564, 282],
   colorScheme: colorSets.find(s => s.name === 'cool'),
   schemeType: 'ordinal',
   showLegend: true,
@@ -130,10 +130,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private dataService: DataService) {
 
     this.dropdownType = [
-      {label: 'Bar vertical', value: 'Bar vertical'},
-      {label: 'Line chart', value: 'Line chart'},
-      {label: 'Pie', value: 'Pie'},
-      {label: 'Guage', value: 'Guage'}
+      {label: 'Bar vertical', value: 'bar-vertical'},
+      {label: 'Line chart', value: 'line-chart'},
+      {label: 'Pie', value: 'pie'},
+      {label: 'Guage', value: 'guage'}
     ];
 
     this.dropdownSource = [
@@ -150,20 +150,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   processData(): void {
     debugger;
+    this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value;
+    this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
+    this.chartType.name = this.selectedType;
     this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
     // TODO: set this data as property to trigger
     this.showPreview = true;
-    return this.ngZone.run(() => {
-    });
 
-    /*
     this.xAxisLabel = this.chartForm.get('xAxisLabel').value;
       this.yAxisLabel = this.chartForm.get('yAxisLabel').value;
       if (this.selectedType === 'Line chart') {
         Object.assign(this, {multi});
       } else {
         Object.assign(this, {single1}); }
-        */
   }
 
   async ngOnInit(): Promise<void> {
@@ -199,7 +198,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.collectedDataService.getBuilderData()
       .subscribe(value => {
-        console.log(value);
         this.collectedDataForChart = value;
       });
 
@@ -221,69 +219,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ];
   }
 
-  getSignalRClaims() {
-    this.dashboardsHub.getSignalRClaims();
-  }
-
   ngOnDestroy(): void {
     this.paramsSubscription.unsubscribe();
   }
 
   async addChartToDashboard(chart: CustomChart) {
     this.charts.push(chart);
-
-    // todo: assumes single series chart
-    const x = this.dataService.createQuery(chart.dataDims[0], chart.dataDims[2], chart.dataDims[4]);
-    const y = this.dataService.createQuery(chart.dataDims[2], 'count');
-
-    const qs = await Promise.all([x, y]);
-
-    chart.xQuery = qs[0];
-    chart.yQuery = qs[1];
-
-    chart.xFilter = this.addFilter(chart.xQuery);
-    chart.yFilter = this.addFilter(chart.yQuery);
-
     this.isEditMode = false;
-  }
-
-  private addFilter(query: CustomQuery): Filter {
-    const key = query.column.key;
-    let filter = this.filters.find(c => c.key === key);
-    if (!filter) {
-      const values = query.column.values;
-      const minValue = Math.min(...values);
-      const maxValue = Math.max(...values);
-
-      const type = (values.length < 6 || isNaN(minValue) || isNaN(maxValue)) ? 'cat' : 'value';
-
-      let range = [];
-      let rangeIndex = {};
-      if (type === 'value') {
-        range = [minValue, maxValue];
-      } else {
-        range = query.column.values.slice(0);
-        rangeIndex = range.reduce((acc, cur) => {
-          acc[cur] = true;
-          return acc;
-        }, rangeIndex);
-      }
-
-      filter = {
-        type,
-        label: toCapitalizedWords(key),
-        key,
-        minValue,
-        maxValue,
-        query,
-        step: 1,
-        values,
-        rangeIndex,
-        range
-      };
-      this.filters.push(filter);
-    }
-    return filter;
   }
 
   onInstanceRemoved(id: number) {
@@ -403,7 +345,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isEditMode = true;
   }
 
-
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
@@ -421,6 +362,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.creation = false;
     this.displayEditDashboard = false;
   }
+
 
   onClosed() {
     if (this.creation === true) {
@@ -462,12 +404,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return item;
   }
 
-
   showPopupAddChart() {
     this.popupAddChart = true;
 
 
   }
+
 
   onCancel() {
     this.popupAddChart = false;
@@ -504,7 +446,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     }
   }
-/*
+
   onEditChart(chart: ChartRequest) {
     this.chartService.update(111, this.createChart()).subscribe(
       value => {
@@ -513,7 +455,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       error => {
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
-  }*/
+  }
+
 
   onDeleteChart(id: number) {
     this.chartService.delete(111).subscribe(
@@ -523,5 +466,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       error => {
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
+  }
+
+  getSignalRClaims() {
+    this.dashboardsHub.getSignalRClaims();
   }
 }
