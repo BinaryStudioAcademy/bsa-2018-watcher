@@ -8,6 +8,7 @@ import {DataService} from '../../services/data.service';
 import {toCapitalizedWords} from '../models';
 import {customChartTypes} from './customChartTypes';
 import {CollectedData} from '../../../shared/models/collected-data.model';
+import {CollectedDataService} from '../../../core/services/collected-data.service';
 
 const defaultOptions = {
   view: undefined,
@@ -72,6 +73,7 @@ export class ChartBuilderComponent implements OnInit {
   }
 
   constructor(private ngZone: NgZone,
+              private collectedDataService: CollectedDataService,
               private dataService: DataService) {
     dataService.universeUpdated.subscribe(() => {
       this.clearAll();
@@ -92,7 +94,10 @@ export class ChartBuilderComponent implements OnInit {
     this.dataDims = [null, null, null, null, 'count'];
     this.clearAll();
 
-    this.collectedDataService.getBuilderData().subscribe();
+    this.collectedDataService.getBuilderData()
+      .subscribe(value => {
+        console.log(value);
+      });
   }
 
   setChartLabels(): any {
