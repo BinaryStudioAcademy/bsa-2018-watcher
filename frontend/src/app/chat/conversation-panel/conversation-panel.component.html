@@ -5,8 +5,8 @@
     <p-accordionTab [selected]="display">
 
       <p-header class="vertical-center">
-        <div class="conversation-panel-name">
-          <span *ngIf="unreadMessages" class="message-counter" style="margin-right:5px">{{unreadMessages}}</span>
+        <div class="panel-name">
+          <span *ngIf="unreadMessages" class="message-counter">{{unreadMessages}}</span>
           <div class="text-overflow">{{chat?.name}}</div>
         </div>
         <div class="vertical-center">

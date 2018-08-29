@@ -6,8 +6,10 @@
     <p-accordionTab>
       <p-header class="vertical-center">
         <div>
-          <span *ngIf="totalUnreadMessages" class="message-counter">{{totalUnreadMessages}}</span>
-          Chats
+          <div class="panel-name">
+            <span *ngIf="totalUnreadMessages" class="message-counter">{{totalUnreadMessages}}</span>
+            Chats
+          </div>
         </div>
         <i class="icon icon-right fa fa-plus" (click)="openCreating($event)" pTooltip="Create" tooltipPosition="top"></i>
       </p-header>
