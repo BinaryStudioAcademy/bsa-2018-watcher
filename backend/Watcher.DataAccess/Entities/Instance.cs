@@ -31,5 +31,15 @@
 
         [Required]
         public bool IsDeleted { get; set; }
+
+        public void OnDelete()
+        {
+            foreach (var dashboard in Dashboards)
+            {
+                dashboard.OnDelete();
+            }
+
+            IsDeleted = true;
+        }
     }
 }

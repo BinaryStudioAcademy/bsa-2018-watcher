@@ -63,5 +63,45 @@
         public IList<Organization> CreatedOrganizations { get; set; }
 
         public IList<OrganizationInvite> OrganizationInvites { get; set; }
+
+        public void OnDelete()
+        {
+            foreach (var notificationSetting in NotificationSettings)
+            {
+                notificationSetting.OnDelete();
+            }
+
+            foreach (var feedback in Feedbacks)
+            {
+                feedback.OnDelete();
+            }
+
+            foreach (var response in Responses)
+            {
+                response.OnDelete();
+            }
+
+            foreach (var message in Messages)
+            {
+                message.OnDelete();
+            }
+
+            foreach (var chat in CreatedChats)
+            {
+                chat.OnDelete();
+            }
+
+            foreach (var organization in CreatedOrganizations)
+            {
+                organization.OnDelete();
+            }
+
+            foreach (var organizationInvite in OrganizationInvites)
+            {
+                organizationInvite.OnDelete();
+            }
+
+            IsDeleted = true;
+        }
     }
 }

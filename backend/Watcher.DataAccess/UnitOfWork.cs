@@ -8,10 +8,12 @@
     using AutoMapper;
 
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
 
     using Watcher.DataAccess.Data;
     using Watcher.DataAccess.Interfaces;
     using Watcher.DataAccess.Interfaces.Repositories;
+
     using Watcher.DataAccess.Repositories;
 
     public class UnitOfWork : IUnitOfWork
@@ -123,6 +125,7 @@
             }
         }
 
+
         private void OnBeforeSaving()
         {
             foreach (var entry in _context.ChangeTracker.Entries())
@@ -134,7 +137,6 @@
                         break;
                     case EntityState.Deleted:
                         entry.State = EntityState.Modified;
-                        entry.CurrentValues["IsDeleted"] = true;
                         break;
                 }
             }

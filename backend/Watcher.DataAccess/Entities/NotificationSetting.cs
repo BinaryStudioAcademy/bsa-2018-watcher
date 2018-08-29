@@ -30,5 +30,15 @@
 
         [Required]
         public bool IsDeleted { get; set; }
+
+        public void OnDelete()
+        {
+            foreach (var notification in Notifications)
+            {
+                notification.OnDelete();
+            }
+
+            IsDeleted = true;
+        }
     }
 }

@@ -17,5 +17,10 @@ namespace Watcher.DataAccess.Entities
 
         [Required]
         public bool IsDeleted { get; set; }
+
+        public void OnDelete()
+        {
+            IsDeleted = true;
+        }
     }
 }

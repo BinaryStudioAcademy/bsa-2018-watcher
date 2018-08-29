@@ -41,5 +41,25 @@
         public IList<Notification> Notifications { get; set; }
 
         public IList<OrganizationInvite> OrganizationInvites { get; set; }
+
+        public void OnDelete()
+        {
+            foreach (var instance in Instances)
+            {
+                instance.OnDelete();
+            }
+
+            foreach (var notification in Notifications)
+            {
+                notification.OnDelete();
+            }
+
+            foreach (var organizationInvite in OrganizationInvites)
+            {
+                organizationInvite.OnDelete();
+            }
+
+            IsDeleted = true;
+        }
     }
 }

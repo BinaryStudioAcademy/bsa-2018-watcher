@@ -231,6 +231,20 @@
                 DbSet.Attach(entityToDelete);
             }
 
+
+
+            try
+            {
+                if (entityToDelete is ISoftDeletable)
+                {
+                    ((ISoftDeletable)entityToDelete).OnDelete();
+                }
+            }
+            catch (Exception ex)
+            {
+                var e = ex;
+            }
+
             DbSet.Remove(entityToDelete);
         }
 

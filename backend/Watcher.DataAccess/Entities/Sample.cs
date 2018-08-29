@@ -31,5 +31,10 @@
         public bool IsDeleted { get; set; }
 
         public Sample() { }
+
+        public void OnDelete()
+        {
+            IsDeleted = true;
+        }
     }
 }
