@@ -12,12 +12,6 @@
 		width: 100%
 		overflow-x: hidden
 
-/deep/.ui-inputtext
-	border-radius: 0 !important
-
-/deep/.ui-button
-	border-radius: 0 !important
-
 .chat-list-panel
 	position: fixed
 	bottom: 0
@@ -28,27 +22,31 @@
 		height: 30px
 		border-radius: 50%
 	.chat-list-name
+		display: inline-flex
+		max-width: 100%
 		white-space: nowrap
 		line-height: 30px
 	/deep/.ui-listbox
 		border: 0
-		min-width: unset
+		min-width: 100%
 		.ui-listbox-list
 			width: 100%
 			overflow-x: hidden
 		.ui-listbox-item
-			padding: 0.25em
+			padding: 0.25em 0.5em
+
+.vertical-center
+	display: flex
+	align-items: center
+	justify-content: space-between
 
 .icon
 	cursor: pointer
-	margin: 4px
-	font-size: 120%
+	font-size: 1.3em
+	margin: 0 4px
 
 .icon:hover
     color: gray
-
-.icon-right
-	float: right
 
 .field
 	margin-left: 3px
@@ -61,6 +59,7 @@
 .user-list
 	overflow-y: auto
 	max-height: 150px
+	white-space: nowrap
 
 .user-list-img
 	width: 40px
@@ -72,6 +71,10 @@
 .user-list-item
 	border-top: 1px solid #d5d5d5
 	padding: 5px
+
+.user-list-name
+	display: flex
+	align-items: center
 
 .message-counter
 	background-color: #CF513D

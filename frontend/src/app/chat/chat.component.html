@@ -2,12 +2,14 @@
 <app-chat-create-popup [onDisplay]="onDisplayCreating"></app-chat-create-popup>
 
 <div class="chat-list-panel ui-shadow">
-  <p-accordion>
+  <p-accordion expandIcon="" collapseIcon="">
     <p-accordionTab>
-      <p-header>
-        Chats
-        <span *ngIf="totalUnreadMessages !== 0" class="message-counter">{{totalUnreadMessages}}</span>
-        <i class="icon icon-right fa fa-plus" (click)="openCreating($event)"></i>
+      <p-header class="vertical-center">
+        <div>
+          <span *ngIf="totalUnreadMessages" class="message-counter">{{totalUnreadMessages}}</span>
+          Chats
+        </div>
+        <i class="icon icon-right fa fa-plus" (click)="openCreating($event)" pTooltip="Create" tooltipPosition="top"></i>
       </p-header>
       <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="selectChat()">
         <ng-template let-chat pTemplate="item">

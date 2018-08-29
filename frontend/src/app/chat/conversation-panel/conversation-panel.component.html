@@ -1,14 +1,17 @@
 <app-conversation-settings-popup [onDisplay]="onDisplaySettings"></app-conversation-settings-popup>
 
 <div class="conversation-panel ui-shadow" [hidden]="!display">
-  <p-accordion (onClose)="collapseExtend()" (onOpen)="collapseExtend()">
+  <p-accordion (onClose)="collapseExtend()" (onOpen)="collapseExtend()" expandIcon="" collapseIcon="">
     <p-accordionTab [selected]="display">
-      <p-header>
-        <i class="icon icon-right fa fa-close" (click)="closePanel($event)"></i>
-        <i class="icon icon-right fa fa-cog" (click)="openSettings($event)"></i>
-        <div class="conversation-panel-header">
-          <div class="conversation-name text-overflow">{{chat?.name}}</div>
-          <span *ngIf="unreadMessages !== 0" class="message-counter">{{unreadMessages}}</span>        
+
+      <p-header class="vertical-center">
+        <div class="conversation-panel-name">
+          <span *ngIf="unreadMessages" class="message-counter" style="margin-right:5px">{{unreadMessages}}</span>
+          <div class="text-overflow">{{chat?.name}}</div>
+        </div>
+        <div class="vertical-center">
+          <i class="icon fa fa-cog" (click)="openSettings($event)" pTooltip="Settings" tooltipPosition="top"></i>
+          <i class="icon fa fa-close" (click)="closePanel($event)" pTooltip="Close" tooltipPosition="top"></i>
         </div>
       </p-header>
 
@@ -17,7 +20,7 @@
           <div *ngFor="let message of chat?.messages" class="message" [ngClass]="{'received-message': message?.user?.id != currentUser?.id}">
             <div class="ui-g">
               <div class="ui-g-3 ui-g-nopad">
-                  <img class="message-user-img" src="{{message?.user?.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}"/>
+                <img class="message-user-img" src="{{message?.user?.photoURL}}" />
               </div>
               <div class="ui-g-9 ui-g-nopad">
                 <strong class="message-name text-overflow text-inline">{{message?.user?.displayName}}</strong>
@@ -28,9 +31,10 @@
           </div>
         </div>
 
-        <div class="ui-inputgroup">
-          <input type="text" pInputText [(ngModel)]="textMessage" (keyup.enter)="sendMessage()" placeholder="Write message">
-          <button pButton icon="fa fa-send" (click)="sendMessage()"></button>
+        <div class="ui-inputgroup send-message-input">
+          <input class="border-top" type="text" pInputText [(ngModel)]="textMessage" (keyup.enter)="sendMessage()"
+            placeholder="Write message">
+          <button pButton class="ui-button-secondary" icon="fa fa-send" (click)="sendMessage()"></button>
         </div>
       </div>
     </p-accordionTab>
