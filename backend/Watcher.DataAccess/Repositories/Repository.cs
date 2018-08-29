@@ -231,13 +231,15 @@
                 DbSet.Attach(entityToDelete);
             }
 
-
-
             try
             {
                 if (entityToDelete is ISoftDeletable)
                 {
                     ((ISoftDeletable)entityToDelete).OnDelete();
+                }
+                else
+                {
+                    DbSet.Remove(entityToDelete);
                 }
             }
             catch (Exception ex)
@@ -245,7 +247,7 @@
                 var e = ex;
             }
 
-            DbSet.Remove(entityToDelete);
+            
         }
 
 		public async Task DeleteManyAsync(Expression<Func<TEntity, bool>> predicate = null,

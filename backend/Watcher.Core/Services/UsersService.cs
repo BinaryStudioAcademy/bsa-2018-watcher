@@ -235,7 +235,23 @@ namespace Watcher.Core.Services
 
         public async Task<bool> DeleteEntityByIdAsync(string id)
         {
-            await _uow.UsersRepository.DeleteAsync(id);
+            await _uow.UsersRepository.DeleteAsync(id, include: user =>
+                    user.Include(u => u.NotificationSettings)
+                    .Include(u => u.Notifications)
+                    .Include(u => u.Feedbacks)
+                    .Include(u => u.Responses)
+                    .Include(u => u.Messages)
+                    .Include(u => u.CreatedChats)
+                        .ThenInclude(c => c.Messages)
+                    .Include(u => u.OrganizationInvites)
+                    .Include(u => u.CreatedOrganizations)
+                        .ThenInclude(o => o.Instances)
+                            .ThenInclude(i => i.Dashboards)
+                                .ThenInclude(d => d.Charts)
+                    .Include(u => u.CreatedOrganizations)
+                        .ThenInclude(o => o.Notifications)
+                    .Include(u => u.CreatedOrganizations)
+                        .ThenInclude(o => o.OrganizationInvites));
 
             var result = await _uow.SaveAsync();
 

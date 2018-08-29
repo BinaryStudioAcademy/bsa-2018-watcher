@@ -144,7 +144,8 @@
 
         public async Task<bool> DeleteEntityByIdAsync(int id)
         {
-            await _uow.ChatsRepository.DeleteAsync(id);
+            await _uow.ChatsRepository.DeleteAsync(id, 
+                include: chat => chat.Include(c => c.Messages));
 
             var result = await _uow.SaveAsync();
 
