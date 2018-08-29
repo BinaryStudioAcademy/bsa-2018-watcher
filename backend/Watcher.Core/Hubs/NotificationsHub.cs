@@ -19,7 +19,6 @@
         {
         }
 
-        [Authorize]
         public async Task SendNotification(NotificationDto notificationDto)
         {
             await Clients.User(notificationDto.UserId).SendAsync("AddNotification", notificationDto);
