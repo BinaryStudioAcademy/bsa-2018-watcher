@@ -24,6 +24,12 @@
             await Clients.User(notificationDto.UserId).SendAsync("AddNotification", notificationDto);
         }
 
+        [Authorize]
+        public async Task DeleteNotification(NotificationDto notificationDto)
+        {
+            await Clients.User(notificationDto.UserId).SendAsync("DeleteNotification", notificationDto.Id);
+        }
+
         public override Task OnConnectedAsync()
         {
             if (Context.User.GetUserId() != null)
