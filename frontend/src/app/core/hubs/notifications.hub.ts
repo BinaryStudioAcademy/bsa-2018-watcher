@@ -23,7 +23,7 @@ export class NotificationsHubService {
     this.connectToSignalR();
   }
 
-  connectToSignalR(): void {
+  private connectToSignalR(): void {
     this.createConnection();
     this.registerOnServerEvents();
     this.startNotificationHubConnection();

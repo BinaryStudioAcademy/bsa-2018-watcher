@@ -34,7 +34,6 @@ export class NotificationBlockComponent implements OnInit {
 
   ngOnInit() {
     this.loadNotifications();
-    this.notificationsHubService.connectToSignalR();
     this.subscribeToEvents();
   }
 
