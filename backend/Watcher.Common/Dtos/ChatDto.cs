@@ -12,7 +12,7 @@ namespace Watcher.Common.Dtos
 
         public string Name { get; set; }
 
-        public int? UnreadMessagesCount { get; set; }
+        public int UnreadMessagesCount { get; set; }
         
         public ChatType Type { get; set; }
 
@@ -23,5 +23,7 @@ namespace Watcher.Common.Dtos
         public IList<MessageDto> Messages { get; set; }
 
         public IList<UserDto> Users { get; set; }
+
+        public IList<NotificationSettingDto> UsersSettings { get; set; }
     }
 }

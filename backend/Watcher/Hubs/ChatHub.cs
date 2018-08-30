@@ -1,4 +1,6 @@
-﻿namespace Watcher.Hubs
+﻿using Watcher.Common.Dtos;
+
+namespace Watcher.Hubs
 {
     using System;
     using System.Collections.Generic;
@@ -15,12 +17,16 @@
     {
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
+        private readonly IEmailProvider _emailProvider;
 
         private static readonly Dictionary<string, List<string>> UsersConnections = new Dictionary<string, List<string>>();
 
-        public ChatHub(IChatsService chatsService, 
-                        IMessagesService messagesService)
+        public ChatHub(
+            IChatsService chatsService,
+            IMessagesService messagesService,
+            IEmailProvider emailProvider)
         {
+            _emailProvider = emailProvider;
             _chatsService = chatsService;
             _messagesService = messagesService;
         }
@@ -38,6 +44,9 @@
                 if (!UsersConnections.ContainsKey(userDto.Id)) continue;
                 foreach (string connectionId in UsersConnections[userDto.Id])
                     await Clients.Client(connectionId).SendAsync("ReceiveMessage", createdMessage);
+
+                // Sending to email
+                SendToEmailIfNeeded(userDto, createdMessage);
             }
         }
 
@@ -150,6 +159,20 @@
         public bool RemoveUserConnection(string userId, string connectionId)
         {
             return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
+        }
+
+        private async Task SendToEmailIfNeeded(UserDto userDto, MessageDto messageDto)
+        {
+            if (userDto.Id != messageDto.User.Id)
+            {
+                var settings = await _chatsService.GetSettingsForUserIdAsync(userDto.Id, messageDto.ChatId);
+                if (settings != null && settings.IsEmailable)
+                {
+                    await _emailProvider.SendMessageOneToOne("watcher@net.com",
+                        $"Chat message from {messageDto.User.DisplayName}", userDto.Email,
+                        messageDto.Text, "");
+                }
+            }
         }
     }
 }

@@ -30,7 +30,7 @@ export class ConversationPanelComponent implements OnInit {
   onDisplaySettings = new EventEmitter<Chat>();
 
   textMessage: string;
-  unreadMessages: number;
+  unreadMessages = 0;
 
   constructor(
     private authService: AuthService,
@@ -92,7 +92,7 @@ export class ConversationPanelComponent implements OnInit {
   }
 
   sendMessage() {
-    if (this.textMessage.length < 1) {
+    if (!this.textMessage.length) {
       return;
     }
 
@@ -100,7 +100,7 @@ export class ConversationPanelComponent implements OnInit {
       text: this.textMessage,
       userId: this.currentUser.id,
       chatId: this.chat.id,
-      createdAt: new Date(Date.now())
+      createdAt: new Date()
     } as MessageRequest;
 
     this.chatHub.sendMessage(newMessage);

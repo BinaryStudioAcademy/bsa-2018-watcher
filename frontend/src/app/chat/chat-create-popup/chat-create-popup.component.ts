@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -10,6 +10,8 @@ import { ChatRequest } from '../../shared/requests/chat-request';
 import { ChatType } from '../../shared/models/chat-type.enum';
 import { Chat } from '../../shared/models/chat.model';
 import { User } from '../../shared/models/user.model';
+import { NotificationType } from '../../shared/models/notification-type.enum';
+import { NotificationSetting } from '../../shared/models/notification-setting.model';
 
 @Component({
   selector: 'app-chat-create-popup',
@@ -30,18 +32,23 @@ export class ChatCreatePopupComponent implements OnInit {
 
   display: boolean;
   chatSettingsForm: FormGroup;
+  notificationSettingsForm: FormGroup;
 
   wantedUser: string;
   filteredUsers: User[];
   users: User[] = [];
-  currentUser: User;
+  currentUserId: string;
 
   ngOnInit() {
     this.chatSettingsForm = this.fb.group({
-      'name': new FormControl('', Validators.required)
+      'name': ['', Validators.required]
+    });
+    this.notificationSettingsForm = this.fb.group({
+      'isMute': [false],
+      'isEmailable': [false]
     });
 
-    this.currentUser = this.authService.getCurrentUser();
+    this.currentUserId = this.authService.getCurrentUser().id;
     this.onDisplay.subscribe(() => {
       this.users = [];
       this.chatSettingsForm.reset();
@@ -60,10 +67,17 @@ export class ChatCreatePopupComponent implements OnInit {
     }
     const newChat: ChatRequest = {
       name: this.chatSettingsForm.get('name').value,
-      createdById: this.currentUser.id,
+      createdById: this.currentUserId,
       type: ChatType.BetweenUsers,
       users: this.users,
-      organizationId: null
+      organizationId: null,
+      usersSettings: [{
+        type: NotificationType.Chat,
+        userId: this.currentUserId,
+        isMute: this.notificationSettingsForm.get('isMute').value || false,
+        isEmailable: this.notificationSettingsForm.get('isEmailable').value || false
+        } as NotificationSetting
+      ]
     };
 
     this.chatHub.createNewChat(newChat);
@@ -79,7 +93,7 @@ export class ChatCreatePopupComponent implements OnInit {
     this.userService.find(event.query).subscribe(data => {
       this.filteredUsers = [];
       if (data.length) {
-        this.filteredUsers = data.filter(u => u.id !== this.currentUser.id &&
+        this.filteredUsers = data.filter(u => u.id !== this.currentUserId &&
           !this.users.some(x => x.id === u.id));
       }
     });

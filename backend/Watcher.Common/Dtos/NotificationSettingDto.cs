@@ -18,5 +18,7 @@ namespace Watcher.Common.Dtos
         public bool IsEmailable { get; set; }
 
         public string UserId { get; set; }
+
+        public int? ChatId { get; set; }
     }
 }

@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
 
+
 namespace DataCollector
 {
+#if Windows
     public class Collector
     {
         private static readonly Lazy<Collector> Value = new Lazy<Collector>(() => new Collector());
@@ -93,6 +95,7 @@ namespace DataCollector
                     _processCpuCounters.Remove(item.ProcessName);
                 }
             }
+           
 
             return result;
         }
@@ -121,4 +124,5 @@ namespace DataCollector
             return result;
         }
     }
+#endif
 }
