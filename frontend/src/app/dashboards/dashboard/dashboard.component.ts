@@ -132,11 +132,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   processData(): void {
     debugger;
-    console.log(this.selectedSource[0].toString());
+    console.log(this.selectedType);
     this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value;
     this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
     this.chartType.name = this.selectedType.toString();
-    this.dataForChart = this.dataService.prepareData(this.selectedType.toString(), this.selectedSource, this.collectedDataForChart);
+    this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
     // TODO: set this data as property to trigger
     this.showPreview = true;
     if (this.selectedType === ChartType.BarVertical /*'bar-vertical' */) {

@@ -1,15 +1,15 @@
-import {Injectable, EventEmitter} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import * as universe from 'universe';
 import * as papaparse from 'papaparse';
 import {nest} from 'd3-collection';
-import {Universe, CustomData, CustomQuery} from '../charts/models';
-import {Nameable} from '../charts/models';
+import {CustomData, CustomQuery, Nameable, Universe} from '../charts/models';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {ApiService} from '../../core/services/api.service';
 import {Observable} from 'rxjs';
 import {NumberSeriesItem, SeriesItem} from '../models/series-item';
 import {MultiChartItem} from '../models/multi-chart-item';
 import {dataProperties, DataProperty} from '../models/data-property.enum';
+import {ChartType} from '../../shared/models/chart-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -52,17 +52,11 @@ export class DataService {
   }
 
   // dataSource - property to show on the chart
-  prepareData(chartType: string, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
-    if (chartType === 'line-chart') {
-      const data: MultiChartItem[] = this.mapToMultiData(dataToTransform, dataSources);
-      return data;
-    }
-    if (chartType === 'bar-vertical') {
-      const data: NumberSeriesItem[] = this.mapToSeriesItem(dataToTransform[0], dataSources);
-      return data;
+  prepareData(chartType: ChartType, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
+    if (chartType === ChartType.LineChart) {
+      return this.mapToMultiData(dataToTransform, dataSources);
     } else {
-      const data: NumberSeriesItem[] = this.mapToSeriesItem(dataToTransform[0], dataSources);
-      return data;
+      return this.mapToSeriesItem(dataToTransform[0], dataSources);
     }
   }
 
