@@ -22,12 +22,12 @@ export class ChartService {
     return this.http.get<Chart>(`${this.ctrlUrl}/${id}`);
   }
 
-  create(organization: ChartRequest): Observable<Chart> {
-    return this.http.post<Chart>(`${this.ctrlUrl}`, organization);
+  create(request: ChartRequest): Observable<Chart> {
+    return this.http.post<Chart>(`${this.ctrlUrl}`, request);
   }
 
-  update(id: number, organization: Chart) {
-    return this.http.put(`${this.ctrlUrl}/${id}`, organization);
+  update(id: number, request: ChartRequest) {
+    return this.http.put(`${this.ctrlUrl}/${id}`, request);
   }
 
   delete(id: number) {

@@ -8,7 +8,7 @@ import {ApiService} from '../../core/services/api.service';
 import {Observable} from 'rxjs';
 import {NumberSeriesItem, SeriesItem} from '../models/series-item';
 import {MultiChartItem} from '../models/multi-chart-item';
-import {dataProperties, DataProperty} from '../models/data-property.enum';
+import {dataPropertyLables, DataProperty, dataProperties} from '../../shared/models/data-property.enum';
 import {ChartType} from '../../shared/models/chart-type.enum';
 
 @Injectable({
@@ -64,7 +64,7 @@ export class DataService {
     const items: MultiChartItem[] = [];
     for (let i = 0; i < properties.length; i++) {
       const item: MultiChartItem = {
-        name: dataProperties[properties[i].toString()],
+        name: dataPropertyLables[properties[i]],
         series: []
       };
       item.series = data.map(p => this.mapToLineChartSeriesItem(p, properties[i]));
@@ -79,8 +79,8 @@ export class DataService {
     for (let i = 0; i < properties.length; i++) {
       items.push(
         {
-          name: dataProperties[properties[i].toString()],
-          value: data[properties[i].toString()]
+          name: dataPropertyLables[properties[i]],
+          value: data[dataProperties[properties[i]]]
         });
     }
 
@@ -89,7 +89,7 @@ export class DataService {
 
   mapToLineChartSeriesItem(data: CollectedData, property: DataProperty): SeriesItem {
     const seriesItem: SeriesItem = {
-      value: data[property.toString()],
+      value: data[dataProperties[property]],
       name: new Date(data.time)
     };
 
