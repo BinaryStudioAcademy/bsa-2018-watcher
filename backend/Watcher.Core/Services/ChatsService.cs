@@ -73,6 +73,20 @@
             return dtos;
         }
 
+        public async Task<NotificationSettingDto> GetSettingsForUserIdAsync(string userId, int chatId)
+        {
+            var settings = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(x =>
+                x.UserId == userId && x.ChatId == chatId);
+
+            if (settings == null)
+            {
+                return null;
+            }
+
+            var dtos = _mapper.Map<NotificationSetting, NotificationSettingDto>(settings);
+            return dtos;
+        }
+
         public async Task<IEnumerable<UserDto>> GetUsersByChatIdAsync(int id)
         {
             var users = await _uow.ChatsRepository.GetUsersByChatId(id);

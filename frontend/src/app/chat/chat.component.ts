@@ -9,6 +9,9 @@ import { SystemToastrService } from '../core/services/system-toastr.service';
 
 import { Chat } from '../shared/models/chat.model';
 import { Message } from '../shared/models/message.model';
+import { NotificationsHubService } from '../core/hubs/notifications.hub';
+import { Notification } from '../shared/models/notification.model';
+import { NotificationType } from '../shared/models/notification-type.enum';
 
 
 @Component({
@@ -23,6 +26,8 @@ export class ChatComponent implements OnInit {
     private authService: AuthService,
     private chatService: ChatService,
     private toastrService: ToastrService,
+    private notify: NotificationsHubService,
+
     private systemToastrService: SystemToastrService) { }
 
   public onDisplayChat = new EventEmitter<number>();
@@ -51,15 +56,11 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  openChat(chatId: number) {
-    this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
-    this.selectedChat.unreadMessagesCount = 0;
-    this.onDisplayChat.emit(chatId);
-  }
-
   selectChat() {
-    this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
-    this.selectedChat.unreadMessagesCount = 0;
+    if (this.selectedChat.unreadMessagesCount) {
+      this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
+      this.selectedChat.unreadMessagesCount = 0;
+    }
     this.onDisplayChat.emit(this.selectedChat.id);
   }
 
@@ -78,17 +79,18 @@ export class ChatComponent implements OnInit {
   }
 
   subscribeToEvents() {
+    this.chatService.openChatClick.subscribe((id: number) => {
+      this.selectedChat = this.chatList.find(x => x.value.id === id).value;
+      this.selectChat();
+    });
+
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
       this.chatList.unshift({ value: chat });
 
       if (chat.createdBy.id === this.currentUserId) {
         this.selectedChat = this.chatList[0].value;
-        this.openChat(chat.id);
+        this.selectChat();
       }
-    });
-
-    this.chatService.openChatClick.subscribe((id: number) => {
-      this.openChat(id);
     });
 
     this.chatHub.chatChanged.subscribe((chat: Chat) => {
@@ -100,25 +102,37 @@ export class ChatComponent implements OnInit {
       this.selectedChat = chat;
     });
 
-    this.chatHub.messageReceived.subscribe((message: Message) => {
-      if (message.user.id !== this.currentUserId) {
-        this.systemToastrService.chat(message);
-
-        // Don`t count unread if chat is open and not collapse
-        if (this.selectedChat && !this.isSelectedChatCollapsed && this.selectedChat.id === message.chatId) {
-        } else {
-          this.totalUnreadMessages++;
-          const index = this.chatList.findIndex(x => x.value.id === message.chatId);
-          this.chatList[index].value.unreadMessagesCount++;
-        }
-      }
-    });
-
     this.chatHub.chatDeleted.subscribe((chat: Chat) => {
       this.onDisplayChat.emit();
       const indexOfChat = this.chatList.map(item => item.value.id).indexOf(chat.id);
       this.totalUnreadMessages -= this.chatList[indexOfChat].value.unreadMessagesCount;
       this.chatList.splice(indexOfChat, 1);
+    });
+
+    this.chatHub.messageReceived.subscribe((message: Message) => {
+      // TODO: test
+      const not = {
+        text: 'New message',
+        createdAt: new Date(),
+        userId: this.currentUserId
+      } as Notification;
+      this.notify.send(not, NotificationType.Warning);
+
+      if (message.user.id !== this.currentUserId) {
+        // Check chat settings
+        const settings = this.chatList.find(x => x.value.id === message.chatId).
+          value.usersSettings.find(x => x.userId === this.currentUserId);
+
+        if (!(settings && settings.isMute)) {
+          this.systemToastrService.chat(message);
+        }
+
+        // Don`t count unread if chat is open and not collapse
+        if (!(this.selectedChat && !this.isSelectedChatCollapsed && this.selectedChat.id === message.chatId)) {
+          this.totalUnreadMessages++;
+          this.chatList.find(x => x.value.id === message.chatId).value.unreadMessagesCount++;
+        }
+      }
     });
   }
 

@@ -50,7 +50,6 @@ export class ConversationSettingsPopupComponent implements OnInit {
     });
     this.notificationSettingsForm = this.fb.group({
       'isMute': [false],
-      'isDisable': [false],
       'isEmailable': [false]
     });
 
@@ -62,7 +61,6 @@ export class ConversationSettingsPopupComponent implements OnInit {
           data.usersSettings.find(s => s.userId === this.currentUserId) || this.createDefaultNotificationsSettings();
 
         this.notificationSettingsForm.controls['isMute'].setValue(this.notificationSettings.isMute);
-        this.notificationSettingsForm.controls['isDisable'].setValue(this.notificationSettings.isDisable);
         this.notificationSettingsForm.controls['isEmailable'].setValue(this.notificationSettings.isEmailable);
       }
       this.display = true;
@@ -101,7 +99,6 @@ export class ConversationSettingsPopupComponent implements OnInit {
       this.toastrService.error('Form was filled incorrectly');
       return;
     }
-    this.notificationSettings.isDisable = this.notificationSettingsForm.get('isDisable').value || false;
     this.notificationSettings.isMute = this.notificationSettingsForm.get('isMute').value || false;
     this.notificationSettings.isEmailable = this.notificationSettingsForm.get('isEmailable').value || false;
 
@@ -130,7 +127,6 @@ export class ConversationSettingsPopupComponent implements OnInit {
       type: NotificationType.Chat,
       userId: this.currentUserId,
       chatId: this.chat.id,
-      isDisable: false,
       isMute: false,
       isEmailable: false
     } as NotificationSetting;

@@ -45,7 +45,6 @@ export class ChatCreatePopupComponent implements OnInit {
     });
     this.notificationSettingsForm = this.fb.group({
       'isMute': [false],
-      'isDisable': [false],
       'isEmailable': [false]
     });
 
@@ -75,7 +74,6 @@ export class ChatCreatePopupComponent implements OnInit {
       usersSettings: [{
         type: NotificationType.Chat,
         userId: this.currentUserId,
-        isDisable: this.notificationSettingsForm.get('isDisable').value || false,
         isMute: this.notificationSettingsForm.get('isMute').value || false,
         isEmailable: this.notificationSettingsForm.get('isEmailable').value || false
         } as NotificationSetting
