@@ -1,9 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.SignalR;
-using Watcher.Common.Enums;
-using Watcher.Hubs;
-
-namespace Watcher.Controllers
+﻿namespace Watcher.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;

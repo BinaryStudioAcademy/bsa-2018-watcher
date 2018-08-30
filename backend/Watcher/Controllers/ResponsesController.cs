@@ -1,9 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.SignalR;
-using Watcher.Common.Enums;
-using Watcher.Hubs;
-
-namespace Watcher.Controllers
+﻿namespace Watcher.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -12,6 +7,7 @@ namespace Watcher.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    using Watcher.Common.Enums;
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
