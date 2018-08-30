@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
 
+
 namespace DataCollector
 {
     public class Collector
@@ -93,6 +94,7 @@ namespace DataCollector
                     _processCpuCounters.Remove(item.ProcessName);
                 }
             }
+           
 
             return result;
         }
