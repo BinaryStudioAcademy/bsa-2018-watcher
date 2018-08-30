@@ -41,7 +41,6 @@
     using Watcher.DataAccess.Data;
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
-    using Watcher.Hubs;
     using Watcher.Utils;
 
     public class Startup
@@ -247,7 +246,7 @@
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
                         routes.MapHub<DashboardsHub>("/dashboards");
-                        routes.MapHub<ChatHub>("/chatsHub");
+                        routes.MapHub<ChatsHub>("/chatsHub");
                     });
             }
             else
@@ -256,7 +255,7 @@
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
                         routes.MapHub<DashboardsHub>("/dashboards");
-                        routes.MapHub<ChatHub>("/chatsHub");
+                        routes.MapHub<ChatsHub>("/chatsHub");
                     });
             }
 
