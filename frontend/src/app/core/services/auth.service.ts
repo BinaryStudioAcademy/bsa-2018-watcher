@@ -27,7 +27,7 @@ export class AuthService {
   private userDetails: firebase.User = null;
   public userRegisterRequest: UserRegisterRequest = null;
 
-  private helper: JwtHelperService = new JwtHelperService();
+  private tokenHelper: JwtHelperService = new JwtHelperService();
 
   constructor(private _firebaseAuth: AngularFireAuth,
     private tokenService: TokenService,
@@ -237,11 +237,11 @@ export class AuthService {
 
     console.clear();
 
-    console.log(`Firebase token expiration date: ${this.helper.getTokenExpirationDate(fToken)}`);
-    console.log(`Is Firebase token expired: ${this.helper.isTokenExpired(fToken)}`);
+    console.log(`Firebase token expiration date: ${this.tokenHelper.getTokenExpirationDate(fToken)}`);
+    console.log(`Is Firebase token expired: ${this.tokenHelper.isTokenExpired(fToken)}`);
 
-    console.log(`Watcher token expiration date: ${this.helper.getTokenExpirationDate(wToken)}`);
-    console.log(`Is Watcher token expired: ${this.helper.isTokenExpired(wToken)}`);
+    console.log(`Watcher token expiration date: ${this.tokenHelper.getTokenExpirationDate(wToken)}`);
+    console.log(`Is Watcher token expired: ${this.tokenHelper.isTokenExpired(wToken)}`);
 
     if (user != null) {
       return true;
@@ -285,9 +285,19 @@ export class AuthService {
     return true;
   }
 
-  async refreshToken() {
-    const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
-    localStorage.removeItem('firebaseToken');
-    localStorage.setItem('firebaseToken', firebaseToken);
+  public async refreshFirebaseToken() {
+    const token = this.getFirebaseToken();
+    if (this.tokenHelper.isTokenExpired(token)) {
+      const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
+      localStorage.removeItem('firebaseToken');
+      localStorage.setItem('firebaseToken', firebaseToken);
+    }
+  }
+
+  public async refreshWatcherToken() {
+    const token = this.getWatcherToken();
+    if (this.tokenHelper.isTokenExpired(token)) {
+      // TODO: Implement watcher token refresh here
+    }
   }
 }
