@@ -16,19 +16,17 @@ export class TokensInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-    const firebaseToken = this.auth.getFirebaseToken();
-      if (firebaseToken) {
-        this.headersConfig['Authorization'] = `Bearer ${firebaseToken}`;
+    // first firebase token, then watcher
+    this.auth.getTokens().subscribe( (tokens: [string, string]) => {
+      if (tokens[0]) {
+        this.headersConfig['Authorization'] = `Bearer ${tokens[0]}`;
       }
-
-    const watcherToken = this.auth.getWatcherToken();
-      if (watcherToken) {
-        this.headersConfig['WatcherAuthorization'] = watcherToken;
+      if (tokens[1]) {
+        this.headersConfig['WatcherAuthorization'] = tokens[1];
       }
+    });
 
     const request = req.clone({setHeaders: this.headersConfig, responseType: 'json'});
-
     return next.handle(request);
   }
 }

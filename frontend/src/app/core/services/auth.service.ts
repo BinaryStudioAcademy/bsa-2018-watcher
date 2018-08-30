@@ -257,22 +257,15 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 
-  getTokens(): [string, string] {
-    let watcherToken: string;
-    let firebaseToken: string;
-    forkJoin( this.getFirebaseToken(),
-              this.getWatcherToken()).subscribe(
-                ([tokenF, tokenW]) => {
-                  watcherToken = tokenW;
-                  firebaseToken = tokenF;
-                }
-              );
-    return [firebaseToken, watcherToken];
+  getTokens() {
+    return forkJoin( this.getFirebaseToken(),
+              this.getWatcherToken());
   }
 
   getFirebaseToken(): Observable<string> {
     const currentToken =  localStorage.getItem('firebaseToken');
     if (this.tokenHelper.isTokenExpired(currentToken)) {
+      console.log(`${new Date()} firebase token expired`);
       return from(this.refreshFirebaseToken());
     }
     return from(localStorage.getItem('firebaseToken'));
@@ -282,6 +275,7 @@ export class AuthService {
   getWatcherToken(): Observable<string> {
     const currentToken = localStorage.getItem('watcherToken');
     if (this.tokenHelper.isTokenExpired(currentToken)) {
+      console.log(`${new Date()} watcher token expired`);
       return from(this.refreshWatcherToken());
     }
     return from(localStorage.getItem('watcherToken'));
