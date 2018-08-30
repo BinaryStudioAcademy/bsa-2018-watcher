@@ -209,6 +209,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         command: (event?: any) => this.delete(),
       }
     ];
+
+
   }
 
   ngOnDestroy(): void {
@@ -234,6 +236,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe((value = []) => {
         if (value && value.length > 0) {
           this.dashboards = value;
+
+
+          // !!!!!!!!!!!!!!!!!!!!!!!!
+          // this.dashboards.forEach(d => { d.charts.forEach(ch => ch.sources.split(',')); });
+
+
           // Fill Dashboard Menu Items
           this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
           this.activeDashboardItem = this.dashboardMenuItems[0];
@@ -422,7 +430,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   createChart() {
     debugger;
-    const chart: ChartRequest = {
+    const chart: Chart = { /*Request */
+      id: 0,
       // showTotal: this.chartForm.get('isMultiple').value
       showCommon: this.chartForm.get('isMultiple').value,
       threshold: this.threshold,
@@ -447,7 +456,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       isShowSeriesOnHover: this.chartOptions.showSeriesOnHover,
       title: this.chartOptions.title,
       type: this.selectedType, // if ChartType.Plot -> Bad request
-      sources: this.selectedSource,
+      sources: this.selectedSource.join(),
       isLightTheme: this.chartOptions.theme === 'light',
     };
     return chart;
