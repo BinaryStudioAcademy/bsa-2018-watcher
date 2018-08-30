@@ -10,7 +10,8 @@ import {
   ListboxModule,
   AccordionModule,
   AutoCompleteModule,
-  TooltipModule
+  TooltipModule,
+  InputSwitchModule
 } from 'primeng/primeng';
 
 import { ChatComponent } from './chat.component';
@@ -30,7 +31,8 @@ import { ChatCreatePopupComponent } from './chat-create-popup/chat-create-popup.
     ListboxModule,
     DialogModule,
     AutoCompleteModule,
-    TooltipModule
+    TooltipModule,
+    InputSwitchModule
   ],
   declarations: [
     ChatComponent,

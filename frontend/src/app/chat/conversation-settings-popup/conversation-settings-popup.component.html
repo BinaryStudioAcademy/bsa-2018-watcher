@@ -9,6 +9,7 @@
       <p class="field">Name*:</p>
       <input type="text" pInputText formControlName="name" placeholder="Enter chat name">
     </form>
+
     <p class="field">Add user:</p>
     <p-autoComplete [(ngModel)]="wantedUser" [suggestions]="filteredUsers" (completeMethod)="filterUsers($event)"
       (onSelect)="addUser($event)" emptyMessage="User not found" placeholder="Write name or email">
@@ -20,6 +21,7 @@
         </div>
       </ng-template>
     </p-autoComplete>
+
     <p class="field">Members:</p>
     <div class="user-list">
       <div *ngFor="let user of chat?.users" class="ui-helper-clearfix user-list-item">
@@ -33,10 +35,22 @@
     </div>
   </div>
 
+  <form [formGroup]="notificationSettingsForm">
+    <p class="field">Notification settings:</p>
+    <div class="vertical-center notification-settings">
+      <div class="notification-setting-item">Mute: <p-inputSwitch formControlName="isMute"></p-inputSwitch>
+      </div>
+      <div class="notification-setting-item">Disable: <p-inputSwitch formControlName="isDisable"></p-inputSwitch>
+      </div>
+      <div class="notification-setting-item">Emailable: <p-inputSwitch formControlName="isEmailable"></p-inputSwitch>
+      </div>
+    </div>
+  </form>
+
   <p-footer>
     <div style="text-align:center">
-        <button type="button" pButton class="ui-button-success" (click)="updateChat()" label="Update" [disabled]="!chatSettingsForm.valid"></button>
-        <button type="button" pButton class="ui-button-danger" (click)="deleteChat(chat.id)" label="Delete" [disabled]="chat?.createdBy?.id !== currentUser?.id"></button>    
+      <button type="button" pButton class="ui-button-success" (click)="updateChat()" label="Update" [disabled]="!chatSettingsForm.valid"></button>
+      <button type="button" pButton class="ui-button-danger" (click)="deleteChat()" label="Delete" [disabled]="chat?.createdBy?.id !== currentUser?.id"></button>
     </div>
-      </p-footer>
+  </p-footer>
 </p-dialog>

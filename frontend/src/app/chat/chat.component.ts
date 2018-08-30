@@ -97,6 +97,7 @@ export class ChatComponent implements OnInit {
       // Save amount of unreaded messages and replace chat
       chat.unreadMessagesCount = this.chatList[index].value.unreadMessagesCount;
       this.chatList.splice(index, 1, { value: chat });
+      this.selectedChat = chat;
     });
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
@@ -114,6 +115,7 @@ export class ChatComponent implements OnInit {
     });
 
     this.chatHub.chatDeleted.subscribe((chat: Chat) => {
+      this.onDisplayChat.emit();
       const indexOfChat = this.chatList.map(item => item.value.id).indexOf(chat.id);
       this.totalUnreadMessages -= this.chatList[indexOfChat].value.unreadMessagesCount;
       this.chatList.splice(indexOfChat, 1);
