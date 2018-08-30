@@ -20,7 +20,6 @@ import { User } from '../../shared/models/user.model';
 })
 export class OrganizationProfileComponent implements OnInit {
 
-
   constructor(
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,

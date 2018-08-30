@@ -147,7 +147,8 @@
                               {
                                   if ((!context.Request.Path.Value.Contains("/notifications")
                                       && !context.Request.Path.Value.Contains("/dashboards")
-                                      && !context.Request.Path.Value.Contains("/chatsHub"))
+                                      && !context.Request.Path.Value.Contains("/chatsHub")
+                                      && !context.Request.Path.Value.Contains("/invites"))
 
                                       || !context.Request.Query.ContainsKey("Authorization")
                                       || !context.Request.Query.ContainsKey("WatcherAuthorization"))
@@ -247,6 +248,7 @@
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
                         routes.MapHub<DashboardsHub>("/dashboards");
+                        routes.MapHub<InvitesHub>("/invites");
                         routes.MapHub<ChatHub>("/chatsHub");
                     });
             }
@@ -256,6 +258,7 @@
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
                         routes.MapHub<DashboardsHub>("/dashboards");
+                        routes.MapHub<InvitesHub>("/invites");
                         routes.MapHub<ChatHub>("/chatsHub");
                     });
             }

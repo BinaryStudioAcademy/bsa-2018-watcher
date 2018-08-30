@@ -1,0 +1,25 @@
+<p-dataView [value]="values" [rows]="10">
+    <p-header>List of invites</p-header>
+    <ng-template let-invite pTemplate="listItem">
+        <div class="ui-g ui-g-12 invite-item">
+            <div class="ui-g ui-g-12">
+                <div class="ui-g-12"><div class="label">Invite link:</div></div>
+                <div class="ui-g-10 ui-fluid item-input">
+                    <input type="text" disabled pInputText placeholder="Link">
+                </div>         
+                <div class="ui-g-2">
+                    <button pButton type="button" class="ui-button-danger invite-item-button" label="Delete"></button>                                 
+                </div>
+            </div>
+            <div class="ui-g ui-g-12 invite-info">
+                <div class="ui-g-12"><div class="label">Expired at:</div></div>
+                <div class="ui-g-10 ui-fluid item-input">
+                    <p-inputMask mask="99/99/9999" slotChar="dd/mm/yyyy" placeholder="99/99/9999"></p-inputMask>
+                </div>
+                <div class="ui-g-2">
+                    <button pButton type="button" class="ui-button-success invite-item-button" label="Update"></button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-dataView>

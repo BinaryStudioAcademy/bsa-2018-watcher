@@ -4,7 +4,6 @@ import {HubConnection} from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import {environment} from '../../../environments/environment';
 import {SampleRequest} from '../../shared/models/sample-request.model';
-import {ApiService} from '../services/api.service';
 import {AuthService} from '../services/auth.service';
 import { Notification } from '../../shared/models/notification.model';
 
@@ -13,8 +12,8 @@ import { Notification } from '../../shared/models/notification.model';
   providedIn: 'root'
 })
 export class NotificationsHubService {
-  private connectionIsEstablished = false;
   private hubConnection: HubConnection | undefined;
+  private connectionIsEstablished = false;
 
   notificationReceived = new EventEmitter<Notification>();
   connectionEstablished = new EventEmitter<Boolean>();
