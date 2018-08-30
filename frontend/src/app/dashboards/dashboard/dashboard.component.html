@@ -22,8 +22,8 @@
     </div>
     <div>
       <p class="text-pl">Click * -> Add chart or plot</p>
-      <div class="img-example">
-        <img src="C:\Users\Eugene\Desktop\Tanya\image.png" alt="example" class="img-example"/>
+      <div class="img-example-wr">
+        <img src="assets\chart-example.png" alt="example" class="img-example"/>
       </div>
     </div>
 
@@ -106,10 +106,9 @@
   <div class="ui-g ui-fluid">
     <div class="ui-g-3">
       <p class="field">Select chart type: </p>
-      <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" [style]="{'width':'172px'}"></p-dropdown>
-      <p>{{selectedType}}</p>
+      <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" placeholder="Select a type" [style]="{'width':'172px'}"></p-dropdown>
       <p class="field">Select source: </p>
-      <p-dropdown [options]="dropdownSource" [(ngModel)]="selectedSource" [style]="{'width':'172px'}"></p-dropdown>
+      <p-multiSelect [options]="dropdownSource" [(ngModel)]="selectedSource" [style]="{'width':'172px'}"></p-multiSelect>
       <p class="field">Is single:
         <p-checkbox formControlName="isSingle" binary="true"></p-checkbox>
       </p>

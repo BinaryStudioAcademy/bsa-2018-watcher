@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {DashboardComponent} from './dashboard/dashboard.component';
-import {TabViewModule, PanelMenuModule, DialogModule, DropdownModule, CheckboxModule, TieredMenuModule,
+import {TabViewModule, PanelMenuModule, DialogModule, DropdownModule, CheckboxModule, TieredMenuModule, MultiSelectModule,
    ButtonModule, TabMenuModule, ProgressSpinnerModule} from 'primeng/primeng';
 import {EditDashboardComponent} from './editDashboard/editDashboard.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -51,7 +51,8 @@ import {ChartsComponent} from './charts/charts.component';
     DashboardRoutingModule,
     DropdownModule,
     CheckboxModule,
-    TieredMenuModule
+    TieredMenuModule,
+    MultiSelectModule
   ],
   declarations: [
     DashboardComponent,
