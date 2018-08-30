@@ -50,7 +50,7 @@
   <p-footer>
     <div style="text-align:center">
       <button type="button" pButton class="ui-button-success" (click)="updateChat()" label="Update" [disabled]="!chatSettingsForm.valid"></button>
-      <button type="button" pButton class="ui-button-danger" (click)="deleteChat()" label="Delete" [disabled]="chat?.createdBy?.id !== currentUser?.id"></button>
+      <button type="button" pButton class="ui-button-danger" (click)="deleteChat()" label="Delete" [disabled]="chat?.createdBy?.id !== currentUserId"></button>
     </div>
   </p-footer>
 </p-dialog>
