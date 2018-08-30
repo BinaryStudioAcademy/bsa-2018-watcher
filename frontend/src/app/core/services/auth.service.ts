@@ -297,7 +297,20 @@ export class AuthService {
   public async refreshWatcherToken() {
     const token = this.getWatcherToken();
     if (this.tokenHelper.isTokenExpired(token)) {
-      // TODO: Implement watcher token refresh here
+      const userInfo = this.getCurrentUserLS();
+      const req: UserLoginRequest = {
+        uid: userInfo.id,
+        email: userInfo.email
+      };
+
+    await this.tokenService.login(req).toPromise()
+      .then(tokenDto => {
+        localStorage.removeItem('watcherToken');
+        localStorage.setItem('watcherToken', tokenDto.watcherJWT);
+      })
+      .catch(err => {
+        throw err;
+      });
     }
   }
 }
