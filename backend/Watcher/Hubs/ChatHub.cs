@@ -41,12 +41,12 @@ namespace Watcher.Hubs
 
             foreach (var userDto in usersInChat)
             {
+                // Sending to email
+                SendToEmailIfNeeded(userDto, createdMessage);
+
                 if (!UsersConnections.ContainsKey(userDto.Id)) continue;
                 foreach (string connectionId in UsersConnections[userDto.Id])
                     await Clients.Client(connectionId).SendAsync("ReceiveMessage", createdMessage);
-
-                // Sending to email
-                SendToEmailIfNeeded(userDto, createdMessage);
             }
         }
 
