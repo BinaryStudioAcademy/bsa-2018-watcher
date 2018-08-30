@@ -51,15 +51,11 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  openChat(chatId: number) {
-    this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
-    this.selectedChat.unreadMessagesCount = 0;
-    this.onDisplayChat.emit(chatId);
-  }
-
   selectChat() {
-    this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
-    this.selectedChat.unreadMessagesCount = 0;
+    if (this.selectedChat.unreadMessagesCount) {
+      this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
+      this.selectedChat.unreadMessagesCount = 0;
+    }
     this.onDisplayChat.emit(this.selectedChat.id);
   }
 
@@ -83,12 +79,13 @@ export class ChatComponent implements OnInit {
 
       if (chat.createdBy.id === this.currentUserId) {
         this.selectedChat = this.chatList[0].value;
-        this.openChat(chat.id);
+        this.selectChat();
       }
     });
 
     this.chatService.openChatClick.subscribe((id: number) => {
-      this.openChat(id);
+      this.selectedChat = this.chatList.find(x => x.value.id === id).value;
+      this.selectChat();
     });
 
     this.chatHub.chatChanged.subscribe((chat: Chat) => {
