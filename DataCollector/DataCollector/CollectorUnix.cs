@@ -37,8 +37,8 @@ namespace DataCollector
 
         public void Collect()
         {
-          //  try
-          //  {
+            try
+            {
                 
 
                 var dataItem = new CollectedData
@@ -57,11 +57,11 @@ namespace DataCollector
                     Time = DateTime.Now
                 };
                 Data.Add(dataItem);
-          //  }
-           // catch (Exception e)
-          //  {
-          //      System.Console.WriteLine("----->" + e.Message);
-          //  }
+            }
+            catch (Exception e)
+            {
+                 // ignored 
+            }
 
             _tm.Start();
         }
