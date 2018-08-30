@@ -324,7 +324,7 @@
   [maxRadius]="20">
 </ngx-charts-bubble-chart -->
 
-<div class="svg-saver-container">
+<div class="svg-saver-container" *ngIf="showDownload">
   Download:
   <ngx-button (click)="svgSaver.asSvg()">SVG</ngx-button>
   <ngx-button (click)="svgSaver.asPng()">PNG</ngx-button>

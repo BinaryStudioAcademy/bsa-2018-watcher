@@ -59,7 +59,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private paramsSubscription: Subscription;
   private instanceGuidId: string;
 
-  isEditMode = false;
   instanceId: number;
   dashboards: Dashboard[] = [];
   dashboardMenuItems: DashboardMenuItem[] = [];
@@ -72,31 +71,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   collectedDataForChart: CollectedData[];
   percentageInfoToDisplay: PercentageInfo[];
   percentageInfoToDisplaySingle: PercentageInfo;
-  popupAddChart: Boolean = false;
+  popupAddChart = false;
   dropdownType: SelectItem[];
   dropdownSource: SelectItem[];
   selectedType: string;
   selectedSource: string[] = [];
   cogItems: MenuItem[];
-
-  single1: any[];
-  view: any[] = [564, 282];
-  showXAxis = true;
-  showYAxis = true;
-  gradient = false;
-  showLegend = true;
-  showXAxisLabel = true;
-  xAxisLabel = '';
-  showYAxisLabel = true;
-  yAxisLabel = '';
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
-
-  autoScale = true;
-  showLabels = true;
-  explodeSlices = false;
-  doughnut = false;
 
   // Inputs for Chart
   chartOptions: CustomChart = defaultOptions;
@@ -152,7 +132,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value;
     this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
     this.chartType.name = this.selectedType;
-    this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource[0], this.collectedDataForChart);
+    this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
     // TODO: set this data as property to trigger
     this.showPreview = true;
     if (this.selectedType === 'bar-vertical') {
@@ -163,14 +143,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
     } else if (this.selectedType === 'guage') {
       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Process';
-    }
-
-    /*this.xAxisLabel = this.chartForm.get('xAxisLabel').value;
-    this.yAxisLabel = this.chartForm.get('yAxisLabel').value;*/
-    if (this.selectedType === 'Line chart') {
-      Object.assign(this, { multi });
-    } else {
-      Object.assign(this, { single1 });
     }
   }
 
@@ -348,10 +320,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // if we are adding new, textbox needs to be clear
     this.editTitle = creation ? '' : this.activeDashboardItem.label;
     this.displayEditDashboard = true;
-  }
-
-  showAddItemPopup(): void {
-    this.isEditMode = true;
   }
 
   onEdited(title: string) {

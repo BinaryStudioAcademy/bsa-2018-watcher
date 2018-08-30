@@ -44,7 +44,7 @@
 
         public CurveClosedType IsCurveClosed { get; set; }
             
-        public string Title{ get; set; }
+        public string Title { get; set; }
 
         public string[] DataDims { get; set; }
 

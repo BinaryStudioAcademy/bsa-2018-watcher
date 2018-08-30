@@ -17,6 +17,7 @@ export class ChartComponent implements OnInit {
   @Input() chart: CustomChart;
   @Input() chartType: any;
   @Input() data: CustomData[];
+  @Input() showDownload = false;
   // TODO: Here after Data came from father component need to parse data and render it on Component
 
   svgSaver = new SvgSaver();

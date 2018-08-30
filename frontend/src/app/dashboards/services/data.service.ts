@@ -52,56 +52,32 @@ export class DataService {
   }
 
   // dataSource - property to show on the chart
-  prepareData(chartType: string, dataSource: string, dataToTransform: CollectedData[]): CustomData[] {
+  prepareData(chartType: string, dataSources: string[], dataToTransform: CollectedData[]): CustomData[] {
     if (chartType === 'line-chart') {
-      const data: MultiChartItem = this.mapToMultiData(dataToTransform, dataSource);
-      return [data];
+      const data: MultiChartItem[] = this.mapToMultiData(dataToTransform, dataSources);
+      return data;
     }
     if (chartType === 'bar-vertical') {
-      const data: NumberSeriesItem = this.mapToSeriesItem(dataToTransform[0], dataSource);
-      return [data];
+      const data: NumberSeriesItem[] = this.mapToSeriesItem(dataToTransform[0], dataSources);
+      return data;
     } else {
-      const data: NumberSeriesItem = this.mapToSeriesItem(dataToTransform[0], dataSource);
-      return [data];
+      const data: NumberSeriesItem[] = this.mapToSeriesItem(dataToTransform[0], dataSources);
+      return data;
     }
   }
 
-  mapToMultiData(data: CollectedData[], property: string): MultiChartItem {
-    const item: MultiChartItem = {
-      name: property,
-      series: []
-    };
+  mapToMultiData(data: CollectedData[], properties: string[]): MultiChartItem[] {
+    const items: MultiChartItem[] = [];
+    for (let i = 0; i < properties.length; i++) {
+      const item: MultiChartItem = {
+        name: properties[i],
+        series: []
+      };
+      item.series = data.map(p => this.mapToLineChartSeriesItem(p, properties[i]));
+      items.push(item);
+    }
 
-    item.series = data.map(p => this.mapToLineChartSeriesItem(p, property));
-
-    // const dataToInsert: SeriesItem[]
-    // for (const inf of dataToInsert) {
-    //   item.series.push(inf);
-    // }
-
-    return item;
-  }
-  //
-  // function legendName(s: string) {
-  //   return // TODO: create dictionary and by this s - key - get user friendly value
-  // }
-  //
-
-  mapToSeriesItem(data: CollectedData, property: string): NumberSeriesItem {
-    const seriesItem: NumberSeriesItem = {
-      value: data[property],
-      name: property
-    };
-    return seriesItem;
-  }
-
-  mapToLineChartSeriesItem(data: CollectedData, property: string): SeriesItem {
-    const seriesItem: SeriesItem = {
-      value: data[property],
-      name: new Date(data.time)
-    };
-
-    return seriesItem;
+    return items;
   }
 
   toSeriesData(info: PercentageInfo | CollectedData, property: string): SeriesItem[] {
@@ -115,6 +91,36 @@ export class DataService {
     items[2].value = Math.floor(info.localDiskFreeSpacePercent);
 
     return items;
+  }
+
+  //
+  // function legendName(s: string) {
+  //   return // TODO: create dictionary and by this s - key - get user friendly value
+  // }
+  //
+
+  mapToSeriesItem(data: CollectedData, properties: string[]): NumberSeriesItem[] {
+    const items: NumberSeriesItem[] = [];
+    for (let i = 0; i < properties.length; i++) {
+      items.push({name: properties[i], value: data[properties[i]]});
+    }
+
+    //
+    // const seriesItem: NumberSeriesItem = {
+    //   value: data[property],
+    //   name: property
+    // };
+
+    return items;
+  }
+
+  mapToLineChartSeriesItem(data: CollectedData, property: string): SeriesItem {
+    const seriesItem: SeriesItem = {
+      value: data[property],
+      name: new Date(data.time)
+    };
+
+    return seriesItem;
   }
 
 
