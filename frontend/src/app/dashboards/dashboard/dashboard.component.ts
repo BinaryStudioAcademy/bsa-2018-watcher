@@ -405,7 +405,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   closeMy() {
-    this.processData();
+   // this.processData();
     this.onCancel();
   }
 
