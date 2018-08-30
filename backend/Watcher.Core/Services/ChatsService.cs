@@ -43,12 +43,15 @@
                                                             .ThenInclude(c => c.User)
                                                         .Include(c => c.Organization)
                                                         .Include(c => c.CreatedBy)
+                                                        .Include(c => c.UsersSettings)
                                                         .Include(c => c.UserChats)
                                                             .ThenInclude(uc => uc.User));
 
             if (chat == null) return null;
 
             var dto = _mapper.Map<Chat, ChatDto>(chat);
+
+            dto.UnreadMessagesCount = dto.Messages.Count(m => !m.WasRead);
 
             return dto;
         }
@@ -62,8 +65,25 @@
                     {
                         c.UnreadMessagesCount = CountUnreadedMessagesForUser(id, c.Messages);
                         c.Messages = null;
+
+                        if (c.UsersSettings.FirstOrDefault(x => x.UserId == id) == null)
+                            c.UsersSettings.Add(CreateDefaultSettings(id));
                     })));
 
+            return dtos;
+        }
+
+        public async Task<NotificationSettingDto> GetSettingsForUserIdAsync(string userId, int chatId)
+        {
+            var settings = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(x =>
+                x.UserId == userId && x.ChatId == chatId);
+
+            if (settings == null)
+            {
+                return null;
+            }
+
+            var dtos = _mapper.Map<NotificationSetting, NotificationSettingDto>(settings);
             return dtos;
         }
 
@@ -136,6 +156,18 @@
             var entity = _mapper.Map<ChatUpdateRequest, Chat>(request);
             entity.Id = id;
 
+            foreach (var settings in entity.UsersSettings)
+            {
+                if (settings.Id == 0)
+                {
+                    await _uow.NotificationSettingsRepository.CreateAsync(settings);
+                }
+                else
+                {
+                    await _uow.NotificationSettingsRepository.UpdateAsync(settings);
+                }
+            }
+
             // In returns updated entity, you could do smth with it or just leave as it is
             var updated = await _uow.ChatsRepository.UpdateAsync(entity);
             var result = await _uow.SaveAsync();
@@ -156,6 +188,18 @@
         private int CountUnreadedMessagesForUser(string userId, IList<MessageDto> messages)
         {
             return messages.Count(m => !m.WasRead && m.User.Id != userId);
+        }
+
+        private NotificationSettingDto CreateDefaultSettings(string userId)
+        {
+            return new NotificationSettingDto
+            {
+                UserId = userId,
+                IsDisable = false,
+                IsMute = false,
+                IsEmailable = false,
+                Type = NotificationType.Chat
+            };
         }
     }
 }

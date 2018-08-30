@@ -320,6 +320,8 @@ namespace Watcher.DataAccess.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("ChatId");
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<bool>("IsDisable");
@@ -333,6 +335,8 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
 
                     b.HasIndex("UserId");
 
@@ -723,6 +727,10 @@ namespace Watcher.DataAccess.Data.Migrations
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.NotificationSetting", b =>
                 {
+                    b.HasOne("Watcher.DataAccess.Entities.Chat", "Chat")
+                        .WithMany("UsersSettings")
+                        .HasForeignKey("ChatId");
+
                     b.HasOne("Watcher.DataAccess.Entities.User", "User")
                         .WithMany("NotificationSettings")
                         .HasForeignKey("UserId")

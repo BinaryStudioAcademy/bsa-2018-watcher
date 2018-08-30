@@ -8,4 +8,5 @@ export interface NotificationSetting {
     isDisable: boolean;
     isEmailable: boolean;
     userId: string;
+    chatId: number;
 }

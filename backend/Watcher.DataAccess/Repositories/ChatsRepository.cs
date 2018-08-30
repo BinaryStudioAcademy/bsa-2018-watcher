@@ -27,6 +27,7 @@
                 .Where(uc => uc.UserId == id)
                 .Select(uc => uc.Chat)
                 .Include(uc => uc.Messages)
+                .Include(uc => uc.UsersSettings)
                 .Include(uc => uc.UserChats)
                     .ThenInclude(uc => uc.User);
 
