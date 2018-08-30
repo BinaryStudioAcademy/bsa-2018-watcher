@@ -20,21 +20,16 @@ export class TokensInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
     const firebaseToken = this.auth.getFirebaseToken();
-    if (firebaseToken) {
-      if (this.tokenHelper.isTokenExpired(firebaseToken)) {
-        this.auth.refreshFirebaseToken();
+      if (firebaseToken) {
+        this.headersConfig['Authorization'] = `Bearer ${firebaseToken}`;
       }
-      this.headersConfig['Authorization'] = `Bearer ${firebaseToken}`;
-    }
 
     const watcherToken = this.auth.getWatcherToken();
-    if (watcherToken) {
-      if (this.tokenHelper.isTokenExpired(watcherToken)) {
-        this.auth.refreshWatcherToken();
+      if (watcherToken) {
+        this.headersConfig['WatcherAuthorization'] = watcherToken;
       }
-      this.headersConfig['Authorization'] = `Bearer ${firebaseToken}`;
-    }
 
     const request = req.clone({setHeaders: this.headersConfig, responseType: 'json'});
 

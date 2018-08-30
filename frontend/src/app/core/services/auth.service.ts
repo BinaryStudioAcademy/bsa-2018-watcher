@@ -47,10 +47,10 @@ export class AuthService {
 
   // Verify JWT in localstorage with server & load user's info.
   // This runs once on application startup.
-  populate(): Promise<any> {
+  async populate(): Promise<any> {
     // If JWT detected, attempt to get & store user's info
-    const fToken = this.getFirebaseToken();
-    const wToken = this.getWatcherToken();
+    const fToken = await this.getFirebaseToken();
+    const wToken = await this.getWatcherToken();
     if (fToken && wToken) {
       return this.tokenService.getUserByTokens().toPromise()
         .then(currUser => {
@@ -232,17 +232,6 @@ export class AuthService {
   isAuthorized(): boolean {
     const user = this.getCurrentUserLS();
 
-    const fToken = this.getFirebaseToken();
-    const wToken = this.getWatcherToken();
-
-    console.clear();
-
-    console.log(`Firebase token expiration date: ${this.tokenHelper.getTokenExpirationDate(fToken)}`);
-    console.log(`Is Firebase token expired: ${this.tokenHelper.isTokenExpired(fToken)}`);
-
-    console.log(`Watcher token expiration date: ${this.tokenHelper.getTokenExpirationDate(wToken)}`);
-    console.log(`Is Watcher token expired: ${this.tokenHelper.isTokenExpired(wToken)}`);
-
     if (user != null) {
       return true;
     } else {
@@ -266,11 +255,19 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 
-  getFirebaseToken(): string | null {
+  async getFirebaseToken(): Promise<string | null> {
+    const currentToken =  localStorage.getItem('firebaseToken');
+    if (this.tokenHelper.isTokenExpired(currentToken)) {
+      await this.refreshFirebaseToken();
+    }
     return localStorage.getItem('firebaseToken');
   }
 
-  getWatcherToken(): string | null {
+  async getWatcherToken(): Promise<string | null> {
+    const currentToken = localStorage.getItem('watcherToken');
+    if (this.tokenHelper.isTokenExpired(currentToken)) {
+      await this.refreshWatcherToken(); // это промис
+    }
     return localStorage.getItem('watcherToken');
   }
 
@@ -286,7 +283,7 @@ export class AuthService {
   }
 
   public async refreshFirebaseToken() {
-    const token = this.getFirebaseToken();
+    const token = localStorage.getItem('firebaseToken');
     if (this.tokenHelper.isTokenExpired(token)) {
       const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
       localStorage.removeItem('firebaseToken');
@@ -295,13 +292,15 @@ export class AuthService {
   }
 
   public async refreshWatcherToken() {
-    const token = this.getWatcherToken();
-    if (this.tokenHelper.isTokenExpired(token)) {
-      const userInfo = this.getCurrentUserLS();
-      const req: UserLoginRequest = {
-        uid: userInfo.id,
-        email: userInfo.email
-      };
+    const token = localStorage.getItem('watcherToken');
+    if (!this.tokenHelper.isTokenExpired(token)) {
+      return;
+    }
+    const userInfo = this.getCurrentUserLS();
+     const req: UserLoginRequest = {
+      uid: userInfo.id,
+      email: userInfo.email
+    };
 
     await this.tokenService.login(req).toPromise()
       .then(tokenDto => {
@@ -311,6 +310,5 @@ export class AuthService {
       .catch(err => {
         throw err;
       });
-    }
   }
 }
