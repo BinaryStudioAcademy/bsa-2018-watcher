@@ -152,7 +152,11 @@ export class AuthService {
   }
 
   async signInWithGoogle(): Promise<boolean> {
-    return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider().addScope('email'))
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('email');
+    provider.setCustomParameters({ prompt : 'select_account'});
+
+    return await this._firebaseAuth.auth.signInWithPopup(provider)
       .then(res => {
         return this.login(res, 'Google');
       })
@@ -169,7 +173,11 @@ export class AuthService {
   }
 
   async signInWithFacebook(): Promise<boolean> {
-    return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider().addScope('email'))
+    const provider = new firebase.auth.FacebookAuthProvider();
+    provider.addScope('email');
+    provider.setCustomParameters({ auth_type: 'reauthenticate'});
+
+    return await this._firebaseAuth.auth.signInWithPopup(provider)
       .then(res => {
         return this.login(res, 'Facebook');
       })
