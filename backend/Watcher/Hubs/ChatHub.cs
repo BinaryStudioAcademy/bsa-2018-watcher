@@ -31,7 +31,6 @@ namespace Watcher.Hubs
             _messagesService = messagesService;
         }
 
-        [Authorize]
         public async Task Send(MessageRequest messageRequest)
         {
             var message = await _messagesService.CreateEntityAsync(messageRequest);
@@ -51,14 +50,12 @@ namespace Watcher.Hubs
             }
         }
 
-        [Authorize]
         public async Task MarkMessageAsRead(int messageId)
         {
             var result = await _messagesService.UpdateEntityByIdAsync(new MessageUpdateRequest { WasRead = true }, messageId);
             if (!result) return;
         }
 
-        [Authorize]
         public async Task InitializeChat(ChatRequest chatRequest)
         {
             var createdChat = await _chatsService.CreateEntityAsync(chatRequest);
@@ -74,7 +71,6 @@ namespace Watcher.Hubs
             }
         }
 
-        [Authorize]
         public async Task UpdateChat(ChatUpdateRequest chat, int chatId)
         {
             var result = await _chatsService.UpdateEntityByIdAsync(chat, chatId);
@@ -90,7 +86,6 @@ namespace Watcher.Hubs
             }
         }
 
-        [Authorize]
         public async Task AddUserToChat(int chatId, string userId)
         {
             var result = await _chatsService.AddUserToChat(chatId, userId);
@@ -106,7 +101,6 @@ namespace Watcher.Hubs
             }
         }
 
-        [Authorize]
         public async Task DeleteUserFromChat(int chatId, string userId)
         {
             var result = await _chatsService.DeleteUserFromChat(chatId, userId);
@@ -122,7 +116,6 @@ namespace Watcher.Hubs
             }
         }
 
-        [Authorize]
         public async Task DeleteChat(int id)
         {
             var deleteChat = await _chatsService.GetEntityByIdAsync(id);

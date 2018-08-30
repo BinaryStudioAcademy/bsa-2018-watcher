@@ -127,9 +127,10 @@ export class AuthService {
       uid: this.userRegisterRequest.uid,
       email: this.userRegisterRequest.email
     };
+    const firebaseToken = await credential.user.getIdToken(true);
 
-    const firebaseToken = await credential.user.getIdToken();
     localStorage.setItem('firebaseToken', firebaseToken);
+
     console.log(credential.user.photoURL);
     return this.tokenService.login(request).toPromise()
       .then(tokenDto => {
@@ -267,5 +268,11 @@ export class AuthService {
       .catch(err => console.error(err));
 
     return true;
+  }
+
+  async refreshToken() {
+    const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
+    localStorage.removeItem('firebaseToken');
+    localStorage.setItem('firebaseToken', firebaseToken);
   }
 }
