@@ -2,8 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {AuthService} from '../services/auth.service';
 import {Observable} from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +11,6 @@ export class TokensInterceptor implements HttpInterceptor {
     'Content-Type': 'application/json; charset=utf-8',
     'Accept': 'application/json'
   };
-
-  private tokenHelper: JwtHelperService = new JwtHelperService();
 
   constructor(public auth: AuthService) {
   }

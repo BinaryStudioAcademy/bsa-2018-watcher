@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, forkJoin } from 'rxjs';
 import { UserRegisterRequest } from '../../shared/models/user-register-request';
 import { TokenService } from './token.service';
 import { UserLoginRequest } from '../../shared/models/user-login-request';
@@ -12,6 +12,8 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { Token } from '../../shared/models/token.model';
 import { UserProfile} from '../../shared/models/user-profile';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { from } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -255,20 +257,34 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 
-  async getFirebaseToken(): Promise<string | null> {
-    const currentToken =  localStorage.getItem('firebaseToken');
-    if (this.tokenHelper.isTokenExpired(currentToken)) {
-      await this.refreshFirebaseToken();
-    }
-    return localStorage.getItem('firebaseToken');
+  getTokens(): [string, string] {
+    let watcherToken: string;
+    let firebaseToken: string;
+    forkJoin( this.getFirebaseToken(),
+              this.getWatcherToken()).subscribe(
+                ([tokenF, tokenW]) => {
+                  watcherToken = tokenW;
+                  firebaseToken = tokenF;
+                }
+              );
+    return [firebaseToken, watcherToken];
   }
 
-  async getWatcherToken(): Promise<string | null> {
+  getFirebaseToken(): Observable<string> {
+    const currentToken =  localStorage.getItem('firebaseToken');
+    if (this.tokenHelper.isTokenExpired(currentToken)) {
+      return from(this.refreshFirebaseToken());
+    }
+    return from(localStorage.getItem('firebaseToken'));
+  }
+
+
+  getWatcherToken(): Observable<string> {
     const currentToken = localStorage.getItem('watcherToken');
     if (this.tokenHelper.isTokenExpired(currentToken)) {
-      await this.refreshWatcherToken(); // это промис
+      return from(this.refreshWatcherToken());
     }
-    return localStorage.getItem('watcherToken');
+    return from(localStorage.getItem('watcherToken'));
   }
 
   logout(): boolean {
@@ -289,6 +305,7 @@ export class AuthService {
       localStorage.removeItem('firebaseToken');
       localStorage.setItem('firebaseToken', firebaseToken);
     }
+    return localStorage.getItem('firebaseToken');
   }
 
   public async refreshWatcherToken() {
@@ -310,5 +327,6 @@ export class AuthService {
       .catch(err => {
         throw err;
       });
+    return localStorage.getItem('watcherToken');
   }
 }
