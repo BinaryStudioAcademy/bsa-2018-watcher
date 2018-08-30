@@ -74,6 +74,11 @@ export class ChatComponent implements OnInit {
   }
 
   subscribeToEvents() {
+    this.chatService.openChatClick.subscribe((id: number) => {
+      this.selectedChat = this.chatList.find(x => x.value.id === id).value;
+      this.selectChat();
+    });
+
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
       this.chatList.unshift({ value: chat });
 
@@ -81,11 +86,6 @@ export class ChatComponent implements OnInit {
         this.selectedChat = this.chatList[0].value;
         this.selectChat();
       }
-    });
-
-    this.chatService.openChatClick.subscribe((id: number) => {
-      this.selectedChat = this.chatList.find(x => x.value.id === id).value;
-      this.selectChat();
     });
 
     this.chatHub.chatChanged.subscribe((chat: Chat) => {
@@ -97,25 +97,29 @@ export class ChatComponent implements OnInit {
       this.selectedChat = chat;
     });
 
-    this.chatHub.messageReceived.subscribe((message: Message) => {
-      if (message.user.id !== this.currentUserId) {
-        this.systemToastrService.chat(message);
-
-        // Don`t count unread if chat is open and not collapse
-        if (this.selectedChat && !this.isSelectedChatCollapsed && this.selectedChat.id === message.chatId) {
-        } else {
-          this.totalUnreadMessages++;
-          const index = this.chatList.findIndex(x => x.value.id === message.chatId);
-          this.chatList[index].value.unreadMessagesCount++;
-        }
-      }
-    });
-
     this.chatHub.chatDeleted.subscribe((chat: Chat) => {
       this.onDisplayChat.emit();
       const indexOfChat = this.chatList.map(item => item.value.id).indexOf(chat.id);
       this.totalUnreadMessages -= this.chatList[indexOfChat].value.unreadMessagesCount;
       this.chatList.splice(indexOfChat, 1);
+    });
+
+    this.chatHub.messageReceived.subscribe((message: Message) => {
+      if (message.user.id !== this.currentUserId) {
+        // Check chat settings
+        const settings = this.chatList.find(x => x.value.id === message.chatId).
+          value.usersSettings.find(x => x.userId === this.currentUserId);
+
+        if (!(settings && settings.isMute)) {
+          this.systemToastrService.chat(message);
+        }
+
+        // Don`t count unread if chat is open and not collapse
+        if (!(this.selectedChat && !this.isSelectedChatCollapsed && this.selectedChat.id === message.chatId)) {
+          this.totalUnreadMessages++;
+          this.chatList.find(x => x.value.id === message.chatId).value.unreadMessagesCount++;
+        }
+      }
     });
   }
 
