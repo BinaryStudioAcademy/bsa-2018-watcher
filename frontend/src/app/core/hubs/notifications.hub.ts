@@ -5,6 +5,8 @@ import * as signalR from '@aspnet/signalr';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { Notification } from '../../shared/models/notification.model';
+import { NotificationType } from '../../shared/models/notification-type.enum';
+
 import { Message } from '../../shared/models/message.model';
 
 
@@ -30,27 +32,18 @@ export class NotificationsHubService {
     this.startNotificationHubConnection();
   }
 
-  send(userId: string, item: string): string {
+  send(notification: Notification, type: NotificationType) {
     if (this.hubConnection) {
-      this.hubConnection.invoke('Send', userId, item)
-                         .catch(err => console.error(err));
+      this.hubConnection.invoke('SendNotification', notification, type)
+        .catch(err => console.error(err));
     }
-    return item;
   }
 
   delete(notification: Notification) {
     if (this.hubConnection) {
       this.hubConnection.invoke('DeleteNotification', notification)
-                         .catch(err => console.error(err));
+        .catch(err => console.error(err));
     }
-  }
-
-  sendMessage(mess: string): string {
-    if (this.hubConnection) {
-      this.hubConnection.invoke('BroadcastMessage', mess)
-                         .catch(err => console.error(err));
-    }
-    return mess;
   }
 
   private createConnection(): void {
@@ -59,7 +52,7 @@ export class NotificationsHubService {
     const connPath = `${environment.server_url}/notifications?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(connPath, ) // {accessTokenFactory: () => firebaseToken}
+      .withUrl(connPath) // {accessTokenFactory: () => firebaseToken}
       .configureLogging(signalR.LogLevel.Information)
       .build();
   }

@@ -1,4 +1,6 @@
-﻿namespace Watcher.Core.Hubs
+﻿using Watcher.Common.Enums;
+
+namespace Watcher.Core.Hubs
 {
     using System;
     using System.Collections.Generic;
@@ -24,9 +26,15 @@
         }
 
         [Authorize]
-        public async Task SendNotification(NotificationDto notificationDto)
+        public async Task SendNotification(NotificationDto notificationDto, NotificationType type)
         {
-            await Clients.User(notificationDto.UserId).SendAsync("AddNotification", notificationDto);
+            var result = await _notificationService.CreateEntityAsync(notificationDto, type);
+
+            //if (result != null)
+            //{
+            //    foreach (string connectionId in UsersConnections[notificationDto.UserId])
+            //        await Clients.Client(connectionId).SendAsync("AddNotification", result);
+            //}
         }
 
         [Authorize]
@@ -35,7 +43,8 @@
             var result = await _notificationService.DeleteEntityByIdAsync(notificationDto.Id);
             if (result)
             {
-                await Clients.User(notificationDto.UserId).SendAsync("DeleteNotification", notificationDto.Id);
+                foreach (string connectionId in UsersConnections[notificationDto.UserId])
+                    await Clients.User(notificationDto.UserId).SendAsync("DeleteNotification", notificationDto.Id);
             }
         }
 
