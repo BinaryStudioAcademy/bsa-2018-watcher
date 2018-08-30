@@ -8,8 +8,8 @@ import {CollectedData} from '../../shared/models/collected-data.model';
 import {ApiService} from '../../core/services/api.service';
 import {Observable} from 'rxjs';
 import {NumberSeriesItem, SeriesItem} from '../models/series-item';
-import {PercentageInfo} from '../models/percentage-info';
 import {MultiChartItem} from '../models/multi-chart-item';
+import {dataProperties, DataProperty} from '../models/data-property.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +52,7 @@ export class DataService {
   }
 
   // dataSource - property to show on the chart
-  prepareData(chartType: string, dataSources: string[], dataToTransform: CollectedData[]): CustomData[] {
+  prepareData(chartType: string, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
     if (chartType === 'line-chart') {
       const data: MultiChartItem[] = this.mapToMultiData(dataToTransform, dataSources);
       return data;
@@ -66,11 +66,11 @@ export class DataService {
     }
   }
 
-  mapToMultiData(data: CollectedData[], properties: string[]): MultiChartItem[] {
+  mapToMultiData(data: CollectedData[], properties: DataProperty[]): MultiChartItem[] {
     const items: MultiChartItem[] = [];
     for (let i = 0; i < properties.length; i++) {
       const item: MultiChartItem = {
-        name: properties[i],
+        name: dataProperties[properties[i].toString()],
         series: []
       };
       item.series = data.map(p => this.mapToLineChartSeriesItem(p, properties[i]));
@@ -80,43 +80,22 @@ export class DataService {
     return items;
   }
 
-  toSeriesData(info: PercentageInfo | CollectedData, property: string): SeriesItem[] {
-    const items: SeriesItem[] = [];
-    for (let i = 0; i < 3; i++) {
-      items.push({name: new Date(info.time), value: 0});
-    }
-
-    items[0].value = Math.floor(info.cpuUsagePercent);
-    items[1].value = Math.floor(info.ramUsagePercent);
-    items[2].value = Math.floor(info.localDiskFreeSpacePercent);
-
-    return items;
-  }
-
-  //
-  // function legendName(s: string) {
-  //   return // TODO: create dictionary and by this s - key - get user friendly value
-  // }
-  //
-
-  mapToSeriesItem(data: CollectedData, properties: string[]): NumberSeriesItem[] {
+  mapToSeriesItem(data: CollectedData, properties: DataProperty[]): NumberSeriesItem[] {
     const items: NumberSeriesItem[] = [];
     for (let i = 0; i < properties.length; i++) {
-      items.push({name: properties[i], value: data[properties[i]]});
+      items.push(
+        {
+          name: dataProperties[properties[i].toString()],
+          value: data[properties[i].toString()]
+        });
     }
-
-    //
-    // const seriesItem: NumberSeriesItem = {
-    //   value: data[property],
-    //   name: property
-    // };
 
     return items;
   }
 
-  mapToLineChartSeriesItem(data: CollectedData, property: string): SeriesItem {
+  mapToLineChartSeriesItem(data: CollectedData, property: DataProperty): SeriesItem {
     const seriesItem: SeriesItem = {
-      value: data[property],
+      value: data[property.toString()],
       name: new Date(data.time)
     };
 

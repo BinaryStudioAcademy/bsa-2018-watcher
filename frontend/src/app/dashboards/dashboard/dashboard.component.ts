@@ -25,6 +25,7 @@ import { CollectedData } from '../../shared/models/collected-data.model';
 import { customChartTypes } from '../charts/chart-builder/customChartTypes';
 import { colorSets } from '@swimlane/ngx-charts/release/utils';
 import * as shape from 'd3-shape';
+import {DataProperty} from '../models/data-property.enum';
 
 const defaultOptions = {
   view: [564, 282],
@@ -75,7 +76,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   dropdownType: SelectItem[];
   dropdownSource: SelectItem[];
   selectedType: string;
-  selectedSource: string[] = [];
+  selectedSource: DataProperty[] = [];
   cogItems: MenuItem[];
 
   // Inputs for Chart
@@ -93,10 +94,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   charts: CustomChart[] = [];
-  filters: Filter[] = [];
-
   errors: any[] = [];
-  rawData: CustomData[] = [];
 
   constructor(private dashboardsService: DashboardService,
     private collectedDataService: CollectedDataService,
@@ -117,9 +115,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ];
 
     this.dropdownSource = [
-      { label: 'CPU', value: 'cpuUsagePercent' },
-      { label: 'RAM', value: 'ramUsagePercent' },
-      { label: 'DISC', value: 'localDiskFreeSpacePercent' }
+      { label: 'CPU', value: DataProperty.cpuUsagePercent },
+      { label: 'RAM', value: DataProperty.ramUsagePercent },
+      { label: 'DISC', value: DataProperty.localDiskFreeSpacePercent }
     ];
   }
 
@@ -129,6 +127,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   });
 
   processData(): void {
+    debugger;
+    console.log(this.selectedSource[0].toString());
     this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value;
     this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
     this.chartType.name = this.selectedType;
@@ -204,9 +204,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.paramsSubscription.unsubscribe();
   }
 
-  async addChartToDashboard(chart: CustomChart) {
+  addChartToDashboard(chart: CustomChart) {
     this.charts.push(chart);
-    this.isEditMode = false;
   }
 
   onInstanceRemoved(id: number) {
