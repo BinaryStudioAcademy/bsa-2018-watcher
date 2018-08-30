@@ -28,6 +28,8 @@
 
         public IList<Message> Messages { get; set; }
 
+        public IList<NotificationSetting> UsersSettings { get; set; }
+
         public IList<UserChat> UserChats { get; set; }
     }
 }

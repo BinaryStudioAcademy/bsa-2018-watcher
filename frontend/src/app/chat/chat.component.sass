@@ -2,46 +2,57 @@
 	.ui-accordion-header
 		margin: 0 !important
 		a
+			border-top-left-radius: 3px
+			border-top-right-radius: 3px
 			padding: 4px !important
 	.ui-accordion-content
 		padding: 0 !important
-		border-top: 0
+		border: 0 !important
 		height: 300px
+		width: 100%
 		overflow-x: hidden
 
-/deep/.ui-inputtext
-	border-radius: 0 !important
-
-/deep/.ui-button
-	border-radius: 0 !important
-
+.panel-name
+	display: inline-flex
+	width: 80%
+	align-items: center
+	padding: 0px 5px
+	white-space: nowrap
 .chat-list-panel
 	position: fixed
 	bottom: 0
 	right: 20px
 	width: 150px
-	/deep/.ui-listbox
-		border: 0
-	/deep/.ui-listbox-list
-		overflow-x: hidden
 	.chat-list-img
 		width: 30px
 		height: 30px
 		border-radius: 50%
 	.chat-list-name
+		display: inline-flex
+		max-width: 100%
 		white-space: nowrap
 		line-height: 30px
+	/deep/.ui-listbox
+		border: 0
+		min-width: 100%
+		.ui-listbox-list
+			width: 100%
+			overflow-x: hidden
+		.ui-listbox-item
+			padding: 0.25em 0.5em
+
+.vertical-center
+	display: flex
+	align-items: center
+	justify-content: space-between
 
 .icon
 	cursor: pointer
-	margin: 4px
-	font-size: 120%
+	font-size: 1.3em
+	margin: 0 4px
 
 .icon:hover
     color: gray
-
-.icon-right
-	float: right
 
 .field
 	margin-left: 3px
@@ -50,11 +61,11 @@
 .text-overflow
 	overflow: hidden
 	text-overflow: ellipsis
-	white-space: nowrap
 
 .user-list
 	overflow-y: auto
 	max-height: 150px
+	white-space: nowrap
 
 .user-list-img
 	width: 40px
@@ -67,6 +78,10 @@
 	border-top: 1px solid #d5d5d5
 	padding: 5px
 
+.user-list-name
+	display: flex
+	align-items: center
+
 .message-counter
 	background-color: #CF513D
 	color: #ffffff
@@ -74,6 +89,7 @@
 	padding: 0px 4px
 	font-size: 12px
 	height: fit-content
+	margin-right: 5px
 
 .counter-absolute
 	position: absolute
@@ -82,3 +98,13 @@
 	top: -2px
 	padding: 0px 3px
 	font-size: 10px
+
+.notification-settings
+    border-top: 1px solid #d5d5d5
+    padding-top: 10px
+    padding-bottom: 5px
+    /deep/.ui-inputswitch
+        margin: 0 5px !important    
+.notification-setting-item
+	display: flex
+	align-items: center
