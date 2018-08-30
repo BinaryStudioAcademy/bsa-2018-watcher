@@ -1,6 +1,4 @@
-﻿using Watcher.Common.Dtos;
-
-namespace Watcher.Hubs
+﻿namespace Watcher.Core.Hubs
 {
     using System;
     using System.Collections.Generic;
@@ -10,10 +8,11 @@ namespace Watcher.Hubs
     using Microsoft.AspNetCore.Authorization;
 
     using Watcher.Common.Requests;
+    using Watcher.Common.Dtos;
     using Watcher.Core.Interfaces;
     using Watcher.Common.Helpers.Extensions;
 
-    public class ChatHub : Hub
+    public class ChatsHub : Hub
     {
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
@@ -21,7 +20,7 @@ namespace Watcher.Hubs
 
         private static readonly Dictionary<string, List<string>> UsersConnections = new Dictionary<string, List<string>>();
 
-        public ChatHub(
+        public ChatsHub(
             IChatsService chatsService,
             IMessagesService messagesService,
             IEmailProvider emailProvider)
@@ -42,7 +41,7 @@ namespace Watcher.Hubs
             foreach (var userDto in usersInChat)
             {
                 // Sending to email
-                SendToEmailIfNeeded(userDto, createdMessage);
+                await SendToEmailIfNeeded(userDto, createdMessage);
 
                 if (!UsersConnections.ContainsKey(userDto.Id)) continue;
                 foreach (string connectionId in UsersConnections[userDto.Id])

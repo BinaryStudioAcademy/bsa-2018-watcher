@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-
-namespace Watcher.DataAccess.Repositories
+﻿namespace Watcher.DataAccess.Repositories
 {
     using AutoMapper;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Query;
 
+    using Watcher.Common.Interfaces.Entities;
     using Watcher.DataAccess.Data;
     using Watcher.DataAccess.Entities;
     using Watcher.DataAccess.Interfaces.Repositories;
@@ -47,7 +46,14 @@ namespace Watcher.DataAccess.Repositories
             {
                 query = query.AsNoTracking();
             }
-            return await query.ToListAsync();
+            var items = await query.ToListAsync();
+
+            if (items is IEnumerable<ISoftDeletable>)
+            {
+                items = items.Where(i => ((ISoftDeletable)i).IsDeleted == false).ToList();
+            }
+
+            return items;
         }
 
         public void Delete(int companyId, string userId)

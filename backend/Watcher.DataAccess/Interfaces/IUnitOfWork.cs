@@ -21,6 +21,8 @@
 
         IUserOrganizationRepository UserOrganizationRepository { get; }
 
+        IUserChatRepository UserChatRepository { get; }
+
         IFeedbackRepository FeedbackRepository { get; }
 
         IResponseRepository ResponseRepository { get; }

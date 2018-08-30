@@ -58,7 +58,7 @@
 
         public async Task<IEnumerable<ChatDto>> GetEntitiesByUserIdAsync(string id)
         {
-            var chats = await _uow.ChatsRepository.GetChatsByUserId(id);
+            var chats = await _uow.UserChatRepository.GetChatsByUserId(id);
             var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats,
                 opts: o => o.AfterMap((src, dest) => dest
                     .ForEach(c =>
@@ -89,7 +89,7 @@
 
         public async Task<IEnumerable<UserDto>> GetUsersByChatIdAsync(int id)
         {
-            var users = await _uow.ChatsRepository.GetUsersByChatId(id);
+            var users = await _uow.UserChatRepository.GetUsersByChatId(id);
 
             var dtos = _mapper.Map<List<User>, List<UserDto>>(users);
 
@@ -98,7 +98,7 @@
 
         public async Task<bool> AddUserToChat(int chatId, string userId)
         {
-            var userChat = await _uow.ChatsRepository.AddUserChat(new UserChat() { ChatId = chatId, UserId = userId });
+            var userChat = await _uow.UserChatRepository.CreateAsync(new UserChat() { ChatId = chatId, UserId = userId });
 
             var result = await _uow.SaveAsync();
 
@@ -107,7 +107,7 @@
 
         public async Task<bool> DeleteUserFromChat(int chatId, string userId)
         {
-            await _uow.ChatsRepository.DeleteUserChat(new UserChat() { ChatId = chatId, UserId = userId });
+            _uow.UserChatRepository.Delete(userId, chatId);
 
             var result = await _uow.SaveAsync();
 
@@ -187,7 +187,7 @@
 
         private int CountUnreadedMessagesForUser(string userId, IList<MessageDto> messages)
         {
-            return messages.Count(m => !m.WasRead && m.User.Id != userId);
+            return messages?.Count(m => !m.WasRead && m.UserId != userId) ?? 0;
         }
 
         private NotificationSettingDto CreateDefaultSettings(string userId)
