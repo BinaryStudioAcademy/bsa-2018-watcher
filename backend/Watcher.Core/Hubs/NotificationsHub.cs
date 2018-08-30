@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.AspNetCore.Authorization;
 
+    using Watcher.Core.Interfaces;
     using Watcher.Common.Dtos;
     using Watcher.Common.Helpers.Extensions;
 
@@ -15,8 +16,11 @@
     {
         public static readonly Dictionary<string, List<string>> UsersConnections = new Dictionary<string, List<string>>();
 
-        public NotificationsHub()
+        private readonly INotificationService _notificationService;
+
+        public NotificationsHub(INotificationService notificationService)
         {
+            this._notificationService = notificationService;
         }
 
         [Authorize]
@@ -28,7 +32,11 @@
         [Authorize]
         public async Task DeleteNotification(NotificationDto notificationDto)
         {
-            await Clients.User(notificationDto.UserId).SendAsync("DeleteNotification", notificationDto.Id);
+            var result = await _notificationService.DeleteEntityByIdAsync(notificationDto.Id);
+            if (result)
+            {
+                await Clients.User(notificationDto.UserId).SendAsync("DeleteNotification", notificationDto.Id);
+            }
         }
 
         public override Task OnConnectedAsync()

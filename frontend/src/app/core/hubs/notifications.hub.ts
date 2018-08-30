@@ -1,22 +1,23 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 
-import {HubConnection} from '@aspnet/signalr';
+import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
-import {environment} from '../../../environments/environment';
-import {SampleRequest} from '../../shared/models/sample-request.model';
-import {ApiService} from '../services/api.service';
-import {AuthService} from '../services/auth.service';
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../services/auth.service';
 import { Notification } from '../../shared/models/notification.model';
+import { Message } from '../../shared/models/message.model';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationsHubService {
-  private connectionIsEstablished = false;
   private hubConnection: HubConnection | undefined;
 
   notificationReceived = new EventEmitter<Notification>();
+  notificationDeleted = new EventEmitter<number>();
+
+  private connectionIsEstablished = false;
   connectionEstablished = new EventEmitter<Boolean>();
 
   constructor(private authService: AuthService) {
@@ -37,12 +38,11 @@ export class NotificationsHubService {
     return item;
   }
 
-  createSample(request: SampleRequest): SampleRequest {
+  delete(notification: Notification) {
     if (this.hubConnection) {
-      this.hubConnection.invoke('CreateSample', request)
+      this.hubConnection.invoke('DeleteNotification', notification)
                          .catch(err => console.error(err));
     }
-    return request;
   }
 
   sendMessage(mess: string): string {
@@ -51,13 +51,6 @@ export class NotificationsHubService {
                          .catch(err => console.error(err));
     }
     return mess;
-  }
-
-  echo(): void {
-    if (this.hubConnection) {
-      this.hubConnection.invoke('Echo')
-                         .catch(err => console.error(err));
-    }
   }
 
   private createConnection(): void {
@@ -73,8 +66,13 @@ export class NotificationsHubService {
 
   private registerOnServerEvents(): void {
     this.hubConnection.on('AddNotification', (data: Notification) => {
-      console.log(data);
+      console.log('Notification added');
       this.notificationReceived.emit(data);
+    });
+
+    this.hubConnection.on('DeleteNotification', (data: number) => {
+      console.log('Notification deleted');
+      this.notificationDeleted.emit(data);
     });
 
     // On Close open connection again

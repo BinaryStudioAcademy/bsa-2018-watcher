@@ -56,6 +56,11 @@ export class NotificationBlockComponent implements OnInit {
       }
       this.notifications.unshift(value);
     });
+
+    this.notificationsHubService.notificationDeleted.subscribe((value: Notification) => {
+      const index = this.notifications.findIndex(item => item.id === value.id);
+      this.notifications.splice(index, 1);
+    });
   }
 
   loadNotifications(): void {
@@ -87,12 +92,13 @@ export class NotificationBlockComponent implements OnInit {
   }
 
   remove(id: number): void {
-    const index = this.notifications.findIndex(item => item.id === id);
-    if (!this.notifications[index].wasRead) {
+    const notify = this.notifications.find(item => item.id === id);
+    if (!notify.wasRead) {
       this.notificationCounter--;
     }
+
+    const index = this.notifications.findIndex(item => item.id === id);
     this.notifications.splice(index, 1);
-    // TODO: need add logic for operation
-    // this.notificationsService.remove(id);
+    this.notificationsHubService.delete(notify);
   }
 }
