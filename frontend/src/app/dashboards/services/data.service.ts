@@ -19,6 +19,8 @@ export class DataService {
   private _dataText: string;
   private _parsed: { data: CustomData[], errors: any[], meta: any };
 
+
+
   universeUpdated: EventEmitter<Universe> = new EventEmitter();
 
   dataDims: string[] = [];
@@ -79,6 +81,11 @@ export class DataService {
 
     return item;
   }
+  //
+  // function legendName(s: string) {
+  //   return // TODO: create dictionary and by this s - key - get user friendly value
+  // }
+  //
 
   mapToSeriesItem(data: CollectedData, property: string): NumberSeriesItem {
     const seriesItem: NumberSeriesItem = {

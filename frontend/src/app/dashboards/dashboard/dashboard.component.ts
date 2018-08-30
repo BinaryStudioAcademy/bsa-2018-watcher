@@ -149,7 +149,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   });
 
   processData(): void {
-    debugger;
     this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value;
     this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
     this.chartType.name = this.selectedType;
