@@ -15,7 +15,7 @@ namespace Watcher.Core.MappingProfiles
                 .ForMember(d => d.Id, o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
                 
             CreateMap<Dashboard, DashboardDto>()
-                .ForMember(d => d.Charts, o => o.UseValue(new List<ChartDto>()));
+                .ForMember(d => d.Charts, o => o.MapFrom(s => s.Charts));
 
             CreateMap<DashboardRequest, Dashboard>()
                 .ForMember(d => d.Id, o => o.Ignore());

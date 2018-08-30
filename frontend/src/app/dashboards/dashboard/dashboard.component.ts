@@ -1,4 +1,4 @@
-import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {ConfirmationService} from 'primeng/primeng';
 import {MessageService, MenuItem} from 'primeng/api';
 import {DashboardService} from '../../core/services/dashboard.service';
@@ -26,6 +26,7 @@ import {customChartTypes} from '../charts/chart-builder/customChartTypes';
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 import * as shape from 'd3-shape';
 import {DataProperty} from '../../shared/models/data-property.enum';
+import {DashboardChart} from '../models/dashboard-chart';
 
 const defaultOptions = {
   view: [716, 337],
@@ -94,8 +95,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.percentageInfoToDisplaySingle = info;
   }
 
-  charts: CustomChart[] = [];
-  errors: any[] = [];
+  charts: DashboardChart[] = [];
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -134,8 +134,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
     this.chartType.name = chartTypes[this.selectedType];
     this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
-    // TODO: set this data as property to trigger
     this.showPreview = true;
+
     if (this.selectedType === ChartType.BarVertical) {
       this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Parameters';
       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
@@ -227,6 +227,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           // Fill Dashboard Menu Items
           this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
           this.activeDashboardItem = this.dashboardMenuItems[0];
+          this.charts = this.dashboards[0].charts.map(c => this.instantiateChart(c));
         }
         this.loading = false;
         this.toastrService.success('Successfully got instance info from server');
@@ -401,6 +402,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (true) {
       this.chartService.create(this.createChart()).subscribe(
         value => {
+          const dashChat: DashboardChart = this.instantiateChart(value);
+          this.charts.push(dashChat);
           this.toastrService.success('Chart was created');
           // this.activeDashboardItem.charts.push(value);
         },
@@ -410,14 +413,55 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  instantiateChart(value: Chart): DashboardChart {
+    // TODO: parse here SourcesString and input in method prepareData
+    // TODO: convert to enum type
+    // const props: DataProperty[] = value.sources.split(',');
+    const dashChart: DashboardChart = {
+      view: [800, 400],
+      colorScheme: defaultOptions.colorScheme,
+      schemeType: defaultOptions.schemeType,
+      showLegend: value.showLegend,
+      legendTitle: value.legendTitle,
+      gradient: value.gradient,
+      showXAxis: value.showXAxis,
+      showYAxis: value.showYAxis,
+      showXAxisLabel: value.showXAxisLabel,
+      showYAxisLabel: value.showYAxisLabel,
+      yAxisLabel: value.yAxisLabel,
+      xAxisLabel: value.xAxisLabel,
+      autoScale: value.autoScale,
+      showGridLines: value.showGridLines,
+      rangeFillOpacity: value.rangeFillOpacity,
+      roundDomains: value.roundDomains,
+      tooltipDisabled: value.isTooltipDisabled,
+      showSeriesOnHover: value.isShowSeriesOnHover,
+      curve: defaultOptions.curve,
+      curveClosed: defaultOptions.curveClosed,
+
+      title: value.title,
+
+      data: this.dataService.prepareData(value.type, , this.collectedDataForChart), // this.dataForChart,
+      activeEntries: [],
+      chartType: {
+        name: chartTypes[value.type],
+        title: '',
+        chartLabels: null,
+        dimLabels: []
+      },
+      theme: value.isLightTheme ? 'light' : 'dark'
+    };
+
+    return dashChart;
+  }
+
   createChart() {
-    debugger;
     const chart: ChartRequest = {
       // showTotal: this.chartForm.get('isMultiple').value
       showCommon: true, // TODO: change this to get this prop from user
       threshold: this.threshold,
       mostLoaded: 'mostLoaded', // this.chartForm.get('mostLoaded').value,
-      dashboardId: 106, // TODO: this.activeDashboardItem.dashId,
+      dashboardId: this.activeDashboardItem.dashId, // TODO: this.activeDashboardItem.dashId,
       schemeType: this.chartOptions.schemeType,
 
       showLegend: this.chartOptions.showLegend,

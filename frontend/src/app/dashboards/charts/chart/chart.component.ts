@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import * as SvgSaver from 'svgsaver';
 import {CustomChart, CustomData} from '../models';
+import {DashboardChart} from '../../models/dashboard-chart';
 
 const EMPTY = [];
 
@@ -14,7 +15,7 @@ const EMPTY = [];
 export class ChartComponent implements OnInit {
   @Output() select: EventEmitter<{ chart: CustomChart, value?: any }> = new EventEmitter();
 
-  @Input() chart: CustomChart;
+  @Input() chart: DashboardChart;
   @Input() chartType: any;
   @Input() data: CustomData[];
   @Input() showDownload = false;
@@ -43,21 +44,21 @@ export class ChartComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSelect(data: CustomData) {
-    if (data) {
-      const value = typeof data === 'object' ? data.name : data;
-      if (this.chart.xFilter) {
-        const filter = this.chart.xFilter;
-        switch (filter.type) {
-          case 'value':
-            filter.range[0] = value;
-            break;
-          default:
-            filter.rangeIndex[value] = !filter.rangeIndex[value];
-        }
-      }
-      return this.select.emit({chart: this.chart, value});
-    }
-    return this.select.emit({chart: this.chart});
-  }
+  // onSelect(data: CustomData) {
+  //   if (data) {
+  //     const value = typeof data === 'object' ? data.name : data;
+  //     if (this.chart.xFilter) {
+  //       const filter = this.chart.xFilter;
+  //       switch (filter.type) {
+  //         case 'value':
+  //           filter.range[0] = value;
+  //           break;
+  //         default:
+  //           filter.rangeIndex[value] = !filter.rangeIndex[value];
+  //       }
+  //     }
+  //     return this.select.emit({chart: this.chart, value});
+  //   }
+  //   return this.select.emit({chart: this.chart});
+  // }
 }
