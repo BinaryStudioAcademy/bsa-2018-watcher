@@ -417,7 +417,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       showCommon: true, // TODO: change this to get this prop from user
       threshold: this.threshold,
       mostLoaded: 'mostLoaded', // this.chartForm.get('mostLoaded').value,
-      dashboardId: 102, // TODO: this.activeDashboardItem.dashId,
+      dashboardId: 106, // TODO: this.activeDashboardItem.dashId,
       schemeType: this.chartOptions.schemeType,
 
       showLegend: this.chartOptions.showLegend,
@@ -443,8 +443,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return chart;
   }
 
-  onEditChart(chart: Chart) {
-    this.chartService.update(chart.id, chart).subscribe(
+  onEditChart(chart: ChartRequest) {
+    this.chartService.update(1, chart).subscribe(
       value => {
         this.toastrService.success('The chart was updated');
       },

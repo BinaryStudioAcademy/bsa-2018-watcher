@@ -45,6 +45,7 @@
         public async Task<ChartDto> CreateEntityAsync(ChartRequest request)
         {
             var entity = _mapper.Map<ChartRequest, Chart>(request);
+            // entity.Sources = 
 
             entity = await _uow.ChartsRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();

@@ -102,7 +102,7 @@
                 .RuleFor(o => o.Description, f => f.Lorem.Sentences(Randomizer.Seed.Next(5), " "))
                 .RuleFor(o => o.CreatedByUserId, f => f.PickRandom(users).Id)
                 .RuleFor(o => o.ThemeId, f => f.PickRandom(themes).Id);
-            
+
             var organizations = organizationFaker.Generate(amount).ToArray();
 
             var instanceFaker = new Faker<Instance>()
@@ -125,12 +125,30 @@
 
             var chartFaker = new Faker<Chart>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
-                .RuleFor(o => o.Source, f => f.PickRandom("Source1", "Source2", "Source3"))
-                .RuleFor(o => o.ShowCommon, f => f.PickRandom("Common1", "Common2", "Common3"))
-                .RuleFor(o => o.MostLoaded, f => f.PickRandom("MostLoaded1", "MostLoaded2", "MostLoaded3"))
+                .RuleFor(o => o.ShowCommon, true)
                 .RuleFor(o => o.Threshold, f => f.Random.Number(100))
+                .RuleFor(o => o.MostLoaded, f => f.PickRandom("MostLoaded1", "MostLoaded2", "MostLoaded3"))
+                .RuleFor(o => o.DashboardId, f => f.PickRandom(dashboards).Id)
+                .RuleFor(o => o.SchemeType, "ordinal")
+                .RuleFor(o => o.ShowLegend, true)
+                .RuleFor(o => o.LegendTitle, "Legend")
+                .RuleFor(o => o.Gradient, false)
+                .RuleFor(o => o.ShowXAxis, true)
+                .RuleFor(o => o.ShowYAxis, true)
+                .RuleFor(o => o.ShowXAxisLabel, true)
+                .RuleFor(o => o.ShowYAxisLabel, true)
+                .RuleFor(o => o.YAxisLabel, "Y Label")
+                .RuleFor(o => o.XAxisLabel, "X Label")
+                .RuleFor(o => o.AutoScale, true)
+                .RuleFor(o => o.ShowGridLines, true)
+                .RuleFor(o => o.RangeFillOpacity, 0.5d)
+                .RuleFor(o => o.RoundDomains, false)
+                .RuleFor(o => o.IsTooltipDisabled, false)
+                .RuleFor(o => o.IsShowSeriesOnHover, true)
+                .RuleFor(o => o.Title, string.Empty)
                 .RuleFor(o => o.Type, f => f.Random.Enum<ChartType>())
-                .RuleFor(o => o.DashboardId, f => f.PickRandom(dashboards).Id);
+                .RuleFor(o => o.Sources, f => f.PickRandom("0,1"))
+                .RuleFor(o => o.IsLightTheme, true);
 
             var charts = chartFaker.Generate(amount).ToArray();
 
@@ -140,7 +158,7 @@
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
                 .RuleFor(o => o.UserId, f => f.PickRandom(users).Id)
                 .RuleFor(o => o.NotificationSettingId, f => f.PickRandom(notificationSettings).Id);
-                
+
             var notifications = notificationFaker.Generate(amount).ToArray();
 
             var userOrganizations = users.Select(x =>

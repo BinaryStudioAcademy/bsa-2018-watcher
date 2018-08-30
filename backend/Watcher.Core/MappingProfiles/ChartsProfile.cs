@@ -1,5 +1,7 @@
 ﻿namespace Watcher.Core.MappingProfiles
 {
+    using System.Linq;
+
     using AutoMapper;
 
     using Watcher.Common.Dtos;
@@ -16,7 +18,8 @@
             CreateMap<Chart, ChartDto>();
 
             CreateMap<ChartRequest, Chart>()
-                .ForMember(d => d.Id, o => o.UseValue(0));
+                .ForMember(d => d.Id, o => o.UseValue(0))
+                .ForMember(d => d.Sources, o => o.UseValue(string.Empty));
         }
     }
 }
