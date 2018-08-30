@@ -5,10 +5,7 @@ export interface Notification  {
    text: string;
    createdAt: Date;
    wasRead: boolean;
-   userId: Number;
+   userId: string;
    notificationSettingId: Number;
    notificationSetting: NotificationSetting;
 }
-
-
-
