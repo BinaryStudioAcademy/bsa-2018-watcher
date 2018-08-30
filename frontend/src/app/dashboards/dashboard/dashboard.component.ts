@@ -14,6 +14,7 @@ import { PercentageInfo } from '../models/percentage-info';
 import { CustomChart, CustomChartType, CustomData, CustomQuery, Filter, gapminder, toCapitalizedWords } from '../charts/models';
 import { DataService } from '../services/data.service';
 
+import { Chart } from '../../shared/models/chart.model';
 import { ChartType } from '../../shared/models/chart-type.enum';
 import { ChartRequest } from '../../shared/requests/chart-request.model';
 import { ChartService } from '../../core/services/chart.service';
@@ -28,7 +29,7 @@ import * as shape from 'd3-shape';
 import {DataProperty} from '../models/data-property.enum';
 
 const defaultOptions = {
-  view: [564, 282],
+  view: [716, 337],
   colorScheme: colorSets.find(s => s.name === 'cool'),
   schemeType: 'ordinal',
   showLegend: true,
@@ -75,9 +76,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   popupAddChart = false;
   dropdownType: SelectItem[];
   dropdownSource: SelectItem[];
-  selectedType: string;
+  selectedType: ChartType; // string;
   selectedSource: DataProperty[] = [];
   cogItems: MenuItem[];
+  threshold: number;
 
   // Inputs for Chart
   chartOptions: CustomChart = defaultOptions;
@@ -108,10 +110,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dataService: DataService) {
 
     this.dropdownType = [
-      { label: 'Bar vertical', value: 'bar-vertical' },
-      { label: 'Line chart', value: 'line-chart' },
-      { label: 'Pie', value: 'pie' },
-      { label: 'Guage', value: 'guage' }
+      { label: 'Bar vertical', value: ChartType.BarVertical /*'bar-vertical' 'line-chart' 'pie' 'guage'*/},
+      { label: 'Line chart', value: ChartType.LineChart },
+      { label: 'Pie', value: ChartType.Pie },
+      { label: 'Guage', value: ChartType.Guage }
     ];
 
     this.dropdownSource = [
@@ -122,6 +124,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   chartForm = this.fb.group({
+    isMultiple: new FormControl({ value: false, disabled: false }),
+    mostLoaded: new FormControl({ value: 1, disabled: false }),
     xAxisLabel: new FormControl({ value: '', disabled: false }),
     yAxisLabel: new FormControl({ value: '', disabled: false })
   });
@@ -131,17 +135,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     console.log(this.selectedSource[0].toString());
     this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value;
     this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
-    this.chartType.name = this.selectedType;
-    this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
+    this.chartType.name = this.selectedType.toString();
+    this.dataForChart = this.dataService.prepareData(this.selectedType.toString(), this.selectedSource, this.collectedDataForChart);
     // TODO: set this data as property to trigger
     this.showPreview = true;
-    if (this.selectedType === 'bar-vertical') {
+    if (this.selectedType === ChartType.BarVertical /*'bar-vertical' */) {
       this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Parameters';
       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
-    } else if (this.selectedType === 'line-chart') {
+    } else if (this.selectedType === ChartType.LineChart ) {
       this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Time';
       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
-    } else if (this.selectedType === 'guage') {
+    } else if (this.selectedType === ChartType.Guage ) {
       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Process';
     }
   }
@@ -390,19 +394,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.popupAddChart = false;
     this.selectedSource = null;
     this.selectedType = null;
+    this.threshold = 0;
     this.chartForm.reset();
   }
 
-  createChart(source: string, type: string) {
+  createChart() {
     const chart: ChartRequest = {
-      type: ChartType.Single, // if ChartType.Plot -> Bad request
-      source: source,
-      showCommon: type,
-      threshold: 16,
-      mostLoaded: 'mostLoaded',
+      type: this.selectedType, // if ChartType.Plot -> Bad request
+      source: this.selectedSource[0],
+      showCommon: '', // showTotal: this.chartForm.get('isMultiple').value,
+      threshold: this.threshold,
+      mostLoaded: 'mostLoaded', // this.chartForm.get('mostLoaded').value,
       dashboardId: 102// this.activeDashboardItem.dashId
     };
-    console.log(chart);
     return chart;
   }
 
@@ -410,7 +414,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.popupAddChart = false;
 
     if (true) {
-      this.chartService.create(this.createChart(this.selectedSource[0], this.selectedType)).subscribe(
+      this.chartService.create(this.createChart()).subscribe(
         value => {
           this.toastrService.success('Chart was created');
           // this.activeDashboardItem.charts.push(value);
@@ -420,9 +424,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     }
   }
-  /*
-    onEditChart(chart: ChartRequest) {
-      this.chartService.update(111, this.createChart()).subscribe(
+
+    onEditChart(chart: Chart) {
+      this.chartService.update(chart.id, chart).subscribe(
         value => {
           this.toastrService.success('The chart was updated');
         },
@@ -430,7 +434,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.toastrService.error(`Error ocured status: ${error.message}`);
         });
     }
-  */
+
 
   onDeleteChart(id: number) {
     this.chartService.delete(111).subscribe(

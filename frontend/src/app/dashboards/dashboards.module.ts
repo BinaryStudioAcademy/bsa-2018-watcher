@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {TabViewModule, PanelMenuModule, DialogModule, DropdownModule, CheckboxModule, TieredMenuModule, MultiSelectModule,
-   ButtonModule, TabMenuModule, ProgressSpinnerModule} from 'primeng/primeng';
+  SliderModule, SpinnerModule, ButtonModule, TabMenuModule, ProgressSpinnerModule} from 'primeng/primeng';
 import {EditDashboardComponent} from './editDashboard/editDashboard.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ToastModule} from 'primeng/toast';
@@ -52,7 +52,9 @@ import {ChartsComponent} from './charts/charts.component';
     DropdownModule,
     CheckboxModule,
     TieredMenuModule,
-    MultiSelectModule
+    MultiSelectModule,
+    SliderModule,
+    SpinnerModule
   ],
   declarations: [
     DashboardComponent,

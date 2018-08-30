@@ -26,7 +26,7 @@ export class ChartService {
     return this.http.post<Chart>(`${this.ctrlUrl}`, organization);
   }
 
-  update(id: number, organization: ChartRequest) {
+  update(id: number, organization: Chart) {
     return this.http.put(`${this.ctrlUrl}/${id}`, organization);
   }
 
