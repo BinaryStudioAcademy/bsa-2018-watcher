@@ -25,6 +25,7 @@ export class FeedbackComponent implements OnInit {
   // feedbacks: Feedback[];
   user: User;
   isSubmiting: Boolean = false;
+  isAuthorized: Boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -55,7 +56,7 @@ export class FeedbackComponent implements OnInit {
   ngOnInit() {
     this.user = this.authService.getCurrentUser();
     if (this.user == null) {
-      return;
+      this.isAuthorized = false;
     }
 
     // this.feedbackService.getAll().subscribe((value: Feedback[]) => this.feedbacks = value);

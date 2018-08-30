@@ -1,26 +1,28 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.sass',
-  './landing.component.cards.sass',
-  './landing.component.footer.sass',
-  './landing.component.header.sass'],
+    './landing.component.cards.sass',
+    './landing.component.footer.sass',
+    './landing.component.header.sass'],
 })
 export class LandingComponent implements OnInit, OnDestroy {
 
-  constructor() {}
+  constructor(private router: Router) { }
 
   headerScroll(): any {
     const scrolled = window.pageYOffset || document.documentElement.scrollTop;
     if (scrolled < 100) {
       document.getElementById('header').style.background = 'rgba(0,0,0,0.2)';
-    } else { document.getElementById('header').style.background = 'rgba(0,0,0,0.8)'; }}
+    } else { document.getElementById('header').style.background = 'rgba(0,0,0,0.8)'; }
+  }
 
   scrollTo(id: string): void {
     const element = document.getElementById(id);
-    element.scrollIntoView( {block: 'start', behavior: 'smooth'});
+    element.scrollIntoView({ block: 'start', behavior: 'smooth' });
     const menu = document.getElementById('nav');
     if (menu.style.display === 'block') {
       this.show();
@@ -29,11 +31,12 @@ export class LandingComponent implements OnInit, OnDestroy {
   show(): void {
     const menu = document.getElementById('nav');
     if (menu.style.visibility === 'visible') {
-      menu.style.visibility = 'hidden'; } else { menu.style.visibility = 'visible'; }
+      menu.style.visibility = 'hidden';
+    } else { menu.style.visibility = 'visible'; }
   }
 
   resize(): void {
-    if (window.innerWidth > 730) {document.getElementById('nav').style.visibility = 'visible'; }
+    if (window.innerWidth > 730) { document.getElementById('nav').style.visibility = 'visible'; }
   }
   ngOnInit() {
     window.addEventListener('resize', this.resize, true);
@@ -42,6 +45,5 @@ export class LandingComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     window.removeEventListener('scroll', this.headerScroll, true);
     window.removeEventListener('resize', this.resize, true);
-
-}
+  }
 }
