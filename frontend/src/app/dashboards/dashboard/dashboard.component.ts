@@ -144,6 +144,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.chartOptions.yAxisLabel = 'Percentage %';
     } else if (this.selectedType === ChartType.Guage) {
       this.chartOptions.yAxisLabel = 'Process';
+      this.chartOptions.xAxisLabel = '';
     }
    /* if (this.selectedType === ChartType.BarVertical) {
       this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Parameters';
@@ -423,10 +424,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     debugger;
     const chart: ChartRequest = {
       // showTotal: this.chartForm.get('isMultiple').value
-      showCommon: true, // TODO: change this to get this prop from user
+      showCommon: this.chartForm.get('isMultiple').value,
       threshold: this.threshold,
       mostLoaded: 'mostLoaded', // this.chartForm.get('mostLoaded').value,
-      dashboardId: 106, // TODO: this.activeDashboardItem.dashId,
+      dashboardId: this.activeDashboardItem.dashId,
       schemeType: this.chartOptions.schemeType,
 
       showLegend: this.chartOptions.showLegend,
