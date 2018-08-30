@@ -108,9 +108,9 @@ namespace DataAccumulator
             string connectionString = Configuration.GetConnectionString(enviroment == EnvironmentName.Production ? "AzureCosmosDbConnection" : "MongoDbConnection");
 
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-                options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage"));
+                options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>(
-                options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage"));
+                options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.AggregationForHour));
 
         }
 
