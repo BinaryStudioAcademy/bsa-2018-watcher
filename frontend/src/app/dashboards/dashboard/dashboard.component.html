@@ -97,7 +97,7 @@
 
 
 <p-dialog header="Create chart" [(visible)]="popupAddChart" [modal]="true" [responsive]="true" [width]="1000" [minWidth]="850"
-  [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}">
+  [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false (onHide)="closeMy()">
   <!--  [baseZIndex]="10000"-->
   <!-- <app-chart-builder (addChart)="addChartToDashboard($event)"></app-chart-builder>   -->
   <div class="ui-g ui-fluid">

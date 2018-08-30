@@ -239,7 +239,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
 
           // !!!!!!!!!!!!!!!!!!!!!!!!
-          // this.dashboards.forEach(d => { d.charts.forEach(ch => ch.sources.split(',')); });
+          // this.dashboards.forEach(d => { d.charts.forEach(ch => arr = ch.sources.split(',')); });
 
 
           // Fill Dashboard Menu Items
@@ -401,9 +401,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   showPopupAddChart() {
     this.popupAddChart = true;
-
+    this.processData();
   }
 
+  closeMy() {
+    this.processData();
+    this.onCancel();
+  }
 
   onCancel() {
     this.popupAddChart = false;
@@ -411,6 +415,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedType = null;
     this.threshold = 0;
     this.chartForm.reset();
+
   }
 
   onCreateChart() {
@@ -435,7 +440,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // showTotal: this.chartForm.get('isMultiple').value
       showCommon: this.chartForm.get('isMultiple').value,
       threshold: this.threshold,
-      mostLoaded: 'mostLoaded', // this.chartForm.get('mostLoaded').value,
+      mostLoaded: '' + this.chartForm.get('mostLoaded').value,
       dashboardId: this.activeDashboardItem.dashId,
       schemeType: this.chartOptions.schemeType,
 
