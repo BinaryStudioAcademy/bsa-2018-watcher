@@ -13,6 +13,7 @@ export class TokensInterceptor implements HttpInterceptor {
   };
 
   constructor(public auth: AuthService) {
+    console.log('INTERCEPT CONSTRUCTOR CALLED');
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

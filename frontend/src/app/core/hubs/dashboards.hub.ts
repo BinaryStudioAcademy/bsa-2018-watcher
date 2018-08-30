@@ -29,8 +29,10 @@ export class DashboardsHub {
   }
 
   connectToSignalR(): Promise<void> {
-    this.createConnection();
-    this.registerOnServerEvents();
+    this.authService.getTokens().subscribe( (tokens: [string, string]) => {
+      this.createConnection(tokens[0], tokens[1]);
+      this.registerOnServerEvents();
+    });
     return this.startHubConnection();
   }
 
@@ -63,9 +65,7 @@ export class DashboardsHub {
     return item;
   }
 
-  private createConnection(): void {
-    const firebaseToken = this.authService.getFirebaseToken();
-    const watcherToken = this.authService.getWatcherToken();
+  private createConnection(firebaseToken: string, watcherToken: string): void {
     const connPath = `${environment.server_url}/dashboards?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
     this.hubConnection = new signalR.HubConnectionBuilder()

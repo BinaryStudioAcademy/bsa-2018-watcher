@@ -24,9 +24,11 @@ export class NotificationsHubService {
   }
 
   connectToSignalR(): void {
-    this.createConnection();
-    this.registerOnServerEvents();
-    this.startNotificationHubConnection();
+    this.authService.getTokens().subscribe( (tokens: [string, string]) => {
+      this.createConnection(tokens[0], tokens[1]);
+      this.registerOnServerEvents();
+      this.startNotificationHubConnection();
+    });
   }
 
   send(userId: string, item: string): string {
@@ -60,9 +62,7 @@ export class NotificationsHubService {
     }
   }
 
-  private createConnection(): void {
-    const firebaseToken = this.authService.getFirebaseToken();
-    const watcherToken = this.authService.getWatcherToken();
+  private createConnection(firebaseToken: string, watcherToken: string): void {
     const connPath = `${environment.server_url}/notifications?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
     this.hubConnection = new signalR.HubConnectionBuilder()

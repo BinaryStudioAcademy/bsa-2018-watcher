@@ -298,6 +298,7 @@ export class AuthService {
       const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
       localStorage.removeItem('firebaseToken');
       localStorage.setItem('firebaseToken', firebaseToken);
+      console.log(firebaseToken);
     }
     return localStorage.getItem('firebaseToken');
   }
@@ -312,11 +313,12 @@ export class AuthService {
       uid: userInfo.id,
       email: userInfo.email
     };
-
+    console.log(userInfo);
     await this.tokenService.login(req).toPromise()
       .then(tokenDto => {
         localStorage.removeItem('watcherToken');
         localStorage.setItem('watcherToken', tokenDto.watcherJWT);
+        console.log(tokenDto.watcherJWT);
       })
       .catch(err => {
         throw err;
