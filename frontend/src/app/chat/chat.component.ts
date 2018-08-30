@@ -109,14 +109,6 @@ export class ChatComponent implements OnInit {
     });
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
-      // TODO: test
-      const not = {
-        text: 'New message',
-        createdAt: new Date(),
-        userId: this.currentUserId
-      } as Notification;
-      this.notify.send(not, NotificationType.Warning);
-
       if (message.user.id !== this.currentUserId) {
         // Check chat settings
         const settings = this.chatList.find(x => x.value.id === message.chatId).
