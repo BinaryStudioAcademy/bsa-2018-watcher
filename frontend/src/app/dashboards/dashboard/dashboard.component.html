@@ -121,12 +121,12 @@
       <form [formGroup]="chartForm">
         <p class="field">Show multiple:
           <p-checkbox formControlName="isMultiple" binary="true"></p-checkbox>
-        </p>       
+        </p>   
+      </form>    
         <p class="field">Y axis label (optional): </p>
-        <input class="width-left-part" type="text" formControlName="yAxisLabel" pInputText/>
+        <input class="width-left-part" type="text" [(ngModel)]="chartOptions.yAxisLabel" pInputText/>
         <p class="field">X axis label (optional): </p>
-        <input class="width-left-part" type="text" formControlName="xAxisLabel" pInputText/>
-      </form>
+        <input class="width-left-part" type="text" [(ngModel)]="chartOptions.xAxisLabel" pInputText/>
     </div>
     <div class="ui-g-9">
       <p class="field-top center">Visualization</p>
@@ -138,7 +138,7 @@
   </div>
   <p-footer>
     <div class="center">
-      <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>
+     <!-- <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
       <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()" label="Save"></button>
       <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
     </div>
