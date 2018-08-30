@@ -10,7 +10,8 @@ import { UserInfoProfile } from '../../shared/models/user-info-profile';
 import { User } from '../../shared/models/user.model';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { Token } from '../../shared/models/token.model';
-import {UserProfile} from '../../shared/models/user-profile';
+import { UserProfile} from '../../shared/models/user-profile';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +27,12 @@ export class AuthService {
   private userDetails: firebase.User = null;
   public userRegisterRequest: UserRegisterRequest = null;
 
+  private helper: JwtHelperService = new JwtHelperService();
+
   constructor(private _firebaseAuth: AngularFireAuth,
     private tokenService: TokenService,
-    private router: Router) {
+    private router: Router,
+    ) {
     this.user = _firebaseAuth.authState;
     this.user.subscribe(
       (user) => {
@@ -227,6 +231,17 @@ export class AuthService {
 
   isAuthorized(): boolean {
     const user = this.getCurrentUserLS();
+
+    const fToken = this.getFirebaseToken();
+    const wToken = this.getWatcherToken();
+
+    console.clear();
+
+    console.log(`Firebase token expiration date: ${this.helper.getTokenExpirationDate(fToken)}`);
+    console.log(`Is Firebase token expired: ${this.helper.isTokenExpired(fToken)}`);
+
+    console.log(`Watcher token expiration date: ${this.helper.getTokenExpirationDate(wToken)}`);
+    console.log(`Is Watcher token expired: ${this.helper.isTokenExpired(wToken)}`);
 
     if (user != null) {
       return true;
