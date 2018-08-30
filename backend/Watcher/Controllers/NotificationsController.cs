@@ -79,5 +79,23 @@ namespace Watcher.Controllers
 
             return NoContent();
         }
+
+
+        [HttpPut("{id}")]
+        public virtual async Task<ActionResult> Delete([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            var result = await _notificationService.DeleteEntityByIdAsync(id);
+            if (!result)
+            {
+                return StatusCode(500);
+            }
+
+            return NoContent();
+        }
     }
 }

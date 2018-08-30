@@ -18,5 +18,7 @@
         public int? OrganizationId { get; set; }
 
         public IList<UserDto> Users { get; set; }
+
+        public IList<NotificationSettingRequest> UsersSettings { get; set; }
     }
 }

@@ -14,7 +14,8 @@
         public ChatProfile()
         {
             CreateMap<Chat, Chat>()
-                .ForMember(d => d.Id, o => o.Ignore()); // Don't Map Id because It is useless for Ids when updating
+                .ForMember(d => d.Id, o => o.Ignore()) // Don't Map Id because It is useless for Ids when updating
+                .ForMember(d => d.UsersSettings, o => o.Ignore());
 
             CreateMap<Chat, ChatDto>()
                 .ForMember(d => d.Users, c => c.MapFrom(o => o.UserChats.Select(uc => uc.User)));
