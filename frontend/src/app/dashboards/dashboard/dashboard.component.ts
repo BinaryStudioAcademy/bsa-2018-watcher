@@ -27,7 +27,7 @@ import { colorSets } from '@swimlane/ngx-charts/release/utils';
 import * as shape from 'd3-shape';
 
 const defaultOptions = {
-  view: [564, 282],
+  view: [716, 337],
   colorScheme: colorSets.find(s => s.name === 'cool'),
   schemeType: 'ordinal',
   showLegend: true,
@@ -77,6 +77,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedType: string;
   selectedSource: string[] = [];
   cogItems: MenuItem[];
+  threshold: number;
 
   // Inputs for Chart
   chartOptions: CustomChart = defaultOptions;
@@ -124,6 +125,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   chartForm = this.fb.group({
+    isMultiple: new FormControl({ value: false, disabled: false }),
+   // threshold: new FormControl({ value: 10, disabled: false }),
+    mostLoaded: new FormControl({ value: 1, disabled: false }),
     xAxisLabel: new FormControl({ value: '', disabled: false }),
     yAxisLabel: new FormControl({ value: '', disabled: false })
   });
@@ -206,7 +210,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async addChartToDashboard(chart: CustomChart) {
     this.charts.push(chart);
-    this.isEditMode = false;
+    // this.isEditMode = false;
   }
 
   onInstanceRemoved(id: number) {
@@ -391,12 +395,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.popupAddChart = false;
     this.selectedSource = null;
     this.selectedType = null;
+    this.threshold = 0;
     this.chartForm.reset();
   }
 
   createChart(source: string, type: string) {
     const chart: ChartRequest = {
-      type: ChartType.Single, // if ChartType.Plot -> Bad request
+      type: ChartType.BarVertical, // if ChartType.Plot -> Bad request
       source: source,
       showCommon: type,
       threshold: 16,

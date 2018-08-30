@@ -2,8 +2,9 @@
 
 
 export enum ChartType {
-    Plot = 0,
-    Single = 1,
-    Multiple = 2
+    BarVertical = 0,
+    LineChart = 1,
+    Pie = 2,
+    Guage = 3
 }
 
