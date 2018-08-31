@@ -1,32 +1,40 @@
-﻿
-namespace Watcher.Core.Services
+﻿namespace Watcher.Core.Services
 {
+    using System;
+    using System.Text;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Security.Cryptography;
+
     using AutoMapper;
+
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.SignalR;
+
+    using Watcher.Core.Hubs;
+    using Watcher.Common.Enums;
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Entities;
     using Watcher.DataAccess.Interfaces;
-    using System.Text;
-    using System;
-    using System.Linq;
-    using Watcher.Common.Enums;
 
     public class OrganizationInvitesService: IOrganizationInvitesService
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
         private readonly IEmailProvider _emailProvider;
+        private readonly IHubContext<InvitesHub> _invitesHub;
 
-        public OrganizationInvitesService(IUnitOfWork uow, IMapper mapper, IEmailProvider emailProvider)
+        public OrganizationInvitesService(IUnitOfWork uow, 
+                                            IMapper mapper, 
+                                            IEmailProvider emailProvider,
+                                            IHubContext<InvitesHub> invitesHub)
         {
             _uow = uow;
             _mapper = mapper;
             _emailProvider = emailProvider;
+            _invitesHub = invitesHub;
         }
 
         public async Task<OrganizationInviteDto> GetEntityByLinkAsync(string link)
@@ -47,6 +55,20 @@ namespace Watcher.Core.Services
             return dto;
         }
 
+        public async Task<IEnumerable<OrganizationInviteDto>> GetEntitiesByUserIdAsync(string userId)
+        {
+            var entities = await _uow.OrganizationInvitesRepository
+                .GetRangeAsync(1, int.MaxValue,
+                    o => o.CreatedByUserId == userId,
+                    include: x => x
+                        .Include(o => o.CreatedByUser)
+                        .Include(o => o.Organization));
+
+            var dtos = _mapper.Map<IEnumerable<OrganizationInvite>, IEnumerable<OrganizationInviteDto>>(entities);
+
+            return dtos;
+        }
+
         public async Task<OrganizationInviteDto> CreateEntityAsync(OrganizationInviteRequest request)
         {
             var entity = _mapper.Map<OrganizationInviteRequest, OrganizationInvite>(request);
@@ -63,6 +85,13 @@ namespace Watcher.Core.Services
             if (entity == null) return null;
 
             var dto = _mapper.Map<OrganizationInvite, OrganizationInviteDto>(entity);
+
+            if (InvitesHub.UsersConnections.ContainsKey(dto.CreatedByUserId))
+            {
+                foreach (string connectionId in InvitesHub.UsersConnections[dto.CreatedByUserId])
+                    await _invitesHub.Clients.Client(connectionId)
+                        .SendAsync("AddInvite", dto);
+            }
 
             return dto;
         }
@@ -120,6 +149,16 @@ namespace Watcher.Core.Services
                 var updated = await _uow.OrganizationInvitesRepository.UpdateAsync(entity);
                 result = await _uow.SaveAsync();
             }
+
+            var dto = _mapper.Map<OrganizationInvite, OrganizationInviteDto>(await _uow.OrganizationInvitesRepository.GetFirstOrDefaultAsync(i => i.Id == id));
+
+            if (InvitesHub.UsersConnections.ContainsKey(dto.CreatedByUserId))
+            {
+                foreach (string connectionId in InvitesHub.UsersConnections[dto.CreatedByUserId])
+                    await _invitesHub.Clients.Client(connectionId)
+                        .SendAsync("UpdateInvite", dto);
+            }
+
             return result;
         }
 
@@ -135,7 +174,23 @@ namespace Watcher.Core.Services
             return sb.ToString();
         }
 
+        public async Task<bool> DeleteEntityAsync(int id)
+        {
+            var entity = await _uow.OrganizationInvitesRepository.GetFirstOrDefaultAsync(i => i.Id == id);
 
+            await _uow.OrganizationInvitesRepository.DeleteAsync(id);
+
+            var result = await _uow.SaveAsync();
+
+            if (InvitesHub.UsersConnections.ContainsKey(entity.CreatedByUserId))
+            {
+                foreach (string connectionId in InvitesHub.UsersConnections[entity.CreatedByUserId])
+                    await _invitesHub.Clients.Client(connectionId)
+                        .SendAsync("DeleteInvite", id);
+            }
+
+            return result;
+        }
 
     }
 }

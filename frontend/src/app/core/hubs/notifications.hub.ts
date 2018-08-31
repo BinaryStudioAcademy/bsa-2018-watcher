@@ -15,11 +15,11 @@ import { Message } from '../../shared/models/message.model';
 })
 export class NotificationsHubService {
   private hubConnection: HubConnection | undefined;
+  private connectionIsEstablished = false;
 
   notificationReceived = new EventEmitter<Notification>();
   notificationDeleted = new EventEmitter<number>();
 
-  private connectionIsEstablished = false;
   connectionEstablished = new EventEmitter<Boolean>();
 
   constructor(private authService: AuthService) {

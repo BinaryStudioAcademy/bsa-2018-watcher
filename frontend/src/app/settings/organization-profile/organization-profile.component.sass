@@ -55,14 +55,14 @@ input
     font-size: 22px
     font-weight: normal
 
-.ui-g-12, .ui-g-10, .ui-g-2
+.ui-g-12, .ui-g-10, .ui-g-2, .ui-g-6
     padding: 0px
 
 .grid-container
   display: grid
   grid-column-gap: 0px
-  grid-template-columns: auto auto
-  grid-template-rows: 200px auto
+  grid-template-columns: 50% 50%
+  grid-template-rows: auto auto
 
 .grid-item 
   padding: 20px
@@ -81,9 +81,15 @@ input
 
 .invite
     grid-column-start: 2
-    grid-column-end: 2
+    grid-column-end: 3
     grid-row-start: 1
-    grid-row-end: 1
+    grid-row-end: 2
+
+.list-invites
+    grid-column-start: 2
+    grid-column-end: 3
+    grid-row-start: 2
+    grid-row-end: 3
 
 .alert-danger
     font-size: small

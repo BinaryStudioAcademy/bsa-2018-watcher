@@ -9,12 +9,5 @@
 
     public interface IChatsRepository : IRepository<Chat, int>
     {
-        Task<List<Chat>> GetChatsByUserId(string id);
-
-        Task<List<User>> GetUsersByChatId(int id);
-
-        Task<UserChat> AddUserChat(UserChat userChat);
-
-        Task DeleteUserChat(UserChat userChat);
     }
 }

@@ -11,11 +11,12 @@ namespace Watcher.Core.Interfaces
 
         Task<OrganizationInviteDto> GetEntityByLinkAsync(string link);
 
-        Task<OrganizationInviteDto> CreateEntityAsync(OrganizationInviteRequest request);
+        Task<IEnumerable<OrganizationInviteDto>> GetEntitiesByUserIdAsync(string userId);
 
+        Task<OrganizationInviteDto> CreateEntityAsync(OrganizationInviteRequest request);
 
         Task<bool> UpdateEntityByIdAsync(OrganizationInviteRequest request, int id);
 
-
+        Task<bool> DeleteEntityAsync(int id);
     }
 }

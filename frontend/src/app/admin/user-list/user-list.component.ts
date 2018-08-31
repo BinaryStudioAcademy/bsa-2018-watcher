@@ -11,7 +11,7 @@ import { SelectItem, LazyLoadEvent } from 'primeng/api';
 
 import { UserOrganizationService } from '../../core/services/user-organization.service';
 import { UserOrganization } from '../../shared/models/user-organization.model';
-import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
+import { OrganizationInvitesService } from '../../core/services/organization-invites.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
 import { Role } from '../../shared/models/role.model';
