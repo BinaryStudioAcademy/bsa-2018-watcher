@@ -19,10 +19,7 @@
   [tooltipDisabled]="chart.tooltipDisabled"
   [xAxisLabel]="chart.xAxisLabel"
   [yAxisLabel]="chart.yAxisLabel"
-  [showGridLines]="chart.showGridLines"
-<!--(select)="onSelect($event)"-->
-<!--(deactivate)="onSelect()"-->
->
+  [showGridLines]="chart.showGridLines">
 </ngx-charts-bar-vertical>
 
 <ngx-charts-bar-horizontal
@@ -43,10 +40,7 @@
   [tooltipDisabled]="chart.tooltipDisabled"
   [xAxisLabel]="chart.xAxisLabel"
   [yAxisLabel]="chart.yAxisLabel"
-  [showGridLines]="chart.showGridLines"
-<!--(select)="onSelect($event)"-->
-<!--(deactivate)="onSelect()"-->
->
+  [showGridLines]="chart.showGridLines">
 </ngx-charts-bar-horizontal>
 
 <ngx-charts-pie-chart
@@ -61,20 +55,14 @@
   [labels]="chart.showXAxisLabel"
   [doughnut]="false"
   [gradient]="chart.gradient"
-  [tooltipDisabled]="chart.tooltipDisabled"
-<!--(select)="onSelect($event)"-->
-<!--(deactivate)="onSelect()"-->
->
+  [tooltipDisabled]="chart.tooltipDisabled">
 </ngx-charts-pie-chart>
 
 <ngx-charts-pie-grid
   *ngIf="chartType.name === 'pie-grid'"
   [view]="chart.view"
   [scheme]="chart.colorScheme"
-  [results]="data"
-<!--(select)="onSelect($event)"-->
-<!--(deactivate)="onSelect()"-->
->
+  [results]="data">
 </ngx-charts-pie-grid>
 
 <ngx-charts-tree-map
@@ -83,20 +71,14 @@
   [scheme]="chart.colorScheme"
   [results]="data"
   [gradient]="chart.gradient"
-  [tooltipDisabled]="chart.tooltipDisabled"
-<!--(select)="onSelect($event)"-->
-<!--(deactivate)="onSelect()"-->
->
+  [tooltipDisabled]="chart.tooltipDisabled">
 </ngx-charts-tree-map>
 
 <ngx-charts-number-card
   *ngIf="chartType.name === 'number-cards'"
   [view]="chart.view"
   [scheme]="chart.colorScheme"
-  [results]="data"
-<!--(select)="onSelect($event)"-->
-<!--(deactivate)="onSelect()"-->
->
+  [results]="data">
 </ngx-charts-number-card>
 
 <ngx-charts-gauge
@@ -105,10 +87,7 @@
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"
-  [units]="chart.yAxisLabel"
-<!--(select)="onSelect($event)"-->
-<!--(deactivate)="onSelect()"-->
->
+  [units]="chart.yAxisLabel">
 </ngx-charts-gauge>
 
 <ngx-charts-bar-vertical-2d
