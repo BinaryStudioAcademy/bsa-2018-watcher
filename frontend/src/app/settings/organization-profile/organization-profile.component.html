@@ -115,12 +115,18 @@
                             <input disabled [(ngModel)]="inviteLink" required minlength="20" class="form-control" pInputText placeholder="Invite link">
                         </div>
                     </div>
-                <div class="ui-fluid">
-                    <button pButton label="Generate" (click)="onInvite()" class="view-inline ui-button-raised ui-button-icon-primary btn-inline-flex" [disabled]="isInviting">
+                <!-- <div class="ui-fluid">
+                    <button pButton label="&nbsp;" (click)="onInvite()" class="view-inline ui-button-raised ui-button-icon-primary btn-inline-flex" [disabled]="isInviting">
                         <p-progressSpinner class="btn-spinner" *ngIf="isInviting" strokeWidth="5"></p-progressSpinner>
                         <span class="ui-button-text" *ngIf="!isInviting">Generate</span>
                     </button>
-                   
+                </div> -->
+                <div class="btn-panel btn-save">
+                    <button pButton type="button" (click)="onInvite()" label="&nbsp;" class="ui-button-raised ui-button-success btn-inline-flex"
+                        [disabled]="isInviting">
+                        <p-progressSpinner class="btn-spinner" *ngIf="isInviting" strokeWidth="5"></p-progressSpinner>
+                        <span class="ui-button-text" *ngIf="!isInviting">Update</span>
+                    </button>
                 </div>
 
                 <div class="label">Send invite link to:</div>
