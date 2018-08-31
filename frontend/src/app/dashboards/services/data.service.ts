@@ -20,7 +20,6 @@ export class DataService {
   private _parsed: { data: CustomData[], errors: any[], meta: any };
 
 
-
   universeUpdated: EventEmitter<Universe> = new EventEmitter();
 
   dataDims: string[] = [];
@@ -53,6 +52,10 @@ export class DataService {
 
   // dataSource - property to show on the chart
   prepareData(chartType: ChartType, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
+    debugger;
+    if (!chartType && chartType !== ChartType.BarVertical) {
+      return [];
+    }
     if (chartType === ChartType.LineChart) {
       return this.mapToMultiData(dataToTransform, dataSources);
     } else {
@@ -63,10 +66,13 @@ export class DataService {
   mapToMultiData(data: CollectedData[], properties: DataProperty[]): MultiChartItem[] {
     const items: MultiChartItem[] = [];
     for (let i = 0; i < properties.length; i++) {
-      const item: MultiChartItem = {
-        name: dataPropertyLables[properties[i]],
-        series: []
-      };
+      const item: MultiChartItem = {name: '', series: []};
+      if (typeof properties[i] === 'number') {
+        item.name = dataPropertyLables[properties[i]];
+      } else {
+        item.name = dataPropertyLables[DataProperty[properties[i]]];
+      }
+
       item.series = data.map(p => this.mapToLineChartSeriesItem(p, properties[i]));
       items.push(item);
     }
@@ -77,21 +83,32 @@ export class DataService {
   mapToSeriesItem(data: CollectedData, properties: DataProperty[]): NumberSeriesItem[] {
     const items: NumberSeriesItem[] = [];
     for (let i = 0; i < properties.length; i++) {
-      items.push(
-        {
-          name: dataPropertyLables[properties[i]],
-          value: data[dataProperties[properties[i]]]
-        });
+      if (typeof properties[i] === 'number') {
+        items.push(
+          {
+            name: dataPropertyLables[properties[i]],
+            value: data[DataProperty[properties[i]]]
+          });
+      } else {
+        items.push(
+          {
+            name: dataPropertyLables[DataProperty[properties[i]]],
+            value: data[properties[i]]
+          });
+      }
     }
 
     return items;
   }
 
   mapToLineChartSeriesItem(data: CollectedData, property: DataProperty): SeriesItem {
-    const seriesItem: SeriesItem = {
-      value: data[dataProperties[property]],
-      name: new Date(data.time)
-    };
+    const seriesItem: SeriesItem = { value: 0, name: new Date(data.time) };
+
+    if (typeof property === 'number') {
+      seriesItem.value = data[DataProperty[property]];
+    } else {
+      seriesItem.value = data[property];
+    }
 
     return seriesItem;
   }

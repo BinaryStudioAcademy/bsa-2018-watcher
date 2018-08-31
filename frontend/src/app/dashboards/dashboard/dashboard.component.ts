@@ -374,6 +374,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
+    debugger;
     const dashChats: DashboardChart[] = dashboard.charts.map(c => this.instantiateDashboardChart(c));
 
     const item: DashboardMenuItem = {
@@ -474,7 +475,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         chartLabels: null,
         dimLabels: []
       },
-      theme: value.isLightTheme ? 'light' : 'dark'
+      theme: 'light' // value.isLightTheme ? 'light' : 'dark'
     };
 
     return dashChart;
