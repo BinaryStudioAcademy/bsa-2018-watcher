@@ -1,4 +1,4 @@
-﻿namespace Watcher.Core.Hubs
+namespace Watcher.Core.Hubs
 {
     using System;
     using System.Collections.Generic;

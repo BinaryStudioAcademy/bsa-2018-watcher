@@ -158,7 +158,7 @@
                 .RuleFor(o => o.Title, string.Empty)
                 .RuleFor(o => o.Type, f => f.Random.Enum<ChartType>())
                 .RuleFor(o => o.Sources, f => f.PickRandom("0,1"))
-                .RuleFor(o => o.IsLightTheme, true);
+                .RuleFor(o => o.IsLightTheme, true)
                 .RuleFor(o => o.IsDeleted, false);
 
             var charts = chartFaker.Generate(amount).ToArray();
