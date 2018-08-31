@@ -19,6 +19,7 @@ import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DataViewModule } from 'primeng/dataview';
 import { InvitesListComponent } from './organization-profile/invites-list.component';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   imports: [
@@ -41,7 +42,7 @@ import { InvitesListComponent } from './organization-profile/invites-list.compon
     TableModule,
     CheckboxModule,
     DataViewModule,
-    InputMaskModule
+    CalendarModule
   ],
   declarations: [
     SettingsComponent,

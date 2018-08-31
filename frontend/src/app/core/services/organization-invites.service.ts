@@ -20,6 +20,10 @@ export class OrganizationInvitesService {
     return this.apiService.get(`/${this.ctrlUrl}/${link}`);
   }
 
+  getByUser(id: string): Observable<OrganizationInvite[]> {
+    return this.apiService.get(`/${this.ctrlUrl}/getByUser/${id}`);
+  }
+
   create(organizationInvite: OrganizationInvite): Observable<OrganizationInvite> {
     return this.apiService.post(`/${this.ctrlUrl}`, organizationInvite);
   }
@@ -32,7 +36,7 @@ export class OrganizationInvitesService {
     return this.apiService.put(`/${this.ctrlUrl}/${id}`, organization);
   }
 
-/*   delete(id: number): Observable<boolean> {
+  delete(id: number): Observable<boolean> {
     return this.apiService.delete(`/${this.ctrlUrl}/${id}`);
-  } */
+  }
 }

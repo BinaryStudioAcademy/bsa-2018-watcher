@@ -22,7 +22,7 @@ export class OrganizationInvitesHub {
     this.connectToSignalR();
   }
 
-  connectToSignalR(): void {
+  private connectToSignalR(): void {
     this.createConnection();
     this.registerOnServerEvents();
     this.startInviteHubConnection();

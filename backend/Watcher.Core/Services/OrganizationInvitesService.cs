@@ -174,7 +174,23 @@
             return sb.ToString();
         }
 
+        public async Task<bool> DeleteEntityAsync(int id)
+        {
+            var entity = await _uow.OrganizationInvitesRepository.GetFirstOrDefaultAsync(i => i.Id == id);
 
+            await _uow.OrganizationInvitesRepository.DeleteAsync(id);
+
+            var result = await _uow.SaveAsync();
+
+            if (InvitesHub.UsersConnections.ContainsKey(entity.CreatedByUserId))
+            {
+                foreach (string connectionId in InvitesHub.UsersConnections[entity.CreatedByUserId])
+                    await _invitesHub.Clients.Client(connectionId)
+                        .SendAsync("DeleteInvite", id);
+            }
+
+            return result;
+        }
 
     }
 }

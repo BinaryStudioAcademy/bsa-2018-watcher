@@ -17,6 +17,6 @@ namespace Watcher.Core.Interfaces
 
         Task<bool> UpdateEntityByIdAsync(OrganizationInviteRequest request, int id);
 
-
+        Task<bool> DeleteEntityAsync(int id);
     }
 }
