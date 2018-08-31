@@ -5,7 +5,7 @@
     <p-header>List of invites</p-header>
     <ng-template let-invite pTemplate="listItem">
         <div class="ui-g ui-g-12 invite-item">
-            <div class="ui-g ui-g-12">
+            <div class="ui-g ui-g-12 item-link">
                 <div class="ui-g-12">Invite link:</div>
                 <div class="ui-g-12 date">
                     <div class="ui-fluid item-input">
@@ -14,7 +14,7 @@
                     <button pButton type="button" class="ui-button-danger invite-item-button" (click)="onDelete(invite.invite.id)" label="Delete"></button>          
                 </div> 
                 <div class="ui-g-12">
-                    <button pButton type="button" class="ui-button-danger" label="Copy"></button>          
+                    <p-button label="Copy" (click)="onCopy(invite.showLink)"></p-button>        
                 </div>                      
             </div>
             <div class="ui-g ui-g-12 invite-info">
