@@ -10,11 +10,9 @@
                 <div class="ui-g-12 date">
                     <div class="ui-fluid item-input">
                         <input type="text" disabled pInputText placeholder="{{invite.showLink}}">
-                    </div>         
-                    <button pButton type="button" class="ui-button-danger invite-item-button" (click)="onDelete(invite.invite.id)" label="Delete"></button>          
-                </div> 
-                <div class="ui-g-12">
-                    <p-button label="Copy" (click)="onCopy(invite.showLink)"></p-button>        
+                    </div>               
+                    <p-button label="Copy" class="invite-item-button" (click)="onCopy(invite.showLink)"></p-button>        
+                    <button pButton type="button" class="ui-button-danger invite-item-button" (click)="onDelete(invite.invite.id)" label="Delete"></button>
                 </div>                      
             </div>
             <div class="ui-g ui-g-12 invite-info">
@@ -23,7 +21,10 @@
                     <div class="ui-fluid item-input">
                         <p-calendar class="item-input" [(ngModel)]="invite.invite.experationDate"></p-calendar>
                     </div>
-                    <button pButton type="button" class="ui-button-success invite-item-button" (click)="onUpdate(invite.invite.id)" label="Update"></button>
+                    <button type="button" class="ui-button ui-state-default ui-corner-all ui-button-success invite-item-button" (click)="onUpdate(invite.invite.id)">
+                        <p-progressSpinner class="btn-spinner" *ngIf="isUpdating && updatingItem === invite.invite.id" strokeWidth="5"></p-progressSpinner>
+                        <span class="ui-button-text" *ngIf="(isUpdating && updatingItem !== invite.invite.id) || !isUpdating">Update</span>
+                    </button>
                 </div>
             </div>
         </div>

@@ -23,6 +23,8 @@ export class InvitesListComponent implements OnInit {
 
   indexFirstRecordPage = 0;
   rowsPerPage = 2;
+  isUpdating: boolean;
+  updatingItem: number;
 
   constructor(private organizationInvitesService: OrganizationInvitesService,
               private organizationInvitesHub: OrganizationInvitesHub,
@@ -49,21 +51,27 @@ export class InvitesListComponent implements OnInit {
   }
 
   onUpdate(id: number): void {
+    this.updatingItem = id;
+    this.isUpdating = true;
     const invite = this.invites.find(item => item.invite.id === id).invite;
 
     this.organizationInvitesService.update(id, invite).subscribe(value => {
       this.toastrService.success('Invite was updated');
+      this.isUpdating = false;
     }, err => {
       this.toastrService.error('Invite wasn`t updated');
+      this.isUpdating = false;
     });
   }
 
-  onDelete(id: number): void {
-    this.organizationInvitesService.delete(id).subscribe(value => {
-      this.toastrService.success('Invite was deleted');
-    }, err => {
-      this.toastrService.error('Invite wasn`t deleted');
-    });
+  async onDelete(id: number) {
+    if (await this.toastrService.confirm('You sure you want to delete this invite link? ')) {
+      this.organizationInvitesService.delete(id).subscribe(value => {
+        this.toastrService.success('Invite was deleted');
+      }, err => {
+        this.toastrService.error('Invite wasn`t deleted');
+      });
+    }
   }
 
   onCopy(link: string) {
