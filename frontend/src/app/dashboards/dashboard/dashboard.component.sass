@@ -71,3 +71,89 @@ nav
 
 .fa-dashboard
   padding-right: 10px
+
+.center
+  text-align: center
+
+.field-top
+  margin: 3px 0
+
+.field
+  margin: 9px 0 3px
+
+.view-chart
+  width: 716px
+  height: 352px
+  border: 1px solid #a6a6a6
+
+.gear
+  color: #9d9d9d
+  background-color: #F8FAFC
+  border: 1px solid #F8FAFC
+  font-size: 20px
+
+.gear:hover, .gear:enabled:focus, .gear:enabled:hover
+  color: #474747
+  background-color: #F8FAFC
+  border: 1px solid #F8FAFC
+
+.img-example
+  width: 93%
+  height: 650px
+  opacity: 0.6
+
+.img-example-wr
+  text-align: center
+  opacity: 0.6
+
+.text-pl
+  text-align: center
+  font-size: 17px
+  margin: 1px
+
+.width-left-part
+  width: 192px
+
+.container
+  display: flex
+
+  > div.charts
+    flex: 1 1 100%
+    text-align: center
+    margin-right: 10px
+
+    .viz-container
+      margin: 30px 0 10px 0
+
+    .chart
+      max-height: 600px
+      margin-top: 60px
+
+  > div.filters
+    flex: 0 0 250px
+    margin-left: 10px
+
+    .filter
+      margin-top: 20px
+      width: 100%
+      clear: both
+      border-left: 1px solid lightgrey
+      padding-left: 10px
+
+  .cat-filter-item
+    display: flex
+    clear: both
+
+    > div
+      flex: 1 1 50%
+
+    ngx-button
+      visibility: hidden
+      display: inline-block
+
+    &:hover ngx-button
+      visibility: initial
+
+    .count
+      float: right
+

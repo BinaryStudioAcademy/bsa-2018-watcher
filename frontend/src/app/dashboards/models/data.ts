@@ -1,24 +1,21 @@
-// export let single = [
-//   {
-//     'name': 'Germany',
-//     'value': 8940000,
-//     'color': 'red'
-//   },
-//   {
-//     'name': 'USA',
-//     'value': 5000000,
-//     'color': 'green'
-//   },
-//   {
-//     'name': 'France',
-//     'value': 7200000,
-//     'color': 'yellow'
-//   }
-// ];
+export let single1 = [
+  {
+    'name': 'Germany',
+    'value': 8940000
+  },
+  {
+    'name': 'USA',
+    'value': 5000000
+  },
+  {
+    'name': 'France',
+    'value': 7200000
+  }
+];
 
 export let single: any[] = [
   {
-    name:  'qweqw',
+    name: 'qweqw',
     series: [
       {
         value: 1311,
