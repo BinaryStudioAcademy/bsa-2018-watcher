@@ -6,18 +6,21 @@
     <ng-template let-invite pTemplate="listItem">
         <div class="ui-g ui-g-12 invite-item">
             <div class="ui-g ui-g-12">
-                <div class="label">Invite link:</div>
-                <div class="ui-g ui-g-12 date">
-                    <div class="ui-g-8 ui-fluid item-input">
-                        <input type="text" disabled pInputText value="{{invite.showLink}}">
+                <div class="ui-g-12">Invite link:</div>
+                <div class="ui-g-12 date">
+                    <div class="ui-fluid item-input">
+                        <input type="text" disabled pInputText placeholder="{{invite.showLink}}">
                     </div>         
                     <button pButton type="button" class="ui-button-danger invite-item-button" (click)="onDelete(invite.invite.id)" label="Delete"></button>          
-                </div>                       
+                </div> 
+                <div class="ui-g-12">
+                    <button pButton type="button" class="ui-button-danger" label="Copy"></button>          
+                </div>                      
             </div>
             <div class="ui-g ui-g-12 invite-info">
-                <div class="label">Expired at:</div>
-                <div class="ui-g ui-g-12 date">
-                    <div class="ui-g-8 ui-fluid item-input">
+                <div class="ui-g-12">Expired at:</div>
+                <div class="ui-g-12 date">
+                    <div class="ui-fluid item-input">
                         <p-calendar class="item-input" [(ngModel)]="invite.invite.experationDate"></p-calendar>
                     </div>
                     <button pButton type="button" class="ui-button-success invite-item-button" (click)="onUpdate(invite.invite.id)" label="Update"></button>
