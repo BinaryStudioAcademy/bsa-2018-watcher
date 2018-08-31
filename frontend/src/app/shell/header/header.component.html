@@ -32,10 +32,9 @@
       <!--<button #btn type="button" pButton icon="fa fa-fw fa-cog" (click)="getUserClaims()"></button>-->
     <!--</div>-->
 
-    <a class="user-info" (click)="op1.toggle($event)">
-      <span>{{ currentUser?.displayName }}</span>
+    <button pButton class="user-info-btn" label="{{currentUser?.displayName}}" (click)="op1.toggle($event)">
       <img src="{{currentUser?.photoURL}}" class="user-photo" alt="" />
-    </a>
+    </button>
 
     <p-overlayPanel #op1 styleClass="user-overlay">
       <div class="user-info-wrp">
@@ -45,7 +44,7 @@
         <div class="user-overlay-info">
           <div class="user-name">{{ currentUser?.displayName }}</div>
           <p class="user-email">{{ currentUser?.email }}</p>
-          <p class="user-organization"><i class="fa fa-fw fa-building-o"></i>{{currentUser?.lastPickedOrganization?.name}}</p>
+          <p class="user-organization">{{currentUser?.lastPickedOrganization?.name}}</p>
         </div>
       </div>
       <div class="overlay-buttons">
