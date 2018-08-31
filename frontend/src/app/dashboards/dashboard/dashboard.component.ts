@@ -29,6 +29,9 @@ import {DashboardChart} from '../models/dashboard-chart';
 
 const defaultOptions = {
   view: [716, 337],
+  // colorScheme:  {
+  //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  // },
   colorScheme: colorSets.find(s => s.name === 'cool'),
   schemeType: 'ordinal',
   showLegend: true,
@@ -69,8 +72,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   creation: boolean;
   loading = false;
   displayEditDashboard = false;
-  collectedDataForChart: CollectedData[];
-  percentageInfoToDisplay: PercentageInfo[];
+  collectedDataForChart: CollectedData[] = [];
+  percentageInfoToDisplay: PercentageInfo[] = [];
   percentageInfoToDisplaySingle: PercentageInfo;
   popupAddChart = false;
   dropdownType: SelectItem[];
@@ -82,7 +85,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Inputs for Chart
   chartOptions: CustomChart = defaultOptions;
-  dataForChart: CustomData[];
+  dataForChart: CustomData[] = [];
   chartType: CustomChartType = customChartTypes[0];
   showPreview = false;
 
@@ -93,8 +96,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   set PercentageInfoToDisplaySingle(info: PercentageInfo) {
     this.percentageInfoToDisplaySingle = info;
   }
-
-  // charts: DashboardChart[] = [];
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -145,15 +146,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.chartOptions.yAxisLabel = 'Process';
       this.chartOptions.xAxisLabel = '';
     }
-   /* if (this.selectedType === ChartType.BarVertical) {
-      this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Parameters';
-      this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
-    } else if (this.selectedType === ChartType.LineChart) {
-      this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Time';
-      this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
-    } else if (this.selectedType === ChartType.Guage) {
-      this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Process';
-    }*/
+    /* if (this.selectedType === ChartType.BarVertical) {
+       this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Parameters';
+       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
+     } else if (this.selectedType === ChartType.LineChart) {
+       this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Time';
+       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
+     } else if (this.selectedType === ChartType.Guage) {
+       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Process';
+     }*/
   }
 
   async ngOnInit(): Promise<void> {
@@ -226,19 +227,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const plusItem = this.createPlusItem();
     this.dashboardMenuItems.push(plusItem);
     this.dashboardsService.getAllByInstance(id)
-      .subscribe((value = []) => {
+      .subscribe((value) => {
         if (value && value.length > 0) {
           this.dashboards = value;
-
-
-          // !!!!!!!!!!!!!!!!!!!!!!!!
-          // this.dashboards.forEach(d => { d.charts.forEach(ch => arr = ch.sources.split(',')); });
-
-
           // Fill Dashboard Menu Items
           this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
           this.activeDashboardItem = this.dashboardMenuItems[0];
-          // this.charts = this.dashboards[0].charts.map(c => this.instantiateDashboardChart(c));
         }
         this.loading = false;
         this.toastrService.success('Successfully got instance info from server');
@@ -405,8 +399,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   showPopupAddChart() {
-    this.popupAddChart = true;
     this.processData();
+    this.popupAddChart = true;
   }
 
   closeMy() {
@@ -420,7 +414,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedType = null;
     this.threshold = 0;
     this.chartForm.reset();
-    this.dataForChart = null;
+    this.dataForChart = [];
   }
 
   onCreateChart() {
@@ -441,17 +435,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   instantiateDashboardChart(value: Chart): DashboardChart {
+    debugger;
     const props: DataProperty[] = [];
     const arrNumbers = value.sources.split(',');
 
     for (let i = 0; i < arrNumbers.length; i++) {
-      console.log(DataProperty[arrNumbers[i]]);
-      const d = DataProperty[arrNumbers[i]];
-      props.push(d);
+      props.push(DataProperty[arrNumbers[i]]);
     }
-
-    // this.dashboards.forEach(d => { d.charts.forEach(ch => arr = ch.sources.split(',')); });
-
     const dashChart: DashboardChart = {
       view: [800, 400],
       colorScheme: defaultOptions.colorScheme,

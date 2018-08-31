@@ -1,4 +1,5 @@
-<app-edit-dashboard (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard" [dashboardTitle]="editTitle"></app-edit-dashboard>
+<app-edit-dashboard (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard"
+                    [dashboardTitle]="editTitle"></app-edit-dashboard>
 <div class="site-wrap">
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
@@ -16,23 +17,24 @@
     <div>
       <p class="text-pl">Click <i class="fa fa-gear"></i> and add chart or plot</p>
       <!--<div class="img-example-wr">-->
-        <!--<img src="assets\chart-example.png" alt="example" class="img-example" />-->
+      <!--<img src="assets\chart-example.png" alt="example" class="img-example" />-->
       <!--</div>-->
     </div>
 
-      <div class="charts" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">
-        <div class="viz-container" [ngClass]="chart.theme" *ngFor="let chart of activeDashboardItem.charts">
-          <h1></h1>
-          <app-chart
-            class="chart"
-            [chart]="chart"
-            [data]="chart.data"
-            [activeEntries]="chart.activeEntries"
-            [chartType]="chart.chartType">
-          </app-chart>
-        </div>
+    <div class="charts" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1
+    && activeDashboardItem.charts && activeDashboardItem.charts.length > 0">
+      <div class="viz-container" [ngClass]="chart.theme" *ngFor="let chart of activeDashboardItem.charts">
+        <h1></h1>
+        <app-chart
+          class="chart"
+          [chart]="chart"
+          [data]="chart.data"
+          [activeEntries]="chart.activeEntries"
+          [chartType]="chart.chartType">
+        </app-chart>
+      </div>
     </div>
-      <!--<div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">-->
+    <!--<div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">-->
     <!--<app-charts></app-charts>-->
     <!--<div class="dashboard-item">-->
     <!--<app-percentage-bar-chart [dataToPlot]="percentageInfoToDisplaySingle"></app-percentage-bar-chart>-->
@@ -84,27 +86,33 @@
 
 <p-confirmDialog header="Confirmation " icon="pi pi-exclamation-triangle " width="425 " #cd>
   <p-footer>
-    <button pButton type="button " class="ui-button-success ui-button-raised " icon="pi pi-times " label="No " (click)="cd.reject() "></button>
-    <button pButton type="button " class="ui-button-danger ui-button-raised " icon="pi pi-check " label="Yes " (click)="cd.accept() "></button>
+    <button pButton type="button " class="ui-button-success ui-button-raised " icon="pi pi-times " label="No "
+            (click)="cd.reject() "></button>
+    <button pButton type="button " class="ui-button-danger ui-button-raised " icon="pi pi-check " label="Yes "
+            (click)="cd.accept() "></button>
   </p-footer>
 </p-confirmDialog>
 <p-toast position="bottom-right" life="500"></p-toast>
 
 
-<p-dialog header="Create chart" [(visible)]="popupAddChart" [modal]="true" [responsive]="true" [width]="1000" [minWidth]="850"
-  [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false (onHide)="closeMy()">
+<p-dialog header="Create chart" [(visible)]="popupAddChart" [modal]="true" [responsive]="true" [width]="1000"
+          [minWidth]="850"
+          [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false
+          (onHide)="closeMy()">
   <!--  [baseZIndex]="10000"-->
   <!-- <app-chart-builder (addChart)="addChartToDashboard($event)"></app-chart-builder>   -->
   <div class="ui-g ui-fluid">
     <div class="ui-g-3">
       <p class="field-top">Select chart type: </p>
-      <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" placeholder="Select a type" [style]="{'width':'192px'}" (onChange)="processData()">
+      <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" placeholder="Select a type"
+                  [style]="{'width':'192px'}" (onChange)="processData()">
       </p-dropdown>
       <p class="field">Select source: </p>
-      <p-multiSelect [options]="dropdownSource" [(ngModel)]="selectedSource" [style]="{'width':'192px'}" (onChange)="processData()">
+      <p-multiSelect [options]="dropdownSource" [(ngModel)]="selectedSource" [style]="{'width':'192px'}"
+                     (onChange)="processData()">
       </p-multiSelect>
       <form [formGroup]="chartForm">
-         <p class="field">Number of heavy processes:</p>
+        <p class="field">Number of heavy processes:</p>
         <div class="width-left-part">
           <p-spinner size="17" formControlName="mostLoaded" [min]="0" [max]="100"></p-spinner>
         </div>
@@ -116,12 +124,12 @@
       <form [formGroup]="chartForm">
         <p class="field">Show multiple:
           <p-checkbox formControlName="isMultiple" binary="true"></p-checkbox>
-        </p>   
-      </form>    
-        <p class="field">Y axis label (optional): </p>
-        <input class="width-left-part" type="text" [(ngModel)]="chartOptions.yAxisLabel" pInputText/>
-        <p class="field">X axis label (optional): </p>
-        <input class="width-left-part" type="text" [(ngModel)]="chartOptions.xAxisLabel" pInputText/>
+        </p>
+      </form>
+      <p class="field">Y axis label (optional): </p>
+      <input class="width-left-part" type="text" [(ngModel)]="chartOptions.yAxisLabel" pInputText/>
+      <p class="field">X axis label (optional): </p>
+      <input class="width-left-part" type="text" [(ngModel)]="chartOptions.xAxisLabel" pInputText/>
     </div>
     <div class="ui-g-9">
       <p class="field-top center">Visualization</p>
@@ -133,8 +141,9 @@
   </div>
   <p-footer>
     <div class="center"> <!-- [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))"-->
-     <!--&& selectedSource <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
-      <button type="button"  pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()" label="Save"></button>
+      <!--&& selectedSource <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()"
+              label="Save"></button>
       <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
     </div>
   </p-footer>
