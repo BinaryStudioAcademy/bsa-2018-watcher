@@ -258,27 +258,49 @@ export class AuthService {
   }
 
   getTokens() {
-    return forkJoin( this.getFirebaseToken(),
-              this.getWatcherToken());
+    return forkJoin(this.getFirebaseToken(), this.getWatcherToken());
   }
 
-  getFirebaseToken(): Observable<string> {
+  async getFirebaseToken(): Promise<string> {
     const currentToken =  localStorage.getItem('firebaseToken');
     if (this.tokenHelper.isTokenExpired(currentToken)) {
-      console.log(`${new Date()} firebase token expired`);
-      return from(this.refreshFirebaseToken());
+      await this.refreshFirebaseToken();
     }
-    return from(localStorage.getItem('firebaseToken'));
+    return localStorage.getItem('firebaseToken');
   }
 
-
-  getWatcherToken(): Observable<string> {
+  async getWatcherToken(): Promise<string> {
     const currentToken = localStorage.getItem('watcherToken');
     if (this.tokenHelper.isTokenExpired(currentToken)) {
-      console.log(`${new Date()} watcher token expired`);
-      return from(this.refreshWatcherToken());
+      await this.refreshWatcherToken();
     }
-    return from(localStorage.getItem('watcherToken'));
+    return localStorage.getItem('watcherToken');
+  }
+
+  async refreshFirebaseToken() {
+    const token = localStorage.getItem('firebaseToken');
+    if (this.tokenHelper.isTokenExpired(token)) {
+      return;
+    }
+
+    const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
+    localStorage.setItem('firebaseToken', firebaseToken);
+  }
+
+  async refreshWatcherToken() {
+    const token = localStorage.getItem('watcherToken');
+    if (!this.tokenHelper.isTokenExpired(token)) {
+      return;
+    }
+
+    const userInfo = this.getCurrentUserLS();
+     const req: UserLoginRequest = {
+      uid: userInfo.id,
+      email: userInfo.email
+    };
+
+    const tokenDto = await this.tokenService.login(req).toPromise();
+    localStorage.setItem('watcherToken', tokenDto.watcherJWT);
   }
 
   logout(): boolean {
@@ -290,39 +312,5 @@ export class AuthService {
       .catch(err => console.error(err));
 
     return true;
-  }
-
-  public async refreshFirebaseToken() {
-    const token = localStorage.getItem('firebaseToken');
-    if (this.tokenHelper.isTokenExpired(token)) {
-      const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
-      localStorage.removeItem('firebaseToken');
-      localStorage.setItem('firebaseToken', firebaseToken);
-      console.log(firebaseToken);
-    }
-    return localStorage.getItem('firebaseToken');
-  }
-
-  public async refreshWatcherToken() {
-    const token = localStorage.getItem('watcherToken');
-    if (!this.tokenHelper.isTokenExpired(token)) {
-      return;
-    }
-    const userInfo = this.getCurrentUserLS();
-     const req: UserLoginRequest = {
-      uid: userInfo.id,
-      email: userInfo.email
-    };
-    console.log(userInfo);
-    await this.tokenService.login(req).toPromise()
-      .then(tokenDto => {
-        localStorage.removeItem('watcherToken');
-        localStorage.setItem('watcherToken', tokenDto.watcherJWT);
-        console.log(tokenDto.watcherJWT);
-      })
-      .catch(err => {
-        throw err;
-      });
-    return localStorage.getItem('watcherToken');
   }
 }
