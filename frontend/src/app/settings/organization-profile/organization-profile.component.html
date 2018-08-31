@@ -110,21 +110,17 @@
             <div class="ui-g-12 ui-md-12 ui-lg-12">
 
                 <div class="label">Invite:</div>
-                <div class="ui-g ui-fluid">
-                    <div class="ui-g-12 ui-lg-12">
-                        <input disabled [(ngModel)]="inviteLink" required minlength="20" class="form-control" pInputText placeholder="Invite link">
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12 ui-lg-12">
+                            <input disabled [(ngModel)]="inviteLink" required minlength="20" class="form-control" pInputText placeholder="Invite link">
+                        </div>
                     </div>
-                </div>
-                <div class="ui-g ui-fluid btn-under-link">
-                    <div class="btn-panel">
-                        <button pButton label="&nbsp;" (click)="onInvite()" class="ui-button-raised ui-button-icon-primary btn-generate" [disabled]="isInviting">
-                            <p-progressSpinner class="btn-spinner" *ngIf="isInviting" strokeWidth="5"></p-progressSpinner>
-                            <span class="ui-button-text" *ngIf="!isInviting" style="margin-left: 5px;">Generate</span>
-                        </button>
-                    </div>
-                    <div class="btn-panel small-space">
-                        <button pButton label="Copy" (click)="onCopy()" [disabled]="inviteLink === '' "></button>
-                    </div>
+                <div class="ui-fluid">
+                    <button pButton label="Generate" (click)="onInvite()" class="view-inline ui-button-raised ui-button-icon-primary btn-inline-flex" [disabled]="isInviting">
+                        <p-progressSpinner class="btn-spinner" *ngIf="isInviting" strokeWidth="5"></p-progressSpinner>
+                        <span class="ui-button-text" *ngIf="!isInviting">Generate</span>
+                    </button>
+                   
                 </div>
 
                 <div class="label">Send invite link to:</div>
@@ -144,7 +140,7 @@
                             <button pButton label="&nbsp;" (click)="onSentInviteToEmail()" class="view-inline ui-button-raised ui-button-success btn-inline-flex"
                                 [disabled]="inviteLink === '' || iEmail?.invalid || isSending">
                                 <p-progressSpinner class="btn-spinner" *ngIf="isSending" strokeWidth="5"></p-progressSpinner>
-                                <span class="ui-button-text" *ngIf="!isSending" style="margin-left: 8px;">Send</span>
+                                <span class="ui-button-text" *ngIf="!isSending">Send</span>
                             </button>
                         
 
