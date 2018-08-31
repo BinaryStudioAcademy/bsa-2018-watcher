@@ -44,12 +44,9 @@ namespace Watcher.Core.Services
             return dto;
         }
 
-        public async Task<ChartDto> CreateEntityAsync(ChartDto request)
+        public async Task<ChartDto> CreateEntityAsync(ChartRequest request)
         {
-            /*var entity = _mapper.Map<ChartRequest, Chart>(request); ChartRequest
-      
-            entity.Sources = string.Join(",", request.Sources);*/
-            var entity = _mapper.Map<ChartDto, Chart>(request);
+            var entity = _mapper.Map<ChartRequest, Chart>(request);
 
             entity = await _uow.ChartsRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();

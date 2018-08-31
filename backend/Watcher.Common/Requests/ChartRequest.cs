@@ -2,8 +2,6 @@
 
 namespace Watcher.Common.Requests
 {
-    using System.Collections.Generic;
-
     using Watcher.Common.Enums;
 
     [ExportClassToTypescript]
@@ -61,7 +59,7 @@ namespace Watcher.Common.Requests
 
         public ChartType Type { get; set; }
 
-        public List<DataProperty> Sources { get; set; }
+        public string Sources { get; set; }
 
         public bool IsLightTheme { get; set; }
     }

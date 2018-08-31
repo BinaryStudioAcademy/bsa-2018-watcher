@@ -98,9 +98,9 @@
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
         [HttpPost]
-        public virtual async Task<ActionResult<ChartDto>> Create([FromBody] ChartDto request)
+        public virtual async Task<ActionResult<ChartDto>> Create([FromBody] ChartRequest request)
         {
-            if (!ModelState.IsValid) /* ChartRequest*/
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }

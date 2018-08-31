@@ -1,6 +1,6 @@
-import {Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {ConfirmationService} from 'primeng/primeng';
-import {MessageService, MenuItem} from 'primeng/api';
+import {MenuItem, MessageService, SelectItem} from 'primeng/api';
 import {DashboardService} from '../../core/services/dashboard.service';
 import {Dashboard} from '../../shared/models/dashboard.model';
 import {ToastrService} from '../../core/services/toastr.service';
@@ -18,8 +18,7 @@ import {Chart} from '../../shared/models/chart.model';
 import {ChartType, chartTypes} from '../../shared/models/chart-type.enum';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {ChartService} from '../../core/services/chart.service';
-import {SelectItem} from 'primeng/api';
-import {FormControl, FormBuilder} from '@angular/forms';
+import {FormBuilder, FormControl} from '@angular/forms';
 import {CollectedDataService} from '../../core/services/collected-data.service';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {customChartTypes} from '../charts/chart-builder/customChartTypes';
@@ -245,7 +244,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           // Fill Dashboard Menu Items
           this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
           this.activeDashboardItem = this.dashboardMenuItems[0];
-          this.charts = this.dashboards[0].charts.map(c => this.instantiateChart(c));
+          this.charts = this.dashboards[0].charts.map(c => this.instantiateDashboardChart(c));
         }
         this.loading = false;
         this.toastrService.success('Successfully got instance info from server');
@@ -423,9 +422,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.popupAddChart = false;
 
     if (true) {
-      this.chartService.create(this.createChart()).subscribe(
+      this.chartService.create(this.createChartRequest()).subscribe(
         value => {
-          const dashChat: DashboardChart = this.instantiateChart(value);
+          const dashChat: DashboardChart = this.instantiateDashboardChart(value);
           this.charts.push(dashChat);
           this.toastrService.success('Chart was created');
           // this.activeDashboardItem.charts.push(value);
@@ -436,10 +435,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  instantiateChart(value: Chart): DashboardChart {
+  instantiateDashboardChart(value: Chart): DashboardChart {
     // TODO: parse here SourcesString and input in method prepareData
     // TODO: convert to enum type
-    // const props: DataProperty[] = value.sources.split(',');
+    const props: DataProperty[] = []; // (DataProperty[])
+    const arrNumbers = value.sources.split(',');
+
+    for (let i = 0; i < arrNumbers.length; i++) {
+      console.log(DataProperty[i]);
+      props.push();
+    }
+
+    // this.dashboards.forEach(d => { d.charts.forEach(ch => arr = ch.sources.split(',')); });
+
     const dashChart: DashboardChart = {
       view: [800, 400],
       colorScheme: defaultOptions.colorScheme,
@@ -464,7 +472,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       title: value.title,
 
-      data: this.dataService.prepareData(value.type, , this.collectedDataForChart), // this.dataForChart,
+      data: this.dataService.prepareData(value.type, props, this.collectedDataForChart), // this.dataForChart,
       activeEntries: [],
       chartType: {
         name: chartTypes[value.type],
@@ -478,9 +486,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return dashChart;
   }
 
-  createChart() {
+  createChartRequest(): ChartRequest {
+    debugger;
     const chart: ChartRequest = {
-      // showTotal: this.chartForm.get('isMultiple').value
       showCommon: this.chartForm.get('isMultiple').value,
       threshold: this.threshold,
       mostLoaded: '' + this.chartForm.get('mostLoaded').value,
@@ -503,35 +511,35 @@ export class DashboardComponent implements OnInit, OnDestroy {
       isTooltipDisabled: this.chartOptions.tooltipDisabled,
       isShowSeriesOnHover: this.chartOptions.showSeriesOnHover,
       title: this.chartOptions.title,
-      type: this.selectedType, // if ChartType.Plot -> Bad request
+      type: this.selectedType,
       sources: this.selectedSource.join(),
       isLightTheme: this.chartOptions.theme === 'light',
     };
     return chart;
   }
 
-  onEditChart(chart: ChartRequest) {
-    this.chartService.update(1, chart).subscribe(
-      value => {
-        this.toastrService.success('The chart was updated');
-      },
-      error => {
-        this.toastrService.error(`Error ocured status: ${error.message}`);
-      });
-  }
-
-
-  onDeleteChart(id: number) {
-    this.chartService.delete(111).subscribe(
-      value => {
-        this.toastrService.success('The chart was deleted');
-      },
-      error => {
-        this.toastrService.error(`Error ocured status: ${error.message}`);
-      });
-  }
-
-  getSignalRClaims() {
-    this.dashboardsHub.getSignalRClaims();
-  }
+  // onEditChart(chart: ChartRequest) {
+  //   this.chartService.update(1, chart).subscribe(
+  //     value => {
+  //       this.toastrService.success('The chart was updated');
+  //     },
+  //     error => {
+  //       this.toastrService.error(`Error ocured status: ${error.message}`);
+  //     });
+  // }
+  //
+  //
+  // onDeleteChart(id: number) {
+  //   this.chartService.delete(111).subscribe(
+  //     value => {
+  //       this.toastrService.success('The chart was deleted');
+  //     },
+  //     error => {
+  //       this.toastrService.error(`Error ocured status: ${error.message}`);
+  //     });
+  // }
+  //
+  // getSignalRClaims() {
+  //   this.dashboardsHub.getSignalRClaims();
+  // }
 }

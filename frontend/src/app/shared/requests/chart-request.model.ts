@@ -1,6 +1,5 @@
 ﻿
 import { ChartType } from '../models/chart-type.enum';
-import { DataProperty } from '../models/data-property.enum';
 
 export interface ChartRequest  {
    showCommon: boolean;
@@ -25,7 +24,7 @@ export interface ChartRequest  {
    isShowSeriesOnHover: boolean;
    title: string;
    type: ChartType;
-   sources: DataProperty[];
+   sources: string;
    isLightTheme: boolean;
 }
 
