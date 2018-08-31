@@ -1,4 +1,4 @@
-﻿namespace Watcher.Hubs
+﻿namespace Watcher.Core.Hubs
 {
     using System;
     using System.Collections.Generic;
@@ -8,19 +8,24 @@
     using Microsoft.AspNetCore.Authorization;
 
     using Watcher.Common.Requests;
+    using Watcher.Common.Dtos;
     using Watcher.Core.Interfaces;
     using Watcher.Common.Helpers.Extensions;
 
-    public class ChatHub : Hub
+    public class ChatsHub : Hub
     {
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
+        private readonly IEmailProvider _emailProvider;
 
         private static readonly Dictionary<string, List<string>> UsersConnections = new Dictionary<string, List<string>>();
 
-        public ChatHub(IChatsService chatsService, 
-                        IMessagesService messagesService)
+        public ChatsHub(
+            IChatsService chatsService,
+            IMessagesService messagesService,
+            IEmailProvider emailProvider)
         {
+            _emailProvider = emailProvider;
             _chatsService = chatsService;
             _messagesService = messagesService;
         }
@@ -35,6 +40,9 @@
 
             foreach (var userDto in usersInChat)
             {
+                // Sending to email
+                await SendToEmailIfNeeded(userDto, createdMessage);
+
                 if (!UsersConnections.ContainsKey(userDto.Id)) continue;
                 foreach (string connectionId in UsersConnections[userDto.Id])
                     await Clients.Client(connectionId).SendAsync("ReceiveMessage", createdMessage);
@@ -150,6 +158,20 @@
         public bool RemoveUserConnection(string userId, string connectionId)
         {
             return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
+        }
+
+        private async Task SendToEmailIfNeeded(UserDto userDto, MessageDto messageDto)
+        {
+            if (userDto.Id != messageDto.User.Id)
+            {
+                var settings = await _chatsService.GetSettingsForUserIdAsync(userDto.Id, messageDto.ChatId);
+                if (settings != null && settings.IsEmailable)
+                {
+                    await _emailProvider.SendMessageOneToOne("watcher@net.com",
+                        $"Chat message from {messageDto.User.DisplayName}", userDto.Email,
+                        messageDto.Text, "");
+                }
+            }
         }
     }
 }

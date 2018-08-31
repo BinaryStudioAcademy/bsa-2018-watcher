@@ -1,11 +1,13 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 
-import {HubConnection} from '@aspnet/signalr';
+import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
-import {environment} from '../../../environments/environment';
-import {SampleRequest} from '../../shared/models/sample-request.model';
-import {AuthService} from '../services/auth.service';
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../services/auth.service';
 import { Notification } from '../../shared/models/notification.model';
+import { NotificationType } from '../../shared/models/notification-type.enum';
+
+import { Message } from '../../shared/models/message.model';
 
 
 @Injectable({
@@ -16,46 +18,31 @@ export class NotificationsHubService {
   private connectionIsEstablished = false;
 
   notificationReceived = new EventEmitter<Notification>();
+  notificationDeleted = new EventEmitter<number>();
+
   connectionEstablished = new EventEmitter<Boolean>();
 
   constructor(private authService: AuthService) {
     this.connectToSignalR();
   }
 
-  connectToSignalR(): void {
+  private connectToSignalR(): void {
     this.createConnection();
     this.registerOnServerEvents();
     this.startNotificationHubConnection();
   }
 
-  send(userId: string, item: string): string {
+  send(notification: Notification, type: NotificationType) {
     if (this.hubConnection) {
-      this.hubConnection.invoke('Send', userId, item)
-                         .catch(err => console.error(err));
+      this.hubConnection.invoke('SendNotification', notification, type)
+        .catch(err => console.error(err));
     }
-    return item;
   }
 
-  createSample(request: SampleRequest): SampleRequest {
+  delete(notification: Notification) {
     if (this.hubConnection) {
-      this.hubConnection.invoke('CreateSample', request)
-                         .catch(err => console.error(err));
-    }
-    return request;
-  }
-
-  sendMessage(mess: string): string {
-    if (this.hubConnection) {
-      this.hubConnection.invoke('BroadcastMessage', mess)
-                         .catch(err => console.error(err));
-    }
-    return mess;
-  }
-
-  echo(): void {
-    if (this.hubConnection) {
-      this.hubConnection.invoke('Echo')
-                         .catch(err => console.error(err));
+      this.hubConnection.invoke('DeleteNotification', notification)
+        .catch(err => console.error(err));
     }
   }
 
@@ -65,15 +52,20 @@ export class NotificationsHubService {
     const connPath = `${environment.server_url}/notifications?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(connPath, ) // {accessTokenFactory: () => firebaseToken}
+      .withUrl(connPath) // {accessTokenFactory: () => firebaseToken}
       .configureLogging(signalR.LogLevel.Information)
       .build();
   }
 
   private registerOnServerEvents(): void {
     this.hubConnection.on('AddNotification', (data: Notification) => {
-      console.log(data);
+      console.log('Notification added');
       this.notificationReceived.emit(data);
+    });
+
+    this.hubConnection.on('DeleteNotification', (data: number) => {
+      console.log('Notification deleted');
+      this.notificationDeleted.emit(data);
     });
 
     // On Close open connection again

@@ -127,9 +127,10 @@ export class AuthService {
       uid: this.userRegisterRequest.uid,
       email: this.userRegisterRequest.email
     };
+    const firebaseToken = await credential.user.getIdToken(true);
 
-    const firebaseToken = await credential.user.getIdToken();
     localStorage.setItem('firebaseToken', firebaseToken);
+
     console.log(credential.user.photoURL);
     return this.tokenService.login(request).toPromise()
       .then(tokenDto => {
@@ -151,7 +152,11 @@ export class AuthService {
   }
 
   async signInWithGoogle(): Promise<boolean> {
-    return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider().addScope('email'))
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('email');
+    provider.setCustomParameters({ prompt : 'select_account'});
+
+    return await this._firebaseAuth.auth.signInWithPopup(provider)
       .then(res => {
         return this.login(res, 'Google');
       })
@@ -168,7 +173,11 @@ export class AuthService {
   }
 
   async signInWithFacebook(): Promise<boolean> {
-    return await this._firebaseAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider().addScope('email'))
+    const provider = new firebase.auth.FacebookAuthProvider();
+    provider.addScope('email');
+    provider.setCustomParameters({ auth_type: 'reauthenticate'});
+
+    return await this._firebaseAuth.auth.signInWithPopup(provider)
       .then(res => {
         return this.login(res, 'Facebook');
       })
@@ -267,5 +276,11 @@ export class AuthService {
       .catch(err => console.error(err));
 
     return true;
+  }
+
+  async refreshToken() {
+    const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
+    localStorage.removeItem('firebaseToken');
+    localStorage.setItem('firebaseToken', firebaseToken);
   }
 }

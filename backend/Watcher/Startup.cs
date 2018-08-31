@@ -41,7 +41,6 @@
     using Watcher.DataAccess.Data;
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
-    using Watcher.Hubs;
     using Watcher.Utils;
 
     public class Startup
@@ -249,7 +248,7 @@
                         routes.MapHub<NotificationsHub>("/notifications");
                         routes.MapHub<DashboardsHub>("/dashboards");
                         routes.MapHub<InvitesHub>("/invites");
-                        routes.MapHub<ChatHub>("/chatsHub");
+                        routes.MapHub<ChatsHub>("/chatsHub");
                     });
             }
             else
@@ -259,7 +258,7 @@
                         routes.MapHub<NotificationsHub>("/notifications");
                         routes.MapHub<DashboardsHub>("/dashboards");
                         routes.MapHub<InvitesHub>("/invites");
-                        routes.MapHub<ChatHub>("/chatsHub");
+                        routes.MapHub<ChatsHub>("/chatsHub");
                     });
             }
 
@@ -274,7 +273,7 @@
             string connectionString = configuration.GetConnectionString(enviroment == EnvironmentName.Production ? "AzureCosmosDbConnection" : "MongoDbConnection");
 
             services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-                  options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage"));
+                  options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
         }
 
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)

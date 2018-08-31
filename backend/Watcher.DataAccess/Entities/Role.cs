@@ -1,8 +1,10 @@
-﻿namespace Watcher.DataAccess.Entities
+﻿using Watcher.Common.Interfaces.Entities;
+
+namespace Watcher.DataAccess.Entities
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class Role : Entity<int>
+    public class Role : Entity<int>, ISoftDeletable
     {
         public Role() { }
 
@@ -16,5 +18,13 @@
 
         [Required]
         public string Name { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
+
+        public void OnDelete()
+        {
+            IsDeleted = true;
+        }
     }
 }

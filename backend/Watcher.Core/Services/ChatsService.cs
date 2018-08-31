@@ -28,7 +28,7 @@
         {
             var chats = await _uow.ChatsRepository.GetRangeAsync(
                 include: c => c.Include(x => x.UserChats)
-                               .ThenInclude(x => x.User), filter: chat => chat.IsActive);
+                               .ThenInclude(x => x.User));
 
             var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats);
 
@@ -37,12 +37,13 @@
 
         public async Task<ChatDto> GetEntityByIdAsync(int id)
         {
-            var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id && s.IsActive,
+            var chat = await _uow.ChatsRepository.GetFirstOrDefaultAsync(s => s.Id == id,
                                 include: chats => chats.Include(c => c.CreatedBy)
                                                         .Include(c => c.Messages)
                                                             .ThenInclude(c => c.User)
                                                         .Include(c => c.Organization)
                                                         .Include(c => c.CreatedBy)
+                                                        .Include(c => c.UsersSettings)
                                                         .Include(c => c.UserChats)
                                                             .ThenInclude(uc => uc.User));
 
@@ -50,26 +51,45 @@
 
             var dto = _mapper.Map<Chat, ChatDto>(chat);
 
+            dto.UnreadMessagesCount = dto.Messages.Count(m => !m.WasRead);
+
             return dto;
         }
 
         public async Task<IEnumerable<ChatDto>> GetEntitiesByUserIdAsync(string id)
         {
-            var chats = await _uow.ChatsRepository.GetChatsByUserId(id, chat => chat.IsActive);
+            var chats = await _uow.UserChatRepository.GetChatsByUserId(id);
             var dtos = _mapper.Map<List<Chat>, List<ChatDto>>(chats,
                 opts: o => o.AfterMap((src, dest) => dest
                     .ForEach(c =>
                     {
                         c.UnreadMessagesCount = CountUnreadedMessagesForUser(id, c.Messages);
                         c.Messages = null;
+
+                        if (c.UsersSettings.FirstOrDefault(x => x.UserId == id) == null)
+                            c.UsersSettings.Add(CreateDefaultSettings(id));
                     })));
 
             return dtos;
         }
 
+        public async Task<NotificationSettingDto> GetSettingsForUserIdAsync(string userId, int chatId)
+        {
+            var settings = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(x =>
+                x.UserId == userId && x.ChatId == chatId);
+
+            if (settings == null)
+            {
+                return null;
+            }
+
+            var dtos = _mapper.Map<NotificationSetting, NotificationSettingDto>(settings);
+            return dtos;
+        }
+
         public async Task<IEnumerable<UserDto>> GetUsersByChatIdAsync(int id)
         {
-            var users = await _uow.ChatsRepository.GetUsersByChatId(id);
+            var users = await _uow.UserChatRepository.GetUsersByChatId(id);
 
             var dtos = _mapper.Map<List<User>, List<UserDto>>(users);
 
@@ -78,7 +98,7 @@
 
         public async Task<bool> AddUserToChat(int chatId, string userId)
         {
-            var userChat = await _uow.ChatsRepository.AddUserChat(new UserChat() { ChatId = chatId, UserId = userId });
+            var userChat = await _uow.UserChatRepository.CreateAsync(new UserChat() { ChatId = chatId, UserId = userId });
 
             var result = await _uow.SaveAsync();
 
@@ -87,7 +107,7 @@
 
         public async Task<bool> DeleteUserFromChat(int chatId, string userId)
         {
-            await _uow.ChatsRepository.DeleteUserChat(new UserChat() { ChatId = chatId, UserId = userId });
+            _uow.UserChatRepository.Delete(userId, chatId);
 
             var result = await _uow.SaveAsync();
 
@@ -97,7 +117,6 @@
         public async Task<ChatDto> CreateEntityAsync(ChatRequest request)
         {
             var entity = _mapper.Map<ChatRequest, Chat>(request);
-            entity.IsActive = true;
 
             if (entity.Type == ChatType.BetweenUsers)
             {
@@ -137,6 +156,18 @@
             var entity = _mapper.Map<ChatUpdateRequest, Chat>(request);
             entity.Id = id;
 
+            foreach (var settings in entity.UsersSettings)
+            {
+                if (settings.Id == 0)
+                {
+                    await _uow.NotificationSettingsRepository.CreateAsync(settings);
+                }
+                else
+                {
+                    await _uow.NotificationSettingsRepository.UpdateAsync(settings);
+                }
+            }
+
             // In returns updated entity, you could do smth with it or just leave as it is
             var updated = await _uow.ChatsRepository.UpdateAsync(entity);
             var result = await _uow.SaveAsync();
@@ -146,11 +177,8 @@
 
         public async Task<bool> DeleteEntityByIdAsync(int id)
         {
-            var entity = await _uow.ChatsRepository.GetFirstOrDefaultAsync(c => c.Id == id);
-            entity.IsActive = false;
-
-            // In returns updated entity, you could do smth with it or just leave as it is
-            var updated = await _uow.ChatsRepository.UpdateAsync(entity);
+            await _uow.ChatsRepository.DeleteAsync(id, 
+                include: chat => chat.Include(c => c.Messages));
 
             var result = await _uow.SaveAsync();
 
@@ -159,7 +187,19 @@
 
         private int CountUnreadedMessagesForUser(string userId, IList<MessageDto> messages)
         {
-            return messages.Count(m => !m.WasRead && m.User.Id != userId);
+            return messages?.Count(m => !m.WasRead && m.UserId != userId) ?? 0;
+        }
+
+        private NotificationSettingDto CreateDefaultSettings(string userId)
+        {
+            return new NotificationSettingDto
+            {
+                UserId = userId,
+                IsDisable = false,
+                IsMute = false,
+                IsEmailable = false,
+                Type = NotificationType.Chat
+            };
         }
     }
 }
