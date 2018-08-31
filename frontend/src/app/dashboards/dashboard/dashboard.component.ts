@@ -22,36 +22,9 @@ import {FormBuilder, FormControl} from '@angular/forms';
 import {CollectedDataService} from '../../core/services/collected-data.service';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {customChartTypes} from '../charts/chart-builder/customChartTypes';
-import {colorSets} from '@swimlane/ngx-charts/release/utils';
-import * as shape from 'd3-shape';
 import {DataProperty} from '../../shared/models/data-property.enum';
 import {DashboardChart} from '../models/dashboard-chart';
-
-const defaultOptions = {
-  view: [716, 337],
-  // colorScheme:  {
-  //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  // },
-  colorScheme: colorSets.find(s => s.name === 'cool'),
-  schemeType: 'ordinal',
-  showLegend: true,
-  legendTitle: 'Legend',
-  gradient: false,
-  showXAxis: true,
-  showYAxis: true,
-  showXAxisLabel: true,
-  showYAxisLabel: true,
-  yAxisLabel: '',
-  xAxisLabel: '',
-  autoScale: true,
-  showGridLines: true,
-  rangeFillOpacity: 0.5,
-  roundDomains: false,
-  tooltipDisabled: false,
-  showSeriesOnHover: true,
-  curve: shape.curveLinear,
-  curveClosed: shape.curveCardinalClosed
-} as CustomChart;
+import {defaultOptions} from '../charts/models/chart-options';
 
 @Component({
   selector: 'app-dashboard',
@@ -105,7 +78,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private chartService: ChartService,
               private activateRoute: ActivatedRoute,
               private fb: FormBuilder,
-              private ngZone: NgZone,
               private dataService: DataService) {
 
     this.dropdownType = [
@@ -213,13 +185,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.paramsSubscription.unsubscribe();
-  }
-
-  onInstanceRemoved(id: number) {
-    this.instanceId = 0;
-    this.dashboards = [];
-    this.dashboardMenuItems = []; // no +
-    this.activeDashboardItem = null;
   }
 
   getDashboardsByInstanceId(id: number): void {
@@ -354,16 +319,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const index = this.dashboardMenuItems.length - 2;
         const label = this.dashboardMenuItems[index].label.slice();
 
-        // TODO: refactor this shit below
-        const x: DashboardMenuItem = {
+        this.dashboardMenuItems[index] = {
           label: label,
           dashId: this.dashboardMenuItems[index].dashId,
           createdAt: this.dashboardMenuItems[index].createdAt,
           charts: this.dashboardMenuItems[index].charts,
           command: this.dashboardMenuItems[index].command
         };
-
-        this.dashboardMenuItems[index] = x;
         this.activeDashboardItem = this.dashboardMenuItems[index];
       } else {
         this.activeDashboardItem = undefined;
@@ -374,29 +336,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
-    debugger;
-    const dashChats: DashboardChart[] = dashboard.charts.map(c => this.instantiateDashboardChart(c));
-
     const item: DashboardMenuItem = {
       label: dashboard.title,
       dashId: dashboard.id,
       createdAt: dashboard.createdAt,
-      charts: dashChats,
+      charts: dashboard.charts.map(c => this.instantiateDashboardChart(c)),
       // routerLink: `/user/instances/${this.instanceId}/${this.instanceGuidId}/dashboards/${dashboard.id}`,
       command: (onclick) => {
         this.activeDashboardItem = item;
       }
     };
     return item;
-  }
-
-  convertStringToArrEnum(sources: string) {
-    const array = new Array<DataProperty>();
-    const newSources = sources.split(',');
-    for (let i = 0; i < newSources.length; i++) {
-      array.push(DataProperty[newSources[i]]);
-    }
-    return array;
   }
 
   showPopupAddChart() {
@@ -427,7 +377,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           const dashChat: DashboardChart = this.instantiateDashboardChart(value);
           this.activeDashboardItem.charts.push(dashChat);
           this.toastrService.success('Chart was created');
-          // this.charts.push(dashChat);
         },
         error => {
           this.toastrService.error(`Error ocured status: ${error.message}`);
@@ -437,12 +386,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   instantiateDashboardChart(value: Chart): DashboardChart {
     debugger;
-    const props: DataProperty[] = [];
-    const arrNumbers = value.sources.split(',');
-
-    for (let i = 0; i < arrNumbers.length; i++) {
-      props.push(DataProperty[arrNumbers[i]]);
-    }
     const dashChart: DashboardChart = {
       view: [800, 400],
       colorScheme: defaultOptions.colorScheme,
@@ -464,10 +407,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       showSeriesOnHover: value.isShowSeriesOnHover,
       curve: defaultOptions.curve,
       curveClosed: defaultOptions.curveClosed,
-
       title: value.title,
-
-      data: this.dataService.prepareData(value.type, props, this.collectedDataForChart), // this.dataForChart,
+      data: this.dataService.prepareData(value.type, this.dataService.convertStringToArrEnum(value.sources), this.collectedDataForChart),
       activeEntries: [],
       chartType: {
         name: chartTypes[value.type],
@@ -475,14 +416,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         chartLabels: null,
         dimLabels: []
       },
-      theme: 'light' // value.isLightTheme ? 'light' : 'dark'
+      theme: value.isLightTheme ? 'light' : 'dark'
     };
 
     return dashChart;
   }
 
   createChartRequest(): ChartRequest {
-    debugger;
     const chart: ChartRequest = {
       showCommon: this.chartForm.get('isMultiple').value,
       threshold: this.threshold,
@@ -513,6 +453,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return chart;
   }
 
+  onInstanceRemoved(id: number) {
+    this.instanceId = 0;
+    this.dashboards = [];
+    this.dashboardMenuItems = [];
+    this.activeDashboardItem = null;
+  }
   // onEditChart(chart: ChartRequest) {
   //   this.chartService.update(1, chart).subscribe(
   //     value => {

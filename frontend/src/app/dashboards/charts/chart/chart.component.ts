@@ -43,22 +43,4 @@ export class ChartComponent implements OnInit {
 
   ngOnInit() {
   }
-
-  // onSelect(data: CustomData) {
-  //   if (data) {
-  //     const value = typeof data === 'object' ? data.name : data;
-  //     if (this.chart.xFilter) {
-  //       const filter = this.chart.xFilter;
-  //       switch (filter.type) {
-  //         case 'value':
-  //           filter.range[0] = value;
-  //           break;
-  //         default:
-  //           filter.rangeIndex[value] = !filter.rangeIndex[value];
-  //       }
-  //     }
-  //     return this.select.emit({chart: this.chart, value});
-  //   }
-  //   return this.select.emit({chart: this.chart});
-  // }
 }

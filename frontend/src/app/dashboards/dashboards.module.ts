@@ -71,7 +71,6 @@ import {ChartsComponent} from './charts/charts.component';
     PercentageBarChartComponent,
     PercentageLineChartComponent,
 
-    ChartsComponent,
     ChartComponent,
     ChartBuilderComponent,
     ChartDashboardComponent

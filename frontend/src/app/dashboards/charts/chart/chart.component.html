@@ -2,7 +2,6 @@
 
 <ngx-charts-bar-vertical
   *ngIf="chartType.name === 'bar-vertical'"
-  [view]="chart.view"
   class="chart-container"
   [view]="chart.view"
   [scheme]="chart.colorScheme"
@@ -253,7 +252,7 @@
   [results]="data"
   [legend]="chart.showLegend"
   [legendTitle]="chart.legendTitle"
-  [gradient]="false"
+  [gradient]="chart.gradient"
   [xAxis]="chart.showXAxis"
   [yAxis]="chart.showYAxis"
   [showXAxisLabel]="chart.showXAxisLabel"

@@ -18,27 +18,6 @@
       <p class="text-pl">Click <i class="fa fa-gear"></i> and add chart or plot</p>
     </div>
 
-    <!--<div class="charts" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1-->
-    <!--&& activeDashboardItem.charts && activeDashboardItem.charts.length > 0">-->
-    <!--&lt;!&ndash;<div class="viz-container" [ngClass]="'light'">&ndash;&gt;-->
-    <!--&lt;!&ndash;<h1></h1>&ndash;&gt;-->
-    <!--&lt;!&ndash;<app-percentage-bar-chart [dataToPlot]="percentageInfoToDisplaySingle"></app-percentage-bar-chart>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="viz-container" [ngClass]="'light'">&ndash;&gt;-->
-    <!--&lt;!&ndash;<h1></h1>&ndash;&gt;-->
-    <!--&lt;!&ndash;<app-percentage-line-chart [percentageInfo]="percentageInfoToDisplay"></app-percentage-line-chart>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--<div class="viz-container" [ngClass]="chart.theme" *ngFor="let chart of activeDashboardItem.charts">-->
-    <!--<h1></h1>-->
-    <!--<app-chart-->
-    <!--class="chart"-->
-    <!--[chart]="chart"-->
-    <!--[data]="chart.data"-->
-    <!--[activeEntries]="chart.activeEntries"-->
-    <!--[chartType]="chart.chartType">-->
-    <!--</app-chart>-->
-    <!--</div>-->
-    <!--</div>-->
     <div class="charts-area" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">
       <div class="dashboard-item">
         <app-percentage-bar-chart [dataToPlot]="percentageInfoToDisplaySingle"></app-percentage-bar-chart>
@@ -111,8 +90,6 @@
             [minWidth]="850"
             [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false
             (onHide)="closeMy()">
-    <!--  [baseZIndex]="10000"-->
-    <!-- <app-chart-builder (addChart)="addChartToDashboard($event)"></app-chart-builder>   -->
     <div class="ui-g ui-fluid">
       <div class="ui-g-3">
         <p class="field-top">Select chart type: </p>

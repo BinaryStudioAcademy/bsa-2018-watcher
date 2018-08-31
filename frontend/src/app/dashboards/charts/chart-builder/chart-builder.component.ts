@@ -1,37 +1,11 @@
 import {Component, OnInit, NgZone, Output, EventEmitter} from '@angular/core';
-import {colorSets} from '@swimlane/ngx-charts/release/utils/color-sets';
-import * as shape from 'd3-shape';
 import * as chroma from 'chroma-js';
 
 import {CustomChart, CustomChartType, CustomData} from '../models';
-import {DataService} from '../../services/data.service';
 import {toCapitalizedWords} from '../models';
 import {customChartTypes} from './customChartTypes';
-import {CollectedData} from '../../../shared/models/collected-data.model';
 import {CollectedDataService} from '../../../core/services/collected-data.service';
-
-const defaultOptions = {
-  view: undefined,
-  colorScheme: colorSets.find(s => s.name === 'cool'),
-  schemeType: 'ordinal',
-  showLegend: true,
-  legendTitle: 'Legend',
-  gradient: false,
-  showXAxis: true,
-  showYAxis: true,
-  showXAxisLabel: true,
-  showYAxisLabel: true,
-  yAxisLabel: '',
-  xAxisLabel: '',
-  autoScale: true,
-  showGridLines: true,
-  rangeFillOpacity: 0.5,
-  roundDomains: false,
-  tooltipDisabled: false,
-  showSeriesOnHover: true,
-  curve: shape.curveLinear,
-  curveClosed: shape.curveCardinalClosed
-} as CustomChart;
+import {defaultOptions} from '../models/chart-options';
 
 @Component({
   selector: 'app-chart-builder',
@@ -57,8 +31,6 @@ export class ChartBuilderComponent implements OnInit {
   data: CustomData[] = [];
   headerValues: any[] = [];
 
-  collectedData: CollectedData[] = [];
-
   aggragates = ['count', 'sum', 'avg', 'max', 'min'];
 
   @Output() addChart: EventEmitter<CustomChart> = new EventEmitter();
@@ -73,21 +45,7 @@ export class ChartBuilderComponent implements OnInit {
   }
 
   constructor(private ngZone: NgZone,
-              private collectedDataService: CollectedDataService,
-              private dataService: DataService) {
-    dataService.universeUpdated.subscribe(() => {
-      this.clearAll();
-
-      const headerValues = this.dataService.headerValues;
-
-      if (JSON.stringify(headerValues) !== JSON.stringify(this.headerValues)) {
-        this.headerValues = headerValues.slice();
-        this.dataDims = [null, null, null, null, 'count'];
-        this.data = [];
-      } else {
-        this.processData();
-      }
-    });
+              private collectedDataService: CollectedDataService) {
   }
 
   ngOnInit(): void {
@@ -123,9 +81,6 @@ export class ChartBuilderComponent implements OnInit {
 
     const yKey = this.dataDims[2];
     const agg = this.dataDims[4];
-
-    const query = await this.dataService.createQuery(xKey, yKey, agg);
-    this.data = this.dataService.getChartSeriesFromQuery(query, yKey, agg);
 
     return this.ngZone.run(() => {
     });
