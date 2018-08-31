@@ -94,7 +94,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.percentageInfoToDisplaySingle = info;
   }
 
-  charts: DashboardChart[] = [];
+  // charts: DashboardChart[] = [];
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -208,16 +208,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         command: (event?: any) => this.delete(),
       }
     ];
-
-
   }
 
   ngOnDestroy(): void {
     this.paramsSubscription.unsubscribe();
-  }
-
-  addChartToDashboard(chart: CustomChart) {
-    this.charts.push(chart);
   }
 
   onInstanceRemoved(id: number) {
@@ -244,7 +238,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           // Fill Dashboard Menu Items
           this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
           this.activeDashboardItem = this.dashboardMenuItems[0];
-          this.charts = this.dashboards[0].charts.map(c => this.instantiateDashboardChart(c));
+          // this.charts = this.dashboards[0].charts.map(c => this.instantiateDashboardChart(c));
         }
         this.loading = false;
         this.toastrService.success('Successfully got instance info from server');
@@ -386,11 +380,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
+    const dashChats: DashboardChart[] = dashboard.charts.map(c => this.instantiateDashboardChart(c));
+
     const item: DashboardMenuItem = {
       label: dashboard.title,
       dashId: dashboard.id,
       createdAt: dashboard.createdAt,
-      charts: dashboard.charts,
+      charts: dashChats,
       // routerLink: `/user/instances/${this.instanceId}/${this.instanceGuidId}/dashboards/${dashboard.id}`,
       command: (onclick) => {
         this.activeDashboardItem = item;
@@ -425,9 +421,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.chartService.create(this.createChartRequest()).subscribe(
         value => {
           const dashChat: DashboardChart = this.instantiateDashboardChart(value);
-          this.charts.push(dashChat);
+          this.activeDashboardItem.charts.push(dashChat);
           this.toastrService.success('Chart was created');
-          // this.activeDashboardItem.charts.push(value);
+          // this.charts.push(dashChat);
         },
         error => {
           this.toastrService.error(`Error ocured status: ${error.message}`);
@@ -436,14 +432,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   instantiateDashboardChart(value: Chart): DashboardChart {
-    // TODO: parse here SourcesString and input in method prepareData
-    // TODO: convert to enum type
-    const props: DataProperty[] = []; // (DataProperty[])
+    const props: DataProperty[] = [];
     const arrNumbers = value.sources.split(',');
 
     for (let i = 0; i < arrNumbers.length; i++) {
-      console.log(DataProperty[i]);
-      props.push();
+      console.log(DataProperty[arrNumbers[i]]);
+      const d = DataProperty[arrNumbers[i]];
+      props.push(d);
     }
 
     // this.dashboards.forEach(d => { d.charts.forEach(ch => arr = ch.sources.split(',')); });

@@ -21,7 +21,7 @@
     </div>
 
       <div class="charts" *ngIf="activeDashboardItem && dashboardMenuItems.length > 1">
-        <div class="viz-container" [ngClass]="chart.theme" *ngFor="let chart of charts">
+        <div class="viz-container" [ngClass]="chart.theme" *ngFor="let chart of activeDashboardItem.charts">
           <h1></h1>
           <app-chart
             class="chart"
