@@ -399,6 +399,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return item;
   }
 
+  convertStringToArrEnum(sources: string) {
+    const array = new Array<DataProperty>();
+    const newSources = sources.split(',');
+    for (let i = 0; i < newSources.length; i++) {
+      array.push(DataProperty[newSources[i]]);
+    }
+    return array;
+  }
+
   showPopupAddChart() {
     this.popupAddChart = true;
     this.processData();
