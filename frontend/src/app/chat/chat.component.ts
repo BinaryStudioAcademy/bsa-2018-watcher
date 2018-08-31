@@ -10,8 +10,6 @@ import { SystemToastrService } from '../core/services/system-toastr.service';
 import { Chat } from '../shared/models/chat.model';
 import { Message } from '../shared/models/message.model';
 import { NotificationsHubService } from '../core/hubs/notifications.hub';
-import { Notification } from '../shared/models/notification.model';
-import { NotificationType } from '../shared/models/notification-type.enum';
 
 
 @Component({
@@ -26,7 +24,6 @@ export class ChatComponent implements OnInit {
     private authService: AuthService,
     private chatService: ChatService,
     private toastrService: ToastrService,
-    private notify: NotificationsHubService,
 
     private systemToastrService: SystemToastrService) { }
 
@@ -99,6 +96,10 @@ export class ChatComponent implements OnInit {
       // Save amount of unreaded messages and replace chat
       chat.unreadMessagesCount = this.chatList[index].value.unreadMessagesCount;
       this.chatList.splice(index, 1, { value: chat });
+      if (this.selectedChat && this.selectedChat.id === chat.id) {
+        this.selectedChat = chat;
+        this.onDisplayChat.emit(chat.id);
+      }
     });
 
     this.chatHub.chatDeleted.subscribe((chat: Chat) => {
