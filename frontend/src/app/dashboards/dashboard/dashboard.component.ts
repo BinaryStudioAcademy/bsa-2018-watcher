@@ -405,7 +405,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   closeMy() {
-   // this.processData();
+    // this.processData();
     this.onCancel();
   }
 
@@ -415,7 +415,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedType = null;
     this.threshold = 0;
     this.chartForm.reset();
-
+    this.dataForChart = null;
   }
 
   onCreateChart() {

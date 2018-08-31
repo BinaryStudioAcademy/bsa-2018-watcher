@@ -132,9 +132,9 @@
     </div>
   </div>
   <p-footer>
-    <div class="center">
+    <div class="center"> <!-- [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))"-->
      <!--&& selectedSource <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
-      <button type="button" [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))" pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()" label="Save"></button>
+      <button type="button"  pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()" label="Save"></button>
       <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
     </div>
   </p-footer>
