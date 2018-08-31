@@ -1,4 +1,6 @@
-﻿namespace Watcher.Core.Services
+﻿using System;
+
+namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -42,10 +44,12 @@
             return dto;
         }
 
-        public async Task<ChartDto> CreateEntityAsync(ChartRequest request)
+        public async Task<ChartDto> CreateEntityAsync(ChartDto request)
         {
-            var entity = _mapper.Map<ChartRequest, Chart>(request);
-            // entity.Sources = 
+            /*var entity = _mapper.Map<ChartRequest, Chart>(request); ChartRequest
+      
+            entity.Sources = string.Join(",", request.Sources);*/
+            var entity = _mapper.Map<ChartDto, Chart>(request);
 
             entity = await _uow.ChartsRepository.CreateAsync(entity);
             var result = await _uow.SaveAsync();

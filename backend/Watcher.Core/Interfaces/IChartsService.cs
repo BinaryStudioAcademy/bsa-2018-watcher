@@ -12,7 +12,7 @@
 
         Task<ChartDto> GetEntityByIdAsync(int id);
 
-        Task<ChartDto> CreateEntityAsync(ChartRequest request);
+        Task<ChartDto> CreateEntityAsync(ChartDto request); /*ChartRequest */
 
         Task<bool> UpdateEntityByIdAsync(ChartRequest request, int id);
 

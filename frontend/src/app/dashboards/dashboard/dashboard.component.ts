@@ -130,13 +130,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
   });
 
   processData(): void {
-    this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value;
-    this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
+    // this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value;
+    // this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
     this.chartType.name = chartTypes[this.selectedType];
     this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
     this.showPreview = true;
 
     if (this.selectedType === ChartType.BarVertical) {
+      this.chartOptions.xAxisLabel = 'Parameters';
+      this.chartOptions.yAxisLabel = 'Percentage %';
+    } else if (this.selectedType === ChartType.LineChart) {
+      this.chartOptions.xAxisLabel = 'Time';
+      this.chartOptions.yAxisLabel = 'Percentage %';
+    } else if (this.selectedType === ChartType.Guage) {
+      this.chartOptions.yAxisLabel = 'Process';
+      this.chartOptions.xAxisLabel = '';
+    }
+   /* if (this.selectedType === ChartType.BarVertical) {
       this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Parameters';
       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
     } else if (this.selectedType === ChartType.LineChart) {
@@ -144,7 +154,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
     } else if (this.selectedType === ChartType.Guage) {
       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Process';
-    }
+    }*/
   }
 
   async ngOnInit(): Promise<void> {
@@ -199,6 +209,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         command: (event?: any) => this.delete(),
       }
     ];
+
+
   }
 
   ngOnDestroy(): void {
@@ -224,6 +236,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe((value = []) => {
         if (value && value.length > 0) {
           this.dashboards = value;
+
+
+          // !!!!!!!!!!!!!!!!!!!!!!!!
+          // this.dashboards.forEach(d => { d.charts.forEach(ch => arr = ch.sources.split(',')); });
+
+
           // Fill Dashboard Menu Items
           this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
           this.activeDashboardItem = this.dashboardMenuItems[0];
@@ -384,9 +402,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   showPopupAddChart() {
     this.popupAddChart = true;
-
+    this.processData();
   }
 
+  closeMy() {
+   // this.processData();
+    this.onCancel();
+  }
 
   onCancel() {
     this.popupAddChart = false;
@@ -394,6 +416,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedType = null;
     this.threshold = 0;
     this.chartForm.reset();
+
   }
 
   onCreateChart() {
@@ -458,10 +481,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   createChart() {
     const chart: ChartRequest = {
       // showTotal: this.chartForm.get('isMultiple').value
-      showCommon: true, // TODO: change this to get this prop from user
+      showCommon: this.chartForm.get('isMultiple').value,
       threshold: this.threshold,
-      mostLoaded: 'mostLoaded', // this.chartForm.get('mostLoaded').value,
-      dashboardId: this.activeDashboardItem.dashId, // TODO: this.activeDashboardItem.dashId,
+      mostLoaded: '' + this.chartForm.get('mostLoaded').value,
+      dashboardId: this.activeDashboardItem.dashId,
       schemeType: this.chartOptions.schemeType,
 
       showLegend: this.chartOptions.showLegend,
@@ -481,7 +504,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       isShowSeriesOnHover: this.chartOptions.showSeriesOnHover,
       title: this.chartOptions.title,
       type: this.selectedType, // if ChartType.Plot -> Bad request
-      sources: this.selectedSource,
+      sources: this.selectedSource.join(),
       isLightTheme: this.chartOptions.theme === 'light',
     };
     return chart;

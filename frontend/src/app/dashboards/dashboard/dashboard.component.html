@@ -92,7 +92,7 @@
 
 
 <p-dialog header="Create chart" [(visible)]="popupAddChart" [modal]="true" [responsive]="true" [width]="1000" [minWidth]="850"
-  [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}">
+  [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false (onHide)="closeMy()">
   <!--  [baseZIndex]="10000"-->
   <!-- <app-chart-builder (addChart)="addChartToDashboard($event)"></app-chart-builder>   -->
   <div class="ui-g ui-fluid">
@@ -116,12 +116,12 @@
       <form [formGroup]="chartForm">
         <p class="field">Show multiple:
           <p-checkbox formControlName="isMultiple" binary="true"></p-checkbox>
-        </p>       
+        </p>   
+      </form>    
         <p class="field">Y axis label (optional): </p>
-        <input class="width-left-part" type="text" formControlName="yAxisLabel" pInputText/>
+        <input class="width-left-part" type="text" [(ngModel)]="chartOptions.yAxisLabel" pInputText/>
         <p class="field">X axis label (optional): </p>
-        <input class="width-left-part" type="text" formControlName="xAxisLabel" pInputText/>
-      </form>
+        <input class="width-left-part" type="text" [(ngModel)]="chartOptions.xAxisLabel" pInputText/>
     </div>
     <div class="ui-g-9">
       <p class="field-top center">Visualization</p>
@@ -133,8 +133,8 @@
   </div>
   <p-footer>
     <div class="center">
-      <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>
-      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()" label="Save"></button>
+     <!--&& selectedSource <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
+      <button type="button" [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))" pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()" label="Save"></button>
       <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
     </div>
   </p-footer>

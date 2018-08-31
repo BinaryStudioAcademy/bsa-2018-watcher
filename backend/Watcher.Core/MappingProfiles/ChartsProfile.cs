@@ -19,7 +19,9 @@
 
             CreateMap<ChartRequest, Chart>()
                 .ForMember(d => d.Id, o => o.UseValue(0))
-                .ForMember(d => d.Sources, o => o.MapFrom(s => string.Join(',', s.Sources)));
+                .ForMember(d => d.Sources, o => o.UseValue(string.Empty));
+
+            CreateMap<ChartDto, Chart>();
         }
     }
 }
