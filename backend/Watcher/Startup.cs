@@ -332,6 +332,7 @@
 
         public virtual void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
         {
+            // Fix SignalR PLEASE
             // Use SQL Database if in Azure, otherwise, use Local DB
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (env == EnvironmentName.Production)
