@@ -7,11 +7,11 @@ import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
 import { OrganizationService } from '../../core/services/organization.service';
 import { RoleService } from '../../core/services/role.service';
-import { SelectItem } from 'primeng/api';
+import { SelectItem, LazyLoadEvent } from 'primeng/api';
 
 import { UserOrganizationService } from '../../core/services/user-organization.service';
 import { UserOrganization } from '../../shared/models/user-organization.model';
-import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
+import { OrganizationInvitesService } from '../../core/services/organization-invites.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
 import { Role } from '../../shared/models/role.model';
@@ -100,9 +100,10 @@ export class UserListComponent implements OnInit {
       return;
     }
 
-    this.userService.getAll().subscribe((value: User[]) => {
+    this.userService.getNumber().subscribe((value: number) => this.totalRecords = value);
+
+    this.userService.getRange(1, 5).subscribe((value: User[]) => {
       this.users = value;
-      this.totalRecords = value.length;
     });
 
     this.organizationService.getAll().subscribe((value: Organization[]) => {
@@ -283,5 +284,12 @@ export class UserListComponent implements OnInit {
     this.user.photoType = this.photoType;
     this.photoUrl = this.data.image;
     this.display = false;
+  }
+
+  loadUsersLazy(event: LazyLoadEvent) {
+    const currentPage = event.first / event.rows + 1;
+    this.userService.getRange(currentPage, event.rows).subscribe((value: User[]) => {
+      this.users = value;
+    });;
   }
 }

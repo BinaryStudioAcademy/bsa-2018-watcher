@@ -56,6 +56,57 @@
         }
 
         /// <summary>
+        /// Get range of Users for pagination
+        /// </summary>
+        /// <returns>
+        /// List of Dtos of Users
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Organizations not found</response>
+        /// <response code="403">You don`t have permission to create watch Organizations</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
+        [HttpGet]
+        [Route("table")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<IEnumerable<OrganizationDto>>> GetRange(int page, int pageSize)
+        {
+            var dtos = await _usersService.GetRangeOfEntitiesAsync(page, pageSize);
+            if (!dtos.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(dtos);
+        }
+
+        /// <summary>
+        /// Get number of Users
+        /// </summary>
+        /// <returns>
+        /// Number of Users
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Organizations not found</response>
+        /// <response code="403">You don`t have permission to create watch Organizations</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
+        [HttpGet]
+        [Route("number")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<IEnumerable<OrganizationDto>>> GetNumberOfOrganizations()
+        {
+            var dtos = await _usersService.GetNumberOfEntitiesAsync();
+            if (dtos < 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(dtos);
+        }
+
+
+        /// <summary>
         /// Find Users by display name, first name, last name or email
         /// </summary>
         /// <returns>

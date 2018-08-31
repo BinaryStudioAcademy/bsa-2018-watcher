@@ -1,15 +1,15 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
-import { MessageService } from 'primeng/api';
 
 import { ChatHub } from '../core/hubs/chat.hub';
 import { AuthService } from '../core/services/auth.service';
 import { ChatService } from '../core/services/chat.service';
 import { ToastrService } from '../core/services/toastr.service';
+import { SystemToastrService } from '../core/services/system-toastr.service';
 
 import { Chat } from '../shared/models/chat.model';
 import { Message } from '../shared/models/message.model';
-import { User } from '../shared/models/user.model';
+import { NotificationsHubService } from '../core/hubs/notifications.hub';
 
 
 @Component({
@@ -24,20 +24,21 @@ export class ChatComponent implements OnInit {
     private authService: AuthService,
     private chatService: ChatService,
     private toastrService: ToastrService,
-    private messageService: MessageService) { }
+
+    private systemToastrService: SystemToastrService) { }
 
   public onDisplayChat = new EventEmitter<number>();
-  public onDisplayChatCreating = new EventEmitter<boolean>();
+  public onDisplayCreating = new EventEmitter<boolean>();
 
+  isSelectedChatCollapsed: boolean;
   chatList: SelectItem[] = [];
   selectedChat: Chat;
-  isSelectedChatCollapsed: boolean;
-  currentUser: User;
+  currentUserId: string;
   totalUnreadMessages = 0;
 
   ngOnInit() {
-    this.currentUser = this.authService.getCurrentUser();
-    this.chatService.getByUserId(this.currentUser.id).subscribe(
+    this.currentUserId = this.authService.getCurrentUser().id;
+    this.chatService.getByUserId(this.currentUserId).subscribe(
       chats => {
         chats.reverse();
         chats.forEach(chat => {
@@ -52,56 +53,40 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  openChat(chatId: number) {
-    this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
-    this.selectedChat.unreadMessagesCount = 0;
-    this.onDisplayChat.emit(chatId);
-  }
-
   selectChat() {
-    this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
-    this.selectedChat.unreadMessagesCount = 0;
+    if (this.selectedChat.unreadMessagesCount) {
+      this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
+      this.selectedChat.unreadMessagesCount = 0;
+    }
     this.onDisplayChat.emit(this.selectedChat.id);
   }
 
-  removeSelect() {
-    this.onDisplayChat.emit();
-    this.selectedChat = null;
-  }
-
-  openChatCreating(event) {
+  openCreating(event) {
     event.stopPropagation();
     event.preventDefault();
-    this.onDisplayChatCreating.emit(true);
+    this.onDisplayCreating.emit(true);
   }
 
-  onCollapseChat(isCollapse) {
-    this.isSelectedChatCollapsed = isCollapse;
-    if (!isCollapse) {
+  onCollapseChat(isCollapsed) {
+    this.isSelectedChatCollapsed = isCollapsed;
+    if (!isCollapsed) {
       this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
       this.selectedChat.unreadMessagesCount = 0;
     }
   }
 
-  getChatImage(chat: Chat) {
-    if (chat.users.length === 2) {
-      const photo = chat.users.find(u => u.id !== this.currentUser.id).photoURL;
-      return photo || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
-    }
-
-    if (chat.users.length === 1) {
-      return chat.users[0].photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
-    }
-    return 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
-  }
-
   subscribeToEvents() {
+    this.chatService.openChatClick.subscribe((id: number) => {
+      this.selectedChat = this.chatList.find(x => x.value.id === id).value;
+      this.selectChat();
+    });
+
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
       this.chatList.unshift({ value: chat });
 
-      if (chat.createdBy.id === this.currentUser.id) {
+      if (chat.createdBy.id === this.currentUserId) {
         this.selectedChat = this.chatList[0].value;
-        this.openChat(chat.id);
+        this.selectChat();
       }
     });
 
@@ -111,30 +96,50 @@ export class ChatComponent implements OnInit {
       // Save amount of unreaded messages and replace chat
       chat.unreadMessagesCount = this.chatList[index].value.unreadMessagesCount;
       this.chatList.splice(index, 1, { value: chat });
+      if (this.selectedChat && this.selectedChat.id === chat.id) {
+        this.selectedChat = chat;
+        this.onDisplayChat.emit(chat.id);
+      }
+    });
+
+    this.chatHub.chatDeleted.subscribe((chat: Chat) => {
+      this.onDisplayChat.emit();
+      const indexOfChat = this.chatList.map(item => item.value.id).indexOf(chat.id);
+      this.totalUnreadMessages -= this.chatList[indexOfChat].value.unreadMessagesCount;
+      this.chatList.splice(indexOfChat, 1);
     });
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
-      if (message.user.id !== this.currentUser.id) {
-        this.sendNotify(message);
+      if (message.user.id !== this.currentUserId) {
+        // Check chat settings
+        const settings = this.chatList.find(x => x.value.id === message.chatId).
+          value.usersSettings.find(x => x.userId === this.currentUserId);
+
+        if (!(settings && settings.isMute)) {
+          this.systemToastrService.chat(message);
+        }
 
         // Don`t count unread if chat is open and not collapse
-        if (this.selectedChat && !this.isSelectedChatCollapsed && this.selectedChat.id === message.chatId) {
-        } else {
+        if (!(this.selectedChat && !this.isSelectedChatCollapsed && this.selectedChat.id === message.chatId)) {
           this.totalUnreadMessages++;
-          const index = this.chatList.findIndex(x => x.value.id === message.chatId);
-          this.chatList[index].value.unreadMessagesCount++;
+          this.chatList.find(x => x.value.id === message.chatId).value.unreadMessagesCount++;
         }
       }
     });
   }
 
-  sendNotify(message: Message) {
-    this.messageService.add(
-      {
-        key: 'chat-message',
-        data: message,
-        life: 8000
-      }
-    );
+  getChatImage(chat: Chat) {
+    const groupeImg = 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/Users-icon.png';
+    const partnerImg = 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png';
+
+    if (chat.users.length === 2) {
+      const photo = chat.users.find(u => u.id !== this.currentUserId).photoURL;
+      return photo || partnerImg;
+    }
+
+    if (chat.users.length === 1) {
+      return chat.users[0].photoURL || partnerImg;
+    }
+    return groupeImg;
   }
 }

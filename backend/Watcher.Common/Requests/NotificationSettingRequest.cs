@@ -12,5 +12,6 @@
         public bool IsEmailable { get; set; }
 
         public string UserId { get; set; }
+        public string ChatId { get; set; }
     }
 }

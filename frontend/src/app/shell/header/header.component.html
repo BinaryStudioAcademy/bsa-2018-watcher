@@ -2,50 +2,20 @@
  
   <div class="logo-wr">
       <a routerLink="/user" class="logo">WATCHER | {{currentUser.lastPickedOrganization.name}}</a> 
-  </div>  
-  
-  <p-growl [(value)]="msgs"></p-growl>
+  </div>
 
   <div class="ui-toolbar-group-right">
 
     <p-tieredMenu #admin [model]="adminItems" [popup]="true"></p-tieredMenu>
     <button #btn type="button" *ngIf="isAdmin()" pButton icon="fa fa-fw fa-user" (click)="admin.toggle($event)"></button>
 
-    <div class="notifications-block" appClickOutside (clickOutside)="close()">
-      <div class="toolbar-item">
-        <button #btn type="button" id="bell-button" pButton icon="fa fa-fw fa-bell-o" (click)="bellClick()"></button>
-        <span *ngIf="notificationsNumber !== 0" class="topbar-badge">{{ notificationsNumber }}</span>
-      </div>
-
-      <div class="notifications-popup" *ngIf="isNotificationShow">
-        <div class="withoutNotification" *ngIf="notifications.length == 0">
-          <p>
-            You don`t have notifications yet.
-          </p>
-        </div>
-        <div *ngIf="notifications.length !== 0">
-          <div class="markAsRead">
-            <a (click)="markAsRead()">Mark as read</a>
-          </div>
-
-          <div class="notification-card" *ngFor="let notification of notifications">
-            <div class="notification-type {{notification.type}}"></div>
-            <div class="notification-text">{{notification.text}}</div>
-            <div class="info-block">
-              <div class="short-info">
-                <p class="time">{{notification.createdAt | date:'dd/MM/yy HH:mm'}}</p>
-                <p>Type: {{notification.type}}</p>
-              </div>
-              <div class="readIndicator">
-                <i *ngIf="notification.wasRead" class="fa fa-check-square"></i>
-                <i *ngIf="!notification.wasRead" class="fa fa-check"></i>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
+    <div class="toolbar-item">
+      <button type="button" pButton icon="fa fa-fw fa-bell-o" (click)="notificationBlock.toggle($event)"></button>
+      <span *ngIf="notificationCounter" class="topbar-badge">{{ notificationCounter }}</span>
     </div>
+    <p-overlayPanel #notificationBlock class="notifications-block">
+      <app-notification-block (counterChanged)="changeCounter($event)"></app-notification-block>
+    </p-overlayPanel>
 
     <div class="toolbar-item">
       <button #btn type="button" pButton icon="fa fa-fw fa-bullhorn" (click)="onFeedback()"></button>
@@ -68,19 +38,20 @@
     </a>
 
     <p-overlayPanel #op1 styleClass="user-overlay">
-      <div class="ui-g">
-          <div class="ui-g-4">
-            <img src="{{currentUser?.photoURL}}" class="user-overlay-photo" alt="User photo" />
-          </div>
-          <div class="ui-g-8">
-            <h3>{{ currentUser?.displayName }}</h3>
-            <p class="secondary-text">{{ currentUser?.email }}</p>
-            <p class="secondary-text">{{ currentUser?.role.name }}</p>
-            <p class="organization"><i class="fa fa-fw fa-building-o"></i>{{currentUser?.lastPickedOrganization?.name}}</p>
-          </div>
-          <a class="edit" (click)="userpage()"><i class="fa fa-edit"></i>edit</a>
-          <a class="logout" (click)="logout()"><i class="fa fa-fw fa-sign-out"></i>logout</a>
+      <div class="user-info-wrp">
+        <div class="text-center user-photo-wrp">
+          <img src="{{currentUser?.photoURL}}" class="user-photo" alt="User photo" (click)="openUserProfile(op1)"/>
+        </div>
+        <div class="user-overlay-info">
+          <div class="user-name">{{ currentUser?.displayName }}</div>
+          <p class="user-email">{{ currentUser?.email }}</p>
+          <p class="user-organization"><i class="fa fa-fw fa-building-o"></i>{{currentUser?.lastPickedOrganization?.name}}</p>
+        </div>
       </div>
-  </p-overlayPanel>
+      <div class="overlay-buttons">
+        <a class="overlay-btn edit-btn" (click)="openUserProfile(op1);"><i class="fa fa-edit icon-btn"></i>Edit</a>
+        <a class="overlay-btn logout-btn" (click)="logout()"><i class="fa fa-fw fa-sign-out icon-btn"></i>Logout</a>
+      </div>
+    </p-overlayPanel>
   </div>
 </div>

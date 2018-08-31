@@ -3,7 +3,7 @@ import { OrganizationService } from '../../core/services/organization.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Organization } from '../../shared/models/organization.model';
-import { OrganizationInvitesService } from '../../core/services/organization-ivites.service';
+import { OrganizationInvitesService } from '../../core/services/organization-invites.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
 import { environment } from '../../../environments/environment';
@@ -19,7 +19,6 @@ import { User } from '../../shared/models/user.model';
   ]
 })
 export class OrganizationProfileComponent implements OnInit {
-
 
   constructor(
     private organizationService: OrganizationService,

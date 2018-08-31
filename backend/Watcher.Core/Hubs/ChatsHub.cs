@@ -1,31 +1,31 @@
-﻿using System.Security.Claims;
-using Microsoft.Extensions.Logging;
-using Serilog.Context;
-using Watcher.Core.Providers;
-
-namespace Watcher.Hubs
+﻿namespace Watcher.Core.Hubs
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.AspNetCore.Authorization;
 
     using Watcher.Common.Requests;
+    using Watcher.Common.Dtos;
     using Watcher.Core.Interfaces;
+    using Watcher.Common.Helpers.Extensions;
 
-    public class ChatHub : Hub
+    public class ChatsHub : Hub
     {
         private readonly IChatsService _chatsService;
         private readonly IMessagesService _messagesService;
-        private readonly ILogger<ChatHub> _logger;
+        private readonly IEmailProvider _emailProvider;
 
         private static readonly Dictionary<string, List<string>> UsersConnections = new Dictionary<string, List<string>>();
 
-        public ChatHub(ILoggerFactory loggerFactory,
-                        IChatsService chatsService, 
-                        IMessagesService messagesService)
+        public ChatsHub(
+            IChatsService chatsService,
+            IMessagesService messagesService,
+            IEmailProvider emailProvider)
         {
-            _logger = loggerFactory?.CreateLogger<ChatHub>() ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _emailProvider = emailProvider;
             _chatsService = chatsService;
             _messagesService = messagesService;
         }
@@ -40,6 +40,9 @@ namespace Watcher.Hubs
 
             foreach (var userDto in usersInChat)
             {
+                // Sending to email
+                await SendToEmailIfNeeded(userDto, createdMessage);
+
                 if (!UsersConnections.ContainsKey(userDto.Id)) continue;
                 foreach (string connectionId in UsersConnections[userDto.Id])
                     await Clients.Client(connectionId).SendAsync("ReceiveMessage", createdMessage);
@@ -66,7 +69,7 @@ namespace Watcher.Hubs
                     await Clients.Client(connectionId).SendAsync("ChatCreated", chat);
             }
         }
-      
+
         public async Task UpdateChat(ChatUpdateRequest chat, int chatId)
         {
             var result = await _chatsService.UpdateEntityByIdAsync(chat, chatId);
@@ -112,17 +115,33 @@ namespace Watcher.Hubs
             }
         }
 
+        public async Task DeleteChat(int id)
+        {
+            var deleteChat = await _chatsService.GetEntityByIdAsync(id);
+
+            var result = await _chatsService.DeleteEntityByIdAsync(id);
+            if (result)
+            {
+                foreach (var user in deleteChat.Users)
+                {
+                    if (!UsersConnections.ContainsKey(user.Id)) continue;
+                    foreach (string connectionId in UsersConnections[user.Id])
+                        await Clients.Client(connectionId).SendAsync("ChatDeleted", deleteChat);
+                }
+            }
+        }
+
         public override async Task OnConnectedAsync()
         {
-            if (Context.User.Identity.Name != null)
-                AddUserConnection(Context.User.Identity.Name, Context.ConnectionId);
+            if (Context.User.GetUserId() != null)
+                AddUserConnection(Context.User.GetUserId(), Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            if (Context.User.Identity.Name != null)
-                RemoveUserConnection(Context.User.Identity.Name, Context.ConnectionId);
+            if (Context.User.GetUserId() != null)
+                RemoveUserConnection(Context.User.GetUserId(), Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
 
@@ -139,6 +158,20 @@ namespace Watcher.Hubs
         public bool RemoveUserConnection(string userId, string connectionId)
         {
             return UsersConnections.ContainsKey(userId) && UsersConnections[userId].Remove(connectionId);
+        }
+
+        private async Task SendToEmailIfNeeded(UserDto userDto, MessageDto messageDto)
+        {
+            if (userDto.Id != messageDto.User.Id)
+            {
+                var settings = await _chatsService.GetSettingsForUserIdAsync(userDto.Id, messageDto.ChatId);
+                if (settings != null && settings.IsEmailable)
+                {
+                    await _emailProvider.SendMessageOneToOne("watcher@net.com",
+                        $"Chat message from {messageDto.User.DisplayName}", userDto.Email,
+                        messageDto.Text, "");
+                }
+            }
         }
     }
 }

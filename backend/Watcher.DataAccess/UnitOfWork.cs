@@ -8,10 +8,12 @@
     using AutoMapper;
 
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
 
     using Watcher.DataAccess.Data;
     using Watcher.DataAccess.Interfaces;
     using Watcher.DataAccess.Interfaces.Repositories;
+
     using Watcher.DataAccess.Repositories;
 
     public class UnitOfWork : IUnitOfWork
@@ -43,6 +45,8 @@
 
         private INotificationsRepository _notificationsRepository;
 
+        private IUserChatRepository _userChatRepository;
+        
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -89,6 +93,8 @@
 
         public IMessagesRepository MessagesRepository => _messagesRepository ?? (_messagesRepository = new MessagesRepository(_context, _mapper));
 
+        public IUserChatRepository UserChatRepository => _userChatRepository ?? (_userChatRepository = new UserChatRepository(_context, _mapper));
+
         public IOrganizationInvitesRepository OrganizationInvitesRepository =>
             _organizationInvitesRepository
             ?? (_organizationInvitesRepository = new OrganizationInvitesRepository(_context, _mapper));
@@ -104,7 +110,7 @@
                 return _notificationsRepository;
             }
         }
-
+        
         public async Task<bool> SaveAsync()
         {
             try

@@ -1,58 +1,104 @@
-import { Component,
-         OnInit,
-         ViewChild,
-         ComponentFactoryResolver,
-         ViewContainerRef,
-         ComponentRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { NotificationComponent } from '../notification/notification.component';
 import { NotificationsHubService } from '../../core/hubs/notifications.hub';
-import { Notification } from '../../shared/models/notification.model';
+import { NotificationService } from '../../core/services/notification.service';
+import { AuthService } from '../../core/services/auth.service';
+import { SystemToastrService } from '../../core/services/system-toastr.service';
+
 import { NotificationType } from '../../shared/models/notification-type.enum';
+import { Notification } from '../../shared/models/notification.model';
+
 
 @Component({
   selector: 'app-notification-block',
   templateUrl: './notification-block.component.html',
-  styleUrls: ['./notification-block.component.sass']
+  styleUrls: [
+    './notification-block.component.sass',
+    '../system-notification/system-notification.component.sass'
+  ]
 })
 export class NotificationBlockComponent implements OnInit {
 
-  @ViewChild('parent', { read: ViewContainerRef }) container: ViewContainerRef;
+  @Output() counterChanged = new EventEmitter<number>();
 
-  constructor(private _cfr: ComponentFactoryResolver,
-    private notificationsHubService: NotificationsHubService) {
-      this.subscribeToNotificationsEvents();
-  }
+  private _unreadedNotifications = 0;
+
+  notifications: Notification[] = [];
+  type = NotificationType;
+
+  constructor(
+    private notificationsHubService: NotificationsHubService,
+    private authService: AuthService,
+    private notificationsService: NotificationService,
+    private systemToastrService: SystemToastrService) { }
 
   ngOnInit() {
+    this.loadNotifications();
+    this.subscribeToEvents();
   }
 
-  private subscribeToNotificationsEvents(): void {
+  get notificationCounter() {
+    return this._unreadedNotifications;
+  }
+
+  set notificationCounter(value: number) {
+    this._unreadedNotifications = value;
+    this.counterChanged.emit(value);
+  }
+
+  private subscribeToEvents(): void {
     this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
-      console.log('message');
-      value.type = NotificationType[value.notificationSetting.type].toLowerCase();
-
-      if (value.type === 'chat' || value.notificationSetting.isMute) {
-        return;
+      if (!value.notificationSetting.isDisable) {
+        this.notificationCounter++;
+        if (!value.notificationSetting.isMute) {
+          this.systemToastrService.send(value);
+        }
       }
+      this.notifications.unshift(value);
+    });
 
-      const component = this.addComponent(value);
-      this.destroyTimeout(component);
+    this.notificationsHubService.notificationDeleted.subscribe((value: Notification) => {
+      const index = this.notifications.findIndex(item => item.id === value.id);
+      this.notifications.splice(index, 1);
     });
   }
 
-  addComponent(notification: Notification): ComponentRef<NotificationComponent> {
-      const comp = this._cfr.resolveComponentFactory(NotificationComponent);
-      const expComponent = this.container.createComponent(comp);
-      expComponent.instance.notification = notification;
-
-      return expComponent;
+  loadNotifications(): void {
+    this.notificationsService.getAll(this.authService.getCurrentUser().id).subscribe((value: Notification[]) => {
+      this.notifications = value;
+      this.notificationCounter = this.calcNotReadNotifications(value);
+    });
   }
 
-  destroyTimeout(component: ComponentRef<NotificationComponent>): void {
-    setTimeout(() => {
-      component.destroy();
-    }, 3000);
+  calcNotReadNotifications(allNotifications: Notification[]): number {
+    return allNotifications.filter(item => !item.wasRead).length;
   }
 
+  markAsReadAll(): void {
+    this.notificationCounter = 0;
+    let notReadNotifications: Notification[];
+
+    notReadNotifications = this.notifications.filter(item => !item.wasRead);
+    notReadNotifications.forEach(item => item.wasRead = true);
+
+    this.notificationsService.updateAll(notReadNotifications).subscribe();
+  }
+
+  markAsRead(id: number): void {
+    this.notificationCounter--;
+    const notify = this.notifications.find(item => item.id === id);
+    notify.wasRead = true;
+    this.notificationsService.update(id, notify).subscribe();
+  }
+
+  remove(id: number): void {
+    const notify = this.notifications.find(item => item.id === id);
+    if (!notify.wasRead) {
+      this.notificationCounter--;
+    }
+
+    const index = this.notifications.findIndex(item => item.id === id);
+    this.notifications.splice(index, 1);
+    this.notificationsHubService.delete(notify);
+  }
 }

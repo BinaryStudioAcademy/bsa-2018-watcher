@@ -1,0 +1,79 @@
+.system-notification
+	/deep/.ui-toast-top-right
+		top: 75px
+	/deep/.ui-toast
+		width: 390px
+		.ui-toast-message
+			background-color: white
+			border: 0 none
+			box-shadow: 2px 2px 5px 0px #c2c1c1
+		.ui-toast-message-content
+			padding: 0
+		.ui-toast-close-icon
+			color: black
+		.ui-toast-close-icon:hover
+			color: gray
+
+.unread-message
+	background-color: #E7E7E7
+.message-container
+	display: grid
+	grid-template-columns: auto 1fr
+	grid-template-rows: 100px
+	.message-content
+		display: grid
+		grid-template-rows: auto 1fr auto
+		padding: 5px 10px 0
+	.message-title
+		color: #575757
+		margin-bottom: 5px
+		font-weight: bolder
+		font-size: 1.1em
+		width: 250px
+	.message-img
+		height: 100px
+		width: 100px
+	.message-text
+		color: black
+		line-height: 1.5em
+		max-height: 3em
+		overflow: hidden
+		display: -webkit-box
+		-webkit-line-clamp: 2
+		/* autoprefixer: off */
+		-webkit-box-orient: vertical
+		/* autoprefixer: on */
+	.message-date
+		margin-top: 5px
+		margin-bottom: 3px
+		text-align: right
+		color: #aaaabd
+		font-size: 0.9em
+
+.text-overflow
+	overflow: hidden
+	text-overflow: ellipsis
+	white-space: nowrap
+
+.action
+	cursor: pointer
+
+.info
+	background-color: #82B0E3
+.info:before
+	content: "\f129"
+
+.error
+	background-color: #E5A4AF
+.error:before
+	content: "\f00d"
+
+.warning
+	background-color: #F4D98F
+.warning:before
+	content: "\f071"
+
+.icon-style
+	text-align: center
+	line-height: 100px
+	color: white

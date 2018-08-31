@@ -103,7 +103,10 @@ namespace Watcher.Core.Services
 
         public async Task<bool> DeleteEntityByIdAsync(int id)
         {
-            await _uow.InstanceRepository.DeleteAsync(id);
+            await _uow.InstanceRepository.DeleteAsync(id,
+                instances =>
+                instances.Include(i => i.Dashboards)
+                            .ThenInclude(d => d.Charts));
 
             var result = await _uow.SaveAsync();
 

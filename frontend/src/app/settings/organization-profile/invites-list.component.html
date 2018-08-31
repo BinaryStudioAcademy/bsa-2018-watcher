@@ -1,0 +1,37 @@
+<p-dataView #dt *ngIf="invites" [(value)]="invites" 
+                                [paginator]="true" [rows]="rowsPerPage" 
+                                [totalRecords]="invites.length"
+                                (onPage)="onPaginate($event)">
+    <p-header>List of invites</p-header>
+    <ng-template let-invite pTemplate="listItem">
+        <div class="ui-g ui-g-12 invite-item">
+            <div class="ui-g ui-g-12 item-link">
+                <div class="ui-g-12">Invite link:</div>
+                <div class="ui-g-12 date">
+                    <div class="ui-fluid item-input">
+                        <input type="text" disabled pInputText placeholder="{{invite.showLink}}">
+                    </div>         
+                    <button pButton type="button" class="ui-button-danger invite-item-button" (click)="onDelete(invite.invite.id)" label="Delete"></button>          
+                </div> 
+                <div class="ui-g-12">
+                    <p-button label="Copy" (click)="onCopy(invite.showLink)"></p-button>        
+                </div>                      
+            </div>
+            <div class="ui-g ui-g-12 invite-info">
+                <div class="ui-g-12">Expired at:</div>
+                <div class="ui-g-12 date">
+                    <div class="ui-fluid item-input">
+                        <p-calendar class="item-input" [(ngModel)]="invite.invite.experationDate"></p-calendar>
+                    </div>
+                    <button pButton type="button" class="ui-button-success invite-item-button" (click)="onUpdate(invite.invite.id)" label="Update"></button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft" let-state>
+        <button type="button" pButton icon="fa-refresh"></button>
+    </ng-template>
+    <ng-template pTemplate="paginatoright">
+        <button type="button" pButton icon="fa-cloud-upload"></button>
+    </ng-template>
+</p-dataView>

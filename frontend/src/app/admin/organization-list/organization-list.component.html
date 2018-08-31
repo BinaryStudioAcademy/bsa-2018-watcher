@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <p-table [value]="organizations" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
+  <p-table [value]="organizations" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]" [lazy]="true" (onLazyLoad)="loadOrganizationsLazy($event)">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th>NAME</th>
