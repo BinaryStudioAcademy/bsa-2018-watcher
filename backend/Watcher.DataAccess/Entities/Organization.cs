@@ -38,8 +38,6 @@
 
         public IList<Instance> Instances { get; set; }
 
-        public IList<Notification> Notifications { get; set; }
-
         public IList<OrganizationInvite> OrganizationInvites { get; set; }
 
         public void OnDelete()
@@ -49,14 +47,6 @@
                 foreach (var instance in Instances)
                 {
                     instance.OnDelete();
-                }
-            }
-
-            if (Notifications != null)
-            {
-                foreach (var notification in Notifications)
-                {
-                    notification.OnDelete();
                 }
             }
 

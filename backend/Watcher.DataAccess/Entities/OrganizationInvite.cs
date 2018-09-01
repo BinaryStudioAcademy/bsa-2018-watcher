@@ -25,8 +25,7 @@ namespace Watcher.DataAccess.Entities
 
         public string InvitedUserId { get; set; }
         public User InvitedUser { get; set; }
-
-
+        
         public string CreatedByUserId { get; set; }
         public User CreatedByUser { get; set; }
 
