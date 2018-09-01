@@ -7,6 +7,7 @@ import { ToastrService } from './toastr.service';
 import { InstanceRequest } from '../../dashboards/models/instance-request.model';
 import { EventEmitter } from '@angular/core';
 import { Instance } from '../../shared/models/instance.model';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,8 @@ export class InstanceService {
   public instanceChecked: EventEmitter<Instance>;
 
   constructor(private http: HttpClient,
-    private toastrService: ToastrService) {
+    private toastrService: ToastrService,
+    private apiService: ApiService) {
     this.instanceAdded = new EventEmitter<Instance>();
     this.instanceEdited = new EventEmitter<Instance>();
     this.instanceRemoved = new EventEmitter<number>();

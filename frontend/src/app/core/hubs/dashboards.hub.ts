@@ -28,9 +28,9 @@ export class DashboardsHub {
     return this.apiService.get(`/CollectedData/Percentage/${id}?count=20`) as Observable<PercentageInfo[]>;
   }
 
-  connectToSignalR(): Promise<void> {
-    this.createConnection();
-    this.registerOnServerEvents();
+  connectToSignalR(firebaseToken: string, watcherToken: string): Promise<void> {
+      this.createConnection(firebaseToken, watcherToken);
+      this.registerOnServerEvents();
     return this.startDashboardHubConnection();
   }
 
@@ -63,9 +63,7 @@ export class DashboardsHub {
     return item;
   }
 
-  private createConnection(): void {
-    const firebaseToken = this.authService.getFirebaseToken();
-    const watcherToken = this.authService.getWatcherToken();
+  private createConnection(firebaseToken: string, watcherToken: string): void {
     const connPath = `${environment.server_url}/dashboards?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
     this.hubConnection = new signalR.HubConnectionBuilder()

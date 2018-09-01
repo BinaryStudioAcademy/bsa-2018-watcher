@@ -22,9 +22,7 @@ export class NotificationsHubService {
     this.startNotificationsHubConnection();
   }
 
-  private createConnection(): void {
-    const firebaseToken = this.authService.getFirebaseToken();
-    const watcherToken = this.authService.getWatcherToken();
+  private createConnection(firebaseToken: string, watcherToken: string): void {
     const connPath = `${environment.server_url}/notifications?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -34,17 +32,19 @@ export class NotificationsHubService {
   }
 
   private startNotificationsHubConnection(): void {
-    this.createConnection();
-    console.log('NotificationsHub trying to connect');
-    this.hubConnection.start()
-      .then(() => {
-        console.log('NotificationsHub connected');
-        this.registerOnServerEvents();
-      })
-      .catch(err => {
-        console.error('Error while establishing connection (NotificationsHub)');
-        setTimeout(this.startNotificationsHubConnection(), 3000);
-      });
+    this.authService.getTokens().subscribe( ([firebaseToken, watcherToken]) => {
+      this.createConnection(firebaseToken, watcherToken);
+      console.log('NotificationsHub trying to connect');
+      this.hubConnection.start()
+        .then(() => {
+          console.log('NotificationsHub connected');
+          this.registerOnServerEvents();
+        })
+        .catch(err => {
+          console.error('Error while establishing connection (NotificationsHub)');
+          setTimeout(this.startNotificationsHubConnection(), 3000);
+        });
+    });
   }
 
   send(notification: Notification, type: NotificationType) {
