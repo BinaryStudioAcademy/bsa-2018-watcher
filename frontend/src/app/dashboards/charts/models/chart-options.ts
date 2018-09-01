@@ -1,6 +1,6 @@
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 import * as shape from 'd3-shape';
-import {CustomChart} from './custom-chart';
+import {DashboardChart} from '../../models/dashboard-chart';
 
 export const defaultOptions = {
   view: [716, 337],
@@ -25,5 +25,6 @@ export const defaultOptions = {
   tooltipDisabled: false,
   showSeriesOnHover: true,
   curve: shape.curveLinear,
+  theme: 'light',
   curveClosed: shape.curveCardinalClosed
-} as CustomChart;
+} as DashboardChart;

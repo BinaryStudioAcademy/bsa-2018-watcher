@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import * as SvgSaver from 'svgsaver';
-import {CustomChart, CustomData} from '../models';
+import {CustomChart, CustomChartType, CustomData} from '../models';
 import {DashboardChart} from '../../models/dashboard-chart';
 
 const EMPTY = [];
@@ -13,10 +13,10 @@ const EMPTY = [];
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class ChartComponent implements OnInit {
-  @Output() select: EventEmitter<{ chart: CustomChart, value?: any }> = new EventEmitter();
+  @Output() select: EventEmitter<{ chart: DashboardChart, value?: any }> = new EventEmitter();
 
   @Input() chart: DashboardChart;
-  @Input() chartType: any;
+  @Input() chartType: CustomChartType;
   @Input() data: CustomData[];
   @Input() showDownload = false;
   // TODO: Here after Data came from father component need to parse data and render it on Component

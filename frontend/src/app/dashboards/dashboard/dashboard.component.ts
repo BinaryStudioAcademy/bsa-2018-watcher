@@ -11,10 +11,9 @@ import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 import {PercentageInfo} from '../models/percentage-info';
-import {CustomChart, CustomChartType, CustomData} from '../charts/models';
+import {CustomChartType, CustomData} from '../charts/models';
 import {DataService} from '../services/data.service';
 
-import {Chart} from '../../shared/models/chart.model';
 import {ChartType, chartTypes} from '../../shared/models/chart-type.enum';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {ChartService} from '../../core/services/chart.service';
@@ -57,7 +56,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   threshold: number;
 
   // Inputs for Chart
-  chartOptions: CustomChart = defaultOptions;
+  chartOptions: DashboardChart = defaultOptions;
   dataForChart: CustomData[] = [];
   chartType: CustomChartType = customChartTypes[0];
   showPreview = false;
@@ -102,31 +101,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
   });
 
   processData(): void {
-    // this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value;
-    // this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value;
+    debugger;
+    this.showPreview = false;
     this.chartType.name = chartTypes[this.selectedType];
+    this.chartType.type = this.selectedType;
     this.dataForChart = this.dataService.prepareData(this.selectedType, this.selectedSource, this.collectedDataForChart);
-    this.showPreview = true;
+    if (this.dataForChart && this.dataForChart.length > 0) {
+      this.showPreview = true;
+    }
 
     if (this.selectedType === ChartType.BarVertical) {
       this.chartOptions.xAxisLabel = 'Parameters';
       this.chartOptions.yAxisLabel = 'Percentage %';
     } else if (this.selectedType === ChartType.LineChart) {
+      // this.dataForChart = single;
       this.chartOptions.xAxisLabel = 'Time';
       this.chartOptions.yAxisLabel = 'Percentage %';
     } else if (this.selectedType === ChartType.Guage) {
       this.chartOptions.yAxisLabel = 'Process';
       this.chartOptions.xAxisLabel = '';
     }
-    /* if (this.selectedType === ChartType.BarVertical) {
-       this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Parameters';
-       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
-     } else if (this.selectedType === ChartType.LineChart) {
-       this.chartOptions.xAxisLabel = this.chartForm.get('xAxisLabel').value ? this.chartForm.get('xAxisLabel').value : 'Time';
-       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Percentage %';
-     } else if (this.selectedType === ChartType.Guage) {
-       this.chartOptions.yAxisLabel = this.chartForm.get('yAxisLabel').value ? this.chartForm.get('yAxisLabel').value : 'Process';
-     }*/
   }
 
   async ngOnInit(): Promise<void> {
@@ -152,6 +146,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
           if (info && info.length > 0) {
             this.PercentageInfoToDisplaySingle = info[info.length - 1];
             this.PercentageInfoToDisplay = info;
+            // for (let i = 0; i < this.dashboardMenuItems.length; i++) {
+            //   for (let j = 0; j < this.dashboardMenuItems.length; j++) {
+            //     this.dashboardMenuItems[i].charts[j].data = this.dataService.prepareData(
+            //       this.dashboardMenuItems[i].charts[j].chartType.type, this.dashboardMenuItems[i].charts[j].dataSources, info);
+            //   }
+            // }
           }
           this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
         }, err => {
@@ -340,7 +340,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       label: dashboard.title,
       dashId: dashboard.id,
       createdAt: dashboard.createdAt,
-      charts: dashboard.charts.map(c => this.instantiateDashboardChart(c)),
+      charts: dashboard.charts.map(c => this.dataService.instantiateDashboardChart(c, this.collectedDataForChart)),
       // routerLink: `/user/instances/${this.instanceId}/${this.instanceGuidId}/dashboards/${dashboard.id}`,
       command: (onclick) => {
         this.activeDashboardItem = item;
@@ -374,7 +374,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (true) {
       this.chartService.create(this.createChartRequest()).subscribe(
         value => {
-          const dashChat: DashboardChart = this.instantiateDashboardChart(value);
+          const dashChat: DashboardChart = this.dataService.instantiateDashboardChart(value, this.collectedDataForChart);
           this.activeDashboardItem.charts.push(dashChat);
           this.toastrService.success('Chart was created');
         },
@@ -382,44 +382,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.toastrService.error(`Error ocured status: ${error.message}`);
         });
     }
-  }
-
-  instantiateDashboardChart(value: Chart): DashboardChart {
-    debugger;
-    const dashChart: DashboardChart = {
-      view: [800, 400],
-      colorScheme: defaultOptions.colorScheme,
-      schemeType: defaultOptions.schemeType,
-      showLegend: value.showLegend,
-      legendTitle: value.legendTitle,
-      gradient: value.gradient,
-      showXAxis: value.showXAxis,
-      showYAxis: value.showYAxis,
-      showXAxisLabel: value.showXAxisLabel,
-      showYAxisLabel: value.showYAxisLabel,
-      yAxisLabel: value.yAxisLabel,
-      xAxisLabel: value.xAxisLabel,
-      autoScale: value.autoScale,
-      showGridLines: value.showGridLines,
-      rangeFillOpacity: value.rangeFillOpacity,
-      roundDomains: value.roundDomains,
-      tooltipDisabled: value.isTooltipDisabled,
-      showSeriesOnHover: value.isShowSeriesOnHover,
-      curve: defaultOptions.curve,
-      curveClosed: defaultOptions.curveClosed,
-      title: value.title,
-      data: this.dataService.prepareData(value.type, this.dataService.convertStringToArrEnum(value.sources), this.collectedDataForChart),
-      activeEntries: [],
-      chartType: {
-        name: chartTypes[value.type],
-        title: '',
-        chartLabels: null,
-        dimLabels: []
-      },
-      theme: value.isLightTheme ? 'light' : 'dark'
-    };
-
-    return dashChart;
   }
 
   createChartRequest(): ChartRequest {

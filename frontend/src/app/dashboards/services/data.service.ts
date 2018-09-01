@@ -5,6 +5,10 @@ import {NumberSeriesItem, SeriesItem} from '../models/series-item';
 import {MultiChartItem} from '../models/multi-chart-item';
 import {dataPropertyLables, DataProperty} from '../../shared/models/data-property.enum';
 import {ChartType} from '../../shared/models/chart-type.enum';
+import {Chart} from '../../shared/models/chart.model';
+import {DashboardChart} from '../models/dashboard-chart';
+import {customChartTypes} from '../charts/chart-builder/customChartTypes';
+import {defaultOptions} from '../charts/models/chart-options';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +28,40 @@ export class DataService {
     return array;
   }
 
+  instantiateDashboardChart(value: Chart, collData: CollectedData[]): DashboardChart {
+    debugger;
+    const dataProps = this.convertStringToArrEnum(value.sources);
+    const dashChart: DashboardChart = {
+      view: [600, 300],
+      colorScheme: defaultOptions.colorScheme,
+      schemeType: defaultOptions.schemeType,
+      showLegend: value.showLegend,
+      legendTitle: value.legendTitle,
+      gradient: value.gradient,
+      showXAxis: value.showXAxis,
+      showYAxis: value.showYAxis,
+      showXAxisLabel: value.showXAxisLabel,
+      showYAxisLabel: value.showYAxisLabel,
+      yAxisLabel: value.yAxisLabel,
+      xAxisLabel: value.xAxisLabel,
+      autoScale: value.autoScale,
+      showGridLines: value.showGridLines,
+      rangeFillOpacity: value.rangeFillOpacity,
+      roundDomains: value.roundDomains,
+      tooltipDisabled: value.isTooltipDisabled,
+      showSeriesOnHover: value.isShowSeriesOnHover,
+      curve: defaultOptions.curve,
+      curveClosed: defaultOptions.curveClosed,
+      title: value.title,
+      dataSources: dataProps,
+      data: this.prepareData(value.type, dataProps , collData),
+      activeEntries: [],
+      chartType: customChartTypes.find(ct => ct.type === value.type),
+      theme: value.isLightTheme ? 'light' : 'dark'
+    };
+
+    return dashChart;
+  }
   // dataSource - property to show on the chart
   prepareData(chartType: ChartType, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
     if (!dataSources || (!chartType && chartType !== ChartType.BarVertical)) {

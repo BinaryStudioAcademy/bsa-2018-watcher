@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CustomChart} from '../models';
+import {DashboardChart} from '../../models/dashboard-chart';
 
 @Component({
   selector: 'app-chart-dashboard',
@@ -7,7 +7,7 @@ import { CustomChart} from '../models';
   styleUrls: ['./chart-dashboard.component.sass']
 })
 export class ChartDashboardComponent implements OnInit {
-  @Input() charts: CustomChart[] = [];
+  @Input() charts: DashboardChart[] = [];
 
   constructor() { }
 

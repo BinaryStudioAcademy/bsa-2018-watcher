@@ -1,11 +1,12 @@
 import {Component, OnInit, NgZone, Output, EventEmitter} from '@angular/core';
 import * as chroma from 'chroma-js';
 
-import {CustomChart, CustomChartType, CustomData} from '../models';
+import { CustomChartType, CustomData} from '../models';
 import {toCapitalizedWords} from '../models';
 import {customChartTypes} from './customChartTypes';
 import {CollectedDataService} from '../../../core/services/collected-data.service';
 import {defaultOptions} from '../models/chart-options';
+import {DashboardChart} from '../../models/dashboard-chart';
 
 @Component({
   selector: 'app-chart-builder',
@@ -16,7 +17,7 @@ export class ChartBuilderComponent implements OnInit {
   chartTypes = customChartTypes;
 
   dataDims: string[] = [null, null, null, null, 'count'];
-  chartOptions: CustomChart;
+  chartOptions: DashboardChart;
   colors: string;
   colorsRight: string;
   steps: number;
@@ -33,7 +34,7 @@ export class ChartBuilderComponent implements OnInit {
 
   aggragates = ['count', 'sum', 'avg', 'max', 'min'];
 
-  @Output() addChart: EventEmitter<CustomChart> = new EventEmitter();
+  @Output() addChart: EventEmitter<DashboardChart> = new EventEmitter();
 
   get hasChartSelected(): boolean {
     return this.chartType && !!this.chartType.name;
@@ -98,7 +99,7 @@ export class ChartBuilderComponent implements OnInit {
     this.lightnessRight = false;
     this.bezier = false;
     this.lightness = false;
-    this.chartOptions = {...defaultOptions} as CustomChart;
+    this.chartOptions = {...defaultOptions} as DashboardChart;
     return this.updateColorScheme();
   }
 
@@ -111,7 +112,6 @@ export class ChartBuilderComponent implements OnInit {
     const chart = {...this.chartOptions};
     chart.data = this.data.slice();
     chart.chartType = {...this.chartType};
-    chart.dataDims = this.dataDims.slice();
     chart.theme = this.theme;
     return this.addChart.emit(chart);
   }

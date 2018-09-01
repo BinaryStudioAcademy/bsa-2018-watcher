@@ -1,4 +1,5 @@
-import {CustomChartType, CustomData, Filter} from '../charts/models';
+import {CustomChartType, CustomData} from '../charts/models';
+import {DataProperty} from '../../shared/models/data-property.enum';
 
 export interface DashboardChart {
   view: any;
@@ -21,9 +22,8 @@ export interface DashboardChart {
   showSeriesOnHover: boolean;
   curve: any;
   curveClosed: any;
-
   title: string;
-
+  dataSources: DataProperty[];
   data: CustomData[];
   activeEntries: CustomData[];
   chartType: CustomChartType;

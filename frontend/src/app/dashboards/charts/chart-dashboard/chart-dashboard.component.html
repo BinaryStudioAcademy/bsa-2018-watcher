@@ -1,14 +1,11 @@
-<div class="container">
-  <div class="charts">
-    <div class="viz-container" [ngClass]="chart.theme" *ngFor="let chart of charts">
-      <h1></h1>
-      <app-chart
-        class="chart"
-        [chart]="chart"
-        [data]="chart.data"
-        [activeEntries]="chart.activeEntries"
-        [chartType]="chart.chartType">
-      </app-chart>
-    </div>
+<div class="charts-area">
+  <div class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
+    <app-chart
+      class="chart"
+      [chart]="chart"
+      [data]="chart.data"
+      [activeEntries]="chart.activeEntries"
+      [chartType]="chart.chartType">
+    </app-chart>
   </div>
 </div>

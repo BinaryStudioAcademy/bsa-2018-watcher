@@ -1,8 +1,10 @@
 import {CustomChartType} from '../models';
+import {ChartType} from '../../../shared/models/chart-type.enum';
 
-function createChartType({title, ...obj}): CustomChartType {
+function createChartType({title, type, ...obj}): CustomChartType {
   return {
     title,
+    type: type,
     name: titleToName(title),
     dimLabels: ['Group by', 'Name', 'Value', null],
     ...obj
@@ -85,54 +87,66 @@ const lineChartLables = ([group, name, value, value2, agg]) => {
 export const customChartTypes = [
   createChartType({
     title: 'Bar Vertical',
+    type: ChartType.BarVertical,
     dimLabels: singleDimLables,
     chartLabels: singleChartLables
-  }),
-  createChartType({
-    title: 'Bar Horizontal',
-    dimLabels: singleDimLables,
-    chartLabels: singleChartLablesInv
   }),
   createChartType({
     title: 'Pie',
+    type: ChartType.Pie,
     dimLabels: singleDimLables,
     chartLabels: singleChartLables
   }),
   createChartType({
-    title: 'Tree Map',
-    dimLabels: singleDimLables,
-    chartLabels: cardsLables
-  }),
-  createChartType({
-    title: 'Number Cards',
-    dimLabels: singleDimLables,
-    chartLabels: cardsLables
-  }),
-  createChartType({
     title: 'Guage',
-    dimLabels: singleDimLables,
-    chartLabels: cardsLables
-  }),
-  createChartType({
-    title: 'Pie Grid',
+    type: ChartType.Guage,
     dimLabels: singleDimLables,
     chartLabels: cardsLables
   }),
   createChartType({
     title: 'Line Chart',
+    type: ChartType.LineChart,
     dimLabels: lineChartLabels,
     chartLabels: lineChartLables
   }),
-  createChartType({
-    title: 'Bar Vertical 2D',
-    dimLabels: multiDimLables,
-    chartLabels: multiChartLables
-  }),
-  createChartType({
-    title: 'Bar Horizontal 2D',
-    dimLabels: multiDimLables,
-    chartLabels: multiChartLablesInv
-  }),
+
+  // createChartType({
+  //   title: 'Bar Horizontal',
+  //   dimLabels: singleDimLables,
+  //   chartLabels: singleChartLablesInv
+  // }),
+  // createChartType({
+  //   title: 'Tree Map',
+  //   dimLabels: singleDimLables,
+  //   chartLabels: cardsLables
+  // }),
+  // createChartType({
+  //   title: 'Number Cards',
+  //   dimLabels: singleDimLables,
+  //   chartLabels: cardsLables
+  // }),
+  // createChartType({
+  //   title: 'Pie Grid',
+  //   dimLabels: singleDimLables,
+  //   chartLabels: cardsLables
+  // }),
+  // createChartType({
+  //   title: 'Bar Vertical 2D',
+  //   dimLabels: multiDimLables,
+  //   chartLabels: multiChartLables
+  // }),
+  // createChartType({
+  //   title: 'Polar Chart',
+  //   dimLabels: ['Group by', 'Angle Values', 'Radius Values', null, 'Aggregation'],
+  //   chartLabels: multiChartLables
+  // }),
+  // createChartType({
+  //   title: 'Heat Map',
+  //   dimLabels: ['x-Category', 'y-Category', 'Color', null, 'Aggregation'],
+  //   chartLabels: heatMapChartLables
+  // }),
+
+  // Commented
   /* createChartType({
     title: 'Bar Vertical Stacked',
     dimLabels: multiDimLables,
@@ -148,16 +162,11 @@ export const customChartTypes = [
     dimLabels: multiDimLables,
     chartLabels: singleChartLables
   }), */
-  createChartType({
-    title: 'Polar Chart',
-    dimLabels: ['Group by', 'Angle Values', 'Radius Values', null, 'Aggregation'],
-    chartLabels: multiChartLables
-  }),
-  createChartType({
-    title: 'Heat Map',
-    dimLabels: ['x-Category', 'y-Category', 'Color', null, 'Aggregation'],
-    chartLabels: heatMapChartLables
-  }),
+  // createChartType({
+  //   title: 'Bar Horizontal 2D',
+  //   dimLabels: multiDimLables,
+  //   chartLabels: multiChartLablesInv
+  // }),
   /* createChartType({
     title: 'Bubble Chart',
     dimLabels: ['GroupBy', 'x-Values', 'y-Values', 'Radius', 'Aggregation'],
