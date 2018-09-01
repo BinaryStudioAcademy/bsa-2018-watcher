@@ -141,7 +141,7 @@
                             </div>
                         </div>
                         <!-- <div class=" btn-panel ">  </div>-->
-                        <button (click)="onSentInviteToEmail()" class="view-inline ui-button-raised ui-button-success ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                        <button (click)="onSentInviteToEmail()" class="btn-inline-flex view-inline ui-button-raised ui-button-success ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                             [disabled]="inviteLink === '' || iEmail?.invalid || isSending">
                             <p-progressSpinner class="btn-spinner" *ngIf="isSending" strokeWidth="5"></p-progressSpinner>
                             <span class="ui-button-text" *ngIf="!isSending">Send</span>
