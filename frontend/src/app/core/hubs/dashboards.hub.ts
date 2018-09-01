@@ -28,11 +28,9 @@ export class DashboardsHub {
     return this.apiService.get(`/CollectedData/Percentage/${id}?count=20`) as Observable<PercentageInfo[]>;
   }
 
-  connectToSignalR(): Promise<void> {
-    this.authService.getTokens().subscribe( (tokens: [string, string]) => {
-      this.createConnection(tokens[0], tokens[1]);
+  connectToSignalR(firebaseToken: string, watcherToken: string): Promise<void> {
+      this.createConnection(firebaseToken, watcherToken);
       this.registerOnServerEvents();
-    });
     return this.startHubConnection();
   }
 

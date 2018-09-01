@@ -74,7 +74,7 @@
                 audience: _tokenOptions.Value.Audience,
                 notBefore: now,
                 subject: claimsIdentity,
-                expires: now.Add(TimeSpan.FromMinutes(1)),
+                expires: now.Add(TimeSpan.FromMinutes(3)),
                 signingCredentials: new SigningCredentials(_tokenOptions.Value.GetSymmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature)
             ); // TODO: Get secret key from Configs
 

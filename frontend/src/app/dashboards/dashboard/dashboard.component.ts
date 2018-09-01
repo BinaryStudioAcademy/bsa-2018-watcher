@@ -11,6 +11,7 @@ import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 import {PercentageInfo} from '../models/percentage-info';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -47,13 +48,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private instanceService: InstanceService,
               private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
-              private activateRoute: ActivatedRoute) {
+              private activateRoute: ActivatedRoute,
+              private authService: AuthService) {
   }
 
   async ngOnInit(): Promise<void> {
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
-
-    await this.dashboardsHub.connectToSignalR();
+    this.authService.getTokens().subscribe( async ([firebaseToken, watcherToken]) => {
+      await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
+    });
 
     this.subscription = this.activateRoute.params.subscribe(params => {
       if (this.instanceGuidId) {

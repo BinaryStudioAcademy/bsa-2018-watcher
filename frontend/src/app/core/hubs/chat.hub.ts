@@ -39,7 +39,10 @@ export class ChatHub {
 
     private startConnection(): void {
       this.authService.getTokens().subscribe((tokens: [string, string]) => {
-        this.buildConnection(tokens[0], tokens[1]);
+        const firebaseToken = tokens[0];
+        const watcherToken = tokens[1];
+
+        this.buildConnection(firebaseToken, watcherToken);
         console.log('ChatHub trying to connect');
         this.hubConnection
             .start()

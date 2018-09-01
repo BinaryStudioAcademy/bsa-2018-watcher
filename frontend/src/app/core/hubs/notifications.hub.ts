@@ -20,15 +20,13 @@ export class NotificationsHubService {
   connectionEstablished = new EventEmitter<Boolean>();
 
   constructor(private authService: AuthService) {
-    this.connectToSignalR();
+
   }
 
-  connectToSignalR(): void {
-    this.authService.getTokens().subscribe( (tokens: [string, string]) => {
-      this.createConnection(tokens[0], tokens[1]);
+  connectToSignalR(firebaseToken: string, watcherToken: string): void {
+    this.createConnection(firebaseToken, watcherToken);
       this.registerOnServerEvents();
       this.startNotificationHubConnection();
-    });
   }
 
   send(userId: string, item: string): string {
