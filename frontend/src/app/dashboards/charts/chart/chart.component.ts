@@ -3,6 +3,8 @@ import * as SvgSaver from 'svgsaver';
 import {DashboardChartType, CustomData} from '../models';
 import {DashboardChart} from '../../models/dashboard-chart';
 
+const EMPTY = [];
+
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
