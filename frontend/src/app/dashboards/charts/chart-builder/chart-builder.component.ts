@@ -1,9 +1,9 @@
 import {Component, OnInit, NgZone, Output, EventEmitter} from '@angular/core';
 import * as chroma from 'chroma-js';
 
-import { CustomChartType, CustomData} from '../models';
+import { DashboardChartType, CustomData} from '../models';
 import {toCapitalizedWords} from '../models';
-import {customChartTypes} from './customChartTypes';
+import {customChartTypes} from '../models/customChartTypes';
 import {CollectedDataService} from '../../../core/services/collected-data.service';
 import {defaultOptions} from '../models/chart-options';
 import {DashboardChart} from '../../models/dashboard-chart';
@@ -27,7 +27,7 @@ export class ChartBuilderComponent implements OnInit {
   lightnessRight: boolean;
   diverging: boolean;
   theme: string;
-  chartType: CustomChartType = customChartTypes[0];
+  chartType: DashboardChartType = customChartTypes[0];
 
   data: CustomData[] = [];
   headerValues: any[] = [];
@@ -88,7 +88,7 @@ export class ChartBuilderComponent implements OnInit {
   }
 
   clearAll(): any {
-    this.chartType = customChartTypes[0];
+    this.chartType = {...customChartTypes[0]};
     this.theme = 'dark';
     this.colors = '#a8385d,#7aa3e5,#a27ea8,#aae3f5,#adcded,#a95963,#8796c0,#7ed3ed,#50abcc,#ad6886';
     this.colorsRight = 'darkred, deeppink, orange, lightyellow';
@@ -99,7 +99,8 @@ export class ChartBuilderComponent implements OnInit {
     this.lightnessRight = false;
     this.bezier = false;
     this.lightness = false;
-    this.chartOptions = {...defaultOptions} as DashboardChart;
+    this.chartOptions = {...defaultOptions};
+    this.chartOptions.chartType = {...defaultOptions.chartType};
     return this.updateColorScheme();
   }
 
@@ -116,7 +117,7 @@ export class ChartBuilderComponent implements OnInit {
     return this.addChart.emit(chart);
   }
 
-  setChartType(chartType: CustomChartType): void {
+  setChartType(chartType: DashboardChartType): void {
     this.chartType = chartType;
     this.dataDims = chartType.dimLabels.map((l, i) => l ? this.dataDims[i] : null);
     return this.setChartLabels();

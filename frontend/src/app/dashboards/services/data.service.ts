@@ -7,7 +7,7 @@ import {dataPropertyLables, DataProperty} from '../../shared/models/data-propert
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {Chart} from '../../shared/models/chart.model';
 import {DashboardChart} from '../models/dashboard-chart';
-import {customChartTypes} from '../charts/chart-builder/customChartTypes';
+import {customChartTypes} from '../charts/models/customChartTypes';
 import {defaultOptions} from '../charts/models/chart-options';
 
 @Injectable({
@@ -29,11 +29,14 @@ export class DataService {
   }
 
   instantiateDashboardChart(value: Chart, collData: CollectedData[]): DashboardChart {
-    debugger;
     const dataProps = this.convertStringToArrEnum(value.sources);
     const dashChart: DashboardChart = {
       view: [600, 300],
-      colorScheme: defaultOptions.colorScheme,
+      id: value.id,
+      showCommon: value.showCommon,
+      threshold: value.threshold,
+      mostLoaded: value.mostLoaded,
+      colorScheme: {...defaultOptions.colorScheme},
       schemeType: defaultOptions.schemeType,
       showLegend: value.showLegend,
       legendTitle: value.legendTitle,
@@ -54,14 +57,15 @@ export class DataService {
       curveClosed: defaultOptions.curveClosed,
       title: value.title,
       dataSources: dataProps,
-      data: this.prepareData(value.type, dataProps , collData),
+      data: this.prepareData(value.type, dataProps, collData),
       activeEntries: [],
-      chartType: customChartTypes.find(ct => ct.type === value.type),
+      chartType: {...customChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
       theme: value.isLightTheme ? 'light' : 'dark'
     };
 
     return dashChart;
   }
+
   // dataSource - property to show on the chart
   prepareData(chartType: ChartType, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
     if (!dataSources || (!chartType && chartType !== ChartType.BarVertical)) {

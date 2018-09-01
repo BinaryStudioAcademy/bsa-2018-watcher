@@ -1,6 +1,6 @@
 import {ChartType} from '../../../shared/models/chart-type.enum';
 
-export interface CustomChartType {
+export interface DashboardChartType {
   name: string;
   type: ChartType;
   title: string;

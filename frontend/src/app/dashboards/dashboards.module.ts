@@ -37,6 +37,7 @@ import {ChartDashboardComponent} from './charts/chart-dashboard/chart-dashboard.
 import {ChartBuilderComponent} from './charts/chart-builder/chart-builder.component';
 import {ChartComponent} from './charts/chart/chart.component';
 import {DataService} from './services/data.service';
+import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
 import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
 
 @NgModule({
@@ -84,6 +85,7 @@ import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
     ChartComponent,
     ChartBuilderComponent,
     ChartDashboardComponent, ContainerComponent, DraggableComponent
+    EditChartComponent
   ],
   providers: [DataService],
   exports: []

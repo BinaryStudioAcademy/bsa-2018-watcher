@@ -1,9 +1,14 @@
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 import * as shape from 'd3-shape';
 import {DashboardChart} from '../../models/dashboard-chart';
+import {customChartTypes} from './customChartTypes';
 
 export const defaultOptions = {
   view: [716, 337],
+  id: 0,
+  showCommon: true,
+  threshold: 0,
+  mostLoaded: '',
   // colorScheme:  {
   //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   // },
@@ -25,6 +30,10 @@ export const defaultOptions = {
   tooltipDisabled: false,
   showSeriesOnHover: true,
   curve: shape.curveLinear,
+  curveClosed: shape.curveCardinalClosed,
+  title: '',
+  dataSources: [],
+  activeEntries: [],
+  chartType: {...customChartTypes[0]},
   theme: 'light',
-  curveClosed: shape.curveCardinalClosed
 } as DashboardChart;
