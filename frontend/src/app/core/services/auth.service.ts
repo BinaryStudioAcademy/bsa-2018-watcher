@@ -268,6 +268,8 @@ export class AuthService {
 
   async getFirebaseToken(): Promise<string> {
     const currentToken =  localStorage.getItem('firebaseToken');
+    console.log(new Date());
+    console.log(`Firebase token is expired: ${this.tokenHelper.isTokenExpired(currentToken)}`);
     if (this.tokenHelper.isTokenExpired(currentToken)) {
       await this.refreshFirebaseToken();
     }
@@ -276,6 +278,8 @@ export class AuthService {
 
   async getWatcherToken(): Promise<string> {
     const currentToken = localStorage.getItem('watcherToken');
+    console.log(new Date());
+    console.log(`Watcher token is expired: ${this.tokenHelper.isTokenExpired(currentToken)}`);
     if (this.tokenHelper.isTokenExpired(currentToken)) {
       await this.refreshWatcherToken();
     }
@@ -296,6 +300,7 @@ export class AuthService {
   }
 
   async refreshWatcherToken() {
+    console.log('REFRESH WATCHER TOKEN');
     const token = localStorage.getItem('watcherToken');
     if (!token) {
       return;
@@ -303,6 +308,7 @@ export class AuthService {
     if (!this.tokenHelper.isTokenExpired(token)) {
       return;
     }
+    console.log('IT IS EXPIRED');
 
     const userInfo = this.getCurrentUserLS();
      const req: UserLoginRequest = {

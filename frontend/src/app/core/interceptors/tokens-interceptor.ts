@@ -17,7 +17,7 @@ export class TokensInterceptor implements HttpInterceptor {
   constructor(public auth: AuthService) {
   }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // need this check to prevent infinite loop while refreshing watcher token
+
     if (req.url.match(/\/Tokens\/Login/)) {
       return from(this.auth.getFirebaseToken()).pipe(
         flatMap<string[], HttpEvent<any>>((firebaseToken) => {
