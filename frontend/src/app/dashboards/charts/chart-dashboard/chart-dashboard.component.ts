@@ -13,6 +13,8 @@ import { ToastrService } from '../../../core/services/toastr.service';
 export class ChartDashboardComponent implements OnInit {
   @Input() charts: DashboardChart[] = [];
 
+  displayEditChart = false;
+
   constructor(private chartService: ChartService, private toastrService: ToastrService) {
     this.getChildPayload1 = this.getChildPayload1.bind(this);
   }
@@ -26,6 +28,18 @@ export class ChartDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  onChartEditClosed() {
+    this.displayEditChart = false;
+  }
+
+  showPopupAddChart() {
+    this.displayEditChart = true;
+  }
+
+  onChartEdited(obj?: any) {
+    // this.toastrService.success('Successfully update chart!');
   }
 
   onDeleteChart(id: number) {

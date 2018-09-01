@@ -283,7 +283,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onChartEdited(obj?: any) {
-    this.toastrService.success('Successfully update chart!');
+    // this.toastrService.success('Successfully update chart!');
   }
 
 
