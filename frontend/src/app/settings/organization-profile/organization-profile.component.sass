@@ -185,6 +185,7 @@ figure:hover:before
     display: inline-flex
     justify-content: center
     width: 99px !important
+    height: 33px
 
 .btn-under-link
     margin-bottom: 23px
@@ -194,5 +195,11 @@ figure:hover:before
     display: inline-block
 
 .inputEmail
-    position: relative
-    width: calc(100% - 78px)
+    display: flex
+    justify-content: space-between
+    padding: 0
+    .small-space
+        position: relative
+        width: calc(100% - 78px)
+    input
+        width: 100%

@@ -128,10 +128,10 @@
                 </div>
 
                 <div class="label">Send invite link to:</div>
-                <div class="ui-g ui-fluid">
-                    <div class="ui-g-12 ui-lg-12">
-
-                        <div class="small-space inputEmail view-inline">
+                
+                <div class="ui-lg-12 inputEmail">
+                    
+                        <div class="small-space view-inline">
                             <input type="email" [(ngModel)]="inviteEmail" id="iEmail" #iEmail="ngModel" ngModel email="true" class="form-control" required
                                 pInputText placeholder="Email">
                             <div *ngIf="iEmail?.invalid && (iEmail?.dirty || iEmail?.touched)" class="alert alert-danger">
@@ -141,16 +141,13 @@
                             </div>
                         </div>
                         <!-- <div class=" btn-panel ">  </div>-->
-                            <button pButton label="&nbsp;" (click)="onSentInviteToEmail()" class="view-inline ui-button-raised ui-button-success btn-inline-flex"
-                                [disabled]="inviteLink === '' || iEmail?.invalid || isSending">
-                                <p-progressSpinner class="btn-spinner" *ngIf="isSending" strokeWidth="5"></p-progressSpinner>
-                                <span class="ui-button-text" *ngIf="!isSending" style="margin-left: 8px;">Send</span>
-                            </button>
-
-
-                    </div>
+                        <button (click)="onSentInviteToEmail()" class="view-inline ui-button-raised ui-button-success ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                            [disabled]="inviteLink === '' || iEmail?.invalid || isSending">
+                            <p-progressSpinner class="btn-spinner" *ngIf="isSending" strokeWidth="5"></p-progressSpinner>
+                            <span class="ui-button-text" *ngIf="!isSending">Send</span>
+                        </button>
+                    
                 </div>
-
             </div>
         </div>
         <div class="grid-item list-invites">
