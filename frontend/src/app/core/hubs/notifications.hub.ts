@@ -7,15 +7,11 @@ import { AuthService } from '../services/auth.service';
 import { Notification } from '../../shared/models/notification.model';
 import { NotificationType } from '../../shared/models/notification-type.enum';
 
-import { Message } from '../../shared/models/message.model';
-
-
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationsHubService {
   private hubConnection: HubConnection | undefined;
-  private connectionIsEstablished = false;
 
   notificationReceived = new EventEmitter<Notification>();
   notificationDeleted = new EventEmitter<number>();
@@ -23,13 +19,32 @@ export class NotificationsHubService {
   connectionEstablished = new EventEmitter<Boolean>();
 
   constructor(private authService: AuthService) {
-    this.connectToSignalR();
+    this.startNotificationsHubConnection();
   }
 
-  private connectToSignalR(): void {
+  private createConnection(): void {
+    const firebaseToken = this.authService.getFirebaseToken();
+    const watcherToken = this.authService.getWatcherToken();
+    const connPath = `${environment.server_url}/notifications?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
+
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl(connPath) // {accessTokenFactory: () => firebaseToken}
+      .configureLogging(signalR.LogLevel.Information)
+      .build();
+  }
+
+  private startNotificationsHubConnection(): void {
     this.createConnection();
-    this.registerOnServerEvents();
-    this.startNotificationHubConnection();
+    console.log('NotificationsHub trying to connect');
+    this.hubConnection.start()
+      .then(() => {
+        console.log('NotificationsHub connected');
+        this.registerOnServerEvents();
+      })
+      .catch(err => {
+        console.error('Error while establishing connection (NotificationsHub)');
+        setTimeout(this.startNotificationsHubConnection(), 3000);
+      });
   }
 
   send(notification: Notification, type: NotificationType) {
@@ -46,17 +61,6 @@ export class NotificationsHubService {
     }
   }
 
-  private createConnection(): void {
-    const firebaseToken = this.authService.getFirebaseToken();
-    const watcherToken = this.authService.getWatcherToken();
-    const connPath = `${environment.server_url}/notifications?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
-
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(connPath) // {accessTokenFactory: () => firebaseToken}
-      .configureLogging(signalR.LogLevel.Information)
-      .build();
-  }
-
   private registerOnServerEvents(): void {
     this.hubConnection.on('AddNotification', (data: Notification) => {
       console.log('Notification added');
@@ -68,27 +72,10 @@ export class NotificationsHubService {
       this.notificationDeleted.emit(data);
     });
 
-    // On Close open connection again
-    this.hubConnection.onclose(function (error) {
-      console.log('CONNECTION CLOSED!!!');
-      console.error(error);
-      this.startNotificationHubConnection();
+    this.hubConnection.onclose(err => {
+      console.log('NotificationsHub connection closed');
+      console.error(err);
+      this.startNotificationsHubConnection();
     });
-  }
-
-
-  // Reconnect loop
-  private startNotificationHubConnection(): void {
-    console.log('Connecting to Hub!!!');
-    this.hubConnection.start()
-      .then(() => {
-        console.log('Notification hub connected');
-        this.connectionIsEstablished = true;
-        this.connectionEstablished.emit(true);
-      })
-      .catch(function (err) {
-        console.error('Error while establishing connection (Notification hub)...');
-        setTimeout(this.startNotificationHubConnection(), 5000);
-      });
   }
 }
