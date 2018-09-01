@@ -421,26 +421,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dashboardMenuItems = [];
     this.activeDashboardItem = null;
   }
-  // onEditChart(chart: ChartRequest) {
-  //   this.chartService.update(1, chart).subscribe(
-  //     value => {
-  //       this.toastrService.success('The chart was updated');
-  //     },
-  //     error => {
-  //       this.toastrService.error(`Error ocured status: ${error.message}`);
-  //     });
-  // }
-  //
-  //
-  // onDeleteChart(id: number) {
-  //   this.chartService.delete(111).subscribe(
-  //     value => {
-  //       this.toastrService.success('The chart was deleted');
-  //     },
-  //     error => {
-  //       this.toastrService.error(`Error ocured status: ${error.message}`);
-  //     });
-  // }
+
   //
   // getSignalRClaims() {
   //   this.dashboardsHub.getSignalRClaims();

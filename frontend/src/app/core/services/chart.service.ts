@@ -22,7 +22,7 @@ export class ChartService {
     return this.http.get<Chart>(`${this.ctrlUrl}/${id}`);
   }
 
-  create(request: ChartRequest): Observable<Chart> { /*Request */
+  create(request: ChartRequest): Observable<Chart> {
     return this.http.post<Chart>(`${this.ctrlUrl}`, request);
   }
 
