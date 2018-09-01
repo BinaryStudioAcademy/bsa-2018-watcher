@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Watcher.Common.Interfaces.Entities;
 
-    public class User : Entity<string>
+    public class User : Entity<string>, ISoftDeletable
     {
         public User() { }
 
@@ -29,6 +30,9 @@
 
         [Required]
         public DateTime CreatedAt { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
 
         public string PhotoURL { get; set; }
 
@@ -59,5 +63,45 @@
         public IList<Organization> CreatedOrganizations { get; set; }
 
         public IList<OrganizationInvite> OrganizationInvites { get; set; }
+
+        public void OnDelete()
+        {
+            foreach (var notificationSetting in NotificationSettings)
+            {
+                notificationSetting.OnDelete();
+            }
+
+            foreach (var feedback in Feedbacks)
+            {
+                feedback.OnDelete();
+            }
+
+            foreach (var response in Responses)
+            {
+                response.OnDelete();
+            }
+
+            foreach (var message in Messages)
+            {
+                message.OnDelete();
+            }
+
+            foreach (var chat in CreatedChats)
+            {
+                chat.OnDelete();
+            }
+
+            foreach (var organization in CreatedOrganizations)
+            {
+                organization.OnDelete();
+            }
+
+            foreach (var organizationInvite in OrganizationInvites)
+            {
+                organizationInvite.OnDelete();
+            }
+
+            IsDeleted = true;
+        }
     }
 }

@@ -17,6 +17,8 @@ namespace Watcher.Common.Dtos
 
         public UserDto User { get; set; }
 
+        public string UserId { get; set; }
+        
         public int ChatId { get; set; }
 
         public string ChatName { get; set; }

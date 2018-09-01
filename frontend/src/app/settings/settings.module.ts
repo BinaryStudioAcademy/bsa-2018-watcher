@@ -17,6 +17,9 @@ import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DataViewModule } from 'primeng/dataview';
+import { InvitesListComponent } from './organization-profile/invites-list.component';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   imports: [
@@ -37,14 +40,17 @@ import { CheckboxModule } from 'primeng/checkbox';
     InputMaskModule,
     ProgressSpinnerModule,
     TableModule,
-    CheckboxModule
+    CheckboxModule,
+    DataViewModule,
+    CalendarModule
   ],
   declarations: [
     SettingsComponent,
     NotificationSettingsComponent,
     UserProfileComponent,
     OrganizationProfileComponent,
-    UserPictureComponent
+    UserPictureComponent,
+    InvitesListComponent
   ]
 })
 export class SettingsModule { }

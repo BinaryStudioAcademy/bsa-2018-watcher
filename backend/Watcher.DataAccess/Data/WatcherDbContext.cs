@@ -1,8 +1,11 @@
 ﻿namespace Watcher.DataAccess.Data
 {
     using Microsoft.EntityFrameworkCore;
-
+    using System.Linq.Expressions;
+    using System.Linq;
+    using Watcher.Common.Interfaces.Entities;
     using Watcher.DataAccess.Entities;
+
 
 
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
@@ -59,7 +62,6 @@
                 .WithOne(u => u.User)
                 .OnDelete(DeleteBehavior.Cascade);
             
-
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Feedbacks)
                 .WithOne(f => f.User)
@@ -73,10 +75,6 @@
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.Organization)
                 .WithOne(o => o.Chat);
-
-            modelBuilder.Entity<Chat>()
-                .Property(c => c.IsActive)
-                .HasDefaultValue(true);
 
             modelBuilder.Entity<OrganizationInvite>()
                 .HasOne(u => u.Organization)
@@ -100,6 +98,8 @@
                .HasMany(u => u.OrganizationInvites)
                .WithOne(f => f.Organization)
                .OnDelete(DeleteBehavior.Cascade);
+
+
 
             modelBuilder.Seed();
         }

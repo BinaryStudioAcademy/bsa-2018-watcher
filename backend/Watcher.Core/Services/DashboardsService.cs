@@ -100,7 +100,8 @@ namespace Watcher.Core.Services
 
         public async Task<bool> DeleteDashboardByIdAsync(int id)
         {
-            await _uow.DashboardsRepository.DeleteAsync(id);
+            await _uow.DashboardsRepository.DeleteAsync(id, include: dashboard =>
+                        dashboard.Include(d => d.Charts));
 
             var result = await _uow.SaveAsync();
 

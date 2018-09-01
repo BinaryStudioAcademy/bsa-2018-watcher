@@ -13,7 +13,7 @@ export interface OrganizationInvite  {
    createdByUser: User;
    inviteEmail: string;
    invitedUserId: string;
-   createdDate: string;
-   experationDate: string;
+   createdDate: Date;
+   experationDate: Date;
    state: OrganizationInviteState;
 }

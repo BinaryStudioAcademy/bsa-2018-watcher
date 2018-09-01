@@ -31,7 +31,7 @@ export class DashboardsHub {
   connectToSignalR(firebaseToken: string, watcherToken: string): Promise<void> {
       this.createConnection(firebaseToken, watcherToken);
       this.registerOnServerEvents();
-    return this.startHubConnection();
+    return this.startDashboardHubConnection();
   }
 
   getSignalRClaims() {
@@ -89,24 +89,27 @@ export class DashboardsHub {
     });
 
     // On Close open connection again
-    this.hubConnection.onclose(function (error) {
-      console.log('CONNECTION CLOSED!!!');
-      console.error(error);
-      this.startHubConnection();
+    this.hubConnection.onclose(err => {
+      console.log('DashboardHub connection closed');
+      console.error(err);
+      this.startDashboardHubConnection();
     });
   }
 
 
   // Reconnect loop
-  private startHubConnection(): Promise<void> {
+  private startDashboardHubConnection(): Promise<void> {
+    console.log('DashboardHub trying to connect');
     return this.hubConnection.start()
       .then(() => {
+        console.log('DashboardHub connected');
         this.connectionEstablishedSub.next(true);
         // this.getSignalRClaims();
       })
-      .catch(function (err) {
+      .catch(err => {
+        console.log('Error while establishing connection (DashboardHub)');
         console.error(err);
-        setTimeout(this.startHubConnection(), 3000);
+        setTimeout(this.startDashboardHubConnection(), 3000);
       });
   }
 }

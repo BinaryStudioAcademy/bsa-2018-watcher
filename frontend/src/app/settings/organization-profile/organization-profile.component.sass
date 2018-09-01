@@ -47,19 +47,22 @@ input
     width: 80px
     margin: 0px
 
+.header
+    margin-left: 20px
+
 .title
     padding-bottom: 10px
     font-size: 22px
     font-weight: normal
 
-.ui-g-12, .ui-g-10, .ui-g-2
+.ui-g-12, .ui-g-10, .ui-g-2, .ui-g-6
     padding: 0px
 
 .grid-container
   display: grid
   grid-column-gap: 0px
-  grid-template-columns: auto auto
-  grid-template-rows: 200px auto
+  grid-template-columns: 50% 50%
+  grid-template-rows: auto auto
 
 .grid-item 
   padding: 20px
@@ -78,9 +81,15 @@ input
 
 .invite
     grid-column-start: 2
-    grid-column-end: 2
+    grid-column-end: 3
     grid-row-start: 1
-    grid-row-end: 1
+    grid-row-end: 2
+
+.list-invites
+    grid-column-start: 2
+    grid-column-end: 3
+    grid-row-start: 2
+    grid-row-end: 3
 
 .alert-danger
     font-size: small
@@ -152,7 +161,6 @@ figure:hover:before
     width: 300px
     height: 150px
 
-
 .ui-inputgroup
     position: relative
     display: inline-block
@@ -173,8 +181,7 @@ figure:hover:before
     padding-right: .5em
 
 .btn-generate
-    display: inline-flex
-    width: 99px !important
+    min-width: 100px
     
 .btn-under-link
     margin-bottom: 23px
@@ -186,3 +193,7 @@ figure:hover:before
 .inputEmail
     position: relative
     width: calc(100% - 78px)
+
+.flex-input-button
+    display: flex
+    align-items: center

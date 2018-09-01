@@ -51,8 +51,8 @@ export class ChatHub {
                 this.registerOnEvents();
             })
             .catch(err => {
-                console.log('Error while establishing connection...');
-                setTimeout(this.startConnection(), 5000);
+                console.log('Error while establishing connection (ChatHub)');
+                setTimeout(this.startConnection(), 3000);
             });
       });
     }
@@ -84,7 +84,7 @@ export class ChatHub {
         });
 
         this.hubConnection.onclose((error: Error) => {
-            console.log('ChatHub connection closed!');
+            console.log('ChatHub connection closed');
             console.error(error);
             this.startConnection();
         });

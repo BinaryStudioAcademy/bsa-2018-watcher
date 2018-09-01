@@ -1,0 +1,200 @@
+<div>
+
+  <ngx-section class="shadow dark" sectionTitle="Select your Chart">
+    <ngx-select [filterable]="false" label="Chart Type" [ngModel]="[chartType]" (change)="setChartType($event[0])">
+      <ngx-select-option *ngFor="let chart of chartTypes" [name]="chart.title" [value]="chart">
+      </ngx-select-option>
+    </ngx-select>
+  </ngx-section>
+
+  <ngx-section class="shadow dark" sectionTitle="Map your Dimensions"
+               [sectionCollapsible]="hasChartSelected"
+               [sectionCollapsed]="!hasChartSelected">
+    <div *ngIf="hasChartSelected">
+      <ngx-select
+        *ngIf="chartType.dimLabels[0] && chartType"
+        [filterable]="false"
+        [label]="chartType.dimLabels[0]"
+        [ngModel]="[dataDims[0]]"
+        (change)="dataDims[0] = $event[0]; processData()">
+        <ngx-select-option *ngFor="let field of headerValues"
+                           [name]="field"
+                           [value]="field.name">
+          <ng-template ngx-select-option-input-template ngx-select-option-template let-option="option">
+            {{option.name.name}}
+            <small>{{option.name.type}}</small>
+          </ng-template>
+        </ngx-select-option>
+      </ngx-select>
+
+      <ngx-select
+        *ngIf="chartType.dimLabels[1]"
+        [filterable]="false"
+        [label]="chartType.dimLabels[1]"
+        [ngModel]="[dataDims[1]]"
+        (change)="dataDims[1] = $event[0]; processData()">
+        <ngx-select-option *ngFor="let field of headerValues"
+                           [name]="field"
+                           [value]="field.name">
+          <ng-template ngx-select-option-input-template ngx-select-option-template let-option="option">
+            {{option.name.name}}
+            <small>{{option.name.type}}</small>
+          </ng-template>
+        </ngx-select-option>
+      </ngx-select>
+
+      <ngx-select
+        *ngIf="chartType.dimLabels[2]"
+        [filterable]="false"
+        [label]="chartType.dimLabels[2]"
+        [ngModel]="[dataDims[2]]"
+        (change)="dataDims[2] = $event[0]; processData()">
+        <ngx-select-option *ngFor="let field of headerValues"
+                           [name]="field"
+                           [value]="field.name">
+          <ng-template ngx-select-option-input-template ngx-select-option-template let-option="option">
+            {{option.name.name}}
+            <small>{{option.name.type}}</small>
+          </ng-template>
+        </ngx-select-option>
+      </ngx-select>
+
+      <ngx-select
+        *ngIf="chartType.dimLabels[3]"
+        [filterable]="false"
+        [label]="chartType.dimLabels[3]"
+        [ngModel]="[dataDims[3]]"
+        (change)="dataDims[3] = $event[0]; processData()">
+        <ngx-select-option *ngFor="let field of headerValues"
+                           [name]="field"
+                           [value]="field.name">
+          <ng-template ngx-select-option-input-template ngx-select-option-template let-option="option">
+            {{option.name.name}}
+            <small>{{option.name.type}}</small>
+          </ng-template>
+        </ngx-select-option>
+      </ngx-select>
+
+      <ngx-select
+        *ngIf="chartType.dimLabels[4]"
+        [filterable]="false"
+        [label]="chartType.dimLabels[4]"
+        [ngModel]="[dataDims[4]]"
+        (change)="dataDims[4] = $event[0]; processData()">
+        <ngx-select-option *ngFor="let agg of aggragates"
+                           [name]="agg"
+                           [value]="agg">
+        </ngx-select-option>
+      </ngx-select>
+    </div>
+  </ngx-section>
+
+  <ngx-section class="shadow" [ngClass]="theme" sectionTitle="Your Visualization"
+               [sectionCollapsible]="hasValidDimensions"
+               [sectionCollapsed]="!hasValidDimensions">
+    <ngx-button (click)="onAddToDashboard()">Add to dashboard</ngx-button>
+    <div *ngIf="hasValidDimensions" class="viz-container">
+
+      <app-chart
+        [chart]="chartOptions"
+        [data]="data"
+        [chartType]="chartType">
+      </app-chart>
+
+    </div>
+    <!-- Download:
+    <ngx-button (click)="svgSaver.asSvg()">SVG</ngx-button>
+    <ngx-button (click)="svgSaver.asPng()">PNG</ngx-button -->
+  </ngx-section>
+
+  <ngx-section class="shadow dark" sectionTitle="Customize your Visualization"
+               [sectionCollapsible]="hasValidDimensions"
+               [sectionCollapsed]="!hasValidDimensions">
+    <div *ngIf="hasValidDimensions">
+      <ngx-select
+        [filterable]="false"
+        label="Theme"
+        [allowClear]="false"
+        [ngModel]="[theme]"
+        (change)="theme = $event[0]">
+        <ngx-select-option *ngFor="let theme of ['light', 'dark']"
+                           [name]="theme"
+                           [value]="theme">
+        </ngx-select-option>
+      </ngx-select>
+
+      <ngx-toggle type="checkbox" [(ngModel)]="chartOptions.showLegend" label="Show Legend">
+      </ngx-toggle>
+      <ngx-input type="text" [(ngModel)]="chartOptions.legendTitle" label="Legend Title"></ngx-input>
+      <ngx-input type="text" [(ngModel)]="chartOptions.xAxisLabel" label="X Axis Label"></ngx-input>
+      <ngx-input type="text" [(ngModel)]="chartOptions.yAxisLabel" label="Y Axis Label"></ngx-input>
+    </div>
+  </ngx-section>
+
+  <ngx-section class="shadow dark" sectionTitle="Customize Color Scale"
+               [sectionCollapsible]="hasValidDimensions"
+               [sectionCollapsed]="!hasValidDimensions">
+
+    <ng-container *ngIf="hasValidDimensions">
+      <ngx-toggle
+        [(ngModel)]="diverging"
+        label="Diverging"
+        (change)="updateColorScheme()">
+      </ngx-toggle>
+      <ngx-input
+        type="number"
+        min="2"
+        label="Step count"
+        [(ngModel)]="steps"
+        (change)="updateColorScheme()"></ngx-input>
+
+      <div fxLayout="row nowrap" fxLayoutGap="20px">
+        <div fxFlex="1 1 100%">
+          <ngx-input
+            class="colors"
+            type="text"
+            [(ngModel)]="colors"
+            (change)="updateColorScheme()"
+            label="Color Scale"
+            hint="Enter named colors or hex codes"></ngx-input>
+          <ngx-checkbox
+            [(ngModel)]="bezier"
+            (change)="updateColorScheme()">
+            Bezier interpollation
+          </ngx-checkbox>
+          <ngx-checkbox
+            [(ngModel)]="lightness"
+            (change)="updateColorScheme()">
+            Lightness correction
+          </ngx-checkbox>
+        </div>
+        <div fxFlex="1 1 100%" *ngIf="diverging">
+          <ngx-input
+            class="colors"
+            type="text"
+            [(ngModel)]="colorsRight"
+            (change)="updateColorScheme()"
+            label="Color Scale Right"
+            hint="Enter named colors or hex codes"></ngx-input>
+          <ngx-checkbox
+            [(ngModel)]="bezierRight"
+            (change)="updateColorScheme()">
+            Bezier interpollation
+          </ngx-checkbox>
+          <ngx-checkbox
+            [(ngModel)]="lightnessRight"
+            (change)="updateColorScheme()">
+            Lightness correction
+          </ngx-checkbox>
+        </div>
+        <div fxFlex="0 0 200px">
+          <ul class="color-scale pull-right">
+            <li *ngFor="let hex of chartOptions.colorScheme.domain" [ngStyle]="{'background-color': hex}">{{hex}}</li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+
+  </ngx-section>
+
+</div>

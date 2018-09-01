@@ -1,0 +1,34 @@
+<div class="main">
+
+  <ngx-tabs #tabs>
+    <ngx-tab title="Data" #dataTab>
+      <div *ngxIfTabActive>
+
+        <span>
+          Copy and paste your tabular (TSV, CSV) data here.
+          <button class="btn btn-link" (click)="useExample()">(Use example data)</button>
+        </span>
+        <ngx-codemirror
+          [(ngModel)]="dataText"
+          [config]="editorConfig">
+        </ngx-codemirror>
+        <p *ngIf="dataText.length > 1">
+          <span *ngFor="let error of errors" class="text-red">
+            <span *ngIf="error.row">Row {{error.row + 2}}: </span>{{error.message}} <br />
+          </span>
+          <span *ngIf="!errors.length" class="text-green">
+            {{rawData.length}} records have been successfully parsed!
+          </span>
+        </p>
+
+      </div>
+    </ngx-tab>
+    <ngx-tab title="Chart Builder" [disabled]="!hasValidData" #builderTab>
+      <app-chart-builder (addChart)="addChartToDashboard($event)"></app-chart-builder>
+    </ngx-tab>
+    <ngx-tab title="Dashboard" [disabled]="charts.length < 1" #dashboardTab>
+      <app-chart-dashboard [charts]="charts" [filters]="filters"></app-chart-dashboard>
+    </ngx-tab>
+  </ngx-tabs>
+
+</div>

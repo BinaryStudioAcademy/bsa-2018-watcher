@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Watcher.Controllers
 {
@@ -65,6 +66,29 @@ namespace Watcher.Controllers
             }
 
             return Ok(dto);
+        }
+
+        /// <summary>
+        /// Get Invites by user id
+        /// </summary>
+        /// <param name="id">User identifier</param>
+        /// <returns>
+        /// Collection of OrganizationInviteDto
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Invites not found</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
+        [HttpGet("getByUser/{id}")]
+        public virtual async Task<ActionResult<IEnumerable<OrganizationInviteDto>>> GetByUserId(string id)
+        {
+            var dtos = await _service.GetEntitiesByUserIdAsync(id);
+            if (dtos == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(dtos);
         }
 
         [HttpPost]
@@ -137,6 +161,18 @@ namespace Watcher.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public virtual async Task<ActionResult> Delete(int id)
+        {
+            var result = await _service.DeleteEntityAsync(id);
+            if (!result)
+            {
+                return StatusCode(500);
+            }
+
+            return NoContent();
         }
     }
 }

@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Watcher.Common.Interfaces.Entities;
     
-    public class Instance : Entity<int>
+    public class Instance : Entity<int>, ISoftDeletable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
@@ -27,5 +28,21 @@
         public Organization Organization { get; set; }
         
         public IList<Dashboard> Dashboards { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
+
+        public void OnDelete()
+        {
+            if (Dashboards != null)
+            {
+                foreach (var dashboard in Dashboards)
+                {
+                    dashboard.OnDelete();
+                }
+            }
+
+            IsDeleted = true;
+        }
     }
 }
