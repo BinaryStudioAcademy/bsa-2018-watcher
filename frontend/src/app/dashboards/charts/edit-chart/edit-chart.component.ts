@@ -130,6 +130,16 @@ export class EditChartComponent implements OnInit, OnChanges {
         });
   }
 
+  onEditChart1(chart: ChartRequest) {
+    this.chartService.update(1, chart).subscribe(
+      value => {
+        this.toastrService.success('The chart was updated');
+      },
+      error => {
+        this.toastrService.error(`Error ocured status: ${error.message}`);
+      });
+  }
+
   // edit(model: NgModel): void {
   //   this.editChart.emit(this.title);
   //   this.title = '';

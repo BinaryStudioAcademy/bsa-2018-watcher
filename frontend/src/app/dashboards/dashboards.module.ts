@@ -84,7 +84,9 @@ import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
 
     ChartComponent,
     ChartBuilderComponent,
-    ChartDashboardComponent, ContainerComponent, DraggableComponent
+    ChartDashboardComponent,
+    ContainerComponent,
+    DraggableComponent,
     EditChartComponent
   ],
   providers: [DataService],
