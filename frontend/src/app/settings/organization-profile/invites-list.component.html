@@ -7,7 +7,7 @@
         <div class="ui-g ui-g-12 invite-item">
             <div class="ui-g ui-g-12 item-link">
                 <div class="ui-g-12">Invite link:</div>
-                <div class="ui-g-12 date">
+                <div class="ui-g-12 flex-input-button">
                     <div class="ui-fluid item-input">
                         <input type="text" disabled pInputText placeholder="{{invite.showLink}}">
                     </div>               
@@ -17,11 +17,12 @@
             </div>
             <div class="ui-g ui-g-12 invite-info">
                 <div class="ui-g-12">Expired at:</div>
-                <div class="ui-g-12 date">
+                <div class="ui-g-12 flex-input-button">
                     <div class="ui-fluid item-input">
                         <p-calendar class="item-input" [(ngModel)]="invite.invite.experationDate"></p-calendar>
                     </div>
-                    <button type="button" class="ui-button ui-state-default ui-corner-all ui-button-success invite-item-button" (click)="onUpdate(invite.invite.id)">
+                    <button type="button" class="ui-button ui-state-default ui-corner-all ui-button-success ui-button-text-only invite-item-button btn-inline-flex"
+                                                                                                                                 (click)="onUpdate(invite.invite.id)">
                         <p-progressSpinner class="btn-spinner" *ngIf="isUpdating && updatingItem === invite.invite.id" strokeWidth="5"></p-progressSpinner>
                         <span class="ui-button-text" *ngIf="(isUpdating && updatingItem !== invite.invite.id) || !isUpdating">Update</span>
                     </button>
