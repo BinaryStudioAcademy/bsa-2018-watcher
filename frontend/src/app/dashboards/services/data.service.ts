@@ -52,7 +52,6 @@ export class DataService {
 
   // dataSource - property to show on the chart
   prepareData(chartType: ChartType, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
-    debugger;
     if (!chartType && chartType !== ChartType.BarVertical) {
       return [];
     }

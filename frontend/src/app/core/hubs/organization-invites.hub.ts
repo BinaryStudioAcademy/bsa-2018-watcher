@@ -21,9 +21,7 @@ export class OrganizationInvitesHub {
     this.startInviteHubConnection();
   }
 
-  private createConnection(): void {
-    const firebaseToken = this.authService.getFirebaseToken();
-    const watcherToken = this.authService.getWatcherToken();
+  private createConnection(firebaseToken: string, watcherToken: string): void {
     const connPath = `${environment.server_url}/invites?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -33,17 +31,19 @@ export class OrganizationInvitesHub {
   }
 
   private startInviteHubConnection(): void {
-    this.createConnection();
-    console.log('OrganizationInvitesHub trying to connect');
-    this.hubConnection.start()
-      .then(() => {
-        console.log('OrganizationInvitesHub connected');
-        this.registerOnServerEvents();
-      })
-      .catch(err => {
-        console.error('Error while establishing connection (OrganizationInvitesHub)');
-        setTimeout(this.startInviteHubConnection(), 3000);
-      });
+    this.authService.getTokens().subscribe( ([firebaseToken, watcherToken]) => {
+      this.createConnection(firebaseToken, watcherToken);
+      console.log('OrganizationInvitesHub trying to connect');
+      this.hubConnection.start()
+        .then(() => {
+          console.log('OrganizationInvitesHub connected');
+          this.registerOnServerEvents();
+        })
+        .catch(err => {
+          console.error('Error while establishing connection (OrganizationInvitesHub)');
+          setTimeout(this.startInviteHubConnection(), 3000);
+        });
+    });
   }
 
   private registerOnServerEvents(): void {

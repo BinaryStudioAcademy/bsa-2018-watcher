@@ -276,8 +276,6 @@ export class AuthService {
 
   async getFirebaseToken(): Promise<string> {
     const currentToken =  localStorage.getItem('firebaseToken');
-    console.log(new Date());
-    console.log(`Firebase token is expired: ${this.tokenHelper.isTokenExpired(currentToken)}`);
     if (this.tokenHelper.isTokenExpired(currentToken)) {
       await this.refreshFirebaseToken();
     }
@@ -286,8 +284,6 @@ export class AuthService {
 
   async getWatcherToken(): Promise<string> {
     const currentToken = localStorage.getItem('watcherToken');
-    console.log(new Date());
-    console.log(`Watcher token is expired: ${this.tokenHelper.isTokenExpired(currentToken)}`);
     if (this.tokenHelper.isTokenExpired(currentToken)) {
       await this.refreshWatcherToken();
     }
@@ -295,6 +291,7 @@ export class AuthService {
   }
 
   async refreshFirebaseToken() {
+    console.log('REFRESHING FIREBASE TOKEN');
     const token = localStorage.getItem('firebaseToken');
     if (!token) {
       return;
@@ -304,11 +301,12 @@ export class AuthService {
     }
 
     const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
+    console.log('FIREBASE TOKEN HAS BEEN REFRESHED');
     localStorage.setItem('firebaseToken', firebaseToken);
   }
 
   async refreshWatcherToken() {
-    console.log('REFRESH WATCHER TOKEN');
+    console.log('REFRESHING WATCHER TOKEN');
     const token = localStorage.getItem('watcherToken');
     if (!token) {
       return;
@@ -316,7 +314,6 @@ export class AuthService {
     if (!this.tokenHelper.isTokenExpired(token)) {
       return;
     }
-    console.log('IT IS EXPIRED');
 
     const userInfo = this.getCurrentUserLS();
      const req: UserLoginRequest = {
@@ -325,6 +322,7 @@ export class AuthService {
     };
 
     const tokenDto = await this.tokenService.login(req).toPromise();
+    console.log('WATCHER TOKEN HAS BEEN REFRESHED');
     localStorage.setItem('watcherToken', tokenDto.watcherJWT);
   }
 
