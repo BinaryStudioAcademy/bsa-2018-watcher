@@ -5,8 +5,9 @@
     using System.ComponentModel.DataAnnotations.Schema;
 
     using Watcher.Common.Enums;
+    using Watcher.Common.Interfaces.Entities;
 
-    public class Sample : Entity<int>
+    public class Sample : Entity<int>, ISoftDeletable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override int Id { get; set; }
@@ -26,6 +27,14 @@
         [Required]
         public SampleEnum SampleField { get; set; }
 
+        [Required]
+        public bool IsDeleted { get; set; }
+
         public Sample() { }
+
+        public void OnDelete()
+        {
+            IsDeleted = true;
+        }
     }
 }

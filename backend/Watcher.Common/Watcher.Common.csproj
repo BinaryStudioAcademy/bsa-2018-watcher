@@ -11,6 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="MoveToFrontend\chart-request.model.ts">
+      <CustomToolNamespace>Requests\ChartRequest.cs</CustomToolNamespace>
+    </None>
     <None Update="MoveToFrontend\chart-type.enum.ts">
       <CustomToolNamespace>Enums\ChartType.cs</CustomToolNamespace>
     </None>

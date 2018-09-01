@@ -14,6 +14,8 @@
 
         Task<IEnumerable<UserDto>> GetUsersByChatIdAsync(int id);
 
+        Task<NotificationSettingDto> GetSettingsForUserIdAsync(string userId, int chatId);
+
         Task<bool> AddUserToChat(int chatId, string userId);
 
         Task<bool> DeleteUserFromChat(int chatId, string userId);

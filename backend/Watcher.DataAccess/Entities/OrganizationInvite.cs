@@ -4,9 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Watcher.Common.Enums;
 
+using Watcher.Common.Interfaces.Entities;
+
 namespace Watcher.DataAccess.Entities
 {
-    public class OrganizationInvite : Entity<int>
+    public class OrganizationInvite : Entity<int>, ISoftDeletable
     {
         public override int Id { get; set; }
 
@@ -29,5 +31,13 @@ namespace Watcher.DataAccess.Entities
         public User CreatedByUser { get; set; }
 
         public OrganizationInviteState State { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
+
+        public void OnDelete()
+        {
+            IsDeleted = true;
+        }
     }
 }

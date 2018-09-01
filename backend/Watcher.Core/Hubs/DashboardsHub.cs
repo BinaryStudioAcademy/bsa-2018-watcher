@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Core.Hubs
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -33,6 +34,8 @@
         /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous connect.</returns>
         public override Task OnConnectedAsync()
         {
+            var name = Context.User.FindFirstValue("unique_name");
+            Debug.WriteLine($"*****************{name}****************");
             return base.OnConnectedAsync();
         }
 
@@ -47,6 +50,8 @@
         /// </returns>
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            var name = Context.User.FindFirstValue("unique_name");
+            Debug.WriteLine($"*****************{name}****************");
             using (LogContext.PushProperty("ClassName", this.GetType().FullName))
             using (LogContext.PushProperty("Source", exception?.Source))
             {
@@ -72,6 +77,8 @@
         [Authorize]
         public Task SubscribeToInstanceById(Guid GuidId)
         {
+            var name = Context.User.FindFirstValue("unique_name");
+            Debug.WriteLine($"*****************{name}****************");
             return Groups.AddToGroupAsync(Context.ConnectionId, GuidId.ToString());
         }
 

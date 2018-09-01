@@ -97,7 +97,7 @@ export class FeedbackListComponent implements OnInit {
       this.feedbacks = value;
       this.lstFeedbacks = [];
       this.fillLstFeedbacks();
-    });;
+    });
   }
 
   onSubmit() {

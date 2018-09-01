@@ -24,7 +24,7 @@ namespace Watcher.Core.Services
 
         public async Task<IEnumerable<NotificationSettingDto>> GetEntitysByUserIdAsync(string userId)
         {
-            var entity = await _uow.NotificationSettingsRepository.GetRangeAsync(1, int.MaxValue, x => x.UserId == userId);
+            var entity = await _uow.NotificationSettingsRepository.GetRangeAsync(1, int.MaxValue, x => x.UserId == userId && x.ChatId == null);
 
             if (entity == null) return null;
 

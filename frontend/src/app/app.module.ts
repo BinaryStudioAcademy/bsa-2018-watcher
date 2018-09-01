@@ -26,7 +26,6 @@ import { AuthService } from './core/services/auth.service';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
 import { ShellModule } from './shell/shell.module';
-import { NotificationsModule } from './notifications/notifications.module';
 import { CustomConfirmDialogComponent } from './notification/custom-confirm-dialog/custom-confirm-dialog.component';
 import { SystemNotificationComponent } from './notification/system-notification/system-notification.component';
 
@@ -60,9 +59,7 @@ import { SystemNotificationComponent } from './notification/system-notification/
     AngularFireAuthModule,
 
     CoreModule,
-
     AppRoutingModule,
-    NotificationsModule,
     ShellModule
   ],
   providers: [AuthService],

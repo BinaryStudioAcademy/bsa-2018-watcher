@@ -1,5 +1,6 @@
 <p-dialog [(visible)]="display" [contentStyle]="{'overflow':'visible'}" [modal]="true" [responsive]="true" [width]="350"
   [baseZIndex]="10000">
+
   <p-header>
     New chat
   </p-header>
@@ -11,28 +12,41 @@
     </form>
 
     <p class="field">Add user:</p>
-    <p-autoComplete [(ngModel)]="wantedUser" [suggestions]="filteredUsers" (completeMethod)="filterUsers($event)" (onSelect)="addUser($event)"
-      emptyMessage="User not found" placeholder="Write name or email">
+    <p-autoComplete [(ngModel)]="wantedUser" [suggestions]="filteredUsers" (completeMethod)="filterUsers($event)"
+      (onSelect)="addUser($event)" emptyMessage="User not found" placeholder="Write name or email">
       <ng-template let-user pTemplate="item">
         <div class="ui-helper-clearfix">
-          <img class="user-list-img" src="{{user.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}"/>
+          <img class="user-list-img" src="{{user.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}" />
           <strong class="text-overflow">{{user.firstName}} {{user.lastName}}</strong>
           <div class="text-overflow">{{user.email}}</div>
         </div>
       </ng-template>
     </p-autoComplete>
+
     <p *ngIf="users?.length" class="field">Members:</p>
     <div class="user-list">
       <div *ngFor="let user of users">
         <div class="ui-helper-clearfix user-list-item">
-          <img class="user-list-img" src="{{user.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}"/>
-          <strong class="text-overflow">{{user.firstName}} {{user.lastName}}</strong>
-          <i class="icon fa fa-close" (click)="deleteUser(user.id)"></i>
+          <img class="user-list-img" src="{{user.photoURL || 'http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/128/User-blue-icon.png'}}" />
+          <div class="user-list-name">
+            <div class="text-overflow"><strong>{{user.firstName}} {{user.lastName}}</strong></div>
+            <i class="icon fa fa-close" (click)="deleteUser(user.id)"></i>
+          </div>
           <div class="text-overflow">{{user.email}}</div>
         </div>
       </div>
     </div>
   </div>
+
+  <form [formGroup]="notificationSettingsForm">
+    <p class="field">Notification settings:</p>
+    <div class="notification-settings notification-setting-item">
+      <div class="notification-setting-item">Mute: <p-inputSwitch formControlName="isMute"></p-inputSwitch>
+      </div>
+      <div class="notification-setting-item">Emailable: <p-inputSwitch formControlName="isEmailable"></p-inputSwitch>
+      </div>
+    </div>
+  </form>
 
   <p-footer>
     <div style="text-align:center">

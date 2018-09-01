@@ -107,7 +107,7 @@ namespace Watcher.Core.Services
             return await _repository.RemoveEntity(id);
         }
 
-        public static CollectedData GetFakeData(Guid instanceId)
+        public static CollectedData GetFakeData(Guid instanceId, DateTime dateTime)
         {
             var processNames = new List<string>()
             {
@@ -123,9 +123,8 @@ namespace Watcher.Core.Services
             var random = new Random();
             var ProcessesCPU = new Dictionary<string, float>();
             var ProcessesRAM = new Dictionary<string, float>();
-
-            int processes = random.Next(0, 7);
-            for (int i = 0; i < processes; i++)
+            
+            for (int i = 0; i < 7; i++)
             {
                 ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
                 ProcessesRAM.Add(processNames[i], (float)random.NextDouble() * 1000);
@@ -133,7 +132,7 @@ namespace Watcher.Core.Services
             var data = new CollectedData()
             {
                 Id = instanceId, // Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"), // instanceId
-                Time = DateTime.UtcNow,
+                Time = dateTime,
                 CpuUsagePercent = (float)Math.Round(random.NextDouble() * 100, 2),
                 RamUsagePercent = (float)Math.Round(random.NextDouble() * 100, 2),
                 InterruptsTimePercent = (float)Math.Round(random.NextDouble() * 100, 2),

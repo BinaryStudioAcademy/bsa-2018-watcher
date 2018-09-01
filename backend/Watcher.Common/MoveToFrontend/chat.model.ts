@@ -4,6 +4,7 @@ import { User } from './user.model';
 import { Organization } from './organization.model';
 import { Message } from './message.model';
 import { User } from './user.model';
+import { NotificationSetting } from './notification-setting.model';
 
 export interface Chat  {
    id: number;
@@ -14,6 +15,7 @@ export interface Chat  {
    organization: Organization;
    messages: Message[];
    users: User[];
+   usersSettings: NotificationSetting[];
 }
 
 

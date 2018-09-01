@@ -41,7 +41,6 @@
     using Watcher.DataAccess.Data;
     using Watcher.DataAccess.Interfaces;
     using Watcher.Extensions;
-    using Watcher.Hubs;
     using Watcher.Utils;
 
     public class Startup
@@ -147,7 +146,8 @@
                               {
                                   if ((!context.Request.Path.Value.Contains("/notifications")
                                       && !context.Request.Path.Value.Contains("/dashboards")
-                                      && !context.Request.Path.Value.Contains("/chatsHub"))
+                                      && !context.Request.Path.Value.Contains("/chatsHub")
+                                      && !context.Request.Path.Value.Contains("/invites"))
 
                                       || !context.Request.Query.ContainsKey("Authorization")
                                       || !context.Request.Query.ContainsKey("WatcherAuthorization"))
@@ -247,7 +247,8 @@
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
                         routes.MapHub<DashboardsHub>("/dashboards");
-                        routes.MapHub<ChatHub>("/chatsHub");
+                        routes.MapHub<InvitesHub>("/invites");
+                        routes.MapHub<ChatsHub>("/chatsHub");
                     });
             }
             else
@@ -256,7 +257,8 @@
                     {
                         routes.MapHub<NotificationsHub>("/notifications");
                         routes.MapHub<DashboardsHub>("/dashboards");
-                        routes.MapHub<ChatHub>("/chatsHub");
+                        routes.MapHub<InvitesHub>("/invites");
+                        routes.MapHub<ChatsHub>("/chatsHub");
                     });
             }
 
@@ -271,7 +273,7 @@
             string connectionString = configuration.GetConnectionString(enviroment == EnvironmentName.Production ? "AzureCosmosDbConnection" : "MongoDbConnection");
 
             services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
-                  options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage"));
+                  options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
         }
 
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
@@ -330,6 +332,7 @@
 
         public virtual void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
         {
+            // Fix SignalR PLEASE
             // Use SQL Database if in Azure, otherwise, use Local DB
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (env == EnvironmentName.Production)

@@ -7,6 +7,8 @@ export interface NotificationSetting  {
    isMute: boolean;
    isDisable: boolean;
    isEmailable: boolean;
+   userId: string;
+   chatId: number;
 }
 
 
