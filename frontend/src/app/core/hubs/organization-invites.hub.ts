@@ -10,7 +10,6 @@ import { OrganizationInvite } from '../../shared/models/organization-invite.mode
 })
 export class OrganizationInvitesHub {
   private hubConnection: HubConnection | undefined;
-  private connectionIsEstablished = false;
 
   onAddInvite = new EventEmitter<OrganizationInvite>();
   onUpdateInvite = new EventEmitter<OrganizationInvite>();
@@ -19,12 +18,6 @@ export class OrganizationInvitesHub {
   connectionEstablished = new EventEmitter<Boolean>();
 
   constructor(private authService: AuthService) {
-    this.connectToSignalR();
-  }
-
-  private connectToSignalR(): void {
-    this.createConnection();
-    this.registerOnServerEvents();
     this.startInviteHubConnection();
   }
 
@@ -37,6 +30,20 @@ export class OrganizationInvitesHub {
       .withUrl(connPath, ) // {accessTokenFactory: () => firebaseToken}
       .configureLogging(signalR.LogLevel.Information)
       .build();
+  }
+
+  private startInviteHubConnection(): void {
+    this.createConnection();
+    console.log('OrganizationInvitesHub trying to connect');
+    this.hubConnection.start()
+      .then(() => {
+        console.log('OrganizationInvitesHub connected');
+        this.registerOnServerEvents();
+      })
+      .catch(err => {
+        console.error('Error while establishing connection (OrganizationInvitesHub)');
+        setTimeout(this.startInviteHubConnection(), 3000);
+      });
   }
 
   private registerOnServerEvents(): void {
@@ -59,24 +66,10 @@ export class OrganizationInvitesHub {
     });
 
     // On Close event
-    this.hubConnection.onclose(function (error) {
-      console.log('CONNECTION CLOSED!!!');
-      console.error(error);
+    this.hubConnection.onclose(err => {
+      console.log('OrganizationInvitesHub connection closed');
+      console.error(err);
       this.startInviteHubConnection();
     });
-  }
-
-  private startInviteHubConnection(): void {
-    console.log('Connecting to Invite Hub!!!');
-    this.hubConnection.start()
-      .then(() => {
-        console.log('Invite hub connected');
-        this.connectionIsEstablished = true;
-        this.connectionEstablished.emit(true);
-      })
-      .catch(function (err) {
-        console.error('Error while establishing connection (Invites hub)...');
-        setTimeout(this.startInviteHubConnection(), 5000);
-      });
   }
 }

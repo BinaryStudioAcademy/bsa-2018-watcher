@@ -91,7 +91,7 @@
                 var repo = scope.ServiceProvider.GetRequiredService<IDataAccumulatorRepository<CollectedData>>();
                 var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
-                var data = CollectedDataService.GetFakeData(instanceId);
+                var data = CollectedDataService.GetFakeData(instanceId, DateTime.UtcNow);
 
                 await repo.AddEntity(data);
 

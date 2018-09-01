@@ -25,20 +25,45 @@ namespace Watcher.DataAccess.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("AutoScale");
+
                     b.Property<int>("DashboardId");
 
                     b.Property<bool>("IsDeleted");
 
                     b.Property<string>("MostLoaded");
 
-                    b.Property<string>("ShowCommon");
+                    b.Property<double>("RangeFillOpacity");
 
-                    b.Property<string>("Source")
-                        .IsRequired();
+                    b.Property<bool>("RoundDomains");
+
+                    b.Property<string>("SchemeType");
+
+                    b.Property<bool>("ShowCommon");
+
+                    b.Property<bool>("ShowGridLines");
+
+                    b.Property<bool>("ShowLegend");
+
+                    b.Property<bool>("ShowXAxis");
+
+                    b.Property<bool>("ShowXAxisLabel");
+
+                    b.Property<bool>("ShowYAxis");
+
+                    b.Property<bool>("ShowYAxisLabel");
+
+                    b.Property<string>("Sources");
 
                     b.Property<int>("Threshold");
 
+                    b.Property<string>("Title");
+
                     b.Property<int>("Type");
+
+                    b.Property<string>("XAxisLabel");
+
+                    b.Property<string>("YAxisLabel");
 
                     b.HasKey("Id");
 
