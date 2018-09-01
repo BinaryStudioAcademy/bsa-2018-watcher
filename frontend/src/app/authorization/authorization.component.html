@@ -49,7 +49,7 @@
             </span>
             <span class="firebaseui-idp-text">Sign In with Facebook</span>
         </button>
-        <p-progressSpinner [style]="{width: '40px', height: '40px'}" *ngIf="isFetching"></p-progressSpinner>
+        <p-progressSpinner [style]="{width: '38px', height: '38px'}" *ngIf="isFetching"></p-progressSpinner>
     </div>
 </ng-template>
 
@@ -73,7 +73,7 @@
             </span>
             <span class="firebaseui-idp-text">Sign Up with Facebook</span>
         </button>
-        <p-progressSpinner [style]="{width: '40px', height: '40px'}" *ngIf="isFetching"></p-progressSpinner>
+        <p-progressSpinner [style]="{width: '38px', height: '38px'}" *ngIf="isFetching"></p-progressSpinner>
     </div>
 </ng-template>
 
@@ -128,8 +128,10 @@
             </div>
         </div>
         <div class="auth-buttons">
-            <input type="button" pButton class="auth-button auth-btn-save" (click)="saveUserDetails()" [disabled]="eName?.invalid || cName?.invalid || fName?.invalid || lName?.invalid"
-                value="Save" />
+            <button type="button" class="auth-button auth-btn-save ui-button ui-widget ui-state-default ui-corner-all" (click)="saveUserDetails()" [disabled]="eName?.invalid || cName?.invalid || fName?.invalid || lName?.invalid || isSaving">
+                <p-progressSpinner [style]="{width: '38px', height: '38px'}" *ngIf="isSaving"></p-progressSpinner>
+				<span class="ui-button-text" *ngIf="!isSaving">Save</span>
+            </button>
             <input type="button" pButton class="auth-button auth-btn-save" (click)="onContinueLaterClick()" [disabled]="eName?.invalid || cName?.valid && fName?.valid && lName?.valid"
                 value="Continue Later" />
         </div>
