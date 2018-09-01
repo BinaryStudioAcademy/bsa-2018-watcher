@@ -9,7 +9,7 @@ import {UserLoginRequest} from '../../shared/models/user-login-request';
   providedIn: 'root'
 })
 export class TokenService {
-  public readonly ctrlUrl = 'Tokens';
+  private readonly ctrlUrl = 'Tokens';
 
   constructor(private apiService: ApiService) { }
 
@@ -26,7 +26,6 @@ export class TokenService {
   }
 
   login(request: UserLoginRequest): Observable<Token>  {
-    const req = this.apiService.post(`/${this.ctrlUrl}/Login`, request);
-    return req;
+    return this.apiService.post(`/${this.ctrlUrl}/Login`, request);
   }
 }

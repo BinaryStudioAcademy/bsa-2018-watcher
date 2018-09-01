@@ -35,7 +35,6 @@ export class NotificationBlockComponent implements OnInit {
   ngOnInit() {
     this.loadNotifications();
     this.authService.getTokens().subscribe(([firebaseToken, watcherToken]) => {
-      console.log(`firebase token noti ${firebaseToken}`);
       this.notificationsHubService.connectToSignalR(firebaseToken, watcherToken);
     });
     this.subscribeToEvents();
