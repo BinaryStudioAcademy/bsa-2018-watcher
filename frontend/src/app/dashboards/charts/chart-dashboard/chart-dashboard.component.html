@@ -1,4 +1,4 @@
-<div class="charts-area">
+<div class="charts-area" >
   <div class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
     <app-chart
       class="chart"
@@ -8,4 +8,18 @@
       [chartType]="chart.chartType">
     </app-chart>
   </div>
+<!-- [ngStyle]="{ 'display': 'flex', 'justifyContent': 'stretch'}"
+    <smooth-dnd-container [groupName]="'1'" [getChildPayload]="getChildPayload1" (drop)="onDrop('charts', $event)">            
+      <smooth-dnd-draggable class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
+        <app-chart
+          class="chart"
+          [chart]="chart"
+          [data]="chart.data"
+          [activeEntries]="chart.activeEntries"
+          [chartType]="chart.chartType">
+        </app-chart>
+      </smooth-dnd-draggable>
+    </smooth-dnd-container>
+ -->
 </div>
+
