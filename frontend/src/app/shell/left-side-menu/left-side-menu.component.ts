@@ -1,14 +1,15 @@
-import {Component, OnInit, OnChanges} from '@angular/core';
-import {MenuItem} from 'primeng/api';
-import {Router, RouterEvent} from '@angular/router';
-import {InstanceService} from '../../core/services/instance.service';
-import {Instance} from '../../shared/models/instance.model';
-import {ToastrService} from '../../core/services/toastr.service';
-import {AuthService} from '../../core/services/auth.service';
+import {Component, OnInit} from '@angular/core';
 import {AfterContentChecked, AfterViewChecked} from '@angular/core';
 import {NavigationStart} from '@angular/router';
-import {DashboardsHub} from '../../core/hubs/dashboards.hub';
-import { User } from '../../shared/models/user.model';
+import {Router, RouterEvent} from '@angular/router';
+import {MenuItem} from 'primeng/api';
+
+import {InstanceService} from '../../core/services/instance.service';
+import {ToastrService} from '../../core/services/toastr.service';
+import {AuthService} from '../../core/services/auth.service';
+
+import {User} from '../../shared/models/user.model';
+import {Instance} from '../../shared/models/instance.model';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -22,7 +23,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private settingsItems: MenuItem[];
   private instanceItems: MenuItem[];
   private adminItems: MenuItem[];
-  private organisationId: number;
 
   private regexSettingsUrl: RegExp = /\/user\/settings/;
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
@@ -39,7 +39,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   constructor(private router: Router,
               private instanceService: InstanceService,
-              private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
               private authService: AuthService) {
     router.events.forEach((event) => {
