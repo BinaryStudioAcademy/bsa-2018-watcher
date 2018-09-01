@@ -1,0 +1,53 @@
+<p-dialog header="Create chart" [(visible)]="display" [modal]="true" [responsive]="true" [width]="1000"
+          [minWidth]="850" [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-3">
+      <p class="field-top">Select chart type: </p>
+      <p-dropdown [options]="dropdownTypes" [(ngModel)]="dashboardChart.chartType.type" placeholder="Select a type"
+                  [style]="{'width':'192px'}" (onChange)="processData()">
+      </p-dropdown>
+      <p class="field">Select source: </p>
+      <p-multiSelect [options]="dropdownSources" [(ngModel)]="dashboardChart.dataSources" [style]="{'width':'192px'}"
+                     (onChange)="processData()">
+      </p-multiSelect>
+      <form [formGroup]="chartForm">
+        <p class="field">Number of heavy processes:</p>
+        <div class="width-left-part">
+          <p-spinner size="17" formControlName="mostLoaded" [min]="0" [max]="100"></p-spinner>
+        </div>
+      </form>
+      <p class="field">Threshold: {{dashboardChart.threshold}}</p>
+      <div class="field">
+        <p-slider [(ngModel)]="dashboardChart.threshold" [style]="{'width':'192px'}"></p-slider>
+      </div>
+      <form [formGroup]="chartForm">
+        <p class="field">Show multiple:
+          <p-checkbox formControlName="isMultiple" binary="true"></p-checkbox>
+        </p>
+      </form>
+      <p class="field">Y axis label (optional): </p>
+      <input class="width-left-part" type="text" [(ngModel)]="dashboardChart.yAxisLabel" pInputText/>
+      <p class="field">X axis label (optional): </p>
+      <input class="width-left-part" type="text" [(ngModel)]="dashboardChart.xAxisLabel" pInputText/>
+    </div>
+    <div class="ui-g-9">
+      <p class="field-top center">Visualization</p>
+      <div class="view-chart" *ngIf="showPreview && data && data.length > 0">
+        <app-chart [chart]="dashboardChart"
+                   [data]="data"
+                   [chartType]="type"
+                   [showDownload]="false">
+        </app-chart>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="center"> <!-- [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))"-->
+      <!--&& selectedSource <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onEditChart()"
+              label="Save"></button>
+      <button type="button" pButton (click)="closeDialog()" label="Cancel" class="ui-button-warning"></button>
+    </div>
+  </p-footer>
+
+</p-dialog>

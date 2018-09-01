@@ -1,14 +1,14 @@
-import {CustomChartType} from '../models';
+import {DashboardChartType} from './index';
 import {ChartType} from '../../../shared/models/chart-type.enum';
 
-function createChartType({title, type, ...obj}): CustomChartType {
+function createChartType({title, type, ...obj}): DashboardChartType {
   return {
     title,
     type: type,
     name: titleToName(title),
     dimLabels: ['Group by', 'Name', 'Value', null],
     ...obj
-  } as CustomChartType;
+  } as DashboardChartType;
 
   function titleToName(s: string) {
     return s.toLowerCase().replace(/\ /g, '-');

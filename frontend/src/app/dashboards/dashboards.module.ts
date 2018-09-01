@@ -37,6 +37,7 @@ import {ChartDashboardComponent} from './charts/chart-dashboard/chart-dashboard.
 import {ChartBuilderComponent} from './charts/chart-builder/chart-builder.component';
 import {ChartComponent} from './charts/chart/chart.component';
 import {DataService} from './services/data.service';
+import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
 
 
 @NgModule({
@@ -83,7 +84,8 @@ import {DataService} from './services/data.service';
 
     ChartComponent,
     ChartBuilderComponent,
-    ChartDashboardComponent
+    ChartDashboardComponent,
+    EditChartComponent
   ],
   providers: [DataService],
   exports: []

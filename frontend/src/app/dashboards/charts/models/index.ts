@@ -1,5 +1,4 @@
-export * from './custom-chart';
-export * from './custom-chart-type';
+export * from './dashboard-chart-type';
 export * from './custom-data';
 export * from './data';
 export * from './filter';
