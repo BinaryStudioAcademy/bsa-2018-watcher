@@ -53,9 +53,8 @@ namespace Watcher.Core.Services
  
         public async Task<IEnumerable<InstanceDto>> GetEntitiesByOrganizationIdAsync(int id)
         {
-            // TODO: now it take only 20 items
             var entities = await _uow.InstanceRepository.GetRangeAsync(
-                filter: i => i.OrganizationId == id, count: 20);
+                filter: i => i.OrganizationId == id);
 
             if (entities == null) return null;
 
