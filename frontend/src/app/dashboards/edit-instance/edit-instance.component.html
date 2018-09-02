@@ -8,42 +8,36 @@
   <form [formGroup]="instanceForm" (ngSubmit)="onSubmit()">
     <div class="label">Title:</div>
     <div class="ui-g ui-fluid">
-      <div class="ui-g-12 ui-mg-6 ui-lg-6">
-        <div class="ui-inputgroup">
-          <input pInputText type="text" formControlName="title" pInputText placeholder="Title">
-        </div>
+      <div class="ui-g-12 ui-md-6 ui-lg-4">
+        <input pInputText type="text" formControlName="title" pInputText placeholder="Title">
       </div>
     </div>
 
     <div class="invalid" *ngIf="instanceForm.get('title').errors && (instanceForm.get('title').touched ||instanceForm.get('title').dirty)">
-        <label>Title is required.</label>
-      </div>
+      <label>Title is required.</label>
+    </div>
 
     <div class="label">Platform:</div>
     <div class="ui-g ui-fluid">
-      <div class="ui-g-12 ui-mg-6 ui-lg-6">
-        <div class="ui-inputgroup">
-          <p-dropdown [options]="platformsDropdown" [formGroup]="instanceForm" formControlName="platform"></p-dropdown>
-        </div>
+      <div class="ui-g-12 ui-md-6 ui-lg-6">
+        <p-dropdown [options]="platformsDropdown" [formGroup]="instanceForm" formControlName="platform"></p-dropdown>
       </div>
     </div>
 
     <div class="label">IP address:</div>
     <div class="ui-g ui-fluid">
-      <div class="ui-g-12 ui-mg-6 ui-lg-6">
-        <div class="ui-inputgroup">
-          <input pInputText type="text" formControlName="address" pInputText placeholder="Address">
-        </div>
+      <div class="ui-g-12 ui-md-6 ui-lg-4">
+        <input pInputText type="text" formControlName="address" pInputText placeholder="Address">
       </div>
     </div>
 
     <div class="invalid" *ngIf="instanceForm.get('address').errors && (instanceForm.get('address').touched ||instanceForm.get('address').dirty)">
-        <label>Address is required.</label>
+      <label>Address is required.</label>
     </div>
-    
+
     <div *ngIf="id" class="label">Identifier:</div>
     <div *ngIf="id" class="ui-g ui-fluid">
-      <div class="ui-g-12 ui-mg-6 ui-lg-6">
+      <div class="ui-g-12 ui-lg-6">
         <div class="ui-inputgroup identifier">
           <input pInputText type="text" readonly formControlName="guid" pInputText placeholder="Identifier">
           <button pButton type="button" label="Copy" class="ui-button-info" (click)="copyToClipboard(this.instance.guidId)"></button>
