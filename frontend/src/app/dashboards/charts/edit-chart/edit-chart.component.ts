@@ -73,8 +73,11 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   processChartType() {
+    debugger;
+    this.showPreview = false;
     this.dashboardChart.chartType.type = this.type;
     this.dashboardChart.chartType.name = chartTypes[this.type];
+    this.processData();
   }
 
   ngOnChanges(changes) {
