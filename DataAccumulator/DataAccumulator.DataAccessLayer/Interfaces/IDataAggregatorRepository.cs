@@ -9,11 +9,13 @@ namespace DataAccumulator.DataAccessLayer.Interfaces
     public interface IDataAggregatorRepository<TEntity> where TEntity : IEntity
     {
         Task<IEnumerable<CollectedData>> GetAllEntities();
+        Task<IEnumerable<CollectedData>> GetAllEntitiesByType(CollectedDataType collectedDataType);
 
         Task<CollectedData> GetEntity(Guid id);
 
         // query after multiple parameters
-        Task<IEnumerable<CollectedData>> GetEntities(DateTime timeFrom, DateTime timeTo);
+        Task<IEnumerable<CollectedData>> GetEntitiesInTime(DateTime timeFrom, DateTime timeTo);
+        Task<IEnumerable<CollectedData>> GetEntitiesByTypeInTime(CollectedDataType collectedDataType, DateTime timeFrom, DateTime timeTo);
 
         // add new entity
         Task AddEntity(CollectedData item);

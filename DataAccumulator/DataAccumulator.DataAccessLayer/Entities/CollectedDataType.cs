@@ -7,6 +7,9 @@ namespace DataAccumulator.DataAccessLayer.Entities
     public enum CollectedDataType
     {
         Accumulation,
-        AggregationForHour
+        AggregationForHour,
+        AggregationForDay,
+        AggregationForWeek,
+        AggregationForMonth
     }
 }

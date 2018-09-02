@@ -1,7 +1,13 @@
 ﻿using System;
 using AutoMapper;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using DataAccumulator.BusinessLayer.Interfaces;
 using DataAccumulator.BusinessLayer.Services;
+using DataAccumulator.BusinessLayer.Providers;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
@@ -10,22 +16,12 @@ using DataAccumulator.DataAggregator.Interfaces;
 using DataAccumulator.DataAggregator.Services;
 using DataAccumulator.Shared.Models;
 using DataAccumulator.WebAPI.Jobs;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
+using DataAccumulator.WebAPI.Extensions;
+using ServiceBus.Shared.Queue;
 using Quartz.Spi;
 
 namespace DataAccumulator
 {
-    using DataAccumulator.BusinessLayer.Providers;
-    using DataAccumulator.WebAPI.Extensions;
-
-    using Microsoft.AspNetCore.Mvc;
-
-    using ServiceBus.Shared.Queue;
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -110,7 +106,7 @@ namespace DataAccumulator
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
                 options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>(
-                options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.AggregationForHour));
+                options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage"));
 
         }
 
