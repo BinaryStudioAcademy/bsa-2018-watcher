@@ -14,7 +14,8 @@ import {
   SpinnerModule,
   ButtonModule,
   TabMenuModule,
-  ProgressSpinnerModule} from 'primeng/primeng';
+  ProgressSpinnerModule,
+  InputTextModule} from 'primeng/primeng';
 import {EditDashboardComponent} from './editDashboard/editDashboard.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ToastModule} from 'primeng/toast';
@@ -51,6 +52,7 @@ import {ContainerComponent, DraggableComponent} from 'ngx-smooth-dnd';
     TabMenuModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
+    InputTextModule,
     ToastModule,
     MessageModule,
     ReactiveFormsModule,
