@@ -11,6 +11,7 @@ import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 import {PercentageInfo} from '../models/percentage-info';
+import { AuthService } from '../../core/services/auth.service';
 import {CustomChart, CustomChartType, CustomData} from '../charts/models';
 import {DataService} from '../services/data.service';
 
@@ -102,8 +103,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private instanceService: InstanceService,
               private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
-              private chartService: ChartService,
               private activateRoute: ActivatedRoute,
+              private authService: AuthService,
+              private chartService: ChartService,
               private fb: FormBuilder,
               private ngZone: NgZone,
               private dataService: DataService) {
@@ -159,8 +161,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
-
-    await this.dashboardsHub.connectToSignalR();
+    this.authService.getTokens().subscribe( async ([firebaseToken, watcherToken]) => {
+      await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
+    });
 
     this.paramsSubscription = this.activateRoute.params.subscribe(params => {
       if (this.instanceGuidId) {
@@ -435,7 +438,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   instantiateDashboardChart(value: Chart): DashboardChart {
-    debugger;
     const props: DataProperty[] = [];
     const arrNumbers = value.sources.split(',');
 
@@ -481,7 +483,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   createChartRequest(): ChartRequest {
-    debugger;
     const chart: ChartRequest = {
       showCommon: this.chartForm.get('isMultiple').value,
       threshold: this.threshold,

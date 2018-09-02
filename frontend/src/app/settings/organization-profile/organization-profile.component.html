@@ -1,157 +1,156 @@
 <div class="container">
-    <div class="ui-g ui-fluid">
-        <div class="ui-g-12 ui-lg-6 header">
-            <div class="title">ORGANIZATION PROFILE</div>
-            <hr>
-        </div>
-    </div>
-
-
-
-    <div class="grid-container">
-
-        <div class="grid-item logo">
-            <div class="ui-g-12 ui-md-8 ui-lg-5">
-                <div class="label">Organization logo</div>
-                <figure class="cap-bot">
-                    <img class="imageLogo" src="{{imageUrl}}">
-                    <figcaption class="centered-text custom-upload-btn">
-                        <span>
-                            <i class="fa fa-camera"></i> Update logo</span>
-                        <p-fileUpload #upload mode="basic" name="myfile[]" files="photosList" accept="image/*" (uploadHandler)="onImageSelected($event.files)"
-                            customUpload="true" maxFileSize="2000000" auto="true" chooseLabel="Change"></p-fileUpload>
-                    </figcaption>
-                </figure>
-
-                <p-dialog [(visible)]="display" [showHeader]="false" appendTo="body" [closable]=false [modal]="true" [responsive]="true"
-                    [draggable]="false">
-                    <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
-
-                    <div class="btn-panel crop-btn-panel">
-                        <button pButton class="ui-button-raised ui-button-primary" (click)="onCropSave()" label="Done"></button>
-                        <button pButton class="ui-button-raised ui-button-warning" (click)="onCropCancel() " label="Cancel"></button>
-
-                    </div>
-                </p-dialog>
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12 ui-lg-6 header">
+                <div class="title">ORGANIZATION PROFILE</div>
+                <hr>
             </div>
         </div>
-
-        <div class="grid-item orgData">
-            <div class="ui-g">
+    
+    
+    
+        <div class="grid-container">
+    
+            <div class="grid-item logo">
+                <div class="ui-g-12 ui-md-8 ui-lg-5">
+                    <div class="label">Organization logo</div>
+                    <figure class="cap-bot">
+                        <img class="imageLogo" src="{{imageUrl}}">
+                        <figcaption class="centered-text custom-upload-btn">
+                            <span>
+                                <i class="fa fa-camera"></i> Update logo</span>
+                            <p-fileUpload #upload mode="basic" name="myfile[]" files="photosList" accept="image/*" (uploadHandler)="onImageSelected($event.files)"
+                                customUpload="true" maxFileSize="2000000" auto="true" chooseLabel="Change"></p-fileUpload>
+                        </figcaption>
+                    </figure>
+    
+                    <p-dialog [(visible)]="display" [showHeader]="false" appendTo="body" [closable]=false [modal]="true" [responsive]="true"
+                        [draggable]="false">
+                        <img-cropper #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+    
+                        <div class="btn-panel crop-btn-panel">
+                            <button pButton class="ui-button-raised ui-button-primary" (click)="onCropSave()" label="Done"></button>
+                            <button pButton class="ui-button-raised ui-button-warning" (click)="onCropCancel() " label="Cancel"></button>
+    
+                        </div>
+                    </p-dialog>
+                </div>
+            </div>
+    
+            <div class="grid-item orgData">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12 ui-lg-12">
+                        <div class="label">Name*:</div>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12">
+                                <div class="ui-inputgroup">
+                                    <input [(ngModel)]="organization.name" type="text" pInputText placeholder="Company name" required id="cName" required minlength="4"
+                                        #cName="ngModel" />
+                                    <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
+                                        <div *ngIf="cName.errors.required">Company name is required.</div>
+                                        <div *ngIf="cName.errors.minlength">Company name must be at least 4 characters long.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="label">Email:</div>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12">
+                                <div class="ui-inputgroup">
+                                    <input type="email" pInputText placeholder="Email" [(ngModel)]="organization.email" id="cEmail" #cEmail="ngModel" ngModel
+                                        email />
+                                    <div *ngIf="cEmail?.invalid && (cEmail?.dirty || cEmail?.touched)" class="alert alert-danger">
+                                        <div *ngIf="cEmail.errors.email">Email must be a valid email address</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="label">Contact number:</div>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12">
+                                <div class="ui-inputgroup">
+                                    <p-inputMask type="phone" [(ngModel)]="organization.contactNumber" mask="+380 (99) 999-99-99" placeholder="Contact number"></p-inputMask>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="label">Web site:</div>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12">
+                                <div class="ui-inputgroup">
+                                    <input type="text" pInputText placeholder="Web site" [(ngModel)]="organization.webSite" id="cWebSite" #cWebSite="ngModel"
+                                        pattern="^(http|https|ftp)?(://)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([/?].*)?$">
+                                    <div *ngIf="cWebSite?.invalid && (cWebSite?.dirty || cWebSite?.touched)" class="alert alert-danger">
+                                        <div *ngIf="cWebSite.errors.pattern">Web site must be a valid.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="label">Description:</div>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12">
+                                <textarea rows="5" pInputTextarea [(ngModel)]="organization.description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="btn-panel btn-save">
+                        <button (click)="onSubmit()" class="ui-button ui-state-default ui-corner-all ui-button-text-only ui-button-success btn-inline-flex"
+                            [disabled]="cName?.invalid || cEmail?.invalid || cWebSite?.invalid || isUpdating">
+                            <p-progressSpinner class="btn-spinner" *ngIf="isUpdating" strokeWidth="5"></p-progressSpinner>
+                            <span class="ui-button-text" *ngIf="!isUpdating">Update</span>
+                        </button>
+                    </div>
+                </div>
+    
+            </div>
+            <div class="grid-item ui-g invite">
                 <div class="ui-g-12 ui-md-12 ui-lg-12">
-                    <div class="label">Name*:</div>
+    
+                    <div class="label">Invite:</div>
                     <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <div class="ui-inputgroup">
-                                <input [(ngModel)]="organization.name" type="text" pInputText placeholder="Company name" required id="cName" required minlength="4"
-                                    #cName="ngModel" />
-                                <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
-                                    <div *ngIf="cName.errors.required">Company name is required.</div>
-                                    <div *ngIf="cName.errors.minlength">Company name must be at least 4 characters long.</div>
+                        <div class="ui-g-12 ui-lg-12">
+                            <input disabled [(ngModel)]="inviteLink" required minlength="20" class="form-control" pInputText placeholder="Invite link">
+                        </div>
+                    </div>
+                    <div class="ui-g ui-fluid btn-under-link">
+                        <div class="btn-panel">
+                            <button (click)="onInvite()" class="ui-button ui-state-default ui-corner-all ui-button-text-only btn-inline-flex btn-generate" [disabled]="isInviting">
+                                <p-progressSpinner class="btn-spinner" *ngIf="isInviting" strokeWidth="5"></p-progressSpinner>
+                                <span class="ui-button-text" *ngIf="!isInviting">Generate</span>
+                            </button>
+                        </div>
+                        <div class="btn-panel small-space">
+                            <button pButton label="Copy" (click)="onCopy()" [disabled]="inviteLink === '' "></button>
+                        </div>
+                    </div>
+    
+                    <div class="label">Send invite link to:</div>
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-lg-12 flex-input-button">
+                            <div class="ui-fluid small-space inputEmail view-inline">
+                                <input type="email" [(ngModel)]="inviteEmail" id="iEmail" #iEmail="ngModel" ngModel email="true" class="form-control" required
+                                    pInputText placeholder="Email">
+                                <div *ngIf="iEmail?.invalid && (iEmail?.dirty || iEmail?.touched)" class="alert alert-danger">
+                                    <div *ngIf="iEmail.errors.email">
+                                        Email is invalid.
+                                    </div>
                                 </div>
                             </div>
+                            <button (click)="onSentInviteToEmail()" class="ui-button ui-state-default ui-corner-all ui-button-success ui-button-text-only ui-widget btn-inline-flex"
+                                [disabled]="inviteLink === '' || iEmail?.invalid || isSending">
+                                <p-progressSpinner class="btn-spinner" *ngIf="isSending" strokeWidth="5"></p-progressSpinner>
+                                <span class="ui-button-text" *ngIf="!isSending">Send</span>
+                            </button>  
                         </div>
                     </div>
-
-                    <div class="label">Email:</div>
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <div class="ui-inputgroup">
-                                <input type="email" pInputText placeholder="Email" [(ngModel)]="organization.email" id="cEmail" #cEmail="ngModel" ngModel
-                                    email />
-                                <div *ngIf="cEmail?.invalid && (cEmail?.dirty || cEmail?.touched)" class="alert alert-danger">
-                                    <div *ngIf="cEmail.errors.email">Email must be a valid email address</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="label">Contact number:</div>
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <div class="ui-inputgroup">
-                                <p-inputMask type="phone" [(ngModel)]="organization.contactNumber" mask="+380 (99) 999-99-99" placeholder="Contact number"></p-inputMask>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="label">Web site:</div>
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <div class="ui-inputgroup">
-                                <input type="text" pInputText placeholder="Web site" [(ngModel)]="organization.webSite" id="cWebSite" #cWebSite="ngModel"
-                                    pattern="^(http|https|ftp)?(://)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([/?].*)?$">
-                                <div *ngIf="cWebSite?.invalid && (cWebSite?.dirty || cWebSite?.touched)" class="alert alert-danger">
-                                    <div *ngIf="cWebSite.errors.pattern">Web site must be a valid.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="label">Description:</div>
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <textarea rows="5" pInputTextarea [(ngModel)]="organization.description"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="btn-panel btn-save">
-                    <button type="button" (click)="onSubmit()" class="ui-button-raised ui-button-success btn-inline-flex ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                        [disabled]="cName?.invalid || cEmail?.invalid || cWebSite?.invalid || isUpdating">
-                        <p-progressSpinner class="btn-spinner" *ngIf="isUpdating" strokeWidth="5"></p-progressSpinner>
-                        <span class="ui-button-text" *ngIf="!isUpdating">Update</span>
-                    </button>
-                </div>
-            </div>
-
-        </div>
-        <div class="grid-item ui-g invite">
-            <div class="ui-g-12 ui-md-12 ui-lg-12">
-
-                <div class="label">Invite:</div>
-                <div class="ui-g ui-fluid">
-                    <div class="ui-g-12 ui-lg-12">
-                        <input disabled [(ngModel)]="inviteLink" required minlength="20" class="form-control" pInputText placeholder="Invite link">
-                    </div>
-                </div>
-                <div class="ui-g ui-fluid btn-under-link">
-                    <div class="btn-panel">
-                        <button (click)="onInvite()" class="ui-button-raised ui-button-icon-primary btn-generate ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" [disabled]="isInviting">
-                            <p-progressSpinner class="btn-spinner" *ngIf="isInviting" strokeWidth="5"></p-progressSpinner>
-                            <span class="ui-button-text" *ngIf="!isInviting" style="margin-left: 5px;">Generate</span>
-                        </button>
-                    </div>
-                    <div class="btn-panel small-space">
-                        <button pButton label="Copy" (click)="onCopy()" [disabled]="inviteLink === '' "></button>
-                    </div>
-                </div>
-
-                <div class="label">Send invite link to:</div>
-                
-                <div class="ui-lg-12 inputEmail">
-                    
-                        <div class="small-space view-inline">
-                            <input type="email" [(ngModel)]="inviteEmail" id="iEmail" #iEmail="ngModel" ngModel email="true" class="form-control" required
-                                pInputText placeholder="Email">
-                            <div *ngIf="iEmail?.invalid && (iEmail?.dirty || iEmail?.touched)" class="alert alert-danger">
-                                <div *ngIf="iEmail.errors.email">
-                                    Email is invalid.
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class=" btn-panel ">  </div>-->
-                        <button (click)="onSentInviteToEmail()" class="btn-inline-flex view-inline ui-button-raised ui-button-success ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                            [disabled]="inviteLink === '' || iEmail?.invalid || isSending">
-                            <p-progressSpinner class="btn-spinner" *ngIf="isSending" strokeWidth="5"></p-progressSpinner>
-                            <span class="ui-button-text" *ngIf="!isSending">Send</span>
-                        </button>
                     
                 </div>
             </div>
-        </div>
-        <div class="grid-item list-invites">
-            <app-invites-list></app-invites-list>
+            <div class="grid-item list-invites">
+                <app-invites-list></app-invites-list>
+            </div>
         </div>
     </div>
-</div>

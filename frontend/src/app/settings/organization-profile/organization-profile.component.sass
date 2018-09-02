@@ -161,7 +161,6 @@ figure:hover:before
     width: 300px
     height: 150px
 
-
 .ui-inputgroup
     position: relative
     display: inline-block
@@ -182,11 +181,8 @@ figure:hover:before
     padding-right: .5em
 
 .btn-generate
-    display: inline-flex
-    justify-content: center
-    width: 99px !important
-    height: 33px
-
+    min-width: 100px
+    
 .btn-under-link
     margin-bottom: 23px
     margin-top: 10px
@@ -195,14 +191,9 @@ figure:hover:before
     display: inline-block
 
 .inputEmail
+    position: relative
+    width: calc(100% - 78px)
+
+.flex-input-button
     display: flex
-    justify-content: space-between
-    padding: 0
-    height: 35px
-    .small-space
-        position: relative
-        width: calc(100% - 78px)
-    input
-        width: 100%
-    button
-        height: 100%
+    align-items: center

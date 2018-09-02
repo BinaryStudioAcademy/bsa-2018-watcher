@@ -20,7 +20,7 @@ export class InvitesListComponent implements OnInit {
   invites: ShowInvite[];
 
   currentUser: User;
-
+  // SignalR
   indexFirstRecordPage = 0;
   rowsPerPage = 2;
   isUpdating: boolean;

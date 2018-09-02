@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, forkJoin } from 'rxjs';
 import { UserRegisterRequest } from '../../shared/models/user-register-request';
 import { TokenService } from './token.service';
 import { UserLoginRequest } from '../../shared/models/user-login-request';
@@ -10,7 +10,10 @@ import { UserInfoProfile } from '../../shared/models/user-info-profile';
 import { User } from '../../shared/models/user.model';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { Token } from '../../shared/models/token.model';
-import {UserProfile} from '../../shared/models/user-profile';
+import { UserProfile} from '../../shared/models/user-profile';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { from } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +29,12 @@ export class AuthService {
   private userDetails: firebase.User = null;
   public userRegisterRequest: UserRegisterRequest = null;
 
+  private tokenHelper: JwtHelperService = new JwtHelperService();
+
   constructor(private _firebaseAuth: AngularFireAuth,
     private tokenService: TokenService,
-    private router: Router) {
+    private router: Router,
+    ) {
     this.user = _firebaseAuth.authState;
     this.user.subscribe(
       (user) => {
@@ -43,10 +49,14 @@ export class AuthService {
 
   // Verify JWT in localstorage with server & load user's info.
   // This runs once on application startup.
-  populate(): Promise<any> {
+  async populate(): Promise<any> {
+    console.log('POPULATE');
     // If JWT detected, attempt to get & store user's info
-    const fToken = this.getFirebaseToken();
-    const wToken = this.getWatcherToken();
+    const fToken = await this.getFirebaseToken();
+    const wToken = await this.getWatcherToken();
+    console.log(fToken);
+    console.log(wToken);
+
     if (fToken && wToken) {
       return this.tokenService.getUserByTokens().toPromise()
         .then(currUser => {
@@ -130,7 +140,7 @@ export class AuthService {
     const firebaseToken = await credential.user.getIdToken(true);
 
     localStorage.setItem('firebaseToken', firebaseToken);
-
+    console.log('LOGIN');
     console.log(credential.user.photoURL);
     return this.tokenService.login(request).toPromise()
       .then(tokenDto => {
@@ -158,6 +168,7 @@ export class AuthService {
 
     return await this._firebaseAuth.auth.signInWithPopup(provider)
       .then(res => {
+        console.log(res);
         return this.login(res, 'Google');
       })
       .then(() => {
@@ -259,12 +270,60 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 
-  getFirebaseToken(): string | null {
+  getTokens() {
+    return forkJoin(this.getFirebaseToken(), this.getWatcherToken());
+  }
+
+  async getFirebaseToken(): Promise<string> {
+    const currentToken =  localStorage.getItem('firebaseToken');
+    if (this.tokenHelper.isTokenExpired(currentToken)) {
+      await this.refreshFirebaseToken();
+    }
     return localStorage.getItem('firebaseToken');
   }
 
-  getWatcherToken(): string | null {
+  async getWatcherToken(): Promise<string> {
+    const currentToken = localStorage.getItem('watcherToken');
+    if (this.tokenHelper.isTokenExpired(currentToken)) {
+      await this.refreshWatcherToken();
+    }
     return localStorage.getItem('watcherToken');
+  }
+
+  async refreshFirebaseToken() {
+    console.log('REFRESHING FIREBASE TOKEN');
+    const token = localStorage.getItem('firebaseToken');
+    if (!token) {
+      return;
+    }
+    if (!this.tokenHelper.isTokenExpired(token)) {
+      return;
+    }
+
+    const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
+    console.log('FIREBASE TOKEN HAS BEEN REFRESHED');
+    localStorage.setItem('firebaseToken', firebaseToken);
+  }
+
+  async refreshWatcherToken() {
+    console.log('REFRESHING WATCHER TOKEN');
+    const token = localStorage.getItem('watcherToken');
+    if (!token) {
+      return;
+    }
+    if (!this.tokenHelper.isTokenExpired(token)) {
+      return;
+    }
+
+    const userInfo = this.getCurrentUserLS();
+     const req: UserLoginRequest = {
+      uid: userInfo.id,
+      email: userInfo.email
+    };
+
+    const tokenDto = await this.tokenService.login(req).toPromise();
+    console.log('WATCHER TOKEN HAS BEEN REFRESHED');
+    localStorage.setItem('watcherToken', tokenDto.watcherJWT);
   }
 
   logout(): boolean {
@@ -276,11 +335,5 @@ export class AuthService {
       .catch(err => console.error(err));
 
     return true;
-  }
-
-  async refreshToken() {
-    const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
-    localStorage.removeItem('firebaseToken');
-    localStorage.setItem('firebaseToken', firebaseToken);
   }
 }

@@ -28,9 +28,7 @@ export class ChatHub {
         this.startConnection();
     }
 
-    private buildConnection() {
-        const firebaseToken = this.authService.getFirebaseToken();
-        const watcherToken = this.authService.getWatcherToken();
+    private buildConnection(firebaseToken: string, watcherToken: string) {
         const connPath = `${environment.server_url}/${this.hubName}?Authorization=${firebaseToken}&WatcherAuthorization=${watcherToken}`;
 
         this.hubConnection = new signalR.HubConnectionBuilder()
@@ -40,7 +38,8 @@ export class ChatHub {
     }
 
     private startConnection(): void {
-        this.buildConnection();
+      this.authService.getTokens().subscribe(([firebaseToken, watcherToken]) => {
+        this.buildConnection(firebaseToken, watcherToken);
         console.log('ChatHub trying to connect');
         this.hubConnection
             .start()
@@ -49,9 +48,10 @@ export class ChatHub {
                 this.registerOnEvents();
             })
             .catch(err => {
-                console.log('Error while establishing connection...');
-                setTimeout(this.startConnection(), 5000);
+                console.log('Error while establishing connection (ChatHub)');
+                setTimeout(this.startConnection(), 3000);
             });
+      });
     }
 
     private registerOnEvents(): void {
@@ -81,7 +81,7 @@ export class ChatHub {
         });
 
         this.hubConnection.onclose((error: Error) => {
-            console.log('ChatHub connection closed!');
+            console.log('ChatHub connection closed');
             console.error(error);
             this.startConnection();
         });
