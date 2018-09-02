@@ -1,5 +1,5 @@
-<p-dataView #dt *ngIf="invites" [(value)]="invites" 
-                                [paginator]="true" [rows]="rowsPerPage" 
+<p-dataView #dt *ngIf="invites" [(value)]="invites"
+                                [paginator]="true" [rows]="rowsPerPage"
                                 [totalRecords]="invites.length"
                                 (onPage)="onPaginate($event)">
     <p-header>List of invites</p-header>
@@ -10,10 +10,10 @@
                 <div class="ui-g-12 flex-input-button">
                     <div class="ui-fluid item-input">
                         <input type="text" disabled pInputText placeholder="{{invite.showLink}}">
-                    </div>               
-                    <p-button label="Copy" class="invite-item-button" (click)="onCopy(invite.showLink)"></p-button>        
+                    </div>
+                    <p-button label="Copy" class="invite-item-button" (click)="onCopy(invite.showLink)"></p-button>
                     <button pButton type="button" class="ui-button-danger invite-item-button" (click)="onDelete(invite.invite.id)" label="Delete"></button>
-                </div>                      
+                </div>
             </div>
             <div class="ui-g ui-g-12 invite-info">
                 <div class="ui-g-12">Expired at:</div>

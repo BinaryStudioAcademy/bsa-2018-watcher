@@ -30,6 +30,7 @@ export class AuthorizationComponent implements OnInit {
   isSuccessSignUp = false;
   isNotRegisteredSignIn = false;
   isFetching = false;
+  isSaving: Boolean = false;
   emailExists = false;
 
   companyName = '';
@@ -165,7 +166,7 @@ export class AuthorizationComponent implements OnInit {
   }
 
   async saveUserDetails(): Promise<void> {
-
+    this.isSaving = true;
     let invitedOrganizationid = 0;
     if (this.invitedOrganization !== null) {
       invitedOrganizationid = this.invitedOrganization.id;
@@ -174,11 +175,13 @@ export class AuthorizationComponent implements OnInit {
     await this.authService.signUpWithProvider(this.companyName, this.firstName, this.lastName,
                                                this.userEmail, invitedOrganizationid)
       .then(res => {
+        this.isSaving = false;
         this.closeDialog();
         this.signInPostProcessing(true);
       })
       .catch(err => {
         if (err) {
+          this.isSaving = false;
           this.closeDialog();
           console.log(err);
         }
