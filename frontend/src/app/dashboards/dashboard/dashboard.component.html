@@ -1,10 +1,20 @@
-<app-edit-dashboard (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard"
-                    [dashboardTitle]="editTitle"></app-edit-dashboard>
+<app-edit-dashboard (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard" [dashboardTitle]="editTitle"></app-edit-dashboard>
 <div class="site-wrap">
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
       <div class="title">DASHBOARDS</div>
-      <hr *ngIf="!instanceId">
+      <div *ngIf="!instanceId" class="placeholder">
+        <hr>
+        <div>
+          <i class="fa fa-plus"></i> 1. Create a VM instance
+        </div>
+        <div>
+          <i class="fa fa-download"></i> 2. Download the application
+        </div>
+        <div>
+          <i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity
+        </div>
+      </div>
     </div>
   </div>
   <!--Item showAddItemPopup() -->
@@ -47,12 +57,7 @@
         <app-percentage-line-chart [percentageInfo]="percentageInfoToDisplay"></app-percentage-line-chart>
       </div>
       <div class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of activeDashboardItem.charts">
-        <app-chart
-          class="chart"
-          [chart]="chart"
-          [data]="chart.data"
-          [activeEntries]="chart.activeEntries"
-          [chartType]="chart.chartType">
+        <app-chart class="chart" [chart]="chart" [data]="chart.data" [activeEntries]="chart.activeEntries" [chartType]="chart.chartType">
         </app-chart>
       </div>
       <!--<div class="dashboard-item">-->
@@ -81,47 +86,32 @@
       <!--</div>-->
       <!--</div>-->
     </div>
-
-    <div *ngIf="!instanceId" class="placeholder">
-      <div>
-        <i class="fa fa-plus"></i> 1. Create a VM instance
-      </div>
-      <div>
-        <i class="fa fa-download"></i> 2. Download the application
-      </div>
-      <div>
-        <i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity
-      </div>
-    </div>
-
   </div>
 
   <p-confirmDialog header="Confirmation " icon="pi pi-exclamation-triangle " width="425 " #cd>
     <p-footer>
       <button pButton type="button " class="ui-button-success ui-button-raised " icon="pi pi-times " label="No "
-              (click)="cd.reject() "></button>
+        (click)="cd.reject() "></button>
       <button pButton type="button " class="ui-button-danger ui-button-raised " icon="pi pi-check " label="Yes "
-              (click)="cd.accept() "></button>
+        (click)="cd.accept() "></button>
     </p-footer>
   </p-confirmDialog>
   <p-toast position="bottom-right" life="500"></p-toast>
 
 
   <p-dialog header="Create chart" [(visible)]="popupAddChart" [modal]="true" [responsive]="true" [width]="1000"
-            [minWidth]="850"
-            [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false
-            (onHide)="closeMy()">
+    [minWidth]="850" [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false
+    (onHide)="closeMy()">
     <!--  [baseZIndex]="10000"-->
     <!-- <app-chart-builder (addChart)="addChartToDashboard($event)"></app-chart-builder>   -->
     <div class="ui-g ui-fluid">
       <div class="ui-g-3">
         <p class="field-top">Select chart type: </p>
-        <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" placeholder="Select a type"
-                    [style]="{'width':'192px'}" (onChange)="processData()">
+        <p-dropdown [options]="dropdownType" [(ngModel)]="selectedType" placeholder="Select a type" [style]="{'width':'192px'}"
+          (onChange)="processData()">
         </p-dropdown>
         <p class="field">Select source: </p>
-        <p-multiSelect [options]="dropdownSource" [(ngModel)]="selectedSource" [style]="{'width':'192px'}"
-                       (onChange)="processData()">
+        <p-multiSelect [options]="dropdownSource" [(ngModel)]="selectedSource" [style]="{'width':'192px'}" (onChange)="processData()">
         </p-multiSelect>
         <form [formGroup]="chartForm">
           <p class="field">Number of heavy processes:</p>
@@ -139,9 +129,9 @@
           </p>
         </form>
         <p class="field">Y axis label (optional): </p>
-        <input class="width-left-part" type="text" [(ngModel)]="chartOptions.yAxisLabel" pInputText/>
+        <input class="width-left-part" type="text" [(ngModel)]="chartOptions.yAxisLabel" pInputText />
         <p class="field">X axis label (optional): </p>
-        <input class="width-left-part" type="text" [(ngModel)]="chartOptions.xAxisLabel" pInputText/>
+        <input class="width-left-part" type="text" [(ngModel)]="chartOptions.xAxisLabel" pInputText />
       </div>
       <div class="ui-g-9">
         <p class="field-top center">Visualization</p>
@@ -152,10 +142,10 @@
       </div>
     </div>
     <p-footer>
-      <div class="center"> <!-- [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))"-->
+      <div class="center">
+        <!-- [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))"-->
         <!--&& selectedSource <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
-        <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()"
-                label="Save"></button>
+        <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onCreateChart()" label="Save"></button>
         <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
       </div>
     </p-footer>
