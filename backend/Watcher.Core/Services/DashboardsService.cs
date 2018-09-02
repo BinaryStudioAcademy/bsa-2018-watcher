@@ -1,19 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using AutoMapper;
-
-using Microsoft.EntityFrameworkCore;
-
-using Watcher.Common.Dtos;
-using Watcher.Common.Requests;
-using Watcher.Core.Interfaces;
-using Watcher.DataAccess.Entities;
-using Watcher.DataAccess.Interfaces;
-
-namespace Watcher.Core.Services
+﻿namespace Watcher.Core.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using AutoMapper;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using Watcher.Common.Dtos;
+    using Watcher.Common.Requests;
+    using Watcher.Core.Interfaces;
+    using Watcher.DataAccess.Entities;
+    using Watcher.DataAccess.Interfaces;
 
     public class DashboardsService : IDashboardsService
     {
@@ -26,25 +26,12 @@ namespace Watcher.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<InstanceDto> GetFirstInstanceAsync()
-        {
-            var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(
-                               include: x => x.Include(o => o.Organization)
-                                              .Include(o => o.Dashboards)
-                                                    .ThenInclude(d => d.Charts));
-
-            if (instance == null) return null;
-
-            var dto = _mapper.Map<Instance, InstanceDto>(instance);
-
-            return dto;
-        }
-
-        public async Task<IEnumerable<DashboardDto>> GetInstanceDashboards(int id)
+        public async Task<IEnumerable<DashboardDto>> GetDashboardsByInstanceId(int id)
         {
             var entities = await _uow.DashboardsRepository.GetRangeAsync(
                                filter: d => d.InstanceId == id,
-                               include: x => x.Include(o => o.Charts));
+                               orderBy: d => d.OrderByDescending(x => x.CreatedAt),
+                               include: d => d.Include(o => o.Charts));
 
             if (entities == null) return null;
 

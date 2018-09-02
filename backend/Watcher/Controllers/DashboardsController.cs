@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Watcher.Common.Dtos;
-using Watcher.Common.Requests;
-using Watcher.Core.Interfaces;
-
-namespace Watcher.Controllers
+﻿namespace Watcher.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
+    using Watcher.Common.Dtos;
+    using Watcher.Common.Requests;
+    using Watcher.Core.Interfaces;
+
     [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
@@ -21,26 +22,24 @@ namespace Watcher.Controllers
             _dashboardsService = service;
         }
 
-        // GET: /dashboards/FirstInstance
-        [HttpGet("FirstInstance")]
-        [AllowAnonymous]
-        public virtual async Task<ActionResult<IEnumerable<DashboardDto>>> GetFirstInstance()
+        // GET: /dashboards/:id
+        [HttpGet("{id}")]
+        public virtual async Task<ActionResult<DashboardDto>> GetById(int id)
         {
-            var instanceDto = await _dashboardsService.GetFirstInstanceAsync();
-            if (instanceDto == null)
+            var dto = await _dashboardsService.GetDashboardByIdAsync(id);
+            if (dto == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
-            return Ok(instanceDto);
+            return Ok(dto);
         }
 
-        // GET: /dashboards
-        [HttpGet("{id}")]
-        [AllowAnonymous]
-        public virtual async Task<ActionResult<IEnumerable<DashboardDto>>> GetInstanceDashboards(int id)
+        // GET: /dashboards/instance/:id
+        [HttpGet("instance/{id}")]
+        public virtual async Task<ActionResult<IEnumerable<DashboardDto>>> GetDashboardsByInstanceId(int id)
         {
-            var dtos = await _dashboardsService.GetInstanceDashboards(id);
+            var dtos = await _dashboardsService.GetDashboardsByInstanceId(id);
             if (!dtos.Any())
             {
                 return NoContent();
