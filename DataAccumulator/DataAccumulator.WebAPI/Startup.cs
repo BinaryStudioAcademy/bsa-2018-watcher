@@ -67,7 +67,7 @@ namespace DataAccumulator
                     return new JobFactory(provider);
                 });
 
-            services.AddTransient<CollectedDataAggregatingJob>();
+            services.AddTransient<CollectedDataAggregatingByHourJob>();
 
             services.AddTransient<IAzureQueueSender, AzureQueueSender>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
@@ -97,7 +97,7 @@ namespace DataAccumulator
             {
                 if (Configuration.GetSection("DataAggregator").GetValue<bool>("Aggregating"))
                 {
-                    quartz.AddJob<CollectedDataAggregatingJob>("DataAggregator", "Import", Configuration.GetSection("DataAggregator").GetValue<int>("IntervalMinute"));
+                    quartz.AddJob<CollectedDataAggregatingByHourJob>("DataAggregator", "Import", Configuration.GetSection("DataAggregator").GetValue<int>("IntervalMinute"));
                 }
             });
         }

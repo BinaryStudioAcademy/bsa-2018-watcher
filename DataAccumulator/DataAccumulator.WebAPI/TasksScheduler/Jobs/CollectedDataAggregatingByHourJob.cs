@@ -6,10 +6,10 @@ using Quartz;
 
 namespace DataAccumulator.WebAPI.TasksScheduler.Jobs
 {
-    public class CollectedDataAggregatingJob : IJob
+    public class CollectedDataAggregatingByHourJob : IJob
     {
         private readonly IDataAggregatorCore<CollectedDataDto> _dataAggregatorCore;
-        public CollectedDataAggregatingJob(IDataAggregatorCore<CollectedDataDto> dataAggregatorCore)
+        public CollectedDataAggregatingByHourJob(IDataAggregatorCore<CollectedDataDto> dataAggregatorCore)
         {
             _dataAggregatorCore = dataAggregatorCore;
         }
