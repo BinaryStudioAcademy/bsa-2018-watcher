@@ -68,6 +68,9 @@ namespace DataAccumulator
                 });
 
             services.AddTransient<CollectedDataAggregatingByHourJob>();
+            services.AddTransient<CollectedDataAggregatingByDayJob>();
+            services.AddTransient<CollectedDataAggregatingByWeekJob>();
+            services.AddTransient<CollectedDataAggregatingByMonthJob>();
 
             services.AddTransient<IAzureQueueSender, AzureQueueSender>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
