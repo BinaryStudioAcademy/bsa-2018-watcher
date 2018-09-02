@@ -2,7 +2,7 @@
 using Quartz.Impl;
 using Quartz.Spi;
 
-namespace DataAccumulator.WebAPI.Jobs
+namespace DataAccumulator.WebAPI.TasksScheduler
 {
     public class Quartz
     {
