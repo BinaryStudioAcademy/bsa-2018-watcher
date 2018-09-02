@@ -27,7 +27,7 @@
     <p-tieredMenu #org [model]="orgItems" [popup]="true"></p-tieredMenu>
     <button #btn type="button" pButton icon="fa fa-sitemap" (click)="org.toggle($event)"></button>
     <app-add-new-organization [(display)]="displayAddNewOrganization" (displayChange)="onDisplayChange($event)"></app-add-new-organization>
-
+    <app-spinner-popup [display]="isChangingOrganization" [header]="popupMessage"></app-spinner-popup>
     <!--<div class="toolbar-item">-->
       <!--<button #btn type="button" pButton icon="fa fa-fw fa-cog" (click)="getUserClaims()"></button>-->
     <!--</div>-->

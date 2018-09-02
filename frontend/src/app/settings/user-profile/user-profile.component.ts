@@ -123,8 +123,7 @@ export class UserProfileComponent implements OnInit {
         photoURL: this.user.photoURL,
         photoType: this.user.photoType
       };
-      // tslint:disable-next-line:no-debugger
-      debugger;
+
       this.userService.update(this.userId, userDto).subscribe(value => {
         this.authService.updateCurrentUser(this.user);
         this.toastrService.success('Profile was updated');

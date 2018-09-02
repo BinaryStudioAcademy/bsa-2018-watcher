@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
     "@aspnet/signalr": "^1.0.2",
+    "@auth0/angular-jwt": "^2.0.0",
     "@swimlane/ngx-charts": "^9.0.0",
     "@swimlane/ngx-ui": "^21.4.2",
     "@types/core-js": "^2.5.0",

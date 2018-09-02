@@ -20,7 +20,7 @@ export class InvitesListComponent implements OnInit {
   invites: ShowInvite[];
 
   currentUser: User;
-
+  // SignalR
   indexFirstRecordPage = 0;
   rowsPerPage = 2;
   isUpdating: boolean;
@@ -54,7 +54,6 @@ export class InvitesListComponent implements OnInit {
     this.updatingItem = id;
     this.isUpdating = true;
     const invite = this.invites.find(item => item.invite.id === id).invite;
-
     this.organizationInvitesService.update(id, invite).subscribe(value => {
       this.toastrService.success('Invite was updated');
       this.isUpdating = false;

@@ -4,9 +4,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AccordionModule, TabViewModule, ProgressSpinnerModule } from 'primeng/primeng';
+import { AccordionModule, TabViewModule, ProgressSpinnerModule, ButtonModule } from 'primeng/primeng';
 import { PanelModule } from 'primeng/primeng';
-import { ButtonModule } from 'primeng/components/button/button';
 import { RadioButtonModule } from 'primeng/primeng';
 import { DialogModule } from 'primeng/primeng';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

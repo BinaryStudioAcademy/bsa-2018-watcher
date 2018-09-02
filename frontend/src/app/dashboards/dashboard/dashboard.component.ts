@@ -11,6 +11,8 @@ import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 import {PercentageInfo} from '../models/percentage-info';
+import { AuthService } from '../../core/services/auth.service';
+import {CustomChart, CustomChartType, CustomData} from '../charts/models';
 import {DataService} from '../services/data.service';
 import {ChartService} from '../../core/services/chart.service';
 import {CollectedDataService} from '../../core/services/collected-data.service';
@@ -60,8 +62,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private instanceService: InstanceService,
               private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
-              private chartService: ChartService,
               private activateRoute: ActivatedRoute,
+              private authService: AuthService,
+              private chartService: ChartService,
+              private fb: FormBuilder,
+              private ngZone: NgZone,
               private dataService: DataService) {
   }
 
@@ -72,8 +77,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
 
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
-
-    await this.dashboardsHub.connectToSignalR();
+    this.authService.getTokens().subscribe( async ([firebaseToken, watcherToken]) => {
+      await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
+    });
 
     this.paramsSubscription = this.activateRoute.params.subscribe(params => {
       if (this.instanceGuidId) {
