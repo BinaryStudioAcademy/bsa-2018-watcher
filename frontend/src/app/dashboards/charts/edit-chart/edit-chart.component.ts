@@ -151,6 +151,7 @@ console.log(this.dashboardChart);
   // }
 
   onEditChart() {
+    if (!this.dashboardChart.id) {
     this.chartService.create(this.createChartRequest()).subscribe(
       value => {
           debugger;
@@ -163,16 +164,15 @@ console.log(this.dashboardChart);
       error => {
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
-  }
-
-  onEditChart1(chart: ChartRequest) {
-    this.chartService.update(1, chart).subscribe(
+    } else {
+      this.chartService.update(this.dashboardChart.id, this.createChartRequest()).subscribe(
       value => {
         this.toastrService.success('The chart was updated');
       },
       error => {
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
+    }
   }
 
   // edit(model: NgModel): void {

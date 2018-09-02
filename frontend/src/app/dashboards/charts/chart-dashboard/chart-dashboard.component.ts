@@ -53,6 +53,7 @@ export class ChartDashboardComponent implements OnInit {
 
   onDeleteChart(id: number) {
     console.log(id);
+
     this.chartService.delete(id).subscribe(
       value => {
         this.toastrService.success('The chart was deleted');
