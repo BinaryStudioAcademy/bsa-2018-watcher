@@ -29,6 +29,7 @@ import { AddNewOrganizationComponent } from './add-new-organization/add-new-orga
 import { FormsModule } from '@angular/forms';
 import { ClickOutsideDirective } from '../shared/directives/click-outside.directive';
 import { NotificationBlockComponent } from '../notification/notification-block/notification-block.component';
+import { SpinnerPopupComponent } from './spinner-popup/spinner-popup.component';
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import { NotificationBlockComponent } from '../notification/notification-block/n
     AddNewOrganizationComponent,
     ClickOutsideDirective,
     DownloadAppComponent,
-    NotificationBlockComponent
+    NotificationBlockComponent,
+    SpinnerPopupComponent
   ]
 })
 export class ShellModule { }

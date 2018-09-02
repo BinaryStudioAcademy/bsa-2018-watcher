@@ -33,6 +33,8 @@ export class HeaderComponent implements OnInit {
   cogItems: MenuItem[];
   orgItems: MenuItem[];
   displayAddNewOrganization = false;
+  isChangingOrganization: Boolean = false;
+  popupMessage: String = 'Loading';
 
   constructor(
     private tokenService: TokenService,
@@ -159,6 +161,9 @@ export class HeaderComponent implements OnInit {
 
 
   private changeLastPicOrganizations(item: Organization): void {
+    this.popupMessage = 'Current organization is changing';
+    this.isChangingOrganization = true;
+
     // update user in beckend
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
       .subscribe(value => {
@@ -169,9 +174,11 @@ export class HeaderComponent implements OnInit {
         this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
         // notify user about changes
         this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
+        this.isChangingOrganization = false;
       },
         err => {
           this.toastrService.error('Organization by defaul was not updated.');
+          this.isChangingOrganization = false;
         });
   }
 }

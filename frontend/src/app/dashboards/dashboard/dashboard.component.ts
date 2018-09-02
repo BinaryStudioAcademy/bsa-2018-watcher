@@ -374,7 +374,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
-    debugger;
     const dashChats: DashboardChart[] = dashboard.charts.map(c => this.instantiateDashboardChart(c));
 
     const item: DashboardMenuItem = {

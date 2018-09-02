@@ -36,6 +36,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   isFeedback: boolean;
   menuItems: MenuItem[];
   user: User;
+  isDeleting: Boolean = false;
 
   constructor(private router: Router,
               private instanceService: InstanceService,
@@ -157,12 +158,14 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   async deleteInstance(id: number, index: number) {
     if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
+      this.isDeleting = true;
       this.instanceService.delete(id).subscribe((res: Response) => {
         this.instanceService.instanceRemoved.emit(id);
         this.toastrService.success('Deleted instance');
         this.instanceItems.splice(index, 1);
         this.router.navigate([`instances`]);
         this.onSearchChange(this.currentQuery);
+        this.isDeleting = false;
       });
     }
   }
