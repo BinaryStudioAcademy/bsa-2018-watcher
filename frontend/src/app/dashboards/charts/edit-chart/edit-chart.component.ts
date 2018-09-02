@@ -93,6 +93,7 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   sources() {
     if (this.dashboardChart.showCommon) {
+     // this.dashboardChart.dataSources = null;
       return this.dropdownSourcesProcesses;
     } else {
       return this.dropdownSources;
@@ -109,9 +110,10 @@ export class EditChartComponent implements OnInit, OnChanges {
     this.showPreview = false;
     // this.dashboardChart.chartType.name = chartTypes[this.selectedType];
     // this.dashboardChart.chartType.type = this.selectedType;
+    if (!this.dashboardChart.showCommon) {
     this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
       this.dashboardChart.dataSources, this.collectedDataForChart);
-
+    }
     if (this.dashboardChart.chartType.type === ChartType.BarVertical) {
       this.dashboardChart.xAxisLabel = 'Parameters';
       this.dashboardChart.yAxisLabel = 'Percentage %';

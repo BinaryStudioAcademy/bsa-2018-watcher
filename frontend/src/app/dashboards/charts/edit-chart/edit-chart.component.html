@@ -1,19 +1,15 @@
-<p-dialog header="Create chart" [(visible)]="display" [modal]="true" [responsive]="true" [width]="1000"
-          [minWidth]="850" [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false>
+<p-dialog header="Create chart" [(visible)]="display" [modal]="true" [responsive]="true" [width]="1000" [minWidth]="850"
+  [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false>
   <div class="ui-g ui-fluid">
     <div class="ui-g-3">
       <p class="field-top">Select chart type: </p>
-      <p-dropdown [options]="dropdownTypes" [(ngModel)]="type" placeholder="Select a type"
-                  [style]="{'width':'192px'}" (onChange)="processChartType()">
-      </p-dropdown> 
-      <!-- <form [formGroup]="chartForm"> formControlName="isMultiple"  </form>-->
-        <p class="field">Show total:
-          <p-checkbox [(ngModel)]="dashboardChart.showCommon" binary="true"></p-checkbox>
-        </p>
-    
+      <p-dropdown [options]="dropdownTypes" [(ngModel)]="type" placeholder="Select a type" [style]="{'width':'192px'}" (onChange)="processChartType()">
+      </p-dropdown>
+      <p class="field">Show total:
+        <p-checkbox [(ngModel)]="dashboardChart.showCommon" binary="true"></p-checkbox>
+      </p>
       <p class="field">Select source: </p>
-      <p-multiSelect [options]="sources()" [(ngModel)]="dashboardChart.dataSources" [style]="{'width':'192px'}"
-                     (onChange)="processData()">
+      <p-multiSelect [options]="sources()" [(ngModel)]="dashboardChart.dataSources" [style]="{'width':'192px'}" (onChange)="processData()">
       </p-multiSelect>
       <form [formGroup]="chartForm">
         <p class="field">Number of heavy processes:</p>
@@ -24,7 +20,7 @@
       <p class="field">Threshold: {{dashboardChart.threshold}}</p>
       <div class="field">
         <p-slider [(ngModel)]="dashboardChart.threshold" [disabled]="dashboardChart.showCommon" [style]="{'width':'192px'}"></p-slider>
-      </div>     
+      </div>
       <p class="field">Y axis label (optional): </p>
       <input class="width-left-part" type="text" [(ngModel)]="dashboardChart.yAxisLabel" pInputText/>
       <p class="field">X axis label (optional): </p>
@@ -33,19 +29,16 @@
     <div class="ui-g-9">
       <p class="field-top center">Visualization</p>
       <div class="view-chart" *ngIf="showPreview && dashboardChart.data && dashboardChart.data.length > 0">
-        <app-chart [chart]="dashboardChart"
-                   [data]="dashboardChart.data"
-                   [chartType]="dashboardChart.chartType"
-                   [showDownload]="false">
+        <app-chart [chart]="dashboardChart" [data]="dashboardChart.data" [chartType]="dashboardChart.chartType" [showDownload]="false">
         </app-chart>
       </div>
     </div>
   </div>
   <p-footer>
-    <div class="center"> <!-- [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))"-->
+    <div class="center">
+      <!-- [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))"-->
       <!--&& selectedSource <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
-      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onEditChart()"
-              label="Save"></button>
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onEditChart()" label="Save"></button>
       <button type="button" pButton (click)="closeDialog()" label="Cancel" class="ui-button-warning"></button>
     </div>
   </p-footer>
