@@ -3,8 +3,8 @@
   <div class="ui-g ui-fluid">
     <div class="ui-g-3">
       <p class="field-top">Select chart type: </p>
-      <p-dropdown [options]="dropdownTypes" [(ngModel)]="dashboardChart.chartType.type" placeholder="Select a type"
-                  [style]="{'width':'192px'}" (onChange)="processData()">
+      <p-dropdown [options]="dropdownTypes" [(ngModel)]="type" placeholder="Select a type"
+                  [style]="{'width':'192px'}" (onChange)="processChartType()">
       </p-dropdown> 
       <!-- <form [formGroup]="chartForm"> formControlName="isMultiple"  </form>-->
         <p class="field">Show total:
@@ -32,10 +32,10 @@
     </div>
     <div class="ui-g-9">
       <p class="field-top center">Visualization</p>
-      <div class="view-chart" *ngIf="showPreview && data && data.length > 0">
+      <div class="view-chart" *ngIf="showPreview && dashboardChart.data && dashboardChart.data.length > 0">
         <app-chart [chart]="dashboardChart"
-                   [data]="data"
-                   [chartType]="type"
+                   [data]="dashboardChart.data"
+                   [chartType]="dashboardChart.chartType"
                    [showDownload]="false">
         </app-chart>
       </div>

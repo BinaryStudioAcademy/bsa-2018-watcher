@@ -42,6 +42,10 @@ export class ChartDashboardComponent implements OnInit {
     // this.toastrService.success('Successfully update chart!');
   }
 
+  onEditChart(chart) {
+
+  }
+
   onDeleteChart(id: number) {
     this.chartService.delete(111).subscribe(
       value => {

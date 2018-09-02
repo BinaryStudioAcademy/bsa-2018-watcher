@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { ChartType } from '../../../shared/models/chart-type.enum';
+import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
 import { DataProperty } from '../../../shared/models/data-property.enum';
 import { SelectItem } from 'primeng/api';
 import { DashboardChart } from '../../models/dashboard-chart';
@@ -23,8 +23,8 @@ export class EditChartComponent implements OnInit, OnChanges {
   @Input() display: boolean;
   @Input() dashboardId: number;
   @Input() dashboardChart: DashboardChart;
-  type: DashboardChartType;
-  data: CustomData[] = [];
+  type: ChartType;
+  // data: CustomData[] = [];
   // object to send to backend to add or edit dashboardChart
   // in dashboard component fill this object with real data if it is edit mode, or fill it with default data from defaultOptions and set
   // current dashboard id if it is create mode
@@ -78,10 +78,16 @@ export class EditChartComponent implements OnInit, OnChanges {
       yAxisLabel: new FormControl({ value: '', disabled: false })
     });
 
-    this.type = this.dashboardChart.chartType;
+    // this.type = this.dashboardChart.chartType;
+  }
+
+  processChartType() {
+    this.dashboardChart.chartType.type = this.type;
+    this.dashboardChart.chartType.name = chartTypes[this.type];
   }
 
   ngOnChanges(changes) {
+
     // this.title = changes.dashboardTitle && changes.dashboardTitle.currentValue;
   }
 
@@ -100,11 +106,10 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   processData(): void {
-    debugger;
     this.showPreview = false;
     // this.dashboardChart.chartType.name = chartTypes[this.selectedType];
     // this.dashboardChart.chartType.type = this.selectedType;
-    this.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
+    this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
       this.dashboardChart.dataSources, this.collectedDataForChart);
 
     if (this.dashboardChart.chartType.type === ChartType.BarVertical) {
@@ -119,7 +124,7 @@ export class EditChartComponent implements OnInit, OnChanges {
       this.dashboardChart.xAxisLabel = '';
     }
 
-    if (this.data && this.data.length > 0) {
+    if (this.dashboardChart.data  && this.dashboardChart.data .length > 0) {
       this.showPreview = true;
     }
   }
@@ -142,6 +147,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   onEditChart() {
     this.chartService.create(this.createChartRequest()).subscribe(
       value => {
+          debugger;
         const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value, this.collectedDataForChart);
         // this.activeDashboardItem.charts.push(dashboardChart); // TODO: use this in dash component
         this.editChart.emit(dashboardChart);

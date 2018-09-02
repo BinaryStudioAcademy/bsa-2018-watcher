@@ -15,8 +15,8 @@ import {DataService} from '../services/data.service';
 import {ChartService} from '../../core/services/chart.service';
 import {CollectedDataService} from '../../core/services/collected-data.service';
 import {CollectedData} from '../../shared/models/collected-data.model';
-import {DashboardChart} from '../models/dashboard-chart';
 import {defaultOptions} from '../charts/models/chart-options';
+import {DashboardChart} from '../models/dashboard-chart';
 
 @Component({
   selector: 'app-dashboard',
@@ -275,6 +275,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onChartEditClosed() {
+    console.log('Edit chart window was closed');
     this.displayEditChart = false;
   }
 
@@ -282,7 +283,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.displayEditChart = true;
   }
 
-  onChartEdited(obj?: any) {
+  onChartEdited(chart?: DashboardChart) {
+    console.log(chart);
     // this.toastrService.success('Successfully update chart!');
   }
 
