@@ -1,4 +1,4 @@
-<p-dialog header="Create chart" [(visible)]="display" [modal]="true" [responsive]="true" [width]="1000" [minWidth]="850"
+<p-dialog [header]="!dashboardChart.id ? 'Create chart' : 'Edit chart'" [(visible)]="display" [modal]="true" [responsive]="true" [width]="1000" [minWidth]="850"
   [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false>
   <div class="ui-g ui-fluid">
     <div class="ui-g-3">
@@ -6,8 +6,8 @@
       <p-dropdown [options]="dropdownTypes" [(ngModel)]="type" placeholder="Select a type" [style]="{'width':'192px'}" (onChange)="processChartType()">
       </p-dropdown>
       <p class="field">Show total:
-        <p-checkbox [(ngModel)]="dashboardChart.showCommon" [disabled]="!dashboardChart.dataSources.length<1" binary="true"></p-checkbox>
-      </p>
+        <p-checkbox [(ngModel)]="dashboardChart.showCommon"  binary="true"></p-checkbox>
+      </p><!-- [disabled]="!dashboardChart.dataSources.length<1"-->
       <p class="field">Select source: </p>
       <p-multiSelect [options]="sources()" [(ngModel)]="dashboardChart.dataSources" [style]="{'width':'192px'}" (onChange)="processData()">
       </p-multiSelect>

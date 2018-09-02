@@ -9,13 +9,19 @@
           [chartType]="chart.chartType">
         </app-chart>
          <div class="btn-panel">
-          <button #btn type="button" class="btn-chart" pButton icon="fa fa-fw fa-edit" (click)="onEditChart(chart)"></button>
-          <button #btn type="button" class="btn-chart ui-button-danger" pButton icon="fa fa-fw fa-remove" (click)="onDeleteChart(chart)"></button>
+          <button #btn type="button" class="btn-chart" pButton icon="fa fa-fw fa-edit" (click)="showPopupEditChart(chart)"></button>
+          <button #btn type="button" class="btn-chart ui-button-danger" pButton icon="fa fa-fw fa-remove" (click)="onDeleteChart(chart.id)"></button>
         </div>
       </smooth-dnd-draggable>
     </smooth-dnd-container>
   </div>
 
+  <app-edit-chart (editChart)="onChartEdited($event)"
+                (closed)="onChartEditClosed()"
+                [display]="displayEditChart"
+                [dashboardId]="dashboardId"
+                [dashboardChart]="chartToEdit">
+</app-edit-chart>
 <!-- <div class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of charts">    
     <app-chart
       class="chart"

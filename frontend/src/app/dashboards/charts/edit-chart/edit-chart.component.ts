@@ -89,9 +89,10 @@ export class EditChartComponent implements OnInit, OnChanges {
     // this.title = changes.dashboardTitle && changes.dashboardTitle.currentValue;
   }
 
-  sources() {
+  sources() {if (this.dashboardChart.dataSources.length > 0) {
+        this.dashboardChart.dataSources = []; }
     if (this.dashboardChart.showCommon) {
-      // this.dashboardChart.dataSources = [];
+
       return this.dropdownSourcesProcesses;
     } else {
       return this.dropdownSources;
@@ -140,6 +141,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   // }
 
   onEditChart() {
+    if (!this.dashboardChart.id) {
     this.chartService.create(this.createChartRequest()).subscribe(
       value => {
           debugger;
@@ -152,16 +154,15 @@ export class EditChartComponent implements OnInit, OnChanges {
       error => {
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
-  }
-
-  onEditChart1(chart: ChartRequest) {
-    this.chartService.update(1, chart).subscribe(
+    } else {
+      this.chartService.update(this.dashboardChart.id, this.createChartRequest()).subscribe(
       value => {
         this.toastrService.success('The chart was updated');
       },
       error => {
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
+    }
   }
 
   // edit(model: NgModel): void {

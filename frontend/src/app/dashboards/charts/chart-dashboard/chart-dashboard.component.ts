@@ -4,6 +4,7 @@ import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
 import { applyDrag, generateItems } from './utils';
 import { ChartService } from '../../../core/services/chart.service';
 import { ToastrService } from '../../../core/services/toastr.service';
+import { defaultOptions } from '../../charts/models/chart-options';
 
 @Component({
   selector: 'app-chart-dashboard',
@@ -12,8 +13,11 @@ import { ToastrService } from '../../../core/services/toastr.service';
 })
 export class ChartDashboardComponent implements OnInit {
   @Input() charts: DashboardChart[] = [];
+  @Input() dashboardId: number;
 
   displayEditChart = false;
+
+  chartToEdit: DashboardChart; // = { ...defaultOptions };
 
   constructor(private chartService: ChartService, private toastrService: ToastrService) {
     this.getChildPayload1 = this.getChildPayload1.bind(this);
@@ -34,7 +38,8 @@ export class ChartDashboardComponent implements OnInit {
     this.displayEditChart = false;
   }
 
-  showPopupAddChart() {
+  showPopupEditChart(chart: DashboardChart) {
+    this.chartToEdit = { ...chart };
     this.displayEditChart = true;
   }
 
@@ -47,7 +52,9 @@ export class ChartDashboardComponent implements OnInit {
   }
 
   onDeleteChart(id: number) {
-    this.chartService.delete(111).subscribe(
+    console.log(id);
+
+    this.chartService.delete(id).subscribe(
       value => {
         this.toastrService.success('The chart was deleted');
       },
