@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
 
       this.getDashboardsByInstanceId(this.instanceId);
-      this.dashboardsHub.getInitialPercentageInfoByInstanceId(this.instanceId)
+      this.collectedDataService.getInitialPercentageInfoByInstanceId(this.instanceId)
         .subscribe(info => {
           if (info && info.length > 0) {
             this.PercentageInfoToDisplaySingle = info[info.length - 1];
@@ -106,6 +106,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.toastrService.error('Error occured while fetching instance\'s collected Data');
         });
     });
+
+    this.subscribeToCollectedData();
 
     this.cogItems = [{
       label: 'Add item',
@@ -129,6 +131,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.paramsSubscription.unsubscribe();
   }
 
+  subscribeToCollectedData(): void {
+    this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
+      this.collectedDataForChart.push(latestData); // TODO: check current array on size to remove super old useless data elements
+      // TODO: use this operation only for current dashboard and then on switching dashboard make data preparing on existing
+      // collectedDataForChart to reduce amount of operations and time
+      for (let i = 0; i < this.dashboardMenuItems.length; i++) {
+        for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
+          const tempData = this.dataService.prepareDataTick(this.dashboardMenuItems[i].charts[j], latestData);
+          this.dashboardMenuItems[i].charts[j].data = tempData;
+          // this.dataService.prepareData(
+            // this.dashboardMenuItems[i].charts[j].chartType.type, this.dashboardMenuItems[i].charts[j].dataSources, info);
+        }
+      }
+      // const infoToInsert = this.toSeriesData(latestData);
+      // for (let i = 0; i < 3; i++) {
+      //   if (this.data[i].series > 20) {
+      //     this.data[i].series.shift();
+      //   }
+      //   this.data[i].series.push(infoToInsert[i]);
+      // }
+      //
+      // this.data = [...this.data];
+    });
+  }
+
   getDashboardsByInstanceId(id: number): void {
     this.loading = true;
     const plusItem = this.createPlusItem();
@@ -139,7 +166,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.dashboards = value;
           // Fill Dashboard Menu Items
           this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
-          debugger;
           this.activeDashboardItem = this.dashboardMenuItems[0];
         }
         this.loading = false;
@@ -284,7 +310,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onChartEdited(chart?: DashboardChart) {
-    console.log(chart);
+    chart.data = this.dataService.prepareData(chart.chartType.type, chart.dataSources, this.collectedDataForChart);
+    this.activeDashboardItem.charts.push(chart);
     // this.toastrService.success('Successfully update chart!');
   }
 

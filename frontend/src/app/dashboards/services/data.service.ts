@@ -3,7 +3,7 @@ import {CustomData} from '../charts/models';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {NumberSeriesItem, SeriesItem} from '../models/series-item';
 import {MultiChartItem} from '../models/multi-chart-item';
-import {dataPropertyLables, DataProperty} from '../../shared/models/data-property.enum';
+import {DataProperty, dataPropertyLables} from '../../shared/models/data-property.enum';
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {Chart} from '../../shared/models/chart.model';
 import {DashboardChart} from '../models/dashboard-chart';
@@ -108,5 +108,31 @@ export class DataService {
     };
 
     return seriesItem;
+  }
+
+  prepareDataTick(chartToUpdate: DashboardChart, newData: CollectedData): CustomData[] {
+    if (!newData) {
+      return chartToUpdate.data ? chartToUpdate.data : [];
+    }
+
+    if (chartToUpdate.chartType.type === ChartType.LineChart) {
+      return this.mapToMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources);
+    } else {
+      return this.mapToSeriesItem(newData, chartToUpdate.dataSources);
+    }
+  }
+
+  mapToMultiDataOnUpdate(oldData: CustomData[], newData: CollectedData, properties: DataProperty[]): CustomData[] {
+    const dataToSet: CustomData[] = [];
+    if (oldData.length > 20) {
+      // TODO: remove oldest element from array - use order by or sort or smt coz data can be not ordered by date
+      // TODO: maybe depend on chart's setting get from old array specific amount of data or etc.
+      dataToSet.push(oldData.slice(1)); // Start from first element(removes oldest data el)
+    }
+
+    const newDataToPush = this.mapToMultiData([newData], properties);
+    dataToSet.push(newDataToPush);
+
+    return dataToSet;
   }
 }

@@ -24,10 +24,6 @@ export class DashboardsHub {
               private authService: AuthService) {
   }
 
-  public getInitialPercentageInfoByInstanceId(id: number): Observable<PercentageInfo[]> {
-    return this.apiService.get(`/CollectedData/Percentage/${id}?count=20`) as Observable<PercentageInfo[]>;
-  }
-
   connectToSignalR(): Promise<void> {
     this.createConnection();
     this.registerOnServerEvents();

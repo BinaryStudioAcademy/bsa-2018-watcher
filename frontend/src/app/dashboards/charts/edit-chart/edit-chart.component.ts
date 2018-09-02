@@ -10,7 +10,6 @@ import { CollectedData } from '../../../shared/models/collected-data.model';
 import { DataService } from '../../services/data.service';
 import { ChartService } from '../../../core/services/chart.service';
 import { ToastrService } from '../../../core/services/toastr.service';
-import { CustomData, DashboardChartType } from '../models';
 
 @Component({
   selector: 'app-edit-chart',
@@ -66,9 +65,9 @@ export class EditChartComponent implements OnInit, OnChanges {
     ];
 
     this.dropdownSourcesProcesses = [
-      { label: 'CPU n', value: DataProperty.processesCPU },
-      { label: 'RAM', value: DataProperty.processesRAM },
-      { label: 'DISC', value: DataProperty.localDiskFreeMBytes }
+      { label: 'CPU p', value: DataProperty.processesCPU },
+      { label: 'RAM p', value: DataProperty.processesRAM },
+      { label: 'DISC p', value: DataProperty.localDiskFreeMBytes }
     ];
 
     this.chartForm = this.fb.group({
@@ -77,12 +76,9 @@ export class EditChartComponent implements OnInit, OnChanges {
       xAxisLabel: new FormControl({ value: '', disabled: false }),
       yAxisLabel: new FormControl({ value: '', disabled: false })
     });
-
-    // this.type = this.dashboardChart.chartType;
   }
 
   processChartType() {
-    debugger;
     this.showPreview = false;
     this.dashboardChart.chartType.type = this.type;
     this.dashboardChart.chartType.name = chartTypes[this.type];
@@ -90,7 +86,6 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes) {
-
     // this.title = changes.dashboardTitle && changes.dashboardTitle.currentValue;
   }
 
@@ -104,15 +99,11 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   isGuage() {
-    if (this.dashboardChart.chartType.type === 3) {
-      return true;
-    } else { return false; }
+    return this.dashboardChart.chartType.type === 3;
   }
 
   processData(): void {
     this.showPreview = false;
-    // this.dashboardChart.chartType.name = chartTypes[this.selectedType];
-    // this.dashboardChart.chartType.type = this.selectedType;
     if (!this.dashboardChart.showCommon) {
     this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
       this.dashboardChart.dataSources, this.collectedDataForChart);
@@ -121,7 +112,6 @@ export class EditChartComponent implements OnInit, OnChanges {
       this.dashboardChart.xAxisLabel = 'Parameters';
       this.dashboardChart.yAxisLabel = 'Percentage %';
     } else if (this.dashboardChart.chartType.type === ChartType.LineChart) {
-      // this.dataForChart = single;
       this.dashboardChart.xAxisLabel = 'Time';
       this.dashboardChart.yAxisLabel = 'Percentage %';
     } else if (this.dashboardChart.chartType.type === ChartType.Guage) {
