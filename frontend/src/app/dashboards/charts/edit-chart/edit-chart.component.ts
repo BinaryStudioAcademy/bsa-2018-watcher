@@ -77,7 +77,7 @@ export class EditChartComponent implements OnInit, OnChanges {
       xAxisLabel: new FormControl({ value: '', disabled: false }),
       yAxisLabel: new FormControl({ value: '', disabled: false })
     });
-
+console.log(this.dashboardChart);
     // this.type = this.dashboardChart.chartType;
   }
 
@@ -94,9 +94,10 @@ export class EditChartComponent implements OnInit, OnChanges {
     // this.title = changes.dashboardTitle && changes.dashboardTitle.currentValue;
   }
 
-  sources() {
+  sources() {if (this.dashboardChart.dataSources.length > 0) {
+        this.dashboardChart.dataSources = []; }
     if (this.dashboardChart.showCommon) {
-      // this.dashboardChart.dataSources = [];
+
       return this.dropdownSourcesProcesses;
     } else {
       return this.dropdownSources;

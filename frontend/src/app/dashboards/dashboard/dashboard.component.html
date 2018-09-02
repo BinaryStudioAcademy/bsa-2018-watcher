@@ -28,7 +28,8 @@
       <p class="text-pl">Click <i class="fa fa-gear"></i> and add chart or plot</p>
     </div>
     <app-chart-dashboard *ngIf="activeDashboardItem && dashboardMenuItems.length > 1"
-                         [charts]="activeDashboardItem.charts">
+                         [charts]="activeDashboardItem.charts"
+                         [dashboardId]="activeDashboardItem.dashId">
 
     </app-chart-dashboard>
   </div>

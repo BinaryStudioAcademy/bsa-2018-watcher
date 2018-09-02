@@ -31,6 +31,6 @@ export class ChartService {
   }
 
   delete(id: number) {
-    return this.http.delete(`/${this.ctrlUrl}/${id}`);
+    return this.http.delete(`${this.ctrlUrl}/${id}`);
   }
 }
