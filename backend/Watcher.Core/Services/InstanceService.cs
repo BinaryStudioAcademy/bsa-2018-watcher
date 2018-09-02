@@ -66,6 +66,7 @@ namespace Watcher.Core.Services
         public async Task<InstanceDto> CreateEntityAsync(InstanceRequest request)
         {
             var entity = _mapper.Map<InstanceRequest, Instance>(request);
+            entity.GuidId = Guid.NewGuid();
 
             entity = await _uow.InstanceRepository.CreateAsync(entity);
 
