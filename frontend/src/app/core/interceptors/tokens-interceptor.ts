@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {AuthService} from '../services/auth.service';
-import {Observable} from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {Observable, from} from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -15,33 +16,38 @@ export class TokensInterceptor implements HttpInterceptor {
 
   constructor(public auth: AuthService) {
   }
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const firebaseToken = this.auth.getFirebaseToken();
-    const watcherToken = this.auth.getWatcherToken();
-
-    if (firebaseToken) {
-      this.headersConfig['Authorization'] = `Bearer ${firebaseToken}`;
-    }
-    if (watcherToken) {
-      this.headersConfig['WatcherAuthorization'] = watcherToken;
-    }
-
-    const request = req.clone({setHeaders: this.headersConfig, responseType: 'json'});
-
-    return next.handle(request).pipe(tap(
-      (event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse) {
-          console.log('INTERCEPTOR WITHOUT ERROR');
-        }
-      },
-      (error: any) => {
-      if (error instanceof HttpErrorResponse) {
-        if (error.status === 401) {
-          console.log('401 CAUGHT IN INTERCEPTOR, REFRESHING TOKEN');
-         this.auth.refreshToken();
-        }
+    // check for preventing infinite loop while getting new token from backend
+      if (req.url.match(/\/Tokens\/Login/)) {
+        console.log('Login...');
+        return from(this.auth.getFirebaseToken()).pipe(
+          flatMap<string[], HttpEvent<any>>((firebaseToken) => {
+            let headers = {};
+            if (firebaseToken) {
+              headers = {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${firebaseToken}`
+              };
+            } else {
+              headers = this.headersConfig;
+            }
+            console.log(headers);
+            const request = req.clone({setHeaders: headers, responseType: 'json'});
+            return next.handle(request);
+          }));
       }
-    }) );
-  }
+      return this.auth.getTokens().pipe(
+        flatMap<string[], HttpEvent<any>>(([firebaseToken, watcherToken]) => {
+          if (firebaseToken) {
+            this.headersConfig['Authorization'] = `Bearer ${firebaseToken}`;
+          }
+          if (watcherToken) {
+            this.headersConfig['WatcherAuthorization'] = watcherToken;
+          }
+          const request = req.clone({setHeaders: this.headersConfig, responseType: 'json'});
+          return next.handle(request);
+        })
+      );
+    }
 }

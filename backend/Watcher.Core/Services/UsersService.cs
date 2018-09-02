@@ -271,7 +271,6 @@ namespace Watcher.Core.Services
                             .ThenInclude(i => i.Dashboards)
                                 .ThenInclude(d => d.Charts)
                     .Include(u => u.CreatedOrganizations)
-                        .ThenInclude(o => o.Notifications)
                     .Include(u => u.CreatedOrganizations)
                         .ThenInclude(o => o.OrganizationInvites));
 

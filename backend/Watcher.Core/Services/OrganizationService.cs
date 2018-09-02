@@ -30,7 +30,6 @@ namespace Watcher.Core.Services
         {
             var entities = await _uow.OrganizationRepository.GetRangeAsync(include: x => x
                 .Include(o => o.Theme)
-                .Include(o => o.Notifications)
                 .Include(o => o.Instances)
                 .Include(o => o.UserOrganizations),
                 count: await _uow.OrganizationRepository.CountAsync(o => o.Id >= 0));
@@ -44,7 +43,6 @@ namespace Watcher.Core.Services
         {
             var entities = await _uow.OrganizationRepository.GetRangeAsync(include: x => x
                 .Include(o => o.Theme)
-                .Include(o => o.Notifications)
                 .Include(o => o.Instances)
                 .Include(o => o.UserOrganizations), index: page, count: pageSize);
 
@@ -67,7 +65,6 @@ namespace Watcher.Core.Services
                     predicate: o => o.Id == id,
                     include: x => x
                         .Include(o => o.Theme)
-                        .Include(o => o.Notifications)
                         .Include(o => o.Instances)
                         .Include(o => o.UserOrganizations));
 
@@ -150,7 +147,6 @@ namespace Watcher.Core.Services
                 org.Include(o => o.Instances)
                     .ThenInclude(i => i.Dashboards)
                         .ThenInclude(d => d.Charts)
-                .Include(o => o.Notifications)
                 .Include(o => o.OrganizationInvites));
 
             var result = await _uow.SaveAsync();

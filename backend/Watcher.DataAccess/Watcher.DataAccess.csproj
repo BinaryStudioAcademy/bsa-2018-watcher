@@ -19,6 +19,7 @@
     <Compile Remove="Data\Migrations\20180811141458_ChangedUserSecondNameToLastName.cs" />
     <Compile Remove="Data\Migrations\20180811141834_ChangedUserSecondNameToLastName.cs" />
     <Compile Remove="Data\Migrations\20180827141447_AddIsActiveToChat.cs" />
+    <Compile Remove="Data\Migrations\20180901204334_RemoveNotificationFromOrganization.cs" />
     <Compile Remove="Migrations\20180809132634_AddedSeed.cs" />
     <Compile Remove="Migrations\20180809134759_AddedSeed.cs" />
     <Compile Remove="Migrations\20180809135541_AddedSeed.cs" />
