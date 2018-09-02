@@ -4,7 +4,7 @@ using DataAccumulator.DataAggregator.Interfaces;
 using DataAccumulator.Shared.Models;
 using Quartz;
 
-namespace DataAccumulator.WebAPI.TasksScheduler
+namespace DataAccumulator.WebAPI.TasksScheduler.Jobs
 {
     public class CollectedDataAggregatingJob : IJob
     {

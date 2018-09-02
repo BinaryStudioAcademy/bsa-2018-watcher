@@ -17,6 +17,7 @@ using DataAccumulator.DataAggregator.Services;
 using DataAccumulator.Shared.Models;
 using DataAccumulator.WebAPI.TasksScheduler;
 using DataAccumulator.WebAPI.Extensions;
+using DataAccumulator.WebAPI.TasksScheduler.Jobs;
 using ServiceBus.Shared.Queue;
 using Quartz.Spi;
 
