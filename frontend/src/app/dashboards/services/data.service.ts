@@ -68,7 +68,7 @@ export class DataService {
 
   // dataSource - property to show on the chart
   prepareData(chartType: ChartType, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
-    if (!dataSources || (!chartType && chartType !== ChartType.BarVertical)) {
+    if (!dataSources || (!chartType && chartType !== ChartType.BarVertical) || (!dataToTransform && dataToTransform.length < 1)) {
       return [];
     }
     if (chartType === ChartType.LineChart) {
@@ -130,9 +130,14 @@ export class DataService {
       dataToSet.push(oldData.slice(1)); // Start from first element(removes oldest data el)
     }
 
+    debugger;
     const newDataToPush = this.mapToMultiData([newData], properties);
+    for (let i = 0; i < properties.length; i++) {
+       // oldData.filter(d => d.name === 'CPU')
+      oldData[i].series.push(...newDataToPush[i].series);
+    }
     dataToSet.push(newDataToPush);
 
-    return dataToSet;
+    return oldData;
   }
 }

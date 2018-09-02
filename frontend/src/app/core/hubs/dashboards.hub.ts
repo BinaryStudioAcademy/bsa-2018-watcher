@@ -25,8 +25,8 @@ export class DashboardsHub {
   }
 
   connectToSignalR(firebaseToken: string, watcherToken: string): Promise<void> {
-      this.createConnection(firebaseToken, watcherToken);
-      this.registerOnServerEvents();
+    this.createConnection(firebaseToken, watcherToken);
+    this.registerOnServerEvents();
     return this.startDashboardHubConnection();
   }
 
@@ -76,7 +76,7 @@ export class DashboardsHub {
     );
 
     this.hubConnection.on('UserClaimsData', (claimsData: any[]) => {
-      console.log(claimsData);
+        console.log(claimsData);
       }
     );
 

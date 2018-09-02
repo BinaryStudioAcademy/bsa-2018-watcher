@@ -10,9 +10,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
-import {PercentageInfo} from '../models/percentage-info';
-import { AuthService } from '../../core/services/auth.service';
-import {CustomChart, CustomChartType, CustomData} from '../charts/models';
+import {AuthService} from '../../core/services/auth.service';
 import {DataService} from '../services/data.service';
 import {ChartService} from '../../core/services/chart.service';
 import {CollectedDataService} from '../../core/services/collected-data.service';
@@ -40,21 +38,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loading = false;
   displayEditDashboard = false;
   collectedDataForChart: CollectedData[] = [];
-  percentageInfoToDisplay: PercentageInfo[] = [];
-  percentageInfoToDisplaySingle: PercentageInfo;
   cogItems: MenuItem[];
 
   displayEditChart = false;
-  editChartTitle: string;
-
-  set PercentageInfoToDisplay(info: PercentageInfo[]) {
-    this.percentageInfoToDisplay = info;
-  }
-
-  set PercentageInfoToDisplaySingle(info: PercentageInfo) {
-    this.percentageInfoToDisplaySingle = info;
-  }
-
   chartToEdit = {...defaultOptions};
 
   constructor(private dashboardsService: DashboardService,
@@ -65,21 +51,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private activateRoute: ActivatedRoute,
               private authService: AuthService,
               private chartService: ChartService,
-              private fb: FormBuilder,
-              private ngZone: NgZone,
               private dataService: DataService) {
   }
 
   async ngOnInit(): Promise<void> {
-    this.collectedDataService.getBuilderData()
-      .subscribe(value => {
-        this.collectedDataForChart = value;
-      });
-
-    this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
-    this.authService.getTokens().subscribe( async ([firebaseToken, watcherToken]) => {
+    this.authService.getTokens().subscribe(async ([firebaseToken, watcherToken]) => {
       await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
     });
+    this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
 
     this.paramsSubscription = this.activateRoute.params.subscribe(params => {
       if (this.instanceGuidId) {
@@ -93,27 +72,35 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.getDashboardsByInstanceId(this.instanceId);
-      this.collectedDataService.getInitialPercentageInfoByInstanceId(this.instanceId)
-        .subscribe(info => {
-          if (info && info.length > 0) {
-            this.PercentageInfoToDisplaySingle = info[info.length - 1];
-            this.PercentageInfoToDisplay = info;
-            // for (let i = 0; i < this.dashboardMenuItems.length; i++) {
-            //   for (let j = 0; j < this.dashboardMenuItems.length; j++) {
-            //     this.dashboardMenuItems[i].charts[j].data = this.dataService.prepareData(
-            //       this.dashboardMenuItems[i].charts[j].chartType.type, this.dashboardMenuItems[i].charts[j].dataSources, info);
-            //   }
-            // }
-          }
-          this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
-        }, err => {
-          console.error(err);
-          this.toastrService.error('Error occured while fetching instance\'s collected Data');
-        });
-    });
+      this.getDashboardsByInstanceId(this.instanceId).then(value => {
+        this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceId)
+          .subscribe(data => {
+            if (data && data.length > 0) {
+              this.collectedDataForChart = data;
+              this.onDashboards(value);
+              // -1 is last item - plus sign
+              for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
+                for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
+                  const tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
+                    this.dashboardMenuItems[i].charts[j].dataSources, data);
+                  this.dashboardMenuItems[i].charts[j].data = [...tempData];
+                }
+              }
+              // for (let i = 0; i < this.dashboardMenuItems.length; i++) {
+              //   for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
+              //     this.dashboardMenuItems[i].charts[j].data = this.dataService.prepareData(
+              //       this.dashboardMenuItems[i].charts[j].chartType.type, this.dashboardMenuItems[i].charts[j].dataSources, info);
+              //   }
+              // }
+            }
+            this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
+          }, err => {
+            console.error(err);
+            this.toastrService.error('Error occured while fetching instance\'s collected Data');
+          });
+      }).catch();
 
-    this.subscribeToCollectedData();
+    });
 
     this.cogItems = [{
       label: 'Add item',
@@ -131,6 +118,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         command: (event?: any) => this.delete(),
       }
     ];
+
+    this.subscribeToCollectedData();
   }
 
   ngOnDestroy(): void {
@@ -139,44 +128,42 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   subscribeToCollectedData(): void {
     this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
-      this.collectedDataForChart.push(latestData); // TODO: check current array on size to remove super old useless data elements
+      this.collectedDataForChart = this.collectedDataForChart || [];
+      this.collectedDataForChart.push(latestData);
+      // this.collectedDataForChart.push(latestData); // TODO: check current array on size to remove super old useless data elements
       // TODO: use this operation only for current dashboard and then on switching dashboard make data preparing on existing
       // collectedDataForChart to reduce amount of operations and time
-      for (let i = 0; i < this.dashboardMenuItems.length; i++) {
-        for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
-          const tempData = this.dataService.prepareDataTick(this.dashboardMenuItems[i].charts[j], latestData);
-          this.dashboardMenuItems[i].charts[j].data = tempData;
-          // this.dataService.prepareData(
-            // this.dashboardMenuItems[i].charts[j].chartType.type, this.dashboardMenuItems[i].charts[j].dataSources, info);
-        }
+
+      for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
+        const tempData = this.dataService.prepareDataTick(this.activeDashboardItem.charts[i], latestData);
+        this.activeDashboardItem.charts[i].data = [...tempData];
       }
-      // const infoToInsert = this.toSeriesData(latestData);
-      // for (let i = 0; i < 3; i++) {
-      //   if (this.data[i].series > 20) {
-      //     this.data[i].series.shift();
+
+      // for (let i = 0; i < this.dashboardMenuItems.length; i++) {
+      //   for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
+      //     const tempData = this.dataService.prepareDataTick(this.dashboardMenuItems[i].charts[j], latestData);
+      //     this.dashboardMenuItems[i].charts[j].data = [...tempData];
       //   }
-      //   this.data[i].series.push(infoToInsert[i]);
       // }
-      //
-      // this.data = [...this.data];
     });
   }
 
-  getDashboardsByInstanceId(id: number): void {
+  getDashboardsByInstanceId(id: number): Promise<Dashboard[]> {
     this.loading = true;
     const plusItem = this.createPlusItem();
     this.dashboardMenuItems.push(plusItem);
-    this.dashboardsService.getAllByInstance(id)
-      .subscribe((value) => {
-        if (value && value.length > 0) {
-          this.dashboards = value;
-          // Fill Dashboard Menu Items
-          this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
-          this.activeDashboardItem = this.dashboardMenuItems[0];
-        }
-        this.loading = false;
-        this.toastrService.success('Successfully got instance info from server');
-      }, error => this.toastrService.error(error.toString()));
+    return this.dashboardsService.getAllByInstance(id).toPromise();
+  }
+
+  onDashboards(value) {
+    if (value && value.length > 0) {
+      this.dashboards = value;
+      // Fill Dashboard Menu Items
+      this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
+      this.activeDashboardItem = this.dashboardMenuItems[0];
+    }
+    this.loading = false;
+    this.toastrService.success('Successfully got instance info from server');
   }
 
   createPlusItem(): DashboardMenuItem {
