@@ -96,7 +96,7 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   sources() {
     if (this.dashboardChart.showCommon) {
-     // this.dashboardChart.dataSources = null;
+      // this.dashboardChart.dataSources = [];
       return this.dropdownSourcesProcesses;
     } else {
       return this.dropdownSources;
