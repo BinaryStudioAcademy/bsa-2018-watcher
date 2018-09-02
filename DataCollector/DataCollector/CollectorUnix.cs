@@ -92,15 +92,15 @@ namespace DataCollector
 
         private float GetDiscFree()
         {
-            string strData = Bash("df | awk '{print $2 \";\" $3 \";\" $4}'");
+            string strData = Bash("df -t xfs -t ext4 | awk '{print $2 \";\" $3 \";\" $4}'");
             var allParts = strData.Split("\n");
-            var disc = allParts[1 ].Split(";");
+            var disc = allParts[1].Split(";");
             return float.Parse(disc[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture)/1024.0f;
         }
 
         private float GetLocalDiskFreeSpacePercent()
         {
-            string strData = Bash("df | awk '{print $2 \";\" $3 \";\" $4 \";\" $5}'");
+            string strData = Bash("df -t xfs -t ext4 | awk '{print $2 \";\" $3 \";\" $4 \";\" $5}'");
             var allParts = strData.Split("\n");
             var disc = allParts[1].Split(";");
             return 100.0f - float.Parse(disc[3].Split("%")[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture)/1024.0f;
