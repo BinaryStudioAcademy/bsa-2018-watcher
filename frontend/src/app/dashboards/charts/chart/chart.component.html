@@ -1,28 +1,28 @@
 <h1>{{chart.title}}</h1>
 
-<!--<ngx-charts-line-chart-->
-  <!--*ngIf="chartType.name === 'line-chart'"-->
-  <!--class="chart-container"-->
-  <!--[scheme]="chart.colorScheme"-->
-  <!--[schemeType]="chart.schemeType"-->
-  <!--[results]="data"-->
-  <!--[activeEntries]="activeEntries"-->
-  <!--[legend]="chart.showLegend"-->
-  <!--[legendTitle]="chart.legendTitle"-->
-  <!--[gradient]="chart.gradient"-->
-  <!--[xAxis]="chart.showXAxis"-->
-  <!--[yAxis]="chart.showYAxis"-->
-  <!--[showXAxisLabel]="chart.showXAxisLabel"-->
-  <!--[showYAxisLabel]="chart.showYAxisLabel"-->
-  <!--[xAxisLabel]="chart.xAxisLabel"-->
-  <!--[yAxisLabel]="chart.yAxisLabel"-->
-  <!--[autoScale]="chart.autoScale"-->
-  <!--[showGridLines]="chart.showGridLines"-->
-  <!--[curve]="chart.curve"-->
-  <!--[rangeFillOpacity]="chart.rangeFillOpacity"-->
-  <!--[roundDomains]="chart.roundDomains"-->
-  <!--[tooltipDisabled]="chart.tooltipDisabled">-->
-<!--</ngx-charts-line-chart>-->
+<ngx-charts-line-chart
+  *ngIf="chartType.name === 'line-chart'"
+  class="chart-container"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [gradient]="chart.gradient"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [autoScale]="chart.autoScale"
+  [showGridLines]="chart.showGridLines"
+  [curve]="chart.curve"
+  [rangeFillOpacity]="chart.rangeFillOpacity"
+  [roundDomains]="chart.roundDomains"
+  [tooltipDisabled]="chart.tooltipDisabled">
+</ngx-charts-line-chart>
 
 <ngx-charts-bar-vertical
   *ngIf="chartType.name === 'bar-vertical'"
