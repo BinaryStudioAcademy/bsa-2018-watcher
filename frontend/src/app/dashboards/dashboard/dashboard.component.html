@@ -14,7 +14,18 @@
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
       <div class="title">DASHBOARDS</div>
-      <hr *ngIf="!instanceId">
+      <div *ngIf="!instanceId" class="placeholder">
+        <hr>
+        <div>
+          <i class="fa fa-plus"></i> 1. Create a VM instance
+        </div>
+        <div>
+          <i class="fa fa-download"></i> 2. Download the application
+        </div>
+        <div>
+          <i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity
+        </div>
+      </div>
     </div>
   </div>
   <!--Item showAddItemPopup() -->
@@ -30,22 +41,8 @@
     <app-chart-dashboard *ngIf="activeDashboardItem && dashboardMenuItems.length > 1"
                          [charts]="activeDashboardItem.charts"
                          [dashboardId]="activeDashboardItem.dashId">
-
     </app-chart-dashboard>
   </div>
-
-  <div *ngIf="!instanceId" class="placeholder">
-    <div>
-      <i class="fa fa-plus"></i> 1. Create a VM instance
-    </div>
-    <div>
-      <i class="fa fa-download"></i> 2. Download the application
-    </div>
-    <div>
-      <i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity
-    </div>
-  </div>
-
 </div>
 
 <p-confirmDialog header="Confirmation " icon="pi pi-exclamation-triangle " width="425 " #cd>
