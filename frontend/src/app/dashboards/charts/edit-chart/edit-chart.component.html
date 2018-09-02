@@ -5,30 +5,30 @@
       <p class="field-top">Select chart type: </p>
       <p-dropdown [options]="dropdownTypes" [(ngModel)]="type" placeholder="Select a type"
                   [style]="{'width':'192px'}" (onChange)="processChartType()">
-      </p-dropdown>
+      </p-dropdown> 
+      <!-- <form [formGroup]="chartForm"> formControlName="isMultiple"  </form>-->
+        <p class="field">Show total:
+          <p-checkbox [(ngModel)]="dashboardChart.showCommon" binary="true"></p-checkbox>
+        </p>
+    
       <p class="field">Select source: </p>
-      <p-multiSelect [options]="dropdownSources" [(ngModel)]="dashboardChart.dataSources" [style]="{'width':'192px'}"
+      <p-multiSelect [options]="sources()" [(ngModel)]="dashboardChart.dataSources" [style]="{'width':'192px'}"
                      (onChange)="processData()">
       </p-multiSelect>
       <form [formGroup]="chartForm">
         <p class="field">Number of heavy processes:</p>
         <div class="width-left-part">
-          <p-spinner size="17" formControlName="mostLoaded" [min]="0" [max]="100"></p-spinner>
+          <p-spinner size="17" [disabled]="dashboardChart.showCommon" formControlName="mostLoaded" [min]="0" [max]="100"></p-spinner>
         </div>
       </form>
       <p class="field">Threshold: {{dashboardChart.threshold}}</p>
       <div class="field">
-        <p-slider [(ngModel)]="dashboardChart.threshold" [style]="{'width':'192px'}"></p-slider>
-      </div>
-      <form [formGroup]="chartForm">
-        <p class="field">Show multiple:
-          <p-checkbox formControlName="isMultiple" binary="true"></p-checkbox>
-        </p>
-      </form>
+        <p-slider [(ngModel)]="dashboardChart.threshold" [disabled]="dashboardChart.showCommon" [style]="{'width':'192px'}"></p-slider>
+      </div>     
       <p class="field">Y axis label (optional): </p>
       <input class="width-left-part" type="text" [(ngModel)]="dashboardChart.yAxisLabel" pInputText/>
       <p class="field">X axis label (optional): </p>
-      <input class="width-left-part" type="text" [(ngModel)]="dashboardChart.xAxisLabel" pInputText/>
+      <input class="width-left-part" type="text" [disabled]="isGuage()" [(ngModel)]="dashboardChart.xAxisLabel" pInputText/>
     </div>
     <div class="ui-g-9">
       <p class="field-top center">Visualization</p>

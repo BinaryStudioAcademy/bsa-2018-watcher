@@ -1,16 +1,16 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
-import {DataProperty} from '../../../shared/models/data-property.enum';
-import {SelectItem} from 'primeng/api';
-import {DashboardChart} from '../../models/dashboard-chart';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {ChartRequest} from '../../../shared/requests/chart-request.model';
-import {CollectedDataService} from '../../../core/services/collected-data.service';
-import {CollectedData} from '../../../shared/models/collected-data.model';
-import {DataService} from '../../services/data.service';
-import {ChartService} from '../../../core/services/chart.service';
-import {ToastrService} from '../../../core/services/toastr.service';
-import {CustomData, DashboardChartType} from '../models';
+import { DataProperty } from '../../../shared/models/data-property.enum';
+import { SelectItem } from 'primeng/api';
+import { DashboardChart } from '../../models/dashboard-chart';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ChartRequest } from '../../../shared/requests/chart-request.model';
+import { CollectedDataService } from '../../../core/services/collected-data.service';
+import { CollectedData } from '../../../shared/models/collected-data.model';
+import { DataService } from '../../services/data.service';
+import { ChartService } from '../../../core/services/chart.service';
+import { ToastrService } from '../../../core/services/toastr.service';
+import { CustomData, DashboardChartType } from '../models';
 
 @Component({
   selector: 'app-edit-chart',
@@ -31,16 +31,17 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   dropdownTypes: SelectItem[];
   dropdownSources: SelectItem[];
+  dropdownSourcesProcesses: SelectItem[];
   collectedDataForChart: CollectedData[] = [];
   // chartType: DashboardChartType = {...customChartTypes[0]};
   showPreview = false;
   chartForm: FormGroup;
 
   constructor(private fb: FormBuilder,
-              private collectedDataService: CollectedDataService,
-              private dataService: DataService,
-              private chartService: ChartService,
-              private toastrService: ToastrService) {
+    private collectedDataService: CollectedDataService,
+    private dataService: DataService,
+    private chartService: ChartService,
+    private toastrService: ToastrService) {
   }
 
   ngOnInit() {
@@ -49,24 +50,32 @@ export class EditChartComponent implements OnInit, OnChanges {
         this.collectedDataForChart = value;
       });
 
+    this.dashboardChart.showCommon = false;
+
     this.dropdownTypes = [
-      {label: 'Bar vertical', value: ChartType.BarVertical},
-      {label: 'Line chart', value: ChartType.LineChart},
-      {label: 'Pie', value: ChartType.Pie},
-      {label: 'Guage', value: ChartType.Guage}
+      { label: 'Bar vertical', value: ChartType.BarVertical },
+      { label: 'Line chart', value: ChartType.LineChart },
+      { label: 'Pie', value: ChartType.Pie },
+      { label: 'Guage', value: ChartType.Guage }
     ];
 
     this.dropdownSources = [
-      {label: 'CPU', value: DataProperty.cpuUsagePercent},
-      {label: 'RAM', value: DataProperty.ramUsagePercent},
-      {label: 'DISC', value: DataProperty.localDiskFreeSpacePercent}
+      { label: 'CPU', value: DataProperty.cpuUsagePercent },
+      { label: 'RAM', value: DataProperty.ramUsagePercent },
+      { label: 'DISC', value: DataProperty.localDiskFreeSpacePercent }
+    ];
+
+    this.dropdownSourcesProcesses = [
+      { label: 'CPU n', value: DataProperty.processesCPU },
+      { label: 'RAM', value: DataProperty.processesRAM },
+      { label: 'DISC', value: DataProperty.localDiskFreeMBytes }
     ];
 
     this.chartForm = this.fb.group({
-      isMultiple: new FormControl({value: false, disabled: false}),
-      mostLoaded: new FormControl({value: 1, disabled: false}),
-      xAxisLabel: new FormControl({value: '', disabled: false}),
-      yAxisLabel: new FormControl({value: '', disabled: false})
+      isMultiple: new FormControl({ value: false, disabled: false }),
+      mostLoaded: new FormControl({ value: 1, disabled: false }),
+      xAxisLabel: new FormControl({ value: '', disabled: false }),
+      yAxisLabel: new FormControl({ value: '', disabled: false })
     });
 
     // this.type = this.dashboardChart.chartType;
@@ -83,6 +92,20 @@ export class EditChartComponent implements OnInit, OnChanges {
   ngOnChanges(changes) {
 
     // this.title = changes.dashboardTitle && changes.dashboardTitle.currentValue;
+  }
+
+  sources() {
+    if (this.dashboardChart.showCommon) {
+      return this.dropdownSourcesProcesses;
+    } else {
+      return this.dropdownSources;
+    }
+  }
+
+  isGuage() {
+    if (this.dashboardChart.chartType.type === 3) {
+      return true;
+    } else { return false; }
   }
 
   processData(): void {
@@ -125,18 +148,18 @@ export class EditChartComponent implements OnInit, OnChanges {
   // }
 
   onEditChart() {
-      this.chartService.create(this.createChartRequest()).subscribe(
-        value => {
+    this.chartService.create(this.createChartRequest()).subscribe(
+      value => {
           debugger;
-          const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value, this.collectedDataForChart);
-          // this.activeDashboardItem.charts.push(dashboardChart); // TODO: use this in dash component
-          this.editChart.emit(dashboardChart);
-          this.toastrService.success('Chart was created');
-          this.closeDialog();
-        },
-        error => {
-          this.toastrService.error(`Error ocured status: ${error.message}`);
-        });
+        const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value, this.collectedDataForChart);
+        // this.activeDashboardItem.charts.push(dashboardChart); // TODO: use this in dash component
+        this.editChart.emit(dashboardChart);
+        this.toastrService.success('Chart was created');
+        this.closeDialog();
+      },
+      error => {
+        this.toastrService.error(`Error ocured status: ${error.message}`);
+      });
   }
 
   onEditChart1(chart: ChartRequest) {
@@ -157,7 +180,7 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   createChartRequest(): ChartRequest {
     const chart: ChartRequest = {
-      showCommon: this.chartForm.get('isMultiple').value,
+      showCommon: this.dashboardChart.showCommon,
       threshold: this.dashboardChart.threshold,
       mostLoaded: '' + this.chartForm.get('mostLoaded').value,
       dashboardId: this.dashboardId,
