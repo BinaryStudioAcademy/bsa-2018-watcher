@@ -95,7 +95,9 @@ namespace DataAccumulator
             app.UseQuartz((quartz) =>
             {
                 if (Configuration.GetSection("DataAggregator").GetValue<bool>("Aggregating"))
+                {
                     quartz.AddJob<CollectedDataAggregatingJob>("DataAggregator", "Import", Configuration.GetSection("DataAggregator").GetValue<int>("IntervalMinute"));
+                }
             });
         }
         public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
