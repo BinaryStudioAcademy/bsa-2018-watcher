@@ -69,14 +69,14 @@ export class InstanceListComponent implements OnInit {
     const item: MenuItem = {
       label: instance.title,
       id: instance.id.toString(),
-      routerLink:  [`instances/${instance.id}/${instance.guidId}/dashboards`],
+      routerLink:  [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
         this.instanceService.instanceChecked.emit(instance);
       },
       items: [{
         label: 'Edit',
         icon: 'fa fa-pencil',
-        routerLink: [`instances/${instance.id}/edit`],
+        routerLink: [`/user/instances/${instance.id}/edit`],
         styleClass: 'instance-options'
       }, {
         label: 'Download app',
@@ -116,17 +116,19 @@ export class InstanceListComponent implements OnInit {
     }
   }
 
-  onInstanceAdded(instance: Instance) {
+  onInstanceAdded(instance: Instance): void {
     const item: MenuItem = this.instanceToMenuItem(instance);
     this.menuItems.push(item);
     this.onSearchChange(this.currentQuery);
+    this.expandElement(item);
   }
 
-  onInstanceEdited(instance: Instance) {
+  onInstanceEdited(instance: Instance): void {
     const item: MenuItem = this.instanceToMenuItem(instance);
     const index: number = this.menuItems.findIndex(inst => inst.id === instance.id.toString());
     this.menuItems[index] = item;
     this.onSearchChange(this.currentQuery);
+    this.expandElement(item);
   }
 
   onSearchChange(searchQuery: string): void {
@@ -143,6 +145,10 @@ export class InstanceListComponent implements OnInit {
     this.menuItems[0].visible = true;
   }
 
+  expandElement(menuitem: MenuItem): void {
+    this.menuItems[0].expanded = false;
+    menuitem.expanded = true;
+  }
   onClose(): void {
     this.showDownloadModal = false;
   }
