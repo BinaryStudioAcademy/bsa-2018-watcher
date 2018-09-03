@@ -20,8 +20,13 @@ namespace DataAccumulator.WebAPI.TasksScheduler.Jobs
         {
             try
             {
+                var sourceType = CollectedDataType.AggregationForHour;
+                var destinationType = CollectedDataType.AggregationForDay;
+                var timeSpan = TimeSpan.FromDays(1);
+                var deleteSource = false;
+
                 // Run Aggregating CollectedData
-                await _dataAggregatorCore.AggregatingData();
+                await _dataAggregatorCore.AggregatingData(sourceType, destinationType, timeSpan, deleteSource);
             }
             catch (Exception e)
             {

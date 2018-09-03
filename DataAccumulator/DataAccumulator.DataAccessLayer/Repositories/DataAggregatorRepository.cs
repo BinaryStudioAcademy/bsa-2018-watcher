@@ -86,7 +86,8 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         }
 
         // Query by type in time
-        public async Task<IEnumerable<CollectedData>> GetEntitiesByTypeInTime(CollectedDataType collectedDataType, DateTime timeFrom, DateTime timeTo)
+        public async Task<IEnumerable<CollectedData>> GetEntitiesByTypeInTime(CollectedDataType collectedDataType, 
+            DateTime timeFrom, DateTime timeTo)
         {
             try
             {

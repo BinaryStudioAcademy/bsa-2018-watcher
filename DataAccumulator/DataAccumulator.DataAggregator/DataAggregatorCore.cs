@@ -15,20 +15,21 @@ namespace DataAccumulator.DataAggregator
             _aggregatorService = aggregatorService;
         }
 
-        public async Task AggregatingData()
-        {
-            // By default subtract 1 hour from the current time
-            await AggregatingData(TimeSpan.FromHours(1));
-        }
+        //public async Task AggregatingData()
+        //{
+        //    // By default subtract 1 hour from the current time
+        //    //await AggregatingData(TimeSpan.FromHours(1));
+        //}
 
-        public async Task AggregatingData(TimeSpan interval)
+        public async Task AggregatingData(CollectedDataType sourceType, CollectedDataType destinationType, 
+            TimeSpan interval, bool deleteSource)
         {
             // Subtract interval from the current time
             DateTime timeFrom = DateTime.Now.Add(-interval);
             DateTime timeTo = DateTime.Now;
 
             var accumulatedCollectedDataDtos = 
-                await _aggregatorService.GetAccumulatorEntitiesAsync(timeFrom, timeTo);
+                await _aggregatorService.GetSourceEntitiesAsync(sourceType, timeFrom, timeTo);
 
             if (accumulatedCollectedDataDtos != null)
             {
@@ -39,6 +40,7 @@ namespace DataAccumulator.DataAggregator
                     select new CollectedDataDto
                     {
                         ClientId = collectedDataGroup.Key,
+                        CollectedDataType = destinationType,
                         ProcessesCount = Convert.ToInt32(collectedDataGroup
                             .Average(d => d.ProcessesCount)),
                         CpuUsagePercent = collectedDataGroup
@@ -67,16 +69,20 @@ namespace DataAccumulator.DataAggregator
                             .ToDictionary(l => l.Key, l => l.Average()),
                     };
 
-                // Save aggregated CollectedDataDto to Aggregator table MongoDb
+                // Save aggregated CollectedDataDto to destination table MongoDb
                 foreach (var collectedDataDto in collectedDataDtosAverage)
                 {
                     await _aggregatorService.AddAggregatorEntityAsync(collectedDataDto);
                 }
 
-                // Delete already aggregated CollectedDataDto from Accumulator table MongoDb
-                foreach (var collectedDataDto in accumulatedCollectedDataDtos)
+
+                if (deleteSource)
                 {
-                    await _aggregatorService.DeleteAccumulatorEntityAsync(collectedDataDto.Id);
+                    // Delete already aggregated CollectedDataDto from source table MongoDb
+                    foreach (var collectedDataDto in accumulatedCollectedDataDtos)
+                    {
+                        await _aggregatorService.DeleteAggregatedEntityAsync(collectedDataDto.Id);
+                    }
                 }
             }
         }
