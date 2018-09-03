@@ -11,7 +11,8 @@ import {
   AccordionModule,
   AutoCompleteModule,
   TooltipModule,
-  InputSwitchModule
+  InputSwitchModule,
+  ProgressSpinnerModule
 } from 'primeng/primeng';
 
 import { ChatComponent } from './chat.component';
@@ -32,7 +33,8 @@ import { ChatCreatePopupComponent } from './chat-create-popup/chat-create-popup.
     DialogModule,
     AutoCompleteModule,
     TooltipModule,
-    InputSwitchModule
+    InputSwitchModule,
+    ProgressSpinnerModule
   ],
   declarations: [
     ChatComponent,
