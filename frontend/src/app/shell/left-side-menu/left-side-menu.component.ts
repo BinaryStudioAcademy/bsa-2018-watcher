@@ -158,7 +158,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   async deleteInstance(id: number, index: number) {
     if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
-      this.popupMessage = `Instance is deleting`
+      this.popupMessage = `Instance is deleting`;
       this.isDeleting = true;
       this.instanceService.delete(id).subscribe((res: Response) => {
         this.instanceService.instanceRemoved.emit(id);
