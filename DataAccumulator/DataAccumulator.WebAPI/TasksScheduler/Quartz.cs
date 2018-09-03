@@ -82,6 +82,31 @@ namespace DataAccumulator.WebAPI.TasksScheduler
         }
 
         /// <summary>
+        /// Adds a new hourly job to the scheduler
+        /// </summary>
+        /// <typeparam name="T">Job is generated</typeparam>
+        /// <param name="name">Name of the job</param>
+        /// <param name="group">Group of jobs</param>
+        public async void AddHourlyJob<T>(string name, string group)
+            where T : IJob
+        {
+            // Create a job
+            IJobDetail job = JobBuilder.Create<T>()
+                .WithIdentity(name, group)
+                .Build();
+
+            // Create triggers
+            ITrigger jobTrigger = TriggerBuilder.Create()
+                .WithIdentity(name + "Trigger", group)
+                .StartNow() // Start now
+                .WithSchedule(CronScheduleBuilder.CronSchedule("0 0/60 * * * ?")) // With repetition every hour
+                .Build();
+
+            // Attach job
+            await Scheduler.ScheduleJob(job, jobTrigger);
+        }
+
+        /// <summary>
         /// Adds a new daily job to the scheduler
         /// </summary>
         /// <typeparam name="T">Job is generated</typeparam>
