@@ -1,4 +1,4 @@
-<div class="site-wrapper">
+<div class="container">
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
       <div class="title">{{instanceTitle}}</div>
@@ -37,7 +37,7 @@
 
     <div *ngIf="id" class="label">Identifier:</div>
     <div *ngIf="id" class="ui-g ui-fluid">
-      <div class="ui-g-12 ui-lg-6">
+      <div class="ui-g-12 ui-md-6 ui-lg-4">
         <div class="ui-inputgroup identifier">
           <input pInputText type="text" readonly formControlName="guid" pInputText placeholder="Identifier">
           <button pButton type="button" label="Copy" class="ui-button-info" (click)="copyToClipboard(this.instance.guidId)"></button>
