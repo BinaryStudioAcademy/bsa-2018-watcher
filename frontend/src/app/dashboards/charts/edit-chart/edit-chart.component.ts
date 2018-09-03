@@ -113,10 +113,9 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   processData(): void {
-    // debugger;
     console.log(this.dashboardChart.dataSources);
     this.showPreview = false;
-    if (!this.dashboardChart.showCommon) {
+    if (this.dashboardChart.showCommon) {
       this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
         this.dashboardChart.dataSources, this.collectedDataForChart);
     }

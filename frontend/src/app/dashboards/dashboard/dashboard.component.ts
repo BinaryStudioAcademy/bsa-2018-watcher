@@ -107,6 +107,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       icon: 'fa fa-fw fa-plus',
 
       command: (event?: any) => {
+        debugger;
         this.decomposeChart(defaultOptions);
         this.showChartCreating();
       },
@@ -235,8 +236,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async delete(): Promise<void> {
-    this.toastrService.success('Sucess');
-
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
       this.loading = true;
       this.deleteDashboard(this.activeDashboardItem);
