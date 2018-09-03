@@ -73,10 +73,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
 
       this.getDashboardsByInstanceId(this.instanceId).then(value => {
+        this.onDashboards(value);
         this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceId)
           .subscribe(data => {
             this.collectedDataForChart = data || [];
-            this.onDashboards(value);
+
             if (data && data.length > 0) {
               // -1 is last item - plus sign
               for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
