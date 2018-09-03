@@ -58,7 +58,6 @@ const defaultOptions = {
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.sass'],
-  providers: [ToastrService, ConfirmationService, DashboardService, MessageService]
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private paramsSubscription: Subscription;
