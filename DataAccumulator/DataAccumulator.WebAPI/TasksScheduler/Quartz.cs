@@ -1,4 +1,5 @@
-﻿using Quartz;
+﻿using System;
+using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
 
@@ -74,6 +75,81 @@ namespace DataAccumulator.WebAPI.TasksScheduler
                 .WithIdentity(name + "Trigger", group)
                 .StartNow() // Start now
                 .WithSimpleSchedule(t => t.WithIntervalInMinutes(interval).RepeatForever()) // With repetition every interval minutes
+                .Build();
+
+            // Attach job
+            await Scheduler.ScheduleJob(job, jobTrigger);
+        }
+
+        /// <summary>
+        /// Adds a new daily job to the scheduler
+        /// </summary>
+        /// <typeparam name="T">Job is generated</typeparam>
+        /// <param name="name">Name of the job</param>
+        /// <param name="group">Group of jobs</param>
+        public async void AddDailyJob<T>(string name, string group)
+            where T : IJob
+        {
+            // Create a job
+            IJobDetail job = JobBuilder.Create<T>()
+                .WithIdentity(name, group)
+                .Build();
+
+            // Create triggers
+            ITrigger jobTrigger = TriggerBuilder.Create()
+                .WithIdentity(name + "Trigger", group)
+                .StartNow() // Start now
+                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0, 0)) // With repetition every day at 12:00 AM
+                .Build();
+
+            // Attach job
+            await Scheduler.ScheduleJob(job, jobTrigger);
+        }
+
+        /// <summary>
+        /// Adds a new weekly job to the scheduler
+        /// </summary>
+        /// <typeparam name="T">Job is generated</typeparam>
+        /// <param name="name">Name of the job</param>
+        /// <param name="group">Group of jobs</param>
+        public async void AddWeeklyJob<T>(string name, string group)
+            where T : IJob
+        {
+            // Create a job
+            IJobDetail job = JobBuilder.Create<T>()
+                .WithIdentity(name, group)
+                .Build();
+
+            // Create triggers
+            ITrigger jobTrigger = TriggerBuilder.Create()
+                .WithIdentity(name + "Trigger", group)
+                .StartNow() // Start now
+                .WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Monday, 0, 0)) // With repetition every week on Monday at 12:00 AM
+                .Build();
+
+            // Attach job
+            await Scheduler.ScheduleJob(job, jobTrigger);
+        }
+
+        /// <summary>
+        /// Adds a new monthly job to the scheduler
+        /// </summary>
+        /// <typeparam name="T">Job is generated</typeparam>
+        /// <param name="name">Name of the job</param>
+        /// <param name="group">Group of jobs</param>
+        public async void AddMonthlyJob<T>(string name, string group)
+            where T : IJob
+        {
+            // Create a job
+            IJobDetail job = JobBuilder.Create<T>()
+                .WithIdentity(name, group)
+                .Build();
+
+            // Create triggers
+            ITrigger jobTrigger = TriggerBuilder.Create()
+                .WithIdentity(name + "Trigger", group)
+                .StartNow() // Start now
+                .WithSchedule(CronScheduleBuilder.MonthlyOnDayAndHourAndMinute(1, 12, 0)) // With repetition every month on the first day at 12:00 AM
                 .Build();
 
             // Attach job
