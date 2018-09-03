@@ -34,11 +34,12 @@
         }
         public async Task<List<Chat>> GetChatsByUserId(string id)
         {
-            IQueryable<Chat> chats = _context.UserChat.AsNoTracking()
+            IQueryable<Chat> chats = _context.UserChat
                 .Where(uc => uc.UserId == id)
                 .Select(uc => uc.Chat)
-                .Include(uc => uc.UsersSettings)
-                .Include(uc => uc.UserChats)
+                .Include(c => c.Messages)
+                .Include(c => c.UsersSettings)
+                .Include(c => c.UserChats)
                     .ThenInclude(uc => uc.User);
 
             var items = await chats.ToListAsync();

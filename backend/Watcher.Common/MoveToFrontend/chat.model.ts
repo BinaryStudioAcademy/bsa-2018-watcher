@@ -1,6 +1,5 @@
 ﻿
 import { ChatType } from './chat-type.enum';
-import { User } from './user.model';
 import { Organization } from './organization.model';
 import { Message } from './message.model';
 import { User } from './user.model';
@@ -11,7 +10,7 @@ export interface Chat  {
    name: string;
    unreadMessagesCount: number;
    type: ChatType;
-   createdBy: User;
+   createdById: string;
    organization: Organization;
    messages: Message[];
    users: User[];
