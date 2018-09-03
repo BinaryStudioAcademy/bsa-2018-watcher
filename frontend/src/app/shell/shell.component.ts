@@ -12,7 +12,7 @@ export class ShellComponent implements OnInit {
   constructor(private router: Router) {  }
 
   private regexInstances: RegExp = /\/user\/instances/;
-  private showInstanceList: boolean;
+  showInstanceList: boolean;
 
   ngOnInit(): void {
     this.showInstanceList = true;

@@ -25,10 +25,10 @@ export class InstanceListComponent implements OnInit {
 
   private menuItems: MenuItem[];
   private user: User;
-  private currentGuidId: string;
-  private showDownloadModal: boolean;
-  private popupMessage: string;
-  private isLoading: boolean;
+  currentGuidId: string;
+  showDownloadModal: boolean;
+  popupMessage: string;
+  isLoading: boolean;
 
   private currentQuery = '';
 
