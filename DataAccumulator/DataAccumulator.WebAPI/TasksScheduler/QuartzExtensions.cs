@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Spi;
 
-namespace DataAccumulator.WebAPI.Jobs
+namespace DataAccumulator.WebAPI.TasksScheduler
 {
     public static class QuartzExtensions
     {
@@ -13,17 +13,17 @@ namespace DataAccumulator.WebAPI.Jobs
             app.ApplicationServices.GetService<IScheduler>();
         }
 
-        public static void UseQuartz(this IApplicationBuilder app, Action<Jobs.Quartz> configuration)
+        public static void UseQuartz(this IApplicationBuilder app, Action<TasksScheduler.Quartz> configuration)
         {
             // Job Factory through IOC container
             var jobFactory = (IJobFactory)app.ApplicationServices.GetService(typeof(IJobFactory));
             // Set job factory
-            Jobs.Quartz.Instance.UseJobFactory(jobFactory);
+            TasksScheduler.Quartz.Instance.UseJobFactory(jobFactory);
 
             // Run configuration
-            configuration.Invoke(Jobs.Quartz.Instance);
+            configuration.Invoke(TasksScheduler.Quartz.Instance);
             // Run Quartz
-            Jobs.Quartz.Start();
+            TasksScheduler.Quartz.Start();
         }
     }
 }

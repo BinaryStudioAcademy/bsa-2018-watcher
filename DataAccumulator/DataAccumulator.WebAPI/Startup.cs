@@ -1,7 +1,13 @@
 ﻿using System;
 using AutoMapper;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using DataAccumulator.BusinessLayer.Interfaces;
 using DataAccumulator.BusinessLayer.Services;
+using DataAccumulator.BusinessLayer.Providers;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
@@ -9,23 +15,14 @@ using DataAccumulator.DataAggregator;
 using DataAccumulator.DataAggregator.Interfaces;
 using DataAccumulator.DataAggregator.Services;
 using DataAccumulator.Shared.Models;
-using DataAccumulator.WebAPI.Jobs;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
+using DataAccumulator.WebAPI.TasksScheduler;
+using DataAccumulator.WebAPI.Extensions;
+using DataAccumulator.WebAPI.TasksScheduler.Jobs;
+using ServiceBus.Shared.Queue;
 using Quartz.Spi;
 
 namespace DataAccumulator
 {
-    using DataAccumulator.BusinessLayer.Providers;
-    using DataAccumulator.WebAPI.Extensions;
-
-    using Microsoft.AspNetCore.Mvc;
-
-    using ServiceBus.Shared.Queue;
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -70,7 +67,10 @@ namespace DataAccumulator
                     return new JobFactory(provider);
                 });
 
-            services.AddTransient<CollectedDataAggregatingJob>();
+            services.AddTransient<CollectedDataAggregatingByHourJob>();
+            services.AddTransient<CollectedDataAggregatingByDayJob>();
+            services.AddTransient<CollectedDataAggregatingByWeekJob>();
+            services.AddTransient<CollectedDataAggregatingByMonthJob>();
 
             services.AddTransient<IAzureQueueSender, AzureQueueSender>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
@@ -99,7 +99,12 @@ namespace DataAccumulator
             app.UseQuartz((quartz) =>
             {
                 if (Configuration.GetSection("DataAggregator").GetValue<bool>("Aggregating"))
-                    quartz.AddJob<CollectedDataAggregatingJob>("DataAggregator", "Import", Configuration.GetSection("DataAggregator").GetValue<int>("IntervalMinute"));
+                {
+                    quartz.AddHourlyJob<CollectedDataAggregatingByHourJob>("CollectedDataAggregatingByHour", "DataAggregator");
+                    quartz.AddDailyJob<CollectedDataAggregatingByDayJob>("CollectedDataAggregatingByDay", "DataAggregator");
+                    quartz.AddWeeklyJob<CollectedDataAggregatingByWeekJob>("CollectedDataAggregatingByWeek", "DataAggregator");
+                    quartz.AddMonthlyJob<CollectedDataAggregatingByMonthJob>("CollectedDataAggregatingByMonth", "DataAggregator");
+                }
             });
         }
         public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
@@ -110,7 +115,7 @@ namespace DataAccumulator
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
                 options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>(
-                options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.AggregationForHour));
+                options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage"));
 
         }
 
