@@ -24,13 +24,18 @@ import {
 import { LeftSideMenuComponent } from './left-side-menu/left-side-menu.component';
 import { ChatModule } from '../chat/chat.module';
 import { query } from '@angular/core/src/render3/query';
-import { DownloadAppComponent } from '../download-app/download-app.component';
 import { AddNewOrganizationComponent } from './add-new-organization/add-new-organization.component';
 import { FormsModule } from '@angular/forms';
 import { ClickOutsideDirective } from '../shared/directives/click-outside.directive';
 import { NotificationBlockComponent } from '../notification/notification-block/notification-block.component';
 import { SpinnerPopupComponent } from './spinner-popup/spinner-popup.component';
+import { InstanceListComponent } from './instance-list/instance-list.component';
+import { DownloadAppComponent } from './download-app/download-app.component';
+import { InstanceService } from '../core/services/instance.service';
+import { ToastrService } from '../core/services/toastr.service';
+import { AuthService } from '../core/services/auth.service';
 
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -53,17 +58,23 @@ import { SpinnerPopupComponent } from './spinner-popup/spinner-popup.component';
     DialogModule,
     ProgressSpinnerModule,
     AccordionModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ShellComponent,
     HeaderComponent,
     LeftSideMenuComponent,
+    InstanceListComponent,
+    DownloadAppComponent,
     AddNewOrganizationComponent,
     ClickOutsideDirective,
-    DownloadAppComponent,
     NotificationBlockComponent,
     SpinnerPopupComponent
+  ],
+  providers: [
+    ToastrService,
+    AuthService
   ]
 })
 export class ShellModule { }

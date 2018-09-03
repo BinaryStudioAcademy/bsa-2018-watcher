@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
-
 using DataAccumulator.DataAggregator.Interfaces;
 using DataAccumulator.Shared.Models;
 using Quartz;
 
-namespace DataAccumulator.WebAPI.Jobs
+namespace DataAccumulator.WebAPI.TasksScheduler.Jobs
 {
-    public class CollectedDataAggregatingJob : IJob
+    public class CollectedDataAggregatingByHourJob : IJob
     {
         private readonly IDataAggregatorCore<CollectedDataDto> _dataAggregatorCore;
-        public CollectedDataAggregatingJob(IDataAggregatorCore<CollectedDataDto> dataAggregatorCore)
+        public CollectedDataAggregatingByHourJob(IDataAggregatorCore<CollectedDataDto> dataAggregatorCore)
         {
             _dataAggregatorCore = dataAggregatorCore;
         }
@@ -19,8 +18,13 @@ namespace DataAccumulator.WebAPI.Jobs
         {
             try
             {
+                var sourceType = CollectedDataType.Accumulation;
+                var destinationType = CollectedDataType.AggregationForHour;
+                var timeSpan = TimeSpan.FromHours(1);
+                var deleteSource = true;
+
                 // Run Aggregating CollectedData
-                await _dataAggregatorCore.AggregatingData();
+                await _dataAggregatorCore.AggregatingData(sourceType, destinationType, timeSpan, deleteSource);
             }
             catch (Exception e)
             {

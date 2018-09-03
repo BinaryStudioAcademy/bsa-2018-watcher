@@ -4,11 +4,7 @@ import {NavigationStart} from '@angular/router';
 import {Router, RouterEvent} from '@angular/router';
 import {MenuItem} from 'primeng/api';
 
-import {InstanceService} from '../../core/services/instance.service';
-import {ToastrService} from '../../core/services/toastr.service';
-import {AuthService} from '../../core/services/auth.service';
 
-import {User} from '../../shared/models/user.model';
 import {Instance} from '../../shared/models/instance.model';
 
 @Component({
@@ -21,7 +17,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private activeUrl: string;
   private previousSettingUrl: string;
   private settingsItems: MenuItem[];
-  private instanceItems: MenuItem[];
   private adminItems: MenuItem[];
 
   private regexSettingsUrl: RegExp = /\/user\/settings/;
@@ -29,20 +24,10 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
   private regexAdminUrl = /\/admin/;
 
-  currentQuery = '';
-  currentGuidId: string;
-  showDownloadModal: boolean;
-  isSearching: boolean;
-  isFeedback: boolean;
+  isComponentInvisible: boolean;
   menuItems: MenuItem[];
-  user: User;
-  isDeleting: Boolean = false;
-  popupMessage: String = '';
 
-  constructor(private router: Router,
-              private instanceService: InstanceService,
-              private toastrService: ToastrService,
-              private authService: AuthService) {
+  constructor(private router: Router) {
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         this.clearSettings(this.activeUrl);
@@ -52,18 +37,10 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   ngOnInit(): void {
     this.activeUrl = this.router.url;
-    this.authService.currentUser.subscribe(
-      user => {
-        this.user = user;
-        this.configureInstances(this.user.lastPickedOrganizationId);
-        this.initMenuItems();
-        this.changeMenu();
-        this.subscribeRouteChanges();
-      }
-    );
-    this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
-    this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-  }
+    this.initMenuItems();
+    this.changeMenu();
+    this.subscribeRouteChanges();
+    }
 
   ngAfterContentChecked(): void {
     this.highlightCurrentSetting();
@@ -88,13 +65,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       routerLink: ['/user/settings/notification-settings']
     }];
 
-    this.instanceItems = [{
-      label: 'Create Instance',
-      title: 'Create Instance',
-      icon: 'pi pi-pw pi-plus',
-      routerLink: ['instances/create'],
-    }];
-
     this.adminItems = [{
       label: 'Organizations',
       icon: 'fa fa-fw fa-list',
@@ -110,80 +80,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     }];
   }
 
-  configureInstances(organizationId: number) {
-    this.instanceService.getAllByOrganization(organizationId).subscribe((data: Instance[]) => {
-      if (data) {
-        const items = data.map(inst => this.instanceToMenuItem(inst));
-        items.forEach(inst => this.instanceItems.push(inst));
-        this.toastrService.success('Get instances from server');
-      }
-    });
-  }
-
-  instanceToMenuItem(instance: Instance) {
-    const item: MenuItem = {
-      label: instance.title,
-      title: instance.id.toString(),
-      routerLink:  [`instances/${instance.id}/${instance.guidId}/dashboards`],
-      command: () => {
-        this.instanceService.instanceChecked.emit(instance);
-        // this.router.navigate([`/user/instances/${instance.id}/dashboards`]);
-      },
-      items: [{
-        label: 'Edit',
-        icon: 'fa fa-pencil',
-        routerLink: [`instances/${instance.id}/edit`],
-        styleClass: 'instance-options'
-      }, {
-        label: 'Delete',
-        icon: 'fa fa-close',
-        command: () => {
-          const index = this.instanceItems.findIndex(i => i === item);
-          this.deleteInstance(instance.id, index);
-        },
-        styleClass: 'instance-options'
-      }, {
-        label: 'Download app',
-        icon: 'fa fa-download',
-        styleClass: 'instance-options',
-        command: () => {
-          console.log(this.showDownloadModal);
-          this.showDownloadModal = true;
-          this.currentGuidId = instance.guidId;
-        }
-      }]
-    };
-    return item;
-  }
-
-  async deleteInstance(id: number, index: number) {
-    if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
-      this.popupMessage = `Instance is deleting`;
-      this.isDeleting = true;
-      this.instanceService.delete(id).subscribe((res: Response) => {
-        this.instanceService.instanceRemoved.emit(id);
-        this.toastrService.success('Deleted instance');
-        this.instanceItems.splice(index, 1);
-        this.router.navigate([`instances`]);
-        this.onSearchChange(this.currentQuery);
-        this.isDeleting = false;
-      });
-    }
-  }
-
-  onInstanceAdded(instance: Instance) {
-    const item: MenuItem = this.instanceToMenuItem(instance);
-    this.instanceItems.push(item);
-    this.onSearchChange(this.currentQuery);
-  }
-
-  onInstanceEdited(instance: Instance) {
-    const item: MenuItem = this.instanceToMenuItem(instance);
-    const index: number = this.instanceItems.findIndex(inst => inst.title === instance.id.toString());
-    this.instanceItems[index] = item;
-    this.onSearchChange(this.currentQuery);
-  }
-
   private subscribeRouteChanges(): void {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event.url) {
@@ -196,18 +92,14 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private changeMenu(): void {
     if (this.activeUrl.match(this.regexSettingsUrl)) {
       this.menuItems = this.settingsItems;
-      this.isSearching = false;
-      this.isFeedback = false;
+      this.isComponentInvisible = false;
     } else if (this.activeUrl.match(this.regexFeedbackUrl)) {
-      this.isFeedback = true;
+      this.isComponentInvisible = true;
     } else if (this.activeUrl.match(this.regexAdminUrl)) {
       this.menuItems = this.adminItems;
-      this.isSearching = false;
-      this.isFeedback = false;
+      this.isComponentInvisible = false;
     } else if (this.activeUrl.match(this.regexDashboardUrl)) {
-      this.menuItems = this.instanceItems;
-      this.isSearching = true;
-      this.isFeedback = false;
+      this.isComponentInvisible = true;
     }
   }
 
@@ -237,21 +129,5 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   private getSettingByUrl(url: string): Element {
     return document.querySelector(`div.ui-panelmenu-header a[href="${url}"]`);
-  }
-
-  onSearchChange(searchQuery: string): void {
-    this.currentQuery = searchQuery;
-    this.instanceItems = this.instanceItems.map( (menuitem: MenuItem) => {
-      if (!menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase())) {
-        menuitem.visible = false;
-      } else {
-        menuitem.visible = true;
-      }
-      if (menuitem.label === this.menuItems[0].label) { menuitem.visible = true; }
-      return menuitem;
-    });
-  }
-  onClose(): void {
-    this.showDownloadModal = false;
   }
 }

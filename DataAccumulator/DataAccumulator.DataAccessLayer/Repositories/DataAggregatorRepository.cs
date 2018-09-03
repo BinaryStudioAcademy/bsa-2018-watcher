@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DataAccumulator.DataAccessLayer.Data;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
+using DataAccumulator.Shared.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -14,12 +15,10 @@ namespace DataAccumulator.DataAccessLayer.Repositories
     public class DataAggregatorRepository : IDataAggregatorRepository<CollectedData>
     {
         private readonly DataAccumulatorContext _context = null;
-        private readonly CollectedDataType _collectedDataType;
 
-        public DataAggregatorRepository(string ConnectionString, string Database, CollectedDataType collectedDataType)
+        public DataAggregatorRepository(string ConnectionString, string Database)
         {
             _context = new DataAccumulatorContext(ConnectionString, Database);
-            _collectedDataType = collectedDataType;
         }
 
         public async Task<IEnumerable<CollectedData>> GetAllEntities()
@@ -27,7 +26,22 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             try
             {
                 return await _context.Datasets
-                    .Find(data => data.CollectedDataType == _collectedDataType)
+                    .Find(_ => true)
+                    .ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<CollectedData>> GetAllEntitiesByType(CollectedDataType collectedDataType)
+        {
+            try
+            {
+                return await _context.Datasets
+                    .Find(data => data.CollectedDataType == collectedDataType)
                     .ToListAsync();
             }
             catch (Exception e)
@@ -42,7 +56,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             try
             {
                 var data = await _context.Datasets
-                    .Find(d => d.CollectedDataType == _collectedDataType && d.Id == id)
+                    .Find(d => d.Id == id)
                     .FirstOrDefaultAsync();
 
                 return data;
@@ -54,13 +68,31 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
-        // Query by time
-        public async Task<IEnumerable<CollectedData>> GetEntities(DateTime timeFrom, DateTime timeTo)
+        // Query data in the time
+        public async Task<IEnumerable<CollectedData>> GetEntitiesInTime(DateTime timeFrom, DateTime timeTo)
         {
             try
             {
                 var query = _context.Datasets
-                    .Find(d => d.CollectedDataType == _collectedDataType && d.Time >= timeFrom && d.Time <= timeTo);
+                    .Find(d => d.Time >= timeFrom && d.Time <= timeTo);
+
+                return await query.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        // Query by type in time
+        public async Task<IEnumerable<CollectedData>> GetEntitiesByTypeInTime(CollectedDataType collectedDataType, 
+            DateTime timeFrom, DateTime timeTo)
+        {
+            try
+            {
+                var query = _context.Datasets
+                    .Find(d => d.CollectedDataType == collectedDataType && d.Time >= timeFrom && d.Time <= timeTo);
 
                 return await query.ToListAsync();
             }
@@ -75,7 +107,6 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                collectedData.CollectedDataType = _collectedDataType;
                 await _context.Datasets
                     .InsertOneAsync(collectedData);
             }
@@ -90,7 +121,6 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                collectedData.CollectedDataType = _collectedDataType;
                 ReplaceOneResult actionResult = await _context.Datasets
                     .ReplaceOneAsync(data => data.Id.Equals(collectedData.Id), collectedData, new UpdateOptions { IsUpsert = true });
 

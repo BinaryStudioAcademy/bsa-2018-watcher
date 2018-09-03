@@ -59,10 +59,7 @@
         {
             var entities = await _uow.OrganizationInvitesRepository
                 .GetRangeAsync(1, int.MaxValue,
-                    o => o.CreatedByUserId == userId,
-                    include: x => x
-                        .Include(o => o.CreatedByUser)
-                        .Include(o => o.Organization));
+                    o => o.CreatedByUserId == userId);
 
             var dtos = _mapper.Map<IEnumerable<OrganizationInvite>, IEnumerable<OrganizationInviteDto>>(entities);
 
