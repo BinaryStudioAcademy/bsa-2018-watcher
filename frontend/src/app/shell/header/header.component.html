@@ -44,7 +44,7 @@
         <div class="user-overlay-info">
           <div class="user-name">{{ currentUser?.displayName }}</div>
           <p class="user-email">{{ currentUser?.email }}</p>
-          <p class="user-organization">{{currentUser?.lastPickedOrganization?.name}}</p>
+          <a routerLink="/user/settings/organization-profile" class="user-organization">{{currentUser?.lastPickedOrganization?.name}}</a>
         </div>
       </div>
       <div class="overlay-buttons">
