@@ -7,7 +7,7 @@ import {ToastrService} from '../../core/services/toastr.service';
 import {InstanceService} from '../../core/services/instance.service';
 import {DashboardService} from '../../core/services/dashboard.service';
 import {AuthService} from '../../core/services/auth.service';
-import {DataService} from '../services/data.service';
+import {DataService} from '../../core/services/data.service';
 import {ChartService} from '../../core/services/chart.service';
 import {CollectedDataService} from '../../core/services/collected-data.service';
 
@@ -31,7 +31,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private instanceGuidId: string;
 
   onDisplayChartEditing = new EventEmitter<boolean>();
-  chartToEdit = defaultOptions;
 
   instanceId: number;
   dashboards: Dashboard[] = [];
@@ -44,6 +43,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   displayEditDashboard = false;
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
+
+
+  displayEditChart = false;
+  chartToEdit = { ...defaultOptions } ;
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -78,8 +81,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.onDashboards(value);
         this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceId)
           .subscribe(data => {
+            this.collectedDataForChart = data || [];
+            this.onDashboards(value);
             if (data && data.length > 0) {
-              this.collectedDataForChart = data;
               // -1 is last item - plus sign
               for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
                 for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
@@ -88,26 +92,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
                   this.dashboardMenuItems[i].charts[j].data = [...tempData];
                 }
               }
-              // for (let i = 0; i < this.dashboardMenuItems.length; i++) {
-              //   for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
-              //     this.dashboardMenuItems[i].charts[j].data = this.dataService.prepareData(
-              //       this.dashboardMenuItems[i].charts[j].chartType.type, this.dashboardMenuItems[i].charts[j].dataSources, info);
-              //   }
-              // }
             }
             this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
           }, err => {
             console.error(err);
             this.toastrService.error('Error occured while fetching instance\'s collected Data');
           });
-      }).catch();
+      }).catch(reason => {
+        console.error(reason);
+          this.toastrService.error('Error occured while fetching instance\'s Dashboards');
+      });
 
     });
 
     this.cogItems = [{
       label: 'Add item',
       icon: 'fa fa-fw fa-plus',
-      command: () => this.showChartCreating(),
+
+      command: (event?: any) => {
+        this.chartToEdit = { ...defaultOptions };
+        this.showChartCreating();
+      },
     },
       {
         label: 'Edit',
@@ -245,6 +250,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.creation = creation;
     this.editTitle = creation ? '' : this.activeDashboardItem.label;
     this.displayEditDashboard = true;
+  }
+
+  onEditChart(chart: DashboardChart) {
+    console.log('2', chart);
+    this.chartToEdit = { ...chart };
+    this.showChartCreating();
   }
 
   onEdited(title: string) {

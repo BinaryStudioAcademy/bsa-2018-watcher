@@ -16,7 +16,7 @@
       </p><!-- [disabled]="!dashboardChart.dataSources.length<1"-->
       <p class="field">Select source: </p>
       <p-multiSelect [options]="sources()"
-                     [ngModel]="chartDatasources"
+                     [ngModel]="dashboardChart?.dataSources"
                      (ngModelChange)="dashboardChart.dataSources=$event"
                      [style]="{'width':'192px'}"
                      (onChange)="processData()">

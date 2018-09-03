@@ -1,18 +1,15 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
-import { DataProperty } from '../../../shared/models/data-property.enum';
-import { SelectItem } from 'primeng/api';
-import { DashboardChart } from '../../models/dashboard-chart';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ChartRequest } from '../../../shared/requests/chart-request.model';
-import { CollectedDataService } from '../../../core/services/collected-data.service';
-import { CollectedData } from '../../../shared/models/collected-data.model';
-import { DataService } from '../../services/data.service';
-import { ChartService } from '../../../core/services/chart.service';
-import { ToastrService } from '../../../core/services/toastr.service';
-import {colorSets} from '@swimlane/ngx-charts/release/utils';
-import {customChartTypes} from '../models/customChartTypes';
-import * as shape from 'd3-shape';
+import {DataProperty} from '../../../shared/models/data-property.enum';
+import {SelectItem} from 'primeng/api';
+import {DashboardChart} from '../../models/dashboard-chart';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {ChartRequest} from '../../../shared/requests/chart-request.model';
+import {CollectedDataService} from '../../../core/services/collected-data.service';
+import {CollectedData} from '../../../shared/models/collected-data.model';
+import {DataService} from '../../../core/services/data.service';
+import {ChartService} from '../../../core/services/chart.service';
+import {ToastrService} from '../../../core/services/toastr.service';
 
 @Component({
   selector: 'app-edit-chart',
@@ -28,40 +25,16 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   @Input() onDisplay: EventEmitter<boolean>;
   @Input() dashboardId: number;
-  @Input('dashboardChart') dashboardChart = {
-    view: [716, 337],
-    id: 0,
-    showCommon: true,
-    threshold: 0,
-    mostLoaded: '',
-    // colorScheme:  {
-    //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-    // },
-    colorScheme: {...colorSets.find(s => s.name === 'cool')},
-    schemeType: 'ordinal',
-    showLegend: true,
-    legendTitle: 'Legend',
-    gradient: false,
-    showXAxis: true,
-    showYAxis: true,
-    showXAxisLabel: true,
-    showYAxisLabel: true,
-    yAxisLabel: '',
-    xAxisLabel: '',
-    autoScale: true,
-    showGridLines: true,
-    rangeFillOpacity: 0.5,
-    roundDomains: false,
-    tooltipDisabled: false,
-    showSeriesOnHover: true,
-    curve: shape.curveLinear,
-    curveClosed: shape.curveCardinalClosed,
-    title: '',
-    dataSources: [],
-    activeEntries: [],
-    chartType: {...customChartTypes[0]},
-    theme: 'light',
-  } as DashboardChart;
+
+  @Input() dashboardChart: DashboardChart;
+
+  type: ChartType;
+  dropdownTypes: SelectItem[];
+  dropdownSources: SelectItem[];
+  dropdownSourcesProcesses: SelectItem[];
+  collectedDataForChart: CollectedData[] = [];
+  showPreview = false;
+  chartForm: FormGroup;
 
   get chartDatasources() {
     if (this.dashboardChart) {
@@ -70,25 +43,11 @@ export class EditChartComponent implements OnInit, OnChanges {
       return [];
     }
   }
-  // @Input() dashboardChart: DashboardChart = {...defaultOptions};
-  // @Output()
-  // get chart() {
-  //   return this.dashboardChart;
-  // }
-
-  // @Output() chartChanged = new EventEmitter<DashboardChart>();
-
-  // @Input() chart: DashboardChart;
-  // set chart(val: DashboardChart) {
-  //   this.dashboardChart = val;
-  //   this.chartChanged.emit(this.dashboardChart);
-  // }
-  type: ChartType;
 
   get dialogTitle() {
     if (this.dashboardChart && this.dashboardChart.id) {
       return 'Edit chart';
-    }  else {
+    } else {
       return 'Create chart';
     }
   }
@@ -100,22 +59,12 @@ export class EditChartComponent implements OnInit, OnChanges {
       return true;
     }
   }
-  // object to send to backend to add or edit dashboardChart
-  // in dashboard component fill this object with real data if it is edit mode, or fill it with default data from defaultOptions and set
-  // current dashboard id if it is create mode
-
-  dropdownTypes: SelectItem[];
-  dropdownSources: SelectItem[];
-  dropdownSourcesProcesses: SelectItem[];
-  collectedDataForChart: CollectedData[] = [];
-  showPreview = false;
-  chartForm: FormGroup;
 
   constructor(private fb: FormBuilder,
-    private collectedDataService: CollectedDataService,
-    private dataService: DataService,
-    private chartService: ChartService,
-    private toastrService: ToastrService) {
+              private collectedDataService: CollectedDataService,
+              private dataService: DataService,
+              private chartService: ChartService,
+              private toastrService: ToastrService) {
   }
 
   ngOnInit() {
@@ -129,29 +78,29 @@ export class EditChartComponent implements OnInit, OnChanges {
     this.dashboardChart.showCommon = false;
 
     this.dropdownTypes = [
-      { label: 'Bar vertical', value: ChartType.BarVertical },
-      { label: 'Line chart', value: ChartType.LineChart },
-      { label: 'Pie', value: ChartType.Pie },
-      { label: 'Guage', value: ChartType.Guage }
+      {label: 'Bar vertical', value: ChartType.BarVertical},
+      {label: 'Line chart', value: ChartType.LineChart},
+      {label: 'Pie', value: ChartType.Pie},
+      {label: 'Guage', value: ChartType.Guage}
     ];
 
     this.dropdownSources = [
-      { label: 'CPU', value: DataProperty.cpuUsagePercent },
-      { label: 'RAM', value: DataProperty.ramUsagePercent },
-      { label: 'DISC', value: DataProperty.localDiskFreeSpacePercent }
+      {label: 'CPU', value: DataProperty.cpuUsagePercent},
+      {label: 'RAM', value: DataProperty.ramUsagePercent},
+      {label: 'DISC', value: DataProperty.localDiskFreeSpacePercent}
     ];
 
     this.dropdownSourcesProcesses = [
-      { label: 'CPU p', value: DataProperty.processesCPU },
-      { label: 'RAM p', value: DataProperty.processesRAM },
-      { label: 'DISC p', value: DataProperty.localDiskFreeMBytes }
+      {label: 'CPU p', value: DataProperty.processesCPU},
+      {label: 'RAM p', value: DataProperty.processesRAM},
+      {label: 'DISC p', value: DataProperty.localDiskFreeMBytes}
     ];
 
     this.chartForm = this.fb.group({
-      isMultiple: new FormControl({ value: false, disabled: false }),
-      mostLoaded: new FormControl({ value: 1, disabled: false }),
-      xAxisLabel: new FormControl({ value: '', disabled: false }),
-      yAxisLabel: new FormControl({ value: '', disabled: false })
+      isMultiple: new FormControl({value: false, disabled: false}),
+      mostLoaded: new FormControl({value: 1, disabled: false}),
+      xAxisLabel: new FormControl({value: '', disabled: false}),
+      yAxisLabel: new FormControl({value: '', disabled: false})
     });
   }
 
@@ -166,14 +115,12 @@ export class EditChartComponent implements OnInit, OnChanges {
     // this.title = changes.dashboardTitle && changes.dashboardTitle.currentValue;
   }
 
-  sources() {if (this.dashboardChart.dataSources.length > 0) {
-        this.dashboardChart.dataSources = []; }
-    if (this.dashboardChart.showCommon) {
-
-      return this.dropdownSourcesProcesses;
-    } else {
-      return this.dropdownSources;
+  sources() {
+    if (this.dashboardChart.dataSources.length > 0) { // не ясно, что происходит
+      this.dashboardChart.dataSources = [];
     }
+
+    return this.dashboardChart.showCommon ? this.dropdownSourcesProcesses : this.dropdownSources;
   }
 
   isGuage() {
@@ -183,72 +130,67 @@ export class EditChartComponent implements OnInit, OnChanges {
   processData(): void {
     this.showPreview = false;
     if (!this.dashboardChart.showCommon) {
-    this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
-      this.dashboardChart.dataSources, this.collectedDataForChart);
-    }
-    if (this.dashboardChart.chartType.type === ChartType.BarVertical) {
-      this.dashboardChart.xAxisLabel = 'Parameters';
-      this.dashboardChart.yAxisLabel = 'Percentage %';
-    } else if (this.dashboardChart.chartType.type === ChartType.LineChart) {
-      this.dashboardChart.xAxisLabel = 'Time';
-      this.dashboardChart.yAxisLabel = 'Percentage %';
-    } else if (this.dashboardChart.chartType.type === ChartType.Guage) {
-      this.dashboardChart.yAxisLabel = 'Process';
-      this.dashboardChart.xAxisLabel = '';
+      this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
+        this.dashboardChart.dataSources, this.collectedDataForChart);
     }
 
-    if (this.dashboardChart.data  && this.dashboardChart.data .length > 0) {
+    switch (this.dashboardChart.chartType.type) {
+      case ChartType.BarVertical:
+        this.dashboardChart.xAxisLabel = 'Parameters';
+        this.dashboardChart.yAxisLabel = 'Percentage %';
+        break;
+      case ChartType.LineChart:
+        this.dashboardChart.xAxisLabel = 'Time';
+        this.dashboardChart.yAxisLabel = 'Percentage %';
+        break;
+      case ChartType.Guage:
+        this.dashboardChart.yAxisLabel = 'Process';
+        this.dashboardChart.xAxisLabel = '';
+        break;
+    }
+
+    if (this.dashboardChart.data && this.dashboardChart.data.length > 0) {
       this.showPreview = true;
     }
   }
 
   closeDialog() {
     this.visible = false;
-    this.dashboardChartChange.emit();
-    this.closed.emit();
     this.chartForm.reset();
+    this.closed.emit();
   }
-
 
   onEditChart() {
     if (!this.dashboardChart.id) {
-    this.chartService.create(this.createChartRequest()).subscribe(
-      value => {
-          debugger;
-        const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value, this.collectedDataForChart);
-        // this.activeDashboardItem.charts.push(dashboardChart); // TODO: use this in dash component
-        this.editChart.emit(dashboardChart);
-        this.toastrService.success('Chart was created');
-        this.closeDialog();
-      },
-      error => {
-        this.toastrService.error(`Error ocured status: ${error.message}`);
-      });
+      this.chartService.create(this.createChartRequest()).subscribe(
+        value => {
+          const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value, this.collectedDataForChart);
+          // this.activeDashboardItem.charts.push(dashboardChart); // TODO: use this in dash component
+          this.editChart.emit(dashboardChart);
+          this.toastrService.success('Chart was created');
+          this.closeDialog();
+        },
+        error => {
+          this.toastrService.error(`Error ocured status: ${error.message}`);
+        });
     } else {
       this.chartService.update(this.dashboardChart.id, this.createChartRequest()).subscribe(
-      value => {
-        this.toastrService.success('The chart was updated');
-      },
-      error => {
-        this.toastrService.error(`Error ocured status: ${error.message}`);
-      });
+        value => {
+          this.toastrService.success('The chart was updated');
+        },
+        error => {
+          this.toastrService.error(`Error ocured status: ${error.message}`);
+        });
     }
   }
-
-  // edit(model: NgModel): void {
-  //   this.editChart.emit(this.title);
-  //   this.title = '';
-  //   model.reset();
-  // }
 
   createChartRequest(): ChartRequest {
     const chart: ChartRequest = {
       showCommon: this.dashboardChart.showCommon,
       threshold: this.dashboardChart.threshold,
       mostLoaded: '' + this.chartForm.get('mostLoaded').value,
-      dashboardId: this.dashboardId,
       schemeType: this.dashboardChart.schemeType,
-
+      dashboardId: this.dashboardId,
       showLegend: this.dashboardChart.showLegend,
       legendTitle: this.dashboardChart.legendTitle,
       gradient: this.dashboardChart.gradient,
