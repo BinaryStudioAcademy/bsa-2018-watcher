@@ -29,6 +29,8 @@ import { FormsModule } from '@angular/forms';
 import { ClickOutsideDirective } from '../shared/directives/click-outside.directive';
 import { NotificationBlockComponent } from '../notification/notification-block/notification-block.component';
 import { SpinnerPopupComponent } from './spinner-popup/spinner-popup.component';
+import { InstanceListComponent } from './instance-list/instance-list.component';
+import { DownloadAppComponent } from './download-app/download-app.component';
 
 
 @NgModule({
@@ -58,6 +60,8 @@ import { SpinnerPopupComponent } from './spinner-popup/spinner-popup.component';
     ShellComponent,
     HeaderComponent,
     LeftSideMenuComponent,
+    InstanceListComponent,
+    DownloadAppComponent,
     AddNewOrganizationComponent,
     ClickOutsideDirective,
     NotificationBlockComponent,

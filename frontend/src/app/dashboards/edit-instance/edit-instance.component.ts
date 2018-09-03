@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
-import { ToastrService } from '../../../core/services/toastr.service';
-import { InstanceService } from '../../../core/services/instance.service';
-import { AuthService } from '../../../core/services/auth.service';
-import { Instance } from '../../../shared/models/instance.model';
-import { InstanceRequest } from '../../models/instance-request.model';
-import { SelectItem } from '../../../../../node_modules/primeng/api';
+import { ToastrService } from '../../core/services/toastr.service';
+import { InstanceService } from '../../core/services/instance.service';
+import { AuthService } from '../../core/services/auth.service';
+import { Instance } from '../../shared/models/instance.model';
+import { InstanceRequest } from '../models/instance-request.model';
+import { SelectItem } from '../../../../node_modules/primeng/api';
 
 @Component({
   selector: 'app-edit-instance',

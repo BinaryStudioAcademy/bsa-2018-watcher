@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { InstanceService } from '../../../core/services/instance.service';
-import { ToastrService } from '../../../core/services/toastr.service';
-import { AuthService } from '../../../core/services/auth.service';
+import { InstanceService } from '../../core/services/instance.service';
+import { ToastrService } from '../../core/services/toastr.service';
+import { AuthService } from '../../core/services/auth.service';
 import { MenuItem } from 'primeng/api';
-import { User } from '../../../shared/models/user.model';
-import { Instance } from '../../../shared/models/instance.model';
+import { User } from '../../shared/models/user.model';
+import { Instance } from '../../shared/models/instance.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -86,7 +86,6 @@ export class InstanceListComponent implements OnInit {
         icon: 'fa fa-download',
         styleClass: 'instance-options',
         command: () => {
-          console.log(this.showDownloadModal);
           this.showDownloadModal = true;
           this.currentGuidId = instance.guidId;
         }
@@ -110,14 +109,16 @@ export class InstanceListComponent implements OnInit {
   }
 
   onInstanceAdded(instance: Instance) {
+    console.log('INSATNCE ADSD');
     const item: MenuItem = this.instanceToMenuItem(instance);
     this.menuItems.push(item);
     this.onSearchChange(this.currentQuery);
   }
 
   onInstanceEdited(instance: Instance) {
+    console.log('INSATNCE ADSD');
     const item: MenuItem = this.instanceToMenuItem(instance);
-    const index: number = this.menuItems.findIndex(inst => inst.title === instance.id.toString());
+    const index: number = this.menuItems.findIndex(inst => inst.id === instance.id.toString());
     this.menuItems[index] = item;
     this.onSearchChange(this.currentQuery);
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { ToastrService } from '../../../core/services/toastr.service';
+import { ToastrService } from '../../core/services/toastr.service';
 
 @Component({
   selector: 'app-download-app',

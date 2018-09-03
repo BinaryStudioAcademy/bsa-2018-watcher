@@ -15,8 +15,6 @@ import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
   selector: 'app-feedback',
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.sass'],
-  providers: [
-  ]
 })
 
 export class FeedbackComponent implements OnInit {

@@ -28,9 +28,7 @@ import { ChartBuilderComponent} from './charts/chart-builder/chart-builder.compo
 import { ChartComponent} from './charts/chart/chart.component';
 import { DataService} from './services/data.service';
 import { ChartsComponent} from './charts/charts.component';
-import { DownloadAppComponent } from './instances/download-app/download-app.component';
-import { InstanceListComponent } from './instances/instance-list/instance-list.component';
-import { EditInstanceComponent } from './instances/edit-instance/edit-instance.component';
+import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 import { ToastrService } from '../core/services/toastr.service';
 import { DashboardService } from '../core/services/dashboard.service';
 import { InstanceService } from '../core/services/instance.service';
@@ -81,8 +79,6 @@ import { InstanceService } from '../core/services/instance.service';
     ChartComponent,
     ChartBuilderComponent,
     ChartDashboardComponent,
-    InstanceListComponent,
-    DownloadAppComponent,
   ],
   providers: [DataService, ToastrService, DashboardService, InstanceService],
   exports: []
