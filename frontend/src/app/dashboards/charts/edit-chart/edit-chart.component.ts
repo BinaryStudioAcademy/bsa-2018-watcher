@@ -31,14 +31,6 @@ export class EditChartComponent implements OnInit, OnChanges {
   showPreview = false;
   chartForm: FormGroup;
 
-  get chartDatasources() {
-    if (this.dashboardChart) {
-      return this.dashboardChart.showCommon;
-    } else {
-      return [];
-    }
-  }
-
   get dialogTitle() {
     if (this.dashboardChart && this.dashboardChart.id) {
       return 'Edit chart';
@@ -108,19 +100,12 @@ export class EditChartComponent implements OnInit, OnChanges {
     // this.title = changes.dashboardTitle && changes.dashboardTitle.currentValue;
   }
 
-  sources() {
-    if (this.dashboardChart.dataSources.length > 0) { // не ясно, что происходит
-      this.dashboardChart.dataSources = [];
-    }
-
-    return this.dashboardChart.showCommon ? this.dropdownSourcesProcesses : this.dropdownSources;
-  }
-
   isGuage() {
     return this.dashboardChart.chartType.type === 3;
   }
 
   processData(): void {
+    debugger;
     this.showPreview = false;
     if (!this.dashboardChart.showCommon) {
       this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,

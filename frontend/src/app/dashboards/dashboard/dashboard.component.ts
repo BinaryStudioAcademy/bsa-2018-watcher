@@ -103,7 +103,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       label: 'Add item',
       icon: 'fa fa-fw fa-plus',
       command: (event?: any) => {
+        debugger;
         this.chartToEdit = { ...defaultOptions };
+        this.chartToEdit.chartType = { ...defaultOptions.chartType };
+        this.chartToEdit.colorScheme = { ...defaultOptions.colorScheme };
         this.showPopupEditChart();
       },
     },
@@ -244,8 +247,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onEditChart(chart: DashboardChart) {
+    debugger;
     console.log('2', chart);
     this.chartToEdit = { ...chart };
+    this.chartToEdit.chartType = { ...chart.chartType };
+    this.chartToEdit.colorScheme = { ...chart.colorScheme };
     this.showPopupEditChart();
   }
 
