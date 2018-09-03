@@ -43,9 +43,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   displayEditDashboard = false;
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
-
-
-  displayEditChart = false;
   chartToEdit = { ...defaultOptions } ;
 
   constructor(private dashboardsService: DashboardService,
@@ -96,11 +93,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
           }, err => {
             console.error(err);
-            this.toastrService.error('Error occured while fetching instance\'s collected Data');
+            this.toastrService.error('Error occurred while fetching instance\'s Collected Data');
           });
       }).catch(reason => {
         console.error(reason);
-          this.toastrService.error('Error occured while fetching instance\'s Dashboards');
+          this.toastrService.error('Error occurred while fetching instance\'s Dashboards');
       });
 
     });
@@ -110,10 +107,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       icon: 'fa fa-fw fa-plus',
 
       command: (event?: any) => {
-        debugger;
-        this.chartToEdit = { ...defaultOptions };
-        this.chartToEdit.chartType = { ...defaultOptions.chartType };
-        this.chartToEdit.colorScheme = { ...defaultOptions.colorScheme };
+        this.decomposeChart(defaultOptions);
         this.showChartCreating();
       },
     },
@@ -256,14 +250,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onEditChart(chart: DashboardChart) {
-    debugger;
-    console.log('2', chart);
-    this.chartToEdit = { ...chart };
-    this.chartToEdit.chartType = { ...chart.chartType };
-    this.chartToEdit.colorScheme = { ...chart.colorScheme };
+    this.decomposeChart(chart);
     this.showChartCreating();
   }
-
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
@@ -309,10 +298,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.onDisplayChartEditing.emit(true);
   }
 
+  onChartEditClosed() {
+    this.onDisplayChartEditing.emit(false);
+  }
+
   onChartEdited(chart?: DashboardChart) {
     chart.data = this.dataService.prepareData(chart.chartType.type, chart.dataSources, this.collectedDataForChart);
-    this.activeDashboardItem.charts.push(chart);
-    // this.toastrService.success('Successfully update chart!');
+    const updateChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chart.id);
+    if (updateChartIndex >= 0) {
+      this.activeDashboardItem.charts[updateChartIndex] = chart;
+      this.toastrService.success('Successfully updated chart!');
+    } else {
+      this.activeDashboardItem.charts.push(chart);
+      this.toastrService.success('Successfully created chart!');
+    }
+  }
+
+  decomposeChart(chart: DashboardChart): void {
+    this.chartToEdit = { ...chart };
+    this.chartToEdit.colorScheme = { ...chart.colorScheme };
+    this.chartToEdit.chartType = { ...chart.chartType };
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
