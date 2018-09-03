@@ -10,6 +10,9 @@ import { CollectedData } from '../../../shared/models/collected-data.model';
 import { DataService } from '../../services/data.service';
 import { ChartService } from '../../../core/services/chart.service';
 import { ToastrService } from '../../../core/services/toastr.service';
+import {colorSets} from '@swimlane/ngx-charts/release/utils';
+import {customChartTypes} from '../models/customChartTypes';
+import * as shape from 'd3-shape';
 
 @Component({
   selector: 'app-edit-chart',
@@ -21,9 +24,82 @@ export class EditChartComponent implements OnInit, OnChanges {
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardId: number;
-  @Input() dashboardChart: DashboardChart;
+  @Input('dashboardChart') dashboardChart = {
+    view: [716, 337],
+    id: 0,
+    showCommon: true,
+    threshold: 0,
+    mostLoaded: '',
+    // colorScheme:  {
+    //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    // },
+    colorScheme: {...colorSets.find(s => s.name === 'cool')},
+    schemeType: 'ordinal',
+    showLegend: true,
+    legendTitle: 'Legend',
+    gradient: false,
+    showXAxis: true,
+    showYAxis: true,
+    showXAxisLabel: true,
+    showYAxisLabel: true,
+    yAxisLabel: '',
+    xAxisLabel: '',
+    autoScale: true,
+    showGridLines: true,
+    rangeFillOpacity: 0.5,
+    roundDomains: false,
+    tooltipDisabled: false,
+    showSeriesOnHover: true,
+    curve: shape.curveLinear,
+    curveClosed: shape.curveCardinalClosed,
+    title: '',
+    dataSources: [],
+    activeEntries: [],
+    chartType: {...customChartTypes[0]},
+    theme: 'light',
+  } as DashboardChart;
+
+
+  @Output() dashboardChartChange = new EventEmitter();
+
+
+  get chartDatasources() {
+    if (this.dashboardChart) {
+      return this.dashboardChart.showCommon;
+    } else {
+      return [];
+    }
+  }
+  // @Input() dashboardChart: DashboardChart = {...defaultOptions};
+  // @Output()
+  // get chart() {
+  //   return this.dashboardChart;
+  // }
+
+  // @Output() chartChanged = new EventEmitter<DashboardChart>();
+
+  // @Input() chart: DashboardChart;
+  // set chart(val: DashboardChart) {
+  //   this.dashboardChart = val;
+  //   this.chartChanged.emit(this.dashboardChart);
+  // }
   type: ChartType;
-  // data: CustomData[] = [];
+
+  get dialogTitle() {
+    if (this.dashboardChart && this.dashboardChart.id) {
+      return 'Edit chart';
+    }  else {
+      return 'Create chart';
+    }
+  }
+
+  get spinnerDisabled() {
+    if (this.dashboardChart && this.dashboardChart.showCommon) {
+      return false;
+    } else {
+      return true;
+    }
+  }
   // object to send to backend to add or edit dashboardChart
   // in dashboard component fill this object with real data if it is edit mode, or fill it with default data from defaultOptions and set
   // current dashboard id if it is create mode
@@ -32,7 +108,6 @@ export class EditChartComponent implements OnInit, OnChanges {
   dropdownSources: SelectItem[];
   dropdownSourcesProcesses: SelectItem[];
   collectedDataForChart: CollectedData[] = [];
-  // chartType: DashboardChartType = {...customChartTypes[0]};
   showPreview = false;
   chartForm: FormGroup;
 
@@ -126,6 +201,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   closeDialog() {
+    this.dashboardChartChange.emit();
     this.display = false;
     this.closed.emit();
     // this.selectedSource = null;

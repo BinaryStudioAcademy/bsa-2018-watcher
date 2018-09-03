@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   cogItems: MenuItem[];
 
   displayEditChart = false;
-  chartToEdit = {...defaultOptions};
+  chartToEdit = defaultOptions;
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -131,22 +131,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   subscribeToCollectedData(): void {
     this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
       this.collectedDataForChart = this.collectedDataForChart || [];
-      this.collectedDataForChart.push(latestData);
-      // this.collectedDataForChart.push(latestData); // TODO: check current array on size to remove super old useless data elements
+      this.collectedDataForChart.push(latestData); // TODO: check current array on size to remove super old useless data elements
       // TODO: use this operation only for current dashboard and then on switching dashboard make data preparing on existing
       // collectedDataForChart to reduce amount of operations and time
-
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         const tempData = this.dataService.prepareDataTick(this.activeDashboardItem.charts[i], latestData);
         this.activeDashboardItem.charts[i].data = [...tempData];
       }
-
-      // for (let i = 0; i < this.dashboardMenuItems.length; i++) {
-      //   for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
-      //     const tempData = this.dataService.prepareDataTick(this.dashboardMenuItems[i].charts[j], latestData);
-      //     this.dashboardMenuItems[i].charts[j].data = [...tempData];
-      //   }
-      // }
     });
   }
 

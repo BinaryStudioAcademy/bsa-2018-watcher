@@ -1,37 +1,26 @@
 <div class="charts-area" [ngStyle]="{ 'display': 'flex', 'justifyContent': 'stretch'}">
-  <smooth-dnd-container [groupName]="'1'" [getChildPayload]="getChildPayload1" (drop)="onDrop('charts', $event)">            
-      <smooth-dnd-draggable class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
-        <app-chart
-          class="chart"
-          [chart]="chart"
-          [data]="chart.data"
-          [activeEntries]="chart.activeEntries"
-          [chartType]="chart.chartType">
-        </app-chart>
-         <div class="btn-panel">
-          <button #btn type="button" class="btn-chart" pButton icon="fa fa-fw fa-edit" (click)="showPopupEditChart(chart)"></button>
-          <button #btn type="button" class="btn-chart ui-button-danger" pButton icon="fa fa-fw fa-remove" (click)="onDeleteChart(chart.id)"></button>
-        </div>
-      </smooth-dnd-draggable>
-    </smooth-dnd-container>
-  </div>
+  <smooth-dnd-container [groupName]="'1'" [getChildPayload]="getChildPayload1" (drop)="onDrop('charts', $event)">
+    <smooth-dnd-draggable class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
+      <app-chart
+        class="chart"
+        [chart]="chart"
+        [data]="chart.data"
+        [activeEntries]="chart.activeEntries"
+        [chartType]="chart.chartType">
+      </app-chart>
+      <div class="btn-panel">
+        <button #btn type="button" class="btn-chart" pButton icon="fa fa-fw fa-edit"
+                (click)="showPopupEditChart(chart)"></button>
+        <button #btn type="button" class="btn-chart ui-button-danger" pButton icon="fa fa-fw fa-remove"
+                (click)="onDeleteChart(chart.id)"></button>
+      </div>
+    </smooth-dnd-draggable>
+  </smooth-dnd-container>
+</div>
 
-  <app-edit-chart (editChart)="onChartEdited($event)"
+<app-edit-chart (editChart)="onChartEdited($event)"
                 (closed)="onChartEditClosed()"
                 [display]="displayEditChart"
                 [dashboardId]="dashboardId"
                 [dashboardChart]="chartToEdit">
 </app-edit-chart>
-<!-- <div class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of charts">    
-    <app-chart
-      class="chart"
-      [chart]="chart"
-      [data]="chart.data"
-      [activeEntries]="chart.activeEntries"
-      [chartType]="chart.chartType">
-    </app-chart>
-    <div class="btn-panel">
-        <button #btn type="button" class="btn-chart" pButton icon="fa fa-fw fa-edit" (click)="onEditChart(chart)"></button>
-        <button #btn type="button" class="btn-chart ui-button-danger" pButton icon="fa fa-fw fa-remove" (click)="onDeleteChart(chart)"></button>
-    </div>
-  </div> -->

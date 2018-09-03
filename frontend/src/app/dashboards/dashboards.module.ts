@@ -44,18 +44,19 @@ import {ContainerComponent, DraggableComponent} from 'ngx-smooth-dnd';
 @NgModule({
   imports: [
     CommonModule,
+    InputTextModule,
     TabViewModule,
     PanelMenuModule,
     ButtonModule,
     DialogModule,
     FormsModule,
+    ReactiveFormsModule,
     TabMenuModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
     InputTextModule,
     ToastModule,
     MessageModule,
-    ReactiveFormsModule,
 
     NgxUIModule,
     NgxChartsModule,
