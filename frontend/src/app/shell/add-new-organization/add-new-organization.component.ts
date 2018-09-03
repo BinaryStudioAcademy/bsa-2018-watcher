@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, Validators, MinLengthValidator } from '@angular/forms';
 import { OrganizationService } from '../../core/services/organization.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
 import { User } from '../../shared/models/user.model';
 import { Spinner } from 'primeng/spinner';
+import { tree } from 'd3';
 
 @Component({
   selector: 'app-add-new-organization',
@@ -18,16 +19,20 @@ export class AddNewOrganizationComponent implements OnInit {
   @Output() displayChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   user: User;
+  organization: Organization;
 
-  name = '';
-  email = '';
-  contactNumber = '';
-  webSite = '';
-  description = '';
+  organizationForm = this.fb.group({
+    name: new FormControl('' , Validators.compose([Validators.required, Validators.minLength(4)])),
+    email: new FormControl('', Validators.required),
+    contactNumber: new FormControl(''),
+    webSite: new FormControl('', Validators.pattern('^(http|https|ftp)?(://)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([/?].*)?$')),
+    description: new FormControl('')
+  });
 
   constructor(  private organizationService: OrganizationService,
                 private authService: AuthService,
-                private toastrService: ToastrService) {
+                private toastrService: ToastrService,
+                private fb: FormBuilder) {
   }
 
   ngOnInit() {
@@ -43,16 +48,13 @@ export class AddNewOrganizationComponent implements OnInit {
   }
 
   onAdd() {
-    const org = <Organization>{};
-    org.name = this.name;
-    org.email = this.email;
-    org.contactNumber = this.contactNumber;
-    org.webSite = this.webSite;
-    org.description = this.description;
-    org.createdByUserId = this.user.id;
-    org.usersId = new Array<string>(this.user.id);
+    if (!this.organizationForm.valid) { return; }
 
-    this.organizationService.create(org).subscribe(
+    this.organization = this.organizationForm.value;
+    this.organization.createdByUserId = this.user.id;
+    this.organization.usersId = [this.user.id];
+
+    this.organizationService.create(this.organization).subscribe(
       value => {
         this.user.organizations.push(value);
         this.user.lastPickedOrganization = value;
@@ -62,12 +64,23 @@ export class AddNewOrganizationComponent implements OnInit {
 
         this.toastrService.success(`${value.name} organization Successfully established,
           and it was set as the default organization.`);
+
+          this.clearFields();
       },
       err => {
         this.toastrService.error(`Error The organization was not created!`);
       }
     );
     this.onClose();
+  }
+
+  clearFields(): void {
+    Object.keys(this.organizationForm.controls).forEach(field => {
+      const control = this.organizationForm.get(field);
+      control.setValue('');
+      control.markAsPristine({ onlySelf: true });
+      control.markAsUntouched({ onlySelf: true });
+    });
   }
 
 }

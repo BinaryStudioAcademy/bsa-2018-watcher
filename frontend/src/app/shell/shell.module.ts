@@ -26,7 +26,7 @@ import { ChatModule } from '../chat/chat.module';
 import { query } from '@angular/core/src/render3/query';
 import { DownloadAppComponent } from '../download-app/download-app.component';
 import { AddNewOrganizationComponent } from './add-new-organization/add-new-organization.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideDirective } from '../shared/directives/click-outside.directive';
 import { NotificationBlockComponent } from '../notification/notification-block/notification-block.component';
 import { SpinnerPopupComponent } from './spinner-popup/spinner-popup.component';
@@ -53,7 +53,8 @@ import { SpinnerPopupComponent } from './spinner-popup/spinner-popup.component';
     DialogModule,
     ProgressSpinnerModule,
     AccordionModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ShellComponent,
