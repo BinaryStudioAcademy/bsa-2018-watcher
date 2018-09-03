@@ -296,6 +296,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   showPopupAddChart() {
+    debugger
     this.displayEditChart = true;
   }
 
