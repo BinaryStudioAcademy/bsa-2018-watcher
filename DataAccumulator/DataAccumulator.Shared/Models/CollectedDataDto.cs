@@ -11,6 +11,7 @@ namespace DataAccumulator.Shared.Models
         // ClientId - Client identification number
         public Guid ClientId { get; set; }
 
+        public CollectedDataType CollectedDataType { get; set; }
         public int ProcessesCount { get; set; }
         public Dictionary<string, float> ProcessesCPU { get; set; }
         public Dictionary<string, float> ProcessesRAM { get; set; }

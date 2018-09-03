@@ -58,6 +58,9 @@
                 .ForMember(d => d.LastName, o => o.MapFrom(s => s.User.LastName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.User.Email))
+                .ForMember(d => d.EmailForNotifications, o => o.MapFrom(s =>
+                string.IsNullOrWhiteSpace(s.User.EmailForNotifications) ?
+                    s.User.Email : s.User.EmailForNotifications))
                 .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
                 .ForMember(d => d.CreatedAt, o => o.MapFrom(s => s.User.CreatedAt))
                 .ForMember(d => d.IsActive, o => o.MapFrom(s => s.User.IsActive))
@@ -81,6 +84,9 @@
             // TODO: Get Claim with user Data, extract email from this data, maybe use deserializer
             CreateMap<UserUpdateRequest, User>().ForMember(d => d.Id, o => o.UseValue(0))
                 .ForMember(d => d.RoleId, o => o.MapFrom(s => s.Role.Id))
+                .ForMember(d => d.EmailForNotifications, o => o.MapFrom(s =>
+                    string.IsNullOrWhiteSpace(s.EmailForNotifications) ?
+                    s.Email : s.EmailForNotifications))
                 .ForMember(d => d.Role, o => o.Ignore());
         }
     }

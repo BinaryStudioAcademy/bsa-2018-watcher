@@ -1,4 +1,6 @@
-﻿namespace Watcher
+﻿using DataAccumulator.Shared.Models;
+
+namespace Watcher
 {
     using System;
     using System.Collections.Generic;
