@@ -16,7 +16,7 @@ hr
     text-align: center
 
 .field
-    margin: 3px 0
+    margin-bottom: 10px
 
 .border
      border: 1px solid #a6a6a6
@@ -50,16 +50,15 @@ hr
 figure
   display: block
   position: relative
-  float: left
   overflow: hidden
   // margin: 0 20px 20px 0
 
 figcaption
   position: absolute
+  bottom: 0
   background: black
   background: rgba(0,0,0,0.75)
   border-radius: 0px 0px 5px 5px
-  margin-bottom: 4px
   color: white
   padding: 10px 20px
   width: 150px
@@ -89,6 +88,9 @@ figure:hover:before
 .cap-bot:hover figcaption
   bottom: 0
 
+textarea
+  resize: none
+
 .left-flex
 	display: flex
 	justify-content: flex-start
@@ -99,5 +101,15 @@ figure:hover:before
 	justify-content: center
 	align-items: center
 
+.right-flex
+	display: flex
+	justify-content: flex-end
+	align-items: center  
+
 .list-organization
-	padding: 1em
+  border: 1px solid #a6a6a6
+  border-radius: 2px
+  box-shadow: 0 0 10px 0 #ccc
+
+/deep/ .ui-scrollpanel-content
+  height: 100%

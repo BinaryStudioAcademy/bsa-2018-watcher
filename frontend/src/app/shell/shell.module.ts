@@ -35,6 +35,7 @@ import { InstanceService } from '../core/services/instance.service';
 import { ToastrService } from '../core/services/toastr.service';
 import { AuthService } from '../core/services/auth.service';
 
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import { AuthService } from '../core/services/auth.service';
     DialogModule,
     ProgressSpinnerModule,
     AccordionModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ShellComponent,
