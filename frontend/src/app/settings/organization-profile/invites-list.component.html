@@ -1,4 +1,4 @@
-<p-dataView #dt *ngIf="invites" [(value)]="invites"
+<p-dataView #dt [(value)]="invites"
                                 [paginator]="true" [rows]="rowsPerPage"
                                 [totalRecords]="invites.length"
                                 (onPage)="onPaginate($event)">
