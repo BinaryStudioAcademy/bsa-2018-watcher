@@ -13,7 +13,6 @@ namespace DataAccumulator.DataAggregator.Services
     public class AggregatorService : IAggregatorService<CollectedDataDto>
     {
         private readonly IMapper _mapper;
-        private readonly IDataAccumulatorRepository<CollectedData> _dataAccumulatorRepository;
         private readonly IDataAggregatorRepository<CollectedData> _dataAggregatorRepository;
 
         public AggregatorService(IMapper mapper,
@@ -21,13 +20,13 @@ namespace DataAccumulator.DataAggregator.Services
             IDataAggregatorRepository<CollectedData> dataAggregatorRepository)
         {
             _mapper = mapper;
-            _dataAccumulatorRepository = dataAccumulatorRepository;
             _dataAggregatorRepository = dataAggregatorRepository;
         }
 
-        public async Task<IEnumerable<CollectedDataDto>> GetAccumulatorEntitiesAsync(DateTime timeFrom, DateTime timeTo)
+        public async Task<IEnumerable<CollectedDataDto>> GetSourceEntitiesAsync(CollectedDataType sourceType, 
+            DateTime timeFrom, DateTime timeTo)
         {
-            var entities = await _dataAccumulatorRepository.GetEntities(timeFrom, timeTo);
+            var entities = await _dataAggregatorRepository.GetEntitiesByTypeInTime(sourceType, timeFrom, timeTo);
             if (entities == null)
             {
                 throw new NotFoundException();
@@ -36,14 +35,14 @@ namespace DataAccumulator.DataAggregator.Services
             return _mapper.Map<IEnumerable<CollectedData>, IEnumerable<CollectedDataDto>>(entities);
         }
 
-        public async Task<bool> DeleteAccumulatorEntityAsync(Guid id)
+        public async Task<bool> DeleteAggregatedEntityAsync(Guid id)
         {
-            if (!await _dataAccumulatorRepository.EntityExistsAsync(id))
+            if (!await _dataAggregatorRepository.EntityExistsAsync(id))
             {
                 throw new NotFoundException();
             }
 
-            return await _dataAccumulatorRepository.RemoveEntity(id);
+            return await _dataAggregatorRepository.RemoveEntity(id);
         }
 
         public async Task<CollectedDataDto> AddAggregatorEntityAsync(CollectedDataDto collectedDataDto)

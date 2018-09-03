@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../core/services/auth.service';
-import {Router} from '@angular/router';
+import {Router, RouterEvent} from '@angular/router';
 
 @Component({
   selector: 'app-shell',
@@ -9,10 +9,23 @@ import {Router} from '@angular/router';
 })
 
 export class ShellComponent implements OnInit {
-  constructor(private authService: AuthService,
-              private router: Router) {  }
+  constructor(private router: Router) {  }
+
+  private regexInstances: RegExp = /\/user\/instances/;
+  showInstanceList: boolean;
 
   ngOnInit(): void {
-   // this.authService.getCurrentUser().
+    this.showInstanceList = true;
+    this.subscribeRouteChanges();
+  }
+
+  private subscribeRouteChanges(): void {
+    this.router.events.subscribe((event: RouterEvent) => {
+      this.checkRoute();
+    });
+  }
+
+  private checkRoute(): void {
+    this.showInstanceList = (this.router.url.match(this.regexInstances)) ? true : false;
   }
 }

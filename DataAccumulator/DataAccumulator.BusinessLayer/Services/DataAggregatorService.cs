@@ -33,6 +33,17 @@ namespace DataAccumulator.BusinessLayer.Services
             return _mapper.Map<IEnumerable<CollectedData>, IEnumerable<CollectedDataDto>>(entities);
         }
 
+        public async Task<IEnumerable<CollectedDataDto>> GetEntitiesByTypeAsync(CollectedDataType collectedDataType)
+        {
+            var entities = await _repository.GetAllEntitiesByType(collectedDataType);
+            if (entities == null)
+            {
+                throw new NotFoundException();
+            }
+
+            return _mapper.Map<IEnumerable<CollectedData>, IEnumerable<CollectedDataDto>>(entities);
+        }
+
         public async Task<CollectedDataDto> GetEntityAsync(Guid entityId)
         {
             var entity = await _repository.GetEntity(entityId);

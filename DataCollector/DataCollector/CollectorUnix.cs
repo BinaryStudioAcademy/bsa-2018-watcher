@@ -67,9 +67,9 @@ namespace DataCollector
         }
         private float GetFreeRam()
         {
-            string ramData = Bash("free -b | tail +2 | awk '{print $2 \";\" $3 \";\" $4}'");
+            string ramData = Bash("free -b | awk '{print $2 \";\" $3 \";\" $4}'");
             var ramSwap  = ramData.Split("\n");
-            var ram = ramSwap[0].Split(";");
+            var ram = ramSwap[1].Split(";");
             return float.Parse(ram[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
@@ -82,9 +82,9 @@ namespace DataCollector
 
         private float GetUsageRamPercentages()
         {
-            string ramData = Bash("free -b | tail +2 | awk '{print $2 \";\" $3 \";\" $4}'");
+            string ramData = Bash("free -b | awk '{print $2 \";\" $3 \";\" $4}'");
             var ramSwap  = ramData.Split("\n");
-            var ram = ramSwap[0].Split(";");
+            var ram = ramSwap[1].Split(";");
             var freeRam = float.Parse(ram[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
             var totalRam = float.Parse(ram[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
             return freeRam/totalRam*100.0f;
@@ -92,24 +92,29 @@ namespace DataCollector
 
         private float GetDiscFree()
         {
-            string strData = Bash("df -t ext4 | tail +2 | awk '{print $2 \";\" $3 \";\" $4}'");
-            var disc = strData.Split(";");
+            string strData = Bash("df -t xfs -t ext4 | awk '{print $2 \";\" $3 \";\" $4}'");
+            var allParts = strData.Split("\n");
+            var disc = allParts[1].Split(";");
             return float.Parse(disc[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture)/1024.0f;
         }
 
         private float GetLocalDiskFreeSpacePercent()
         {
-            string strData = Bash("df -t ext4 | tail +2 | awk '{print $2 \";\" $3 \";\" $4 \";\" $5}'");
-            var disc = strData.Split(";");
-            return float.Parse(disc[3].Split("%")[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture)/1024.0f;
+            string strData = Bash("df -t xfs -t ext4 | awk '{print $2 \";\" $3 \";\" $4 \";\" $5}'");
+            var allParts = strData.Split("\n");
+            var disc = allParts[1].Split(";");
+            return 100.0f - float.Parse(disc[3].Split("%")[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture)/1024.0f;
         }
 
         private List<ProcessData> GetProcesses()
         {
-            string output = Bash("ps -xo pmem,pcpu,command | tail +2 | awk '{print $1 \";\" $2 \";\" $3}'");
+            string output = Bash("ps -xo pmem,pcpu,command | awk '{print $1 \";\" $2 \";\" $3}'");
             processData = new List<ProcessData>();
+            int counter = 0;
             foreach (string row in output.Split("\n"))
             {
+                if (counter == 0) continue;
+                counter++;
                 var cols = row.Split(";");
                 if(cols.Length == 3)
                 {

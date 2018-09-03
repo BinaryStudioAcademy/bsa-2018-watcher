@@ -9,8 +9,9 @@ namespace DataAccumulator.DataAggregator.Interfaces
 {
     public interface IAggregatorService<TEntity> where TEntity : ICollectedDataDto
     {
-        Task<IEnumerable<TEntity>> GetAccumulatorEntitiesAsync(DateTime timeFrom, DateTime timeTo);
-        Task<bool> DeleteAccumulatorEntityAsync(Guid id);
+        Task<IEnumerable<CollectedDataDto>> GetSourceEntitiesAsync(CollectedDataType sourceType, 
+            DateTime timeFrom, DateTime timeTo);
+        Task<bool> DeleteAggregatedEntityAsync(Guid id);
         Task<TEntity> AddAggregatorEntityAsync(TEntity entity);
     }
 }

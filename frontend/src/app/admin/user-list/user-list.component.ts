@@ -290,6 +290,6 @@ export class UserListComponent implements OnInit {
     const currentPage = event.first / event.rows + 1;
     this.userService.getRange(currentPage, event.rows).subscribe((value: User[]) => {
       this.users = value;
-    });;
+    });
   }
 }

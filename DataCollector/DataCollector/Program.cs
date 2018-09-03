@@ -19,7 +19,7 @@ namespace DataCollector
         private static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json");
             Configuration = builder.Build();
 
@@ -68,18 +68,21 @@ namespace DataCollector
 
         protected static void SaveGuid()
         {
-            var currentDir = Directory.GetCurrentDirectory();
+            var sep = Path.DirectorySeparatorChar;
+            var currentDir = AppContext.BaseDirectory;
             if (ClientIdentifier != Guid.Empty)
-                using (var writer = new StreamWriter($@"{currentDir}\\guid.txt"))
+                using (var writer = new StreamWriter($@"{currentDir}{sep}guid.txt"))
                 {
                     writer.Write(ClientIdentifier.ToString());
                 }
+            Console.WriteLine($@"{currentDir}{sep}guid.txt");
         }
 
         protected static Guid ConfigureClientIdentifier()
         {
-            var currentDir = Directory.GetCurrentDirectory();
-            var fileInfo = new FileInfo($@"{currentDir}\\guid.txt");
+            var sep = Path.DirectorySeparatorChar;
+            var currentDir = AppContext.BaseDirectory;
+            var fileInfo = new FileInfo($@"{currentDir}{sep}guid.txt");
             var guidId = Guid.Empty;
             if (!fileInfo.Exists) return Guid.Empty;
             using (var reader = new StreamReader(fileInfo.OpenRead()))
