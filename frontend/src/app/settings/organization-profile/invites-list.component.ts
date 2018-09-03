@@ -17,10 +17,10 @@ export class InvitesListComponent implements OnInit {
 
   @ViewChild('dt') dataView: DataView;
 
-  invites: ShowInvite[];
+  invites: ShowInvite[] = [];
 
   currentUser: User;
-  // SignalR
+
   indexFirstRecordPage = 0;
   rowsPerPage = 2;
   isUpdating: boolean;
