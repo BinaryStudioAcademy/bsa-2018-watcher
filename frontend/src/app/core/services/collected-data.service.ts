@@ -20,7 +20,7 @@ export class CollectedDataService {
     return this.apiService.get(`${this.ctrlUrl}/Percentage/${id}?count=20`) as Observable<PercentageInfo[]>;
   }
 
-  public getRecentCollectedDataByInstanceId(id: number): Observable<CollectedData[]>  {
-    return this.apiService.get(`${this.ctrlUrl}/Data/${id}?count=20`) as Observable<CollectedData[]>;
+  public getRecentCollectedDataByInstanceId(guidId: string): Observable<CollectedData[]>  {
+    return this.apiService.get(`${this.ctrlUrl}/Data/${guidId}?count=20`) as Observable<CollectedData[]>;
   }
 }

@@ -84,7 +84,7 @@ export class DataService {
     if (chartType === ChartType.LineChart) {
       return this.mapToMultiData(dataToTransform, dataSources);
     } else {
-      return this.mapToSeriesItem(dataToTransform[0], dataSources);
+      return this.mapToSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources);
     }
   }
 

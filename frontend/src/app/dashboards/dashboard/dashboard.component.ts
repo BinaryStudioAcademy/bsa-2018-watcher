@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       this.getDashboardsByInstanceId(this.instanceId).then(value => {
         this.onDashboards(value);
-        this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceId)
+        this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId)
           .subscribe(data => {
             this.collectedDataForChart = data || [];
 
@@ -107,7 +107,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       icon: 'fa fa-fw fa-plus',
 
       command: (event?: any) => {
-        debugger;
         this.decomposeChart(defaultOptions);
         this.showChartCreating();
       },
@@ -268,6 +267,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     this.creation = false;
     this.displayEditDashboard = false;
+  }
+
+  onChartDeleted(chartId: number) {
+    const deletedChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chartId);
+    if (deletedChartIndex >= 0) {
+      this.activeDashboardItem.charts.splice(deletedChartIndex, 1);
+      this.toastrService.success('Successfully deleted chart!');
+    } else {
+      this.toastrService.error('Deleted chart not found!');
+    }
   }
 
   onClosed() {

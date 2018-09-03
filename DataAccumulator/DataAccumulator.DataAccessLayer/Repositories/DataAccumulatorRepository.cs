@@ -110,7 +110,9 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                var query = _context.Datasets.Find(d => d.ClientId == instanceId).Limit(count);
+                var query = _context.Datasets.Find(d => d.ClientId == instanceId)
+                    .SortByDescending(cd => cd.Time)
+                    .Limit(count);
 
                 return await query.ToListAsync();
             }
