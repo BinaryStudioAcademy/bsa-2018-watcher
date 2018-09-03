@@ -28,6 +28,7 @@ export class InstanceService {
     this.instanceEdited = new EventEmitter<Instance>();
     this.instanceRemoved = new EventEmitter<number>();
     this.instanceChecked = new EventEmitter<Instance>();
+    console.log('CREATING EVENTS');
   }
 
   getOne(id: number): Observable<Object> {
