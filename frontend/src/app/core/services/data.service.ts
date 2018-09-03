@@ -7,8 +7,9 @@ import {DataProperty, dataPropertyLables} from '../../shared/models/data-propert
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {Chart} from '../../shared/models/chart.model';
 import {DashboardChart} from '../../dashboards/models/dashboard-chart';
-import {customChartTypes} from '../../dashboards/charts/models/customChartTypes';
+import {dashboardChartTypes} from '../../dashboards/charts/models/dashboardChartTypes';
 import {defaultOptions} from '../../dashboards/charts/models/chart-options';
+import {ChartRequest} from '../../shared/requests/chart-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -59,11 +60,20 @@ export class DataService {
       dataSources: dataProps,
       data: this.prepareData(value.type, dataProps, collData),
       activeEntries: [],
-      chartType: {...customChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
+      chartType: {...dashboardChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
       theme: value.isLightTheme ? 'light' : 'dark'
     };
 
     return dashChart;
+  }
+
+  instantiateDashboardChartFromRequest(value: ChartRequest, chartId: number, collData: CollectedData[]): DashboardChart {
+    const chart: Chart = {
+      id: chartId,
+      ...value
+    };
+
+    return this.instantiateDashboardChart(chart, collData);
   }
 
   // dataSource - property to show on the chart

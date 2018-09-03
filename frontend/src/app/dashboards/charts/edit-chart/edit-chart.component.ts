@@ -11,6 +11,7 @@ import {DataService} from '../../../core/services/data.service';
 import {ChartService} from '../../../core/services/chart.service';
 import {ToastrService} from '../../../core/services/toastr.service';
 import {Chart} from '../../../shared/models/chart.model';
+import {dashboardChartTypes} from '../models/dashboardChartTypes';
 
 @Component({
   selector: 'app-edit-chart',
@@ -41,7 +42,7 @@ export class EditChartComponent implements OnInit, OnChanges {
     if (this.dashboardChart && this.dashboardChart.id) {
       return 'Edit chart';
     } else {
-      this.dashboardChart.chartType.type = null;
+      // this.dashboardChart.chartType.type = null;
       return 'Create chart';
     }
   }
@@ -68,10 +69,10 @@ export class EditChartComponent implements OnInit, OnChanges {
     this.dashboardChart.showCommon = false;
 
     this.dropdownTypes = [
-      {label: 'Bar vertical', value: ChartType.BarVertical},
-      {label: 'Line chart', value: ChartType.LineChart},
-      {label: 'Pie', value: ChartType.Pie},
-      {label: 'Guage', value: ChartType.Guage}
+      {label: dashboardChartTypes[0].title, value: dashboardChartTypes[0]},
+      {label: dashboardChartTypes[1].title, value: dashboardChartTypes[1]},
+      {label: dashboardChartTypes[2].title, value: dashboardChartTypes[2]},
+      {label: dashboardChartTypes[3].title, value: dashboardChartTypes[3]},
     ];
 
     this.dropdownSources = [
@@ -147,19 +148,34 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   onEditChart() {
+    const chartRequest = this.createChartRequest();
     if (!this.dashboardChart.id) {
-      this.chartService.create(this.createChartRequest()).subscribe(this.handleSuccessfulEdit, this.handleFailedEdit);
+      this.chartService.create(chartRequest).subscribe((val) => {
+        this.handleSuccessfulCreate(val);
+      }, (err) => {
+        this.handleFailedEdit(err);
+      });
     } else {
-      this.chartService.update(this.dashboardChart.id,
-        this.createChartRequest()).subscribe(this.handleSuccessfulEdit, this.handleFailedEdit);
+      this.chartService.update(chartRequest, this.dashboardChart.id).subscribe(() => {
+        this.handleSuccessfulEdit(chartRequest, this.dashboardChart.id);
+      }, (err) => {
+        this.handleFailedEdit(err);
+      });
     }
   }
 
-  handleSuccessfulEdit(chart: Chart): void {
+  handleSuccessfulCreate(chart: Chart): void {
     const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(chart, this.collectedDataForChart);
     this.editChart.emit(dashboardChart);
     this.closeDialog();
   }
+
+  handleSuccessfulEdit(request: ChartRequest, id: number): void {
+    const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChartFromRequest(request, id, this.collectedDataForChart);
+    this.editChart.emit(dashboardChart);
+    this.closeDialog();
+  }
+
 
   handleFailedEdit(error) {
     this.toastrService.error(`Error occurred status: ${error.message}`);

@@ -1,11 +1,16 @@
 import {DashboardChartType} from './index';
 import {ChartType} from '../../../shared/models/chart-type.enum';
 
-export const customChartTypes: DashboardChartType[] = [
+export const dashboardChartTypes: DashboardChartType[] = [
   {
     title: 'Bar Vertical',
     name: 'bar-vertical',
     type: ChartType.BarVertical,
+  },
+  {
+    title: 'Line Chart',
+    name: 'line-chart',
+    type: ChartType.LineChart,
   },
   {
     title: 'Pie',
@@ -16,11 +21,6 @@ export const customChartTypes: DashboardChartType[] = [
     title: 'Guage',
     name: 'guage',
     type: ChartType.Guage,
-  },
-  {
-    title: 'Line Chart',
-    name: 'line-chart',
-    type: ChartType.LineChart,
   }
 
   // createChartType({
