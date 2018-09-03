@@ -18,7 +18,6 @@ import {ToastrService} from '../../../core/services/toastr.service';
 })
 export class EditChartComponent implements OnInit, OnChanges {
   @Output() editChart = new EventEmitter<DashboardChart>();
-  @Output() dashboardChartChange = new EventEmitter();
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardId: number;
@@ -149,20 +148,14 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   closeDialog() {
-    this.dashboardChartChange.emit();
-    this.display = false;
-    this.closed.emit();
-    // this.selectedSource = null;
-    // this.selectedType = null;
     this.chartForm.reset();
-    // this.dataForChart = [];
+    this.closed.emit();
   }
 
   onEditChart() {
     if (!this.dashboardChart.id) {
       this.chartService.create(this.createChartRequest()).subscribe(
         value => {
-          debugger;
           const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value, this.collectedDataForChart);
           // this.activeDashboardItem.charts.push(dashboardChart); // TODO: use this in dash component
           this.editChart.emit(dashboardChart);

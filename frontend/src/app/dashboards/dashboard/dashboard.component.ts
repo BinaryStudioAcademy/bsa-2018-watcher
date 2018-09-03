@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   cogItems: MenuItem[];
 
   displayEditChart = false;
-  chartToEdit = defaultOptions;
+  chartToEdit = { ...defaultOptions } ;
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
