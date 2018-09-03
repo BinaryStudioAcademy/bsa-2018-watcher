@@ -14,8 +14,8 @@ import {
   SpinnerModule,
   ButtonModule,
   TabMenuModule,
-  InputTextModule,
-  ProgressSpinnerModule} from 'primeng/primeng';
+  ProgressSpinnerModule,
+  InputTextModule} from 'primeng/primeng';
 import {EditDashboardComponent} from './editDashboard/editDashboard.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ToastModule} from 'primeng/toast';
@@ -31,12 +31,13 @@ import {PieChartComponent} from './06_pie_chart/pie-chart.component';
 import {DonutChartComponent} from './07_donut_chart/donut-chart.component';
 import {MarketChartComponent} from './08_market_chart/market-chart.component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
-import { PercentageBarChartComponent } from './10_percentage-bar-chart/percentage-bar-chart.component';
-import { PercentageLineChartComponent } from './11_percentage-line-chart/percentage-line-chart.component';
+import {PercentageBarChartComponent } from './10_percentage-bar-chart/percentage-bar-chart.component';
+import {PercentageLineChartComponent } from './11_percentage-line-chart/percentage-line-chart.component';
 import {NgxUIModule} from '@swimlane/ngx-ui';
 import {ChartDashboardComponent} from './charts/chart-dashboard/chart-dashboard.component';
 import {ChartBuilderComponent} from './charts/chart-builder/chart-builder.component';
 import {ChartComponent} from './charts/chart/chart.component';
+
 import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
 import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
 
@@ -53,6 +54,7 @@ import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
     TabMenuModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
+    InputTextModule,
     ToastModule,
     MessageModule,
 

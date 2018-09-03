@@ -15,12 +15,12 @@ export class DashboardService {
   }
 
   getAllByInstance(id: number): Observable<Dashboard[]> {
-      return this.apiService.get(`/${this.ctrlUrl}/${id}`);
+      return this.apiService.get(`/${this.ctrlUrl}/instance/${id}`);
   }
 
-  getDefaultInstance(): Observable<Instance> {
-    return this.apiService.get(`/${this.ctrlUrl}/FirstInstance`);
-  }
+  getById(id: number): Observable<Dashboard> {
+    return this.apiService.get(`/${this.ctrlUrl}/${id}`);
+}
 
   create(request: DashboardRequest): Observable<Dashboard> {
     return this.apiService.post(`/${this.ctrlUrl}`, request);
