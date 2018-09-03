@@ -32,7 +32,7 @@
   </div>
 
   <div class="btn-panel">
-    <button pButton label="&nbsp;" (click)="onSave()" [disabled]="isSaving" class="ui-button-raised ui-button-success btn-inline-flex">
+    <button (click)="onSave()" [disabled]="isSaving" class="btn-inline-flex ui-button-raised ui-button-success ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
       <p-progressSpinner class="btn-spinner" *ngIf="isSaving" strokeWidth="5"></p-progressSpinner>
       <span class="ui-button-text" *ngIf="!isSaving">Update</span>
     </button>

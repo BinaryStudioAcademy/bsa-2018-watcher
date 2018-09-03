@@ -127,26 +127,26 @@
     </div>
   </div>
 
-  <p class="field ui-g ui-fluid space">List of your organizations</p>
-  <div class="border">
+  <div class="ui-g">
+    <div class="ui-g ui-g-12 ui-fluid left-flex"><span>List of your organization</span></div>
 
-    <div class="ui-g ui-fluid">
-      <div class="ui-g-3 center">Name</div>
-      <div class="ui-g-6 center">Email</div>
-      <div class="ui-g-3 "></div>
-    </div>
+      <div class="ui-g ui-g-12">
+        <div class="ui-g-3 left-flex">Name</div>
+        <div class="ui-g-6 left-flex">Email</div>
+        <div class="ui-g-3 left-flex"></div>
+      </div>
 
-    <div class=" ui-fluid" *ngIf="lstUserCompany">
-      <p-scrollPanel [style]="{width: '457px', height: '67px'}" styleClass="custom">
-        <div *ngFor="let organization of lstUserCompany; let i = index" class=" ui-fluid">
-          <div class="ui-g-3 center fieldOrg">{{organization?.name}} </div>
-          <div class="ui-g-6 center fieldOrg">{{organization?.email}} </div>
-          <div class="ui-g-3 center">
-            <button pButton label="Unassign" [disabled]="lstUnassign[i]" (click)="onUnassign(organization, i)" class="ui-button-raised ui-button-danger"></button>
+      <p-scrollPanel [style]="{width: '100%', height: '80px'}" class="ui-g-12">
+        <div class="list-organization">
+          <div *ngFor="let organization of lstUserCompany; let i = index" class="ui-g">
+            <div class="ui-g-3 left-flex">{{organization?.name}}</div>
+            <div class="ui-g-6 left-flex">{{organization?.email}}</div>
+            <div class="ui-g-3 center-flex">
+              <button pButton label="Unassign" [disabled]="lstUnassign[i]" (click)="onUnassign(organization, i)" class="ui-button-danger"></button>
+            </div>
           </div>
         </div>
       </p-scrollPanel>
-    </div>
 
   </div>
 
