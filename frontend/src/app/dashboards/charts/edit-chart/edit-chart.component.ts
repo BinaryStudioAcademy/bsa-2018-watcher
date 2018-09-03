@@ -109,9 +109,9 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   sources() {
-    if (this.dashboardChart.dataSources.length > 0) { // не ясно, что происходит
+    /*if (this.dashboardChart.dataSources.length > 0) { // не ясно, что происходит
       this.dashboardChart.dataSources = [];
-    }
+    }*/
 
     return this.dashboardChart.showCommon ? this.dropdownSourcesProcesses : this.dropdownSources;
   }
