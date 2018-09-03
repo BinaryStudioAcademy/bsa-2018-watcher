@@ -12,7 +12,7 @@ export const defaultOptions = {
   // colorScheme:  {
   //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   // },
-  colorScheme: colorSets.find(s => s.name === 'cool'),
+  colorScheme: {...colorSets.find(s => s.name === 'cool')},
   schemeType: 'ordinal',
   showLegend: true,
   legendTitle: 'Legend',

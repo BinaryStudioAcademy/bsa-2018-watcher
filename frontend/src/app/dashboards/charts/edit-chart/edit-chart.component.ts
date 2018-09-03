@@ -10,6 +10,7 @@ import { CollectedData } from '../../../shared/models/collected-data.model';
 import { DataService } from '../../services/data.service';
 import { ChartService } from '../../../core/services/chart.service';
 import { ToastrService } from '../../../core/services/toastr.service';
+import {defaultOptions} from '../models/chart-options';
 
 @Component({
   selector: 'app-edit-chart',
@@ -18,12 +19,50 @@ import { ToastrService } from '../../../core/services/toastr.service';
 })
 export class EditChartComponent implements OnInit, OnChanges {
   @Output() editChart = new EventEmitter<DashboardChart>();
+
+
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardId: number;
   @Input() dashboardChart: DashboardChart;
+
+  get chartDatasources() {
+    if (this.dashboardChart) {
+      return this.dashboardChart.showCommon;
+    } else {
+      return [];
+    }
+  }
+  // @Input() dashboardChart: DashboardChart = {...defaultOptions};
+  // @Output()
+  // get chart() {
+  //   return this.dashboardChart;
+  // }
+
+  // @Output() chartChanged = new EventEmitter<DashboardChart>();
+
+  // @Input() chart: DashboardChart;
+  // set chart(val: DashboardChart) {
+  //   this.dashboardChart = val;
+  //   this.chartChanged.emit(this.dashboardChart);
+  // }
   type: ChartType;
-  // data: CustomData[] = [];
+
+  get dialogTitle() {
+    if (this.dashboardChart && this.dashboardChart.id) {
+      return 'Edit chart';
+    }  else {
+      return 'Create chart';
+    }
+  }
+
+  get spinnerDisabled() {
+    if (this.dashboardChart && this.dashboardChart.showCommon) {
+      return false;
+    } else {
+      return true;
+    }
+  }
   // object to send to backend to add or edit dashboardChart
   // in dashboard component fill this object with real data if it is edit mode, or fill it with default data from defaultOptions and set
   // current dashboard id if it is create mode
@@ -32,7 +71,6 @@ export class EditChartComponent implements OnInit, OnChanges {
   dropdownSources: SelectItem[];
   dropdownSourcesProcesses: SelectItem[];
   collectedDataForChart: CollectedData[] = [];
-  // chartType: DashboardChartType = {...customChartTypes[0]};
   showPreview = false;
   chartForm: FormGroup;
 

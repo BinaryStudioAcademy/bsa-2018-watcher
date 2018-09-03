@@ -1,11 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DashboardChart } from '../../models/dashboard-chart';
-import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
 import { applyDrag, generateItems } from './utils';
 import { ChartService } from '../../../core/services/chart.service';
 import { ToastrService } from '../../../core/services/toastr.service';
-import { defaultOptions } from '../../charts/models/chart-options';
-
 @Component({
   selector: 'app-chart-dashboard',
   templateUrl: './chart-dashboard.component.html',

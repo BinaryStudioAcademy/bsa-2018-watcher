@@ -123,20 +123,15 @@ export class DataService {
   }
 
   mapToMultiDataOnUpdate(oldData: CustomData[], newData: CollectedData, properties: DataProperty[]): CustomData[] {
-    const dataToSet: CustomData[] = [];
     if (oldData.length > 20) {
       // TODO: remove oldest element from array - use order by or sort or smt coz data can be not ordered by date
       // TODO: maybe depend on chart's setting get from old array specific amount of data or etc.
-      dataToSet.push(oldData.slice(1)); // Start from first element(removes oldest data el)
+      oldData.push(oldData.slice(1)); // Start from first element(removes oldest data el)
     }
-
-    debugger;
     const newDataToPush = this.mapToMultiData([newData], properties);
     for (let i = 0; i < properties.length; i++) {
-       // oldData.filter(d => d.name === 'CPU')
       oldData[i].series.push(...newDataToPush[i].series);
     }
-    dataToSet.push(newDataToPush);
 
     return oldData;
   }
