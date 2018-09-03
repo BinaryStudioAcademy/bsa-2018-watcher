@@ -24,6 +24,8 @@ namespace Watcher.DataAccess.Entities
         public string UserId { get; set; }
         public User User { get; set; }
 
+        public string UserEmail { get; set; }
+
         public int? ResponseId { get; set; }
         public Response Response { get; set; }
 

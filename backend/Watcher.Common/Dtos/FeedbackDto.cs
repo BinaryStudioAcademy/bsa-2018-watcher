@@ -24,6 +24,8 @@ namespace Watcher.Common.Dtos
         
         public UserDto User { get; set; }
 
+        public string UserEmail { get; set; }
+
         public ResponseDto Response { get; set; }
     }
 }
