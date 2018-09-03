@@ -28,7 +28,7 @@ import {ChartComponent} from './charts/chart/chart.component';
 import {DataService} from './services/data.service';
 import {ChartsComponent} from './charts/charts.component';
 import { InstanceListComponent } from './instance-list/instance-list.component';
-
+import { DownloadAppComponent } from './download-app/download-app.component';
 
 @NgModule({
   imports: [
@@ -76,7 +76,8 @@ import { InstanceListComponent } from './instance-list/instance-list.component';
     ChartComponent,
     ChartBuilderComponent,
     ChartDashboardComponent,
-    InstanceListComponent
+    InstanceListComponent,
+    DownloadAppComponent,
   ],
   providers: [DataService],
   exports: []

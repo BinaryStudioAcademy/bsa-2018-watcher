@@ -33,7 +33,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   currentGuidId: string;
   showDownloadModal: boolean;
   isSearching: boolean;
-  isFeedback: boolean;
+  isComponentInvisible: boolean;
   menuItems: MenuItem[];
   user: User;
   isDeleting: Boolean = false;
@@ -41,7 +41,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   constructor(private router: Router,
               private instanceService: InstanceService,
-              private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
               private authService: AuthService) {
     router.events.forEach((event) => {
@@ -62,9 +61,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
         this.subscribeRouteChanges();
       }
     );
-    this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
-    this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-  }
+    }
 
   ngAfterContentChecked(): void {
     this.highlightCurrentSetting();
@@ -87,13 +84,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       label: 'Notification Settings',
       icon: 'fa fa-fw fa-send',
       routerLink: ['/user/settings/notification-settings']
-    }];
-
-    this.instanceItems = [{
-      label: 'Create Instance',
-      title: 'Create Instance',
-      icon: 'pi pi-pw pi-plus',
-      routerLink: ['instances/create'],
     }];
 
     this.adminItems = [{
@@ -128,7 +118,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       routerLink:  [`instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
         this.instanceService.instanceChecked.emit(instance);
-        // this.router.navigate([`/user/instances/${instance.id}/dashboards`]);
       },
       items: [{
         label: 'Edit',
@@ -159,31 +148,18 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   async deleteInstance(id: number, index: number) {
     if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
-      this.popupMessage = `Instance is deleting`
+      this.popupMessage = 'Instance is deleting';
       this.isDeleting = true;
       this.instanceService.delete(id).subscribe((res: Response) => {
         this.instanceService.instanceRemoved.emit(id);
         this.toastrService.success('Deleted instance');
         this.instanceItems.splice(index, 1);
         this.router.navigate([`instances`]);
-        this.onSearchChange(this.currentQuery);
         this.isDeleting = false;
       });
     }
   }
 
-  onInstanceAdded(instance: Instance) {
-    const item: MenuItem = this.instanceToMenuItem(instance);
-    this.instanceItems.push(item);
-    this.onSearchChange(this.currentQuery);
-  }
-
-  onInstanceEdited(instance: Instance) {
-    const item: MenuItem = this.instanceToMenuItem(instance);
-    const index: number = this.instanceItems.findIndex(inst => inst.title === instance.id.toString());
-    this.instanceItems[index] = item;
-    this.onSearchChange(this.currentQuery);
-  }
 
   private subscribeRouteChanges(): void {
     this.router.events.subscribe((event: RouterEvent) => {
@@ -198,17 +174,15 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     if (this.activeUrl.match(this.regexSettingsUrl)) {
       this.menuItems = this.settingsItems;
       this.isSearching = false;
-      this.isFeedback = false;
+      this.isComponentInvisible = false;
     } else if (this.activeUrl.match(this.regexFeedbackUrl)) {
-      this.isFeedback = true;
+      this.isComponentInvisible = true;
     } else if (this.activeUrl.match(this.regexAdminUrl)) {
       this.menuItems = this.adminItems;
       this.isSearching = false;
-      this.isFeedback = false;
+      this.isComponentInvisible = false;
     } else if (this.activeUrl.match(this.regexDashboardUrl)) {
-      this.menuItems = this.instanceItems;
-      this.isSearching = true;
-      this.isFeedback = false;
+      this.isComponentInvisible = true;
     }
   }
 
@@ -238,21 +212,5 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   private getSettingByUrl(url: string): Element {
     return document.querySelector(`div.ui-panelmenu-header a[href="${url}"]`);
-  }
-
-  onSearchChange(searchQuery: string): void {
-    this.currentQuery = searchQuery;
-    this.instanceItems = this.instanceItems.map( (menuitem: MenuItem) => {
-      if (!menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase())) {
-        menuitem.visible = false;
-      } else {
-        menuitem.visible = true;
-      }
-      if (menuitem.label === this.menuItems[0].label) { menuitem.visible = true; }
-      return menuitem;
-    });
-  }
-  onClose(): void {
-    this.showDownloadModal = false;
   }
 }
