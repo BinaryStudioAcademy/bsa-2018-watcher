@@ -133,7 +133,7 @@
 
                 if (dto.NotificationSetting.IsEmailable)
                     await _emailProvider.SendMessageOneToOne("watcher@net.com",
-                        $"{dto.NotificationSetting.Type} Notification", receiver.Email,
+                        $"{dto.NotificationSetting.Type} Notification", receiver.EmailForNotifications,
                         dto.Text, "");
 
                 dtos.Add(dto);
