@@ -80,7 +80,7 @@ import { InstanceService } from '../core/services/instance.service';
     ChartBuilderComponent,
     ChartDashboardComponent,
   ],
-  providers: [DataService, ToastrService, DashboardService, InstanceService],
+  providers: [DataService, ToastrService, DashboardService],
   exports: []
 })
 export class DashboardsModule {

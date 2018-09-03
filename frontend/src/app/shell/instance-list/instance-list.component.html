@@ -10,3 +10,4 @@
   </div>
 </div>
 <app-download-app (closed)="onClose()" [display]="showDownloadModal" [guid]="currentGuidId"></app-download-app>
+<app-spinner-popup [display]="isLoading" [header]="popupMessage"></app-spinner-popup>

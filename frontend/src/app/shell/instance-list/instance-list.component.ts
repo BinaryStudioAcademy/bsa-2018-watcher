@@ -17,12 +17,18 @@ export class InstanceListComponent implements OnInit {
   constructor(private instanceService: InstanceService,
               private toastrService: ToastrService,
               private authService: AuthService,
-              private router: Router) { }
+              private router: Router) {
+                this.instanceService.instanceAdded.subscribe(instance => {this.onInstanceAdded(instance);
+                  console.log('SUBSCRIBED ON EVENT'); });
+                this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
+               }
 
   private menuItems: MenuItem[];
   private user: User;
   private currentGuidId: string;
   private showDownloadModal: boolean;
+  private popupMessage: string;
+  private isLoading: boolean;
 
   private currentQuery = '';
 
@@ -35,19 +41,20 @@ export class InstanceListComponent implements OnInit {
         this.configureInstances(this.user.lastPickedOrganizationId);
       }
     );
-    this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
-    this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-  }
+   }
 
 
   // TODO: refactor items.foreach add range of items instead of every
   configureInstances(organizationId: number): void {
+    this.isLoading = true;
+    this.popupMessage = 'Loading instances info';
     this.instanceService.getAllByOrganization(organizationId).subscribe((data: Instance[]) => {
       if (data) {
         const items = data.map(inst => this.instanceToMenuItem(inst));
         items.forEach(inst => this.menuItems.push(inst));
         this.toastrService.success('Get instances from server');
       }
+      this.isLoading = false;
     });
   }
 
@@ -96,27 +103,26 @@ export class InstanceListComponent implements OnInit {
 
   async deleteInstance(id: number, index: number) {
     if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
-    // here need to be configuration of popup
+        this.isLoading = true;
+        this.popupMessage = 'Loading instances info';
         this.instanceService.delete(id).subscribe((res: Response) => {
         this.instanceService.instanceRemoved.emit(id);
         this.toastrService.success('Deleted instance');
         this.menuItems.splice(index, 1);
         this.router.navigate([`instances`]);
         this.onSearchChange(this.currentQuery);
-        // close spinner popup
+        this.isLoading = false;
       });
     }
   }
 
   onInstanceAdded(instance: Instance) {
-    console.log('INSATNCE ADSD');
     const item: MenuItem = this.instanceToMenuItem(instance);
     this.menuItems.push(item);
     this.onSearchChange(this.currentQuery);
   }
 
   onInstanceEdited(instance: Instance) {
-    console.log('INSATNCE ADSD');
     const item: MenuItem = this.instanceToMenuItem(instance);
     const index: number = this.menuItems.findIndex(inst => inst.id === instance.id.toString());
     this.menuItems[index] = item;

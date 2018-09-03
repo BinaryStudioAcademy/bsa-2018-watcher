@@ -31,6 +31,9 @@ import { NotificationBlockComponent } from '../notification/notification-block/n
 import { SpinnerPopupComponent } from './spinner-popup/spinner-popup.component';
 import { InstanceListComponent } from './instance-list/instance-list.component';
 import { DownloadAppComponent } from './download-app/download-app.component';
+import { InstanceService } from '../core/services/instance.service';
+import { ToastrService } from '../core/services/toastr.service';
+import { AuthService } from '../core/services/auth.service';
 
 
 @NgModule({
@@ -66,6 +69,10 @@ import { DownloadAppComponent } from './download-app/download-app.component';
     ClickOutsideDirective,
     NotificationBlockComponent,
     SpinnerPopupComponent
+  ],
+  providers: [
+    ToastrService,
+    AuthService
   ]
 })
 export class ShellModule { }
