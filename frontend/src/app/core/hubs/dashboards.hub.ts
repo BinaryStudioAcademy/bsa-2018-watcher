@@ -13,6 +13,7 @@ import {CollectedData} from '../../shared/models/collected-data.model';
   providedIn: 'root'
 })
 export class DashboardsHub {
+  private isConnect: boolean;
   private hubConnection: HubConnection | undefined;
   private connectionEstablishedSub = new Subject<boolean>();
   public connectionEstablished$ = from(this.connectionEstablishedSub);
@@ -88,6 +89,7 @@ export class DashboardsHub {
     this.hubConnection.onclose(err => {
       console.log('DashboardHub connection closed');
       console.error(err);
+      this.isConnect = false;
       this.startDashboardHubConnection();
     });
   }
@@ -95,6 +97,7 @@ export class DashboardsHub {
 
   // Reconnect loop
   private startDashboardHubConnection(): Promise<void> {
+    if (this.isConnect) { return; }
     console.log('DashboardHub trying to connect');
     return this.hubConnection.start()
       .then(() => {
