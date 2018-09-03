@@ -10,7 +10,7 @@
       </app-chart>
       <div class="btn-panel">
         <button #btn type="button" class="btn-chart" pButton icon="fa fa-fw fa-edit"
-                (click)="showPopupEditChart(chart)"></button>
+                (click)="edit(chart)"></button>
         <button #btn type="button" class="btn-chart ui-button-danger" pButton icon="fa fa-fw fa-remove"
                 (click)="onDeleteChart(chart.id)"></button>
       </div>
@@ -18,9 +18,9 @@
   </smooth-dnd-container>
 </div>
 
-<app-edit-chart (editChart)="onChartEdited($event)"
-                (closed)="onChartEditClosed()"
-                [display]="displayEditChart"
-                [dashboardId]="dashboardId"
-                [dashboardChart]="chartToEdit">
-</app-edit-chart>
+<!--<app-edit-chart (editChart)="onChartEdited($event)"-->
+                <!--(closed)="onChartEditClosed()"-->
+                <!--[display]="displayEditChart"-->
+                <!--[dashboardId]="dashboardId"-->
+                <!--[dashboardChart]="chartToEdit">-->
+<!--</app-edit-chart>-->

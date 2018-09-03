@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
 import { DashboardChart } from '../../models/dashboard-chart';
 import { applyDrag, generateItems } from './utils';
 import { ChartService } from '../../../core/services/chart.service';
@@ -11,6 +11,7 @@ import { ToastrService } from '../../../core/services/toastr.service';
 export class ChartDashboardComponent implements OnInit {
   @Input() charts: DashboardChart[] = [];
   @Input() dashboardId: number;
+  @Output() editChart = new EventEmitter<DashboardChart>();
 
   displayEditChart = false;
 
@@ -35,8 +36,8 @@ export class ChartDashboardComponent implements OnInit {
     this.displayEditChart = false;
   }
 
-  showPopupEditChart(chart: DashboardChart) {
-    this.chartToEdit = { ...chart };
+  edit(chart: DashboardChart) {
+    this.editChart.emit(chart);
     this.displayEditChart = true;
   }
 

@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
-import {CustomData} from '../charts/models';
+import {CustomData} from '../../dashboards/charts/models';
 import {CollectedData} from '../../shared/models/collected-data.model';
-import {NumberSeriesItem, SeriesItem} from '../models/series-item';
-import {MultiChartItem} from '../models/multi-chart-item';
+import {NumberSeriesItem, SeriesItem} from '../../dashboards/models/series-item';
+import {MultiChartItem} from '../../dashboards/models/multi-chart-item';
 import {DataProperty, dataPropertyLables} from '../../shared/models/data-property.enum';
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {Chart} from '../../shared/models/chart.model';
-import {DashboardChart} from '../models/dashboard-chart';
-import {customChartTypes} from '../charts/models/customChartTypes';
-import {defaultOptions} from '../charts/models/chart-options';
+import {DashboardChart} from '../../dashboards/models/dashboard-chart';
+import {customChartTypes} from '../../dashboards/charts/models/customChartTypes';
+import {defaultOptions} from '../../dashboards/charts/models/chart-options';
 
 @Injectable({
   providedIn: 'root'
@@ -68,7 +68,7 @@ export class DataService {
 
   // dataSource - property to show on the chart
   prepareData(chartType: ChartType, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
-    if (!dataSources || (!chartType && chartType !== ChartType.BarVertical) || (!dataToTransform && dataToTransform.length < 1)) {
+    if (!dataSources || (!chartType && chartType !== ChartType.BarVertical) || (!dataToTransform || dataToTransform.length < 1)) {
       return [];
     }
     if (chartType === ChartType.LineChart) {

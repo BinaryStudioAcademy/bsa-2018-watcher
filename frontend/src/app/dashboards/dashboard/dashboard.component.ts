@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ConfirmationService} from 'primeng/primeng';
-import {MenuItem, MessageService} from 'primeng/api';
+import {MenuItem, } from 'primeng/api';
 import {DashboardService} from '../../core/services/dashboard.service';
 import {Dashboard} from '../../shared/models/dashboard.model';
 import {ToastrService} from '../../core/services/toastr.service';
@@ -11,7 +11,7 @@ import {Subscription} from 'rxjs';
 import {InstanceService} from '../../core/services/instance.service';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 import {AuthService} from '../../core/services/auth.service';
-import {DataService} from '../services/data.service';
+import {DataService} from '../../core/services/data.service';
 import {ChartService} from '../../core/services/chart.service';
 import {CollectedDataService} from '../../core/services/collected-data.service';
 import {CollectedData} from '../../shared/models/collected-data.model';
@@ -22,7 +22,7 @@ import {DashboardChart} from '../models/dashboard-chart';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.sass'],
-  providers: [ToastrService, ConfirmationService, DashboardService, MessageService]
+  providers: [ConfirmationService]
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private paramsSubscription: Subscription;
@@ -75,9 +75,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.getDashboardsByInstanceId(this.instanceId).then(value => {
         this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceId)
           .subscribe(data => {
+            this.collectedDataForChart = data || [];
+            this.onDashboards(value);
             if (data && data.length > 0) {
-              this.collectedDataForChart = data;
-              this.onDashboards(value);
               // -1 is last item - plus sign
               for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
                 for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
@@ -86,26 +86,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
                   this.dashboardMenuItems[i].charts[j].data = [...tempData];
                 }
               }
-              // for (let i = 0; i < this.dashboardMenuItems.length; i++) {
-              //   for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
-              //     this.dashboardMenuItems[i].charts[j].data = this.dataService.prepareData(
-              //       this.dashboardMenuItems[i].charts[j].chartType.type, this.dashboardMenuItems[i].charts[j].dataSources, info);
-              //   }
-              // }
             }
             this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
           }, err => {
             console.error(err);
             this.toastrService.error('Error occured while fetching instance\'s collected Data');
           });
-      }).catch();
+      }).catch(reason => {
+        console.error(reason);
+          this.toastrService.error('Error occured while fetching instance\'s Dashboards');
+      });
 
     });
 
     this.cogItems = [{
       label: 'Add item',
       icon: 'fa fa-fw fa-plus',
-      command: (event?: any) => this.showPopupAddChart(),
+      command: (event?: any) => {
+        this.chartToEdit = { ...defaultOptions };
+        this.showPopupEditChart();
+      },
     },
       {
         label: 'Edit',
@@ -243,6 +243,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.displayEditDashboard = true;
   }
 
+  onEditChart(chart: DashboardChart) {
+    console.log('2', chart);
+    this.chartToEdit = { ...chart };
+    this.showPopupEditChart();
+  }
+
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
@@ -289,7 +295,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.displayEditChart = false;
   }
 
-  showPopupAddChart() {
+  showPopupEditChart() {
+    console.log('3', this.chartToEdit);
     this.displayEditChart = true;
   }
 

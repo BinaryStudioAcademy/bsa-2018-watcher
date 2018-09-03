@@ -16,8 +16,9 @@ import { DashboardsHub} from './hubs/dashboards.hub';
 import { RoleService } from './services/role.service';
 import { ChartService } from './services/chart.service';
 import { UserOrganizationService } from './services/user-organization.service';
-import { NotificationsHubService } from './hubs/notifications.hub';
 import {CollectedDataService} from './services/collected-data.service';
+import {DataService} from './services/data.service';
+import {DashboardService} from './services/dashboard.service';
 
 @NgModule({
   imports: [
@@ -39,6 +40,8 @@ import {CollectedDataService} from './services/collected-data.service';
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },
     AuthGuard,
+    DataService,
+    DashboardService,
     DashboardsHub
   ],
 
