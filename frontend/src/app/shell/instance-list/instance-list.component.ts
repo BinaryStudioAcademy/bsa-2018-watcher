@@ -36,36 +36,34 @@ export class InstanceListComponent implements OnInit {
     this.authService.currentUser.subscribe(
       user => {
         this.user = user;
-        // TODO: make this in one method
-        this.initMenuItems();
         this.configureInstances(this.user.lastPickedOrganizationId);
       }
     );
    }
 
 
-  // TODO: refactor items.foreach add range of items instead of every
   configureInstances(organizationId: number): void {
     this.isLoading = true;
     this.popupMessage = 'Loading instances info';
-    this.instanceService.getAllByOrganization(organizationId).subscribe((data: Instance[]) => {
-      if (data) {
-        const items = data.map(inst => this.instanceToMenuItem(inst));
-        items.forEach(inst => this.menuItems.push(inst));
-        this.toastrService.success('Get instances from server');
-      }
-      this.isLoading = false;
-    });
-  }
 
-  private initMenuItems(): void {
     this.menuItems = [{
       label: 'Create Instance',
       title: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
       routerLink: ['instances/create'],
     }];
+
+    this.instanceService.getAllByOrganization(organizationId).subscribe((data: Instance[]) => {
+      if (data) {
+        const items = data.map(inst => this.instanceToMenuItem(inst));
+        this.menuItems = this.menuItems.concat(items);
+        this.toastrService.success('Get instances from server');
+      }
+
+      this.isLoading = false;
+    });
   }
+
 
   instanceToMenuItem(instance: Instance): MenuItem {
     const item: MenuItem = {
@@ -81,14 +79,6 @@ export class InstanceListComponent implements OnInit {
         routerLink: [`instances/${instance.id}/edit`],
         styleClass: 'instance-options'
       }, {
-        label: 'Delete',
-        icon: 'fa fa-close',
-        command: () => {
-          const index = this.menuItems.findIndex(i => i === item);
-          this.deleteInstance(instance.id, index);
-        },
-        styleClass: 'instance-options'
-      }, {
         label: 'Download app',
         icon: 'fa fa-download',
         styleClass: 'instance-options',
@@ -96,7 +86,15 @@ export class InstanceListComponent implements OnInit {
           this.showDownloadModal = true;
           this.currentGuidId = instance.guidId;
         }
-      }]
+      }, {
+        label: 'Delete',
+        icon: 'fa fa-close',
+        command: () => {
+          const index = this.menuItems.findIndex(i => i === item);
+          this.deleteInstance(instance.id, index);
+        },
+        styleClass: 'instance-options'
+      } ]
     };
     return item;
   }
@@ -104,13 +102,15 @@ export class InstanceListComponent implements OnInit {
   async deleteInstance(id: number, index: number) {
     if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
         this.isLoading = true;
-        this.popupMessage = 'Loading instances info';
+        this.popupMessage = 'Deleting instance';
+
         this.instanceService.delete(id).subscribe((res: Response) => {
         this.instanceService.instanceRemoved.emit(id);
         this.toastrService.success('Deleted instance');
         this.menuItems.splice(index, 1);
         this.router.navigate([`instances`]);
         this.onSearchChange(this.currentQuery);
+
         this.isLoading = false;
       });
     }
@@ -129,7 +129,6 @@ export class InstanceListComponent implements OnInit {
     this.onSearchChange(this.currentQuery);
   }
 
-  // TODO: Make refactor (menuitem can be lower to prevent check on every step)
   onSearchChange(searchQuery: string): void {
     this.currentQuery = searchQuery;
     this.menuItems = this.menuItems.map( (menuitem: MenuItem) => {
@@ -138,9 +137,10 @@ export class InstanceListComponent implements OnInit {
       } else {
         menuitem.visible = true;
       }
-      if (menuitem.label === this.menuItems[0].label) { menuitem.visible = true; }
       return menuitem;
     });
+    // [0] element of menuItems is Create button
+    this.menuItems[0].visible = true;
   }
 
   onClose(): void {
