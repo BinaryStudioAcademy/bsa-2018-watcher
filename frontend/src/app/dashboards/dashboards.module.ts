@@ -14,6 +14,7 @@ import {
   SpinnerModule,
   ButtonModule,
   TabMenuModule,
+  InputTextModule,
   ProgressSpinnerModule} from 'primeng/primeng';
 import {EditDashboardComponent} from './editDashboard/editDashboard.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -43,6 +44,7 @@ import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
 @NgModule({
   imports: [
     CommonModule,
+    InputTextModule,
     TabViewModule,
     PanelMenuModule,
     ButtonModule,

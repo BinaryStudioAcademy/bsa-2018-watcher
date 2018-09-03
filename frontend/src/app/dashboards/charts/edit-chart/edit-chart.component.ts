@@ -10,7 +10,9 @@ import { CollectedData } from '../../../shared/models/collected-data.model';
 import { DataService } from '../../services/data.service';
 import { ChartService } from '../../../core/services/chart.service';
 import { ToastrService } from '../../../core/services/toastr.service';
-import {defaultOptions} from '../models/chart-options';
+import {colorSets} from '@swimlane/ngx-charts/release/utils';
+import {customChartTypes} from '../models/customChartTypes';
+import * as shape from 'd3-shape';
 
 @Component({
   selector: 'app-edit-chart',
@@ -19,12 +21,47 @@ import {defaultOptions} from '../models/chart-options';
 })
 export class EditChartComponent implements OnInit, OnChanges {
   @Output() editChart = new EventEmitter<DashboardChart>();
-
-
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardId: number;
-  @Input() dashboardChart: DashboardChart;
+  @Input('dashboardChart') dashboardChart = {
+    view: [716, 337],
+    id: 0,
+    showCommon: true,
+    threshold: 0,
+    mostLoaded: '',
+    // colorScheme:  {
+    //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    // },
+    colorScheme: {...colorSets.find(s => s.name === 'cool')},
+    schemeType: 'ordinal',
+    showLegend: true,
+    legendTitle: 'Legend',
+    gradient: false,
+    showXAxis: true,
+    showYAxis: true,
+    showXAxisLabel: true,
+    showYAxisLabel: true,
+    yAxisLabel: '',
+    xAxisLabel: '',
+    autoScale: true,
+    showGridLines: true,
+    rangeFillOpacity: 0.5,
+    roundDomains: false,
+    tooltipDisabled: false,
+    showSeriesOnHover: true,
+    curve: shape.curveLinear,
+    curveClosed: shape.curveCardinalClosed,
+    title: '',
+    dataSources: [],
+    activeEntries: [],
+    chartType: {...customChartTypes[0]},
+    theme: 'light',
+  } as DashboardChart;
+
+
+  @Output() dashboardChartChange = new EventEmitter();
+
 
   get chartDatasources() {
     if (this.dashboardChart) {
@@ -164,6 +201,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   closeDialog() {
+    this.dashboardChartChange.emit();
     this.display = false;
     this.closed.emit();
     // this.selectedSource = null;
