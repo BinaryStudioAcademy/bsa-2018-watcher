@@ -15,8 +15,7 @@ import {
   ButtonModule,
   TabMenuModule,
   ProgressSpinnerModule,
-  InputTextModule,
-  ConfirmationService} from 'primeng/primeng';
+  InputTextModule} from 'primeng/primeng';
 import { EditDashboardComponent} from './editDashboard/editDashboard.component';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ToastModule} from 'primeng/toast';
@@ -40,10 +39,9 @@ import {ChartComponent} from './charts/chart/chart.component';
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 import { ToastrService } from '../core/services/toastr.service';
 import { DashboardService } from '../core/services/dashboard.service';
-import { InstanceService } from '../core/services/instance.service';
 
 import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
-import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
+import {NgxSmoothDnDModule} from 'ngx-smooth-dnd';
 
 @NgModule({
   imports: [
@@ -64,7 +62,7 @@ import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
     NgxUIModule,
     NgxChartsModule,
     // NgxDnDModule,
-
+    NgxSmoothDnDModule,
     DashboardRoutingModule,
     DropdownModule,
     CheckboxModule,
@@ -90,8 +88,6 @@ import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
 
     ChartComponent,
     ChartDashboardComponent,
-    ContainerComponent,
-    DraggableComponent,
     EditChartComponent
   ],
   providers: [ToastrService, DashboardService],

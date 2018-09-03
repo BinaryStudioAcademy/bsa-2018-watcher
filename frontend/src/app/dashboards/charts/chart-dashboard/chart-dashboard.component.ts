@@ -34,19 +34,15 @@ export class ChartDashboardComponent implements OnInit {
     this.editChart.emit(chart);
   }
 
-  onDeleteChart(id: number) {
-    this.chartService.delete(id).subscribe(
-      (value) => {
-        this.deleteChart.emit(id);
-      },
-      error => {
-        this.toastrService.error(`Error occurred status: ${error.message}`);
-      });
-  }
-
   async delete(id: number): Promise<void> {
     if (await this.toastrService.confirm('You sure you want to delete chart?')) {
-      this.onDeleteChart(id);
+      this.chartService.delete(id).subscribe(
+        (value) => {
+          this.deleteChart.emit(id);
+        },
+        error => {
+          this.toastrService.error(`Error occurred status: ${error.message}`);
+        });
     }
   }
 }
