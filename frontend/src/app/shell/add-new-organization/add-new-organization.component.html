@@ -1,69 +1,70 @@
 <p-dialog header="Add new organizations" [(visible)]="display" [width]="350" [minWidth]="200" [minY]="70" [closable]="false"
 [modal]="true" [responsive]="true" [draggable]="false" [width]="350" [minWidth]="200" [maximizable]="false" [baseZIndex]="999"  >
 
-  <form class="organizationForm" [formGroup]="organizationForm">
-    <div class="ui-g">
-      <div class="ui-g-12 ui-md-12 ui-lg-12">
-        <div class="label">Name*:</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input formControlName="name" type="text" pInputText placeholder="Company name"/>
-              <div *ngIf="organizationForm.get('name').errors && (organizationForm.get('name')?.dirty || organizationForm.get('name')?.touched)" class="alert alert-danger">
-                <div *ngIf="organizationForm.get('name').errors.required">Company name is required.</div>
-                <div *ngIf="organizationForm.get('name').errors.minlength">Company name must be at least 4 characters long.</div>
-              </div>
+  <div class="ui-g">
+    <div class="ui-g-12 ui-md-12 ui-lg-12">
+      <div class="label">Name*:</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <div class="ui-inputgroup">
+            <input [(ngModel)]="name" type="text" pInputText placeholder="Company name"
+            required id="cName" required minlength="4" #cName="ngModel" />
+            <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
+              <div *ngIf="cName.errors.required">Company name is required.</div>
+              <div *ngIf="cName.errors.minlength">Company name must be at least 4 characters long.</div>
             </div>
-          </div>
-        </div>
-
-        <div class="label">Email:</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input formControlName="email" type="email" pInputText placeholder="Email"/>
-              <div *ngIf="organizationForm.get('email').errors && (organizationForm.get('email')?.dirty || organizationForm.get('email')?.touched)" class="alert alert-danger">
-                <div *ngIf="organizationForm.get('email').errors.required"> Email is required.</div>
-                <div *ngIf="organizationForm.get('email').errors.email">Email must be a valid email address</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="label">Contact number:</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <p-inputMask formControlName="contactNumber" type="phone" mask="+380 (99) 999-99-99"  placeholder="Contact number"></p-inputMask>
-            </div>
-          </div>
-        </div>
-
-        <div class="label">Web site:</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <div class="ui-inputgroup">
-              <input formControlName="webSite" type="text" pInputText placeholder="Web site">
-              <div *ngIf="organizationForm.get('webSite') && (organizationForm.get('webSite')?.dirty || organizationForm.get('webSite')?.touched)" class="alert alert-danger">
-                <div *ngIf="organizationForm.get('webSite').errors">Web site must be a valid.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="label">Description:</div>
-        <div class="ui-g ui-fluid">
-          <div class="ui-g-12">
-            <textarea rows="5" pInputTextarea  [(ngModel)]="description"></textarea>
           </div>
         </div>
       </div>
-    </div>
-    <button id="hiddenSaveButton" #hiddenSaveButton class="hidden-button" type="submit" (click)="onAdd()" style="display: none;"></button>
-  </form>
 
-  <p-footer>
-      <button pButton type="button" label="Add" [disabled]="!organizationForm.valid" (click)="hiddenSaveButton.click()"  class="ui-button-success button"></button>
-      <button pButton type="button" class="ui-button-raised ui-button-danger button" (click)="onClose()" label="Cancel"></button>
-  </p-footer>
+      <div class="label">Email:</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <div class="ui-inputgroup">
+            <input type="email" pInputText placeholder="Email" [(ngModel)]="email" id="cEmail" #cEmail="ngModel" ngModel email />
+            <div *ngIf="cEmail?.invalid && (cEmail?.dirty || cEmail?.touched)" class="alert alert-danger">
+              <div *ngIf="cEmail.errors.required"> Email is required.</div>
+              <div *ngIf="cEmail.errors.email">Email must be a valid email address</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="label">Contact number:</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <div class="ui-inputgroup">
+              <p-inputMask type="phone" [(ngModel)]="contactNumber" mask="+380 (99) 999-99-99"  placeholder="Contact number" 
+              [(ngModel)]="contactNumber"></p-inputMask>
+          </div>
+        </div>
+      </div>
+
+      <div class="label">Web site:</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <div class="ui-inputgroup">
+            <input type="text" pInputText placeholder="Web site"  [(ngModel)]="webSite" id="cWebSite" #cWebSite="ngModel"
+            pattern="^(http|https|ftp)?(://)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([/?].*)?$" >
+            <div *ngIf="cWebSite?.invalid && (cWebSite?.dirty || cWebSite?.touched)" class="alert alert-danger">
+                <div *ngIf="cWebSite.errors.pattern">Web site must be a valid.</div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="label">Description:</div>
+      <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+          <textarea rows="5" pInputTextarea  [(ngModel)]="description"></textarea>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+ <p-footer>
+     <button pButton type="button" label="Add" (click)="onAdd()" [disabled]="cName?.invalid || cEmail?.invalid || cWebSite?.invalid"
+     class="ui-button-raised ui-button-success button"></button>
+     <button class="ui-button-raised ui-button-danger button" pButton type="button" (click)="onClose()" label="Cancel"></button>
+ </p-footer>
 </p-dialog>
