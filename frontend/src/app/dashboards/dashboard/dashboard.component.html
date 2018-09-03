@@ -1,21 +1,27 @@
-<app-edit-dashboard (edited)="onEdited($event)"
-                    (closed)="onClosed()"
-                    [display]="displayEditDashboard"
-                    [dashboardTitle]="editTitle"></app-edit-dashboard>
+<app-edit-dashboard (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard" [dashboardTitle]="editTitle"></app-edit-dashboard>
 
-<app-edit-chart (editChart)="onChartEdited($event)"
-                (closed)="onChartEditClosed()"
-                [display]="displayEditChart"
-                [dashboardId]="activeDashboardItem ? activeDashboardItem.dashId : 0"
-                [dashboardChart]="chartToEdit">
+<app-edit-chart (editChart)="onChartEdited($event)" (closed)="onChartEditClosed()" [onDisplay]="onDisplayChartEditing"
+  [dashboardId]="activeDashboardItem ? activeDashboardItem.dashId : 0" [dashboardChart]="chartToEdit">
 </app-edit-chart>
 
 <div class="site-wrap">
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
       <div class="title">DASHBOARDS</div>
-      <hr *ngIf="!instanceId">
+      <div *ngIf="!instanceId" class="placeholder">
+          <hr>
+          <div>
+            <i class="fa fa-plus"></i> 1. Create a VM instance
+          </div>
+          <div>
+            <i class="fa fa-download"></i> 2. Download the application
+          </div>
+          <div>
+            <i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity
+          </div>
+        </div>
     </div>
+
   </div>
   <!--Item showAddItemPopup() -->
   <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
@@ -27,34 +33,11 @@
     <div>
       <p class="text-pl">Click <i class="fa fa-gear"></i> and add chart or plot</p>
     </div>
+
     <app-chart-dashboard *ngIf="activeDashboardItem && dashboardMenuItems.length > 1"
                          [charts]="activeDashboardItem.charts"
                          [dashboardId]="activeDashboardItem.dashId"
                          (editChart)="onEditChart($event)">
-
     </app-chart-dashboard>
   </div>
-
-  <div *ngIf="!instanceId" class="placeholder">
-    <div>
-      <i class="fa fa-plus"></i> 1. Create a VM instance
-    </div>
-    <div>
-      <i class="fa fa-download"></i> 2. Download the application
-    </div>
-    <div>
-      <i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity
-    </div>
-  </div>
-
 </div>
-
-<p-confirmDialog header="Confirmation " icon="pi pi-exclamation-triangle " width="425 " #cd>
-  <p-footer>
-    <button pButton type="button " class="ui-button-success ui-button-raised " icon="pi pi-times " label="No "
-            (click)="cd.reject() "></button>
-    <button pButton type="button " class="ui-button-danger ui-button-raised " icon="pi pi-check " label="Yes "
-            (click)="cd.accept() "></button>
-  </p-footer>
-</p-confirmDialog>
-<p-toast position="bottom-right" life="500"></p-toast>

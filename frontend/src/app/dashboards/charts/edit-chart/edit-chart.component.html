@@ -1,5 +1,5 @@
-<p-dialog [header]="dialogTitle" [(visible)]="display" [modal]="true" [responsive]="true" [width]="1000" [minWidth]="850"
-  [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]=false>
+<p-dialog [header]="dialogTitle" [(visible)]="visible" [modal]="true" [responsive]="true" [width]="1000" [minWidth]="850"
+  [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]="false" (onAfterToggle)="closeDialog()">
   <div class="ui-g ui-fluid">
     <div class="ui-g-3">
       <p class="field-top">Select chart type: </p>

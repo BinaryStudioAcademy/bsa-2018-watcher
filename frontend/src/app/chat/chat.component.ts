@@ -9,7 +9,6 @@ import { SystemToastrService } from '../core/services/system-toastr.service';
 
 import { Chat } from '../shared/models/chat.model';
 import { Message } from '../shared/models/message.model';
-import { NotificationsHubService } from '../core/hubs/notifications.hub';
 
 
 @Component({

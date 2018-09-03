@@ -1,32 +1,36 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ConfirmationService} from 'primeng/primeng';
-import {MenuItem, } from 'primeng/api';
-import {DashboardService} from '../../core/services/dashboard.service';
-import {Dashboard} from '../../shared/models/dashboard.model';
-import {ToastrService} from '../../core/services/toastr.service';
-import {DashboardMenuItem} from '../models';
-import {DashboardRequest} from '../../shared/models/dashboard-request.model';
+import {Component, OnDestroy, OnInit, EventEmitter} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
+import {MenuItem} from 'primeng/api';
+
+import {ToastrService} from '../../core/services/toastr.service';
 import {InstanceService} from '../../core/services/instance.service';
-import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+import {DashboardService} from '../../core/services/dashboard.service';
 import {AuthService} from '../../core/services/auth.service';
 import {DataService} from '../../core/services/data.service';
 import {ChartService} from '../../core/services/chart.service';
 import {CollectedDataService} from '../../core/services/collected-data.service';
-import {CollectedData} from '../../shared/models/collected-data.model';
+
+import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+
 import {defaultOptions} from '../charts/models/chart-options';
+import {DashboardMenuItem} from '../models';
 import {DashboardChart} from '../models/dashboard-chart';
+import {Dashboard} from '../../shared/models/dashboard.model';
+import {DashboardRequest} from '../../shared/models/dashboard-request.model';
+import {CollectedData} from '../../shared/models/collected-data.model';
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.sass'],
-  providers: [ConfirmationService]
+  styleUrls: ['./dashboard.component.sass']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private paramsSubscription: Subscription;
   private instanceGuidId: string;
+
+  onDisplayChartEditing = new EventEmitter<boolean>();
 
   instanceId: number;
   dashboards: Dashboard[] = [];
@@ -39,6 +43,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   displayEditDashboard = false;
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
+
 
   displayEditChart = false;
   chartToEdit = { ...defaultOptions } ;
@@ -103,23 +108,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.cogItems = [{
       label: 'Add item',
       icon: 'fa fa-fw fa-plus',
+
       command: (event?: any) => {
         debugger;
         this.chartToEdit = { ...defaultOptions };
         this.chartToEdit.chartType = { ...defaultOptions.chartType };
         this.chartToEdit.colorScheme = { ...defaultOptions.colorScheme };
-        this.showPopupEditChart();
+        this.showChartCreating();
       },
     },
       {
         label: 'Edit',
         icon: 'fa fa-fw fa-edit',
-        command: (event?: any) => this.showCreatePopup(false),
+        command: () => this.showCreatePopup(false),
       },
       {
         label: 'Delete',
         icon: 'fa fa-fw fa-remove',
-        command: (event?: any) => this.delete(),
+        command: () => this.delete(),
       }
     ];
 
@@ -151,20 +157,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onDashboards(value) {
-    if (value && value.length > 0) {
+    if (value && value.length) {
       this.dashboards = value;
       // Fill Dashboard Menu Items
       this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
       this.activeDashboardItem = this.dashboardMenuItems[0];
     }
     this.loading = false;
-    this.toastrService.success('Successfully got instance info from server');
+    this.toastrService.success('Successfully got dashboards info from server');
   }
 
   createPlusItem(): DashboardMenuItem {
     const lastItem: DashboardMenuItem = {
       icon: 'fa fa-plus',
-      command: (onlick) => {
+      command: () => {
         this.activeDashboardItem = lastItem;
         this.showCreatePopup(true);
       },
@@ -235,6 +241,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async delete(): Promise<void> {
+    this.toastrService.success('Sucess');
+
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
       this.loading = true;
       this.deleteDashboard(this.activeDashboardItem);
@@ -253,7 +261,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.chartToEdit = { ...chart };
     this.chartToEdit.chartType = { ...chart.chartType };
     this.chartToEdit.colorScheme = { ...chart.colorScheme };
-    this.showPopupEditChart();
+    this.showChartCreating();
   }
 
   onEdited(title: string) {
@@ -297,14 +305,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.displayEditDashboard = false;
   }
 
-  onChartEditClosed() {
-    console.log('Edit chart window was closed');
-    this.displayEditChart = false;
-  }
-
-  showPopupEditChart() {
-    console.log('3', this.chartToEdit);
-    this.displayEditChart = true;
+  showChartCreating() {
+    this.onDisplayChartEditing.emit(true);
   }
 
   onChartEdited(chart?: DashboardChart) {
@@ -313,7 +315,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // this.toastrService.success('Successfully update chart!');
   }
 
-
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
     const item: DashboardMenuItem = {
       label: dashboard.title,
@@ -321,15 +322,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       createdAt: dashboard.createdAt,
       charts: dashboard.charts.map(c => this.dataService.instantiateDashboardChart(c, this.collectedDataForChart)),
       // routerLink: `/user/instances/${this.instanceId}/${this.instanceGuidId}/dashboards/${dashboard.id}`,
-      command: (onclick) => {
-        this.activeDashboardItem = item;
-      }
+      command: () => this.activeDashboardItem = item
     };
     return item;
   }
 
   onInstanceRemoved(id: number) {
-    this.instanceId = 0;
+    this.instanceId = null;
     this.dashboards = [];
     this.dashboardMenuItems = [];
     this.activeDashboardItem = null;

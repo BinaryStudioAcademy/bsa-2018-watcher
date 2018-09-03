@@ -19,8 +19,13 @@ import {ToastrService} from '../../../core/services/toastr.service';
 export class EditChartComponent implements OnInit, OnChanges {
   @Output() editChart = new EventEmitter<DashboardChart>();
   @Output() closed = new EventEmitter();
-  @Input() display: boolean;
+  @Output() dashboardChartChange = new EventEmitter();
+
+  visible: boolean;
+
+  @Input() onDisplay: EventEmitter<boolean>;
   @Input() dashboardId: number;
+
   @Input() dashboardChart: DashboardChart;
 
   type: ChartType;
@@ -55,6 +60,8 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.onDisplay.subscribe((isShow: boolean) => this.visible = isShow);
+
     this.collectedDataService.getBuilderData()
       .subscribe(value => {
         this.collectedDataForChart = value;
@@ -133,6 +140,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   closeDialog() {
+    this.visible = false;
     this.chartForm.reset();
     this.closed.emit();
   }
