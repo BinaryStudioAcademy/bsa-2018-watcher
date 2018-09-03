@@ -1,59 +1,19 @@
-<div class="container">
-  <div class="charts">
-    <div class="viz-container" [ngClass]="chart.theme" *ngFor="let chart of charts">
-        <h1></h1>
-        <app-chart
-          class="chart"
-          [chart]="chart"
-          [data]="chart.data"
-          [activeEntries]="chart.activeEntries"
-          [chartType]="chart.chartType"
-          (select)="onSelect()">
-        </app-chart>
+<div class="charts-area" [ngStyle]="{ 'display': 'flex', 'justifyContent': 'stretch'}">
+  <smooth-dnd-container [groupName]="'1'" [getChildPayload]="getChildPayload1" (drop)="onDrop('charts', $event)">
+    <smooth-dnd-draggable class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
+      <app-chart
+        class="chart"
+        [chart]="chart"
+        [data]="chart.data"
+        [activeEntries]="chart.activeEntries"
+        [chartType]="chart.chartType">
+      </app-chart>
+      <div class="btn-panel">
+        <button #btn type="button" class="btn-chart" pButton icon="fa fa-fw fa-edit"
+                (click)="edit(chart)"></button>
+        <button #btn type="button" class="btn-chart ui-button-danger" pButton icon="fa fa-fw fa-remove"
+                (click)="delete(chart.id)"></button>
       </div>
-  </div>
-  <div class="filters">
-    <div class="filter" *ngFor="let filter of filters">
-      <button class="pull-right" (click)="onClear(filter)">(clear)</button>
-      <div *ngIf="filter.type === 'value'">
-        {{filter.label}}
-        <ngx-slider
-          [(ngModel)]="filter.range[0]"
-          [step]="filter.step"
-          [filled]="true"
-          [min]="filter.minValue"
-          [max]="filter.maxValue"
-          (change)="updateFilters()">
-        </ngx-slider>
-        <ngx-slider
-          [(ngModel)]="filter.range[1]"
-          [step]="filter.step"
-          [filled]="true"
-          [min]="filter.minValue"
-          [max]="filter.maxValue"
-          (change)="updateFilters()">
-        </ngx-slider>
-        <br />{{filter.range[0]}} - {{filter.range[1]}}
-      </div>
-      <div *ngIf="filter.type === 'cat'">
-        <label>{{filter.label}}</label>
-        <ul class="vertical-list">
-          <li class="cat-filter-item" *ngFor="let item of filter.query.data">
-            <div>
-              <ngx-checkbox
-                [(ngModel)]="filter.rangeIndex[item.key]"
-                (change)="updateFilters()">
-                {{item.key}}
-              </ngx-checkbox>
-            </div>
-            <div>
-              <ngx-button class="select-single-filter" (click)="onOnly(filter, item.key)">only</ngx-button>
-              <span class="count">{{item.value.count}}</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
+    </smooth-dnd-draggable>
+  </smooth-dnd-container>
 </div>

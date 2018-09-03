@@ -1,6 +1,7 @@
-﻿
+﻿import {PercentageInfo} from '../../dashboards/models/percentage-info';
 
-export interface CollectedData  {
+
+export interface CollectedData extends PercentageInfo {
    id: string;
    time: Date;
    processesCount: number;

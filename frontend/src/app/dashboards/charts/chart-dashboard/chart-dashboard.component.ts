@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, NgZone } from '@angular/core';
-import { CustomChart, Filter} from '../models';
-import {DataService} from '../../services/data.service';
+import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
+import {DashboardChart} from '../../models/dashboard-chart';
+import {applyDrag} from './utils';
+import {ChartService} from '../../../core/services/chart.service';
+import {ToastrService} from '../../../core/services/toastr.service';
 
 @Component({
   selector: 'app-chart-dashboard',
@@ -8,90 +10,39 @@ import {DataService} from '../../services/data.service';
   styleUrls: ['./chart-dashboard.component.sass']
 })
 export class ChartDashboardComponent implements OnInit {
-  @Input() charts: CustomChart[] = [];
-  @Input() filters: Filter[] = [];
+  @Input() charts: DashboardChart[] = [];
+  @Input() dashboardId: number;
+  @Output() editChart = new EventEmitter<DashboardChart>();
+  @Output() deleteChart = new EventEmitter<number>();
 
-  constructor(private ngZone: NgZone,
-              private dataService: DataService) { }
+  constructor(private chartService: ChartService, private toastrService: ToastrService) {
+    this.getChildPayload1 = this.getChildPayload1.bind(this);
+  }
+
+  onDrop(collection, dropResult) {
+    this[collection] = applyDrag(this[collection], dropResult);
+  }
+
+  getChildPayload1(index) {
+    return this.charts[index];
+  }
 
   ngOnInit() {
   }
 
-  onClear(_filter?: Filter): Promise<void> {
-    const filters = _filter ? [_filter] : this.filters;
-    filters.forEach(filter => {
-      switch (filter.type) {
-        case 'value':
-          filter.range = [filter.minValue, filter.maxValue];
-          break;
-        default:
-          filter.range = filter.query.column.values;
-          filter.rangeIndex = filter.range.reduce((acc, cur) => {
-            acc[cur] = true;
-            return acc;
-          }, {});
-      }
-    });
-    return this.updateFilters();
+  edit(chart: DashboardChart) {
+    this.editChart.emit(chart);
   }
 
-  onSelect(): Promise<void> {
-    return this.updateFilters();
-  }
-
-  onOnly(filter: Filter, id: string) {
-    filter.rangeIndex = {
-      [id]: true
-    };
-    this.updateFilters();
-  }
-
-  /** Updates universe/crossfilter filters based on UI filters */
-  async updateFilters(): Promise<void> {
-    const p = this.filters.map(filter => {
-      switch (filter.type) {
-        case 'value':
-          const value = {
-            $gte: filter.range[0],
-            $lte: filter.range[1],
-          };
-          return this.dataService.dataUniverse.filter(filter.key, value, true, true);
-        default:
-          const range = Object.keys(filter.rangeIndex).reduce((acc, key) => {
-            if (filter.rangeIndex[key]) {
-              acc.push(parseInt(key, 10) || key);
-            }
-            return acc;
-          }, []);
-          return this.dataService.dataUniverse.filter(filter.key, range, false, true);
-      }
-    });
-
-    await Promise.all(p);
-    return this.updateData();
-  }
-
-  /** Converts universe aggragate data into ngx-charts data */
-  private updateData(): void {
-    this.ngZone.runOutsideAngular(() => {
-      this.charts.forEach(chart => {
-        chart.data = this.dataService.getChartSeriesFromQuery(chart.xQuery, chart.dataDims[2], chart.dataDims[4]);
-
-        // todo: move to dataService
-        const filter = chart.xFilter;
-        if (filter.type === 'cat' && filter.values.length > 0) {
-          chart.activeEntries = chart.data.filter(d => {
-            return filter.rangeIndex[d.name];
-          });
-        } else if (filter.type === 'value') {
-          chart.activeEntries = chart.data.filter(d => {
-            return (d.name >= filter.minValue && d.name <= filter.maxValue);
-          });
-        } else {
-          chart.activeEntries = [];
-        }
-      });
-    });
-    this.ngZone.run(() => { });
+  async delete(id: number): Promise<void> {
+    if (await this.toastrService.confirm('You sure you want to delete chart?')) {
+      this.chartService.delete(id).subscribe(
+        (value) => {
+          this.deleteChart.emit(id);
+        },
+        error => {
+          this.toastrService.error(`Error occurred status: ${error.message}`);
+        });
+    }
   }
 }

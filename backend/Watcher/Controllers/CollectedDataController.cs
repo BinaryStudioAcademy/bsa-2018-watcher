@@ -90,6 +90,19 @@
             return Ok(dto);
         }
 
+        [HttpGet("Data/{id}")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<PercentageInfo>> GetCollectedDataByInstanceId([FromRoute] Guid id, [FromQuery] int count)
+        {
+            var dtos = await _collectedDataService.GetCollectedDataByInstanceId(id, count);
+            if (dtos == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(dtos);
+        }
+
         [HttpGet("Percentage/{id}")]
         [AllowAnonymous]
         public virtual async Task<ActionResult<PercentageInfo>> GetInstancePercentageInfo([FromRoute] int id, [FromQuery] int count)
