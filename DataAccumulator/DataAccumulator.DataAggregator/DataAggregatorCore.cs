@@ -22,13 +22,13 @@ namespace DataAccumulator.DataAggregator
             DateTime timeFrom = DateTime.Now.Add(-interval);
             DateTime timeTo = DateTime.Now;
 
-            var accumulatedCollectedDataDtos = 
+            var sourceCollectedDataDtos = 
                 await _aggregatorService.GetSourceEntitiesAsync(sourceType, timeFrom, timeTo);
 
-            if (accumulatedCollectedDataDtos != null)
+            if (sourceCollectedDataDtos != null)
             {
                 var collectedDataDtosAverage =
-                    from collectedDataDto in accumulatedCollectedDataDtos
+                    from collectedDataDto in sourceCollectedDataDtos
                     group collectedDataDto by collectedDataDto.ClientId
                     into collectedDataGroup
                     select new CollectedDataDto
@@ -73,7 +73,7 @@ namespace DataAccumulator.DataAggregator
                 if (deleteSource)
                 {
                     // Delete already aggregated CollectedDataDto from source table MongoDb
-                    foreach (var collectedDataDto in accumulatedCollectedDataDtos)
+                    foreach (var collectedDataDto in sourceCollectedDataDtos)
                     {
                         await _aggregatorService.DeleteAggregatedEntityAsync(collectedDataDto.Id);
                     }
