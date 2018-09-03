@@ -15,7 +15,8 @@ import {
   ButtonModule,
   TabMenuModule,
   ProgressSpinnerModule,
-  InputTextModule} from 'primeng/primeng';
+  InputTextModule,
+  ConfirmationService} from 'primeng/primeng';
 import { EditDashboardComponent} from './editDashboard/editDashboard.component';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ToastModule} from 'primeng/toast';
@@ -36,12 +37,14 @@ import { NgxUIModule} from '@swimlane/ngx-ui';
 import { ChartDashboardComponent} from './charts/chart-dashboard/chart-dashboard.component';
 import { ChartBuilderComponent} from './charts/chart-builder/chart-builder.component';
 import { ChartComponent} from './charts/chart/chart.component';
-import { DataService} from './services/data.service';
-import { ChartsComponent} from './charts/charts.component';
+
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 import { ToastrService } from '../core/services/toastr.service';
 import { DashboardService } from '../core/services/dashboard.service';
 import { InstanceService } from '../core/services/instance.service';
+
+import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
+import { ContainerComponent, DraggableComponent } from 'ngx-smooth-dnd';
 
 @NgModule({
   imports: [
@@ -93,7 +96,7 @@ import { InstanceService } from '../core/services/instance.service';
     DraggableComponent,
     EditChartComponent
   ],
-  providers: [DataService, ToastrService, DashboardService],
+  providers: [ToastrService, DashboardService],
   exports: []
 })
 export class DashboardsModule {
