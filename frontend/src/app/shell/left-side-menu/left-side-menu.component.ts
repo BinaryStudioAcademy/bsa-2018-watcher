@@ -20,29 +20,17 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private activeUrl: string;
   private previousSettingUrl: string;
   private settingsItems: MenuItem[];
-  private instanceItems: MenuItem[];
   private adminItems: MenuItem[];
-  private organisationId: number;
 
   private regexSettingsUrl: RegExp = /\/user\/settings/;
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
   private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
   private regexAdminUrl = /\/admin/;
 
-  currentQuery = '';
-  currentGuidId: string;
-  showDownloadModal: boolean;
-  isSearching: boolean;
   isComponentInvisible: boolean;
   menuItems: MenuItem[];
-  user: User;
-  isDeleting: Boolean = false;
-  popupMessage: String = '';
 
-  constructor(private router: Router,
-              private instanceService: InstanceService,
-              private toastrService: ToastrService,
-              private authService: AuthService) {
+  constructor(private router: Router) {
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         this.clearSettings(this.activeUrl);
@@ -52,15 +40,9 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   ngOnInit(): void {
     this.activeUrl = this.router.url;
-    this.authService.currentUser.subscribe(
-      user => {
-        this.user = user;
-        this.configureInstances(this.user.lastPickedOrganizationId);
-        this.initMenuItems();
-        this.changeMenu();
-        this.subscribeRouteChanges();
-      }
-    );
+    this.initMenuItems();
+    this.changeMenu();
+    this.subscribeRouteChanges();
     }
 
   ngAfterContentChecked(): void {
@@ -101,66 +83,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     }];
   }
 
-  configureInstances(organizationId: number) {
-    this.instanceService.getAllByOrganization(organizationId).subscribe((data: Instance[]) => {
-      if (data) {
-        const items = data.map(inst => this.instanceToMenuItem(inst));
-        items.forEach(inst => this.instanceItems.push(inst));
-        this.toastrService.success('Get instances from server');
-      }
-    });
-  }
-
-  instanceToMenuItem(instance: Instance) {
-    const item: MenuItem = {
-      label: instance.title,
-      title: instance.id.toString(),
-      routerLink:  [`instances/${instance.id}/${instance.guidId}/dashboards`],
-      command: () => {
-        this.instanceService.instanceChecked.emit(instance);
-      },
-      items: [{
-        label: 'Edit',
-        icon: 'fa fa-pencil',
-        routerLink: [`instances/${instance.id}/edit`],
-        styleClass: 'instance-options'
-      }, {
-        label: 'Delete',
-        icon: 'fa fa-close',
-        command: () => {
-          const index = this.instanceItems.findIndex(i => i === item);
-          this.deleteInstance(instance.id, index);
-        },
-        styleClass: 'instance-options'
-      }, {
-        label: 'Download app',
-        icon: 'fa fa-download',
-        styleClass: 'instance-options',
-        command: () => {
-          console.log(this.showDownloadModal);
-          this.showDownloadModal = true;
-          this.currentGuidId = instance.guidId;
-        }
-      }]
-    };
-    return item;
-  }
-
-  async deleteInstance(id: number, index: number) {
-    if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
-      this.popupMessage = 'Instance is deleting';
-      this.isDeleting = true;
-      this.instanceService.delete(id).subscribe((res: Response) => {
-        this.instanceService.instanceRemoved.emit(id);
-        this.toastrService.success('Deleted instance');
-        this.instanceItems.splice(index, 1);
-        this.router.navigate([`instances`]);
-        this.isDeleting = false;
-      });
-    }
-  }
-
-
   private subscribeRouteChanges(): void {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event.url) {
@@ -173,13 +95,11 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private changeMenu(): void {
     if (this.activeUrl.match(this.regexSettingsUrl)) {
       this.menuItems = this.settingsItems;
-      this.isSearching = false;
       this.isComponentInvisible = false;
     } else if (this.activeUrl.match(this.regexFeedbackUrl)) {
       this.isComponentInvisible = true;
     } else if (this.activeUrl.match(this.regexAdminUrl)) {
       this.menuItems = this.adminItems;
-      this.isSearching = false;
       this.isComponentInvisible = false;
     } else if (this.activeUrl.match(this.regexDashboardUrl)) {
       this.isComponentInvisible = true;
