@@ -12,6 +12,7 @@
       <p class="field">Show total:
         <p-checkbox [ngModel]="dashboardChart?.showCommon"
                     (ngModelChange)="dashboardChart.showCommon=$event"
+                    (onChange)="resetDataSources()"
                     binary="true"></p-checkbox>
       </p><!-- [disabled]="!dashboardChart.dataSources.length<1"-->
       <p class="field">Select source: </p>
@@ -27,7 +28,7 @@
                   [(ngModel)]="dashboardChart.dataSources"
                   placeholder="Select a type"
                   [style]="{'width':'192px'}"
-                  (onChange)="processChartType()">
+                  (onChange)="processData()">
       </p-dropdown>
       <form [formGroup]="chartForm">
         <p class="field">Number of heavy processes:</p>
@@ -42,7 +43,7 @@
       <p class="field">Threshold: {{dashboardChart.threshold}}</p>
       <div class="field">
         <p-slider [(ngModel)]="dashboardChart.threshold"
-                  [disabled]="!dashboardChart.showCommon"
+                  [disabled]="dashboardChart.showCommon"
                   [style]="{'width':'192px'}"></p-slider>
       </div>
       <p class="field">Y axis label (optional): </p>

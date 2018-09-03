@@ -1,15 +1,15 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
-import {DataProperty} from '../../../shared/models/data-property.enum';
-import {SelectItem} from 'primeng/api';
-import {DashboardChart} from '../../models/dashboard-chart';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {ChartRequest} from '../../../shared/requests/chart-request.model';
-import {CollectedDataService} from '../../../core/services/collected-data.service';
-import {CollectedData} from '../../../shared/models/collected-data.model';
-import {DataService} from '../../../core/services/data.service';
-import {ChartService} from '../../../core/services/chart.service';
-import {ToastrService} from '../../../core/services/toastr.service';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { ChartType, chartTypes } from '../../../shared/models/chart-type.enum';
+import { DataProperty } from '../../../shared/models/data-property.enum';
+import { SelectItem } from 'primeng/api';
+import { DashboardChart } from '../../models/dashboard-chart';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ChartRequest } from '../../../shared/requests/chart-request.model';
+import { CollectedDataService } from '../../../core/services/collected-data.service';
+import { CollectedData } from '../../../shared/models/collected-data.model';
+import { DataService } from '../../../core/services/data.service';
+import { ChartService } from '../../../core/services/chart.service';
+import { ToastrService } from '../../../core/services/toastr.service';
 
 @Component({
   selector: 'app-edit-chart',
@@ -54,17 +54,17 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   get spinnerDisabled() {
     if (this.dashboardChart && this.dashboardChart.showCommon) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
   }
 
   constructor(private fb: FormBuilder,
-              private collectedDataService: CollectedDataService,
-              private dataService: DataService,
-              private chartService: ChartService,
-              private toastrService: ToastrService) {
+    private collectedDataService: CollectedDataService,
+    private dataService: DataService,
+    private chartService: ChartService,
+    private toastrService: ToastrService) {
   }
 
   ngOnInit() {
@@ -78,29 +78,29 @@ export class EditChartComponent implements OnInit, OnChanges {
     this.dashboardChart.showCommon = false;
 
     this.dropdownTypes = [
-      {label: 'Bar vertical', value: ChartType.BarVertical},
-      {label: 'Line chart', value: ChartType.LineChart},
-      {label: 'Pie', value: ChartType.Pie},
-      {label: 'Guage', value: ChartType.Guage}
+      { label: 'Bar vertical', value: ChartType.BarVertical },
+      { label: 'Line chart', value: ChartType.LineChart },
+      { label: 'Pie', value: ChartType.Pie },
+      { label: 'Guage', value: ChartType.Guage }
     ];
 
     this.dropdownSources = [
-      {label: 'CPU', value: DataProperty.cpuUsagePercent},
-      {label: 'RAM', value: DataProperty.ramUsagePercent},
-      {label: 'DISC', value: DataProperty.localDiskFreeSpacePercent}
+      { label: 'CPU', value: DataProperty.cpuUsagePercent },
+      { label: 'RAM', value: DataProperty.ramUsagePercent },
+      { label: 'DISC', value: DataProperty.localDiskFreeSpacePercent }
     ];
 
     this.dropdownSourcesProcesses = [
-      {label: 'CPU p', value: DataProperty.processesCPU},
-      {label: 'RAM p', value: DataProperty.processesRAM},
-      {label: 'DISC p', value: DataProperty.localDiskFreeMBytes}
+      { label: 'CPU p', value: DataProperty.processesCPU },
+      { label: 'RAM p', value: DataProperty.processesRAM },
+      { label: 'DISC p', value: DataProperty.localDiskFreeMBytes }
     ];
 
     this.chartForm = this.fb.group({
-      isMultiple: new FormControl({value: false, disabled: false}),
-      mostLoaded: new FormControl({value: 1, disabled: false}),
-      xAxisLabel: new FormControl({value: '', disabled: false}),
-      yAxisLabel: new FormControl({value: '', disabled: false})
+      isMultiple: new FormControl({ value: false, disabled: false }),
+      mostLoaded: new FormControl({ value: 1, disabled: false }),
+      xAxisLabel: new FormControl({ value: '', disabled: false }),
+      yAxisLabel: new FormControl({ value: '', disabled: false })
     });
   }
 
@@ -109,6 +109,10 @@ export class EditChartComponent implements OnInit, OnChanges {
     this.dashboardChart.chartType.type = this.type;
     this.dashboardChart.chartType.name = chartTypes[this.type];
     this.processData();
+  }
+
+  resetDataSources() {
+    this.dashboardChart.dataSources = [];
   }
 
   ngOnChanges(changes) {
@@ -120,7 +124,8 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   processData(): void {
-    debugger;
+    // debugger;
+    console.log(this.dashboardChart.dataSources);
     this.showPreview = false;
     if (!this.dashboardChart.showCommon) {
       this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
