@@ -48,6 +48,7 @@ export class EditChartComponent implements OnInit, OnChanges {
     if (this.dashboardChart && this.dashboardChart.id) {
       return 'Edit chart';
     } else {
+      this.dashboardChart.chartType.type = null;
       return 'Create chart';
     }
   }
@@ -106,8 +107,8 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   processChartType() {
     this.showPreview = false;
-    this.dashboardChart.chartType.type = this.type;
-    this.dashboardChart.chartType.name = chartTypes[this.type];
+    // this.dashboardChart.chartType.type = this.type;
+    this.dashboardChart.chartType.name = chartTypes[this.dashboardChart.chartType.type]; // type];
     this.processData();
   }
 

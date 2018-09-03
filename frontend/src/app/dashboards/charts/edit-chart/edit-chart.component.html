@@ -4,7 +4,7 @@
     <div class="ui-g-3">
       <p class="field-top">Select chart type: </p>
       <p-dropdown [options]="dropdownTypes"
-                  [(ngModel)]="type"
+                  [(ngModel)]="dashboardChart?.chartType.type"
                   placeholder="Select a type"
                   [style]="{'width':'192px'}"
                   (onChange)="processChartType()">
@@ -14,7 +14,7 @@
                     (ngModelChange)="dashboardChart.showCommon=$event"
                     (onChange)="resetDataSources()"
                     binary="true"></p-checkbox>
-      </p><!-- [disabled]="!dashboardChart.dataSources.length<1"-->
+      </p><!--type [disabled]="!dashboardChart.dataSources.length<1"-->
       <p class="field">Select source: </p>
       <p-multiSelect *ngIf="dashboardChart.showCommon"
                      [options]="dropdownSources"
