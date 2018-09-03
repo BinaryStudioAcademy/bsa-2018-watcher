@@ -23,14 +23,14 @@ export class InstanceListComponent implements OnInit {
                 this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
                }
 
-  private menuItems: MenuItem[];
-  private user: User;
+  menuItems: MenuItem[];
+  user: User;
   currentGuidId: string;
   showDownloadModal: boolean;
   popupMessage: string;
   isLoading: boolean;
 
-  private currentQuery = '';
+  currentQuery = '';
 
   ngOnInit() {
     this.authService.currentUser.subscribe(
