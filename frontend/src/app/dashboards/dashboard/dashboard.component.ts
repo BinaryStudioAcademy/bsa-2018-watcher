@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, EventEmitter} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {MenuItem} from 'primeng/api';
@@ -30,6 +30,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private paramsSubscription: Subscription;
   private instanceGuidId: string;
 
+  onDisplayChartEditing = new EventEmitter<boolean>();
+  chartToEdit = defaultOptions;
+
   instanceId: number;
   dashboards: Dashboard[] = [];
   dashboardMenuItems: DashboardMenuItem[] = [];
@@ -41,9 +44,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   displayEditDashboard = false;
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
-
-  displayEditChart = false;
-  chartToEdit = defaultOptions;
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.cogItems = [{
       label: 'Add item',
       icon: 'fa fa-fw fa-plus',
-      command: () => this.showPopupAddChart(),
+      command: () => this.showChartCreating(),
     },
       {
         label: 'Edit',
@@ -211,8 +211,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   deleteDashboard(dashboard: DashboardMenuItem): void {
     this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
-    debugger;
-
           console.log(res);
           // Search and delete selected Item
           const index = this.dashboardMenuItems.findIndex(d => d === this.activeDashboardItem);
@@ -290,14 +288,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.displayEditDashboard = false;
   }
 
-  onChartEditClosed() {
-    console.log('Edit chart window was closed');
-    this.displayEditChart = false;
-  }
-
-  showPopupAddChart() {
-    debugger
-    this.displayEditChart = true;
+  showChartCreating() {
+    this.onDisplayChartEditing.emit(true);
   }
 
   onChartEdited(chart?: DashboardChart) {
