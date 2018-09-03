@@ -15,12 +15,6 @@ namespace DataAccumulator.DataAggregator
             _aggregatorService = aggregatorService;
         }
 
-        //public async Task AggregatingData()
-        //{
-        //    // By default subtract 1 hour from the current time
-        //    //await AggregatingData(TimeSpan.FromHours(1));
-        //}
-
         public async Task AggregatingData(CollectedDataType sourceType, CollectedDataType destinationType, 
             TimeSpan interval, bool deleteSource)
         {
