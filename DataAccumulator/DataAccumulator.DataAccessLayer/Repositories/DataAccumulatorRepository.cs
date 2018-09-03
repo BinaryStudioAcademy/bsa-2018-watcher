@@ -106,6 +106,21 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
+        public async Task<IEnumerable<CollectedData>> GetCollectedDataByInstanceIdAsync(Guid instanceId, int count)
+        {
+            try
+            {
+                var query = _context.Datasets.Find(d => d.ClientId == instanceId).Limit(count);
+
+                return await query.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<CollectedData>> GetCollectedDataByInstanceIdAsync(Guid instanceId, DateTime timeFrom, DateTime timeTo)
         {
             try

@@ -31,6 +31,14 @@ export class EditChartComponent implements OnInit, OnChanges {
   showPreview = false;
   chartForm: FormGroup;
 
+  get sources() {
+    if (this.dashboardChart.showCommon) {
+      return this.dropdownSources;
+    } else {
+      return this.dropdownSourcesProcesses;
+    }
+  }
+
   get dialogTitle() {
     if (this.dashboardChart && this.dashboardChart.id) {
       return 'Edit chart';

@@ -55,7 +55,9 @@ namespace Watcher.Core.Services
         public async Task<List<CollectedDataDto>> GetCollectedDataByInstanceId(Guid id, int count)
         {
             // Get collected data for instance for the last 3 minutes(~24 items)
-            var entities = await _repository.GetCollectedDataByInstanceIdAsync(id, DateTime.UtcNow.AddMinutes(-3), DateTime.UtcNow);
+            //var entities = await _repository.GetCollectedDataByInstanceIdAsync(id, DateTime.UtcNow.AddMinutes(-3), DateTime.UtcNow);
+            var entities = await _repository.GetCollectedDataByInstanceIdAsync(id, count);
+
             if (entities == null)
             {
                 return null;

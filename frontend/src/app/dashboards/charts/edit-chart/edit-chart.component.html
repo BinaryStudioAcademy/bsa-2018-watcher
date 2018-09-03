@@ -15,12 +15,20 @@
                     binary="true"></p-checkbox>
       </p><!-- [disabled]="!dashboardChart.dataSources.length<1"-->
       <p class="field">Select source: </p>
-      <p-multiSelect [options]="dropdownSources"
+      <p-multiSelect *ngIf="dashboardChart.showCommon"
+                     [options]="dropdownSources"
                      [(ngModel)]="dashboardChart.dataSources"
                      [style]="{'width':'192px'}"
                      (onChange)="processData()">
         <!--(ngModelChange)="dashboardChart.dataSources.push($event)"-->
       </p-multiSelect>
+      <p-dropdown *ngIf="!dashboardChart.showCommon"
+                  [options]="dropdownSourcesProcesses"
+                  [(ngModel)]="dashboardChart.dataSources"
+                  placeholder="Select a type"
+                  [style]="{'width':'192px'}"
+                  (onChange)="processChartType()">
+      </p-dropdown>
       <form [formGroup]="chartForm">
         <p class="field">Number of heavy processes:</p>
         <div class="width-left-part">

@@ -17,6 +17,9 @@ namespace DataAccumulator.DataAccessLayer.Interfaces
 
         Task<CollectedData> GetEntityByInternalIdAsync(ObjectId id);
 
+        Task<IEnumerable<CollectedData>> GetCollectedDataByInstanceIdAsync(Guid instanceId, int count);
+
+
         Task<IEnumerable<CollectedData>> GetCollectedDataByInstanceIdAsync(
             Guid instanceId,
             DateTime timeFrom,
