@@ -65,10 +65,12 @@ export class AddNewOrganizationComponent implements OnInit {
         this.toastrService.success(`${value.name} organization Successfully established,
           and it was set as the default organization.`);
 
-          this.clearFields();
+        this.clearFields();
       },
       err => {
         this.toastrService.error(`Error The organization was not created!`);
+
+        this.clearFields();
       }
     );
     this.onClose();
