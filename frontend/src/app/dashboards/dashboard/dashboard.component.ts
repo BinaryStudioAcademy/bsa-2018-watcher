@@ -39,11 +39,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   editTitle: string;
   creation: boolean;
-  loading = false;
+  isLoading = false;
   displayEditDashboard = false;
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
-  chartToEdit = { ...defaultOptions } ;
+  chartToEdit = {...defaultOptions};
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -57,9 +57,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.authService.getTokens().subscribe(async ([firebaseToken, watcherToken]) => {
+    try {
+      const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
       await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
-    });
+    } catch (e) {
+      console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(e));
+    }
+
+      // .then(async ([firebaseToken, watcherToken]) => {
+      //   await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
+      // })
+      // .catch(reason => console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(reason)));
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
 
     this.paramsSubscription = this.activateRoute.params.subscribe(params => {
@@ -74,8 +82,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return;
       }
 
+      this.isLoading = true;
       this.getDashboardsByInstanceId(this.instanceId).then(value => {
         this.onDashboards(value);
+        this.isLoading = false;
         this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId)
           .subscribe(data => {
             this.collectedDataForChart = data || [];
@@ -94,10 +104,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }, err => {
             console.error(err);
             this.toastrService.error('Error occurred while fetching instance\'s Collected Data');
+            this.isLoading = false;
           });
       }).catch(reason => {
         console.error(reason);
-          this.toastrService.error('Error occurred while fetching instance\'s Dashboards');
+        this.toastrService.error('Error occurred while fetching instance\'s Dashboards');
+        this.isLoading = false;
       });
 
     });
@@ -144,7 +156,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getDashboardsByInstanceId(id: number): Promise<Dashboard[]> {
-    this.loading = true;
     const plusItem = this.createPlusItem();
     this.dashboardMenuItems.push(plusItem);
     return this.dashboardsService.getAllByInstance(id).toPromise();
@@ -156,8 +167,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // Fill Dashboard Menu Items
       this.dashboardMenuItems.unshift(...this.dashboards.map(dash => this.transformToMenuItem(dash)));
       this.activeDashboardItem = this.dashboardMenuItems[0];
+    } else {
+      this.dashboards = [];
     }
-    this.loading = false;
+
     this.toastrService.success('Successfully got dashboards info from server');
   }
 
@@ -180,11 +193,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
           const item: DashboardMenuItem = this.transformToMenuItem(dto);
           this.dashboardMenuItems.unshift(item);
           this.activeDashboardItem = this.dashboardMenuItems[0];
-          this.loading = false;
           this.toastrService.success('Successfully added new dashboard!');
         },
         error => {
-          this.loading = false;
           this.toastrService.error(`Error occurred status: ${error}`);
         });
   }
@@ -201,11 +212,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         (res: Response) => {
           console.log(res);
           this.dashboardMenuItems[index].label = editTitle;
-          this.loading = false;
           this.toastrService.success('Successfully updated dashboard!');
         },
         error => {
-          this.loading = false;
           this.toastrService.error(`Error occurred status: ${error}`);
         });
   }
@@ -225,18 +234,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.activeDashboardItem = null;
           }
 
-          this.loading = false;
           this.toastrService.success('Successfully deleted dashboard!');
         },
         error => {
-          this.loading = false;
           this.toastrService.error(`Error occurred status: ${error}`);
         });
   }
 
   async delete(): Promise<void> {
     if (await this.toastrService.confirm('You sure you want to delete dashboard ?')) {
-      this.loading = true;
       this.deleteDashboard(this.activeDashboardItem);
     }
   }
@@ -251,8 +257,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.decomposeChart(chart);
     this.showChartCreating();
   }
+
   onEdited(title: string) {
-    this.loading = true;
     if (this.creation === true) {
       const newdash: DashboardRequest = {title: title, instanceId: this.instanceId};
       this.createDashboard(newdash);
@@ -323,9 +329,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   decomposeChart(chart: DashboardChart): void {
-    this.chartToEdit = { ...chart };
-    this.chartToEdit.colorScheme = { ...chart.colorScheme };
-    this.chartToEdit.chartType = { ...chart.chartType };
+    this.chartToEdit = {...chart};
+    this.chartToEdit.colorScheme = {...chart.colorScheme};
+    this.chartToEdit.chartType = {...chart.chartType};
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {

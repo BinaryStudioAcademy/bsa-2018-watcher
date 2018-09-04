@@ -1,6 +1,5 @@
-<div class="charts-area" [ngStyle]="{ 'display': 'flex', 'justifyContent': 'stretch'}">
-  <smooth-dnd-container [groupName]="'1'" [getChildPayload]="getChildPayload1" (drop)="onDrop('charts', $event)">
-    <smooth-dnd-draggable class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
+<div class="charts-area" >  
+    <div class="dashboard-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
       <app-chart
         class="chart"
         [chart]="chart"
@@ -14,6 +13,10 @@
         <button #btn type="button" class="btn-chart ui-button-danger" pButton icon="fa fa-fw fa-remove"
                 (click)="delete(chart.id)"></button>
       </div>
-    </smooth-dnd-draggable>
-  </smooth-dnd-container>
+   </div>
 </div>
+<!--[ngStyle]="{ 'display': 'flex', 'justifyContent': 'stretch'}"
+  <smooth-dnd-container [groupName]="'1'" [getChildPayload]="getChildPayload1" (drop)="onDrop('charts', $event)"> 
+  smooth-dnd-draggable
+</smooth-dnd-draggable>
+  </smooth-dnd-container>-->

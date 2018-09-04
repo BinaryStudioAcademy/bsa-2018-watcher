@@ -23,7 +23,7 @@ export class AddNewOrganizationComponent implements OnInit {
 
   organizationForm = this.fb.group({
     name: new FormControl('' , Validators.compose([Validators.required, Validators.minLength(4)])),
-    email: new FormControl('', Validators.required),
+    email: new FormControl('', Validators.email),
     contactNumber: new FormControl(''),
     webSite: new FormControl('', Validators.pattern('^(http|https|ftp)?(://)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([/?].*)?$')),
     description: new FormControl('')
@@ -45,6 +45,7 @@ export class AddNewOrganizationComponent implements OnInit {
   onClose() {
     this.display = false;
     this.displayChange.emit(this.display);
+    this.clearFields();
   }
 
   onAdd() {

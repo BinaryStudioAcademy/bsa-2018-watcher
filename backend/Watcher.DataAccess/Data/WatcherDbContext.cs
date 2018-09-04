@@ -99,7 +99,23 @@
                .WithOne(f => f.Organization)
                .OnDelete(DeleteBehavior.Cascade);
 
+            // Configure entity filters
+            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                if (entity.ClrType.GetInterfaces().Contains(typeof(ISoftDeletable)))
+                {
+                    var parameter = Expression.Parameter(entity.ClrType);
 
+                    var propertyMethodInfo = typeof(EF).GetMethod("Property").MakeGenericMethod(typeof(bool));
+                    var isDeletedProperty = Expression.Call(propertyMethodInfo, parameter, Expression.Constant("IsDeleted"));
+
+                    BinaryExpression compareExpression = Expression.MakeBinary(ExpressionType.Equal, isDeletedProperty, Expression.Constant(false));
+
+                    var lambda = Expression.Lambda(compareExpression, parameter);
+
+                    modelBuilder.Entity(entity.ClrType).HasQueryFilter(lambda);
+                }
+            } 
 
             modelBuilder.Seed();
         }

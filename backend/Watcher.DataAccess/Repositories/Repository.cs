@@ -88,13 +88,7 @@
 			if (index == 0) index = 1;
 			if (count == 0) count = 10;
 
-			var items = await query.Skip((index - 1) * count).Take(count).ToListAsync();
-
-            if (items is IEnumerable<ISoftDeletable>)
-            {
-                items = items.Where(i => ((ISoftDeletable)i).IsDeleted == false).ToList();
-            }
-            return items;
+            return await query.Skip((index - 1) * count).Take(count).ToListAsync();
 		}
 
 		/// <summary>
@@ -133,11 +127,6 @@
 			{
 				query = query.Where(predicate);
 			}
-
-            if (query is IEnumerable<ISoftDeletable>)
-            {
-                query = query.Where(q => ((ISoftDeletable)q).IsDeleted == false);
-            }
 
 			if (include != null)
 			{
