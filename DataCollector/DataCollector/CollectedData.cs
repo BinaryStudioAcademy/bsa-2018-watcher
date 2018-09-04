@@ -10,8 +10,7 @@ namespace DataCollector
     {
         public CollectedData()
         {
-            ProcessesCpu = new Dictionary<string, float>();
-            ProcessesRam = new Dictionary<string, float>();
+            Processes = new List<ProcessData>();
         }
 
         // Id to reference
@@ -20,11 +19,14 @@ namespace DataCollector
         public Guid ClientId { get; set; }
 
         public int ProcessesCount { get; set; }
-        public Dictionary<string, float> ProcessesCpu { get; set; }
-        public Dictionary<string, float> ProcessesRam { get; set; }
-        public float AvaliableRamBytes { get; set; }
+        public List<ProcessData> Processes { get; set; }
+        public float FreeRamBytes { get; set; }
+        public float TotalRamBytes { get; set; }
+        public float FreeRamPercentage { get; set; }
         public float InterruptsPerSeconds { get; set; }
         public float LocalDiskFreeMBytes { get; set; }
+        public float LocalDiskTotalMBytes { get; set; }
+        public float LocalDiskFreePercentage { get; set; }
         public DateTime Time { get; set; }
 
 
@@ -117,6 +119,7 @@ namespace DataCollector
 
     public class ProcessData
     {
+        public string Name { get; set; }
         public float Ram { get; set; }
         public float PRam { get; set; }
         public float PCpu { get; set; }
