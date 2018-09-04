@@ -25,6 +25,7 @@ export class NotificationBlockComponent implements OnInit {
 
   notifications: Notification[] = [];
   type = NotificationType;
+  isLoading: Boolean = false;
 
   constructor(
     private notificationsHubService: NotificationsHubService,
@@ -64,9 +65,12 @@ export class NotificationBlockComponent implements OnInit {
   }
 
   loadNotifications(): void {
+    this.isLoading = true;
     this.notificationsService.getAll(this.authService.getCurrentUser().id).subscribe((value: Notification[]) => {
       this.notifications = value;
       this.notificationCounter = this.calcNotReadNotifications(value);
+      this.isLoading = false;
+      console.log(this.isLoading);
     });
   }
 

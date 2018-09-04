@@ -11,12 +11,11 @@ import { ChatRequest } from '../../shared/requests/chat-request';
 import { ChatUpdateRequest } from '../../shared/requests/chat-update-request';
 
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ChatHub {
     private hubConnection: HubConnection;
     private hubName = 'chatsHub';
+    private isConnect: boolean;
 
     public messageReceived = new EventEmitter<Message>();
     public chatMessagesWasRead = new EventEmitter<number>();
@@ -38,19 +37,20 @@ export class ChatHub {
     }
 
     private startConnection(): void {
-      this.authService.getTokens().subscribe(([firebaseToken, watcherToken]) => {
-        this.buildConnection(firebaseToken, watcherToken);
-        console.log('ChatHub trying to connect');
-        this.hubConnection
-            .start()
-            .then(() => {
-                console.log('ChatHub connected');
-                this.registerOnEvents();
-            })
-            .catch(err => {
-                console.log('Error while establishing connection (ChatHub)');
-                setTimeout(this.startConnection(), 3000);
-            });
+        if (this.isConnect) { return; }
+        this.authService.getTokens().subscribe(([firebaseToken, watcherToken]) => {
+            this.buildConnection(firebaseToken, watcherToken);
+            console.log('ChatHub trying to connect');
+            this.hubConnection
+                .start()
+                .then(() => {
+                    console.log('ChatHub connected');
+                    this.registerOnEvents();
+                })
+                .catch(err => {
+                    console.log('Error while establishing connection (ChatHub)');
+                    setTimeout(this.startConnection(), 3000);
+                });
       });
     }
 
@@ -81,6 +81,7 @@ export class ChatHub {
         });
 
         this.hubConnection.onclose((error: Error) => {
+            this.isConnect = false;
             console.log('ChatHub connection closed');
             console.error(error);
             this.startConnection();

@@ -5,9 +5,7 @@ import {Observable, from} from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TokensInterceptor implements HttpInterceptor {
   headersConfig = {
     'Content-Type': 'application/json; charset=utf-8',

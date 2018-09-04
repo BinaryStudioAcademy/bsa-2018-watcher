@@ -16,8 +16,7 @@
                     <figure class="cap-bot">
                         <img class="imageLogo" src="{{imageUrl}}">
                         <figcaption class="centered-text custom-upload-btn">
-                            <span>
-                                <i class="fa fa-camera"></i> Update logo</span>
+                            <span><i class="fa fa-camera"></i> Update logo</span>
                             <p-fileUpload #upload mode="basic" name="myfile[]" files="photosList" accept="image/*" (uploadHandler)="onImageSelected($event.files)"
                                 customUpload="true" maxFileSize="2000000" auto="true" chooseLabel="Change"></p-fileUpload>
                         </figcaption>

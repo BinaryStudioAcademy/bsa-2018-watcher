@@ -1,5 +1,6 @@
 <div class="notifications-wrapper">
-  <div class="notifications-empty" *ngIf="notifications.length == 0">
+  <p-progressSpinner class="spinner notifications-empty" [style]="{width: '75px', height: '75px'}" *ngIf="isLoading" strokeWidth="2"></p-progressSpinner>
+  <div class="notifications-empty" *ngIf="notifications.length == 0 && !isLoading">
     You don`t have notifications yet.
   </div>
   <div *ngIf="notifications.length !== 0">

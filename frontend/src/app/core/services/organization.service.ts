@@ -3,9 +3,7 @@ import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Organization } from '../../shared/models/organization.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class OrganizationService {
   private readonly ctrlUrl = 'organizations';
 

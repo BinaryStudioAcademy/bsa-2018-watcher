@@ -9,9 +9,7 @@ import { EventEmitter } from '@angular/core';
 import { Instance } from '../../shared/models/instance.model';
 import { ApiService } from './api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class InstanceService {
 
   private url = environment.server_url + '/instances';
@@ -58,10 +56,6 @@ export class InstanceService {
       catchError(this.handleError));
     return responce;
   }
-/*
-  updateDto(id: number, instance: Instance) {
-    return this.http.put(`/${this.url}/${id}`, instance);
-  }*/
 
   delete(id: number): Observable<Object> {
     const responce = this.http.delete(`${this.url}/${id}`).pipe(

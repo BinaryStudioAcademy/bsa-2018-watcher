@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Role } from '../../shared/models/role.model';
 
-@Injectable(/*{
-  providedIn: 'root'
-}*/)
+@Injectable()
 export class RoleService {
 
   URL = environment.server_url + '/Roles';

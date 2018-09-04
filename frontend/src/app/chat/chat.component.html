@@ -1,4 +1,3 @@
-<app-conversation-panel [onDisplay]="onDisplayChat" (close)="selectedChat=null" (collapse)="onCollapseChat($event)"></app-conversation-panel>
 <app-chat-create-popup [onDisplay]="onDisplayCreating"></app-chat-create-popup>
 
 <div class="chat-list-panel ui-shadow">
@@ -13,12 +12,18 @@
         </div>
         <i class="icon icon-right fa fa-plus" (click)="openCreating($event)" pTooltip="Create" tooltipPosition="top"></i>
       </p-header>
-      <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="selectChat()">
+      <div class="text-center spinner" *ngIf="isLoading">
+        <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="3"></p-progressSpinner>
+      </div>
+      <p class="empty-chat" *ngIf="!chatList.length && !isLoading">
+        No chats to show
+      </p>
+      <p-listbox [options]="chatList" *ngIf="chatList.length && !isLoading" [(ngModel)]="selectedChat" (onChange)="openChat()">
         <ng-template let-chat pTemplate="item">
           <div class="ui-fluid ui-g">
             <div class="ui-g-3 ui-g-nopad" style="position:relative">
               <img class="chat-list-img" src="{{getChatImage(chat?.value)}}" />
-              <span *ngIf="chat.value.unreadMessagesCount !== 0" class="message-counter counter-absolute">
+              <span *ngIf="chat.value.unreadMessagesCount" class="message-counter counter-absolute">
                 {{chat.value.unreadMessagesCount}}
               </span>
             </div>
@@ -30,4 +35,8 @@
       </p-listbox>
     </p-accordionTab>
   </p-accordion>
+</div>
+
+<div class="chat-window" *ngFor="let window of chatWindows; let i = index" [ngStyle]="{'right': 190 + (250 + 20) * i + 'px'}">
+  <app-conversation-panel [window]="window" (close)="removeChatWindow(window.chat.id)" (extended)="clearCounterForChat($event)"></app-conversation-panel>
 </div>

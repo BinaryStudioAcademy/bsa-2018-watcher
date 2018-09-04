@@ -65,7 +65,7 @@ export class EditInstanceComponent implements OnInit {
       form = this.fb.group({
         title: new FormControl({ value: instance.title, disabled: false }, Validators.required),
         platform: new FormControl({ value: instance.platform, disabled: false }, Validators.required),
-        address: new FormControl({ value: instance.address, disabled: false }, Validators.required),
+        address: new FormControl({ value: instance.address, disabled: false }), // , Validators.required
         guid: new FormControl({ value: instance.guidId, disabled: false })
       });
       this.instanceTitle = 'EDIT INSTANCE';
@@ -74,7 +74,7 @@ export class EditInstanceComponent implements OnInit {
       form = this.fb.group({
         title: new FormControl({ value: '', disabled: false }, Validators.required),
         platform: new FormControl({ value: '', disabled: false }, Validators.required),
-        address: new FormControl({ value: '', disabled: false }, Validators.required),
+        address: new FormControl({ value: '', disabled: false }), // , Validators.required
         guid: new FormControl({ value: '', disabled: false })
       });
       this.instanceTitle = 'NEW INSTANCE';

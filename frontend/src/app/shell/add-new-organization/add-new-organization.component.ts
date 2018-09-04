@@ -23,7 +23,7 @@ export class AddNewOrganizationComponent implements OnInit {
 
   organizationForm = this.fb.group({
     name: new FormControl('' , Validators.compose([Validators.required, Validators.minLength(4)])),
-    email: new FormControl('', Validators.required),
+    email: new FormControl('', Validators.email),
     contactNumber: new FormControl(''),
     webSite: new FormControl('', Validators.pattern('^(http|https|ftp)?(://)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([/?].*)?$')),
     description: new FormControl('')
@@ -45,13 +45,15 @@ export class AddNewOrganizationComponent implements OnInit {
   onClose() {
     this.display = false;
     this.displayChange.emit(this.display);
+    this.clearFields();
   }
 
   onAdd() {
-    console.log('Add');
     if (!this.organizationForm.valid) { return; }
 
     this.organization = this.organizationForm.value;
+    this.organization.createdByUserId = this.user.id;
+    this.organization.usersId = [this.user.id];
 
     this.organizationService.create(this.organization).subscribe(
       value => {
@@ -63,22 +65,25 @@ export class AddNewOrganizationComponent implements OnInit {
 
         this.toastrService.success(`${value.name} organization Successfully established,
           and it was set as the default organization.`);
-          this.clearFields();
+
+        this.clearFields();
       },
       err => {
         this.toastrService.error(`Error The organization was not created!`);
+
         this.clearFields();
       }
     );
     this.onClose();
   }
 
-  private clearFields(): void {
-    // Object.keys(this.organizationForm.controls).forEach(field => {
-    //   const control = this.organizationForm.get(field);
-    //   control.markAsUntouched({ onlySelf: true });
-    //   control.setValue('');
-    // });
+  clearFields(): void {
+    Object.keys(this.organizationForm.controls).forEach(field => {
+      const control = this.organizationForm.get(field);
+      control.setValue('');
+      control.markAsPristine({ onlySelf: true });
+      control.markAsUntouched({ onlySelf: true });
+    });
   }
 
 }

@@ -5,11 +5,10 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class OrganizationInvitesHub {
   private hubConnection: HubConnection | undefined;
+  private isConnect: boolean;
 
   onAddInvite = new EventEmitter<OrganizationInvite>();
   onUpdateInvite = new EventEmitter<OrganizationInvite>();
@@ -31,6 +30,7 @@ export class OrganizationInvitesHub {
   }
 
   private startInviteHubConnection(): void {
+    if (this.isConnect) { return; }
     this.authService.getTokens().subscribe( ([firebaseToken, watcherToken]) => {
       this.createConnection(firebaseToken, watcherToken);
       console.log('OrganizationInvitesHub trying to connect');
@@ -69,6 +69,7 @@ export class OrganizationInvitesHub {
     this.hubConnection.onclose(err => {
       console.log('OrganizationInvitesHub connection closed');
       console.error(err);
+      this.isConnect = false;
       this.startInviteHubConnection();
     });
   }

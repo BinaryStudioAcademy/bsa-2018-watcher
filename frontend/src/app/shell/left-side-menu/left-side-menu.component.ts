@@ -1,8 +1,11 @@
-import {Component, OnInit, OnChanges} from '@angular/core';
-import {MenuItem} from 'primeng/api';
-import {Router, RouterEvent} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
 import {AfterContentChecked, AfterViewChecked} from '@angular/core';
 import {NavigationStart} from '@angular/router';
+import {Router, RouterEvent} from '@angular/router';
+import {MenuItem} from 'primeng/api';
+
+
+import {Instance} from '../../shared/models/instance.model';
 
 @Component({
   selector: 'app-left-side-menu',

@@ -52,6 +52,20 @@ namespace Watcher.Core.Services
             return info;
         }
 
+        public async Task<List<CollectedDataDto>> GetCollectedDataByInstanceId(Guid id, int count)
+        {
+            // Get collected data for instance for the last 3 minutes(~24 items)
+            //var entities = await _repository.GetCollectedDataByInstanceIdAsync(id, DateTime.UtcNow.AddMinutes(-3), DateTime.UtcNow);
+            var entities = await _repository.GetCollectedDataByInstanceIdAsync(id, count);
+
+            if (entities == null)
+            {
+                return null;
+            }
+            var dtos = _mapper.Map<IEnumerable<CollectedData>, List<CollectedDataDto>>(entities);
+            return dtos;
+        }
+
         public async Task<ProcessesCpuInfo> GetInstanceProcessCpuInfo(Guid id)
         {
             var entity = await _repository.GetEntityByInstanceIdAsync(id);

@@ -7,11 +7,10 @@ import { AuthService } from '../services/auth.service';
 import { Notification } from '../../shared/models/notification.model';
 import { NotificationType } from '../../shared/models/notification-type.enum';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NotificationsHubService {
   private hubConnection: HubConnection | undefined;
+  private isConnect: boolean;
 
   notificationReceived = new EventEmitter<Notification>();
   notificationDeleted = new EventEmitter<number>();
@@ -32,6 +31,7 @@ export class NotificationsHubService {
   }
 
   private startNotificationsHubConnection(): void {
+    if (this.isConnect) { return; }
     this.authService.getTokens().subscribe( ([firebaseToken, watcherToken]) => {
       this.createConnection(firebaseToken, watcherToken);
       console.log('NotificationsHub trying to connect');
@@ -75,6 +75,7 @@ export class NotificationsHubService {
     this.hubConnection.onclose(err => {
       console.log('NotificationsHub connection closed');
       console.error(err);
+      this.isConnect = false;
       this.startNotificationsHubConnection();
     });
   }

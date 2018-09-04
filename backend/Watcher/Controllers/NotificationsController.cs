@@ -1,16 +1,12 @@
-﻿
-
-using Watcher.Common.Requests;
-
-namespace Watcher.Controllers
+﻿namespace Watcher.Controllers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore.Internal;
 
     using Watcher.Common.Dtos;
+    using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
 
     [Route("[controller]")]
@@ -63,7 +59,7 @@ namespace Watcher.Controllers
             return NoContent();
         }
 
-        [HttpPut]
+        [HttpPut(Name = "UpdateManyNotifications")]
         public virtual async Task<ActionResult> Update([FromBody] IEnumerable<NotificationUpdateRequest> requests)
         {
             if (!ModelState.IsValid)

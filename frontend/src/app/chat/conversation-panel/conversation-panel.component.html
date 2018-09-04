@@ -1,13 +1,12 @@
 <app-conversation-settings-popup [onDisplay]="onDisplaySettings"></app-conversation-settings-popup>
 
-<div class="conversation-panel ui-shadow" [hidden]="!display">
-  <p-accordion (onClose)="collapseExtend()" (onOpen)="collapseExtend()" expandIcon="" collapseIcon="">
-    <p-accordionTab [selected]="display">
-
+<div class="conversation-panel ui-shadow">
+  <p-accordion (onClose)="window.isCollapsed = true" (onOpen)="extend()" expandIcon="" collapseIcon="">
+    <p-accordionTab [selected]="!window.isCollapsed">
       <p-header class="vertical-center">
         <div class="panel-name">
-          <span *ngIf="unreadMessages" class="message-counter">{{unreadMessages}}</span>
-          <div class="text-overflow">{{chat?.name}}</div>
+          <span *ngIf="window.unreadMessages" class="message-counter">{{window.unreadMessages}}</span>
+          <div class="text-overflow">{{window.chat.name}}</div>
         </div>
         <div class="vertical-center">
           <i class="icon fa fa-cog" (click)="openSettings($event)" pTooltip="Settings" tooltipPosition="top"></i>
@@ -17,15 +16,15 @@
 
       <div class="conversation-panel-content ui-fluid">
         <div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="conversation-message-list">
-          <div *ngFor="let message of chat?.messages" class="message" [ngClass]="{'received-message': message?.user?.id != currentUser?.id}">
+          <div *ngFor="let message of window.chat.messages" class="message" [ngClass]="{'received-message': message.user.id != currentUser?.id}">
             <div class="ui-g">
               <div class="ui-g-3 ui-g-nopad">
-                <img class="message-user-img" src="{{message?.user?.photoURL}}" />
+                <img class="message-user-img" src="{{message.user.photoURL}}" />
               </div>
               <div class="ui-g-9 ui-g-nopad">
                 <strong class="message-name text-overflow text-inline">{{message?.user?.displayName}}</strong>
-                <div class="message-text">{{message?.text}}</div>
-                <div class="message-date">{{message?.createdAt | date:'short'}}</div>
+                <div class="message-text">{{message.text}}</div>
+                <div class="message-date">{{message.createdAt | date:'short'}}</div>
               </div>
             </div>
           </div>
