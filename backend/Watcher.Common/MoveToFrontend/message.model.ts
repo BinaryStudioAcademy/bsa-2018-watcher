@@ -9,7 +9,6 @@ export interface Message  {
    user: User;
    userId: string;
    chatId: number;
-   chatName: string;
 }
 
 

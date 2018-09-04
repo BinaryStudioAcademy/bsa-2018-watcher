@@ -93,7 +93,7 @@
 
         public IMessagesRepository MessagesRepository => _messagesRepository ?? (_messagesRepository = new MessagesRepository(_context, _mapper));
 
-        public IUserChatRepository UserChatRepository => _userChatRepository ?? (_userChatRepository = new UserChatRepository(_context, _mapper));
+        public IUserChatRepository UserChatRepository => _userChatRepository ?? (_userChatRepository = new UserChatRepository(_context));
 
         public IOrganizationInvitesRepository OrganizationInvitesRepository =>
             _organizationInvitesRepository
