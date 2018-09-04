@@ -7,7 +7,6 @@ namespace Watcher.Core.Providers
 {
     using Microsoft.AspNetCore.Http;
 
-    using Watcher.Common.Enums;
     using Watcher.Common.Helpers.Utils;
 
     public class LocalFileStorageProvider : IFileStorageProvider
@@ -15,19 +14,6 @@ namespace Watcher.Core.Providers
         public LocalFileStorageProvider() { }
 
         public async Task<string> UploadFormFileAsync(IFormFile formFile)
-        {
-            var fileName = Guid.NewGuid() + Path.GetExtension(formFile.FileName);
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
-
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await formFile.CopyToAsync(stream);
-            }
-
-            return path;
-        }
-
-        public async Task<string> UploadFormFileAsync(IFormFile formFile, OperatingSystems system)
         {
             var fileName = Guid.NewGuid() + Path.GetExtension(formFile.FileName);
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);

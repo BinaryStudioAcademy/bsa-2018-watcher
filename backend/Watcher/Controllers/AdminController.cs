@@ -6,7 +6,6 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
-    using Watcher.Common.Enums;
     using Watcher.Core.Interfaces;
 
     public class AdminController : ControllerBase
@@ -20,14 +19,14 @@
 
         [HttpPost("CollectorInstaller")]
         [DisableRequestSizeLimit]
-        public async Task<IActionResult> UploadCollectorInstallerFile([FromForm] IFormFile file, OperatingSystems system)
+        public async Task<IActionResult> UploadCollectorInstallerFile([FromForm] IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return Content("file not selected");
 
             try
             {
-                var url = await _fileStorageProvider.UploadFormFileAsync(file, system);
+                var url = await _fileStorageProvider.UploadFormFileAsync(file);
                 return Ok(url);
             }
             catch (Exception e)

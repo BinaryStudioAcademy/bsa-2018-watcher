@@ -11,7 +11,6 @@ namespace Watcher.Core.Providers
 
     using Microsoft.AspNetCore.Http;
 
-    using Watcher.Common.Enums;
     using Watcher.Common.Helpers.Utils;
 
     public class FileStorageProvider : IFileStorageProvider
@@ -33,48 +32,8 @@ namespace Watcher.Core.Providers
             {
                 await container.CreateAsync();
             }
-
-            var filename = Guid.NewGuid() + Path.GetExtension(formFile.FileName);
-            var blob = container.GetBlockBlobReference(filename);
-
-            await SetPublicContainerPermissions(container);
-
-            using (var stream = formFile.OpenReadStream())
-            {
-                await blob.UploadFromStreamAsync(stream);
-            }
-
-            return blob.Uri.ToString();
-        }
-
-        public async Task<string> UploadFormFileAsync(IFormFile formFile, OperatingSystems system)
-        {
-            var client = _storageAccount.CreateCloudBlobClient();
-
-            var container = client.GetContainerReference("watcher");
-
-            if (await container.ExistsAsync() == false)
-            {
-                await container.CreateAsync();
-            }
-
-            CloudBlockBlob blob;
-            switch (system)
-            {
-                case OperatingSystems.Windows:
-                    blob = container.GetBlockBlobReference("CollectorInstallerWindows.exe");
-                    break;
-                case OperatingSystems.LinuxDeb:
-                    blob = container.GetBlockBlobReference("CollectorInstallerLinuxDeb.deb");
-                    break;
-                case OperatingSystems.LinuxTgz:
-                    blob = container.GetBlockBlobReference("CollectorInstallerLinuxTgz.tgz");
-                    break;
-                default:
-                    blob = container.GetBlockBlobReference("CollectorInstaller");
-                    break;
-            }
-
+            
+            var blob = container.GetBlockBlobReference("CollectorInstaller.exe");
             await SetPublicContainerPermissions(container);
 
             using (var stream = formFile.OpenReadStream())
