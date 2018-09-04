@@ -100,7 +100,6 @@
                .OnDelete(DeleteBehavior.Cascade);
 
             // Configure entity filters
-            //            modelBuilder.Entity<Post>().HasQueryFilter(p => !p.IsDeleted);
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
                 if (entity.ClrType.GetInterfaces().Contains(typeof(ISoftDeletable)))
