@@ -17,8 +17,7 @@ import { User } from '../../shared/models/user.model';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.sass'],
-  providers: [MessageService]
+  styleUrls: ['./header.component.sass']
 })
 export class HeaderComponent implements OnInit {
 

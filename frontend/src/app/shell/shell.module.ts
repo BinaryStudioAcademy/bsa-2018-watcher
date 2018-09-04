@@ -69,10 +69,6 @@ import { AuthService } from '../core/services/auth.service';
     ClickOutsideDirective,
     NotificationBlockComponent,
     SpinnerPopupComponent
-  ],
-  providers: [
-    ToastrService,
-    AuthService
   ]
 })
 export class ShellModule { }

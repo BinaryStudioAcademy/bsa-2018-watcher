@@ -3,7 +3,6 @@ import { MessageService } from 'primeng/api';
 
 import { Message } from '../../shared/models/message.model';
 import { Notification } from '../../shared/models/notification.model';
-import { NotificationType } from '../../shared/models/notification-type.enum';
 
 @Injectable()
 export class SystemToastrService {

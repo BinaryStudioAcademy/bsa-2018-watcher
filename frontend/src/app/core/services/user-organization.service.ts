@@ -4,9 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-@Injectable(/*{
-  providedIn: 'root'
-}*/)
+@Injectable()
 export class UserOrganizationService {
   ctrlUrl = environment.server_url + '/UserOrganization';
 

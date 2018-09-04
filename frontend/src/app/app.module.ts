@@ -61,7 +61,6 @@ import { SystemNotificationComponent } from './notification/system-notification/
     AppRoutingModule,
     ShellModule
   ],
-  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
