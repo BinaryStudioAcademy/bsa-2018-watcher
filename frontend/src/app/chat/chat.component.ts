@@ -34,9 +34,11 @@ export class ChatComponent implements OnInit {
   selectedChat: Chat;
   currentUserId: string;
   totalUnreadMessages = 0;
+  isLoading: Boolean = false;
 
   ngOnInit() {
     this.currentUserId = this.authService.getCurrentUser().id;
+    this.isLoading = true;
     this.chatService.getByUserId(this.currentUserId).subscribe(
       chats => {
         chats.reverse();
@@ -45,9 +47,11 @@ export class ChatComponent implements OnInit {
           this.totalUnreadMessages += chat.unreadMessagesCount;
         });
         this.subscribeToEvents();
+        this.isLoading = false;
       },
       err => {
         this.toastrService.error('Can`t get user`s chats');
+        this.isLoading = false;
       }
     );
   }

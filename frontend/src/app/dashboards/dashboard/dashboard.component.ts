@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   displayEditDashboard = false;
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
-  chartToEdit = { ...defaultOptions } ;
+  chartToEdit = {...defaultOptions};
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -57,9 +57,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.authService.getTokens().subscribe(async ([firebaseToken, watcherToken]) => {
+    try {
+      const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
       await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
-    });
+    } catch (e) {
+      console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(e));
+    }
+
+      // .then(async ([firebaseToken, watcherToken]) => {
+      //   await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
+      // })
+      // .catch(reason => console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(reason)));
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
 
     this.paramsSubscription = this.activateRoute.params.subscribe(params => {
@@ -97,7 +105,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           });
       }).catch(reason => {
         console.error(reason);
-          this.toastrService.error('Error occurred while fetching instance\'s Dashboards');
+        this.toastrService.error('Error occurred while fetching instance\'s Dashboards');
       });
 
     });
@@ -251,6 +259,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.decomposeChart(chart);
     this.showChartCreating();
   }
+
   onEdited(title: string) {
     this.loading = true;
     if (this.creation === true) {
@@ -323,9 +332,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   decomposeChart(chart: DashboardChart): void {
-    this.chartToEdit = { ...chart };
-    this.chartToEdit.colorScheme = { ...chart.colorScheme };
-    this.chartToEdit.chartType = { ...chart.chartType };
+    this.chartToEdit = {...chart};
+    this.chartToEdit.colorScheme = {...chart.colorScheme};
+    this.chartToEdit.chartType = {...chart.chartType};
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
