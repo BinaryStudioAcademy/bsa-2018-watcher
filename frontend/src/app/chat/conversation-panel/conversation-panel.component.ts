@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 
 import { AuthService } from '../../core/services/auth.service';
 import { ChatHub } from '../../core/hubs/chat.hub';
@@ -7,6 +7,7 @@ import { MessageRequest } from '../../shared/requests/message-request';
 import { Message } from '../../shared/models/message.model';
 import { User } from '../../shared/models/user.model';
 import { Chat } from '../../shared/models/chat.model';
+import { ChatWindow } from '../../shared/models/chat-window.model';
 
 
 @Component({
@@ -16,20 +17,16 @@ import { Chat } from '../../shared/models/chat.model';
     './conversation-panel.component.sass',
     '../chat.component.sass']
 })
-export class ConversationPanelComponent implements OnInit {
+export class ConversationPanelComponent implements OnInit, OnDestroy {
 
-  @Input() chat: Chat;
-
-  @Output() collapse = new EventEmitter<boolean>();
+  @Input() window: ChatWindow;
   @Output() close = new EventEmitter();
-  currentUser: User;
+  @Output() extended = new EventEmitter<number>();
 
-  display: boolean;
-  isCollapse: boolean;
   onDisplaySettings = new EventEmitter<Chat>();
 
+  currentUser: User;
   textMessage: string;
-  unreadMessages = 0;
 
   constructor(
     private authService: AuthService,
@@ -37,41 +34,44 @@ export class ConversationPanelComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-     this.subscribeToEvents();
+    this.subscribeToEvents();
+    this.markMessagesAsRead();
+  }
+
+  ngOnDestroy() {
+    //this.chatHub.messageReceived.unsubscribe();
   }
 
   subscribeToEvents() {
     this.chatHub.messageReceived.subscribe((message: Message) => {
-      if (this.chat && this.chat.id === message.chatId) {
-        if (this.isCollapse) {
-          this.unreadMessages++;
+      if (this.window.chat.id === message.chatId) {
+        this.window.chat.messages.push(message);
+        if (this.window.isCollapsed) {
+          this.window.unreadMessages++;
+          console.log(this.window.unreadMessages);
+        } else {
+          this.markMessagesAsRead();
         }
-        this.chat.messages.push(message);
-        this.markMessagesAsRead();
       }
     });
   }
 
-  collapseExtend() {
-    if (this.isCollapse) {
-      this.isCollapse = false;
-      this.unreadMessages = 0;
-    } else {
-      this.isCollapse = true;
-    }
-    this.collapse.emit(this.isCollapse);
+  extend() {
+    this.markMessagesAsRead();
+    this.window.isCollapsed = false;
+    this.window.unreadMessages = 0;
+    this.extended.emit(this.window.chat.id);
   }
 
   openSettings(event) {
     event.stopPropagation();
     event.preventDefault();
-    this.onDisplaySettings.emit(this.chat);
+    this.onDisplaySettings.emit(this.window.chat);
   }
 
   closePanel(event) {
     event.stopPropagation();
     event.preventDefault();
-    this.isCollapse = false;
     this.close.emit();
   }
 
@@ -83,7 +83,7 @@ export class ConversationPanelComponent implements OnInit {
     const newMessage: MessageRequest = {
       text: this.textMessage,
       userId: this.currentUser.id,
-      chatId: this.chat.id,
+      chatId: this.window.chat.id,
       createdAt: new Date()
     } as MessageRequest;
 
@@ -92,7 +92,7 @@ export class ConversationPanelComponent implements OnInit {
   }
 
   markMessagesAsRead() {
-    this.chat.messages.forEach(m => {
+    this.window.chat.messages.forEach(m => {
       if (!m.wasRead) {
         this.chatHub.markMessageAsRead(m.id);
       }

@@ -1,5 +1,5 @@
 <p-dialog [(visible)]="display" [modal]="true" [responsive]="true" [contentStyle]="{'overflow':'visible'}" [width]="350"
-  [baseZIndex]="10000" (onHide)="closeSettings()">
+  [baseZIndex]="10000" appendTo="body" (onHide)="closeSettings()">
   <p-header>
     Chat settings
   </p-header>

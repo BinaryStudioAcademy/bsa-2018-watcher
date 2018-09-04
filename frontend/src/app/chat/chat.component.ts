@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, HostListener, OnInit, EventEmitter } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 
 import { ChatHub } from '../core/hubs/chat.hub';
@@ -26,18 +26,21 @@ export class ChatComponent implements OnInit {
     private toastrService: ToastrService,
     private systemToastrService: SystemToastrService) { }
 
-  public onDisplayChat = new EventEmitter<number>();
   public onDisplayCreating = new EventEmitter<boolean>();
 
-  isSelectedChatCollapsed: boolean;
   chatWindows: ChatWindow[] = [];
+  maxSupportedOpenedWindows: number;
+
+  totalUnreadMessages = 0;
   chatList: SelectItem[] = [];
   selectedChat: Chat;
   currentUserId: string;
-  totalUnreadMessages = 0;
+
   isLoading: Boolean = false;
 
   ngOnInit() {
+    this.calculateMaxSupportedOpenedWindows(window.innerWidth);
+
     this.currentUserId = this.authService.getCurrentUser().id;
     this.isLoading = true;
     this.chatService.getByUserId(this.currentUserId).subscribe(
@@ -57,17 +60,31 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  selectChat() {
+  openChat() {
+    if (!this.chatWindows.some(c => c.chat.id === this.selectedChat.id)) {
+      this.chatService.get(this.selectedChat.id).subscribe((value: Chat) => {
+        this.chatWindows.unshift({
+          chat: value,
+          isCollapsed: false,
+          unreadMessages: 0
+        });
+        this.removeWindowsOverflow();
+      });
+    } else {
+      // If chat opened but collpsed
+      const window = this.chatWindows.find(cw => cw.chat.id === this.selectedChat.id);
+      window.unreadMessages = 0;
+      window.isCollapsed = false;
+    }
+
+    // Clear counter when chat opens
     if (this.selectedChat.unreadMessagesCount) {
       this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
       this.selectedChat.unreadMessagesCount = 0;
     }
 
-    if (!this.chatWindows.some(c => c.chat.id === this.selectedChat.id)) {
-      this.chatService.get(this.selectedChat.id).subscribe((value: Chat) => {
-        this.chatWindows.unshift({ chat: value, isCollapsed: false });
-      });
-    }
+    // Clear chat selecting in list
+    this.selectedChat = {} as Chat;
   }
 
   openCreating(event) {
@@ -76,26 +93,31 @@ export class ChatComponent implements OnInit {
     this.onDisplayCreating.emit(true);
   }
 
-  onCollapseChat(isCollapsed) {
-    this.isSelectedChatCollapsed = isCollapsed;
-    if (!isCollapsed) {
-      this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
-      this.selectedChat.unreadMessagesCount = 0;
-    }
+  clearCounterForChat(chatId: number) {
+    const window = this.chatList.find(c => c.value.id === chatId);
+    this.totalUnreadMessages -= window.value.unreadMessagesCount;
+    window.value.unreadMessagesCount = 0;
+  }
+
+  removeChatWindow(chatId: number) {
+    const index = this.chatWindows.findIndex(c => c.chat.id === chatId);
+    this.chatWindows.splice(index, 1);
   }
 
   subscribeToEvents() {
     this.chatService.openChatClick.subscribe((id: number) => {
       this.selectedChat = this.chatList.find(x => x.value.id === id).value;
-      this.selectChat();
+      this.openChat();
     });
 
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
       this.chatList.unshift({ value: chat });
+      debugger;
 
+      // Open only for user who create it
       if (chat.createdBy.id === this.currentUserId) {
-        this.selectedChat = this.chatList[0].value;
-        this.selectChat();
+        this.selectedChat = chat;
+        this.openChat();
       }
     });
 
@@ -107,15 +129,20 @@ export class ChatComponent implements OnInit {
       this.chatList.splice(index, 1, { value: chat });
       if (this.selectedChat && this.selectedChat.id === chat.id) {
         this.selectedChat = chat;
-        this.onDisplayChat.emit(chat.id);
+        //this.openChat();
       }
     });
 
     this.chatHub.chatDeleted.subscribe((chat: Chat) => {
-      this.onDisplayChat.emit();
       const indexOfChat = this.chatList.map(item => item.value.id).indexOf(chat.id);
       this.totalUnreadMessages -= this.chatList[indexOfChat].value.unreadMessagesCount;
       this.chatList.splice(indexOfChat, 1);
+
+      debugger;
+      const windowIndex = this.chatWindows.findIndex(w => w.chat.id === chat.id);
+      if (windowIndex) {
+        this.chatWindows.slice(windowIndex, 1);
+      }
     });
 
     this.chatHub.messageReceived.subscribe((message: Message) => {
@@ -129,7 +156,7 @@ export class ChatComponent implements OnInit {
         }
 
         // Don`t count unread if chat is open and not collapse
-        if (!(this.selectedChat && !this.isSelectedChatCollapsed && this.selectedChat.id === message.chatId)) {
+        if (!this.chatWindows.some(cw => cw.chat.id === message.chatId && !cw.isCollapsed)) {
           this.totalUnreadMessages++;
           this.chatList.find(x => x.value.id === message.chatId).value.unreadMessagesCount++;
         }
@@ -152,8 +179,21 @@ export class ChatComponent implements OnInit {
     return groupeImg;
   }
 
-  removeChatWindow(chatId: number) {
-    const index = this.chatWindows.findIndex(c => c.chat.id === chatId);
-    this.chatWindows.splice(index, 1);
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.calculateMaxSupportedOpenedWindows(event.target.innerWidth);
+    this.removeWindowsOverflow();
+  }
+
+  calculateMaxSupportedOpenedWindows(width: number) {
+    this.maxSupportedOpenedWindows = Math.floor((width - 190) / (250 + 20));
+  }
+
+  removeWindowsOverflow() {
+    const difference = this.chatWindows.length - this.maxSupportedOpenedWindows;
+    // Remove windows if don`t have place
+    if (difference > 0) {
+      this.chatWindows.splice(this.chatWindows.length - difference);
+    }
   }
 }
