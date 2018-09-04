@@ -9,8 +9,8 @@
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
       <div class="title">DASHBOARDS</div>
-      <div *ngIf="!instanceId || dashboards.length == 0" class="placeholder">
-          <hr>
+      <div *ngIf="!instanceId" class="placeholder">
+
           <div>
             <i class="fa fa-plus"></i> 1. Create a VM instance
           </div>
@@ -20,13 +20,14 @@
           <div>
             <i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity
           </div>
-        </div>
+      </div>
+
     </div>
 
   </div>
   <!--Item showAddItemPopup() -->
-  <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId && dashboards.length !== 0"></p-tabMenu>
-  <div class="workspace" *ngIf="instanceId && dashboards.length !== 0">
+  <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
+  <div class="workspace" *ngIf="instanceId">
     <div *ngIf="activeDashboardItem && dashboardMenuItems.length > 1" class="dashboard-options">
       <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
       <button #btn type="button" class="gear" pButton icon="fa fa-fw fa-gear" (click)="cog.toggle($event)"></button>
@@ -42,4 +43,6 @@
                          (deleteChart)="onChartDeleted($event)">
     </app-chart-dashboard>
   </div>
+
+
 </div>
