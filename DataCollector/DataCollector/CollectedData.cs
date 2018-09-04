@@ -98,10 +98,10 @@ namespace DataCollector
             var str = new StringBuilder();
             str.Append($"Instance id: {ClientId}\n");
             str.Append($"Processes count: {ProcessesCount}\n");
-            str.Append($"CPU usage: {CpuUsagePercent:.##}%\n");
-            str.Append($"Ram avalaible: {AvaliableRamBytes:.##} MB\n");
-            str.Append($"Ram usage: {RamUsagePercent:.##}%\n");
-            str.Append($"Local disk avalaible: {LocalDiskFreeMBytes:.##} MB\n");
+            str.Append($"CPU usage: {CpuUsagePercent:0.##}%\n");
+            str.Append($"Ram avalaible: {AvaliableRamBytes:0.##} MB\n");
+            str.Append($"Ram usage: {RamUsagePercent:0.##}%\n");
+            str.Append($"Local disk avalaible: {LocalDiskFreeMBytes:0.##} MB\n");
             return str.ToString();
         }
 

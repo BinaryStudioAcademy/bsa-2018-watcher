@@ -16,16 +16,16 @@ export class ChartDashboardComponent implements OnInit {
   @Output() deleteChart = new EventEmitter<number>();
 
   constructor(private chartService: ChartService, private toastrService: ToastrService) {
-    this.getChildPayload1 = this.getChildPayload1.bind(this);
-  }
 
+  }
+/*this.getChildPayload1 = this.getChildPayload1.bind(this);
   onDrop(collection, dropResult) {
     this[collection] = applyDrag(this[collection], dropResult);
   }
 
   getChildPayload1(index) {
     return this.charts[index];
-  }
+  }*/
 
   ngOnInit() {
   }

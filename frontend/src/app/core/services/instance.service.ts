@@ -9,9 +9,7 @@ import { EventEmitter } from '@angular/core';
 import { Instance } from '../../shared/models/instance.model';
 import { ApiService } from './api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class InstanceService {
 
   private url = environment.server_url + '/instances';

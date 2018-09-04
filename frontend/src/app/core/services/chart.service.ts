@@ -4,9 +4,7 @@ import { Chart } from '../../shared/models/chart.model';
 import { ChartRequest } from '../../shared/requests/chart-request.model';
 import {ApiService} from './api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ChartService {
   private readonly ctrlUrl = 'Charts';
 

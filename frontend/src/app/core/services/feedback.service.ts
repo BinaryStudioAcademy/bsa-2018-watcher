@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { Feedback } from '../../shared/models/feedback.model';
 import { ApiService } from './api.service';
 
-@Injectable(/*{
-  providedIn: 'root'
-}*/)
+@Injectable()
 export class FeedbackService {
   private readonly ctrlUrl = 'feedbacks';
 
@@ -17,7 +14,7 @@ export class FeedbackService {
     return this.apiService.get(`/${this.ctrlUrl}`);
   }
 
-  getRange(page: number, pageSize: number) : Observable<Feedback[]> {
+  getRange(page: number, pageSize: number): Observable<Feedback[]> {
     return this.apiService.get(`/${this.ctrlUrl}/table?page=${page}&pageSize=${pageSize}`);
   }
 
@@ -32,5 +29,4 @@ export class FeedbackService {
   create(feedback: Feedback) {
     return this.apiService.post(`/${this.ctrlUrl}`, feedback);
   }
-
 }

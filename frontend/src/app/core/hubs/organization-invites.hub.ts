@@ -5,9 +5,7 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class OrganizationInvitesHub {
   private hubConnection: HubConnection | undefined;
   private isConnect: boolean;

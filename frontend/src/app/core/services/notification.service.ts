@@ -3,9 +3,7 @@ import { ApiService } from './api.service';
 import { Notification } from '../../shared/models/notification.model';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NotificationService {
 
   private readonly ctrlUrl = 'Notifications';
