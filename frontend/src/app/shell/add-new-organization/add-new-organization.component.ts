@@ -45,6 +45,7 @@ export class AddNewOrganizationComponent implements OnInit {
   onClose() {
     this.display = false;
     this.displayChange.emit(this.display);
+    this.clearFields();
   }
 
   onAdd() {
