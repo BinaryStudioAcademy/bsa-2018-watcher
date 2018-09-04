@@ -3,6 +3,7 @@ import {DashboardChart} from '../../models/dashboard-chart';
 import {applyDrag} from './utils';
 import {ChartService} from '../../../core/services/chart.service';
 import {ToastrService} from '../../../core/services/toastr.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-chart-dashboard',
@@ -27,7 +28,53 @@ export class ChartDashboardComponent implements OnInit {
     return this.charts[index];
   }*/
 
+  items: MenuItem[];
+
   ngOnInit() {
+    this.items = [
+      {
+        label: 'Edit',
+        icon: 'fa fa-fw fa-edit',
+        command: (event) => console.log(),
+      },
+      {
+        label: 'Delete',
+        icon: 'fa fa-fw fa-remove',
+        command: (event) => console.log()
+      }
+    ];
+  }
+
+  onClickMenu(chart: DashboardChart) {
+    this.items = [
+      {
+        label: 'Edit',
+        icon: 'fa fa-fw fa-edit',
+        command: () => this.edit(chart),
+      },
+      {
+        label: 'Delete',
+        icon: 'fa fa-fw fa-remove',
+        command: () => this.delete(chart.id)
+      }
+    ];
+  }
+
+  getItems(chart: DashboardChart) {
+    const items: MenuItem[] = [
+      {
+        label: 'Edit',
+        icon: 'fa fa-fw fa-edit',
+        command: () => this.edit(chart),
+      },
+      {
+        label: 'Delete',
+        icon: 'fa fa-fw fa-remove',
+        command: () => this.delete(chart.id)
+      }
+    ];
+
+    return items;
   }
 
   edit(chart: DashboardChart) {

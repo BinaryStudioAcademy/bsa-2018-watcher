@@ -15,6 +15,7 @@ import {
   ButtonModule,
   TabMenuModule,
   ProgressSpinnerModule,
+  TooltipModule,
   InputTextModule} from 'primeng/primeng';
 import { EditDashboardComponent} from './editDashboard/editDashboard.component';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -66,7 +67,8 @@ import {NgxSmoothDnDModule} from 'ngx-smooth-dnd';
     TieredMenuModule,
     MultiSelectModule,
     SliderModule,
-    SpinnerModule
+    SpinnerModule,
+    TooltipModule
   ],
   declarations: [
     DashboardComponent,
