@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { ChatService } from '../../core/services/chat.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ChatHub } from '../../core/hubs/chat.hub';
 
@@ -19,10 +18,10 @@ import { Chat } from '../../shared/models/chat.model';
 })
 export class ConversationPanelComponent implements OnInit {
 
-  @Input() onDisplay: EventEmitter<number>;
+  @Input() chat: Chat;
+
   @Output() collapse = new EventEmitter<boolean>();
   @Output() close = new EventEmitter();
-  chat: Chat;
   currentUser: User;
 
   display: boolean;
@@ -34,28 +33,14 @@ export class ConversationPanelComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private chatService: ChatService,
     private chatHub: ChatHub) { }
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    this.subscribeToEvents();
+     this.subscribeToEvents();
   }
 
   subscribeToEvents() {
-    this.onDisplay.subscribe((chatId: number) => {
-      if (!chatId) {
-        this.display = false;
-        return;
-      }
-      this.chatService.get(chatId).subscribe((chat: Chat) => {
-        this.chat = chat;
-        this.markMessagesAsRead();
-        this.unreadMessages = 0;
-        this.display = true;
-      });
-    });
-
     this.chatHub.messageReceived.subscribe((message: Message) => {
       if (this.chat && this.chat.id === message.chatId) {
         if (this.isCollapse) {
@@ -86,7 +71,6 @@ export class ConversationPanelComponent implements OnInit {
   closePanel(event) {
     event.stopPropagation();
     event.preventDefault();
-    this.display = false;
     this.isCollapse = false;
     this.close.emit();
   }

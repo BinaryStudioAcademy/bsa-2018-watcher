@@ -1,8 +1,8 @@
 <app-conversation-settings-popup [onDisplay]="onDisplaySettings"></app-conversation-settings-popup>
 
-<div class="conversation-panel ui-shadow" [hidden]="!display">
+<div class="conversation-panel ui-shadow">
   <p-accordion (onClose)="collapseExtend()" (onOpen)="collapseExtend()" expandIcon="" collapseIcon="">
-    <p-accordionTab [selected]="display">
+    <p-accordionTab [selected]="true">
 
       <p-header class="vertical-center">
         <div class="panel-name">

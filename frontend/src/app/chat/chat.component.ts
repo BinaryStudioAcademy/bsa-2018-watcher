@@ -9,6 +9,7 @@ import { SystemToastrService } from '../core/services/system-toastr.service';
 
 import { Chat } from '../shared/models/chat.model';
 import { Message } from '../shared/models/message.model';
+import { ChatWindow } from '../shared/models/chat-window.model';
 
 
 @Component({
@@ -23,13 +24,13 @@ export class ChatComponent implements OnInit {
     private authService: AuthService,
     private chatService: ChatService,
     private toastrService: ToastrService,
-
     private systemToastrService: SystemToastrService) { }
 
   public onDisplayChat = new EventEmitter<number>();
   public onDisplayCreating = new EventEmitter<boolean>();
 
   isSelectedChatCollapsed: boolean;
+  chatWindows: ChatWindow[] = [];
   chatList: SelectItem[] = [];
   selectedChat: Chat;
   currentUserId: string;
@@ -61,7 +62,12 @@ export class ChatComponent implements OnInit {
       this.totalUnreadMessages -= this.selectedChat.unreadMessagesCount;
       this.selectedChat.unreadMessagesCount = 0;
     }
-    this.onDisplayChat.emit(this.selectedChat.id);
+
+    if (!this.chatWindows.some(c => c.chat.id === this.selectedChat.id)) {
+      this.chatService.get(this.selectedChat.id).subscribe((value: Chat) => {
+        this.chatWindows.unshift({ chat: value, isCollapsed: false });
+      });
+    }
   }
 
   openCreating(event) {
@@ -144,5 +150,10 @@ export class ChatComponent implements OnInit {
       return chat.users[0].photoURL || partnerImg;
     }
     return groupeImg;
+  }
+
+  removeChatWindow(chatId: number) {
+    const index = this.chatWindows.findIndex(c => c.chat.id === chatId);
+    this.chatWindows.splice(index, 1);
   }
 }
