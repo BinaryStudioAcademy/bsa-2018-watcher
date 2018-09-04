@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Response } from '../../shared/models/response.model';
 
-@Injectable(/*{
-  providedIn: 'root'
-}*/)
+@Injectable()
 export class ResponseService {
 
   URL = environment.server_url + '/Responses';

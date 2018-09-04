@@ -11,12 +11,9 @@ import {dashboardChartTypes} from '../../dashboards/charts/models/dashboardChart
 import {defaultOptions} from '../../dashboards/charts/models/chart-options';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DataService {
-  constructor() {
-  }
+  constructor() { }
 
   convertStringToArrEnum(sources: string) {
     const array: DataProperty[] = [];

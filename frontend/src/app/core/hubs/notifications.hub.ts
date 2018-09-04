@@ -7,9 +7,7 @@ import { AuthService } from '../services/auth.service';
 import { Notification } from '../../shared/models/notification.model';
 import { NotificationType } from '../../shared/models/notification-type.enum';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NotificationsHubService {
   private hubConnection: HubConnection | undefined;
   private isConnect: boolean;

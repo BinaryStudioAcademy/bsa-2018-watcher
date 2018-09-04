@@ -107,6 +107,12 @@ namespace Watcher.Core.Hubs
 
             var changedChat = await _chatsService.GetEntityByIdAsync(chatId);
 
+            if (UsersConnections.ContainsKey(userId))
+            {
+                foreach (string connectionId in UsersConnections[userId])
+                    await Clients.Client(connectionId).SendAsync("ChatDeleted", changedChat);
+            }
+
             foreach (var user in changedChat.Users)
             {
                 if (!UsersConnections.ContainsKey(user.Id)) continue;

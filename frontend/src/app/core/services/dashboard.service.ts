@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Dashboard } from '../../shared/models/dashboard.model';
 import { Observable } from 'rxjs';
-import {DashboardRequest} from '../../shared/models/dashboard-request.model';
-import {ApiService} from './api.service';
-import {Instance} from '../../shared/models/instance.model';
+import { DashboardRequest } from '../../shared/models/dashboard-request.model';
+import { ApiService } from './api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DashboardService {
   private ctrlUrl = 'Dashboards';
 
