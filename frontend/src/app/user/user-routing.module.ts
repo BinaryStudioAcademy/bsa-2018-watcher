@@ -9,8 +9,8 @@ const userRoutes: Routes = [
     pathMatch: 'full' // TODO: Write resolver that redirect or just fetch Organization first instance to show dashboards
   },
   { path: 'instances', loadChildren: '../dashboards/dashboards.module#DashboardsModule' },
-  {path: 'feedback', component: FeedbackComponent},
-  {path: 'settings', loadChildren: '../settings/settings.module#SettingsModule'}
+  { path: 'feedback', component: FeedbackComponent },
+  { path: 'settings', loadChildren: '../settings/settings.module#SettingsModule' }
   ];
 
 @NgModule({

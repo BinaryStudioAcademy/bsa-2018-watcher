@@ -42,6 +42,7 @@ import { DashboardService } from '../core/services/dashboard.service';
 
 import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
 import {NgxSmoothDnDModule} from 'ngx-smooth-dnd';
+import { ReportComponent } from './report/report.component';
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import {NgxSmoothDnDModule} from 'ngx-smooth-dnd';
 
     ChartComponent,
     ChartDashboardComponent,
-    EditChartComponent
+    EditChartComponent,
+    ReportComponent
   ],
   providers: [ToastrService, DashboardService],
   exports: []

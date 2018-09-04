@@ -103,6 +103,24 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
+        // Query by instance and type in time
+        public async Task<IEnumerable<CollectedData>> GetEntitiesByInstanceIdAndTypeInTime(Guid id, CollectedDataType collectedDataType,
+            DateTime timeFrom, DateTime timeTo)
+        {
+            try
+            {
+                var query = _context.Datasets
+                    .Find(d => d.ClientId == id && d.CollectedDataType == collectedDataType && d.Time >= timeFrom && d.Time <= timeTo);
+
+                return await query.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public async Task AddEntity(CollectedData collectedData)
         {
             try

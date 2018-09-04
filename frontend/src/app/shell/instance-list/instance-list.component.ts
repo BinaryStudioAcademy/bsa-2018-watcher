@@ -82,6 +82,11 @@ export class InstanceListComponent implements OnInit {
           this.currentGuidId = instance.guidId;
         }
       }, {
+        label: 'Report',
+        icon: 'fa fa-stack-exchange',
+        routerLink: [`/user/instances/${instance.id}/${instance.guidId}/report`],
+        styleClass: 'instance-options'
+      }, {
         label: 'Delete',
         icon: 'fa fa-close',
         command: () => {
