@@ -1,12 +1,82 @@
-<p-dialog class="download-dialog" header="Data collector" (onHide)="closeDialog()" appendTo="body" [(visible)]="display" [modal]="true" [responsive]="true"
-    [draggable]="false" [width]="380" [minWidth]="200" [maximizable]="false" [baseZIndex]="999">
-    <p>Enter this instance id in desktop app: </p>
-    <div class="ui-inputgroup">
-        <input pInputText readonly type="text" placeholder="Guid id" [value]="guid" />
-        <button pButton type="button" label="Copy" class="ui-button-info" (click)="copyToClipboard(guid)"></button>
+<p-dialog class="download-dialog" header="DOWNLOAD DATA COLLECTOR" (onHide)="closeDialog()" appendTo="body" [(visible)]="display" [modal]="true" [responsive]="true"
+    [draggable]="false" [width]="650" [minWidth]="650" [maximizable]="false" [baseZIndex]="999">
+    <div class="wrapper">
+        <div class="box header">
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-12">
+                    <p>Enter this instance id in desktop app: </p>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-inputgroup">
+                        <input type="text" readonly class="guid" [value]="guid" placeholder="Guid id" pInputText placeholder="Keyword">   
+                        <button pButton class="ui-button-raised ui-button-info" (click)="copyToClipboard(guid)" label="Copy" ></button>      
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box win">
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-12">
+                    <p class="lableOS">Windows installer</p>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                        <div class="ui-input">
+                            <div class="windowsSteps">
+                                <p >
+                                     1. Download and run installer.
+                                </p>
+                                <p>
+                                    2. Set the guid.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-input">
+                        <a href="https://filestoragetestbsa2018.blob.core.windows.net/watcher/DataCollector.exe"
+                            pButton label="Download" (click)="closeDialog()" class="ui-button-info">
+                        </a>      
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box linux">
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-12">
+                    <p class="lableOS">Linux installer</p>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-input">
+                        <div class="linuxCmd">
+                            <p >
+                                 # The first start should be with the rights of root,
+                            </p>
+                            <p >
+                                # for correct recording of the config.
+                            </p>
+                            <p >
+                                <span>~$</span> sudo /usr/bin/DataCollector/DataCollector
+                            </p>
+                        </div>
+                    </div>
+                </div>
+               
+            
+                <div class="ui-g-12 ui-md-6">
+                    <div class="ui-input">
+                        <a href="https://bsawatcherfiles.blob.core.windows.net/watcher/DataCollector-1.0-1.deb"
+                            pButton label="Download .deb" (click)="closeDialog()" class="ui-button-info">
+                        </a>      
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-6">
+                    <div class="ui-input">
+                        <a href="https://bsawatcherfiles.blob.core.windows.net/watcher/DataCollector-1.0.tgz"
+                            pButton label="Download .tgz" (click)="closeDialog()" class="ui-button-info">
+                        </a>      
+                    </div>
+                </div>
+        </div>
+        </div>
     </div>
-    <a href="https://filestoragetestbsa2018.blob.core.windows.net/watcher/DataCollector.exe"
-    pButton type="button"
-    label="Download" (click)="closeDialog()">
-    </a>
 </p-dialog>
