@@ -82,7 +82,17 @@ export class DataService {
       return [];
     }
     if (chartType === ChartType.LineChart) {
-      return this.mapToMultiData(dataToTransform, dataSources);
+      const data = this.mapToMultiData(dataToTransform, dataSources);
+      for (let i = 0; i < data.length; i++) {
+        data[i].series.sort((a, b) => {
+          if (a.name > b.name) { return 1; }
+          if (a.name < b.name) { return -1; }
+          return 0;
+        });
+      }
+
+      return data;
+      // order ascending to in future remove first element (the oldest)
     } else {
       return this.mapToSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources);
     }
@@ -133,10 +143,13 @@ export class DataService {
   }
 
   mapToMultiDataOnUpdate(oldData: CustomData[], newData: CollectedData, properties: DataProperty[]): CustomData[] {
-    if (oldData.length > 20) {
+    if (oldData[0].series.length > 20) { // TODO: refactor
+      for (let i = 0; i < oldData.length; i++) {
+        // oldData.push(oldData.slice(1)); // Start from first element(removes oldest data el)
+        oldData[i].series.shift();
+      }
       // TODO: remove oldest element from array - use order by or sort or smt coz data can be not ordered by date
       // TODO: maybe depend on chart's setting get from old array specific amount of data or etc.
-      oldData.push(oldData.slice(1)); // Start from first element(removes oldest data el)
     }
     const newDataToPush = this.mapToMultiData([newData], properties);
     for (let i = 0; i < properties.length; i++) {
