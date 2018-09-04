@@ -4,11 +4,12 @@
   [dashboardId]="activeDashboardItem ? activeDashboardItem.dashId : 0" [dashboardChart]="chartToEdit">
 </app-edit-chart>
 
-<div class="site-wrap">
+<p-progressSpinner class=spinner *ngIf="isLoading" strokeWidth="3"></p-progressSpinner>
+<div class="site-wrap" *ngIf="!isLoading">
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6">
       <div class="title">DASHBOARDS</div>
-      <div *ngIf="!instanceId" class="placeholder">
+      <div *ngIf="!instanceId || dashboards.length == 0" class="placeholder">
           <hr>
           <div>
             <i class="fa fa-plus"></i> 1. Create a VM instance
@@ -24,8 +25,8 @@
 
   </div>
   <!--Item showAddItemPopup() -->
-  <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
-  <div class="workspace" *ngIf="instanceId">
+  <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId && dashboards.length !== 0"></p-tabMenu>
+  <div class="workspace" *ngIf="instanceId && dashboards.length !== 0">
     <div *ngIf="activeDashboardItem && dashboardMenuItems.length > 1" class="dashboard-options">
       <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
       <button #btn type="button" class="gear" pButton icon="fa fa-fw fa-gear" (click)="cog.toggle($event)"></button>
