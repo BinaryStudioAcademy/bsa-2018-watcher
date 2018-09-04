@@ -12,6 +12,10 @@ namespace DataCollector
 
         public static Timer TimerItem;
 
+        private static readonly HttpClient _client = new HttpClient();
+        private static Logger _logger;
+        private static bool isFirstCollection = true;
+
         //event for exiting by pressing ctrl+c
         private static readonly AutoResetEvent Closing = new AutoResetEvent(false);
         public static IConfiguration Configuration { get; set; }
@@ -47,8 +51,10 @@ namespace DataCollector
             Console.WriteLine("Initializating...");
             // sender and collector for timer
             var payload = (
-                new DataSender(new HttpClient(), uri),
+                new DataSender(_client, uri),
                 Collector.Instance);
+
+            _logger = new Logger(_client, uri);
 
             // setting timer for collecting proccess
             TimerItem = new Timer(Timercallback, payload, 0, delay);
@@ -60,6 +66,7 @@ namespace DataCollector
 
         protected static void OnExit(object sender, EventArgs e)
         {
+            _logger.Log("Data collection stopped").GetAwaiter().GetResult();
             Console.WriteLine("Exiting...");
             SaveGuid();
             Closing.Set();
@@ -97,6 +104,12 @@ namespace DataCollector
 
         public static async void Timercallback(object payload)
         {
+            if (isFirstCollection)
+            {
+                await _logger.Log("Data collection began");
+                isFirstCollection = false;
+            }
+            
             Console.WriteLine($"Current instance: {ClientIdentifier}");
 
             var turple = (ValueTuple<DataSender, Collector>) payload;
@@ -126,8 +139,9 @@ namespace DataCollector
                 else
                     Console.WriteLine($"{DateTime.Now}\t Data wasn`t sent successfully");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await _logger.Log(ex.Message, LogLevel.Error);
                 Console.WriteLine($"{DateTime.Now}\t Data wasn`t sent successfully");
             }
 
