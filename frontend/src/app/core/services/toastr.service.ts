@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-@Injectable(/*{
-  providedIn: 'root'
-}*/)
+
+@Injectable()
 export class ToastrService {
 
   constructor(private messageService: MessageService, private confirmationService: ConfirmationService) { }

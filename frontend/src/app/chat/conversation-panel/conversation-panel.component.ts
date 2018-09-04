@@ -44,7 +44,6 @@ export class ConversationPanelComponent implements OnInit {
         this.window.chat.messages.push(message);
         if (this.window.isCollapsed) {
           this.window.unreadMessages++;
-          console.log(this.window.unreadMessages);
         } else {
           this.markMessagesAsRead();
         }

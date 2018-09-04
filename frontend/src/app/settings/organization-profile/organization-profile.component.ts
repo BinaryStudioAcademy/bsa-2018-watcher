@@ -13,10 +13,7 @@ import { User } from '../../shared/models/user.model';
 @Component({
   selector: 'app-organization-profile',
   templateUrl: './organization-profile.component.html',
-  styleUrls: ['./organization-profile.component.sass'],
-  providers: [
-    ToastrService, OrganizationService, OrganizationInvitesService
-  ]
+  styleUrls: ['./organization-profile.component.sass']
 })
 export class OrganizationProfileComponent implements OnInit {
 
