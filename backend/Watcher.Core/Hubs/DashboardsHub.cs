@@ -34,8 +34,6 @@
         /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous connect.</returns>
         public override Task OnConnectedAsync()
         {
-            var name = Context.User.FindFirstValue("unique_name");
-            Debug.WriteLine($"*****************{name}****************");
             return base.OnConnectedAsync();
         }
 
@@ -50,13 +48,11 @@
         /// </returns>
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            var name = Context.User.FindFirstValue("unique_name");
-            Debug.WriteLine($"*****************{name}****************");
-            using (LogContext.PushProperty("ClassName", this.GetType().FullName))
-            using (LogContext.PushProperty("Source", exception?.Source))
-            {
-                _logger.LogError($"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
-            }
+            //using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+            //using (LogContext.PushProperty("Source", exception?.Source))
+            //{
+            //    _logger.LogError($"Connection: {Context.ConnectionId} disconnected {exception?.Message}");
+            //}
 
             return base.OnDisconnectedAsync(exception ?? new Exception("Something went wrong"));
         }

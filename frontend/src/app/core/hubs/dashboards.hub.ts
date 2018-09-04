@@ -13,6 +13,7 @@ import {CollectedData} from '../../shared/models/collected-data.model';
   providedIn: 'root'
 })
 export class DashboardsHub {
+  private isConnect: boolean;
   private hubConnection: HubConnection | undefined;
   private connectionEstablishedSub = new Subject<boolean>();
   public connectionEstablished$ = from(this.connectionEstablishedSub);
@@ -24,13 +25,9 @@ export class DashboardsHub {
               private authService: AuthService) {
   }
 
-  public getInitialPercentageInfoByInstanceId(id: number): Observable<PercentageInfo[]> {
-    return this.apiService.get(`/CollectedData/Percentage/${id}?count=20`) as Observable<PercentageInfo[]>;
-  }
-
   connectToSignalR(firebaseToken: string, watcherToken: string): Promise<void> {
-      this.createConnection(firebaseToken, watcherToken);
-      this.registerOnServerEvents();
+    this.createConnection(firebaseToken, watcherToken);
+    this.registerOnServerEvents();
     return this.startDashboardHubConnection();
   }
 
@@ -80,7 +77,7 @@ export class DashboardsHub {
     );
 
     this.hubConnection.on('UserClaimsData', (claimsData: any[]) => {
-      console.log(claimsData);
+        console.log(claimsData);
       }
     );
 
@@ -92,6 +89,7 @@ export class DashboardsHub {
     this.hubConnection.onclose(err => {
       console.log('DashboardHub connection closed');
       console.error(err);
+      this.isConnect = false;
       this.startDashboardHubConnection();
     });
   }
@@ -99,6 +97,7 @@ export class DashboardsHub {
 
   // Reconnect loop
   private startDashboardHubConnection(): Promise<void> {
+    if (this.isConnect) { return; }
     console.log('DashboardHub trying to connect');
     return this.hubConnection.start()
       .then(() => {

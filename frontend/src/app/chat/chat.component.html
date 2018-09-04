@@ -13,7 +13,13 @@
         </div>
         <i class="icon icon-right fa fa-plus" (click)="openCreating($event)" pTooltip="Create" tooltipPosition="top"></i>
       </p-header>
-      <p-listbox [options]="chatList" [(ngModel)]="selectedChat" (onChange)="selectChat()">
+      <div class="text-center spinner" *ngIf="isLoading">
+          <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="3"></p-progressSpinner>
+      </div>
+      <p class="empty-chat" *ngIf="chatList.length == 0 && !isLoading">
+        No chats to show
+      </p>
+      <p-listbox [options]="chatList" *ngIf="chatList.length !== 0 && !isLoading" [(ngModel)]="selectedChat" (onChange)="selectChat()">
         <ng-template let-chat pTemplate="item">
           <div class="ui-fluid ui-g">
             <div class="ui-g-3 ui-g-nopad" style="position:relative">

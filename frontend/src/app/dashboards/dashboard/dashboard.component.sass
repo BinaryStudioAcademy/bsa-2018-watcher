@@ -1,5 +1,7 @@
 .site-wrap
-  margin: 17px 32px 20px 32px
+  margin: 20px
+  padding-left: 20px
+  padding-top: 5px
 
 .add-button
   color: #3b5998
@@ -30,7 +32,7 @@ nav
       color: red !important
 
 .title
-  padding-bottom: 10px
+  padding-bottom: 5px
   font-size: 22px
   font-weight: normal
 
@@ -45,15 +47,9 @@ nav
     display: flex
     flex-direction: column
     padding: 10px
-    .charts-area
-      display: flex
-      flex-direction: row
-      flex-wrap: wrap
-      .dashboard-item
-        margin: 10px
 
 .placeholder
-  padding: 0px 10px 10px 0px
+  white-space: nowrap
   font-size: 1.5em
   font-weight: normal
   align-content: center
@@ -61,16 +57,6 @@ nav
   div
     vertical-align: middle
     margin: 10px 0px 20px 10px
-
-.fa-plus
-  padding-right: 13.14px
-  padding-left: 2px
-
-.fa-download
-  padding-right: 11.72px
-
-.fa-dashboard
-  padding-right: 10px
 
 .center
   text-align: center
@@ -114,46 +100,7 @@ nav
 .width-left-part
   width: 192px
 
-.container
-  display: flex
-
-  > div.charts
-    flex: 1 1 100%
-    text-align: center
-    margin-right: 10px
-
-    .viz-container
-      margin: 30px 0 10px 0
-
-    .chart
-      max-height: 600px
-      margin-top: 60px
-
-  > div.filters
-    flex: 0 0 250px
-    margin-left: 10px
-
-    .filter
-      margin-top: 20px
-      width: 100%
-      clear: both
-      border-left: 1px solid lightgrey
-      padding-left: 10px
-
-  .cat-filter-item
-    display: flex
-    clear: both
-
-    > div
-      flex: 1 1 50%
-
-    ngx-button
-      visibility: hidden
-      display: inline-block
-
-    &:hover ngx-button
-      visibility: initial
-
-    .count
-      float: right
-
+.spinner
+    margin-top: 220px
+    margin-left: 500px
+    position: fixed

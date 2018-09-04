@@ -1,8 +1,35 @@
 <h1>{{chart.title}}</h1>
 
+<ngx-charts-line-chart
+  *ngIf="chartType.name === 'line-chart'"
+  class="chart-container"
+  [view]="chart.view"
+  [scheme]="chart.colorScheme"
+  [schemeType]="chart.schemeType"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [gradient]="chart.gradient"
+  [xAxis]="chart.showXAxis"
+  [yAxis]="chart.showYAxis"
+  [showXAxisLabel]="chart.showXAxisLabel"
+  [showYAxisLabel]="chart.showYAxisLabel"
+  [xAxisLabel]="chart.xAxisLabel"
+  [yAxisLabel]="chart.yAxisLabel"
+  [autoScale]="chart.autoScale"
+  [showGridLines]="chart.showGridLines"
+  [curve]="chart.curve"
+  [rangeFillOpacity]="chart.rangeFillOpacity"
+  [roundDomains]="chart.roundDomains"
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [yScaleMin]="0"
+  [yScaleMax]="100">
+
+</ngx-charts-line-chart>
+
 <ngx-charts-bar-vertical
   *ngIf="chartType.name === 'bar-vertical'"
-  [view]="chart.view"
   class="chart-container"
   [view]="chart.view"
   [scheme]="chart.colorScheme"
@@ -19,13 +46,15 @@
   [tooltipDisabled]="chart.tooltipDisabled"
   [xAxisLabel]="chart.xAxisLabel"
   [yAxisLabel]="chart.yAxisLabel"
-  [showGridLines]="chart.showGridLines">
+  [showGridLines]="chart.showGridLines"
+  [yScaleMin]="0"
+  [yScaleMax]="100">
 </ngx-charts-bar-vertical>
 
 <ngx-charts-bar-horizontal
   *ngIf="chartType.name === 'bar-horizontal'"
-  [view]="chart.view"
   class="chart-container"
+  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -58,6 +87,15 @@
   [tooltipDisabled]="chart.tooltipDisabled">
 </ngx-charts-pie-chart>
 
+<ngx-charts-gauge
+  *ngIf="chartType.name === 'guage'"
+  [view]="chart.view"
+  [scheme]="chart.colorScheme"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [units]="chart.yAxisLabel">
+</ngx-charts-gauge>
+
 <ngx-charts-pie-grid
   *ngIf="chartType.name === 'pie-grid'"
   [view]="chart.view"
@@ -79,16 +117,8 @@
   [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data">
-</ngx-charts-number-card>
 
-<ngx-charts-gauge
-  *ngIf="chartType.name === 'guage'"
-  [view]="chart.view"
-  [scheme]="chart.colorScheme"
-  [results]="data"
-  [activeEntries]="activeEntries"
-  [units]="chart.yAxisLabel">
-</ngx-charts-gauge>
+</ngx-charts-number-card>
 
 <ngx-charts-bar-vertical-2d
   *ngIf="chartType.name === 'bar-vertical-2d'"
@@ -243,32 +273,6 @@
   [curve]="chart.curveClosed"
   [showSeriesOnHover]="chart.showSeriesOnHover">
 </ngx-charts-polar-chart>
-
-<ngx-charts-line-chart
-  *ngIf="chartType.name === 'line-chart'"
-  class="chart-container"
-  [view]="chart.view"
-  [scheme]="chart.colorScheme"
-  [schemeType]="chart.schemeType"
-  [results]="data"
-  [legend]="chart.showLegend"
-  [legendTitle]="chart.legendTitle"
-  [gradient]="false"
-  [xAxis]="chart.showXAxis"
-  [yAxis]="chart.showYAxis"
-  [showXAxisLabel]="chart.showXAxisLabel"
-  [showYAxisLabel]="chart.showYAxisLabel"
-  [xAxisLabel]="chart.xAxisLabel"
-  [yAxisLabel]="chart.yAxisLabel"
-  [autoScale]="chart.autoScale"
-  [showGridLines]="chart.showGridLines"
-  [curve]="chart.curve"
-  [rangeFillOpacity]="chart.rangeFillOpacity"
-  [roundDomains]="chart.roundDomains"
-  [tooltipDisabled]="chart.tooltipDisabled"
-  [yScaleMin]="0"
-  [yScaleMax]="100">
-</ngx-charts-line-chart>
 
 <ngx-charts-heat-map
   *ngIf="chartType.name === 'heat-map'"

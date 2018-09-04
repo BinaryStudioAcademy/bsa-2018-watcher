@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Watcher.Common.Dtos;
-using Watcher.Common.Requests;
-
-namespace Watcher.Core.Interfaces
+﻿namespace Watcher.Core.Interfaces
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using Watcher.Common.Dtos;
+    using Watcher.Common.Requests;
+
     public interface IDashboardsService
     {
-        Task<InstanceDto> GetFirstInstanceAsync();
-
-        Task<IEnumerable<DashboardDto>> GetInstanceDashboards(int id);
+        Task<IEnumerable<DashboardDto>> GetDashboardsByInstanceId(int id);
 
         Task<DashboardDto> GetDashboardByIdAsync(int id);
 

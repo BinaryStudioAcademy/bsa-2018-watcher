@@ -107,13 +107,46 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
+        public async Task<IEnumerable<CollectedData>> GetCollectedDataByInstanceIdAsync(Guid instanceId, int count)
+        {
+            try
+            {
+                var query = _context.Datasets.Find(d => d.ClientId == instanceId)
+                    .SortByDescending(cd => cd.Time)
+                    .Limit(count);
+
+                return await query.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<CollectedData>> GetCollectedDataByInstanceIdAsync(Guid instanceId, DateTime timeFrom, DateTime timeTo)
+        {
+            try
+            {
+                var query = _context.Datasets.Find(d => d.ClientId == instanceId 
+                                                        && d.CollectedDataType == _collectedDataType 
+                                                        && d.Time >= timeFrom && d.Time <= timeTo);
+
+                return await query.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         // Query by time
         public async Task<IEnumerable<CollectedData>> GetEntities(DateTime timeFrom, DateTime timeTo)
         {
             try
             {
-                var query = _context.Datasets
-                    .Find(d => d.CollectedDataType == _collectedDataType && d.Time >= timeFrom && d.Time <= timeTo);
+                var query = _context.Datasets.Find(d => d.CollectedDataType == _collectedDataType && d.Time >= timeFrom && d.Time <= timeTo);
 
                 return await query.ToListAsync();
             }
