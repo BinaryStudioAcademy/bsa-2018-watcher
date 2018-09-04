@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { AuthService } from '../../core/services/auth.service';
 import { ChatHub } from '../../core/hubs/chat.hub';
@@ -17,7 +17,7 @@ import { ChatWindow } from '../../shared/models/chat-window.model';
     './conversation-panel.component.sass',
     '../chat.component.sass']
 })
-export class ConversationPanelComponent implements OnInit, OnDestroy {
+export class ConversationPanelComponent implements OnInit {
 
   @Input() window: ChatWindow;
   @Output() close = new EventEmitter();
@@ -36,10 +36,6 @@ export class ConversationPanelComponent implements OnInit, OnDestroy {
     this.currentUser = this.authService.getCurrentUser();
     this.subscribeToEvents();
     this.markMessagesAsRead();
-  }
-
-  ngOnDestroy() {
-    //this.chatHub.messageReceived.unsubscribe();
   }
 
   subscribeToEvents() {

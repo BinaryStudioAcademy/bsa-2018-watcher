@@ -92,6 +92,7 @@ export class ConversationSettingsPopupComponent implements OnInit {
     const index = this.chat.users.findIndex(u => u.id === id);
     this.chat.users.splice(index, 1);
     this.chatHub.deleteUserFromChat(id, this.chat.id);
+    this.closeSettings();
   }
 
   updateChat() {
@@ -113,7 +114,7 @@ export class ConversationSettingsPopupComponent implements OnInit {
 
   deleteChat() {
     this.chatHub.deleteChat(this.chat.id);
-    this.display = false;
+    this.closeSettings();
   }
 
   closeSettings() {

@@ -112,24 +112,27 @@ export class ChatComponent implements OnInit {
 
     this.chatHub.chatCreated.subscribe((chat: Chat) => {
       this.chatList.unshift({ value: chat });
-      debugger;
 
       // Open only for user who create it
-      if (chat.createdBy.id === this.currentUserId) {
+      if (chat.createdById === this.currentUserId) {
         this.selectedChat = chat;
         this.openChat();
       }
     });
 
     this.chatHub.chatChanged.subscribe((chat: Chat) => {
+      if (!this.chatList.some(cl => cl.value.id === chat.id)) {
+        this.chatList.unshift({ value: chat });
+        return;
+      }
       const index = this.chatList.findIndex(x => x.value.id === chat.id);
 
       // Save amount of unreaded messages and replace chat
       chat.unreadMessagesCount = this.chatList[index].value.unreadMessagesCount;
       this.chatList.splice(index, 1, { value: chat });
-      if (this.selectedChat && this.selectedChat.id === chat.id) {
-        this.selectedChat = chat;
-        //this.openChat();
+
+      if (this.chatWindows.some(cw => cw.chat.id === chat.id)) {
+        this.chatWindows.find(w => w.chat.id === chat.id).chat = chat;
       }
     });
 
@@ -138,10 +141,9 @@ export class ChatComponent implements OnInit {
       this.totalUnreadMessages -= this.chatList[indexOfChat].value.unreadMessagesCount;
       this.chatList.splice(indexOfChat, 1);
 
-      debugger;
-      const windowIndex = this.chatWindows.findIndex(w => w.chat.id === chat.id);
-      if (windowIndex) {
-        this.chatWindows.slice(windowIndex, 1);
+      if (this.chatWindows.some(cw => cw.chat.id === chat.id)) {
+        const windowIndex = this.chatWindows.findIndex(w => w.chat.id === chat.id);
+        this.chatWindows.splice(windowIndex, 1);
       }
     });
 
