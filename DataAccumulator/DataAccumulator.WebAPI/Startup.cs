@@ -61,6 +61,9 @@ namespace DataAccumulator
             services.AddTransient<IAggregatorService<CollectedDataDto>, AggregatorService>();
             services.AddTransient<IDataAggregatorCore<CollectedDataDto>, DataAggregatorCore>();
 
+            services.AddTransient<ILogService, LogService>();
+            services.AddTransient<ILogRepository, LogRepository>();
+
             services.AddTransient<IJobFactory, JobFactory>(
                 (provider) =>
                 {
@@ -126,6 +129,7 @@ namespace DataAccumulator
                 cfg.CreateMap<CollectedData, CollectedDataDto>();
                 cfg.CreateMap<CollectedDataDto, CollectedData>();
                 cfg.CreateMap<CollectedData, CollectedData>();
+                cfg.CreateMap<ActionLogDto, ActionLog>();
             });
 
             return config;
