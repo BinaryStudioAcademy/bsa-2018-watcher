@@ -192,11 +192,5 @@ namespace DataCollector
 
     }
 
-    public class ProcessData
-    {
-        public string ProcessName { get; set; }
-        public float Cpu { get; set; }    
-        public float Ram { get; set; } 
-    }
 #endif
 }

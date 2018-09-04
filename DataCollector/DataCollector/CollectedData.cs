@@ -114,4 +114,11 @@ namespace DataCollector
 
         #endregion
     }
+
+    public class ProcessData
+    {
+        public float Ram { get; set; }
+        public float PRam { get; set; }
+        public float PCpu { get; set; }
+    }
 }
