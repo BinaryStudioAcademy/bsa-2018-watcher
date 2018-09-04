@@ -43,9 +43,6 @@ export class InstanceListComponent implements OnInit {
 
 
   configureInstances(organizationId: number): void {
-    this.isLoading = true;
-    this.popupMessage = 'Loading instances info';
-
     this.menuItems = [{
       label: 'Create Instance',
       title: 'Create Instance',
@@ -59,8 +56,6 @@ export class InstanceListComponent implements OnInit {
         this.menuItems = this.menuItems.concat(items);
         this.toastrService.success('Get instances from server');
       }
-
-      this.isLoading = false;
     });
   }
 
