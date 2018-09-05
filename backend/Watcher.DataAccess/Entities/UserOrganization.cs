@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Watcher.DataAccess.Entities
+﻿namespace Watcher.DataAccess.Entities
 {
     public class UserOrganization
     {
@@ -10,7 +8,7 @@ namespace Watcher.DataAccess.Entities
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
 
-        public int OrganizationRoleId { get; set; }
+        public int OrganizationRoleId { get; set; } = 1;
         public OrganizationRole OrganizationRole { get; set; }
     }
 }

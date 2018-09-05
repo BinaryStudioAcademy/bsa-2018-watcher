@@ -87,7 +87,8 @@ namespace Watcher.Core.Services
                 CreatedEntity.UserOrganizations.Add(new UserOrganization
                 {
                     UserId = entity.CreatedByUserId,
-                    OrganizationId = entity.Id
+                    OrganizationId = entity.Id,
+                    OrganizationRoleId = 1,
                 });
             }
             result &= await _uow.SaveAsync();
