@@ -25,10 +25,7 @@ namespace DataAccumulator.DataAccessLayer.Entities
         public CollectedDataType CollectedDataType { get; set; }
 
         public int ProcessesCount { get; set; }
-
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
         public List<ProcessData> Processes { get; set; }
-
         public float FreeRamMBytes { get; set; }
         public float TotalRamMBytes { get; set; }
         public float FreeRamPercentage { get; set; }
