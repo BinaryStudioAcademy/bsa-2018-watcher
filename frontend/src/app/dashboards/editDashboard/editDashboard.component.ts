@@ -58,6 +58,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
 
   generateAll() {
     this.isSource = true;
+    this.isCustomize = false;
   }
 
   customize() {
@@ -67,12 +68,18 @@ export class EditDashboardComponent implements OnInit, OnChanges {
 
   edit(model: NgModel): void {
     for (let i = 0; i < 4; i++) {
+      this.dashboardCharts[i].showXAxis = true;
+      this.dashboardCharts[i].showYAxis = true;
       this.newCharts.push(this.createChartRequest(this.dashboardCharts[i]));
       if (!this.isIncluded[i] && this.isCustomize) {
          this.newCharts.splice(i, 1);
       }
     }
     this.edited.emit({title: this.title, charts: this.newCharts});
+    this.sources = [];
+    this.isSource = false;
+    this.isCustomize = false;
+    this.showPreview = false;
     // this.edited.emit(this.title);
     this.title = '';
     model.reset();
@@ -105,11 +112,14 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.dashboardCharts.push(this.dashboardChart3);
     for (let i = 0; i < 4; i++) {
         this.isIncluded.push(true);
-        this.dashboardCharts[i].view = [476, 247];
+        this.dashboardCharts[i].view = [378, 204];
         this.dashboardCharts[i].chartType = dashboardChartTypes[i];
         this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
         this.dashboardCharts[i].chartType.type = dashboardChartTypes[i].type;
         this.dashboardCharts[i].chartType.title = dashboardChartTypes[i].title;
+        this.dashboardCharts[i].title = dashboardChartTypes[i].title;
+        this.dashboardCharts[i].showXAxis = false;
+        this.dashboardCharts[i].showYAxis = false;
     }
   }
 
