@@ -52,16 +52,16 @@ namespace DataCollector
             {
                 var dataItem = new CollectedData
                 {
-                    AvaliableRamBytes = _systemCounters["FreeRam"].NextValue(),
+                    //AvaliableRamBytes = _systemCounters["FreeRam"].NextValue(),
                     InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
                     LocalDiskFreeMBytes = _systemCounters["DiskFreeMb"].NextValue(),
                     CpuUsagePercent = _systemCounters["CPU"].NextValue(),
                     RamUsagePercent = _systemCounters["RAM"].NextValue(),
                     InterruptsTimePercent = _systemCounters["InterruptsTime"].NextValue(),
                     LocalDiskFreeSpacePercent = _systemCounters["LocalDisk"].NextValue(),
-                    ProcessesCpu = GetProcessesCpu(out var processes),
-                    ProcessesRam = GetProcessesRam(),
-                    ProcessesCount = processes,
+                    //ProcessesCpu = GetProcessesCpu(out var processes),
+                    //ProcessesRam = GetProcessesRam(),
+                   // ProcessesCount = processes,
                     Time = DateTime.Now
                 };
                 Data.Add(dataItem);

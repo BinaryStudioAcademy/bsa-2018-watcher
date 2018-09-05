@@ -20,8 +20,8 @@ namespace DataCollector
 
         public int ProcessesCount { get; set; }
         public List<ProcessData> Processes { get; set; }
-        public float FreeRamBytes { get; set; }
-        public float TotalRamBytes { get; set; }
+        public float FreeRamMBytes { get; set; }
+        public float TotalRamMBytes { get; set; }
         public float FreeRamPercentage { get; set; }
         public float InterruptsPerSeconds { get; set; }
         public float LocalDiskFreeMBytes { get; set; }
@@ -32,19 +32,15 @@ namespace DataCollector
 
         public static CollectedData operator +(CollectedData firstItem, CollectedData secondItem)
         {
-            var processesCpu = firstItem.ProcessesCpu;
+            var processes = firstItem.Processes;
 
-            secondItem.ProcessesCpu.ToList()
-                .ForEach(item => ConcatProcessInfo(processesCpu, item));
+            //secondItem.Processes
+            //    .ForEach(item => ConcatProcessInfo(processes, item));
 
-            var processesRam = firstItem.ProcessesRam;
-
-            secondItem.ProcessesRam.ToList()
-                .ForEach(item => ConcatProcessInfo(processesRam, item));
 
             return new CollectedData
             {
-                AvaliableRamBytes = firstItem.AvaliableRamBytes + secondItem.AvaliableRamBytes,
+                //AvaliableRamBytes = firstItem.AvaliableRamBytes + secondItem.AvaliableRamBytes,
                 CpuUsagePercent = firstItem.CpuUsagePercent + secondItem.CpuUsagePercent,
                 InterruptsPerSeconds = firstItem.InterruptsPerSeconds + secondItem.InterruptsPerSeconds,
                 InterruptsTimePercent = firstItem.InterruptsTimePercent + secondItem.InterruptsTimePercent,
@@ -52,9 +48,9 @@ namespace DataCollector
                 LocalDiskFreeSpacePercent = firstItem.LocalDiskFreeSpacePercent + secondItem.LocalDiskFreeSpacePercent,
                 RamUsagePercent = firstItem.RamUsagePercent + secondItem.RamUsagePercent,
                 Time = secondItem.Time,
-                ProcessesCpu = processesCpu,
-                ProcessesRam = processesRam,
-                ProcessesCount = processesCpu.Count
+                Processes = processes,
+                
+                ProcessesCount = processes.Count
             };
         }
 
@@ -70,18 +66,17 @@ namespace DataCollector
 
         public static CollectedData operator /(CollectedData item, int scalar)
         {
-            var processCpu = new Dictionary<string, float>();
-            var processRam = new Dictionary<string, float>();
+            var process = new List<ProcessData>();
 
-            item.ProcessesCpu.ToList()
-                .ForEach(cpu => processCpu.Add(cpu.Key, cpu.Value / scalar));
+            //item.ProcessesCpu.ToList()
+            //    .ForEach(cpu => processCpu.Add(cpu.Key, cpu.Value / scalar));
 
-            item.ProcessesRam.ToList()
-                .ForEach(ram => processRam.Add(ram.Key, ram.Value / scalar));
+            //item.ProcessesRam.ToList()
+            //    .ForEach(ram => processRam.Add(ram.Key, ram.Value / scalar));
 
             return new CollectedData
             {
-                AvaliableRamBytes = item.AvaliableRamBytes / scalar,
+                //AvaliableRamBytes = item.AvaliableRamBytes / scalar,
                 CpuUsagePercent = item.CpuUsagePercent / scalar,
                 InterruptsPerSeconds = item.InterruptsPerSeconds / scalar,
                 InterruptsTimePercent = item.InterruptsTimePercent / scalar,
@@ -90,8 +85,7 @@ namespace DataCollector
                 ProcessesCount = item.ProcessesCount,
                 RamUsagePercent = item.RamUsagePercent / scalar,
                 Time = item.Time,
-                ProcessesCpu = processCpu,
-                ProcessesRam = processRam
+                Processes = process
             };
         }
 
@@ -101,7 +95,7 @@ namespace DataCollector
             str.Append($"Instance id: {ClientId}\n");
             str.Append($"Processes count: {ProcessesCount}\n");
             str.Append($"CPU usage: {CpuUsagePercent:0.##}%\n");
-            str.Append($"Ram avalaible: {AvaliableRamBytes:0.##} MB\n");
+            //str.Append($"Ram avalaible: {AvaliableRamMBytes:0.##} MB\n");
             str.Append($"Ram usage: {RamUsagePercent:0.##}%\n");
             str.Append($"Local disk avalaible: {LocalDiskFreeMBytes:0.##} MB\n");
             return str.ToString();
@@ -120,7 +114,7 @@ namespace DataCollector
     public class ProcessData
     {
         public string Name { get; set; }
-        public float Ram { get; set; }
+        public float RamMBytes { get; set; }
         public float PRam { get; set; }
         public float PCpu { get; set; }
     }

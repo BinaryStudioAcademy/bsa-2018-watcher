@@ -43,7 +43,7 @@ namespace DataCollector
 
                 var dataItem = new CollectedData
                 {
-                    AvaliableRamBytes = GetFreeRam(),
+                    //AvaliableRamBytes = GetFreeRam(),
                     //InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
                     LocalDiskFreeMBytes = GetDiscFree(),
                     CpuUsagePercent = GetUsageCpuPercentages(),
@@ -52,8 +52,8 @@ namespace DataCollector
                     LocalDiskFreeSpacePercent = GetLocalDiskFreeSpacePercent(),
                     
                     ProcessesCount = GetProcesses().Count,
-                    ProcessesCpu = GetProcessesCpu(),
-                    ProcessesRam = GetProcessesRam(),
+                    //Processes = GetProcessesCpu(),
+                    //ProcessesRam = GetProcessesRam(),
                     Time = DateTime.Now
                 };
                 Data.Add(dataItem);
@@ -124,9 +124,9 @@ namespace DataCollector
 
                     processData.Add( new ProcessData
                     {
-                        Ram = pmem,
-                        Cpu = pcpu,
-                        ProcessName = command
+                        RamMBytes = pmem,
+                        PCpu = pcpu,
+                        Name = command
 
                     });
                 }
@@ -141,7 +141,7 @@ namespace DataCollector
             {
                 try
                 {
-                    processRam.Add(item.ProcessName, item.Ram);
+                    processRam.Add(item.Name, item.PRam);
                 }
                 catch(Exception e)
                 {
@@ -158,7 +158,7 @@ namespace DataCollector
             {
                 try
                 {
-                    processRam.Add(item.ProcessName, (float)item.Cpu);
+                    processRam.Add(item.Name, (float)item.PCpu);
                 }
                 catch(Exception e)
                 {
