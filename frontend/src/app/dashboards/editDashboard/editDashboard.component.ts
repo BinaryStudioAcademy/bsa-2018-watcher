@@ -106,13 +106,11 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     for (let i = 0; i < 4; i++) {
         this.isIncluded.push(true);
         this.dashboardCharts[i].view = [476, 247];
-        this.dashboardCharts[i].chartType = dashboardChartTypes[i]; // .type = dashboardChartTypes[0].type;
+        this.dashboardCharts[i].chartType = dashboardChartTypes[i];
+        this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
+        this.dashboardCharts[i].chartType.type = dashboardChartTypes[i].type;
+        this.dashboardCharts[i].chartType.title = dashboardChartTypes[i].title;
     }
-  }
-
-  processChartType(type: ChartType) {
-    this.dashboardChart.chartType.type = type;
-    this.dashboardChart.chartType.name = chartTypes[type];
   }
 
   processDataForAll() {
@@ -121,7 +119,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
 
   processData(dashboardChart: DashboardChart) {
     this.showPreview = false;
-    this.processChartType(dashboardChart.chartType.type);
     dashboardChart.data = this.dataService.prepareData(dashboardChart.chartType.type,
       this.sources, this.collectedDataForChart);
 
