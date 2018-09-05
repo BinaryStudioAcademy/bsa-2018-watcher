@@ -115,8 +115,7 @@
                 .RuleFor(o => o.Description, f => f.Lorem.Sentences(Randomizer.Seed.Next(5), " "))
                 .RuleFor(o => o.CreatedByUserId, f => f.PickRandom(users).Id)
                 .RuleFor(o => o.ThemeId, f => f.PickRandom(themes).Id)
-                .RuleFor(o => o.IsDeleted, false)
-                .RuleFor(o => o.IsActive, true);
+                .RuleFor(o => o.IsDeleted, false);
 
             var organizations = organizationFaker.Generate(amount).ToArray();
 
@@ -185,10 +184,11 @@
                 {
                     UserId = x.Id,
                     OrganizationId = organizations[Randomizer.Seed.Next(0, organizations.Length - 1)].Id,
-                    OrganizationRoleId = organizationRoles[Randomizer.Seed.Next(0, organizationRoles.Length-1)].Id
+                    OrganizationRoleId = 1
                 }).ToArray();
 
             modelBuilder.Entity<Role>().HasData(roles);
+            modelBuilder.Entity<OrganizationRole>().HasData(organizationRoles);
             modelBuilder.Entity<User>().HasData(users);
             modelBuilder.Entity<Chat>().HasData(userChats);
             modelBuilder.Entity<Message>().HasData(messages);
@@ -203,7 +203,6 @@
             modelBuilder.Entity<Chart>().HasData(charts);
             modelBuilder.Entity<Notification>().HasData(notifications);
             modelBuilder.Entity<UserOrganization>().HasData(userOrganizations);
-            modelBuilder.Entity<Organization>().HasData(organizationRoles);
         }
     }
 }

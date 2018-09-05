@@ -129,6 +129,8 @@
         public DbSet<Organization> Organizations { get; set; }
 
         public DbSet<UserOrganization> UserOrganizations { get; set; }
+
+        public DbSet<OrganizationRole> OrganizationRoles { get; set; }
         
         public DbSet<Instance> Instances { get; set; }
 
