@@ -106,7 +106,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     for (let i = 0; i < 4; i++) {
         this.isIncluded.push(true);
         this.dashboardCharts[i].view = [476, 247];
-        this.dashboardCharts[i].chartType.type = dashboardChartTypes[0].type;
+        this.dashboardCharts[i].chartType = dashboardChartTypes[i]; // .type = dashboardChartTypes[0].type;
     }
   }
 
