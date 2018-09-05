@@ -19,6 +19,7 @@ import {DashboardChart} from '../models/dashboard-chart';
 import {Dashboard} from '../../shared/models/dashboard.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
+import { ChartRequest } from '../../shared/requests/chart-request.model';
 
 
 @Component({
@@ -151,6 +152,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         const tempData = this.dataService.prepareDataTick(this.activeDashboardItem.charts[i], latestData);
         this.activeDashboardItem.charts[i].data = [...tempData];
+        this.activeDashboardItem.charts = [...this.activeDashboardItem.charts];
       }
     });
   }
@@ -187,9 +189,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return lastItem;
   }
 
-  createDashboard(newDashboard: DashboardRequest): void {
+  createDashboard(newDashboard: DashboardRequest, charts: Array<ChartRequest>): void {
     this.dashboardsService.create(newDashboard)
       .subscribe((dto) => {
+          this.onAddedCharts(charts, dto.id);
           const item: DashboardMenuItem = this.transformToMenuItem(dto);
           this.dashboardMenuItems.unshift(item);
           this.activeDashboardItem = this.dashboardMenuItems[0];
@@ -258,10 +261,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.showChartCreating();
   }
 
-  onEdited(title: string) {
+  onEdited(event: any) { // title: string
+    const title = event.title;
+    const charts = event.charts;
     if (this.creation === true) {
       const newdash: DashboardRequest = {title: title, instanceId: this.instanceId};
-      this.createDashboard(newdash);
+      this.createDashboard(newdash, charts);
       let index = 0;
       // switching to new tab
       if (this.dashboardMenuItems.length >= 2) {
@@ -273,12 +278,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     this.creation = false;
     this.displayEditDashboard = false;
+
+  }
+
+  onAddedCharts(array: Array<ChartRequest>, id: number) { console.log(id);
+    array.forEach( chart => {
+      chart.dashboardId = id;
+    this.chartService.create(chart).subscribe(value => {
+      this.toastrService.success('Chart was created');
+    }, error => {
+      this.toastrService.error(`Error occurred status: ${error.message}`);
+    });
+    });
+
   }
 
   onChartDeleted(chartId: number) {
     const deletedChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chartId);
     if (deletedChartIndex >= 0) {
       this.activeDashboardItem.charts.splice(deletedChartIndex, 1);
+      this.activeDashboardItem.charts = [...this.activeDashboardItem.charts];
       this.toastrService.success('Successfully deleted chart!');
     } else {
       this.toastrService.error('Deleted chart not found!');
@@ -321,9 +340,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const updateChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chart.id);
     if (updateChartIndex >= 0) {
       this.activeDashboardItem.charts[updateChartIndex] = chart;
+      this.activeDashboardItem.charts = [...this.activeDashboardItem.charts];
       this.toastrService.success('Successfully updated chart!');
     } else {
-      this.activeDashboardItem.charts.push(chart);
+      this.activeDashboardItem.charts = [...this.activeDashboardItem.charts, chart];
       this.toastrService.success('Successfully created chart!');
     }
   }

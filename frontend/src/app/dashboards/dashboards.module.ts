@@ -15,6 +15,8 @@ import {
   ButtonModule,
   TabMenuModule,
   ProgressSpinnerModule,
+  TooltipModule,
+  ScrollPanelModule,
   InputTextModule} from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { EditDashboardComponent} from './editDashboard/editDashboard.component';
@@ -69,6 +71,8 @@ import { InstanceActivityComponent } from './instance-activity/instance-activity
     MultiSelectModule,
     SliderModule,
     SpinnerModule,
+    ScrollPanelModule,
+    TooltipModule,
     TableModule
   ],
   declarations: [
