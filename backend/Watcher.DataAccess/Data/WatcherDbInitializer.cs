@@ -26,6 +26,12 @@
                 new Role { Id = 2, Name = "User", IsDeleted = false}
             };
 
+            var organizationRoles = new OrganizationRole[]
+            {
+                new OrganizationRole {Id = 1, Name = "Manager", IsDeleted = false},
+                new OrganizationRole {Id = 2, Name = "Member", IsDeleted = false}
+            };
+
             var userFaker = new Faker<User>()
                 .RuleFor(o => o.Id, f => Guid.NewGuid().ToString())
                 .RuleFor(o => o.FirstName, f => f.Name.FirstName())
@@ -109,7 +115,8 @@
                 .RuleFor(o => o.Description, f => f.Lorem.Sentences(Randomizer.Seed.Next(5), " "))
                 .RuleFor(o => o.CreatedByUserId, f => f.PickRandom(users).Id)
                 .RuleFor(o => o.ThemeId, f => f.PickRandom(themes).Id)
-                .RuleFor(o => o.IsDeleted, false);
+                .RuleFor(o => o.IsDeleted, false)
+                .RuleFor(o => o.IsActive, true);
 
             var organizations = organizationFaker.Generate(amount).ToArray();
 
@@ -177,7 +184,8 @@
                 new UserOrganization
                 {
                     UserId = x.Id,
-                    OrganizationId = organizations[Randomizer.Seed.Next(0, organizations.Length - 1)].Id
+                    OrganizationId = organizations[Randomizer.Seed.Next(0, organizations.Length - 1)].Id,
+                    OrganizationRoleId = organizationRoles[Randomizer.Seed.Next(0, organizationRoles.Length-1)].Id
                 }).ToArray();
 
             modelBuilder.Entity<Role>().HasData(roles);
@@ -195,6 +203,7 @@
             modelBuilder.Entity<Chart>().HasData(charts);
             modelBuilder.Entity<Notification>().HasData(notifications);
             modelBuilder.Entity<UserOrganization>().HasData(userOrganizations);
+            modelBuilder.Entity<Organization>().HasData(organizationRoles);
         }
     }
 }
