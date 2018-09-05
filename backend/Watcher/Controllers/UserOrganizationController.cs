@@ -66,7 +66,7 @@ namespace Watcher.Controllers
         [AllowAnonymous]
         public virtual async Task<ActionResult<IEnumerable<UserOrganizationDto>>> GetByOrganization(int id)
         {
-            var dtos = await _userOrganizationService.GetAllEntitiesAsync();
+            var dtos = await _userOrganizationService.GetEntitiesByOrganizationId(id);
             if (!dtos.Any())
             {
                 return NoContent();
