@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
 import {DataProperty, dataPropertyLables} from '../../../shared/models/data-property.enum';
-import {SelectItem} from 'primeng/api';
+import {SelectItem, SelectItemGroup} from 'primeng/api';
 import {DashboardChart} from '../../models/dashboard-chart';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ChartRequest} from '../../../shared/requests/chart-request.model';
@@ -12,6 +12,7 @@ import {ChartService} from '../../../core/services/chart.service';
 import {ToastrService} from '../../../core/services/toastr.service';
 import {Chart} from '../../../shared/models/chart.model';
 import {dashboardChartTypes} from '../models/dashboardChartTypes';
+import { eventNames } from 'cluster';
 
 @Component({
   selector: 'app-edit-chart',
@@ -34,7 +35,8 @@ export class EditChartComponent implements OnInit, OnChanges {
   type: ChartType;
   dropdownTypes: SelectItem[];
   dropdownSources: SelectItem[];
-  dropdownSourcesProcesses: SelectItem[];
+  dropdownGroupSources: SelectItemGroup[];
+
   collectedDataForChart: CollectedData[] = [];
   showPreview = false;
   chartForm: FormGroup;
@@ -62,7 +64,7 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.onDisplay.subscribe((isShow: boolean) => this.visible = isShow);
-
+    this.createSourceItems();
     this.collectedDataService.getBuilderData()
       .subscribe(value => {
         this.collectedDataForChart = value;
@@ -87,12 +89,6 @@ export class EditChartComponent implements OnInit, OnChanges {
       {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
     ];
 
-    this.dropdownSourcesProcesses = [
-      {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
-      {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
-      {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
-    ];
-
     this.chartForm = this.fb.group({
       isMultiple: new FormControl({value: false, disabled: false}),
       mostLoaded: new FormControl({value: 1, disabled: false}),
@@ -101,9 +97,51 @@ export class EditChartComponent implements OnInit, OnChanges {
     });
   }
 
+
+  multiSelect(event) {
+    if (dataPropertyLables[event.itemValue].includes('%')) {
+      this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => dataPropertyLables[s].includes('%'));
+    } else {
+      this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => !dataPropertyLables[s].includes('%'));
+    }
+
+    this.processData();
+  }
+
+  createSourceItems() {
+    switch (this.dashboardChart.chartType.type) {
+      case ChartType.Pie:
+        this.dropdownGroupSources = [{
+          label: 'Percentage',
+          items: [
+            { label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage },
+            { label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage },
+          ]
+        }, {
+          label: 'Memory',
+          items: [
+            { label: dataPropertyLables[DataProperty.localDiskFreeMBytes], value: DataProperty.localDiskFreeMBytes },
+            { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
+          ]
+        }];
+        break;
+      default:
+        this.dropdownGroupSources = [{
+          label: 'Sources', // TODO: change
+          items: [
+            { label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu },
+            { label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam },
+            { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
+          ]
+        }];
+        break;
+    }
+  }
+
   processChartType() {
     this.showPreview = false;
     this.dashboardChart.chartType.name = chartTypes[this.dashboardChart.chartType.type];
+    this.createSourceItems();
     this.processData();
   }
 

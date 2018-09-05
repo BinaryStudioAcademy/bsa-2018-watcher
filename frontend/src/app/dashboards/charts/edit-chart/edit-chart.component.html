@@ -18,21 +18,27 @@
         <p-checkbox [ngModel]="dashboardChart?.showCommon"
                     (ngModelChange)="dashboardChart.showCommon=$event"
                     (onChange)="resetDataSources()"
-                    binary="true"></p-checkbox>
+                    binary="true">
+        </p-checkbox>
       </p><!--type [disabled]="!dashboardChart.dataSources.length<1"-->
       <p class="field">Select source: </p>
       <p-multiSelect *ngIf="dashboardChart.showCommon"
+                     [filter]="false"
+                     [showHeader]="false"
                      [options]="dropdownSources"
                      [(ngModel)]="dashboardChart.dataSources"
                      [style]="{'width':'192px'}"
-                     (onChange)="processData()">
+                     maxSelectedLabels="1"
+                     (onChange)="multiSelect($event)">
+                  </ng-template>
       </p-multiSelect>
       <p-dropdown *ngIf="!dashboardChart.showCommon"
-                  [options]="dropdownSourcesProcesses"
+                  [options]="dropdownGroupSources"
                   [(ngModel)]="processDataSource"
                   placeholder="Select a type"
                   [style]="{'width':'192px'}"
-                  (onChange)="processData()">
+                  (onChange)="processData()"
+                  [group]="true">
       </p-dropdown>
       <form [formGroup]="chartForm">
         <p class="field">Number of heavy processes:</p>
