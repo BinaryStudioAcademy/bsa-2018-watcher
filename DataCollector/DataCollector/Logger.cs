@@ -16,6 +16,7 @@ namespace DataCollector
         public Logger(HttpClient client, Guid clientId,string uri)
         {
             _client = client;
+            _clientId = clientId;
             _uri = uri;
         }
 

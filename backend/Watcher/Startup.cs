@@ -112,6 +112,7 @@ namespace Watcher
             services.AddTransient<ICollectedDataService, CollectedDataService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserOrganizationService, UserOrganizationService>();
+            services.AddTransient<ICollectorActionLogService, CollectorActionLogService>();
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
@@ -276,6 +277,8 @@ namespace Watcher
 
             services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
                   options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
+            services.AddScoped<ILogRepository, LogRepository>(
+                    options => new LogRepository(connectionString, "bsa-watcher-data-storage"));
         }
 
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
