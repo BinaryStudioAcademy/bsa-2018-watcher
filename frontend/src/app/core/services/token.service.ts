@@ -5,9 +5,7 @@ import {UserRegisterRequest} from '../../shared/models/user-register-request';
 import {Token} from '../../shared/models/token.model';
 import {UserLoginRequest} from '../../shared/models/user-login-request';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TokenService {
   public readonly ctrlUrl = 'Tokens';
 

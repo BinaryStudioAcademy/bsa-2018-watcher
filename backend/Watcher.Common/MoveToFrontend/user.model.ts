@@ -7,8 +7,6 @@ import { Notification } from './notification.model';
 import { Feedback } from './feedback.model';
 import { Response } from './response.model';
 import { Message } from './message.model';
-import { Chat } from './chat.model';
-import { Chat } from './chat.model';
 
 export interface User  {
    id: string;
@@ -17,7 +15,9 @@ export interface User  {
    lastName: string;
    bio: string;
    email: string;
+   emailForNotifications: string;
    isActive: boolean;
+   photoURL: string;
    createdAt: Date;
    role: Role;
    lastPickedOrganizationId: number;
@@ -28,8 +28,7 @@ export interface User  {
    feedbacks: Feedback[];
    responses: Response[];
    messages: Message[];
-   createdChats: Chat[];
-   chats: Chat[];
+   chatsId: number[];
 }
 
 

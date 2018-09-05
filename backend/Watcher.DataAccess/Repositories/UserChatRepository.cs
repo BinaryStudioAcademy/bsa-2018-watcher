@@ -1,13 +1,10 @@
 ﻿namespace Watcher.DataAccess.Repositories
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Query;
 
     using Watcher.Common.Interfaces.Entities;
     using Watcher.DataAccess.Data;
@@ -18,13 +15,10 @@
     {
         protected readonly WatcherDbContext _context;
         protected readonly DbSet<UserChat> _dbSet;
-        protected readonly IMapper _mapper;
-
-        public UserChatRepository(WatcherDbContext context, IMapper automapper)
+        public UserChatRepository(WatcherDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<UserChat>();
-            _mapper = automapper;
         }
         public async Task<UserChat> CreateAsync(UserChat entity)
         {
@@ -34,11 +28,12 @@
         }
         public async Task<List<Chat>> GetChatsByUserId(string id)
         {
-            IQueryable<Chat> chats = _context.UserChat.AsNoTracking()
+            IQueryable<Chat> chats = _context.UserChat
                 .Where(uc => uc.UserId == id)
                 .Select(uc => uc.Chat)
-                .Include(uc => uc.UsersSettings)
-                .Include(uc => uc.UserChats)
+                .Include(c => c.Messages)
+                .Include(c => c.UsersSettings)
+                .Include(c => c.UserChats)
                     .ThenInclude(uc => uc.User);
 
             var items = await chats.ToListAsync();

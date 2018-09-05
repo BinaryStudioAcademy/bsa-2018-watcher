@@ -9,7 +9,7 @@ export interface Chat  {
    name: string;
    isActive: boolean;
    type: ChatType;
-   createdBy: User;
+   createdById: string;
    organization: Organization;
    messages: Message[];
    unreadMessagesCount: number;
