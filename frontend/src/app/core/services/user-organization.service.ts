@@ -23,4 +23,8 @@ export class UserOrganizationService {
     //  ${companyId}`, { params: params } const params = new HttpParams().set('userId', userId);
     return this.http.delete(`${this.ctrlUrl}/?companyId=${companyId}&userId=${userId}`);
   }
+
+  getByOrganizationId(id: number) {
+    return this.http.get<UserOrganization[]>(`${this.ctrlUrl}/${id}`);
+  }
 }
