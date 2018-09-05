@@ -1,4 +1,6 @@
-﻿namespace Watcher.DataAccess.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Watcher.DataAccess.Entities
 {
     public class UserOrganization
     {

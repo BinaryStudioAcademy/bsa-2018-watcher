@@ -184,7 +184,7 @@
                 {
                     UserId = x.Id,
                     OrganizationId = organizations[Randomizer.Seed.Next(0, organizations.Length - 1)].Id,
-                    OrganizationRoleId = 1
+                    OrganizationRoleId = organizationRoles[0].Id
                 }).ToArray();
 
             modelBuilder.Entity<Role>().HasData(roles);

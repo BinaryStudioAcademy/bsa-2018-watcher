@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Watcher.DataAccess.Data.Migrations
 {
-    public partial class RoleinUserOrg : Migration
+    public partial class RoleInUserOrganization : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -117,297 +117,297 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 101,
-                columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
-                values: new object[] { 93, "MostLoaded3", 18, 0 });
+                columns: new[] { "DashboardId", "Threshold" },
+                values: new object[] { 94, 47 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 102,
-                columns: new[] { "DashboardId", "Threshold", "Type" },
-                values: new object[] { 95, 61, 0 });
+                columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
+                values: new object[] { 93, "MostLoaded2", 55, 0 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 103,
-                columns: new[] { "DashboardId", "Threshold", "Type" },
-                values: new object[] { 94, 36, 2 });
+                columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
+                values: new object[] { 94, "MostLoaded2", 70, 1 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 104,
-                columns: new[] { "DashboardId", "Threshold", "Type" },
-                values: new object[] { 92, 51, 1 });
+                columns: new[] { "Threshold", "Type" },
+                values: new object[] { 46, 1 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 105,
-                columns: new[] { "DashboardId", "Threshold" },
-                values: new object[] { 96, 30 });
+                columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
+                values: new object[] { 96, "MostLoaded2", 94, 0 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 106,
-                columns: new[] { "DashboardId", "Threshold", "Type" },
-                values: new object[] { 99, 26, 2 });
+                columns: new[] { "DashboardId", "MostLoaded" },
+                values: new object[] { 93, "MostLoaded1" });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 107,
                 columns: new[] { "DashboardId", "Threshold", "Type" },
-                values: new object[] { 96, 42, 1 });
+                values: new object[] { 92, 27, 1 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 108,
-                columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
-                values: new object[] { 99, "MostLoaded2", 18, 3 });
+                columns: new[] { "DashboardId", "Threshold", "Type" },
+                values: new object[] { 96, 67, 0 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 109,
                 columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
-                values: new object[] { 94, "MostLoaded1", 74, 0 });
+                values: new object[] { 99, "MostLoaded1", 44, 3 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 110,
-                columns: new[] { "MostLoaded", "Threshold", "Type" },
-                values: new object[] { "MostLoaded1", 24, 1 });
+                columns: new[] { "DashboardId", "MostLoaded", "Threshold" },
+                values: new object[] { 96, "MostLoaded1", 94 });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 91,
                 columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 4, 22, 56, 42, 276, DateTimeKind.Local), 88, "Title380" });
+                values: new object[] { new DateTime(2018, 9, 5, 4, 53, 46, 147, DateTimeKind.Local), 83, "Title113" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 92,
                 columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 5, 9, 21, 40, 648, DateTimeKind.Local), 87, "Title190" });
+                values: new object[] { new DateTime(2018, 9, 5, 2, 22, 4, 906, DateTimeKind.Local), 88, "Title54" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 93,
                 columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 4, 19, 26, 0, 448, DateTimeKind.Local), 85, "Title26" });
+                values: new object[] { new DateTime(2018, 9, 5, 14, 15, 56, 318, DateTimeKind.Local), 90, "Title57" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 94,
                 columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 5, 10, 16, 17, 830, DateTimeKind.Local), 90, "Title594" });
+                values: new object[] { new DateTime(2018, 9, 5, 4, 21, 49, 775, DateTimeKind.Local), 83, "Title213" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 95,
-                columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 4, 21, 22, 30, 851, DateTimeKind.Local), 90, "Title749" });
+                columns: new[] { "CreatedAt", "Title" },
+                values: new object[] { new DateTime(2018, 9, 5, 4, 57, 29, 620, DateTimeKind.Local), "Title694" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 96,
                 columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 5, 11, 23, 55, 773, DateTimeKind.Local), 85, "Title971" });
+                values: new object[] { new DateTime(2018, 9, 5, 5, 58, 48, 822, DateTimeKind.Local), 82, "Title707" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 97,
                 columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 4, 23, 48, 32, 301, DateTimeKind.Local), 84, "Title341" });
+                values: new object[] { new DateTime(2018, 9, 5, 3, 25, 10, 210, DateTimeKind.Local), 90, "Title893" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 98,
-                columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 4, 14, 24, 19, 107, DateTimeKind.Local), 86, "Title100" });
+                columns: new[] { "CreatedAt", "Title" },
+                values: new object[] { new DateTime(2018, 9, 5, 7, 42, 24, 365, DateTimeKind.Local), "Title122" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 99,
                 columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 5, 12, 9, 56, 497, DateTimeKind.Local), 83, "Title485" });
+                values: new object[] { new DateTime(2018, 9, 5, 15, 6, 55, 214, DateTimeKind.Local), 88, "Title835" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 100,
                 columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 4, 19, 2, 51, 848, DateTimeKind.Local), 85, "Title494" });
+                values: new object[] { new DateTime(2018, 9, 5, 4, 24, 47, 496, DateTimeKind.Local), 82, "Title940" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 81,
                 columns: new[] { "Address", "OrganizationId", "Title" },
-                values: new object[] { "44:04:89:e9:67:1e", 75, "Instance737" });
+                values: new object[] { "33:62:99:7b:7a:6d", 76, "Instance981" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 82,
-                columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "63:18:f5:60:46:05", 78, "Windows", "Instance265" });
+                columns: new[] { "Address", "OrganizationId", "Title" },
+                values: new object[] { "b5:90:ec:4c:91:c9", 80, "Instance909" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 83,
-                columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "cd:fb:79:7f:24:12", 71, "Linux", "Instance731" });
+                columns: new[] { "Address", "OrganizationId", "Title" },
+                values: new object[] { "bb:54:bd:03:39:5a", 75, "Instance78" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 84,
-                columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "88:a6:ae:0f:88:bd", 80, "Windows", "Instance72" });
+                columns: new[] { "Address", "OrganizationId", "Title" },
+                values: new object[] { "ec:7e:2e:21:d6:28", 72, "Instance103" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 85,
                 columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "fa:b7:85:16:5e:1e", 71, "Linux", "Instance422" });
+                values: new object[] { "8a:99:36:8b:a4:a9", 79, "Linux", "Instance125" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 86,
                 columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "da:b0:61:9b:ae:49", 76, "Linux", "Instance732" });
+                values: new object[] { "5c:31:65:b0:58:df", 77, "Linux", "Instance946" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 87,
-                columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "0a:50:61:23:f4:bd", 75, "Windows", "Instance771" });
+                columns: new[] { "Address", "OrganizationId", "Title" },
+                values: new object[] { "fb:9f:72:19:1d:36", 74, "Instance256" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 88,
                 columns: new[] { "Address", "OrganizationId", "Title" },
-                values: new object[] { "0a:d4:14:9a:26:16", 75, "Instance841" });
+                values: new object[] { "a9:4d:50:5b:c0:22", 72, "Instance458" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 89,
-                columns: new[] { "Address", "Title" },
-                values: new object[] { "fc:57:62:68:45:d7", "Instance125" });
+                columns: new[] { "Address", "OrganizationId", "Title" },
+                values: new object[] { "81:8e:02:bd:73:bb", 72, "Instance370" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 90,
                 columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "31:f0:1d:17:16:a9", 74, "Windows", "Instance379" });
+                values: new object[] { "82:8a:64:ff:bd:ea", 72, "Windows", "Instance784" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 61,
                 columns: new[] { "BackgroundColor", "FontFamily", "Name" },
-                values: new object[] { "Yellow", "Frutiger", "Theme328" });
+                values: new object[] { "Gray", "Frutiger", "Theme310" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 62,
-                columns: new[] { "BackgroundColor", "Name" },
-                values: new object[] { "White", "Theme178" });
+                columns: new[] { "BackgroundColor", "FontFamily", "Name" },
+                values: new object[] { "Gray", "Helvetica", "Theme427" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 63,
                 columns: new[] { "BackgroundColor", "FontFamily", "Name" },
-                values: new object[] { "White", "Univers", "Theme681" });
+                values: new object[] { "Yellow", "Trade", "Theme996" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 64,
-                columns: new[] { "FontFamily", "Name" },
-                values: new object[] { "Trade", "Theme633" });
+                columns: new[] { "BackgroundColor", "FontFamily", "Name" },
+                values: new object[] { "Gray", "Frutiger", "Theme29" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 65,
-                columns: new[] { "BackgroundColor", "Name" },
-                values: new object[] { "White", "Theme796" });
+                columns: new[] { "FontFamily", "Name" },
+                values: new object[] { "Helvetica", "Theme778" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 66,
-                columns: new[] { "BackgroundColor", "Name" },
-                values: new object[] { "White", "Theme129" });
+                column: "Name",
+                value: "Theme333");
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 67,
-                columns: new[] { "BackgroundColor", "Name" },
-                values: new object[] { "White", "Theme524" });
+                columns: new[] { "BackgroundColor", "FontFamily", "Name" },
+                values: new object[] { "Gray", "Helvetica", "Theme90" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 68,
-                columns: new[] { "BackgroundColor", "FontFamily", "Name" },
-                values: new object[] { "Yellow", "Helvetica", "Theme155" });
+                column: "Name",
+                value: "Theme798");
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 69,
                 columns: new[] { "BackgroundColor", "FontFamily", "Name" },
-                values: new object[] { "Yellow", "Univers", "Theme947" });
+                values: new object[] { "Yellow", "Univers", "Theme818" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 70,
                 columns: new[] { "FontFamily", "Name" },
-                values: new object[] { "Univers", "Theme503" });
+                values: new object[] { "Trade", "Theme770" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Bio", "CreatedAt", "DisplayName", "Email", "EmailForNotifications", "FirstName", "IsActive", "IsDeleted", "LastName", "LastPickedOrganizationId", "PhotoURL", "RoleId" },
                 values: new object[,]
                 {
-                    { "6f93a171-b5f1-4689-949c-3c2cbd0bdedd", null, new DateTime(2018, 9, 5, 9, 7, 45, 325, DateTimeKind.Local), "Samir", "Keven.Huels25@hotmail.com", null, "Ryder", true, false, "Leffler", null, "https://s3.amazonaws.com/uifaces/faces/twitter/mbilalsiddique1/128.jpg", 1 },
-                    { "3d9eb87f-4749-4005-8cc9-25b6953fb19b", null, new DateTime(2018, 9, 5, 6, 43, 25, 722, DateTimeKind.Local), "Sebastian", "Thomas.Kuhlman@gmail.com", null, "Ryder", true, false, "Gerlach", null, "https://s3.amazonaws.com/uifaces/faces/twitter/bryan_topham/128.jpg", 2 },
-                    { "be796db7-8c5e-479f-9abe-b56640fadb97", null, new DateTime(2018, 9, 5, 7, 25, 39, 68, DateTimeKind.Local), "Guiseppe", "Tyree.Shields@yahoo.com", null, "Isabel", true, false, "Reichel", null, "https://s3.amazonaws.com/uifaces/faces/twitter/missaaamy/128.jpg", 1 },
-                    { "070ce34b-78ab-4ea8-8cc4-75827807a291", null, new DateTime(2018, 9, 5, 5, 30, 29, 820, DateTimeKind.Local), "Monica", "Luella5@gmail.com", null, "Lelah", true, false, "Kassulke", null, "https://s3.amazonaws.com/uifaces/faces/twitter/dc_user/128.jpg", 1 },
-                    { "64019e2c-eb99-4670-9fd4-b5a7e22942ae", null, new DateTime(2018, 9, 5, 0, 51, 12, 329, DateTimeKind.Local), "Daryl", "Delbert.Crona98@hotmail.com", null, "Mathew", true, false, "Reynolds", null, "https://s3.amazonaws.com/uifaces/faces/twitter/davidmerrique/128.jpg", 2 },
-                    { "9678e087-46f4-48fb-a30d-c977325deaf6", null, new DateTime(2018, 9, 4, 18, 14, 57, 460, DateTimeKind.Local), "Casper", "Rene_Macejkovic28@hotmail.com", null, "Hector", true, false, "Yost", null, "https://s3.amazonaws.com/uifaces/faces/twitter/vikasvinfotech/128.jpg", 2 },
-                    { "dea38051-7ab5-4de2-a554-ab9902007f03", null, new DateTime(2018, 9, 5, 7, 5, 31, 986, DateTimeKind.Local), "Monroe", "Cara.Effertz@hotmail.com", null, "Issac", true, false, "Howe", null, "https://s3.amazonaws.com/uifaces/faces/twitter/rawdiggie/128.jpg", 1 },
-                    { "70969be4-d59d-4c34-aa3f-af71656108c4", null, new DateTime(2018, 9, 4, 22, 25, 27, 210, DateTimeKind.Local), "Claudie", "Ena.Rogahn35@yahoo.com", null, "Marcia", true, false, "Hoeger", null, "https://s3.amazonaws.com/uifaces/faces/twitter/joshhemsley/128.jpg", 1 },
-                    { "497eb796-037e-483e-a6da-46d34451db3a", null, new DateTime(2018, 9, 4, 16, 19, 20, 859, DateTimeKind.Local), "Mae", "Jennyfer_Howe@gmail.com", null, "Cornell", true, false, "Kreiger", null, "https://s3.amazonaws.com/uifaces/faces/twitter/thimo_cz/128.jpg", 2 },
-                    { "92ac698a-a117-446e-9d22-e1fd66cc2106", null, new DateTime(2018, 9, 5, 11, 0, 55, 567, DateTimeKind.Local), "Hillard", "Tomas40@hotmail.com", null, "Eliseo", true, false, "Stokes", null, "https://s3.amazonaws.com/uifaces/faces/twitter/polarity/128.jpg", 2 }
+                    { "797183d6-15f0-4fc3-a80c-f4a32e0d0ca9", null, new DateTime(2018, 9, 4, 15, 54, 28, 996, DateTimeKind.Local), "Estell", "Franz70@hotmail.com", null, "Destany", true, false, "Kassulke", null, "https://s3.amazonaws.com/uifaces/faces/twitter/jpenico/128.jpg", 1 },
+                    { "85ecd13b-bea8-41c2-ab16-19d393693093", null, new DateTime(2018, 9, 5, 12, 38, 4, 446, DateTimeKind.Local), "Kraig", "Garrett35@yahoo.com", null, "Delbert", true, false, "Toy", null, "https://s3.amazonaws.com/uifaces/faces/twitter/waghner/128.jpg", 2 },
+                    { "1f91fc25-7cfd-4922-8e0f-36618e422329", null, new DateTime(2018, 9, 5, 5, 49, 29, 693, DateTimeKind.Local), "Marilie", "Agnes35@gmail.com", null, "Garnett", true, false, "Gleason", null, "https://s3.amazonaws.com/uifaces/faces/twitter/sgaurav_baghel/128.jpg", 1 },
+                    { "efb7a095-74a7-430c-a647-23054ed25b36", null, new DateTime(2018, 9, 5, 3, 15, 29, 29, DateTimeKind.Local), "Oswaldo", "Raheem.Blick77@gmail.com", null, "Felicia", true, false, "Larkin", null, "https://s3.amazonaws.com/uifaces/faces/twitter/juangomezw/128.jpg", 1 },
+                    { "7f5cb4d2-a78b-4210-9720-a33e01a768c1", null, new DateTime(2018, 9, 5, 5, 27, 46, 483, DateTimeKind.Local), "Alysson", "Federico_Nienow3@hotmail.com", null, "Alana", true, false, "Williamson", null, "https://s3.amazonaws.com/uifaces/faces/twitter/enricocicconi/128.jpg", 1 },
+                    { "6c0b1a42-427c-43a6-889c-cd19e3729593", null, new DateTime(2018, 9, 4, 16, 16, 48, 125, DateTimeKind.Local), "Arvel", "Stone85@hotmail.com", null, "Annamae", true, false, "Buckridge", null, "https://s3.amazonaws.com/uifaces/faces/twitter/kerem/128.jpg", 2 },
+                    { "291b2e40-05f0-40d2-9162-3cb46c10055b", null, new DateTime(2018, 9, 4, 18, 10, 18, 264, DateTimeKind.Local), "Anne", "Yesenia33@gmail.com", null, "Aniya", true, false, "Okuneva", null, "https://s3.amazonaws.com/uifaces/faces/twitter/jakemoore/128.jpg", 2 },
+                    { "ca11cfd9-0022-4285-85a6-b14c84a5a0c0", null, new DateTime(2018, 9, 5, 5, 54, 31, 411, DateTimeKind.Local), "Vivien", "Marietta65@gmail.com", null, "Mae", true, false, "Hammes", null, "https://s3.amazonaws.com/uifaces/faces/twitter/jordyvdboom/128.jpg", 1 },
+                    { "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60", null, new DateTime(2018, 9, 5, 4, 48, 14, 968, DateTimeKind.Local), "Matilda", "Daphne71@hotmail.com", null, "Morris", true, false, "Ferry", null, "https://s3.amazonaws.com/uifaces/faces/twitter/shoaib253/128.jpg", 1 },
+                    { "2e669749-08c5-4bf0-a7f1-e70c416c44ee", null, new DateTime(2018, 9, 5, 8, 6, 48, 880, DateTimeKind.Local), "Calista", "Lea87@gmail.com", null, "Hayden", true, false, "Wyman", null, "https://s3.amazonaws.com/uifaces/faces/twitter/wim1k/128.jpg", 1 }
                 });
 
             migrationBuilder.UpdateData(
@@ -415,506 +415,506 @@ namespace Watcher.DataAccess.Data.Migrations
                 keyColumn: "Id",
                 keyValue: 21,
                 columns: new[] { "CreatedById", "Name" },
-                values: new object[] { "dea38051-7ab5-4de2-a554-ab9902007f03", "fugiat" });
+                values: new object[] { "2e669749-08c5-4bf0-a7f1-e70c416c44ee", "aspernatur" });
 
             migrationBuilder.UpdateData(
                 table: "Chats",
                 keyColumn: "Id",
                 keyValue: 22,
                 columns: new[] { "CreatedById", "Name" },
-                values: new object[] { "70969be4-d59d-4c34-aa3f-af71656108c4", "quam" });
+                values: new object[] { "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60", "reprehenderit" });
 
             migrationBuilder.UpdateData(
                 table: "Chats",
                 keyColumn: "Id",
                 keyValue: 23,
                 columns: new[] { "CreatedById", "Name" },
-                values: new object[] { "70969be4-d59d-4c34-aa3f-af71656108c4", "dolorum" });
+                values: new object[] { "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60", "earum" });
 
             migrationBuilder.UpdateData(
                 table: "Chats",
                 keyColumn: "Id",
                 keyValue: 24,
                 columns: new[] { "CreatedById", "Name" },
-                values: new object[] { "70969be4-d59d-4c34-aa3f-af71656108c4", "animi" });
+                values: new object[] { "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60", "et" });
 
             migrationBuilder.UpdateData(
                 table: "Chats",
                 keyColumn: "Id",
                 keyValue: 25,
                 columns: new[] { "CreatedById", "Name" },
-                values: new object[] { "9678e087-46f4-48fb-a30d-c977325deaf6", "aliquam" });
+                values: new object[] { "7f5cb4d2-a78b-4210-9720-a33e01a768c1", "id" });
 
             migrationBuilder.UpdateData(
                 table: "Chats",
                 keyColumn: "Id",
                 keyValue: 26,
                 columns: new[] { "CreatedById", "Name" },
-                values: new object[] { "9678e087-46f4-48fb-a30d-c977325deaf6", "nemo" });
+                values: new object[] { "85ecd13b-bea8-41c2-ab16-19d393693093", "deserunt" });
 
             migrationBuilder.UpdateData(
                 table: "Chats",
                 keyColumn: "Id",
                 keyValue: 27,
                 columns: new[] { "CreatedById", "Name" },
-                values: new object[] { "3d9eb87f-4749-4005-8cc9-25b6953fb19b", "dolor" });
+                values: new object[] { "797183d6-15f0-4fc3-a80c-f4a32e0d0ca9", "error" });
 
             migrationBuilder.UpdateData(
                 table: "Chats",
                 keyColumn: "Id",
                 keyValue: 28,
                 columns: new[] { "CreatedById", "Name" },
-                values: new object[] { "9678e087-46f4-48fb-a30d-c977325deaf6", "hic" });
+                values: new object[] { "efb7a095-74a7-430c-a647-23054ed25b36", "sit" });
 
             migrationBuilder.UpdateData(
                 table: "Chats",
                 keyColumn: "Id",
                 keyValue: 29,
                 columns: new[] { "CreatedById", "Name" },
-                values: new object[] { "be796db7-8c5e-479f-9abe-b56640fadb97", "ut" });
+                values: new object[] { "efb7a095-74a7-430c-a647-23054ed25b36", "qui" });
 
             migrationBuilder.UpdateData(
                 table: "Chats",
                 keyColumn: "Id",
                 keyValue: 30,
                 columns: new[] { "CreatedById", "Name" },
-                values: new object[] { "be796db7-8c5e-479f-9abe-b56640fadb97", "vel" });
+                values: new object[] { "85ecd13b-bea8-41c2-ab16-19d393693093", "nulla" });
 
             migrationBuilder.UpdateData(
                 table: "Feedbacks",
                 keyColumn: "Id",
                 keyValue: 41,
                 columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 6, 24, 0, 613, DateTimeKind.Local), "Ratione quis cumque vitae dolorum.", "3d9eb87f-4749-4005-8cc9-25b6953fb19b" });
+                values: new object[] { new DateTime(2018, 9, 5, 8, 33, 17, 763, DateTimeKind.Local), "Corporis quia quis aut odio itaque.", "1f91fc25-7cfd-4922-8e0f-36618e422329" });
 
             migrationBuilder.UpdateData(
                 table: "Feedbacks",
                 keyColumn: "Id",
                 keyValue: 42,
                 columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 1, 14, 20, 536, DateTimeKind.Local), "Expedita officia eum odit ratione laborum ducimus eveniet.", "dea38051-7ab5-4de2-a554-ab9902007f03" });
+                values: new object[] { new DateTime(2018, 9, 5, 3, 11, 34, 819, DateTimeKind.Local), "Optio minima voluptatem omnis ut.", "efb7a095-74a7-430c-a647-23054ed25b36" });
 
             migrationBuilder.UpdateData(
                 table: "Feedbacks",
                 keyColumn: "Id",
                 keyValue: 43,
                 columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 20, 25, 19, 949, DateTimeKind.Local), "Labore quae autem laudantium ut omnis omnis.", "70969be4-d59d-4c34-aa3f-af71656108c4" });
+                values: new object[] { new DateTime(2018, 9, 4, 21, 52, 49, 473, DateTimeKind.Local), "Sint totam nemo quidem ea error ut tempora repudiandae ratione.", "efb7a095-74a7-430c-a647-23054ed25b36" });
 
             migrationBuilder.UpdateData(
                 table: "Feedbacks",
                 keyColumn: "Id",
                 keyValue: 44,
                 columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 16, 0, 23, 577, DateTimeKind.Local), "Et exercitationem minus exercitationem laboriosam mollitia fugit veniam et et.", "9678e087-46f4-48fb-a30d-c977325deaf6" });
+                values: new object[] { new DateTime(2018, 9, 5, 7, 4, 55, 799, DateTimeKind.Local), "Cupiditate nemo et quo quia.", "6c0b1a42-427c-43a6-889c-cd19e3729593" });
 
             migrationBuilder.UpdateData(
                 table: "Feedbacks",
                 keyColumn: "Id",
                 keyValue: 45,
                 columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 1, 30, 36, 675, DateTimeKind.Local), "Ea libero repudiandae odio.", "dea38051-7ab5-4de2-a554-ab9902007f03" });
+                values: new object[] { new DateTime(2018, 9, 5, 15, 4, 16, 5, DateTimeKind.Local), "Atque quaerat quas.", "ca11cfd9-0022-4285-85a6-b14c84a5a0c0" });
 
             migrationBuilder.UpdateData(
                 table: "Feedbacks",
                 keyColumn: "Id",
                 keyValue: 46,
                 columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 6, 42, 42, 690, DateTimeKind.Local), "Autem similique assumenda architecto atque tempora est qui aliquid.", "497eb796-037e-483e-a6da-46d34451db3a" });
+                values: new object[] { new DateTime(2018, 9, 5, 15, 0, 29, 616, DateTimeKind.Local), "Distinctio consequuntur adipisci nihil voluptatum dolorum ipsum.", "2e669749-08c5-4bf0-a7f1-e70c416c44ee" });
 
             migrationBuilder.UpdateData(
                 table: "Feedbacks",
                 keyColumn: "Id",
                 keyValue: 47,
                 columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 13, 43, 29, 575, DateTimeKind.Local), "Totam quisquam alias nostrum explicabo vel consequatur.", "070ce34b-78ab-4ea8-8cc4-75827807a291" });
+                values: new object[] { new DateTime(2018, 9, 4, 17, 54, 21, 777, DateTimeKind.Local), "Quo ut natus eum aut non temporibus iste.", "2e669749-08c5-4bf0-a7f1-e70c416c44ee" });
 
             migrationBuilder.UpdateData(
                 table: "Feedbacks",
                 keyColumn: "Id",
                 keyValue: 48,
                 columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 3, 37, 6, 239, DateTimeKind.Local), "Tempore quasi facilis cum repudiandae perferendis quibusdam.", "070ce34b-78ab-4ea8-8cc4-75827807a291" });
+                values: new object[] { new DateTime(2018, 9, 5, 11, 19, 23, 842, DateTimeKind.Local), "Ut eum quo repudiandae.", "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60" });
 
             migrationBuilder.UpdateData(
                 table: "Feedbacks",
                 keyColumn: "Id",
                 keyValue: 49,
                 columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 22, 15, 41, 301, DateTimeKind.Local), "Quasi necessitatibus eos dicta non.", "497eb796-037e-483e-a6da-46d34451db3a" });
+                values: new object[] { new DateTime(2018, 9, 5, 4, 33, 43, 87, DateTimeKind.Local), "Et non aut harum eligendi aut aut aspernatur quisquam.", "1f91fc25-7cfd-4922-8e0f-36618e422329" });
 
             migrationBuilder.UpdateData(
                 table: "Feedbacks",
                 keyColumn: "Id",
                 keyValue: 50,
                 columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 0, 43, 10, 264, DateTimeKind.Local), "Dolorem nostrum non.", "70969be4-d59d-4c34-aa3f-af71656108c4" });
+                values: new object[] { new DateTime(2018, 9, 5, 10, 21, 8, 861, DateTimeKind.Local), "Dolor sint autem quod repellat nihil dolor porro.", "2e669749-08c5-4bf0-a7f1-e70c416c44ee" });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 31,
                 columns: new[] { "ChatId", "CreatedAt", "Text", "UserId", "WasRead" },
-                values: new object[] { 30, new DateTime(2018, 9, 5, 4, 48, 13, 493, DateTimeKind.Local), "Nam dolorem nobis asperiores nisi quia.", "92ac698a-a117-446e-9d22-e1fd66cc2106", false });
+                values: new object[] { 29, new DateTime(2018, 9, 4, 16, 33, 36, 47, DateTimeKind.Local), "Optio enim consequuntur alias corporis enim incidunt rerum a.", "85ecd13b-bea8-41c2-ab16-19d393693093", false });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 32,
                 columns: new[] { "ChatId", "CreatedAt", "Text", "UserId", "WasRead" },
-                values: new object[] { 23, new DateTime(2018, 9, 4, 22, 55, 33, 727, DateTimeKind.Local), "Voluptatum facere sint perferendis vero.", "dea38051-7ab5-4de2-a554-ab9902007f03", true });
+                values: new object[] { 28, new DateTime(2018, 9, 5, 6, 23, 10, 257, DateTimeKind.Local), "Velit consequatur sint laborum aspernatur.", "85ecd13b-bea8-41c2-ab16-19d393693093", true });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 33,
-                columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 10, 46, 59, 864, DateTimeKind.Local), "Aliquam vel sapiente necessitatibus vel voluptatem doloremque voluptatibus debitis.", "070ce34b-78ab-4ea8-8cc4-75827807a291" });
+                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
+                values: new object[] { 23, new DateTime(2018, 9, 5, 11, 39, 31, 33, DateTimeKind.Local), "Velit commodi quae doloremque accusamus necessitatibus pariatur.", "7f5cb4d2-a78b-4210-9720-a33e01a768c1" });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 34,
-                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
-                values: new object[] { 24, new DateTime(2018, 9, 4, 19, 26, 6, 345, DateTimeKind.Local), "Vel id quo ad.", "070ce34b-78ab-4ea8-8cc4-75827807a291" });
+                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId", "WasRead" },
+                values: new object[] { 25, new DateTime(2018, 9, 5, 7, 6, 59, 395, DateTimeKind.Local), "Ut saepe quidem sunt quidem eius dolor excepturi.", "ca11cfd9-0022-4285-85a6-b14c84a5a0c0", false });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 35,
-                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
-                values: new object[] { 26, new DateTime(2018, 9, 5, 11, 0, 30, 760, DateTimeKind.Local), "Delectus veritatis nihil animi itaque nam molestiae.", "9678e087-46f4-48fb-a30d-c977325deaf6" });
+                columns: new[] { "CreatedAt", "Text", "UserId" },
+                values: new object[] { new DateTime(2018, 9, 5, 8, 54, 22, 540, DateTimeKind.Local), "Accusantium modi possimus placeat quod ea molestiae architecto est aut.", "ca11cfd9-0022-4285-85a6-b14c84a5a0c0" });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 36,
-                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId", "WasRead" },
-                values: new object[] { 24, new DateTime(2018, 9, 5, 12, 29, 51, 971, DateTimeKind.Local), "Dignissimos quisquam aut provident consequatur autem.", "be796db7-8c5e-479f-9abe-b56640fadb97", true });
+                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
+                values: new object[] { 28, new DateTime(2018, 9, 4, 18, 52, 27, 788, DateTimeKind.Local), "Dicta suscipit quo.", "797183d6-15f0-4fc3-a80c-f4a32e0d0ca9" });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 37,
-                columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 17, 46, 47, 827, DateTimeKind.Local), "Velit ut velit quia possimus.", "64019e2c-eb99-4670-9fd4-b5a7e22942ae" });
+                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
+                values: new object[] { 27, new DateTime(2018, 9, 4, 15, 27, 37, 373, DateTimeKind.Local), "Reiciendis cupiditate minus.", "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60" });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 38,
-                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
-                values: new object[] { 28, new DateTime(2018, 9, 4, 19, 56, 47, 915, DateTimeKind.Local), "Aut repellat eum iure porro sunt voluptatem ducimus perferendis aut.", "070ce34b-78ab-4ea8-8cc4-75827807a291" });
+                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId", "WasRead" },
+                values: new object[] { 27, new DateTime(2018, 9, 5, 0, 28, 36, 0, DateTimeKind.Local), "Sapiente minima aut nulla nam sunt eos voluptate illum.", "797183d6-15f0-4fc3-a80c-f4a32e0d0ca9", true });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 39,
                 columns: new[] { "ChatId", "CreatedAt", "Text", "UserId", "WasRead" },
-                values: new object[] { 23, new DateTime(2018, 9, 4, 15, 18, 59, 250, DateTimeKind.Local), "Laborum maxime in.", "be796db7-8c5e-479f-9abe-b56640fadb97", false });
+                values: new object[] { 30, new DateTime(2018, 9, 5, 10, 31, 22, 940, DateTimeKind.Local), "Enim iusto ducimus quo nihil ipsam fuga praesentium.", "85ecd13b-bea8-41c2-ab16-19d393693093", false });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 40,
                 columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
-                values: new object[] { 27, new DateTime(2018, 9, 5, 2, 55, 39, 632, DateTimeKind.Local), "Repellendus perferendis aliquam quod perspiciatis tempore minima veniam eligendi.", "70969be4-d59d-4c34-aa3f-af71656108c4" });
+                values: new object[] { 25, new DateTime(2018, 9, 4, 16, 59, 8, 36, DateTimeKind.Local), "Modi consequatur aliquam itaque iure maxime earum reiciendis voluptatibus.", "2e669749-08c5-4bf0-a7f1-e70c416c44ee" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 11,
-                columns: new[] { "IsEmailable", "IsMute", "UserId" },
-                values: new object[] { false, true, "92ac698a-a117-446e-9d22-e1fd66cc2106" });
+                columns: new[] { "IsEmailable", "IsMute", "Type", "UserId" },
+                values: new object[] { false, true, 3, "ca11cfd9-0022-4285-85a6-b14c84a5a0c0" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 12,
-                columns: new[] { "IsDisable", "Type", "UserId" },
-                values: new object[] { true, 3, "64019e2c-eb99-4670-9fd4-b5a7e22942ae" });
+                columns: new[] { "Type", "UserId" },
+                values: new object[] { 3, "efb7a095-74a7-430c-a647-23054ed25b36" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 13,
-                columns: new[] { "Type", "UserId" },
-                values: new object[] { 2, "070ce34b-78ab-4ea8-8cc4-75827807a291" });
+                columns: new[] { "IsDisable", "IsMute", "Type", "UserId" },
+                values: new object[] { true, false, 1, "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 14,
-                columns: new[] { "Type", "UserId" },
-                values: new object[] { 2, "92ac698a-a117-446e-9d22-e1fd66cc2106" });
+                columns: new[] { "IsDisable", "Type", "UserId" },
+                values: new object[] { false, 2, "1f91fc25-7cfd-4922-8e0f-36618e422329" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 15,
-                columns: new[] { "IsDisable", "IsEmailable", "UserId" },
-                values: new object[] { true, false, "497eb796-037e-483e-a6da-46d34451db3a" });
+                columns: new[] { "IsDisable", "IsEmailable", "IsMute", "Type", "UserId" },
+                values: new object[] { true, false, true, 4, "2e669749-08c5-4bf0-a7f1-e70c416c44ee" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 16,
-                columns: new[] { "IsDisable", "IsEmailable", "UserId" },
-                values: new object[] { false, false, "9678e087-46f4-48fb-a30d-c977325deaf6" });
+                columns: new[] { "IsMute", "UserId" },
+                values: new object[] { true, "85ecd13b-bea8-41c2-ab16-19d393693093" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 17,
-                columns: new[] { "IsDisable", "Type", "UserId" },
-                values: new object[] { false, 4, "be796db7-8c5e-479f-9abe-b56640fadb97" });
+                columns: new[] { "IsEmailable", "IsMute", "Type", "UserId" },
+                values: new object[] { false, false, 4, "6c0b1a42-427c-43a6-889c-cd19e3729593" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 18,
-                columns: new[] { "IsDisable", "IsEmailable", "Type", "UserId" },
-                values: new object[] { true, false, 1, "92ac698a-a117-446e-9d22-e1fd66cc2106" });
+                columns: new[] { "IsDisable", "IsEmailable", "IsMute", "Type", "UserId" },
+                values: new object[] { true, false, true, 0, "291b2e40-05f0-40d2-9162-3cb46c10055b" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 19,
                 columns: new[] { "IsDisable", "IsEmailable", "Type", "UserId" },
-                values: new object[] { true, true, 2, "92ac698a-a117-446e-9d22-e1fd66cc2106" });
+                values: new object[] { true, true, 1, "efb7a095-74a7-430c-a647-23054ed25b36" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 20,
-                columns: new[] { "IsDisable", "IsMute", "Type", "UserId" },
-                values: new object[] { false, false, 3, "64019e2c-eb99-4670-9fd4-b5a7e22942ae" });
+                columns: new[] { "IsEmailable", "UserId" },
+                values: new object[] { true, "1f91fc25-7cfd-4922-8e0f-36618e422329" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 111,
                 columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 6, 8, 48, 749, DateTimeKind.Local), 20, "Suscipit hic quia ratione.", "be796db7-8c5e-479f-9abe-b56640fadb97" });
+                values: new object[] { new DateTime(2018, 9, 4, 23, 55, 21, 637, DateTimeKind.Local), 14, "Fuga ut ea sit quo blanditiis et minima.", "7f5cb4d2-a78b-4210-9720-a33e01a768c1" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 112,
                 columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 9, 22, 51, 914, DateTimeKind.Local), 20, "Tempora rerum earum tempore magni id non.", "3d9eb87f-4749-4005-8cc9-25b6953fb19b" });
+                values: new object[] { new DateTime(2018, 9, 4, 20, 38, 13, 844, DateTimeKind.Local), 16, "Quis ab nostrum quia aut nesciunt.", "1f91fc25-7cfd-4922-8e0f-36618e422329" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 113,
                 columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 15, 32, 19, 290, DateTimeKind.Local), 16, "Rerum eos sit quidem.", "3d9eb87f-4749-4005-8cc9-25b6953fb19b" });
+                values: new object[] { new DateTime(2018, 9, 4, 16, 41, 5, 428, DateTimeKind.Local), 12, "Quae est distinctio autem dolor.", "291b2e40-05f0-40d2-9162-3cb46c10055b" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 114,
                 columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 22, 1, 32, 68, DateTimeKind.Local), 15, "Sapiente eum qui eius praesentium dolor.", "6f93a171-b5f1-4689-949c-3c2cbd0bdedd" });
+                values: new object[] { new DateTime(2018, 9, 5, 7, 55, 0, 750, DateTimeKind.Local), 11, "Optio non ut et molestias voluptas sed.", "1f91fc25-7cfd-4922-8e0f-36618e422329" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 115,
                 columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 11, 59, 27, 80, DateTimeKind.Local), 16, "Odit esse et eligendi enim placeat.", "70969be4-d59d-4c34-aa3f-af71656108c4" });
+                values: new object[] { new DateTime(2018, 9, 4, 21, 11, 50, 671, DateTimeKind.Local), 18, "Esse rerum aspernatur illum rem.", "2e669749-08c5-4bf0-a7f1-e70c416c44ee" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 116,
-                columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 19, 43, 34, 595, DateTimeKind.Local), 17, "Rem quam ipsa voluptatibus.", "be796db7-8c5e-479f-9abe-b56640fadb97" });
+                columns: new[] { "CreatedAt", "Text", "UserId" },
+                values: new object[] { new DateTime(2018, 9, 4, 18, 41, 4, 825, DateTimeKind.Local), "Autem omnis suscipit quia ea.", "ca11cfd9-0022-4285-85a6-b14c84a5a0c0" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 117,
                 columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 13, 38, 6, 246, DateTimeKind.Local), 19, "Voluptatem enim sit.", "70969be4-d59d-4c34-aa3f-af71656108c4" });
+                values: new object[] { new DateTime(2018, 9, 5, 2, 49, 16, 46, DateTimeKind.Local), 17, "Tempore nemo facilis.", "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 118,
                 columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 0, 19, 20, 104, DateTimeKind.Local), 12, "Modi dicta quam atque dolores praesentium sint ducimus voluptas eaque.", "be796db7-8c5e-479f-9abe-b56640fadb97" });
+                values: new object[] { new DateTime(2018, 9, 4, 18, 41, 12, 124, DateTimeKind.Local), 12, "In qui dolor dignissimos necessitatibus.", "6c0b1a42-427c-43a6-889c-cd19e3729593" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 119,
                 columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 3, 10, 8, 904, DateTimeKind.Local), 15, "Et unde ratione fuga consequatur aut ut laboriosam neque.", "be796db7-8c5e-479f-9abe-b56640fadb97" });
+                values: new object[] { new DateTime(2018, 9, 5, 14, 27, 39, 747, DateTimeKind.Local), 20, "Pariatur nesciunt excepturi voluptas quia.", "797183d6-15f0-4fc3-a80c-f4a32e0d0ca9" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 120,
                 columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 13, 0, 7, 267, DateTimeKind.Local), 17, "Recusandae ipsum magnam dicta et odit quisquam.", "dea38051-7ab5-4de2-a554-ab9902007f03" });
+                values: new object[] { new DateTime(2018, 9, 5, 2, 13, 0, 789, DateTimeKind.Local), 17, "Consectetur recusandae debitis voluptas nostrum et ut mollitia quaerat.", "ca11cfd9-0022-4285-85a6-b14c84a5a0c0" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 71,
                 columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
-                values: new object[] { "(766) 300-3104 x21580", "3d9eb87f-4749-4005-8cc9-25b6953fb19b", "Et expedita autem libero alias quo qui et sit deleniti.", "Makenna47@gmail.com", "Company395", 65, "https://sallie.com" });
+                values: new object[] { "(496) 233-0408", "7f5cb4d2-a78b-4210-9720-a33e01a768c1", "Aut necessitatibus culpa accusantium nihil. Quasi minus eaque nesciunt eos adipisci praesentium explicabo est voluptas.", "Trey.Morissette@hotmail.com", "Company919", 61, "http://pinkie.name" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 72,
                 columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
-                values: new object[] { "290-914-6807 x612", "6f93a171-b5f1-4689-949c-3c2cbd0bdedd", "Et ducimus praesentium aspernatur. Culpa tempora quo. Aut ipsum fugit enim perspiciatis aperiam.", "Anika3@gmail.com", "Company612", 68, "http://carey.name" });
+                values: new object[] { "1-303-268-0066 x2780", "85ecd13b-bea8-41c2-ab16-19d393693093", "", "Ricardo_Welch@gmail.com", "Company156", 68, "https://kallie.org" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 73,
                 columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
-                values: new object[] { "1-283-506-5806 x8824", "6f93a171-b5f1-4689-949c-3c2cbd0bdedd", "Suscipit quis ut.", "Matt_Bartell5@gmail.com", "Company766", 67, "http://marcellus.com" });
+                values: new object[] { "1-394-300-7078 x82678", "1f91fc25-7cfd-4922-8e0f-36618e422329", "Error ad vel dolor modi eaque natus suscipit ex nihil.", "Eino73@yahoo.com", "Company152", 61, "http://avery.biz" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 74,
                 columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
-                values: new object[] { "1-343-937-2841 x61434", "6f93a171-b5f1-4689-949c-3c2cbd0bdedd", "Tenetur porro delectus in aperiam architecto. Sit officiis eveniet omnis.", "Isaiah_Kuvalis@hotmail.com", "Company876", 69, "http://amari.net" });
+                values: new object[] { "292-499-5168", "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60", "Totam dolorem voluptatibus sequi et et maxime mollitia culpa. Totam placeat ut. In eveniet dignissimos assumenda alias non in officia tempore.", "Juana.Bradtke62@yahoo.com", "Company332", 61, "https://lorena.org" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 75,
                 columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
-                values: new object[] { "1-552-625-0003", "70969be4-d59d-4c34-aa3f-af71656108c4", "Placeat molestias aut saepe voluptas. Praesentium accusamus cumque pariatur rerum.", "Tess3@hotmail.com", "Company384", 67, "https://margarita.name" });
+                values: new object[] { "1-818-482-6082 x91367", "291b2e40-05f0-40d2-9162-3cb46c10055b", "Assumenda nihil aut dolores fugit quasi ipsum facilis sit. Unde est doloribus ea nam porro rerum quae. In consectetur ipsa sed. In reiciendis debitis ipsam minima quae adipisci corporis laudantium et.", "Ryleigh.Barton@yahoo.com", "Company263", 63, "http://marlon.com" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 76,
                 columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
-                values: new object[] { "673-984-9486 x146", "6f93a171-b5f1-4689-949c-3c2cbd0bdedd", "Quas numquam optio velit provident a quod perspiciatis.", "Brielle.Kuphal@yahoo.com", "Company249", 61, "http://rowland.com" });
+                values: new object[] { "1-847-465-3673 x99118", "efb7a095-74a7-430c-a647-23054ed25b36", "Ut et amet ea quod.", "Christ55@hotmail.com", "Company171", 66, "https://avis.info" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 77,
                 columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
-                values: new object[] { "602-391-9900 x077", "6f93a171-b5f1-4689-949c-3c2cbd0bdedd", "", "Orval89@yahoo.com", "Company400", 65, "http://marilyne.biz" });
+                values: new object[] { "235-871-9892", "291b2e40-05f0-40d2-9162-3cb46c10055b", "Doloribus ipsum quibusdam enim alias at quaerat. Odit rerum rerum occaecati enim provident est.", "Katlyn_Balistreri@gmail.com", "Company202", 63, "https://braulio.com" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 78,
-                columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "WebSite" },
-                values: new object[] { "599.403.9061 x678", "070ce34b-78ab-4ea8-8cc4-75827807a291", "Delectus consequatur velit quibusdam porro adipisci id praesentium consequatur non. Perferendis eos at officia cum ut et.", "Reese.Hoppe44@yahoo.com", "Company437", "https://floyd.net" });
+                columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
+                values: new object[] { "836.570.3225", "efb7a095-74a7-430c-a647-23054ed25b36", "Ut molestiae ratione delectus quibusdam ut tempora ea sit. Tempora qui qui unde fugiat aliquid minima corporis. Consequatur quia qui. Dignissimos in quo est sint.", "Anabel_Cronin96@hotmail.com", "Company732", 65, "https://jazlyn.com" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 79,
                 columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
-                values: new object[] { "(283) 803-5937 x7975", "6f93a171-b5f1-4689-949c-3c2cbd0bdedd", "Tempora vitae occaecati.", "Marge98@gmail.com", "Company844", 63, "https://deja.org" });
+                values: new object[] { "(722) 219-1109", "7f5cb4d2-a78b-4210-9720-a33e01a768c1", "Fuga nam qui tempore nihil reprehenderit sapiente. Quo delectus non est veritatis quae aut doloremque. Cum est dolores laboriosam aut excepturi vitae. Incidunt voluptate aut.", "Thalia67@gmail.com", "Company35", 64, "https://cayla.net" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 80,
                 columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
-                values: new object[] { "351-605-5395", "9678e087-46f4-48fb-a30d-c977325deaf6", "Ab quaerat ea quia adipisci quia possimus eligendi est. Quam unde et possimus occaecati et dolorem dolore velit. Repellendus in omnis eius. Fugit consequatur nobis.", "Percival.Goldner@gmail.com", "Company459", 62, "https://cortez.org" });
+                values: new object[] { "271-661-1115", "efb7a095-74a7-430c-a647-23054ed25b36", "Est amet sint voluptatem.", "Lorenza12@gmail.com", "Company365", 67, "https://vladimir.com" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 51,
                 columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 23, 3, 47, 118, DateTimeKind.Local), 47, "Explicabo voluptate ex autem illum.", "70969be4-d59d-4c34-aa3f-af71656108c4" });
+                values: new object[] { new DateTime(2018, 9, 5, 3, 42, 13, 54, DateTimeKind.Local), 44, "Hic sed omnis vel est exercitationem.", "ca11cfd9-0022-4285-85a6-b14c84a5a0c0" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 52,
                 columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 13, 29, 40, 94, DateTimeKind.Local), 50, "Quia eveniet cumque molestiae aut enim possimus.", "92ac698a-a117-446e-9d22-e1fd66cc2106" });
+                values: new object[] { new DateTime(2018, 9, 4, 19, 50, 16, 842, DateTimeKind.Local), 44, "Laboriosam in quisquam aut quia quia unde hic repellendus.", "efb7a095-74a7-430c-a647-23054ed25b36" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 53,
                 columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 21, 22, 32, 60, DateTimeKind.Local), 41, "Excepturi in qui repudiandae omnis iusto alias.", "3d9eb87f-4749-4005-8cc9-25b6953fb19b" });
+                values: new object[] { new DateTime(2018, 9, 4, 22, 4, 2, 846, DateTimeKind.Local), 44, "Assumenda distinctio deserunt dicta.", "7f5cb4d2-a78b-4210-9720-a33e01a768c1" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 54,
                 columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 20, 59, 48, 565, DateTimeKind.Local), 45, "Fugit veniam nemo culpa quas distinctio quam dolorum.", "9678e087-46f4-48fb-a30d-c977325deaf6" });
+                values: new object[] { new DateTime(2018, 9, 4, 18, 41, 40, 835, DateTimeKind.Local), 50, "Et voluptatum maxime.", "6c0b1a42-427c-43a6-889c-cd19e3729593" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 55,
-                columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 12, 29, 23, 247, DateTimeKind.Local), 41, "Sapiente consectetur dolorem incidunt consequatur quibusdam.", "be796db7-8c5e-479f-9abe-b56640fadb97" });
+                columns: new[] { "CreatedAt", "Text", "UserId" },
+                values: new object[] { new DateTime(2018, 9, 4, 23, 31, 48, 709, DateTimeKind.Local), "Consectetur aut labore et recusandae eveniet voluptas itaque.", "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 56,
                 columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 23, 4, 3, 265, DateTimeKind.Local), 45, "Adipisci qui occaecati dolorem odio laborum eum.", "6f93a171-b5f1-4689-949c-3c2cbd0bdedd" });
+                values: new object[] { new DateTime(2018, 9, 5, 12, 18, 20, 617, DateTimeKind.Local), 50, "Incidunt assumenda quam voluptatem.", "291b2e40-05f0-40d2-9162-3cb46c10055b" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 57,
                 columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 11, 45, 37, 855, DateTimeKind.Local), 43, "Corrupti dolor esse sed tempora consequatur.", "dea38051-7ab5-4de2-a554-ab9902007f03" });
+                values: new object[] { new DateTime(2018, 9, 5, 14, 32, 10, 168, DateTimeKind.Local), 43, "Quisquam explicabo quia voluptas ullam recusandae quo quo aut reiciendis.", "291b2e40-05f0-40d2-9162-3cb46c10055b" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 58,
-                columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 15, 38, 37, 765, DateTimeKind.Local), "Illo sunt consectetur dolorum est.", "be796db7-8c5e-479f-9abe-b56640fadb97" });
+                columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
+                values: new object[] { new DateTime(2018, 9, 4, 17, 7, 0, 762, DateTimeKind.Local), 42, "Omnis reiciendis similique eligendi autem minima molestiae quisquam earum tempora.", "1f91fc25-7cfd-4922-8e0f-36618e422329" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 59,
                 columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 8, 24, 33, 321, DateTimeKind.Local), 46, "Consequuntur omnis cum cupiditate sunt atque veritatis soluta eius aut.", "6f93a171-b5f1-4689-949c-3c2cbd0bdedd" });
+                values: new object[] { new DateTime(2018, 9, 4, 16, 40, 33, 932, DateTimeKind.Local), 41, "Non quia fuga numquam in.", "2e669749-08c5-4bf0-a7f1-e70c416c44ee" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 60,
                 columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 6, 7, 43, 356, DateTimeKind.Local), 48, "Molestiae voluptatum voluptate velit aut omnis doloribus ut distinctio quo.", "3d9eb87f-4749-4005-8cc9-25b6953fb19b" });
+                values: new object[] { new DateTime(2018, 9, 4, 19, 15, 14, 95, DateTimeKind.Local), 50, "Voluptatum aliquid alias amet magni quo cum.", "85ecd13b-bea8-41c2-ab16-19d393693093" });
 
             migrationBuilder.InsertData(
                 table: "UserOrganizations",
                 columns: new[] { "UserId", "OrganizationId", "OrganizationRoleId" },
                 values: new object[,]
                 {
-                    { "070ce34b-78ab-4ea8-8cc4-75827807a291", 79, 1 },
-                    { "be796db7-8c5e-479f-9abe-b56640fadb97", 77, 1 },
-                    { "9678e087-46f4-48fb-a30d-c977325deaf6", 73, 1 },
-                    { "6f93a171-b5f1-4689-949c-3c2cbd0bdedd", 73, 1 },
-                    { "64019e2c-eb99-4670-9fd4-b5a7e22942ae", 79, 1 },
-                    { "70969be4-d59d-4c34-aa3f-af71656108c4", 72, 1 },
-                    { "dea38051-7ab5-4de2-a554-ab9902007f03", 79, 1 },
-                    { "3d9eb87f-4749-4005-8cc9-25b6953fb19b", 71, 1 },
-                    { "497eb796-037e-483e-a6da-46d34451db3a", 79, 1 },
-                    { "92ac698a-a117-446e-9d22-e1fd66cc2106", 75, 1 }
+                    { "797183d6-15f0-4fc3-a80c-f4a32e0d0ca9", 79, 1 },
+                    { "85ecd13b-bea8-41c2-ab16-19d393693093", 79, 1 },
+                    { "1f91fc25-7cfd-4922-8e0f-36618e422329", 75, 1 },
+                    { "291b2e40-05f0-40d2-9162-3cb46c10055b", 72, 1 },
+                    { "ca11cfd9-0022-4285-85a6-b14c84a5a0c0", 73, 1 },
+                    { "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60", 74, 1 },
+                    { "7f5cb4d2-a78b-4210-9720-a33e01a768c1", 71, 1 },
+                    { "6c0b1a42-427c-43a6-889c-cd19e3729593", 74, 1 },
+                    { "efb7a095-74a7-430c-a647-23054ed25b36", 76, 1 },
+                    { "2e669749-08c5-4bf0-a7f1-e70c416c44ee", 75, 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -944,102 +944,102 @@ namespace Watcher.DataAccess.Data.Migrations
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
-                keyValues: new object[] { "070ce34b-78ab-4ea8-8cc4-75827807a291", 79 });
+                keyValues: new object[] { "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60", 74 });
 
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
-                keyValues: new object[] { "3d9eb87f-4749-4005-8cc9-25b6953fb19b", 71 });
+                keyValues: new object[] { "1f91fc25-7cfd-4922-8e0f-36618e422329", 75 });
 
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
-                keyValues: new object[] { "497eb796-037e-483e-a6da-46d34451db3a", 79 });
+                keyValues: new object[] { "291b2e40-05f0-40d2-9162-3cb46c10055b", 72 });
 
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
-                keyValues: new object[] { "64019e2c-eb99-4670-9fd4-b5a7e22942ae", 79 });
+                keyValues: new object[] { "2e669749-08c5-4bf0-a7f1-e70c416c44ee", 75 });
 
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
-                keyValues: new object[] { "6f93a171-b5f1-4689-949c-3c2cbd0bdedd", 73 });
+                keyValues: new object[] { "6c0b1a42-427c-43a6-889c-cd19e3729593", 74 });
 
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
-                keyValues: new object[] { "70969be4-d59d-4c34-aa3f-af71656108c4", 72 });
+                keyValues: new object[] { "797183d6-15f0-4fc3-a80c-f4a32e0d0ca9", 79 });
 
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
-                keyValues: new object[] { "92ac698a-a117-446e-9d22-e1fd66cc2106", 75 });
+                keyValues: new object[] { "7f5cb4d2-a78b-4210-9720-a33e01a768c1", 71 });
 
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
-                keyValues: new object[] { "9678e087-46f4-48fb-a30d-c977325deaf6", 73 });
+                keyValues: new object[] { "85ecd13b-bea8-41c2-ab16-19d393693093", 79 });
 
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
-                keyValues: new object[] { "be796db7-8c5e-479f-9abe-b56640fadb97", 77 });
+                keyValues: new object[] { "ca11cfd9-0022-4285-85a6-b14c84a5a0c0", 73 });
 
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
-                keyValues: new object[] { "dea38051-7ab5-4de2-a554-ab9902007f03", 79 });
+                keyValues: new object[] { "efb7a095-74a7-430c-a647-23054ed25b36", 76 });
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "070ce34b-78ab-4ea8-8cc4-75827807a291");
+                keyValue: "15bdceaa-9bb4-4ef1-8c85-c7aed863fa60");
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "3d9eb87f-4749-4005-8cc9-25b6953fb19b");
+                keyValue: "1f91fc25-7cfd-4922-8e0f-36618e422329");
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "497eb796-037e-483e-a6da-46d34451db3a");
+                keyValue: "291b2e40-05f0-40d2-9162-3cb46c10055b");
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "64019e2c-eb99-4670-9fd4-b5a7e22942ae");
+                keyValue: "2e669749-08c5-4bf0-a7f1-e70c416c44ee");
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "6f93a171-b5f1-4689-949c-3c2cbd0bdedd");
+                keyValue: "6c0b1a42-427c-43a6-889c-cd19e3729593");
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "70969be4-d59d-4c34-aa3f-af71656108c4");
+                keyValue: "797183d6-15f0-4fc3-a80c-f4a32e0d0ca9");
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "92ac698a-a117-446e-9d22-e1fd66cc2106");
+                keyValue: "7f5cb4d2-a78b-4210-9720-a33e01a768c1");
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "9678e087-46f4-48fb-a30d-c977325deaf6");
+                keyValue: "85ecd13b-bea8-41c2-ab16-19d393693093");
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "be796db7-8c5e-479f-9abe-b56640fadb97");
+                keyValue: "ca11cfd9-0022-4285-85a6-b14c84a5a0c0");
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: "dea38051-7ab5-4de2-a554-ab9902007f03");
+                keyValue: "efb7a095-74a7-430c-a647-23054ed25b36");
 
             migrationBuilder.DropColumn(
                 name: "OrganizationRoleId",
@@ -1049,43 +1049,43 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 101,
-                columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
-                values: new object[] { 99, "MostLoaded1", 43, 3 });
+                columns: new[] { "DashboardId", "Threshold" },
+                values: new object[] { 99, 43 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 102,
-                columns: new[] { "DashboardId", "Threshold", "Type" },
-                values: new object[] { 92, 1, 3 });
+                columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
+                values: new object[] { 92, "MostLoaded3", 1, 3 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 103,
-                columns: new[] { "DashboardId", "Threshold", "Type" },
-                values: new object[] { 98, 99, 0 });
+                columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
+                values: new object[] { 98, "MostLoaded3", 99, 0 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 104,
-                columns: new[] { "DashboardId", "Threshold", "Type" },
-                values: new object[] { 94, 49, 3 });
+                columns: new[] { "Threshold", "Type" },
+                values: new object[] { 49, 3 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 105,
-                columns: new[] { "DashboardId", "Threshold" },
-                values: new object[] { 99, 20 });
+                columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
+                values: new object[] { 99, "MostLoaded3", 20, 1 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 106,
-                columns: new[] { "DashboardId", "Threshold", "Type" },
-                values: new object[] { 92, 42, 3 });
+                columns: new[] { "DashboardId", "MostLoaded" },
+                values: new object[] { 92, "MostLoaded3" });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
@@ -1098,8 +1098,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 108,
-                columns: new[] { "DashboardId", "MostLoaded", "Threshold", "Type" },
-                values: new object[] { 95, "MostLoaded1", 56, 2 });
+                columns: new[] { "DashboardId", "Threshold", "Type" },
+                values: new object[] { 95, 56, 2 });
 
             migrationBuilder.UpdateData(
                 table: "Charts",
@@ -1112,8 +1112,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Charts",
                 keyColumn: "Id",
                 keyValue: 110,
-                columns: new[] { "MostLoaded", "Threshold", "Type" },
-                values: new object[] { "MostLoaded3", 66, 2 });
+                columns: new[] { "DashboardId", "MostLoaded", "Threshold" },
+                values: new object[] { 98, "MostLoaded3", 66 });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
@@ -1147,8 +1147,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 95,
-                columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 5, 3, 10, 17, 995, DateTimeKind.Local), 87, "Title906" });
+                columns: new[] { "CreatedAt", "Title" },
+                values: new object[] { new DateTime(2018, 9, 5, 3, 10, 17, 995, DateTimeKind.Local), "Title906" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
@@ -1168,8 +1168,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Dashboards",
                 keyColumn: "Id",
                 keyValue: 98,
-                columns: new[] { "CreatedAt", "InstanceId", "Title" },
-                values: new object[] { new DateTime(2018, 9, 4, 23, 24, 4, 133, DateTimeKind.Local), 87, "Title940" });
+                columns: new[] { "CreatedAt", "Title" },
+                values: new object[] { new DateTime(2018, 9, 4, 23, 24, 4, 133, DateTimeKind.Local), "Title940" });
 
             migrationBuilder.UpdateData(
                 table: "Dashboards",
@@ -1196,22 +1196,22 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 82,
-                columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "70:53:49:f9:b8:1c", 74, "Linux", "Instance960" });
+                columns: new[] { "Address", "OrganizationId", "Title" },
+                values: new object[] { "70:53:49:f9:b8:1c", 74, "Instance960" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 83,
-                columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "e3:bd:e5:dc:2a:a1", 72, "Windows", "Instance320" });
+                columns: new[] { "Address", "OrganizationId", "Title" },
+                values: new object[] { "e3:bd:e5:dc:2a:a1", 72, "Instance320" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 84,
-                columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "ec:2e:59:8e:d1:6f", 71, "Linux", "Instance840" });
+                columns: new[] { "Address", "OrganizationId", "Title" },
+                values: new object[] { "ec:2e:59:8e:d1:6f", 71, "Instance840" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
@@ -1231,8 +1231,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 87,
-                columns: new[] { "Address", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "3d:8a:bd:92:33:41", 80, "Linux", "Instance209" });
+                columns: new[] { "Address", "OrganizationId", "Title" },
+                values: new object[] { "3d:8a:bd:92:33:41", 80, "Instance209" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
@@ -1245,8 +1245,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 89,
-                columns: new[] { "Address", "Title" },
-                values: new object[] { "2f:cc:eb:fe:82:c6", "Instance311" });
+                columns: new[] { "Address", "OrganizationId", "Title" },
+                values: new object[] { "2f:cc:eb:fe:82:c6", 73, "Instance311" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
@@ -1266,8 +1266,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 62,
-                columns: new[] { "BackgroundColor", "Name" },
-                values: new object[] { "Yellow", "Theme432" });
+                columns: new[] { "BackgroundColor", "FontFamily", "Name" },
+                values: new object[] { "Yellow", "Univers", "Theme432" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
@@ -1280,36 +1280,36 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 64,
-                columns: new[] { "FontFamily", "Name" },
-                values: new object[] { "Univers", "Theme533" });
+                columns: new[] { "BackgroundColor", "FontFamily", "Name" },
+                values: new object[] { "White", "Univers", "Theme533" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 65,
-                columns: new[] { "BackgroundColor", "Name" },
-                values: new object[] { "Yellow", "Theme25" });
+                columns: new[] { "FontFamily", "Name" },
+                values: new object[] { "Frutiger", "Theme25" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 66,
-                columns: new[] { "BackgroundColor", "Name" },
-                values: new object[] { "Gray", "Theme104" });
+                column: "Name",
+                value: "Theme104");
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 67,
-                columns: new[] { "BackgroundColor", "Name" },
-                values: new object[] { "Yellow", "Theme439" });
+                columns: new[] { "BackgroundColor", "FontFamily", "Name" },
+                values: new object[] { "Yellow", "Trade", "Theme439" });
 
             migrationBuilder.UpdateData(
                 table: "Themes",
                 keyColumn: "Id",
                 keyValue: 68,
-                columns: new[] { "BackgroundColor", "FontFamily", "Name" },
-                values: new object[] { "White", "Univers", "Theme199" });
+                column: "Name",
+                value: "Theme199");
 
             migrationBuilder.UpdateData(
                 table: "Themes",
@@ -1500,43 +1500,43 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 33,
-                columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 15, 22, 32, 910, DateTimeKind.Local), "Est temporibus deserunt repellat.", "4740e1d3-a664-49cf-bde9-24133792f2d8" });
+                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
+                values: new object[] { 22, new DateTime(2018, 9, 4, 15, 22, 32, 910, DateTimeKind.Local), "Est temporibus deserunt repellat.", "4740e1d3-a664-49cf-bde9-24133792f2d8" });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 34,
-                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
-                values: new object[] { 22, new DateTime(2018, 9, 5, 10, 36, 8, 508, DateTimeKind.Local), "Est et enim dolor beatae quisquam.", "b57b3a69-a3c9-4efd-b242-0fc6b368ff92" });
+                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId", "WasRead" },
+                values: new object[] { 22, new DateTime(2018, 9, 5, 10, 36, 8, 508, DateTimeKind.Local), "Est et enim dolor beatae quisquam.", "b57b3a69-a3c9-4efd-b242-0fc6b368ff92", true });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 35,
-                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
-                values: new object[] { 22, new DateTime(2018, 9, 5, 10, 49, 51, 602, DateTimeKind.Local), "Quia eos qui et.", "4740e1d3-a664-49cf-bde9-24133792f2d8" });
+                columns: new[] { "CreatedAt", "Text", "UserId" },
+                values: new object[] { new DateTime(2018, 9, 5, 10, 49, 51, 602, DateTimeKind.Local), "Quia eos qui et.", "4740e1d3-a664-49cf-bde9-24133792f2d8" });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 36,
-                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId", "WasRead" },
-                values: new object[] { 27, new DateTime(2018, 9, 5, 6, 33, 39, 8, DateTimeKind.Local), "Impedit vitae voluptatem est nam eaque dolor est.", "45e74407-0146-4659-a4f6-de7d7c0d0b9b", false });
+                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
+                values: new object[] { 27, new DateTime(2018, 9, 5, 6, 33, 39, 8, DateTimeKind.Local), "Impedit vitae voluptatem est nam eaque dolor est.", "45e74407-0146-4659-a4f6-de7d7c0d0b9b" });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 37,
-                columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 22, 36, 26, 423, DateTimeKind.Local), "Molestiae delectus delectus cumque exercitationem modi quia.", "d59c9c41-ee13-42c2-adf8-862e5ada2a81" });
+                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
+                values: new object[] { 29, new DateTime(2018, 9, 4, 22, 36, 26, 423, DateTimeKind.Local), "Molestiae delectus delectus cumque exercitationem modi quia.", "d59c9c41-ee13-42c2-adf8-862e5ada2a81" });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
                 keyColumn: "Id",
                 keyValue: 38,
-                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId" },
-                values: new object[] { 25, new DateTime(2018, 9, 4, 20, 2, 47, 147, DateTimeKind.Local), "Eaque repellendus reprehenderit sapiente aliquid.", "d59c9c41-ee13-42c2-adf8-862e5ada2a81" });
+                columns: new[] { "ChatId", "CreatedAt", "Text", "UserId", "WasRead" },
+                values: new object[] { 25, new DateTime(2018, 9, 4, 20, 2, 47, 147, DateTimeKind.Local), "Eaque repellendus reprehenderit sapiente aliquid.", "d59c9c41-ee13-42c2-adf8-862e5ada2a81", false });
 
             migrationBuilder.UpdateData(
                 table: "Messages",
@@ -1556,57 +1556,57 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 11,
-                columns: new[] { "IsEmailable", "IsMute", "UserId" },
-                values: new object[] { true, false, "d59c9c41-ee13-42c2-adf8-862e5ada2a81" });
+                columns: new[] { "IsEmailable", "IsMute", "Type", "UserId" },
+                values: new object[] { true, false, 2, "d59c9c41-ee13-42c2-adf8-862e5ada2a81" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 12,
-                columns: new[] { "IsDisable", "Type", "UserId" },
-                values: new object[] { false, 4, "52e27198-436d-4714-a6e7-e0d0738b847f" });
+                columns: new[] { "Type", "UserId" },
+                values: new object[] { 4, "52e27198-436d-4714-a6e7-e0d0738b847f" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 13,
-                columns: new[] { "Type", "UserId" },
-                values: new object[] { 4, "b3731d39-39d1-491c-950b-719b0606e9c5" });
+                columns: new[] { "IsDisable", "IsMute", "Type", "UserId" },
+                values: new object[] { false, true, 4, "b3731d39-39d1-491c-950b-719b0606e9c5" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 14,
-                columns: new[] { "Type", "UserId" },
-                values: new object[] { 1, "45e74407-0146-4659-a4f6-de7d7c0d0b9b" });
+                columns: new[] { "IsDisable", "Type", "UserId" },
+                values: new object[] { true, 1, "45e74407-0146-4659-a4f6-de7d7c0d0b9b" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 15,
-                columns: new[] { "IsDisable", "IsEmailable", "UserId" },
-                values: new object[] { false, true, "52e27198-436d-4714-a6e7-e0d0738b847f" });
+                columns: new[] { "IsDisable", "IsEmailable", "IsMute", "Type", "UserId" },
+                values: new object[] { false, true, false, 3, "52e27198-436d-4714-a6e7-e0d0738b847f" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 16,
-                columns: new[] { "IsDisable", "IsEmailable", "UserId" },
-                values: new object[] { true, true, "52e27198-436d-4714-a6e7-e0d0738b847f" });
+                columns: new[] { "IsMute", "UserId" },
+                values: new object[] { false, "52e27198-436d-4714-a6e7-e0d0738b847f" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 17,
-                columns: new[] { "IsDisable", "Type", "UserId" },
-                values: new object[] { true, 3, "d59c9c41-ee13-42c2-adf8-862e5ada2a81" });
+                columns: new[] { "IsEmailable", "IsMute", "Type", "UserId" },
+                values: new object[] { true, true, 3, "d59c9c41-ee13-42c2-adf8-862e5ada2a81" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 18,
-                columns: new[] { "IsDisable", "IsEmailable", "Type", "UserId" },
-                values: new object[] { false, true, 2, "e8512f99-a4a3-4cf4-bc56-15cc45d0b3dc" });
+                columns: new[] { "IsDisable", "IsEmailable", "IsMute", "Type", "UserId" },
+                values: new object[] { false, true, false, 2, "e8512f99-a4a3-4cf4-bc56-15cc45d0b3dc" });
 
             migrationBuilder.UpdateData(
                 table: "NotificationSettings",
@@ -1619,8 +1619,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "NotificationSettings",
                 keyColumn: "Id",
                 keyValue: 20,
-                columns: new[] { "IsDisable", "IsMute", "Type", "UserId" },
-                values: new object[] { true, true, 4, "307ee358-2383-4f80-b94f-26f489bdb30f" });
+                columns: new[] { "IsEmailable", "UserId" },
+                values: new object[] { false, "307ee358-2383-4f80-b94f-26f489bdb30f" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
@@ -1661,8 +1661,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Notifications",
                 keyColumn: "Id",
                 keyValue: 116,
-                columns: new[] { "CreatedAt", "NotificationSettingId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 22, 25, 14, 44, DateTimeKind.Local), 16, "Exercitationem aliquam voluptas odit est rerum repellendus.", "52e27198-436d-4714-a6e7-e0d0738b847f" });
+                columns: new[] { "CreatedAt", "Text", "UserId" },
+                values: new object[] { new DateTime(2018, 9, 4, 22, 25, 14, 44, DateTimeKind.Local), "Exercitationem aliquam voluptas odit est rerum repellendus.", "52e27198-436d-4714-a6e7-e0d0738b847f" });
 
             migrationBuilder.UpdateData(
                 table: "Notifications",
@@ -1745,8 +1745,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Organizations",
                 keyColumn: "Id",
                 keyValue: 78,
-                columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "WebSite" },
-                values: new object[] { "(260) 482-0362", "b3731d39-39d1-491c-950b-719b0606e9c5", "Ut assumenda aut nesciunt sequi.", "Ivory_Bayer@yahoo.com", "Company962", "https://hank.net" });
+                columns: new[] { "ContactNumber", "CreatedByUserId", "Description", "Email", "Name", "ThemeId", "WebSite" },
+                values: new object[] { "(260) 482-0362", "b3731d39-39d1-491c-950b-719b0606e9c5", "Ut assumenda aut nesciunt sequi.", "Ivory_Bayer@yahoo.com", "Company962", 66, "https://hank.net" });
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
@@ -1794,8 +1794,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 55,
-                columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 4, 19, 52, 19, 935, DateTimeKind.Local), 48, "Possimus rerum ut tempora.", "45e74407-0146-4659-a4f6-de7d7c0d0b9b" });
+                columns: new[] { "CreatedAt", "Text", "UserId" },
+                values: new object[] { new DateTime(2018, 9, 4, 19, 52, 19, 935, DateTimeKind.Local), "Possimus rerum ut tempora.", "45e74407-0146-4659-a4f6-de7d7c0d0b9b" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
@@ -1815,8 +1815,8 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Responses",
                 keyColumn: "Id",
                 keyValue: 58,
-                columns: new[] { "CreatedAt", "Text", "UserId" },
-                values: new object[] { new DateTime(2018, 9, 5, 4, 11, 18, 556, DateTimeKind.Local), "Consequatur molestias sunt sint rerum rem aut est in a.", "8ce60506-64fa-4b47-a167-f77a2bbe46bc" });
+                columns: new[] { "CreatedAt", "FeedbackId", "Text", "UserId" },
+                values: new object[] { new DateTime(2018, 9, 5, 4, 11, 18, 556, DateTimeKind.Local), 50, "Consequatur molestias sunt sint rerum rem aut est in a.", "8ce60506-64fa-4b47-a167-f77a2bbe46bc" });
 
             migrationBuilder.UpdateData(
                 table: "Responses",
