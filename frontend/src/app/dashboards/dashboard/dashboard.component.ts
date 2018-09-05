@@ -19,6 +19,7 @@ import {DashboardChart} from '../models/dashboard-chart';
 import {Dashboard} from '../../shared/models/dashboard.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
+import { ChartRequest } from '../../shared/requests/chart-request.model';
 
 
 @Component({
@@ -273,6 +274,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     this.creation = false;
     this.displayEditDashboard = false;
+  }
+
+  onAddedCharts(array: Array<ChartRequest>) {
+    array.forEach( chart => {
+      chart.dashboardId = this.activeDashboardItem.dashId;
+    this.chartService.create(chart).subscribe(value => {
+      this.toastrService.success('Chart was created');
+    }, error => {
+      this.toastrService.error(`Error occurred status: ${error.message}`);
+    });
+    });
+
   }
 
   onChartDeleted(chartId: number) {
