@@ -13,6 +13,10 @@ namespace DataCollector
             Processes = new List<ProcessData>();
         }
 
+        #region Percentage
+
+
+        public float InterruptsTimePercent { get; set; }
         // Id to reference
         public Guid Id { get; set; }
         // ClientId - Client identification number
@@ -47,10 +51,10 @@ namespace DataCollector
             return new CollectedData
             {
                 //AvaliableRamBytes = firstItem.AvaliableRamBytes + secondItem.AvaliableRamBytes,
-                CpuUsagePercent = firstItem.CpuUsagePercent + secondItem.CpuUsagePercent,
+                CpuUsagePercentage = firstItem.CpuUsagePercent + secondItem.CpuUsagePercent,
                 InterruptsPerSeconds = firstItem.InterruptsPerSeconds + secondItem.InterruptsPerSeconds,
                 InterruptsTimePercent = firstItem.InterruptsTimePercent + secondItem.InterruptsTimePercent,
-                LocalDiskFreeMBytes = firstItem.LocalDiskFreeMBytes + secondItem.LocalDiskFreeMBytes,
+                //LocalDiskFreeMBytes = firstItem.LocalDiskFreeMBytes + secondItem.LocalDiskFreeMBytes,
                 LocalDiskFreeSpacePercent = firstItem.LocalDiskFreeSpacePercent + secondItem.LocalDiskFreeSpacePercent,
                 RamUsagePercent = firstItem.RamUsagePercent + secondItem.RamUsagePercent,
                 Time = secondItem.Time,
@@ -83,10 +87,10 @@ namespace DataCollector
             return new CollectedData
             {
                 //AvaliableRamBytes = item.AvaliableRamBytes / scalar,
-                CpuUsagePercent = item.CpuUsagePercent / scalar,
+                CpuUsagePercentage = item.CpuUsagePercent / scalar,
                 InterruptsPerSeconds = item.InterruptsPerSeconds / scalar,
                 InterruptsTimePercent = item.InterruptsTimePercent / scalar,
-                LocalDiskFreeMBytes = item.LocalDiskFreeMBytes / scalar,
+                //LocalDiskFreeMBytes = item.LocalDiskFreeMBytes / scalar,
                 LocalDiskFreeSpacePercent = item.LocalDiskFreeSpacePercent / scalar,
                 ProcessesCount = item.ProcessesCount,
                 RamUsagePercent = item.RamUsagePercent / scalar,
@@ -103,18 +107,11 @@ namespace DataCollector
             str.Append($"CPU usage: {CpuUsagePercent:0.##}%\n");
             //str.Append($"Ram avalaible: {AvaliableRamMBytes:0.##} MB\n");
             str.Append($"Ram usage: {RamUsagePercent:0.##}%\n");
-            str.Append($"Local disk avalaible: {LocalDiskFreeMBytes:0.##} MB\n");
+            //str.Append($"Local disk avalaible: {LocalDiskFreeMBytes:0.##} MB\n");
             return str.ToString();
         }
 
-        #region Percentage
 
-        public float CpuUsagePercent { get; set; }
-        public float RamUsagePercent { get; set; }
-        public float InterruptsTimePercent { get; set; }
-        public float LocalDiskFreeSpacePercent { get; set; }
-
-        #endregion
     }
 
     public class ProcessData
