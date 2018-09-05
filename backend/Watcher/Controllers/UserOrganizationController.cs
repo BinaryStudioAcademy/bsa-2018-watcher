@@ -62,6 +62,19 @@ namespace Watcher.Controllers
             return Ok(dtos);
         }
 
+        [HttpGet("id")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<IEnumerable<UserOrganizationDto>>> GetByOrganization(int id)
+        {
+            var dtos = await _userOrganizationService.GetAllEntitiesAsync();
+            if (!dtos.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(dtos);
+        }
+
         /// <summary>
         /// Add new UserOrganization
         /// </summary>

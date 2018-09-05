@@ -12,6 +12,8 @@
     using Watcher.DataAccess.Data;
     using Watcher.DataAccess.Entities;
     using Watcher.DataAccess.Interfaces.Repositories;
+    using Watcher.Common.Errors;
+    using System.Net;
 
     public class UserOrganizationRepository : IUserOrganizationRepository
     {
@@ -68,6 +70,29 @@
             }
 
             DbSet.Remove(entityToDelete);
+        }
+
+        public async Task<UserOrganization> UpdateAsync(UserOrganization userOrganization)
+        {
+            var findEntity = await DbSet.FindAsync(userOrganization.OrganizationId, userOrganization.UserId);
+
+            if (findEntity == null)
+            {
+                throw new HttpStatusCodeException(HttpStatusCode.NotFound, $"Entity {userOrganization.GetType().Name} not found");
+            }
+
+            findEntity.OrganizationRoleId = userOrganization.OrganizationRoleId;
+
+            return findEntity;
+        }
+
+        public async Task<List<UserOrganization>> GetAllByOrganizationId(int id)
+        {
+            IQueryable<UserOrganization> query = DbSet.Include(c => c.User)
+                                                      .Include(c => c.Organization)
+                                                      .Include(c => c.OrganizationRole)
+                                                      .Where(c => c.OrganizationId == id);
+            return await query.ToListAsync();
         }
     }
 }

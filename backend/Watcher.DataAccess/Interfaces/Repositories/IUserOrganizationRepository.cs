@@ -15,5 +15,8 @@ namespace Watcher.DataAccess.Interfaces.Repositories
         void Delete(int companyId, string userId);
 
         Task<List<UserOrganization>> GetRangeAsync(Func<IQueryable<UserOrganization>, IIncludableQueryable<UserOrganization, object>> include = null, bool disableTracking = true);
+
+        Task<UserOrganization> UpdateAsync(UserOrganization userOrganization);
+        Task<List<UserOrganization>> GetAllByOrganizationId(int id);
     }
 }
