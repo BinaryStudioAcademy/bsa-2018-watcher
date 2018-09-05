@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {CustomData} from '../../dashboards/charts/models';
+import {CustomData, date_sort_asc} from '../../dashboards/charts/models';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {NumberSeriesItem, SeriesItem} from '../../dashboards/models/series-item';
 import {MultiChartItem} from '../../dashboards/models/multi-chart-item';
@@ -81,13 +81,16 @@ export class DataService {
     if (chartType === ChartType.LineChart) {
       const data = this.mapToMultiData(dataToTransform, dataSources);
       for (let i = 0; i < data.length; i++) {
-        data[i].series.sort((a, b) => {
-          if (a.name > b.name) { return 1; }
-          if (a.name < b.name) { return -1; }
-          return 0;
-        });
+        data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
       }
 
+      /*
+       (a, b) => {
+        if (a.name > b.name) { return 1; }
+        if (a.name < b.name) { return -1; }
+        return 0;
+      }
+      */
       return data;
       // order ascending to in future remove first element (the oldest)
     } else {

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
-import {DataProperty} from '../../../shared/models/data-property.enum';
+import {DataProperty, ProcessDataProperty} from '../../../shared/models/data-property.enum';
 import {SelectItem} from 'primeng/api';
 import {DashboardChart} from '../../models/dashboard-chart';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
@@ -76,15 +76,21 @@ export class EditChartComponent implements OnInit, OnChanges {
     ];
 
     this.dropdownSources = [
-      {label: 'CPU', value: DataProperty.cpuUsagePercent},
-      {label: 'RAM', value: DataProperty.ramUsagePercent},
-      {label: 'DISC', value: DataProperty.localDiskFreeSpacePercent}
+      {label: 'CPU %', value: DataProperty.cpuUsagePercentage},
+      {label: 'RAM %', value: DataProperty.ramUsagePercentage},
+      {label: 'DISC %', value: DataProperty.localDiskUsagePercentage},
+      // {label: 'CPU %', value: DataProperty.},
+      // {label: 'RAM %', value: DataProperty.ramUsagePercentage},
+      // {label: 'DISC %', value: DataProperty.localDiskUsagePercentage},
+      // {label: 'CPU %', value: DataProperty.cpuUsagePercentage},
+      // {label: 'RAM %', value: DataProperty.ramUsagePercentage},
+      // {label: 'DISC %', value: DataProperty.localDiskUsagePercentage}
     ];
 
     this.dropdownSourcesProcesses = [
-      {label: 'CPU p', value: DataProperty.processesCPU},
-      {label: 'RAM p', value: DataProperty.processesRAM},
-      {label: 'DISC p', value: DataProperty.localDiskFreeMBytes}
+      {label: 'CPU p', value: ProcessDataProperty.pCpu},
+      {label: 'RAM p', value: ProcessDataProperty.pRam},
+      {label: 'RAM Mb p', value: ProcessDataProperty.ramMBytes}
     ];
 
     this.chartForm = this.fb.group({

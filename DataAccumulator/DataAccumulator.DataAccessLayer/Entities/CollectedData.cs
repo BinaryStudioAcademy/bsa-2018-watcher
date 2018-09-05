@@ -28,6 +28,8 @@ namespace DataAccumulator.DataAccessLayer.Entities
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
         public List<ProcessData> Processes { get; set; }
+        public float CpuUsagePercentage { get; set; }
+
 
         public float FreeRamMBytes { get; set; }
         public float TotalRamMBytes { get; set; }

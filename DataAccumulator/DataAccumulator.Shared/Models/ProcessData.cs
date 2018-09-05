@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataAccumulator.Shared.Models
+﻿namespace DataAccumulator.Shared.Models
 {
+    using Watcher.Common.MoveToFrontend;
+
+    [ExportClassToTypescript]
     public class ProcessData
     {
         public string Name { get; set; }
