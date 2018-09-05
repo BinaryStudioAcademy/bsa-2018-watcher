@@ -4,6 +4,12 @@ namespace DataCollector
 {
     class ActionLog
     {
+        // Id - Action log number
+        public Guid Id { get; set; }
+
+        // ClientId - Client identification number
+        public Guid ClientId { get; set; }
+
         public string Message { get; set; }
 
         public DateTime Timestamp { get; set; }

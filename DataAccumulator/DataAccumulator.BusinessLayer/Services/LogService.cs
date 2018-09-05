@@ -4,6 +4,7 @@ using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.Shared.Models;
 using System.Threading.Tasks;
+using System;
 
 namespace DataAccumulator.BusinessLayer.Services
 {
@@ -20,9 +21,14 @@ namespace DataAccumulator.BusinessLayer.Services
 
         public async Task SaveActionLog(ActionLogDto actionLogDto)
         {
+            if (actionLogDto?.Id == Guid.Empty)
+            {
+                actionLogDto.Id = Guid.NewGuid();
+            }
+
             var actionLog = _mapper.Map<ActionLogDto, ActionLog>(actionLogDto);
 
-            await _repository.SaveActionLog(actionLog);
+            await _repository.AddEntity(actionLog);
         }
     }
 }

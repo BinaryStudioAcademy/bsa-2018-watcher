@@ -5,6 +5,6 @@ namespace DataAccumulator.DataAccessLayer.Interfaces
 {
     public interface ILogRepository
     {
-        Task SaveActionLog(ActionLog actionLog);
+        Task AddEntity(ActionLog actionLog);
     }
 }

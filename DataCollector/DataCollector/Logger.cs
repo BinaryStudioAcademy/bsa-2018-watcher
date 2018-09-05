@@ -10,10 +10,10 @@ namespace DataCollector
     internal class Logger
     {
         private readonly HttpClient _client;
-
+        private readonly Guid _clientId;
         private readonly string _uri;
 
-        public Logger(HttpClient client, string uri)
+        public Logger(HttpClient client, Guid clientId,string uri)
         {
             _client = client;
             _uri = uri;
@@ -22,6 +22,8 @@ namespace DataCollector
         public async Task Log(string message, LogLevel logLevel = LogLevel.Info)
         {
             var actionLog = new ActionLog(message, DateTime.Now, logLevel);
+
+            actionLog.ClientId = _clientId;
 
             var content = JsonConvert.SerializeObject(actionLog);
             var buffer = Encoding.UTF8.GetBytes(content);
