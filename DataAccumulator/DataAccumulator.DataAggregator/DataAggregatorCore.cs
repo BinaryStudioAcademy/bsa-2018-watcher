@@ -37,30 +37,31 @@ namespace DataAccumulator.DataAggregator
                         CollectedDataType = destinationType,
                         ProcessesCount = Convert.ToInt32(collectedDataGroup
                             .Average(d => d.ProcessesCount)),
-                        CpuUsagePercent = collectedDataGroup
-                            .Average(d => d.CpuUsagePercent),
-                        RamUsagePercent = collectedDataGroup
-                            .Average(d => d.RamUsagePercent),
-                        InterruptsTimePercent = collectedDataGroup
-                            .Average(d => d.InterruptsTimePercent),
-                        LocalDiskFreeSpacePercent = collectedDataGroup
-                            .Average(d => d.LocalDiskFreeSpacePercent),
-                        AvaliableRamBytes = collectedDataGroup
-                            .Average(d => d.AvaliableRamBytes),
+                        FreeRamMBytes = collectedDataGroup
+                            .Average(d => d.FreeRamMBytes),
+                        TotalRamMBytes = collectedDataGroup
+                            .Average(d => d.TotalRamMBytes),
+                        FreeRamPercentage = collectedDataGroup
+                            .Average(d => d.FreeRamPercentage),
                         InterruptsPerSeconds = collectedDataGroup
                             .Average(d => d.InterruptsPerSeconds),
                         LocalDiskFreeMBytes = collectedDataGroup
                             .Average(d => d.LocalDiskFreeMBytes),
+                        LocalDiskTotalMBytes = collectedDataGroup
+                            .Average(d => d.LocalDiskTotalMBytes),
+                        LocalDiskFreePercentage = collectedDataGroup
+                            .Average(d => d.LocalDiskFreePercentage),
                         Time = collectedDataGroup
                             .Max(d => d.Time),
-                        ProcessesCPU = collectedDataGroup
-                            .SelectMany(d => d.ProcessesCPU)
-                            .ToLookup(pair => pair.Key, pair => pair.Value)
-                            .ToDictionary(l => l.Key, l => l.Average()),
-                        ProcessesRAM = collectedDataGroup
-                            .SelectMany(d => d.ProcessesRAM)
-                            .ToLookup(pair => pair.Key, pair => pair.Value)
-                            .ToDictionary(l => l.Key, l => l.Average()),
+                        //Processes = collectedDataGroup
+                        //    .SelectMany(d => d.Processes)
+                        //    .ToLookup(pair => pair.Key, pair => pair.Value)
+                        //    .ToDictionary(l => l.Key, l => l.Average()),
+
+                        //ProcessesRAM = collectedDataGroup
+                        //    .SelectMany(d => d.ProcessesRAM)
+                        //    .ToLookup(pair => pair.Key, pair => pair.Value)
+                        //    .ToDictionary(l => l.Key, l => l.Average()),
                     };
 
                 // Save aggregated CollectedDataDto to destination table MongoDb

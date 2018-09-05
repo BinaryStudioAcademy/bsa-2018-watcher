@@ -132,17 +132,33 @@ namespace DataAccumulator.BusinessLayer.Services
             {
                 Id = collectedDataId,
                 ClientId = instanceId, // Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"), // instanceId
+                CollectedDataType = CollectedDataType.Accumulation,
                 Time = DateTime.UtcNow,
-                CpuUsagePercent = (float)Math.Round(random.NextDouble() * 100, 2),
-                RamUsagePercent = (float)Math.Round(random.NextDouble() * 100, 2),
-                InterruptsTimePercent = (float)Math.Round(random.NextDouble() * 100, 2),
-                LocalDiskFreeSpacePercent = (float)Math.Round(random.NextDouble() * 100, 2),
-                AvaliableRamBytes = random.Next(100, 4096),
-                InterruptsPerSeconds = random.Next(0, 100),
-                LocalDiskFreeMBytes = random.Next(0, 1000000000),
-                ProcessesCPU = ProcessesCPU,
-                ProcessesRAM = ProcessesRAM,
-                ProcessesCount = random.Next(0, 300)
+                ProcessesCount = random.Next(0, 300),
+                FreeRamMBytes = (float)Math.Round(random.NextDouble() * 100, 2),
+                TotalRamMBytes = (float)Math.Round(random.NextDouble() * 100, 2),
+                FreeRamPercentage = (float)Math.Round(random.NextDouble() * 100, 2),
+                InterruptsPerSeconds = random.Next(100, 4096),
+                LocalDiskFreeMBytes = random.Next(0, 100),
+                LocalDiskTotalMBytes = random.Next(0, 1000000000),
+                LocalDiskFreePercentage = random.Next(0, 100),
+                Processes = new List<ProcessData>()
+                {
+                    new ProcessData()
+                    {
+                        Name = "chrome",
+                        RamMBytes = 20,
+                        PRam = 5,
+                        PCpu = 7
+                    },
+                    new ProcessData()
+                    {
+                        Name = "ie",
+                        RamMBytes = 10,
+                        PRam = 3,
+                        PCpu = 5
+                    },
+                }
             };
 
             return data;
