@@ -34,11 +34,20 @@ namespace DataAccumulator.DataAggregator
                     select new CollectedDataDto
                     {
                         ClientId = collectedDataGroup.Key,
-
                         CollectedDataType = destinationType,
 
                         ProcessesCount = Convert.ToInt32(collectedDataGroup
                             .Average(d => d.ProcessesCount)),
+                        Processes = collectedDataGroup
+                            .SelectMany(d => d.Processes)
+                            .GroupBy(p => p.Name)
+                            .Select(g => new ProcessData()
+                            {
+                                Name = g.Key,
+                                PCpu = g.Average(c => c.PCpu),
+                                PRam = g.Average(r => r.PRam),
+                                RamMBytes = g.Average(b => b.RamMBytes)
+                            }).ToList(),
 
                         UsageRamMBytes = collectedDataGroup
                             .Average(d => d.UsageRamMBytes),
@@ -61,12 +70,7 @@ namespace DataAccumulator.DataAggregator
                             .Average(d => d.CpuUsagePercentage),
 
                         Time = collectedDataGroup
-                            .Max(d => d.Time),
-                        //Processes = collectedDataGroup.SelectMany(d => d.Processes).ToList()
-                        //    .SelectMany(d => d.Processes)
-                        //    .ToLookup(pair => pair.Key, pair => pair.Value)
-                        //    .ToDictionary(l => l.Key, l => l.Average()),
-                        //Processes = collectedDataGroup.SelectMany(d => d.Processes).GroupBy(p => p.Name).SelectMany(g => g.Key.)
+                            .Max(d => d.Time)
                     };
 
                 // Save aggregated CollectedDataDto to destination table MongoDb
