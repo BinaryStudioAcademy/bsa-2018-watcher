@@ -154,16 +154,16 @@ namespace Watcher.Core.Services
                 Id = Guid.NewGuid(),
                 ClientId = instanceId, // Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"), // instanceId
                 CollectedDataType = CollectedDataType.Accumulation,
-                Time = DateTime.UtcNow,
+                Time = dateTime,
                 ProcessesCount = random.Next(10, 300),
                 CpuUsagePercentage = (float)random.NextDouble() * 10,
-                FreeRamMBytes = random.Next(0, 5_000), // (float)Math.Round(random.NextDouble() * 100, 2),
+                UsageRamMBytes = random.Next(0, 5_000), // (float)Math.Round(random.NextDouble() * 100, 2),
                 TotalRamMBytes = random.Next(5_000, 10_000), // (float)Math.Round(random.NextDouble() * 100, 2) + (float)Math.Round(random.NextDouble() * 100, 2),
-                FreeRamPercentage = (float)Math.Round(random.NextDouble() * 100, 2),
+                RamUsagePercentage = (float)Math.Round(random.NextDouble() * 100, 2),
                 InterruptsPerSeconds = random.Next(100, 4096),
-                LocalDiskFreeMBytes = random.Next(0, 5000),
+                LocalDiskUsageMBytes = random.Next(0, 5000),
                 LocalDiskTotalMBytes = random.Next(5000, 1_000_000),
-                LocalDiskFreePercentage = random.Next(0, 100),
+                LocalDiskUsagePercentage = random.Next(0, 100),
                 Processes = processData
             };
 

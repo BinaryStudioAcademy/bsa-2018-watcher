@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
-import {DataProperty, ProcessDataProperty} from '../../../shared/models/data-property.enum';
+import {DataProperty, dataPropertyLables, ProcessDataProperty, processDataPropertyLables} from '../../../shared/models/data-property.enum';
 import {SelectItem} from 'primeng/api';
 import {DashboardChart} from '../../models/dashboard-chart';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
@@ -76,21 +76,19 @@ export class EditChartComponent implements OnInit, OnChanges {
     ];
 
     this.dropdownSources = [
-      {label: 'CPU %', value: DataProperty.cpuUsagePercentage},
-      {label: 'RAM %', value: DataProperty.ramUsagePercentage},
-      {label: 'DISC %', value: DataProperty.localDiskUsagePercentage},
-      // {label: 'CPU %', value: DataProperty.},
-      // {label: 'RAM %', value: DataProperty.ramUsagePercentage},
-      // {label: 'DISC %', value: DataProperty.localDiskUsagePercentage},
-      // {label: 'CPU %', value: DataProperty.cpuUsagePercentage},
-      // {label: 'RAM %', value: DataProperty.ramUsagePercentage},
-      // {label: 'DISC %', value: DataProperty.localDiskUsagePercentage}
+      {label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage},
+      {label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage},
+      {label: dataPropertyLables[DataProperty.localDiskUsagePercentage], value: DataProperty.localDiskUsagePercentage},
+      {label: dataPropertyLables[DataProperty.processesCount], value: DataProperty.processesCount},
+      {label: dataPropertyLables[DataProperty.usageRamMBytes], value: DataProperty.usageRamMBytes},
+      {label: dataPropertyLables[DataProperty.interruptsPerSeconds], value: DataProperty.interruptsPerSeconds},
+      {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
     ];
 
     this.dropdownSourcesProcesses = [
-      {label: 'CPU p', value: ProcessDataProperty.pCpu},
-      {label: 'RAM p', value: ProcessDataProperty.pRam},
-      {label: 'RAM Mb p', value: ProcessDataProperty.ramMBytes}
+      {label: processDataPropertyLables[ProcessDataProperty.pCpu], value: ProcessDataProperty.pCpu},
+      {label: processDataPropertyLables[ProcessDataProperty.pRam], value: ProcessDataProperty.pRam},
+      {label: processDataPropertyLables[ProcessDataProperty.ramMBytes], value: ProcessDataProperty.ramMBytes}
     ];
 
     this.chartForm = this.fb.group({

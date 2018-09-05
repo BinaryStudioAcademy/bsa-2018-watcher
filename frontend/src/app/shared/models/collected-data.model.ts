@@ -8,11 +8,11 @@ export interface CollectedData {
   processesCount: number;
   processes: ProcessData[];
   cpuUsagePercentage: number;
-  freeRamMBytes: number;
+  usageRamMBytes: number;
   totalRamMBytes: number;
   freeRamPercentage: number;
   interruptsPerSeconds: number;
-  localDiskFreeMBytes: number;
+  localDiskUsageMBytes: number;
   localDiskTotalMBytes: number;
   localDiskFreePercentage: number;
   time: Date;
