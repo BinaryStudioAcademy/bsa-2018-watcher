@@ -324,6 +324,7 @@ namespace Watcher
                     cfg.AddProfile<InstancesProfile>();
                     cfg.AddProfile<OrganizationInvitesProfile>();
                     cfg.AddProfile<CollectedDataProfile>();
+                    cfg.AddProfile<CollectorActionLogProfile>();
 
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
