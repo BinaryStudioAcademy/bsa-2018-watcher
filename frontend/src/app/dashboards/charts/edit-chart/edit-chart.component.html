@@ -30,7 +30,6 @@
                      [style]="{'width':'192px'}"
                      maxSelectedLabels="1"
                      (onChange)="multiSelect($event)">
-                  </ng-template>
       </p-multiSelect>
       <p-dropdown *ngIf="!dashboardChart.showCommon"
                   [options]="dropdownGroupSources"
@@ -69,6 +68,14 @@
              [disabled]="isGuage()"
              [(ngModel)]="dashboardChart.xAxisLabel"
              pInputText/>
+      <p class="field">Color schemes:</p>
+      <p-dropdown [options]="colorSchemes"
+                  optionLabel="name"
+                  [(ngModel)]="dashboardChart.colorScheme"
+                  placeholder="Select a scheme"
+                  [style]="{'width':'192px'}"
+                  (onChange)="processData()">
+      </p-dropdown>
     </div>
     <div class="ui-g-9">
       <p class="field-top center">Visualization</p>

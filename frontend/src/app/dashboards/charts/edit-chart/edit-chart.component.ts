@@ -13,6 +13,7 @@ import {ToastrService} from '../../../core/services/toastr.service';
 import {Chart} from '../../../shared/models/chart.model';
 import {dashboardChartTypes} from '../models/dashboardChartTypes';
 import { eventNames } from 'cluster';
+import {colorSets} from '@swimlane/ngx-charts/release/utils';
 
 @Component({
   selector: 'app-edit-chart',
@@ -41,6 +42,8 @@ export class EditChartComponent implements OnInit, OnChanges {
   showPreview = false;
   chartForm: FormGroup;
   processDataSource: DataProperty;
+
+  colorSchemes = colorSets;
 
   get dialogTitle() {
     if (this.dashboardChart && this.dashboardChart.id) {
@@ -96,7 +99,6 @@ export class EditChartComponent implements OnInit, OnChanges {
       yAxisLabel: new FormControl({value: '', disabled: false})
     });
   }
-
 
   multiSelect(event) {
     if (dataPropertyLables[event.itemValue].includes('%')) {
@@ -254,6 +256,7 @@ export class EditChartComponent implements OnInit, OnChanges {
       type: this.dashboardChart.chartType.type,
       sources: this.dashboardChart.dataSources.join(),
       isLightTheme: this.dashboardChart.theme === 'light',
+      scheme: this.dashboardChart.colorScheme
     };
     return chart;
   }
