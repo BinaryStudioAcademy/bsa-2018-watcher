@@ -188,9 +188,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return lastItem;
   }
 
-  createDashboard(newDashboard: DashboardRequest): void {
+  createDashboard(newDashboard: DashboardRequest, charts: Array<ChartRequest>): void {
     this.dashboardsService.create(newDashboard)
       .subscribe((dto) => {
+          this.onAddedCharts(charts, dto.id);
           const item: DashboardMenuItem = this.transformToMenuItem(dto);
           this.dashboardMenuItems.unshift(item);
           this.activeDashboardItem = this.dashboardMenuItems[0];
@@ -259,10 +260,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.showChartCreating();
   }
 
-  onEdited(title: string) {
+  onEdited(event: any) { // title: string
+    const title = event.title;
+    const charts = event.charts;
     if (this.creation === true) {
       const newdash: DashboardRequest = {title: title, instanceId: this.instanceId};
-      this.createDashboard(newdash);
+      this.createDashboard(newdash, charts);
       let index = 0;
       // switching to new tab
       if (this.dashboardMenuItems.length >= 2) {
@@ -274,11 +277,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     this.creation = false;
     this.displayEditDashboard = false;
+
   }
 
-  onAddedCharts(array: Array<ChartRequest>) {
+  onAddedCharts(array: Array<ChartRequest>, id: number) { console.log(id);
     array.forEach( chart => {
-      chart.dashboardId = this.activeDashboardItem.dashId;
+      chart.dashboardId = id;
     this.chartService.create(chart).subscribe(value => {
       this.toastrService.success('Chart was created');
     }, error => {

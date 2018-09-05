@@ -1,5 +1,5 @@
-<app-edit-dashboard (added)="onAddedCharts($event)" (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard" [dashboardTitle]="editTitle"></app-edit-dashboard>
-
+<app-edit-dashboard (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard" [dashboardTitle]="editTitle"></app-edit-dashboard>
+<!-- (added)="onAddedCharts($event)" -->
 <app-edit-chart (editChart)="onChartEdited($event)" (closed)="onChartEditClosed()" [onDisplay]="onDisplayChartEditing"
   [dashboardId]="activeDashboardItem ? activeDashboardItem.dashId : 0" [dashboardChart]="chartToEdit">
 </app-edit-chart>

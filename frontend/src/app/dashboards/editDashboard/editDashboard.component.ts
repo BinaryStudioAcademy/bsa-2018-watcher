@@ -21,18 +21,18 @@ import { ChartRequest } from './../../shared/requests/chart-request.model';
 export class EditDashboardComponent implements OnInit, OnChanges {
   title = '';
 
-  @Output() edited = new EventEmitter<string>();
+  @Output() edited = new EventEmitter<any>(); // string
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardTitle: string;
 
-  @Output() added = new EventEmitter<Array<ChartRequest>>();
+  // @Output() added = new EventEmitter<Array<ChartRequest>>();
 
   showPreview = false;
   dropdownSources: SelectItem[];
   collectedDataForChart: CollectedData[] = [];
   dashboardCharts: DashboardChart[] = [];
-  newCharts: ChartRequest[];
+  newCharts: ChartRequest[] = [];
   dashboardChart1 = { ...defaultOptions };
   dashboardChart2 = { ...defaultOptions };
   dashboardChart3 = { ...defaultOptions };
@@ -66,17 +66,17 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   edit(model: NgModel): void {
-    this.edited.emit(this.title);
-    this.title = '';
-    model.reset();
-
     for (let i = 0; i < 4; i++) {
       this.newCharts.push(this.createChartRequest(this.dashboardCharts[i]));
       if (!this.isIncluded[i] && this.isCustomize) {
          this.newCharts.splice(i, 1);
       }
     }
-    this.added.emit(this.newCharts);
+    this.edited.emit({title: this.title, charts: this.newCharts});
+    // this.edited.emit(this.title);
+    this.title = '';
+    model.reset();
+    /*this.added.emit(this.newCharts);*/
   }
 
   ngOnChanges(changes) {
@@ -89,13 +89,13 @@ export class EditDashboardComponent implements OnInit, OnChanges {
       this.collectedDataForChart = value;
     });
 
-  this.dropdownSources = [
-    { label: 'CPU', value: DataProperty.cpuUsagePercent },
-    { label: 'RAM', value: DataProperty.ramUsagePercent },
-    { label: 'DISC', value: DataProperty.localDiskFreeSpacePercent }
-  ];
+    this.dropdownSources = [
+      { label: 'CPU', value: DataProperty.cpuUsagePercent },
+      { label: 'RAM', value: DataProperty.ramUsagePercent },
+      { label: 'DISC', value: DataProperty.localDiskFreeSpacePercent }
+    ];
 
-  this.fillCharts();
+    this.fillCharts();
   }
 
   fillCharts() {
