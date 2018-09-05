@@ -20,13 +20,19 @@ namespace DataCollector
 
         public int ProcessesCount { get; set; }
         public List<ProcessData> Processes { get; set; }
+
         public float FreeRamMBytes { get; set; }
         public float TotalRamMBytes { get; set; }
-        public float FreeRamPercentage { get; set; }
+        public float RamUsagePercentage { get; set; }
+
         public float InterruptsPerSeconds { get; set; }
+
         public float LocalDiskFreeMBytes { get; set; }
         public float LocalDiskTotalMBytes { get; set; }
-        public float LocalDiskFreePercentage { get; set; }
+        public float LocalDiskUsagePercentage { get; set; }
+
+        public float CpuUsagePercentage { get; set; }
+
         public DateTime Time { get; set; }
 
 
