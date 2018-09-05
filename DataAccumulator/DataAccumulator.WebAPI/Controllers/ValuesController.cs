@@ -62,7 +62,9 @@ namespace DataAccumulator.WebAPI.Controllers
                     {
                         Id = Guid.NewGuid(),
                         ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+
                         CollectedDataType = CollectedDataType.Accumulation,
+
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -81,14 +83,19 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
-                        CpuUsagePercentage = 18,
-                        FreeRamMBytes = 20,
+
+                        UsageRamMBytes = 18,
                         TotalRamMBytes = 20,
-                        FreeRamPercentage = 80,
+                        RamUsagePercentage = 20,
+
                         InterruptsPerSeconds = 80,
-                        LocalDiskFreeMBytes = 10,
-                        LocalDiskTotalMBytes = 20,
-                        LocalDiskFreePercentage = 10,
+
+                        LocalDiskUsageMBytes = 80,
+                        LocalDiskTotalMBytes = 10,
+                        LocalDiskUsagePercentage = 20,
+
+                        CpuUsagePercentage = 10,
+
                         Time = DateTime.Now
                     });
 
@@ -96,7 +103,9 @@ namespace DataAccumulator.WebAPI.Controllers
                     {
                         Id = Guid.NewGuid(),
                         ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+
                         CollectedDataType = CollectedDataType.Accumulation,
+
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -115,14 +124,19 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
-                        CpuUsagePercentage = 18,
-                        FreeRamMBytes = 20,
+
+                        UsageRamMBytes = 18,
                         TotalRamMBytes = 20,
-                        FreeRamPercentage = 80,
+                        RamUsagePercentage = 20,
+
                         InterruptsPerSeconds = 80,
-                        LocalDiskFreeMBytes = 10,
-                        LocalDiskTotalMBytes = 20,
-                        LocalDiskFreePercentage = 10,
+
+                        LocalDiskUsageMBytes = 80,
+                        LocalDiskTotalMBytes = 10,
+                        LocalDiskUsagePercentage = 20,
+
+                        CpuUsagePercentage = 10,
+
                         Time = DateTime.Now
                     });
 
@@ -130,7 +144,9 @@ namespace DataAccumulator.WebAPI.Controllers
                     {
                         Id = Guid.NewGuid(),
                         ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+
                         CollectedDataType = CollectedDataType.Accumulation,
+
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -149,14 +165,19 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
-                        CpuUsagePercentage = 18,
-                        FreeRamMBytes = 20,
+
+                        UsageRamMBytes = 33,
                         TotalRamMBytes = 20,
-                        FreeRamPercentage = 80,
+                        RamUsagePercentage = 20,
+
                         InterruptsPerSeconds = 80,
-                        LocalDiskFreeMBytes = 10,
-                        LocalDiskTotalMBytes = 20,
-                        LocalDiskFreePercentage = 10,
+
+                        LocalDiskUsageMBytes = 80,
+                        LocalDiskTotalMBytes = 10,
+                        LocalDiskUsagePercentage = 20,
+
+                        CpuUsagePercentage = 10,
+
                         Time = DateTime.Now
                     });
 
@@ -164,7 +185,9 @@ namespace DataAccumulator.WebAPI.Controllers
                     {
                         Id = Guid.NewGuid(),
                         ClientId = new Guid("76053df4-6687-4353-8937-b45556748abe"),
+
                         CollectedDataType = CollectedDataType.Accumulation,
+
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -183,14 +206,19 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
-                        CpuUsagePercentage = 18,
-                        FreeRamMBytes = 20,
+
+                        UsageRamMBytes = 18,
                         TotalRamMBytes = 20,
-                        FreeRamPercentage = 80,
+                        RamUsagePercentage = 20,
+
                         InterruptsPerSeconds = 80,
-                        LocalDiskFreeMBytes = 10,
-                        LocalDiskTotalMBytes = 20,
-                        LocalDiskFreePercentage = 10,
+
+                        LocalDiskUsageMBytes = 80,
+                        LocalDiskTotalMBytes = 10,
+                        LocalDiskUsagePercentage = 20,
+
+                        CpuUsagePercentage = 10,
+
                         Time = DateTime.Now
                     });
 
@@ -198,7 +226,9 @@ namespace DataAccumulator.WebAPI.Controllers
                     {
                         Id = Guid.NewGuid(),
                         ClientId = new Guid("76053df4-6687-4353-8937-b45556748abe"),
+
                         CollectedDataType = CollectedDataType.Accumulation,
+
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -217,14 +247,19 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
-                        CpuUsagePercentage = 18,
-                        FreeRamMBytes = 20,
+
+                        UsageRamMBytes = 18,
                         TotalRamMBytes = 20,
-                        FreeRamPercentage = 80,
+                        RamUsagePercentage = 20,
+
                         InterruptsPerSeconds = 80,
-                        LocalDiskFreeMBytes = 10,
-                        LocalDiskTotalMBytes = 20,
-                        LocalDiskFreePercentage = 10,
+
+                        LocalDiskUsageMBytes = 80,
+                        LocalDiskTotalMBytes = 10,
+                        LocalDiskUsagePercentage = 20,
+
+                        CpuUsagePercentage = 10,
+
                         Time = DateTime.Now
                     });
 
