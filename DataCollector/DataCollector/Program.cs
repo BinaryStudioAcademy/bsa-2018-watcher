@@ -54,8 +54,8 @@ namespace DataCollector
                 new DataSender(_client, uri),
                 Collector.Instance);
 
-            _logger = new Logger(_client, uri);
-
+            _logger = new Logger(_client, uri+"/log");
+            _logger.Log("Data collection began").GetAwaiter().GetResult();
             // setting timer for collecting proccess
             TimerItem = new Timer(Timercallback, payload, 0, delay);
 
@@ -103,13 +103,7 @@ namespace DataCollector
         }
 
         public static async void Timercallback(object payload)
-        {
-            if (isFirstCollection)
-            {
-                await _logger.Log("Data collection began");
-                isFirstCollection = false;
-            }
-            
+        {            
             Console.WriteLine($"Current instance: {ClientIdentifier}");
 
             var turple = (ValueTuple<DataSender, Collector>) payload;

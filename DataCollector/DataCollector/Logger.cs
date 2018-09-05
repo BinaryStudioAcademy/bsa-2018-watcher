@@ -23,7 +23,7 @@ namespace DataCollector
         {
             var actionLog = new ActionLog(message, DateTime.Now, logLevel);
 
-            var content = JsonConvert.SerializeObject(message);
+            var content = JsonConvert.SerializeObject(actionLog);
             var buffer = Encoding.UTF8.GetBytes(content);
 
             var byteContent = new ByteArrayContent(buffer);

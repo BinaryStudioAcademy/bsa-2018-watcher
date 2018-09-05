@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DataAccumulator.WebAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/v1/dataaccumulator/log")]
     [ApiController]
     public class LogController : ControllerBase
     {
