@@ -9,7 +9,7 @@ import {ToastrService} from '../../../core/services/toastr.service';
   styleUrls: ['./chart-dashboard.component.sass']
 })
 export class ChartDashboardComponent implements OnChanges {
-  charts: DashboardChart[];
+  charts: DashboardChart[] = [];
 
   @Input() dashboardCharts: DashboardChart[] = [];
   @Input() dashboardId: number;
