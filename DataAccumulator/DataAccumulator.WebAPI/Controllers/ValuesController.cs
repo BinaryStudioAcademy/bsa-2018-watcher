@@ -81,6 +81,7 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
+                        CpuUsagePercentage = 18,
                         FreeRamMBytes = 20,
                         TotalRamMBytes = 20,
                         FreeRamPercentage = 80,
@@ -114,6 +115,7 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
+                        CpuUsagePercentage = 18,
                         FreeRamMBytes = 20,
                         TotalRamMBytes = 20,
                         FreeRamPercentage = 80,
@@ -147,6 +149,7 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
+                        CpuUsagePercentage = 18,
                         FreeRamMBytes = 20,
                         TotalRamMBytes = 20,
                         FreeRamPercentage = 80,
@@ -180,6 +183,7 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
+                        CpuUsagePercentage = 18,
                         FreeRamMBytes = 20,
                         TotalRamMBytes = 20,
                         FreeRamPercentage = 80,
@@ -213,6 +217,7 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
+                        CpuUsagePercentage = 18,
                         FreeRamMBytes = 20,
                         TotalRamMBytes = 20,
                         FreeRamPercentage = 80,

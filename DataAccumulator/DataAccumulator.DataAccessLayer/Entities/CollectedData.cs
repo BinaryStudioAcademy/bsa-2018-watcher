@@ -26,6 +26,7 @@ namespace DataAccumulator.DataAccessLayer.Entities
 
         public int ProcessesCount { get; set; }
         public List<ProcessData> Processes { get; set; }
+        public float CpuUsagePercentage { get; set; }
         public float FreeRamMBytes { get; set; }
         public float TotalRamMBytes { get; set; }
         public float FreeRamPercentage { get; set; }

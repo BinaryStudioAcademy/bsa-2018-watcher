@@ -140,6 +140,7 @@ namespace DataAccumulator.BusinessLayer.Services
                 CollectedDataType = CollectedDataType.Accumulation,
                 Time = DateTime.UtcNow,
                 ProcessesCount = random.Next(0, 300),
+                CpuUsagePercentage = (float)Math.Round(random.NextDouble() * 100, 2),
                 FreeRamMBytes = (float)Math.Round(random.NextDouble() * 100, 2),
                 TotalRamMBytes = (float)Math.Round(random.NextDouble() * 100, 2),
                 FreeRamPercentage = (float)Math.Round(random.NextDouble() * 100, 2),
