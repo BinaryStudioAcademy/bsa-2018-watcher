@@ -26,7 +26,7 @@ namespace DataAccumulator.DataAccessLayer.Entities
 
         public int ProcessesCount { get; set; }
 
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
+        //[BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
         public List<ProcessData> Processes { get; set; }
 
         public float FreeRamMBytes { get; set; }

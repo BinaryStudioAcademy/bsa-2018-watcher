@@ -23,7 +23,7 @@ export class ReportComponent implements OnInit {
 
       const request: AggregateDataRequest = {
         id: this.id,
-        type: 0,
+        type: DataType.AggregationForDay,
         from: new Date(2018, 8, 5, 0, 0),
         to: new Date(2018, 8, 6, 0, 0)
       };

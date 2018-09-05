@@ -55,13 +55,13 @@ namespace DataAccumulator.WebAPI.Controllers
             {
                 if (setting == "init")
                 {
-                    await _repository.RemoveAllEntities();
+                    //await _repository.RemoveAllEntities();
                     var name = _repository.CreateIndex();
 
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
                         CollectedDataType = CollectedDataType.Accumulation,
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
@@ -94,7 +94,7 @@ namespace DataAccumulator.WebAPI.Controllers
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
                         CollectedDataType = CollectedDataType.Accumulation,
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
@@ -127,7 +127,7 @@ namespace DataAccumulator.WebAPI.Controllers
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
                         CollectedDataType = CollectedDataType.Accumulation,
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
@@ -160,7 +160,7 @@ namespace DataAccumulator.WebAPI.Controllers
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("76053df4-6687-4353-8937-b45556748abe"),
+                        ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
                         CollectedDataType = CollectedDataType.Accumulation,
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
@@ -193,7 +193,7 @@ namespace DataAccumulator.WebAPI.Controllers
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("76053df4-6687-4353-8937-b45556748abe"),
+                        ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
                         CollectedDataType = CollectedDataType.Accumulation,
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
