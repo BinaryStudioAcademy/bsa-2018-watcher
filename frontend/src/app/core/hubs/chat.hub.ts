@@ -11,9 +11,7 @@ import { ChatRequest } from '../../shared/requests/chat-request';
 import { ChatUpdateRequest } from '../../shared/requests/chat-update-request';
 
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ChatHub {
     private hubConnection: HubConnection;
     private hubName = 'chatsHub';

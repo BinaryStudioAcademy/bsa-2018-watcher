@@ -4,9 +4,7 @@ import { User } from '../../shared/models/user.model';
 import { ApiService } from './api.service';
 import { UserDto } from '../../shared/models/user-dto.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UserService {
   private readonly ctrlUrl = 'Users';
 
@@ -20,11 +18,11 @@ export class UserService {
     return this.apiService.get(`/${this.ctrlUrl}/${id}`) as Observable<User>;
   }
 
-  getRange(page: number, pageSize: number) : Observable<User[]> {
+  getRange(page: number, pageSize: number): Observable<User[]> {
     return this.apiService.get(`/${this.ctrlUrl}/table?page=${page}&pageSize=${pageSize}`);
   }
 
-  getNumber() : Observable<number> {
+  getNumber(): Observable<number> {
     return this.apiService.get(`/${this.ctrlUrl}/number`);
   }
 

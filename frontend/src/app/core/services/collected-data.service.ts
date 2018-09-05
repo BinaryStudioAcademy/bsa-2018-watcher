@@ -4,9 +4,7 @@ import {Observable} from 'rxjs';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {PercentageInfo} from '../../dashboards/models/percentage-info';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CollectedDataService {
   private readonly ctrlUrl = '/CollectedData';
 

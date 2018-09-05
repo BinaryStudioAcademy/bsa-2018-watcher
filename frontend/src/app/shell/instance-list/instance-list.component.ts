@@ -29,6 +29,7 @@ export class InstanceListComponent implements OnInit {
   showDownloadModal: boolean;
   popupMessage: string;
   isLoading: boolean;
+  isDeleting: boolean;
 
   currentQuery = '';
 
@@ -50,12 +51,15 @@ export class InstanceListComponent implements OnInit {
       routerLink: ['instances/create'],
     }];
 
+
+    this.isLoading = true;
     this.instanceService.getAllByOrganization(organizationId).subscribe((data: Instance[]) => {
       if (data) {
         const items = data.map(inst => this.instanceToMenuItem(inst));
         this.menuItems = this.menuItems.concat(items);
         this.toastrService.success('Get instances from server');
       }
+      this.isLoading = false;
     });
   }
 
@@ -101,7 +105,7 @@ export class InstanceListComponent implements OnInit {
 
   async deleteInstance(id: number, index: number) {
     if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
-        this.isLoading = true;
+        this.isDeleting = true;
         this.popupMessage = 'Deleting instance';
 
         this.instanceService.delete(id).subscribe((res: Response) => {
@@ -111,7 +115,7 @@ export class InstanceListComponent implements OnInit {
         this.router.navigate([`instances`]);
         this.onSearchChange(this.currentQuery);
 
-        this.isLoading = false;
+        this.isDeleting = false;
       });
     }
   }

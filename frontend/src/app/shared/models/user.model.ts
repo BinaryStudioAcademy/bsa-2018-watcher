@@ -5,7 +5,6 @@ import { Notification } from './notification.model';
 import { Feedback } from './feedback.model';
 import { Response } from './response.model';
 import { Message } from './message.model';
-import { Chat } from './chat.model';
 import { Organization } from './organization.model';
 
 export interface User  {
@@ -29,7 +28,6 @@ export interface User  {
    feedbacks: Feedback[];
    responses: Response[];
    messages: Message[];
-   createdChats: Chat[];
-   chats: Chat[];
+   chatsId: number[];
 }
 

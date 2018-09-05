@@ -1,5 +1,4 @@
-﻿
-import { User } from './user.model';
+﻿import { User } from './user.model';
 
 export interface Message  {
    id: number;
@@ -7,6 +6,6 @@ export interface Message  {
    createdAt: Date;
    wasRead: boolean;
    user: User;
+   userId: number;
    chatId: number;
-   chatName: string;
 }

@@ -12,12 +12,9 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { Token } from '../../shared/models/token.model';
 import { UserProfile} from '../../shared/models/user-profile';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { from } from 'rxjs';
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User>(this.getCurrentUserLS());
   public currentUser: Observable<User> = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());

@@ -70,7 +70,7 @@ namespace DataCollector
             string ramData = Bash("free -b | awk '{print $2 \";\" $3 \";\" $4}'");
             var ramSwap  = ramData.Split("\n");
             var ram = ramSwap[1].Split(";");
-            return float.Parse(ram[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
+            return float.Parse(ram[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f / 1024.0f;
         }
 
         private float GetUsageCpuPercentages()

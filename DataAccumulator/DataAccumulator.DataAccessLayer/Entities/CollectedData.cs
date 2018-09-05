@@ -27,21 +27,15 @@ namespace DataAccumulator.DataAccessLayer.Entities
         public int ProcessesCount { get; set; }
 
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
-        public Dictionary<string, float> ProcessesCPU { get; set; }
+        public List<ProcessData> Processes { get; set; }
 
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
-        public Dictionary<string, float> ProcessesRAM { get; set; }
-
-        #region Percentage
-        public float CpuUsagePercent { get; set; }
-        public float RamUsagePercent { get; set; }
-        public float InterruptsTimePercent { get; set; }
-        public float LocalDiskFreeSpacePercent { get; set; }
-        #endregion
-        public float AvaliableRamBytes { get; set; }
+        public float FreeRamMBytes { get; set; }
+        public float TotalRamMBytes { get; set; }
+        public float FreeRamPercentage { get; set; }
         public float InterruptsPerSeconds { get; set; }
         public float LocalDiskFreeMBytes { get; set; }
-
+        public float LocalDiskTotalMBytes { get; set; }
+        public float LocalDiskFreePercentage { get; set; }
         [BsonDateTimeOptions]
         public DateTime Time { get; set; }
     }

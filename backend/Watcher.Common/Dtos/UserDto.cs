@@ -47,8 +47,6 @@ namespace Watcher.Common.Dtos
 
         public IList<MessageDto> Messages { get; set; }
 
-        public IList<ChatDto> CreatedChats { get; set; }
-
-        public IList<ChatDto> Chats { get; set; }
+        public IList<int> ChatsId { get; set; }
     }
 }

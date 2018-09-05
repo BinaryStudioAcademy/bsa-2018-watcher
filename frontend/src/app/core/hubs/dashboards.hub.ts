@@ -9,9 +9,7 @@ import {AuthService} from '../services/auth.service';
 import {CollectedData} from '../../shared/models/collected-data.model';
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DashboardsHub {
   private isConnect: boolean;
   private hubConnection: HubConnection | undefined;
