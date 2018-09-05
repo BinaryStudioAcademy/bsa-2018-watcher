@@ -152,6 +152,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         const tempData = this.dataService.prepareDataTick(this.activeDashboardItem.charts[i], latestData);
         this.activeDashboardItem.charts[i].data = [...tempData];
+        this.activeDashboardItem.charts = [...this.activeDashboardItem.charts];
       }
     });
   }
@@ -296,6 +297,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const deletedChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chartId);
     if (deletedChartIndex >= 0) {
       this.activeDashboardItem.charts.splice(deletedChartIndex, 1);
+      this.activeDashboardItem.charts = [...this.activeDashboardItem.charts];
       this.toastrService.success('Successfully deleted chart!');
     } else {
       this.toastrService.error('Deleted chart not found!');
@@ -338,9 +340,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const updateChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chart.id);
     if (updateChartIndex >= 0) {
       this.activeDashboardItem.charts[updateChartIndex] = chart;
+      this.activeDashboardItem.charts = [...this.activeDashboardItem.charts];
       this.toastrService.success('Successfully updated chart!');
     } else {
-      this.activeDashboardItem.charts.push(chart);
+      this.activeDashboardItem.charts = [...this.activeDashboardItem.charts, chart];
       this.toastrService.success('Successfully created chart!');
     }
   }
