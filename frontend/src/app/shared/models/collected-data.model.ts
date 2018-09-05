@@ -1,12 +1,12 @@
 ﻿import {PercentageInfo} from '../../dashboards/models/percentage-info';
+import { ProcessData } from './process-data.model';
 
 
 export interface CollectedData extends PercentageInfo {
    id: string;
    time: Date;
    processesCount: number;
-   processesCPU: { [key: string]: number; };
-   processesRAM: { [key: string]: number; };
+   processes: ProcessData[];
    cpuUsagePercent: number;
    ramUsagePercent: number;
    interruptsTimePercent: number;

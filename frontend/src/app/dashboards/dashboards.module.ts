@@ -15,26 +15,27 @@ import {
   ButtonModule,
   TabMenuModule,
   ProgressSpinnerModule,
-  InputTextModule} from 'primeng/primeng';
-import { EditDashboardComponent} from './editDashboard/editDashboard.component';
-import { FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { ToastModule} from 'primeng/toast';
-import { LineChartComponent} from './01_line_chart/line-chart.component';
-import { DashboardRoutingModule} from './dashboards-routing.module';
-import { MessageModule} from 'primeng/message';
-import { MultiSeriesComponent} from './02_multi_series_line_chart/multi-series.component';
-import { BarChartComponent} from './03_bar_chart/bar-chart.component';
-import { StackedBarChartComponent} from './04_stacked_bar_chart/stacked-bar-chart.component';
-import { BrushZoomComponent} from './05_brush_zoom/brush-zoom.component';
-import { PieChartComponent} from './06_pie_chart/pie-chart.component';
-import { DonutChartComponent} from './07_donut_chart/donut-chart.component';
-import { MarketChartComponent} from './08_market_chart/market-chart.component';
-import { NgxChartsModule} from '@swimlane/ngx-charts';
-import {PercentageBarChartComponent } from './10_percentage-bar-chart/percentage-bar-chart.component';
-import {PercentageLineChartComponent } from './11_percentage-line-chart/percentage-line-chart.component';
-import {NgxUIModule} from '@swimlane/ngx-ui';
-import {ChartDashboardComponent} from './charts/chart-dashboard/chart-dashboard.component';
-import {ChartComponent} from './charts/chart/chart.component';
+  InputTextModule } from 'primeng/primeng';
+import { TableModule } from 'primeng/table';
+import { EditDashboardComponent } from './editDashboard/editDashboard.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
+import { LineChartComponent } from './01_line_chart/line-chart.component';
+import { DashboardRoutingModule } from './dashboards-routing.module';
+import { MessageModule } from 'primeng/message';
+import { MultiSeriesComponent } from './02_multi_series_line_chart/multi-series.component';
+import { BarChartComponent } from './03_bar_chart/bar-chart.component';
+import { StackedBarChartComponent } from './04_stacked_bar_chart/stacked-bar-chart.component';
+import { BrushZoomComponent } from './05_brush_zoom/brush-zoom.component';
+import { PieChartComponent } from './06_pie_chart/pie-chart.component';
+import { DonutChartComponent } from './07_donut_chart/donut-chart.component';
+import { MarketChartComponent } from './08_market_chart/market-chart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { PercentageBarChartComponent } from './10_percentage-bar-chart/percentage-bar-chart.component';
+import { PercentageLineChartComponent } from './11_percentage-line-chart/percentage-line-chart.component';
+import { NgxUIModule } from '@swimlane/ngx-ui';
+import { ChartDashboardComponent } from './charts/chart-dashboard/chart-dashboard.component';
+import { ChartComponent } from './charts/chart/chart.component';
 
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
@@ -59,7 +60,6 @@ import { ReportComponent } from './report/report.component';
 
     NgxUIModule,
     NgxChartsModule,
-    // NgxDnDModule,
     NgxSmoothDnDModule,
     DashboardRoutingModule,
     DropdownModule,
@@ -67,7 +67,8 @@ import { ReportComponent } from './report/report.component';
     TieredMenuModule,
     MultiSelectModule,
     SliderModule,
-    SpinnerModule
+    SpinnerModule,
+    TableModule
   ],
   declarations: [
     DashboardComponent,

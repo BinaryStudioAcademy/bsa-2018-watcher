@@ -14,16 +14,27 @@ export class ReportComponent implements OnInit {
 
   private id: string;
 
+  collectedData: CollectedData[];
+
+  cols: any[];
+
   constructor(private aggregatedDateService: AggregatedDataService,
               private activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    this.cols = [
+      { field: 'name', header: 'Name' },
+      { field: 'pCpu', header: 'CPU,%' },
+      { field: 'pRam', header: 'RAM, %' },
+      { field: 'ramMBytes', header: 'RAM, Mb' }
+  ];
+
     const x = this.activateRoute.params.subscribe(params => {
       this.id = params['guidId'];
 
       const request: AggregateDataRequest = {
         id: this.id,
-        type: DataType.AggregationForDay,
+        type: DataType.AggregationForHour,
         from: new Date(2018, 8, 5, 0, 0),
         to: new Date(2018, 8, 6, 0, 0)
       };
@@ -31,6 +42,7 @@ export class ReportComponent implements OnInit {
       if (this.id) {
         this.aggregatedDateService.getDataByInstanceIdAndTypeInTime(request).subscribe((data: CollectedData[]) => {
           console.log(data);
+          this.collectedData = data;
         });
       }
     });

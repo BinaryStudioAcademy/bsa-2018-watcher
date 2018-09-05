@@ -62,7 +62,7 @@ namespace DataAccumulator.WebAPI.Controllers
                     {
                         Id = Guid.NewGuid(),
                         ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
-                        CollectedDataType = CollectedDataType.Accumulation,
+                        CollectedDataType = CollectedDataType.AggregationForHour,
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -128,7 +128,7 @@ namespace DataAccumulator.WebAPI.Controllers
                     {
                         Id = Guid.NewGuid(),
                         ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
-                        CollectedDataType = CollectedDataType.Accumulation,
+                        CollectedDataType = CollectedDataType.AggregationForHour,
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -161,7 +161,7 @@ namespace DataAccumulator.WebAPI.Controllers
                     {
                         Id = Guid.NewGuid(),
                         ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
-                        CollectedDataType = CollectedDataType.Accumulation,
+                        CollectedDataType = CollectedDataType.AggregationForHour,
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -194,7 +194,7 @@ namespace DataAccumulator.WebAPI.Controllers
                     {
                         Id = Guid.NewGuid(),
                         ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
-                        CollectedDataType = CollectedDataType.Accumulation,
+                        CollectedDataType = CollectedDataType.AggregationForHour,
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
