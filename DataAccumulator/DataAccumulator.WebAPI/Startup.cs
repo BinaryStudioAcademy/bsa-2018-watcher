@@ -119,7 +119,8 @@ namespace DataAccumulator
                 options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>(
                 options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage"));
-
+            services.AddTransient<ILogRepository, LogRepository>(
+                options => new LogRepository(connectionString, "bsa-watcher-data-storage"));
         }
 
         public MapperConfiguration MapperConfiguration()

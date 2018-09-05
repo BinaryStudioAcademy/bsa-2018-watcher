@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
-using DataAccumulator.DataAccessLayer.Data;
+﻿using DataAccumulator.DataAccessLayer.Data;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
+using System;
+using System.Threading.Tasks;
 
 namespace DataAccumulator.DataAccessLayer.Repositories
 {
@@ -9,14 +10,23 @@ namespace DataAccumulator.DataAccessLayer.Repositories
     {
         private readonly DataAccumulatorContext _context;
 
-        public LogRepository(DataAccumulatorContext context)
+        public LogRepository(string ConnectionString, string Database)
         {
-            _context = context;
+            _context = new DataAccumulatorContext(ConnectionString, Database);
         }
 
         public async Task SaveActionLog(ActionLog actionLog)
         {
-            
+            try
+            {
+                await _context.ActionLogs
+                    .InsertOneAsync(actionLog);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }
