@@ -2,7 +2,7 @@
 .wrapper
     display: grid
     grid-template-columns: repeat(2, 50%)
-    grid-template-rows: repeat(2, auto)
+    grid-template-rows: repeat(3, auto)
     justify-content: center
     align-content: end
 
@@ -17,13 +17,23 @@
 .win 
     grid-column: 1
     grid-row: 2
-    border-top: 1px solid grey
+    border-top: 1px solid #d1d1d1
+
+.win-btn
+    grid-column: 1
+    grid-row: 3
 
 .linux 
     grid-column: 2
     grid-row: 2 
-    border-left: 1px solid grey
-    border-top: 1px solid grey
+    border-left: 1px solid #d1d1d1
+    border-top: 1px solid #d1d1d1
+
+.linux-btn
+    grid-column: 2
+    grid-row: 3
+    border-left: 1px solid #d1d1d1
+
 
 
 .lableOS
@@ -40,17 +50,19 @@
         margin: 0px
         font-size: 14px
 
-.linuxCmd
-    background-color: #ccc
+.linux-cmd
+    background-color: #eff0f1
+    padding: 5px
+    color: #393318
     text-align: left
-    font-size: 12px
+    font-size: 11px
     font-weight: 500
-    font-style: italic
+    font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif
     p
         span
             font-weight: 600
 
-.windowsSteps
+.windows-steps
     text-align: left
     font-size: 14px
     font-weight: 500
