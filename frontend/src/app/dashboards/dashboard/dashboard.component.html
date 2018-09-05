@@ -10,7 +10,7 @@
     <div class="ui-g-12 ui-lg-6">
       <div class="title">DASHBOARDS</div>
       <div *ngIf="!instanceId" class="placeholder">
-
+        <hr>
           <div>
             <i class="fa fa-plus"></i> 1. Create a VM instance
           </div>
@@ -40,7 +40,7 @@
     </div>
 
     <app-chart-dashboard *ngIf="activeDashboardItem && dashboardMenuItems.length > 1"
-                         [charts]="activeDashboardItem.charts"
+                         [dashboardCharts]="activeDashboardItem.charts"
                          [dashboardId]="activeDashboardItem.dashId"
                          (editChart)="onEditChart($event)"
                          (deleteChart)="onChartDeleted($event)">
