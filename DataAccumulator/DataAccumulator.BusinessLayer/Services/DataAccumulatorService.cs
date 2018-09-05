@@ -119,14 +119,19 @@ namespace DataAccumulator.BusinessLayer.Services
                                        "mongodbcompass"
                                    };
             var random = new Random();
-            var ProcessesCPU = new Dictionary<string, float>();
-            var ProcessesRAM = new Dictionary<string, float>();
+            var processData = new List<ProcessData>();
 
             int processes = random.Next(0, 7);
             for (int i = 0; i < processes; i++)
             {
-                ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
-                ProcessesRAM.Add(processNames[i], (float)random.NextDouble() * 1000);
+                //ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
+                processData.Add(new ProcessData()
+                {
+                    Name = processNames[i],
+                    RamMBytes = (float)random.NextDouble() * 10,
+                    PRam = (float)random.NextDouble() * 10,
+                    PCpu = (float)random.NextDouble() * 10
+                });
             }
             var data = new CollectedData
             {
@@ -142,23 +147,7 @@ namespace DataAccumulator.BusinessLayer.Services
                 LocalDiskFreeMBytes = random.Next(0, 100),
                 LocalDiskTotalMBytes = random.Next(0, 1000000000),
                 LocalDiskFreePercentage = random.Next(0, 100),
-                Processes = new List<ProcessData>()
-                {
-                    new ProcessData()
-                    {
-                        Name = "chrome",
-                        RamMBytes = 20,
-                        PRam = 5,
-                        PCpu = 7
-                    },
-                    new ProcessData()
-                    {
-                        Name = "ie",
-                        RamMBytes = 10,
-                        PRam = 3,
-                        PCpu = 5
-                    },
-                }
+                Processes = processData
             };
 
             return data;
