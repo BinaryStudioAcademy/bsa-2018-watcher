@@ -16,6 +16,7 @@ import {
   TabMenuModule,
   ProgressSpinnerModule,
   InputTextModule} from 'primeng/primeng';
+import { TableModule } from 'primeng/table';
 import { EditDashboardComponent} from './editDashboard/editDashboard.component';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ToastModule} from 'primeng/toast';
@@ -39,6 +40,7 @@ import {ChartComponent} from './charts/chart/chart.component';
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
 import {NgxSmoothDnDModule} from 'ngx-smooth-dnd';
+import { InstanceActivityComponent } from './instance-activity/instance-activity.component';
 
 @NgModule({
   imports: [
@@ -66,7 +68,8 @@ import {NgxSmoothDnDModule} from 'ngx-smooth-dnd';
     TieredMenuModule,
     MultiSelectModule,
     SliderModule,
-    SpinnerModule
+    SpinnerModule,
+    TableModule
   ],
   declarations: [
     DashboardComponent,
@@ -85,7 +88,8 @@ import {NgxSmoothDnDModule} from 'ngx-smooth-dnd';
 
     ChartComponent,
     ChartDashboardComponent,
-    EditChartComponent
+    EditChartComponent,
+    InstanceActivityComponent
   ],
   exports: []
 })

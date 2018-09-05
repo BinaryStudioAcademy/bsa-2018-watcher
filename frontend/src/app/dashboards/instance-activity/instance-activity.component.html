@@ -1,0 +1,28 @@
+<div class="working-area">
+
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <div class="title">Instance activities</div>
+      <hr>
+    </div>
+  </div>
+
+
+  <p-table [value]="logs" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width:33%">TIME</th>
+        <th style="width:33%">MESSAGE</th>
+        <th style="width:33%">EVENT LEVEL</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-log>
+      <tr>
+        <td class="center">{{log.timestamp | date:'medium'}}</td>
+        <td class="center">{{log.message}}</td>
+        <td class="center">{{log.logLevel}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+</div>

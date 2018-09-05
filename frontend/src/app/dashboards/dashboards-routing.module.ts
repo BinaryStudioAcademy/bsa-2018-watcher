@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
+import { InstanceActivityComponent } from './instance-activity/instance-activity.component';
 
 const dashboardRoutes: Routes = [
   {
@@ -16,6 +17,10 @@ const dashboardRoutes: Routes = [
   {
     path: 'create',
     component: EditInstanceComponent
+  },
+  {
+    path: ':insId/activities',
+    component: InstanceActivityComponent
   },
   {
     path: ':insId/:guidId/dashboards',
