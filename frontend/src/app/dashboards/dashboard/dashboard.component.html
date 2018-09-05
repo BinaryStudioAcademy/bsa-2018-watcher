@@ -10,7 +10,7 @@
     <div class="ui-g-12 ui-lg-6">
       <div class="title">DASHBOARDS</div>
       <div *ngIf="!instanceId" class="placeholder">
-
+        <hr>
           <div>
             <i class="fa fa-plus"></i> 1. Create a VM instance
           </div>
@@ -32,15 +32,15 @@
       <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
       <button #btn type="button" class="gear" pButton icon="fa fa-fw fa-gear" (click)="cog.toggle($event)"></button>
     </div>
-    <div *ngIf="dashboardMenuItems.length == 1">
+    <div class="tutorial-help" *ngIf="dashboardMenuItems.length == 1">
         <p class="text-pl">Click <i class="fa fa-plus"></i> to add a dashboard</p>
       </div>
-    <div *ngIf="activeDashboardItem?.charts?.length<1 && dashboardMenuItems.length > 1">
+    <div class="tutorial-help" *ngIf="activeDashboardItem?.charts?.length<1 && dashboardMenuItems.length > 1">
       <p class="text-pl">Click <i class="fa fa-gear"></i> and add chart or plot</p>
     </div>
 
     <app-chart-dashboard *ngIf="activeDashboardItem && dashboardMenuItems.length > 1"
-                         [charts]="activeDashboardItem.charts"
+                         [dashboardCharts]="activeDashboardItem.charts"
                          [dashboardId]="activeDashboardItem.dashId"
                          (editChart)="onEditChart($event)"
                          (deleteChart)="onChartDeleted($event)">
