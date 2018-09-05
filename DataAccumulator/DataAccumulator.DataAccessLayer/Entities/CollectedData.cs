@@ -25,8 +25,6 @@ namespace DataAccumulator.DataAccessLayer.Entities
         public CollectedDataType CollectedDataType { get; set; }
 
         public int ProcessesCount { get; set; }
-
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
         public List<ProcessData> Processes { get; set; }
 
         public float UsageRamMBytes { get; set; }
@@ -43,5 +41,6 @@ namespace DataAccumulator.DataAccessLayer.Entities
 
         [BsonDateTimeOptions]
         public DateTime Time { get; set; }
+
     }
 }

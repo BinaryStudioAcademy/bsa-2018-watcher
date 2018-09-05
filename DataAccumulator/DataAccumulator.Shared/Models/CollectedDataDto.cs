@@ -12,6 +12,7 @@ namespace DataAccumulator.Shared.Models
         // Id to reference
         public Guid Id { get; set; }
         // ClientId - Client identification number
+
         public Guid ClientId { get; set; }
 
         public CollectedDataType CollectedDataType { get; set; }
