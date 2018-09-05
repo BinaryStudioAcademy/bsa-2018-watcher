@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
-import {DataProperty, dataPropertyLables, ProcessDataProperty, processDataPropertyLables} from '../../../shared/models/data-property.enum';
+import {DataProperty, dataPropertyLables} from '../../../shared/models/data-property.enum';
 import {SelectItem} from 'primeng/api';
 import {DashboardChart} from '../../models/dashboard-chart';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
@@ -24,6 +24,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   @Output() dashboardChartChange = new EventEmitter();
 
   visible: boolean;
+  processesNumber = 1;
 
   @Input() onDisplay: EventEmitter<boolean>;
   @Input() dashboardId: number;
@@ -37,6 +38,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   collectedDataForChart: CollectedData[] = [];
   showPreview = false;
   chartForm: FormGroup;
+  processDataSource: DataProperty;
 
   get dialogTitle() {
     if (this.dashboardChart && this.dashboardChart.id) {
@@ -86,9 +88,9 @@ export class EditChartComponent implements OnInit, OnChanges {
     ];
 
     this.dropdownSourcesProcesses = [
-      {label: processDataPropertyLables[ProcessDataProperty.pCpu], value: ProcessDataProperty.pCpu},
-      {label: processDataPropertyLables[ProcessDataProperty.pRam], value: ProcessDataProperty.pRam},
-      {label: processDataPropertyLables[ProcessDataProperty.ramMBytes], value: ProcessDataProperty.ramMBytes}
+      {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
+      {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
+      {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
     ];
 
     this.chartForm = this.fb.group({
@@ -118,11 +120,14 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   processData(): void {
-    console.log(this.dashboardChart.dataSources);
     this.showPreview = false;
     if (this.dashboardChart.showCommon) {
       this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
         this.dashboardChart.dataSources, this.collectedDataForChart);
+    } else {
+      debugger;
+      this.dashboardChart.data = this.dataService.prepareProcessData(this.dashboardChart.chartType.type,
+        this.processDataSource, this.collectedDataForChart, this.processesNumber);
     }
 
     switch (this.dashboardChart.chartType.type) {

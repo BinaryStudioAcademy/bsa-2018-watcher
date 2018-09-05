@@ -15,20 +15,12 @@ export enum DataProperty {
   localDiskTotalMBytes,
   localDiskUsagePercentage,
   time,
-}
 
-export enum ProcessDataProperty {
   name,
   ramMBytes,
   pRam,
   pCpu
 }
-
-export const processDataPropertyLables: ProperiesMap<string> = {};
-processDataPropertyLables[ProcessDataProperty.name] = 'Name';
-processDataPropertyLables[ProcessDataProperty.ramMBytes] = 'Ram usage MegaBytes';
-processDataPropertyLables[ProcessDataProperty.pRam] = 'Ram usage %';
-processDataPropertyLables[ProcessDataProperty.pCpu] = 'Сpu usage %';
 
 export const dataPropertyLables: ProperiesMap<string> = {};
 dataPropertyLables[DataProperty.id] = 'Id';
@@ -45,3 +37,8 @@ dataPropertyLables[DataProperty.localDiskUsageMBytes] = 'Disc usage MegaBytes';
 dataPropertyLables[DataProperty.localDiskTotalMBytes] = 'Total Disc MegaBytes';
 dataPropertyLables[DataProperty.localDiskUsagePercentage] = 'Disc usage %';
 dataPropertyLables[DataProperty.time] = 'Time';
+
+dataPropertyLables[DataProperty.name] = 'Name';
+dataPropertyLables[DataProperty.ramMBytes] = 'Ram usage MegaBytes';
+dataPropertyLables[DataProperty.pRam] = 'Ram usage %';
+dataPropertyLables[DataProperty.pCpu] = 'Сpu usage %';

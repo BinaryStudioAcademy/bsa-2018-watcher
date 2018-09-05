@@ -29,7 +29,7 @@
       </p-multiSelect>
       <p-dropdown *ngIf="!dashboardChart.showCommon"
                   [options]="dropdownSourcesProcesses"
-                  [(ngModel)]="dashboardChart.dataSources"
+                  [(ngModel)]="processDataSource"
                   placeholder="Select a type"
                   [style]="{'width':'192px'}"
                   (onChange)="processData()">
@@ -38,6 +38,8 @@
         <p class="field">Number of heavy processes:</p>
         <div class="width-left-part">
           <p-spinner size="17"
+                     [(ngModel)]="processesNumber"
+                     (onChange)="processData()"
                      [disabled]="spinnerDisabled"
                      formControlName="mostLoaded"
                      [min]="0"

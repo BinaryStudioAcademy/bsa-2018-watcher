@@ -137,10 +137,9 @@ namespace Watcher.Core.Services
             var random = new Random();
             var processData = new List<ProcessData>();
 
-            int processes = random.Next(0, 7);
-            for (int i = 0; i < processes; i++)
+            var processes = processNames.Count;
+            for (var i = 0; i < processes; i++)
             {
-                //ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
                 processData.Add(new ProcessData()
                 {
                     Name = processNames[i],

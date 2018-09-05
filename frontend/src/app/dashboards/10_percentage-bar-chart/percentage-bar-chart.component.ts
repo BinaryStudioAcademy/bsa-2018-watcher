@@ -66,9 +66,9 @@ export class PercentageBarChartComponent implements OnInit {
   }
 
   renderChart(data: CollectedData | PercentageInfo) {
-    this.data[0].value = Math.floor(data.cpuUsagePercent);
-    this.data[1].value = Math.floor(data.ramUsagePercent);
-    this.data[2].value = Math.floor(data.localDiskFreeSpacePercent);
+    // this.data[0].value = Math.floor(data.cpuUsagePercent);
+    // this.data[1].value = Math.floor(data.ramUsagePercent);
+    // this.data[2].value = Math.floor(data.localDiskFreeSpacePercent);
     // this.data[3].value = Math.floor(data.interruptsTimePercent);
     this.data = [...this.data];
   }

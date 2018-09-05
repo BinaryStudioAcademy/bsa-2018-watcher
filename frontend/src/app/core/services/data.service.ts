@@ -10,10 +10,12 @@ import {DashboardChart} from '../../dashboards/models/dashboard-chart';
 import {dashboardChartTypes} from '../../dashboards/charts/models/dashboardChartTypes';
 import {defaultOptions} from '../../dashboards/charts/models/chart-options';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
+import {ProcessData} from '../../shared/models/process-data.model';
 
 @Injectable()
 export class DataService {
-  constructor() { }
+  constructor() {
+  }
 
   convertStringToArrEnum(sources: string) {
     const array: DataProperty[] = [];
@@ -75,7 +77,9 @@ export class DataService {
 
   // dataSource - property to show on the chart
   prepareData(chartType: ChartType, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
-    if (!dataSources || (!chartType && chartType !== ChartType.BarVertical) || (!dataToTransform || dataToTransform.length < 1)) {
+    if (!dataSources
+      || (!chartType && chartType !== ChartType.BarVertical)
+      || (!dataToTransform || dataToTransform.length < 1)) {
       return [];
     }
     if (chartType === ChartType.LineChart) {
@@ -83,18 +87,28 @@ export class DataService {
       for (let i = 0; i < data.length; i++) {
         data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
       }
-
-      /*
-       (a, b) => {
-        if (a.name > b.name) { return 1; }
-        if (a.name < b.name) { return -1; }
-        return 0;
-      }
-      */
       return data;
-      // order ascending to in future remove first element (the oldest)
     } else {
       return this.mapToSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources);
+    }
+  }
+
+  // dataSource - property to show on the chart
+  prepareProcessData(chartType: ChartType, dataSource: DataProperty, dataToTransform: CollectedData[], processesAmount = 0): CustomData[] {
+    if (!dataSource
+      || (!chartType && chartType !== ChartType.BarVertical)
+      || (!dataToTransform || dataToTransform.length < 1)
+      || processesAmount < 1) {
+      return [];
+    }
+    if (chartType === ChartType.LineChart) {
+      const data = this.mapToProcessMultiData(dataToTransform, dataSource, processesAmount);
+      for (let i = 0; i < data.length; i++) {
+        data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
+      }
+      return data;
+    } else {
+      return this.mapToProcessesSeriesItem(dataToTransform[dataToTransform.length - 1], dataSource, processesAmount);
     }
   }
 
@@ -109,6 +123,52 @@ export class DataService {
     return items;
   }
 
+  mapToProcessMultiData(data: CollectedData[], property: DataProperty, processesAmount: number = 1) {
+    const items: MultiChartItem[] = [];
+    for (let i = 0; i < processesAmount; i++) {
+      const item: MultiChartItem = {name: data[data.length - 1].processes[i].name, series: []};
+      item.series = data.map(d => this.mapToProcessesLineChartSeriesItem(d, i, property));
+      items.push(item);
+    }
+
+    return items;
+  }
+
+  mapToProcessesSeriesItem(data: CollectedData, property: DataProperty, processesAmount: number = 1): NumberSeriesItem[] {
+    debugger;
+    const items: NumberSeriesItem[] = [];
+    const stringProperty = DataProperty[property];
+    data.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
+    for (let i = 0; i < Math.min(data.processes.length, processesAmount); i++) {
+      items.push(
+        {
+          name: data.processes[i].name,
+          value: data.processes[i][stringProperty]
+        });
+    }
+
+    let free = 100;
+    for (let i = 0; i < data.processes.length; i++) {
+      free -= data.processes[i][stringProperty];
+    }
+    let othersSum = 0;
+    for (let i = processesAmount; i < data.processes.length; i++) {
+      othersSum += data.processes[i][stringProperty];
+    }
+    items.push(
+      {
+        name: 'Others',
+        value: othersSum
+      });
+    items.push(
+      {
+        name: 'Free',
+        value: free
+      });
+
+    return items;
+  }
+
   mapToSeriesItem(data: CollectedData, properties: DataProperty[]): NumberSeriesItem[] {
     const items: NumberSeriesItem[] = [];
     for (let i = 0; i < properties.length; i++) {
@@ -119,6 +179,16 @@ export class DataService {
         });
     }
     return items;
+  }
+
+  mapToProcessesLineChartSeriesItem(data: CollectedData, processIndex, property: DataProperty): SeriesItem {
+    debugger;
+    const seriesItem: SeriesItem = {
+      value: data.processes[processIndex][DataProperty[property]],
+      name: new Date(data.time)
+    };
+
+    return seriesItem;
   }
 
   mapToLineChartSeriesItem(data: CollectedData, property: DataProperty): SeriesItem {
