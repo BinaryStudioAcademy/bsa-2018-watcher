@@ -65,6 +65,7 @@
     <div class="ui-g-9">
       <p class="field-top center">Visualization</p>
       <div class="view-chart" *ngIf="showPreview && dashboardChart.data && dashboardChart.data.length > 0">
+        <div class="chart-title">{{dashboardChart.title}}</div>
         <app-chart [chart]="dashboardChart"
                    [data]="dashboardChart.data"
                    [chartType]="dashboardChart.chartType"

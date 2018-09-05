@@ -2,8 +2,8 @@
     <div class="chart-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
 
       <div class="icon-panel">
-          <div class="action-icon fa fa-fw fa-edit" (click)="edit(chart)" pTooltip="Edit" tooltipPosition="top"></div>
-          <div class="action-icon fa fa-fw fa-times" (click)="delete(chart.id)" pTooltip="Delete" tooltipPosition="top"></div>    
+          <i class="action-icon fa fa-fw fa-edit" (click)="edit(chart)" pTooltip="Edit" tooltipPosition="top"></i>
+          <i class="action-icon fa fa-fw fa-times" (click)="delete(chart.id)" pTooltip="Delete" tooltipPosition="top"></i>    
           <!-- <div class="action-icon fa fa-fw fa-cog" (click)="cog.toggle($event)" pTooltip="Options" tooltipPosition="top">
               <p-tieredMenu #cog appendTo="body" [model]="getItems(chart)" [popup]="true"></p-tieredMenu>
           </div> -->

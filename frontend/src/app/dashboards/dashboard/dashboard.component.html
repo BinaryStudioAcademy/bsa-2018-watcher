@@ -32,10 +32,10 @@
       <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
       <button #btn type="button" class="gear" pButton icon="fa fa-fw fa-gear" (click)="cog.toggle($event)"></button>
     </div>
-    <div *ngIf="dashboardMenuItems.length == 1">
+    <div class="tutorial-help" *ngIf="dashboardMenuItems.length == 1">
         <p class="text-pl">Click <i class="fa fa-plus"></i> to add a dashboard</p>
       </div>
-    <div *ngIf="activeDashboardItem?.charts?.length<1 && dashboardMenuItems.length > 1">
+    <div class="tutorial-help" *ngIf="activeDashboardItem?.charts?.length<1 && dashboardMenuItems.length > 1">
       <p class="text-pl">Click <i class="fa fa-gear"></i> and add chart or plot</p>
     </div>
 
