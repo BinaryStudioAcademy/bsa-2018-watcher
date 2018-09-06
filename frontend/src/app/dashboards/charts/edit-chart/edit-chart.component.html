@@ -1,17 +1,23 @@
-<p-dialog [header]="dialogTitle" [(visible)]="visible" [modal]="true" [responsive]="true" [width]="1000" [minWidth]="850"
-  [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]="false" (onAfterToggle)="closeDialog()">
+<p-dialog [header]="dialogTitle"
+          [(visible)]="visible"
+          [modal]="true"
+          [minWidth]="1000"
+          [minY]="100"
+          [resizable]="true"
+          [draggable]="false"
+          [maximizable]="true"
+          [blockScroll]="true"
+          (onAfterToggle)="closeDialog()">
+
   <div class="ui-g ui-fluid">
-    <div class="ui-g-3">
-        <p class="field-top">Title: </p>
-        <input class="width-left-part"
-        type="text"
-        [(ngModel)]="dashboardChart.title"
-        pInputText/>
+    <div class="ui-g-3 ui-g-nopad">
+      <div class="chart-panel-menu">
+      <div class="chart-panel-menu-title field-top">Data:</div>
       <p class="field">Select chart type: </p>
       <p-dropdown [options]="dropdownTypes"
+                  [autoWidth]="false"
                   [(ngModel)]="dashboardChart.chartType"
                   placeholder="Select a type"
-                  [style]="{'width':'192px'}"
                   (onChange)="processChartType()">
       </p-dropdown>
       <p class="field">Show total:
@@ -23,60 +29,81 @@
       </p><!--type [disabled]="!dashboardChart.dataSources.length<1"-->
       <p class="field">Select source: </p>
       <p-multiSelect *ngIf="dashboardChart.showCommon"
+                     class="custom-multiselect"
                      [filter]="false"
                      [showHeader]="false"
                      [options]="dropdownSources"
                      [(ngModel)]="dashboardChart.dataSources"
-                     [style]="{'width':'192px'}"
                      maxSelectedLabels="1"
                      (onChange)="multiSelect($event)">
       </p-multiSelect>
       <p-dropdown *ngIf="!dashboardChart.showCommon"
+                  [autoWidth]="false"
                   [options]="dropdownGroupSources"
                   [(ngModel)]="processDataSource"
                   placeholder="Select a type"
-                  [style]="{'width':'192px'}"
                   (onChange)="processData()"
                   [group]="true">
       </p-dropdown>
       <form [formGroup]="chartForm">
         <p class="field">Number of heavy processes:</p>
-        <div class="width-left-part">
+        <div class="number-spiner-width">
           <p-spinner size="17"
                      [(ngModel)]="processesNumber"
                      (onChange)="processData()"
                      [disabled]="spinnerDisabled"
                      formControlName="mostLoaded"
-                     [min]="0"
-                     [max]="100"></p-spinner>
+                     [min]="1"
+                     [max]="100">
+          </p-spinner>
         </div>
       </form>
       <p class="field">Threshold: {{dashboardChart.threshold}}</p>
       <div class="field">
         <p-slider [(ngModel)]="dashboardChart.threshold"
-                  [disabled]="dashboardChart.showCommon"
-                  [style]="{'width':'192px'}"></p-slider>
+                  [disabled]="dashboardChart.showCommon">
+        </p-slider>
       </div>
+      <div class="chart-panel-menu-title field">Stylization:</div>
+      <p class="field">Title: </p>
+      <input type="text"
+             [(ngModel)]="dashboardChart.title"
+             pInputText/>
       <p class="field">Y axis label (optional): </p>
-      <input class="width-left-part"
-             type="text"
+      <input type="text"
              [(ngModel)]="dashboardChart.yAxisLabel"
              pInputText/>
       <p class="field">X axis label (optional): </p>
-      <input class="width-left-part"
-             type="text"
+      <input type="text"
              [disabled]="isGuage()"
              [(ngModel)]="dashboardChart.xAxisLabel"
              pInputText/>
+      <p class="field">Width: </p>
+      <div class="number-spiner-width">
+        <p-spinner size="17"
+                   [min]="200"
+                   [max]="1000">
+        </p-spinner>
+      </div>
+      <p class="field">Height: </p>
+      <div class="number-spiner-width">
+        <p-spinner size="17"
+                   [min]="200"
+                   [max]="1000">
+        </p-spinner>
+      </div>
       <p class="field">Color schemes:</p>
       <p-dropdown [options]="colorSchemes"
+                  [autoWidth]="false"
                   optionLabel="name"
                   [(ngModel)]="dashboardChart.colorScheme"
                   placeholder="Select a scheme"
-                  [style]="{'width':'192px'}"
                   (onChange)="processData()">
       </p-dropdown>
     </div>
+
+    </div>
+
     <div class="ui-g-9">
       <p class="field-top center">Visualization</p>
       <div class="view-chart" *ngIf="showPreview && dashboardChart.data && dashboardChart.data.length > 0">
