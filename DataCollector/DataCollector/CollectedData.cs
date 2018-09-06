@@ -13,7 +13,6 @@ namespace DataCollector
             Processes = new List<ProcessData>();
         }
 
-
         // Id to reference
         public Guid Id { get; set; }
         // ClientId - Client identification number
@@ -39,54 +38,6 @@ namespace DataCollector
         public DateTime Time { get; set; }
 
 
-        public static CollectedData operator +(CollectedData firstItem, CollectedData secondItem)
-        {
-            return new CollectedData
-            {
-                
-                InterruptsTimePercent = firstItem.InterruptsTimePercent + secondItem.InterruptsTimePercent,
-                InterruptsPerSeconds = firstItem.InterruptsPerSeconds + secondItem.InterruptsPerSeconds,
-
-                ProcessesCount = secondItem.ProcessesCount,
-
-                UsageRamMBytes = firstItem.UsageRamMBytes + secondItem.UsageRamMBytes,
-                TotalRamMBytes = firstItem.TotalRamMBytes + secondItem.TotalRamMBytes,
-                RamUsagePercentage = firstItem.RamUsagePercentage + secondItem.RamUsagePercentage,
-
-                LocalDiskUsageMBytes = firstItem.LocalDiskUsageMBytes + secondItem.LocalDiskUsageMBytes,
-                LocalDiskTotalMBytes = firstItem.LocalDiskTotalMBytes + secondItem.LocalDiskTotalMBytes,
-                LocalDiskUsagePercentage = firstItem.LocalDiskUsagePercentage + secondItem.LocalDiskUsagePercentage,
-
-                CpuUsagePercentage = firstItem.CpuUsagePercentage + secondItem.CpuUsagePercentage,
-
-                Time = secondItem.Time,
-                Processes = secondItem.Processes,
-            };
-        }
-
-        public static CollectedData operator /(CollectedData item, int scalar)
-        {
-            return new CollectedData
-            {
-                InterruptsTimePercent = item.InterruptsTimePercent / scalar,
-                InterruptsPerSeconds = item.InterruptsPerSeconds / scalar,
-
-                UsageRamMBytes = item.UsageRamMBytes / scalar,
-                TotalRamMBytes = item.TotalRamMBytes / scalar,
-                RamUsagePercentage = item.RamUsagePercentage / scalar,
-
-                LocalDiskUsageMBytes = item.LocalDiskUsageMBytes / scalar,
-                LocalDiskTotalMBytes = item.LocalDiskTotalMBytes / scalar,
-                LocalDiskUsagePercentage = item.LocalDiskUsagePercentage / scalar,
-
-                CpuUsagePercentage = item.CpuUsagePercentage / scalar,
-
-                ProcessesCount = item.ProcessesCount,
-                Time = item.Time,
-                Processes = item.Processes
-            };
-        }
-
         public override string ToString()
         {
             var str = new StringBuilder();
@@ -102,8 +53,6 @@ namespace DataCollector
             str.Append($"LocalDiskUsageMBytes: {LocalDiskUsageMBytes:0.##}\n");
             str.Append($"LocalDiskTotalMBytes: {LocalDiskTotalMBytes:0.##}\n");
             str.Append($"LocalDiskUsagePercentage: {LocalDiskUsagePercentage:0.##}%\n");
-
-           
 
             return str.ToString();
         }

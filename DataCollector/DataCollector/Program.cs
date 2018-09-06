@@ -104,17 +104,8 @@ namespace DataCollector
             var sender = turple.Item1;
             var collector = turple.Item2;
 
-            var sendDataItem = new CollectedData();
+            var sendDataItem = collector.Collect();
 
-            var count = 1;
-            while (!collector.Data.IsEmpty)
-            {
-                collector.Data.TryTake(out var tempDataItem);
-                sendDataItem += tempDataItem;
-                count++;
-            }
-
-            sendDataItem /= count; 
             sendDataItem.ClientId = ClientIdentifier;
 
             Console.Clear();
