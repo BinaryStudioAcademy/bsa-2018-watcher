@@ -35,19 +35,19 @@
                      [options]="dropdownSources"
                      [(ngModel)]="dashboardChart.dataSources"
                      maxSelectedLabels="1"
+                     [selectionLimit]="getMultiSelectNumber()"
                      (onChange)="multiSelect($event)">
       </p-multiSelect>
       <p-dropdown *ngIf="!dashboardChart.showCommon"
                   [autoWidth]="false"
                   [options]="dropdownGroupSources"
-                  [(ngModel)]="processDataSource"
                   placeholder="Select a type"
-                  (onChange)="processData()"
+                  (onChange)="dropDownSelect($event)"
                   [group]="true">
       </p-dropdown>
       <form [formGroup]="chartForm">
         <p class="field">Number of heavy processes:</p>
-        <div class="number-spiner-width">
+        <div class="number-spiner">
           <p-spinner size="17"
                      [(ngModel)]="processesNumber"
                      (onChange)="processData()"
@@ -64,7 +64,14 @@
                   [disabled]="dashboardChart.showCommon">
         </p-slider>
       </div>
-      <div class="chart-panel-menu-title field">Stylization:</div>
+      <p class="field">Show data for (5-60 min): {{historyTime}}</p>
+      <div class="field">
+        <p-slider [(ngModel)]="historyTime"
+                  [min]="5"
+                  [max]="60">
+        </p-slider>
+      </div>
+      <div class="chart-panel-menu-title field" style="margin-top:30px">Stylization:</div>
       <p class="field">Title: </p>
       <input type="text"
              [(ngModel)]="dashboardChart.title"
@@ -79,14 +86,14 @@
              [(ngModel)]="dashboardChart.xAxisLabel"
              pInputText/>
       <p class="field">Width: </p>
-      <div class="number-spiner-width">
+      <div class="number-spiner">
         <p-spinner size="17"
                    [min]="200"
                    [max]="1000">
         </p-spinner>
       </div>
       <p class="field">Height: </p>
-      <div class="number-spiner-width">
+      <div class="number-spiner">
         <p-spinner size="17"
                    [min]="200"
                    [max]="1000">

@@ -28,6 +28,3 @@ export interface ChartRequest  {
    isLightTheme: boolean;
    scheme: ColorScheme;
 }
-
-
-
