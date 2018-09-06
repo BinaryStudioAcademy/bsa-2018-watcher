@@ -21,6 +21,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { InvitesListComponent } from './organization-profile/invites-list.component';
 import { CalendarModule } from 'primeng/calendar';
 import { OrganizationMembersComponent } from './organization-members/organization-members.component';
+import { SpinnerPopupComponent } from './spinner-popup/spinner-popup.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { OrganizationMembersComponent } from './organization-members/organizatio
     OrganizationProfileComponent,
     UserPictureComponent,
     InvitesListComponent,
-    OrganizationMembersComponent
+    OrganizationMembersComponent,
+    SpinnerPopupComponent
   ]
 })
 export class SettingsModule { }

@@ -31,7 +31,7 @@ constructor(private instanceService: InstanceService,
   popupMessage: string;
   isLoading: boolean;
   isDeleting: boolean;
-  isMember = true;
+  isMember: boolean;
 
   currentQuery = '';
 
@@ -42,6 +42,11 @@ constructor(private instanceService: InstanceService,
         this.configureInstances(this.user.lastPickedOrganizationId);
       }
     );
+    this.userOrganizationService.currentOrganizationRole.subscribe((role: OrganizationRole) => {
+      this.isMember = role.name === 'Member' ? true : false;
+      console.log('ISMEMBER');
+      console.log(this.isMember);
+    });
    }
 
 

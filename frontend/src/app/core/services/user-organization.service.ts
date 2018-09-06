@@ -38,7 +38,7 @@ export class UserOrganizationService {
   }
 
   private getUserOrganizationRole(userId: string, organizationId: number): Observable<OrganizationRole> {
-    return this.http.get<OrganizationRole>(`${this.ctrlUrl}/{user/${userId}/organization/${organizationId}`);
+    return this.http.get<OrganizationRole>(`${this.ctrlUrl}/user/${userId}/organization/${organizationId}`);
   }
 
   getOrganizationRole(): Observable<OrganizationRole> {

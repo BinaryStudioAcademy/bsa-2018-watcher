@@ -24,7 +24,8 @@ export class OrganizationMembersComponent implements OnInit {
   lstRoles: OrganizationRole[];
   isManager: boolean;
   dropdownRole: SelectItem[];
-  lstUnassign: Boolean[];
+  isLoading = false;
+  popupMessage = '';
 
   constructor(
     private authService: AuthService,
@@ -81,8 +82,12 @@ export class OrganizationMembersComponent implements OnInit {
         console.log('CONFIRMED');
         const updating: UserOrganization = Object.assign({}, userOrganization);
         updating.organizationRole = Object.assign({}, selectedOption);
+
+        this.isLoading = true;
+        this.popupMessage = 'Updating user permissions';
         this.userOrganizationService.update(updating).subscribe( (value) => {
           this.toastrService.success('User permissions was updated');
+          this.isLoading = false;
         });
       } else {
       dropdown.selectedOption = this.toSelectItem(userOrganization.organizationRole);

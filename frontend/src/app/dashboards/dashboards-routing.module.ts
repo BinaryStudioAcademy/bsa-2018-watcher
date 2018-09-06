@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
+import { ManagerGuard } from '../core/guards/manager.guard';
 
 const dashboardRoutes: Routes = [
   {
@@ -12,12 +13,12 @@ const dashboardRoutes: Routes = [
   {
     path: ':insId/edit',
     component: EditInstanceComponent,
-    canActivate: ['ManagerGuard']
+    canActivate: [ManagerGuard]
   },
   {
     path: 'create',
     component: EditInstanceComponent,
-    canActivate: ['ManagerGuard']
+    canActivate: [ManagerGuard]
   },
   {
     path: ':insId/:guidId/dashboards',
