@@ -121,7 +121,7 @@ namespace DataCollector
                 count++;
             }
 
-            sendDataItem /= count;
+            sendDataItem /= count; 
             sendDataItem.ClientId = ClientIdentifier;
 
             Console.Clear();

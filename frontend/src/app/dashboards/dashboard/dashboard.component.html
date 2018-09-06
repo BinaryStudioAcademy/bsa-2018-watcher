@@ -7,6 +7,7 @@
 <p-progressSpinner class=spinner *ngIf="isLoading" strokeWidth="3"></p-progressSpinner>
 <div class="dashboard-wrap" *ngIf="!isLoading">
   <div class="title">DASHBOARDS</div>
+  <hr *ngIf="!instanceId">
   <div *ngIf="!instanceId" class="tutorial">
     <p class="tutorial-item"><i class="fa fa-plus"></i> 1. Create a VM instance</p>
     <p class="tutorial-item"><i class="fa fa-download"></i> 2. Download the application</p>

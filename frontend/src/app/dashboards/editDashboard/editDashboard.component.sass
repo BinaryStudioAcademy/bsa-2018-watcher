@@ -6,7 +6,7 @@
   margin-top: 10px
 
 .dashboard-inputs
-    text-align: center 
+    text-align: center
     .dashboard-input
         position: relative
         font-size: medium
@@ -37,16 +37,18 @@
     color: red
     position: absolute
     top: 35px
-    width: 100%  
+    width: 100%
 
 .footerbuttons
     margin-top: 20px
     width: 100%
+    display: flex
+    justify-content: space-around
     .save
-        width: 45%
+        width: 20%
         float: left
     .close
-        width: 45%
+        width: 20%
         float: right
 
 .center
@@ -63,12 +65,18 @@ hr
     border-bottom: 1px solid rgba(255, 255, 255, 0.3)
 
 .view-chart
-    width: 470px
-    height: 265px
-    // border: 1px solid #a6a6a6
+    width: 375px
+    height: 230px
+    border: 1px solid #a6a6a6
+    margin: 5px
+
+.wrapper
+    display: flex
+    flex-wrap: wrap
+    margin: -5px
 
 .wr-source
-    margin: 51px 0 0 0
+    margin: 20px 0 0 0
     width: 100%
 
 .view-inline
@@ -77,9 +85,6 @@ hr
 
 .title
     margin-bottom: 7px
-.checkbox-margin
-    margin: 15px 26px 0 0
-    text-align: right
 
-/deep/ .ui-scrollpanel-content
-  height: 100%
+.checkbox-margin
+    margin: 5px 0 0 0
