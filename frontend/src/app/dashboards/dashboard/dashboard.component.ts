@@ -21,6 +21,8 @@ import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {CustomData} from '../charts/models';
+import {ChartType} from '../../shared/models/chart-type.enum';
+import {DataProperty} from '../../shared/models/data-property.enum';
 
 
 @Component({
@@ -378,7 +380,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onChartEdited(chart?: DashboardChart) {
-    chart.data = this.dataService.prepareData(chart.chartType.type, chart.dataSources, this.collectedDataForChart);
+    if (chart.showCommon) {
+      chart.data = this.dataService.prepareData(chart.chartType.type, chart.dataSources, this.collectedDataForChart);
+    } else {
+      chart.data = this.dataService.prepareProcessData(chart.chartType.type,
+        chart.dataSources[0], this.collectedDataForChart, chart.mostLoaded);
+    }
     const updateChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chart.id);
     if (updateChartIndex >= 0) {
       this.activeDashboardItem.charts[updateChartIndex] = chart;

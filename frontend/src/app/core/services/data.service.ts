@@ -29,6 +29,7 @@ export class DataService {
   }
 
   instantiateDashboardChart(value: Chart, collData: CollectedData[]): DashboardChart {
+    debugger;
     const dataProps = this.convertStringToArrEnum(value.sources);
     let chartData = [];
     if (value.showCommon) {
@@ -91,15 +92,57 @@ export class DataService {
       || (!dataToTransform || dataToTransform.length < 1)) {
       return [];
     }
-    if (chartType === ChartType.LineChart) {
-      const data = this.mapToMultiData(dataToTransform, dataSources);
-      for (let i = 0; i < data.length; i++) {
-        data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
-      }
-      return data;
-    } else {
-      return this.mapToSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources);
+
+    switch (chartType) {
+      case ChartType.LineChart:
+        const data = this.mapToMultiData(dataToTransform, dataSources);
+        for (let i = 0; i < data.length; i++) {
+          data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
+        }
+        return data;
+      case ChartType.Pie:
+        return this.mapToPieSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources[0]);
+      default:
+        return this.mapToSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources);
     }
+  }
+
+  mapToPieSeriesItem(data: CollectedData, prop: DataProperty): NumberSeriesItem[] {
+    const items: NumberSeriesItem[] = [];
+    const propStr = DataProperty[prop];
+    items.push(
+      {
+        name: dataPropertyLables[prop],
+        value: data[propStr]
+      });
+
+    let itemName = '';
+    let itemValue = 0;
+    switch (prop) {
+      case DataProperty.cpuUsagePercentage:
+      case DataProperty.ramUsagePercentage:
+      case DataProperty.localDiskUsagePercentage:
+        itemName = 'Available';
+        itemValue = 100;
+        break;
+      case DataProperty.usageRamMBytes:
+        itemName = 'Free Ram MegaBytes';
+        itemValue = data[DataProperty[DataProperty.totalRamMBytes]];
+        break;
+      case DataProperty.localDiskUsageMBytes:
+        itemName = 'Free Local Disc MegaBytes';
+        itemValue = data[DataProperty[DataProperty.localDiskTotalMBytes]];
+        break;
+      default:
+    }
+
+    items.push(
+      {
+        name: itemName,
+        value: itemValue - data[propStr]
+      });
+
+    return items;
   }
 
   // dataSource - property to show on the chart
@@ -133,7 +176,6 @@ export class DataService {
   }
 
   mapToProcessMultiData(data: CollectedData[], property: DataProperty, processesAmount: number = 1) {
-    debugger;
     const items: MultiChartItem[] = [];
     const stringProperty = DataProperty[property];
     const lastData = data[data.length - 1];
@@ -229,11 +271,53 @@ export class DataService {
       return chartToUpdate.data ? chartToUpdate.data : [];
     }
 
-    if (chartToUpdate.chartType.type === ChartType.LineChart) {
-      return this.mapToMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources);
+    if (chartToUpdate.showCommon) {
+      if (chartToUpdate.chartType.type === ChartType.LineChart) {
+        return this.mapToMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources);
+      } else {
+        return this.mapToSeriesItem(newData, chartToUpdate.dataSources);
+      }
     } else {
-      return this.mapToSeriesItem(newData, chartToUpdate.dataSources);
+      if (chartToUpdate.chartType.type === ChartType.LineChart) {
+        return this.mapToProcessMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources[0], chartToUpdate.mostLoaded);
+      } else {
+        return this.mapToProcessesSeriesItem(newData, chartToUpdate.dataSources[0], chartToUpdate.mostLoaded);
+      }
     }
+  }
+
+  mapToProcessMultiDataOnUpdate(oldData: CustomData[],
+                                newData: CollectedData,
+                                property: DataProperty,
+                                procAmount: number = 1): CustomData[] {
+    const prop = DataProperty[property];
+    if (oldData[0].series.length > 20) { // TODO: refactor
+      for (let i = 0; i < oldData.length; i++) {
+        // oldData.push(oldData.slice(1)); // Start from first element(removes oldest data el)
+        oldData[i].series.shift();
+      }
+      // TODO: remove oldest element from array - use order by or sort or smt coz data can be not ordered by date
+      // TODO: maybe depend on chart's setting get from old array specific amount of data or etc.
+    }
+
+    const processes = this.getMostLoadedProcesses(newData, prop, procAmount);
+
+    const newDataToPush = this.mapToProcessMultiData([newData], property, procAmount);
+    for (let i = 0; i < procAmount; i++) {
+      oldData[i].series.push(...newDataToPush[i].series);
+    }
+
+    return oldData;
+  }
+
+  getMostLoadedProcesses(data: CollectedData, stringProperty: string, procAmount: number = 1): string[] {
+    data.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
+    const topProcessesNames: string[] = [];
+    for (let i = 0; i < procAmount; i++) {
+      topProcessesNames.push(data.processes[i].name);
+    }
+
+    return topProcessesNames;
   }
 
   mapToMultiDataOnUpdate(oldData: CustomData[], newData: CollectedData, properties: DataProperty[]): CustomData[] {

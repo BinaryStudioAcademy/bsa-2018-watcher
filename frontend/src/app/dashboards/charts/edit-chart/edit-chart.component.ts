@@ -124,12 +124,13 @@ export class EditChartComponent implements OnInit, OnChanges {
             items: [
               {label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage},
               {label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage},
+              {label: dataPropertyLables[DataProperty.localDiskUsagePercentage], value: DataProperty.localDiskUsagePercentage},
             ]
           }, {
             label: 'Memory',
             items: [
-              {label: dataPropertyLables[DataProperty.localDiskFreeMBytes], value: DataProperty.localDiskFreeMBytes},
-              {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
+              {label: dataPropertyLables[DataProperty.usageRamMBytes], value: DataProperty.usageRamMBytes},
+              {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
             ]
           }];
         } else {
@@ -161,8 +162,10 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   processChartType() {
+    debugger;
     this.showPreview = false;
-    this.dashboardChart.chartType.name = chartTypes[this.dashboardChart.chartType.type];
+    this.dashboardChart.chartType = dashboardChartTypes.find(t => t.type === this.dashboardChart.chartType.type);
+    // .name = chartTypes[this.dashboardChart.chartType.type];
     this.createSourceItems();
     this.processData();
   }

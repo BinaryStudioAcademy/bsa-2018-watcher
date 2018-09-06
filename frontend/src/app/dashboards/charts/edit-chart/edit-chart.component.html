@@ -28,7 +28,7 @@
         </p-checkbox>
       </p><!--type [disabled]="!dashboardChart.dataSources.length<1"-->
       <p class="field">Select source: </p>
-      <p-multiSelect *ngIf="dashboardChart.showCommon"
+      <p-multiSelect *ngIf="dashboardChart.showCommon && dashboardChart.chartType.type !== 2"
                      class="custom-multiselect"
                      [filter]="false"
                      [showHeader]="false"
@@ -38,7 +38,7 @@
                      [selectionLimit]="getMultiSelectNumber()"
                      (onChange)="multiSelect($event)">
       </p-multiSelect>
-      <p-dropdown *ngIf="!dashboardChart.showCommon"
+      <p-dropdown *ngIf="!dashboardChart.showCommon || dashboardChart.chartType.type === 2"
                   [autoWidth]="false"
                   [options]="dropdownGroupSources"
                   placeholder="Select a type"
