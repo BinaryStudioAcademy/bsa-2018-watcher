@@ -169,6 +169,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
       type: dashboardChart.chartType.type,
       sources: this.sources.join(),
       isLightTheme: dashboardChart.theme === 'light',
+      scheme: dashboardChart.colorScheme
     };
     return chart;
   }
