@@ -19,7 +19,7 @@ import {DashboardChart} from '../models/dashboard-chart';
 import {Dashboard} from '../../shared/models/dashboard.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
-import { ChartRequest } from '../../shared/requests/chart-request.model';
+import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {CustomData} from '../charts/models';
 
 
@@ -204,7 +204,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               c.showXAxis = true;
               c.showYAxis = true;
               c.showLegend = true;
-              c.view =  [600, 337];
+              c.view = [600, 337];
               newCharts.push(this.createChartRequest(c));
             });
             this.onAddedCharts(newCharts, dto.id);
@@ -215,6 +215,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.toastrService.error(`Error occurred status: ${error}`);
         });
   }
+
   createChartRequest(dashboardChart: DashboardChart): ChartRequest {
     const chart: ChartRequest = {
       showCommon: dashboardChart.showCommon,
@@ -324,15 +325,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onAddedCharts(array: Array<ChartRequest>, id: number) {
-    array.forEach( chart => {
+    array.forEach(chart => {
       chart.dashboardId = id;
-    this.chartService.create(chart).subscribe(value => {
-      this.toastrService.success('Chart was created');
-    }, error => {
-      this.toastrService.error(`Error occurred status: ${error.message}`);
+      this.chartService.create(chart).subscribe(value => {
+        this.toastrService.success('Chart was created');
+      }, error => {
+        this.toastrService.error(`Error occurred status: ${error.message}`);
+      });
     });
-    });
-
   }
 
   onChartDeleted(chartId: number) {
