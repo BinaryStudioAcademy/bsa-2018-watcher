@@ -196,6 +196,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           charts.forEach(c => {
             c.showXAxis = true;
             c.showYAxis = true;
+            c.showLegend = true;
             c.view =  [600, 337];
             newCharts.push(this.createChartRequest(c));
           });

@@ -1,6 +1,6 @@
 <p-dialog [(visible)]="display" [modal]="true" [closable]=false [responsive]="true" [width]="810" [minWidth]="660"
-          header="Create Dashboard" [maximizable]="false" [baseZIndex]="10000" [draggable]="false" [showHeader]="false"
-          appendTo="body" [positionTop]="90"> <!--[top]="90px"left: 64px; [contentStyle]="{'overflow':'visible'}" [width]="350" [minWidth]="200" -->
+          header="Create Dashboard" [maximizable]="false"  [draggable]="false" [showHeader]="false"
+          [contentStyle]="{'overflow':'visible'}" [positionTop]="90"> <!--[baseZIndex]="10000" appendTo="body"[top]="90px"left: 64px;  [width]="350" [minWidth]="200" -->
     <div class="dashboard-inputs">
         <h2>Dashboard</h2>
         <div class="dashboard-input">
@@ -30,7 +30,7 @@
     <hr>
      
     <div class="center title">Generate common charts:</div>
-    <div class="btns-generate footerbuttons">
+    <div class=" footerbuttons">
         <button type="button" pButton (click)="generateAll()" label="Generate all" class="save ui-button-primary"></button>
         <button type="button" pButton (click)="customize()" label="Customize" class="close ui-button-primary"></button>
     </div>
@@ -44,10 +44,10 @@
             (onChange)="processDataForAll()" [disabled]="!isSource">
         </p-multiSelect> 
       </div>     
-     
+     <div *ngIf="isCustomize"> 
       <p class="field center">Visualization</p>
-      <p-scrollPanel [style]="{width: '100%', height: '235px'}">   
-        <div *ngIf="showPreview">      
+      <p-scrollPanel [style]="{width: '100%', height: '235px'}" *ngIf="showPreview" >   
+        <div class="wrapper">     
           <div *ngFor="let dashboardChart of dashboardCharts; let i = index" class="view-chart">            
               <div class="checkbox-margin center">
                 <p-checkbox [(ngModel)]="isIncluded[i]" [disabled]="!isCustomize" binary="true"></p-checkbox>
@@ -58,9 +58,9 @@
                         [showDownload]="false">
               </app-chart>                  
           </div>     
-        </div>   
+         </div>
       </p-scrollPanel>       
-      
+       </div> 
     </div>
     <div class="footerbuttons">
         <button type="button" pButton (click)="edit(dTitle)" label="Save" class="save ui-button-success" [disabled]="dTitle.invalid "></button>
