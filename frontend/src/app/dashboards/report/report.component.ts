@@ -45,6 +45,8 @@ export class ReportComponent implements OnInit {
       { label: 'AggregationForMonth', value: DataType.AggregationForMonth }
     ];
 
+    this.selectedType = this.types[0].value;
+
     this.calendarFilter.showTime = true;
 
     this.dates = [new Date(Date.now())];
