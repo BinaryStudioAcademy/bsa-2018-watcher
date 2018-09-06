@@ -39,22 +39,28 @@ namespace DataCollector
         {
             try
             {
-                
+                var allProcesses = GetProcesses();
 
                 var dataItem = new CollectedData
                 {
-                    //AvaliableRamBytes = GetFreeRam(),
+
                     //InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
-                    LocalDiskFreeMBytes = GetDiscFree(),
-                    CpuUsagePercent = GetUsageCpuPercentages(),
-                    RamUsagePercent = GetUsageRamPercentages(),
                     //InterruptsTimePercent = _systemCounters["InterruptsTime"].NextValue(),
-                    LocalDiskFreeSpacePercent = GetLocalDiskFreeSpacePercent(),
-                    
-                    ProcessesCount = GetProcesses().Count,
-                    //Processes = GetProcessesCpu(),
-                    //ProcessesRam = GetProcessesRam(),
+
+                    TotalRamMBytes = GetTotalRam(),
+                    RamUsagePercentage = GetUsageRamPercentages(),
+                    UsageRamMBytes = GetUsageRam(),
+
+                    CpuUsagePercentage = GetUsageCpuPercentages(),
+
+                    LocalDiskTotalMBytes = GetDiskTotalMbytes(),
+                    LocalDiskUsageMBytes = GetDiskTotalMbytes() - GetDiskFreeMbytes(),
+                    LocalDiskUsagePercentage = GetLocalDiskFreeSpacePercent(),
+
+                    Processes = allProcesses,
+                    ProcessesCount = allProcesses.Count,
                     Time = DateTime.Now
+
                 };
                 Data.Add(dataItem);
             }
@@ -65,12 +71,20 @@ namespace DataCollector
 
             _tm.Start();
         }
-        private float GetFreeRam()
+        private float GetTotalRam()
         {
             string ramData = Bash("free -b | awk '{print $2 \";\" $3 \";\" $4}'");
             var ramSwap  = ramData.Split("\n");
-            var ram = ramSwap[1].Split(";");
+            var ram = ramSwap[2].Split(";");
             return float.Parse(ram[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f / 1024.0f;
+        }
+
+        private float GetUsageRam()
+        {
+            string ramData = Bash("free -b | awk '{print $2 \";\" $3 \";\" $4}'");
+            var ramSwap = ramData.Split("\n");
+            var ram = ramSwap[2].Split(";");
+            return float.Parse(ram[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f / 1024.0f;
         }
 
         private float GetUsageCpuPercentages()
@@ -90,12 +104,20 @@ namespace DataCollector
             return freeRam/totalRam*100.0f;
         }
 
-        private float GetDiscFree()
+        private float GetDiskTotalMbytes()
         {
             string strData = Bash("df -t xfs -t ext4 | awk '{print $2 \";\" $3 \";\" $4}'");
             var allParts = strData.Split("\n");
             var disc = allParts[1].Split(";");
-            return float.Parse(disc[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture)/1024.0f;
+            return float.Parse(disc[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture)/1024.0f;
+        }
+
+        private float GetDiskFreeMbytes()
+        {
+            string strData = Bash("df -t xfs -t ext4 | awk '{print $2 \";\" $3 \";\" $4}'");
+            var allParts = strData.Split("\n");
+            var disc = allParts[1].Split(";");
+            return float.Parse(disc[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f;
         }
 
         private float GetLocalDiskFreeSpacePercent()
@@ -108,7 +130,7 @@ namespace DataCollector
 
         private List<ProcessData> GetProcesses()
         {
-            string output = Bash("ps -xo pmem,pcpu,command | awk '{print $1 \";\" $2 \";\" $3}'");
+            string output = Bash("ps -xo rss,pmem,pcpu,comm | awk '{print $1 \";\" $2 \";\" $3  \";\" $4}'");
             processData = new List<ProcessData>();
             int counter = 0;
             foreach (string row in output.Split("\n"))
@@ -116,57 +138,20 @@ namespace DataCollector
                 if (counter == 0) continue;
                 counter++;
                 var cols = row.Split(";");
-                if(cols.Length == 3)
+                if(cols.Length == 4)
                 {
-                    var pmem = float.Parse(cols[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
-                    var pcpu = float.Parse(cols[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
-                    var command = cols[2];
-
                     processData.Add( new ProcessData
                     {
-                        RamMBytes = pmem,
-                        PCpu = pcpu,
-                        Name = command
-
+                        RamMBytes = float.Parse(cols[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture),
+                        PRam = float.Parse(cols[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture),
+                        PCpu = float.Parse(cols[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture),
+                        Name = cols[3]
                     });
                 }
             }
             return processData;
         }
 
-        private Dictionary<string, float> GetProcessesRam()
-        {
-            Dictionary<string, float> processRam = new Dictionary<string, float>();
-            foreach (var item in GetProcesses())
-            {
-                try
-                {
-                    processRam.Add(item.Name, item.PRam);
-                }
-                catch(Exception e)
-                {
-                    //
-                }
-            }
-            return processRam;
-        }
-
-        private Dictionary<string, float> GetProcessesCpu()
-        {
-            Dictionary<string, float> processRam = new Dictionary<string, float>();
-            foreach (var item in GetProcesses())
-            {
-                try
-                {
-                    processRam.Add(item.Name, (float)item.PCpu);
-                }
-                catch(Exception e)
-                {
-                    //
-                }
-            }
-            return processRam;
-        }
 
         private static string Bash(string cmd)
         {
@@ -189,8 +174,6 @@ namespace DataCollector
             return result;
         }
 
-
     }
-
 #endif
 }
