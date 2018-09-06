@@ -7,17 +7,17 @@
     </div>
   </div>
 
-  <p-table [value]="userOrganizationsAll" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]" [lazy]="true" (onLazyLoad)="loadUsersLazy($event)">
+  <p-table [value]="userOrganizationsAll" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th style="width:10%">JOINED AT</th>
         <th style="width:10%">PHOTO</th>
         <th style="width:10%">DISPLAY NAME</th>
-        <th style="width:15%">BIO</th>
-        <th style="width:25%">EMAIL</th>
+        <th style="width:20%">BIO</th>
+        <th style="width:20%">EMAIL</th>
         <th style="width:10%">COMPANY ID</th>
         <th style="width:6%">IS ACTIVE</th>
-        <th style="width:10%">ROLE</th>
+        <th style="width:14%">ROLE</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-userOrganization>
@@ -36,7 +36,14 @@
           <i *ngIf="userOrganization.user.isActive" class="fa fa-check-circle-o" style="font-size: 25px"></i>
           <i *ngIf="!userOrganization.user.isActive" class="fa fa-times-circle-o" style="font-size: 25px"></i>
         </td>
-        <td class="center">{{userOrganization.organizationRole.name}}</td>
+        <td class="center"><p *ngIf="!isManager">{{userOrganization.organizationRole.name}}</p>
+          <p-dropdown *ngIf="isManager"
+          [options]="dropdownRole"
+          (onChange) = "changeRole(dd, userOrganization)"
+          [autoDisplayFirst] = "false"
+          [placeholder] = "userOrganization.organizationRole.name"
+          #dd></p-dropdown>
+        </td>
       </tr>
     </ng-template>
   </p-table>

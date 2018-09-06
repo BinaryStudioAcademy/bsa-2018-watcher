@@ -104,6 +104,24 @@ namespace Watcher.Controllers
             return dto;
         }
 
+        // PUT: /userorganization
+        [HttpPut]
+        public virtual async Task<ActionResult> Update([FromBody] UserOrganizationRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _userOrganizationService.UpdateEntityAsync(request);
+            if (result == null)
+            {
+                return StatusCode(500);
+            }
+
+            return NoContent();
+        }
+
         /// <summary>
         /// Delete UserOrganization
         /// </summary>

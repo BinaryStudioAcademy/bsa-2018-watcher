@@ -225,7 +225,7 @@ export class UserListComponent implements OnInit {
       createdByUser: null,
       organization: null,
       createdDate: null,
-      experationDate: null,
+      expirationDate: null,
       link: null,
       state: OrganizationInviteState.Pending
     };

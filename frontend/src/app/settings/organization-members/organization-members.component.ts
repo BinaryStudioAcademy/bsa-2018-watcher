@@ -2,15 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { UserOrganizationService } from '../../core/services/user-organization.service';
 import { OrganizationRoleService } from '../../core/services/organization-role.service';
-import { Organization } from '../../shared/models/organization.model';
 import { User } from '../../shared/models/user.model';
-import { OrganizationInvite } from '../../shared/models/organization-invite.model';
-import { Role } from '../../shared/models/role.model';
 import { SelectItem, LazyLoadEvent } from 'primeng/api';
 import { UserService } from '../../core/services/user.service';
 import { ToastrService } from '../../core/services/toastr.service';
-import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
 import { UserOrganization } from '../../shared/models/user-organization.model';
+import { OrganizationRole } from '../../shared/models/organization-role.model';
+import { Dropdown } from 'primeng/primeng';
 
 @Component({
   selector: 'app-organization-members',
@@ -23,21 +21,10 @@ export class OrganizationMembersComponent implements OnInit {
   userOrganizations: UserOrganization[];
   currentUser: User;
   totalRecords: number;
-  lstOrganizations: Organization[];
-  lstUserCompany: Organization[];
-  invite: OrganizationInvite;
-  lstRoles: Role[];
-  selectedRole: Role;
-  selectedCompany: Organization;
+  lstRoles: OrganizationRole[];
+  isManager: boolean;
   dropdownRole: SelectItem[];
-  dropdownCompany: SelectItem[];
-  lastOrganization: Organization;
   lstUnassign: Boolean[];
-
-  data: any;
-  photoUrl: string;
-  photoType: string;
-  display: Boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -46,13 +33,8 @@ export class OrganizationMembersComponent implements OnInit {
     private organizationRoleService: OrganizationRoleService,
     private toastrService: ToastrService) {
 
-    this.lstUserCompany = new Array<Organization>();
     this.dropdownRole = new Array<SelectItem>();
-    this.dropdownCompany = new Array<SelectItem>();
-    this.lstUnassign = Array<Boolean>();
 
-
-    this.data = {};
   }
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -66,11 +48,14 @@ export class OrganizationMembersComponent implements OnInit {
         .getByOrganizationId(this.currentUser.lastPickedOrganizationId)
         .subscribe((value: UserOrganization[]) => {
           this.userOrganizationsAll = value;
-          const rows = this.userOrganizationsAll.length >= 5 ? 5 : (this.userOrganizationsAll.length - 1);
-          this.userOrganizations = this.userOrganizationsAll.slice(0, rows);
+          this.toastrService.success('Get info from server');
+          const role = this.userOrganizationsAll
+          .find( usOrg => usOrg.user.id === this.currentUser.id )
+          .organizationRole.name;
+          this.isManager = role === 'Manager' ? true : false;
         });
 
-    this.organizationRoleService.getAll().subscribe((value: Role[]) => {
+    this.organizationRoleService.getAll().subscribe((value: OrganizationRole[]) => {
       this.lstRoles = value;
       this.fillDropdownRole();
     });
@@ -82,14 +67,37 @@ export class OrganizationMembersComponent implements OnInit {
     });
   }
 
-  findWithAttr(array, attr1, value1, attr2, value2) {
+  toSelectItem(role: OrganizationRole): SelectItem {
+    const item: SelectItem = {
+      label: role.name,
+      value: role
+    };
+    return item;
+  }
+
+  async changeRole(dropdown: Dropdown, userOrganization: UserOrganization ) {
+    const selectedOption: OrganizationRole = dropdown.selectedOption.value;
+    console.log(dropdown.selectedOption);
+    console.log(typeof(dropdown));
+    if (await this.toastrService.confirm(`You sure you want to make ${userOrganization.user.displayName} a ${selectedOption.name}`)) {
+        console.log('CONFIRMED');
+        console.log(selectedOption);
+    } else {
+      dropdown.selectedOption = this.toSelectItem(userOrganization.organizationRole);
+    }
+  }
+  loaded() {
+    console.log('loaded');
+  }
+
+ /* findWithAttr(array, attr1, value1, attr2, value2) {
     for (let i = 0; i < array.length; i += 1) {
       if (array[i][attr1] === value1 && array[i][attr2] === value2) {
         return array[i];
       }
     }
     return null;
-  }
+  }*/
 
   /*onUnassign(company: Organization, i: number) {
     this.lstUnassign[i] = true;
@@ -117,7 +125,7 @@ export class OrganizationMembersComponent implements OnInit {
     );
   }
 */
-  onInvite(id: number) {
+  /*onInvite(id: number) {
     const invite: OrganizationInvite = {
       id: 0,
       organizationId: id,
@@ -132,5 +140,5 @@ export class OrganizationMembersComponent implements OnInit {
       state: OrganizationInviteState.Pending
     };
     this.invite = invite;
-  }
+  }*/
 }

@@ -4,11 +4,6 @@ import {NavigationStart} from '@angular/router';
 import {Router, RouterEvent} from '@angular/router';
 import {MenuItem} from 'primeng/api';
 
-
-import {Instance} from '../../shared/models/instance.model';
-import { AuthService } from '../../core/services/auth.service';
-import { User } from '../../shared/models/user.model';
-
 @Component({
   selector: 'app-left-side-menu',
   templateUrl: './left-side-menu.component.html',
