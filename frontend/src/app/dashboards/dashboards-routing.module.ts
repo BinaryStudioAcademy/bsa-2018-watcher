@@ -11,11 +11,13 @@ const dashboardRoutes: Routes = [
   },
   {
     path: ':insId/edit',
-    component: EditInstanceComponent
+    component: EditInstanceComponent,
+    canActivate: ['ManagerGuard']
   },
   {
     path: 'create',
-    component: EditInstanceComponent
+    component: EditInstanceComponent,
+    canActivate: ['ManagerGuard']
   },
   {
     path: ':insId/:guidId/dashboards',

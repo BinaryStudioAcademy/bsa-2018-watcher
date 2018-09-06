@@ -13,6 +13,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { HomeGuard } from './guards/home.guard';
 import { NotexistGuard } from './guards/notexist.guard';
+import { ManagerGuard } from './guards/manager.guard';
 
 import { ApiService } from './services/api.service';
 import { FeedbackService } from './services/feedback.service';
@@ -38,7 +39,6 @@ import { ChatHub } from './hubs/chat.hub';
 import { NotificationsHubService } from './hubs/notifications.hub';
 import { OrganizationInvitesHub } from './hubs/organization-invites.hub';
 import { OrganizationRoleService } from './services/organization-role.service';
-
 
 @NgModule({
   imports: [
@@ -76,6 +76,7 @@ import { OrganizationRoleService } from './services/organization-role.service';
     AdminGuard,
     HomeGuard,
     NotexistGuard,
+    ManagerGuard,
 
     DashboardsHub,
     ChatHub,

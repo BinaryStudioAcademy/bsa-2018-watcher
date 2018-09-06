@@ -122,7 +122,7 @@ namespace Watcher.Controllers
             return NoContent();
         }
 
-        [HttpGet("{user/{uId}/organization/{oId}}")]
+        [HttpGet("user/{uId}/organization/{oId}")]
         public virtual async Task<ActionResult> GetUserOrganizationRole(string uId, int oId)
         {
             var organizationRole = await _userOrganizationService.GetUserOrganizationRoleAsync(uId, oId);

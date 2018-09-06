@@ -19,6 +19,8 @@ import {DashboardChart} from '../models/dashboard-chart';
 import {Dashboard} from '../../shared/models/dashboard.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
+import { UserOrganizationService } from '../../core/services/user-organization.service';
+import { OrganizationRole } from '../../shared/models/organization-role.model';
 
 
 @Component({
@@ -44,6 +46,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
   chartToEdit = {...defaultOptions};
+  isMember = true;
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -53,7 +56,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private activateRoute: ActivatedRoute,
               private authService: AuthService,
               private chartService: ChartService,
-              private dataService: DataService) {
+              private dataService: DataService,
+              private userOrganizationService: UserOrganizationService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -136,6 +140,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ];
 
     this.subscribeToCollectedData();
+
+    this.userOrganizationService.currentOrganizationRole.subscribe((role: OrganizationRole) => {
+      this.isMember = role.name === 'Member' ? true : false;
+    });
   }
 
   ngOnDestroy(): void {
@@ -181,7 +189,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.activeDashboardItem = lastItem;
         this.showCreatePopup(true);
       },
-      id: 'lastTab'
+      id: 'lastTab',
+      disabled: this.isMember,
     };
 
     return lastItem;

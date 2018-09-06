@@ -6,6 +6,8 @@ import { MenuItem } from 'primeng/api';
 import { User } from '../../shared/models/user.model';
 import { Instance } from '../../shared/models/instance.model';
 import { Router } from '@angular/router';
+import { OrganizationRole } from '../../shared/models/organization-role.model';
+import { UserOrganizationService } from '../../core/services/user-organization.service';
 
 @Component({
   selector: 'app-instance-list',
@@ -13,15 +15,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./instance-list.component.sass']
 })
 export class InstanceListComponent implements OnInit {
-
-  constructor(private instanceService: InstanceService,
-              private toastrService: ToastrService,
-              private authService: AuthService,
-              private router: Router) {
-                this.instanceService.instanceAdded.subscribe(instance => {this.onInstanceAdded(instance);
-                  console.log('SUBSCRIBED ON EVENT'); });
-                this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-               }
+constructor(private instanceService: InstanceService,
+  private toastrService: ToastrService,
+  private authService: AuthService,
+  private userOrganizationService: UserOrganizationService,
+  private router: Router) {
+  this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
+  this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
+}
 
   menuItems: MenuItem[];
   user: User;
@@ -30,6 +31,7 @@ export class InstanceListComponent implements OnInit {
   popupMessage: string;
   isLoading: boolean;
   isDeleting: boolean;
+  isMember = true;
 
   currentQuery = '';
 
@@ -49,6 +51,7 @@ export class InstanceListComponent implements OnInit {
       title: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
       routerLink: ['instances/create'],
+      disabled: this.isMember
     }];
 
 
@@ -76,11 +79,13 @@ export class InstanceListComponent implements OnInit {
         label: 'Edit',
         icon: 'fa fa-pencil',
         routerLink: [`/user/instances/${instance.id}/edit`],
-        styleClass: 'instance-options'
+        styleClass: 'instance-options',
+        disabled: this.isMember
       }, {
         label: 'Download app',
         icon: 'fa fa-download',
         styleClass: 'instance-options',
+        disabled: this.isMember,
         command: () => {
           this.showDownloadModal = true;
           this.currentGuidId = instance.guidId;
@@ -92,7 +97,8 @@ export class InstanceListComponent implements OnInit {
           const index = this.menuItems.findIndex(i => i === item);
           this.deleteInstance(instance.id, index);
         },
-        styleClass: 'instance-options'
+        styleClass: 'instance-options',
+        disabled: this.isMember
       } ]
     };
     return item;
