@@ -10,86 +10,80 @@ namespace DataCollector
     {
         public CollectedData()
         {
-            ProcessesCpu = new Dictionary<string, float>();
-            ProcessesRam = new Dictionary<string, float>();
+            Processes = new List<ProcessData>();
         }
+
 
         // Id to reference
         public Guid Id { get; set; }
         // ClientId - Client identification number
         public Guid ClientId { get; set; }
 
-        public int ProcessesCount { get; set; }
-        public Dictionary<string, float> ProcessesCpu { get; set; }
-        public Dictionary<string, float> ProcessesRam { get; set; }
-        public float AvaliableRamBytes { get; set; }
+        public float InterruptsTimePercent { get; set; }
         public float InterruptsPerSeconds { get; set; }
-        public float LocalDiskFreeMBytes { get; set; }
+
+        public int ProcessesCount { get; set; }
+        public List<ProcessData> Processes { get; set; }
+
+        public float UsageRamMBytes { get; set; }
+        public float TotalRamMBytes { get; set; }
+        public float RamUsagePercentage { get; set; }
+
+
+        public float LocalDiskUsageMBytes { get; set; }
+        public float LocalDiskTotalMBytes { get; set; }
+        public float LocalDiskUsagePercentage { get; set; }
+
+        public float CpuUsagePercentage { get; set; }
+
         public DateTime Time { get; set; }
 
 
         public static CollectedData operator +(CollectedData firstItem, CollectedData secondItem)
         {
-            var processesCpu = firstItem.ProcessesCpu;
-
-            secondItem.ProcessesCpu.ToList()
-                .ForEach(item => ConcatProcessInfo(processesCpu, item));
-
-            var processesRam = firstItem.ProcessesRam;
-
-            secondItem.ProcessesRam.ToList()
-                .ForEach(item => ConcatProcessInfo(processesRam, item));
-
             return new CollectedData
             {
-                AvaliableRamBytes = firstItem.AvaliableRamBytes + secondItem.AvaliableRamBytes,
-                CpuUsagePercent = firstItem.CpuUsagePercent + secondItem.CpuUsagePercent,
-                InterruptsPerSeconds = firstItem.InterruptsPerSeconds + secondItem.InterruptsPerSeconds,
+                
                 InterruptsTimePercent = firstItem.InterruptsTimePercent + secondItem.InterruptsTimePercent,
-                LocalDiskFreeMBytes = firstItem.LocalDiskFreeMBytes + secondItem.LocalDiskFreeMBytes,
-                LocalDiskFreeSpacePercent = firstItem.LocalDiskFreeSpacePercent + secondItem.LocalDiskFreeSpacePercent,
-                RamUsagePercent = firstItem.RamUsagePercent + secondItem.RamUsagePercent,
-                Time = secondItem.Time,
-                ProcessesCpu = processesCpu,
-                ProcessesRam = processesRam,
-                ProcessesCount = processesCpu.Count
-            };
-        }
+                InterruptsPerSeconds = firstItem.InterruptsPerSeconds + secondItem.InterruptsPerSeconds,
 
-        public static void ConcatProcessInfo(
-            Dictionary<string, float> processInfo,
-            KeyValuePair<string, float> item)
-        {
-            if (processInfo.ContainsKey(item.Key))
-                processInfo[item.Key] += item.Value;
-            else
-                processInfo.Add(item.Key, item.Value);
+                ProcessesCount = secondItem.ProcessesCount,
+
+                UsageRamMBytes = firstItem.UsageRamMBytes + secondItem.UsageRamMBytes,
+                TotalRamMBytes = firstItem.TotalRamMBytes + secondItem.TotalRamMBytes,
+                RamUsagePercentage = firstItem.RamUsagePercentage + secondItem.RamUsagePercentage,
+
+                LocalDiskUsageMBytes = firstItem.LocalDiskUsageMBytes + secondItem.LocalDiskUsageMBytes,
+                LocalDiskTotalMBytes = firstItem.LocalDiskTotalMBytes + secondItem.LocalDiskTotalMBytes,
+                LocalDiskUsagePercentage = firstItem.LocalDiskUsagePercentage + secondItem.LocalDiskUsagePercentage,
+
+                CpuUsagePercentage = firstItem.CpuUsagePercentage + secondItem.CpuUsagePercentage,
+
+                Time = secondItem.Time,
+                Processes = secondItem.Processes,
+            };
         }
 
         public static CollectedData operator /(CollectedData item, int scalar)
         {
-            var processCpu = new Dictionary<string, float>();
-            var processRam = new Dictionary<string, float>();
-
-            item.ProcessesCpu.ToList()
-                .ForEach(cpu => processCpu.Add(cpu.Key, cpu.Value / scalar));
-
-            item.ProcessesRam.ToList()
-                .ForEach(ram => processRam.Add(ram.Key, ram.Value / scalar));
-
             return new CollectedData
             {
-                AvaliableRamBytes = item.AvaliableRamBytes / scalar,
-                CpuUsagePercent = item.CpuUsagePercent / scalar,
-                InterruptsPerSeconds = item.InterruptsPerSeconds / scalar,
                 InterruptsTimePercent = item.InterruptsTimePercent / scalar,
-                LocalDiskFreeMBytes = item.LocalDiskFreeMBytes / scalar,
-                LocalDiskFreeSpacePercent = item.LocalDiskFreeSpacePercent / scalar,
+                InterruptsPerSeconds = item.InterruptsPerSeconds / scalar,
+
+                UsageRamMBytes = item.UsageRamMBytes / scalar,
+                TotalRamMBytes = item.TotalRamMBytes / scalar,
+                RamUsagePercentage = item.RamUsagePercentage / scalar,
+
+                LocalDiskUsageMBytes = item.LocalDiskUsageMBytes / scalar,
+                LocalDiskTotalMBytes = item.LocalDiskTotalMBytes / scalar,
+                LocalDiskUsagePercentage = item.LocalDiskUsagePercentage / scalar,
+
+                CpuUsagePercentage = item.CpuUsagePercentage / scalar,
+
                 ProcessesCount = item.ProcessesCount,
-                RamUsagePercent = item.RamUsagePercent / scalar,
                 Time = item.Time,
-                ProcessesCpu = processCpu,
-                ProcessesRam = processRam
+                Processes = item.Processes
             };
         }
 
@@ -98,20 +92,30 @@ namespace DataCollector
             var str = new StringBuilder();
             str.Append($"Instance id: {ClientId}\n");
             str.Append($"Processes count: {ProcessesCount}\n");
-            str.Append($"CPU usage: {CpuUsagePercent:0.##}%\n");
-            str.Append($"Ram avalaible: {AvaliableRamBytes:0.##} MB\n");
-            str.Append($"Ram usage: {RamUsagePercent:0.##}%\n");
-            str.Append($"Local disk avalaible: {LocalDiskFreeMBytes:0.##} MB\n");
+
+            str.Append($"UsageRamMBytes: {UsageRamMBytes:0.##}\n");
+            str.Append($"TotalRamMBytes: {TotalRamMBytes:0.##}\n");
+            str.Append($"RamUsagePercentage: {RamUsagePercentage:0.##}%\n");
+
+            str.Append($"CpuUsagePercentage: {CpuUsagePercentage:0.##}%\n");
+
+            str.Append($"LocalDiskUsageMBytes: {LocalDiskUsageMBytes:0.##}\n");
+            str.Append($"LocalDiskTotalMBytes: {LocalDiskTotalMBytes:0.##}\n");
+            str.Append($"LocalDiskUsagePercentage: {LocalDiskUsagePercentage:0.##}%\n");
+
+           
+
             return str.ToString();
         }
 
-        #region Percentage
 
-        public float CpuUsagePercent { get; set; }
-        public float RamUsagePercent { get; set; }
-        public float InterruptsTimePercent { get; set; }
-        public float LocalDiskFreeSpacePercent { get; set; }
+    }
 
-        #endregion
+    public class ProcessData
+    {
+        public string Name { get; set; }
+        public float RamMBytes { get; set; }
+        public float PRam { get; set; }
+        public float PCpu { get; set; }
     }
 }
