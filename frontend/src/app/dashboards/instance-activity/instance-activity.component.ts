@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CollectorLog } from '../../shared/models/collector-log.model';
 import { CollectorLogService } from '../../core/services/collector-log.service';
-import { LogLevel } from '../../shared/models/log-level.enum';
+import { CollectorLogLevel } from '../../shared/models/log-level.enum';
 
 @Component({
   selector: 'app-instance-activity',
@@ -25,7 +25,7 @@ export class InstanceActivityComponent implements OnInit {
         this.collectorLogService.getAllLogs(this.instanceId).subscribe((data: CollectorLog[]) => {
           if (data) {
             this.logs = data.map(log =>
-            Object.assign({}, log, {logLevelName: LogLevel[log.logLevel]}));
+            Object.assign({}, log, {logLevelName: CollectorLogLevel[log.logLevel]}));
           }
         });
       }
