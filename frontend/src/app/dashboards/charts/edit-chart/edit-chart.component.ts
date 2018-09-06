@@ -41,6 +41,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   processDataSource: DataProperty;
 
   colorSchemes = colorSets;
+  historyTime: number;
 
   get dialogTitle() {
     if (this.dashboardChart && this.dashboardChart.id) {
@@ -71,7 +72,6 @@ export class EditChartComponent implements OnInit, OnChanges {
       });
 
     this.dashboardChart.showCommon = false;
-
     this.dropdownTypes = [
       {label: dashboardChartTypes[0].title, value: dashboardChartTypes[0]},
       {label: dashboardChartTypes[1].title, value: dashboardChartTypes[1]},
@@ -90,13 +90,29 @@ export class EditChartComponent implements OnInit, OnChanges {
     ];
   }
 
+  getMultiSelectNumber() {
+    return this.dashboardChart.chartType.type === ChartType.Pie ? 1 : null;
+  }
+
   multiSelect(event) {
-    if (dataPropertyLables[event.itemValue].includes('%')) {
-      this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => dataPropertyLables[s].includes('%'));
-    } else {
-      this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => !dataPropertyLables[s].includes('%'));
+    if (event.value.length === 0) {
+      this.dropdownSources.forEach(item => item.disabled = false);
+      return;
     }
 
+    if (dataPropertyLables[event.itemValue].includes('%')) {
+      this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => dataPropertyLables[s].includes('%'));
+      this.dropdownSources.forEach(item => !item.label.includes('%') ? item.disabled = true : item.disabled = false);
+    } else {
+      this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => !dataPropertyLables[s].includes('%'));
+      this.dropdownSources.forEach(item => item.label.includes('%') ? item.disabled = true : item.disabled = false);
+    }
+
+    this.processData();
+  }
+
+  dropDownSelect(event) {
+    this.dashboardChart.dataSources = [event.value];
     this.processData();
   }
 
@@ -161,7 +177,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   isGuage() {
-    return this.dashboardChart.chartType.type === 3;
+    return this.dashboardChart.chartType.type === ChartType.Guage;
   }
 
   processData(): void {

@@ -26,6 +26,3 @@ export interface ChartRequest  {
    sources: string;
    isLightTheme: boolean;
 }
-
-
-
