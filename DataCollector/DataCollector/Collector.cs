@@ -126,7 +126,7 @@ namespace DataCollector
                 {
                     var name = item.ProcessName;
                     //var ramMBytes = _processRamCounters[item.ProcessName].NextValue() / 1024 / 1024;
-                    var pCpu = _processCpuCounters[item.ProcessName].NextValue();
+                    var pCpu = (float)Math.Round(_processCpuCounters[item.ProcessName].NextValue() / Environment.ProcessorCount, 2);
                     //var pRam = (ramMBytes / GetTotalRAM()) * 100;
 
                     result.Add(new ProcessData
@@ -160,11 +160,6 @@ namespace DataCollector
                     }).ToList();
 
             float cpuSum = 0;
-            foreach (var item in temp)
-            {
-                cpuSum += item.PCpu;
-            }
-            Console.WriteLine(cpuSum);
 
             return temp;
         }
