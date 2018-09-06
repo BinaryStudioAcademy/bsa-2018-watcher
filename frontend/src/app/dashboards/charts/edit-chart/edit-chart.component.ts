@@ -38,7 +38,6 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   collectedDataForChart: CollectedData[] = [];
   showPreview = false;
-  processDataSource: DataProperty;
 
   colorSchemes = colorSets;
   historyTime: number;
@@ -112,7 +111,6 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   dropDownSelect(event) {
-    debugger;
     this.dashboardChart.dataSources = [event.value];
     this.processData();
   }
@@ -245,23 +243,16 @@ export class EditChartComponent implements OnInit, OnChanges {
     this.closeDialog();
   }
 
-
   handleFailedEdit(error) {
     this.toastrService.error(`Error occurred status: ${error.message}`);
   }
 
   createChartRequest(): ChartRequest {
-    let src: string;
-    if (!this.dashboardChart.showCommon) { // TODO: add conditions
-      src = this.processDataSource.toString();
-    } else {
-      src = this.dashboardChart.dataSources.join();
-    }
-    const chart: ChartRequest = {
+    return {
       showCommon: this.dashboardChart.showCommon,
       threshold: this.dashboardChart.threshold,
       mostLoaded: this.dashboardChart.mostLoaded,
-      schemeType: this.dashboardChart.colorScheme.name, // this.dashboardChart.schemeType,
+      schemeType: this.dashboardChart.colorScheme.name,
       dashboardId: this.dashboardId,
       showLegend: this.dashboardChart.showLegend,
       legendTitle: this.dashboardChart.legendTitle,
@@ -280,9 +271,8 @@ export class EditChartComponent implements OnInit, OnChanges {
       isShowSeriesOnHover: this.dashboardChart.showSeriesOnHover,
       title: this.dashboardChart.title,
       type: this.dashboardChart.chartType.type,
-      sources: src,
+      sources: this.dashboardChart.dataSources.join(),
       isLightTheme: this.dashboardChart.theme === 'light',
     };
-    return chart;
   }
 }
