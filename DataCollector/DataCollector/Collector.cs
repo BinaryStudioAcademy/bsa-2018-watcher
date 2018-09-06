@@ -136,8 +136,8 @@ namespace DataCollector
                     _processRamCounters.Remove(item.ProcessName);
                 }
             }
-            return result;
-        }
+            return result; // DODO merge processes if Processes with the same name
+        } 
     }
 #endif
 }
