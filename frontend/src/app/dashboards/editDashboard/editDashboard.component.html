@@ -1,6 +1,6 @@
-<p-dialog [(visible)]="display" [modal]="true" [closable]=false [responsive]="true" [width]="550" [minWidth]="400"
+<p-dialog [(visible)]="display" [modal]="true" [closable]=false [responsive]="true" [width]="810" [minWidth]="660"
           header="Create Dashboard" [maximizable]="false" [baseZIndex]="10000" [draggable]="false" [showHeader]="false"
-          appendTo="body" > <!--[contentStyle]="{'overflow':'visible'}" [width]="350" [minWidth]="200" -->
+          appendTo="body" [positionTop]="90"> <!--[top]="90px"left: 64px; [contentStyle]="{'overflow':'visible'}" [width]="350" [minWidth]="200" -->
     <div class="dashboard-inputs">
         <h2>Dashboard</h2>
         <div class="dashboard-input">
@@ -30,11 +30,11 @@
     <hr>
      
     <div class="center title">Generate common charts:</div>
-    <div class="footerbuttons field">
+    <div class="btns-generate footerbuttons">
         <button type="button" pButton (click)="generateAll()" label="Generate all" class="save ui-button-primary"></button>
         <button type="button" pButton (click)="customize()" label="Customize" class="close ui-button-primary"></button>
     </div>
-   
+   <div *ngIf="isSource" >
       <div class="wr-source" >   
         <p class="field view-inline">Select source: </p>
         <p-multiSelect 
@@ -43,25 +43,25 @@
             [style]="{'width':'192px'}"
             (onChange)="processDataForAll()" [disabled]="!isSource">
         </p-multiSelect> 
-      </div>      
-    
+      </div>     
+     
       <p class="field center">Visualization</p>
-      <p-scrollPanel [style]="{width: '100%', height: '300px'}">
-
-        <div  *ngIf="showPreview && dashboardChart.data && dashboardChart.data.length > 0">
-          <div *ngFor="let dashboardChart of dashboardCharts; let i = index" class="view-chart">  
-            <app-chart [chart]="dashboardChart"
-                      [data]="dashboardChart.data"
-                      [chartType]="dashboardChart.chartType"
-                      [showDownload]="false">
-            </app-chart>
-            <div class="checkbox-margin" *ngIf="isCustomize">
-              <p-checkbox [(ngModel)]="isIncluded[i]" binary="true"></p-checkbox>
-            </div>
-          </div>
-        </div>
-      </p-scrollPanel>      
-   
+      <p-scrollPanel [style]="{width: '100%', height: '235px'}">   
+        <div *ngIf="showPreview">      
+          <div *ngFor="let dashboardChart of dashboardCharts; let i = index" class="view-chart">            
+              <div class="checkbox-margin center">
+                <p-checkbox [(ngModel)]="isIncluded[i]" [disabled]="!isCustomize" binary="true"></p-checkbox>
+              </div>
+              <app-chart [chart]="dashboardChart"
+                        [data]="dashboardChart.data"
+                        [chartType]="dashboardChart.chartType"
+                        [showDownload]="false">
+              </app-chart>                  
+          </div>     
+        </div>   
+      </p-scrollPanel>       
+      
+    </div>
     <div class="footerbuttons">
         <button type="button" pButton (click)="edit(dTitle)" label="Save" class="save ui-button-success" [disabled]="dTitle.invalid "></button>
         <button type="button" pButton (click)="closeDialog()" label="Close" class="close ui-button-danger"></button>

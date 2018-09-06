@@ -189,18 +189,55 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return lastItem;
   }
 
-  createDashboard(newDashboard: DashboardRequest, charts: Array<ChartRequest>): void {
+  createDashboard(newDashboard: DashboardRequest, charts: Array<DashboardChart>): void {
+    const newCharts: ChartRequest[] = [];
     this.dashboardsService.create(newDashboard)
       .subscribe((dto) => {
-          this.onAddedCharts(charts, dto.id);
+          charts.forEach(c => {
+            c.showXAxis = true;
+            c.showYAxis = true;
+            c.view =  [600, 337];
+            newCharts.push(this.createChartRequest(c));
+          });
+          this.onAddedCharts(newCharts, dto.id);
           const item: DashboardMenuItem = this.transformToMenuItem(dto);
           this.dashboardMenuItems.unshift(item);
           this.activeDashboardItem = this.dashboardMenuItems[0];
+          this.activeDashboardItem.charts = charts;
           this.toastrService.success('Successfully added new dashboard!');
         },
         error => {
           this.toastrService.error(`Error occurred status: ${error}`);
         });
+  }
+  createChartRequest(dashboardChart: DashboardChart): ChartRequest {
+    const chart: ChartRequest = {
+      showCommon: dashboardChart.showCommon,
+      threshold: dashboardChart.threshold,
+      mostLoaded: '',
+      schemeType: dashboardChart.schemeType,
+      dashboardId: 0,
+      showLegend: dashboardChart.showLegend,
+      legendTitle: dashboardChart.legendTitle,
+      gradient: dashboardChart.gradient,
+      showXAxis: dashboardChart.showXAxis,
+      showYAxis: dashboardChart.showYAxis,
+      showXAxisLabel: dashboardChart.showXAxisLabel,
+      showYAxisLabel: dashboardChart.showYAxisLabel,
+      yAxisLabel: dashboardChart.yAxisLabel,
+      xAxisLabel: dashboardChart.xAxisLabel,
+      autoScale: dashboardChart.autoScale,
+      showGridLines: dashboardChart.showGridLines,
+      rangeFillOpacity: dashboardChart.rangeFillOpacity,
+      roundDomains: dashboardChart.roundDomains,
+      isTooltipDisabled: dashboardChart.tooltipDisabled,
+      isShowSeriesOnHover: dashboardChart.showSeriesOnHover,
+      title: dashboardChart.title,
+      type: dashboardChart.chartType.type,
+      sources: dashboardChart.dataSources.join(),
+      isLightTheme: dashboardChart.theme === 'light',
+    };
+    return chart;
   }
 
   updateDashboard(editTitle: string): void {
@@ -281,7 +318,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   }
 
-  onAddedCharts(array: Array<ChartRequest>, id: number) { console.log(id);
+  onAddedCharts(array: Array<ChartRequest>, id: number) {
     array.forEach( chart => {
       chart.dashboardId = id;
     this.chartService.create(chart).subscribe(value => {
