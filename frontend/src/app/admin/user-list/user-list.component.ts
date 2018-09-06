@@ -230,16 +230,6 @@ export class UserListComponent implements OnInit {
       state: OrganizationInviteState.Pending
     };
     this.invite = invite;
-    /*
-        this.organizationInvitesService.create(invite).subscribe(
-          value => {
-            this.toastrService.success('Organization Invite was created');
-            this.invite = value;
-          },
-          error => {
-            // this.toastrService.error('Organization Invite was not created');
-            this.toastrService.error(`Error ocured status: ${error.message}`);
-          });*/
   }
 
   onSentInviteToEmail() {
@@ -247,9 +237,6 @@ export class UserListComponent implements OnInit {
     this.onInvite(this.selectedCompany.id);
 
     this.invite.inviteEmail = this.user.email;
-    /* this.invite.state = OrganizationInviteState.Pending; console.log(this.invite.inviteEmail );
-     this.invite.createdByUserId = this.authService.getCurrentUser().id;
-     this.invite.organizationId = this.selectedCompany.id;*/
     this.organizationInvitesService.createdAndSend(this.invite).subscribe(
       value => {
         this.toastrService.success('Organization Invite was created and sends to email.');

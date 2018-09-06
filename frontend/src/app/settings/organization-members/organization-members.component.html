@@ -1,3 +1,44 @@
-<p>
-  organization-members works!
-</p>
+<div class="working-area">
+
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <div class="title">USERS</div>
+      <hr>
+    </div>
+  </div>
+
+  <p-table [value]="users" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]" [lazy]="true" (onLazyLoad)="loadUsersLazy($event)">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width:10%">JOINED AT</th>
+        <th style="width:10%">PHOTO</th>
+        <th style="width:10%">DISPLAY NAME</th>
+        <th style="width:15%">BIO</th>
+        <th style="width:25%">EMAIL</th>
+        <th style="width:10%">COMPANY ID</th>
+        <th style="width:6%">IS ACTIVE</th>
+        <th style="width:10%">ROLE</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td class="center">{{user.createdAt | date:'longDate'}}</td>
+        <td class="center">
+          <div class="small-photo ">
+            <img *ngIf="user.photoURL" src="{{user.photoURL}}" alt="profile photo" class="small-photo" />
+          </div>
+        </td>
+        <td class="center">{{user.displayName}}</td>
+        <td class="center">{{user.bio}}</td>
+        <td class="center">{{user.email}}</td>
+        <td class="center">{{user.lastPickedOrganizationId}}</td>
+        <td class="center">
+          <i *ngIf="user.isActive" class="fa fa-check-circle-o" style="font-size: 25px"></i>
+          <i *ngIf="!user.isActive" class="fa fa-times-circle-o" style="font-size: 25px"></i>
+        </td>
+        <td class="center">{{user.role.name}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+</div>
