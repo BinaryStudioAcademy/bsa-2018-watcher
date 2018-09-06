@@ -100,10 +100,17 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   multiSelect(event) {
+    if (event.value.length === 0) {
+      this.dropdownSources.forEach(item => item.disabled = false);
+      return;
+    }
+
     if (dataPropertyLables[event.itemValue].includes('%')) {
       this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => dataPropertyLables[s].includes('%'));
+      this.dropdownSources.forEach(item => !item.label.includes('%') ? item.disabled = true : item.disabled = false);
     } else {
       this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => !dataPropertyLables[s].includes('%'));
+      this.dropdownSources.forEach(item => item.label.includes('%') ? item.disabled = true : item.disabled = false);
     }
 
     this.processData();
