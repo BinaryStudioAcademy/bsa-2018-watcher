@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;Windows</DefineConstants>
+    <DefineConstants>TRACE;Linux</DefineConstants>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
