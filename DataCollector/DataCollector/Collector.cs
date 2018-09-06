@@ -15,13 +15,9 @@ namespace DataCollector
         private readonly Dictionary<string, PerformanceCounter> _processCpuCounters;
         private readonly Dictionary<string, PerformanceCounter> _processRamCounters;
         private readonly Dictionary<string, PerformanceCounter> _systemCounters;
-        private Timer _tm;
-
-        public ConcurrentBag<CollectedData> Data;
 
         private Collector()
         {
-            Data = new ConcurrentBag<CollectedData>();
             _processCpuCounters = new Dictionary<string, PerformanceCounter>();
             _processRamCounters = new Dictionary<string, PerformanceCounter>();
             _systemCounters = new Dictionary<string, PerformanceCounter>
@@ -34,46 +30,26 @@ namespace DataCollector
                 { "InterruptsTime", new PerformanceCounter("Processor", "Interrupts/sec", "_Total") },
                 { "LocalDisk", new PerformanceCounter("LogicalDisk", "% Free Space", "_Total") }
             };
-
-            Start();
         }
 
-        // use `/ 1048576` to get ram in MB
-        // and `/ (1048576 * 1024)` or `/ 1048576 / 1024` to get ram in GB
-        private float GetTotalRAM()
-        {
-            ManagementClass mc = new ManagementClass("Win32_ComputerSystem");
-            ManagementObjectCollection moc = mc.GetInstances();
-            foreach (ManagementObject item in moc)
-            {
-                return (float)Math.Round(Convert.ToDouble(item.Properties["TotalPhysicalMemory"].Value) / 1048576.0f, 0);
-            }
-
-            return 0.0f;
-        }
+       
 
         public static Collector Instance => Value.Value;
 
-        public void Start()
-        {
-            _tm = new Timer(500);
-            _tm.Elapsed += (sender, e) => Collect();
-            _tm.AutoReset = false;
-            _tm.Enabled = true;
-        }
 
-        public void Collect()
+        public CollectedData Collect()
         {
+            CollectedData dataItem = new CollectedData();
             try
             {
                 var allProcesses = GetProcesses();
-                var dataItem = new CollectedData
+                dataItem = new CollectedData
                 {
                     InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
                     InterruptsTimePercent = _systemCounters["InterruptsTime"].NextValue(),
 
                     TotalRamMBytes = GetTotalRAM(),
-                    RamUsagePercentage = _systemCounters["RAM"].NextValue(),
+                    RamUsagePercentage = 100 - (_systemCounters["FreeRam"].NextValue() / (GetTotalRAM() / 100)),
                     UsageRamMBytes = GetTotalRAM() - _systemCounters["FreeRam"].NextValue(),
 
                     CpuUsagePercentage = _systemCounters["CPU"].NextValue(),
@@ -86,15 +62,13 @@ namespace DataCollector
                     ProcessesCount = allProcesses.Count,
                     Time = DateTime.Now
                 };
-                Data.Add(dataItem);
                 
             }
             catch (Exception)
             {
                 // ignored
             }
-
-            _tm.Start();
+            return dataItem;
         }
 
         private float GetDiskTotalMbytes()
@@ -106,6 +80,24 @@ namespace DataCollector
         {
             return GetDiskTotalMbytes() - _systemCounters["DiskFreeMb"].NextValue();
         }
+
+        private float GetTotalRAM()
+        {
+            float totalRam = 1.0f;
+
+            ManagementObjectSearcher ramMonitor =    //запрос к WMI для получения памяти ПК
+            new ManagementObjectSearcher("SELECT TotalVisibleMemorySize,FreePhysicalMemory FROM Win32_OperatingSystem");
+
+            foreach (ManagementObject objram in ramMonitor.Get())
+            {
+                totalRam = Convert.ToUInt64(objram["TotalVisibleMemorySize"]) / 1024;    //общая память ОЗУ
+                float busyRam = totalRam - Convert.ToUInt64(objram["FreePhysicalMemory"]);//занятная память = (total-free)
+                
+            }
+
+            return totalRam;
+        }
+
 
         private List<ProcessData> GetProcesses()
         {

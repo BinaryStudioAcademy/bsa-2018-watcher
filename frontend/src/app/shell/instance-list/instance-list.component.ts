@@ -78,6 +78,11 @@ export class InstanceListComponent implements OnInit {
         routerLink: [`/user/instances/${instance.id}/edit`],
         styleClass: 'instance-options'
       }, {
+        label: 'Activities',
+        icon: 'fa fa fa-history',
+        routerLink: [`/user/instances/${instance.guidId}/activities`],
+        styleClass: 'instance-options'
+      }, {
         label: 'Download app',
         icon: 'fa fa-download',
         styleClass: 'instance-options',

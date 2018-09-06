@@ -43,6 +43,7 @@ import { ChartComponent } from './charts/chart/chart.component';
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
 import { NgxSmoothDnDModule } from 'ngx-smooth-dnd';
+import { InstanceActivityComponent } from './instance-activity/instance-activity.component';
 import { ReportComponent } from './report/report.component';
 
 @NgModule({
@@ -75,7 +76,8 @@ import { ReportComponent } from './report/report.component';
     TooltipModule,
     CalendarModule,
     ScrollPanelModule,
-    TooltipModule
+    TooltipModule,
+    TableModule
   ],
   declarations: [
     DashboardComponent,
@@ -95,7 +97,9 @@ import { ReportComponent } from './report/report.component';
     ChartComponent,
     ChartDashboardComponent,
     EditChartComponent,
-    ReportComponent
+    EditChartComponent,
+    ReportComponent,
+    InstanceActivityComponent
   ],
   exports: []
 })

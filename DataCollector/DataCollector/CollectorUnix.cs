@@ -12,36 +12,22 @@ namespace DataCollector
     {
         private static readonly Lazy<Collector> Value = new Lazy<Collector>(() => new Collector());
 
-        private Timer _tm;
-
         private List<ProcessData> processData;
-
-        public ConcurrentBag<CollectedData> Data;
 
         private Collector()
         {
-            Data = new ConcurrentBag<CollectedData>();
-          
-            Start();
         }
 
         public static Collector Instance => Value.Value;
 
-        public void Start()
+        public CollectedData Collect()
         {
-            _tm = new Timer(500);
-            _tm.Elapsed += (sender, e) => Collect();
-            _tm.AutoReset = false;
-            _tm.Enabled = true;
-        }
-
-        public void Collect()
-        {
+            CollectedData dataItem = new CollectedData();
             try
             {
                 var allProcesses = GetProcesses();
 
-                var dataItem = new CollectedData
+                dataItem = new CollectedData
                 {
 
                     //InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
@@ -62,14 +48,12 @@ namespace DataCollector
                     Time = DateTime.Now
 
                 };
-                Data.Add(dataItem);
             }
             catch (Exception e)
             {
                  // ignored 
             }
-
-            _tm.Start();
+            return dataItem;
         }
         private float GetTotalRam()
         {
