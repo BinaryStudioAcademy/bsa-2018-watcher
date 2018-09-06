@@ -103,10 +103,7 @@ namespace DataCollector
             str.Append($"LocalDiskTotalMBytes: {LocalDiskTotalMBytes:0.##}\n");
             str.Append($"LocalDiskUsagePercentage: {LocalDiskUsagePercentage:0.##}%\n");
 
-            foreach( var item in Processes)
-            {
-                Console.WriteLine($"{item.Name}\t\t {item.PCpu} \t {item.PRam} \t {item.RamMBytes}");
-            }
+           
 
             return str.ToString();
         }

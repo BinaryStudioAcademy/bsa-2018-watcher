@@ -75,8 +75,8 @@ namespace DataCollector
         {
             string ramData = Bash("free -b | awk '{print $2 \";\" $3 \";\" $4}'");
             var ramSwap  = ramData.Split("\n");
-            var ram = ramSwap[2].Split(";");
-            return float.Parse(ram[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f / 1024.0f;
+            var ram = ramSwap[1].Split(";");
+            return float.Parse(ram[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f / 1024.0f;
         }
 
         private float GetUsageRam()
@@ -84,7 +84,7 @@ namespace DataCollector
             string ramData = Bash("free -b | awk '{print $2 \";\" $3 \";\" $4}'");
             var ramSwap = ramData.Split("\n");
             var ram = ramSwap[1].Split(";");
-            return float.Parse(ram[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f / 1024.0f;
+            return float.Parse(ram[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f / 1024.0f;
         }
 
         private float GetUsageCpuPercentages()
@@ -155,8 +155,6 @@ namespace DataCollector
                     });
                 }
             }
-
-            Console.WriteLine(processData.Count);
             
             return processData;
         }

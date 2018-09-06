@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
 using System.Management;
-
+using System.Linq;
 
 namespace DataCollector
 {
@@ -112,10 +112,6 @@ namespace DataCollector
             var result = new List<ProcessData>();
             var processes = Process.GetProcesses();
 
-            
-
-
-
             foreach (var item in processes)
             {
                 if (!_processRamCounters.ContainsKey(item.ProcessName))
@@ -125,8 +121,19 @@ namespace DataCollector
                 if (!_processCpuCounters.ContainsKey(item.ProcessName))
                     _processCpuCounters.Add(item.ProcessName,
                         new PerformanceCounter("Process", "% Processor Time", item.ProcessName));
+            }
 
-                
+            foreach (var item in processes)
+            {
+                if (item.ProcessName == "Idle") continue;
+
+                if (!_processRamCounters.ContainsKey(item.ProcessName))
+                    _processRamCounters.Add(item.ProcessName,
+                        new PerformanceCounter("Process", "Working Set", item.ProcessName));
+
+                if (!_processCpuCounters.ContainsKey(item.ProcessName))
+                    _processCpuCounters.Add(item.ProcessName,
+                        new PerformanceCounter("Process", "% Processor Time", item.ProcessName));
 
                 try
                 {
@@ -149,6 +156,7 @@ namespace DataCollector
                     _processRamCounters.Remove(item.ProcessName);
                 }
             }
+
             return result; // DODO merge processes if Processes with the same name
         } 
     }
