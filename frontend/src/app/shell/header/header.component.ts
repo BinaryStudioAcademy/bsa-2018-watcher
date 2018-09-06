@@ -88,7 +88,7 @@ export class HeaderComponent implements OnInit {
       routerLink: ['/user/settings/organization-profile'],
     },
     {
-      label: 'Colleagues',
+      label: 'Members',
       icon: 'fa fa-fw fa-users',
       routerLink: [`/user/settings/organization-members`],
     },
