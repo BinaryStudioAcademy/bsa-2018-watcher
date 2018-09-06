@@ -20,6 +20,7 @@ import {Dashboard} from '../../shared/models/dashboard.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import { ChartRequest } from '../../shared/requests/chart-request.model';
+import {CustomData} from '../charts/models';
 
 
 @Component({
@@ -64,11 +65,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } catch (e) {
       console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(e));
     }
-
-      // .then(async ([firebaseToken, watcherToken]) => {
-      //   await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
-      // })
-      // .catch(reason => console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(reason)));
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
 
     this.paramsSubscription = this.activateRoute.params.subscribe(params => {
@@ -95,8 +91,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
               // -1 is last item - plus sign
               for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
                 for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
-                  const tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
-                    this.dashboardMenuItems[i].charts[j].dataSources, data);
+                  let tempData: CustomData[];
+                  if (this.dashboardMenuItems[i].charts[j].showCommon) {
+                    tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
+                      this.dashboardMenuItems[i].charts[j].dataSources, data);
+                  } else {
+                    debugger;
+                    tempData = this.dataService.prepareProcessData(this.dashboardMenuItems[i].charts[j].chartType.type,
+                      this.dashboardMenuItems[i].charts[j].dataSources[0], data, this.dashboardMenuItems[i].charts[j].mostLoaded);
+                  }
                   this.dashboardMenuItems[i].charts[j].data = [...tempData];
                 }
               }
@@ -189,18 +192,58 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return lastItem;
   }
 
-  createDashboard(newDashboard: DashboardRequest, charts: Array<ChartRequest>): void {
+  createDashboard(newDashboard: DashboardRequest, charts: Array<DashboardChart>): void {
+    const newCharts: ChartRequest[] = [];
     this.dashboardsService.create(newDashboard)
       .subscribe((dto) => {
-          this.onAddedCharts(charts, dto.id);
           const item: DashboardMenuItem = this.transformToMenuItem(dto);
           this.dashboardMenuItems.unshift(item);
           this.activeDashboardItem = this.dashboardMenuItems[0];
           this.toastrService.success('Successfully added new dashboard!');
+          if (charts) {
+            charts.forEach(c => {
+              c.showXAxis = true;
+              c.showYAxis = true;
+              c.showLegend = true;
+              c.view =  [600, 337];
+              newCharts.push(this.createChartRequest(c));
+            });
+            this.onAddedCharts(newCharts, dto.id);
+            this.activeDashboardItem.charts = charts;
+          }
         },
         error => {
           this.toastrService.error(`Error occurred status: ${error}`);
         });
+  }
+  createChartRequest(dashboardChart: DashboardChart): ChartRequest {
+    const chart: ChartRequest = {
+      showCommon: dashboardChart.showCommon,
+      threshold: dashboardChart.threshold,
+      mostLoaded: 1,
+      schemeType: dashboardChart.schemeType,
+      dashboardId: 0,
+      showLegend: dashboardChart.showLegend,
+      legendTitle: dashboardChart.legendTitle,
+      gradient: dashboardChart.gradient,
+      showXAxis: dashboardChart.showXAxis,
+      showYAxis: dashboardChart.showYAxis,
+      showXAxisLabel: dashboardChart.showXAxisLabel,
+      showYAxisLabel: dashboardChart.showYAxisLabel,
+      yAxisLabel: dashboardChart.yAxisLabel,
+      xAxisLabel: dashboardChart.xAxisLabel,
+      autoScale: dashboardChart.autoScale,
+      showGridLines: dashboardChart.showGridLines,
+      rangeFillOpacity: dashboardChart.rangeFillOpacity,
+      roundDomains: dashboardChart.roundDomains,
+      isTooltipDisabled: dashboardChart.tooltipDisabled,
+      isShowSeriesOnHover: dashboardChart.showSeriesOnHover,
+      title: dashboardChart.title,
+      type: dashboardChart.chartType.type,
+      sources: dashboardChart.dataSources.join(),
+      isLightTheme: dashboardChart.theme === 'light',
+    };
+    return chart;
   }
 
   updateDashboard(editTitle: string): void {
@@ -281,7 +324,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   }
 
-  onAddedCharts(array: Array<ChartRequest>, id: number) { console.log(id);
+  onAddedCharts(array: Array<ChartRequest>, id: number) {
     array.forEach( chart => {
       chart.dashboardId = id;
     this.chartService.create(chart).subscribe(value => {
@@ -355,6 +398,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
+    debugger; // TODO: check how data source looks for multiple chart
     const item: DashboardMenuItem = {
       label: dashboard.title,
       dashId: dashboard.id,

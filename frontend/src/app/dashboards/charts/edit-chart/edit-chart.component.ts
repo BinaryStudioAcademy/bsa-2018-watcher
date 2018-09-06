@@ -25,7 +25,6 @@ export class EditChartComponent implements OnInit, OnChanges {
   @Output() dashboardChartChange = new EventEmitter();
 
   visible: boolean;
-  processesNumber = 1;
 
   @Input() onDisplay: EventEmitter<boolean>;
   @Input() dashboardId: number;
@@ -39,7 +38,6 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   collectedDataForChart: CollectedData[] = [];
   showPreview = false;
-  chartForm: FormGroup;
   processDataSource: DataProperty;
 
   colorSchemes = colorSets;
@@ -90,13 +88,6 @@ export class EditChartComponent implements OnInit, OnChanges {
       {label: dataPropertyLables[DataProperty.interruptsPerSeconds], value: DataProperty.interruptsPerSeconds},
       {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
     ];
-
-    this.chartForm = this.fb.group({
-      isMultiple: new FormControl({value: false, disabled: false}),
-      mostLoaded: new FormControl({value: 1, disabled: false}),
-      xAxisLabel: new FormControl({value: '', disabled: false}),
-      yAxisLabel: new FormControl({value: '', disabled: false})
-    });
   }
 
   getMultiSelectNumber() {
@@ -128,27 +119,42 @@ export class EditChartComponent implements OnInit, OnChanges {
   createSourceItems() {
     switch (this.dashboardChart.chartType.type) {
       case ChartType.Pie:
-        this.dropdownGroupSources = [{
-          label: 'Percentage',
-          items: [
-            { label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage },
-            { label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage },
-          ]
-        }, {
-          label: 'Memory',
-          items: [
-            { label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes },
-            { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
-          ]
-        }];
+        if (this.dashboardChart.showCommon) {
+          this.dropdownGroupSources = [{
+            label: 'Percentage',
+            items: [
+              {label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage},
+              {label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage},
+            ]
+          }, {
+            label: 'Memory',
+            items: [
+              {label: dataPropertyLables[DataProperty.localDiskFreeMBytes], value: DataProperty.localDiskFreeMBytes},
+              {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
+            ]
+          }];
+        } else {
+          this.dropdownGroupSources = [{
+            label: 'Percentage',
+            items: [
+              {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
+              {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
+            ]
+          }, {
+            label: 'Memory',
+            items: [
+              {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
+            ]
+          }];
+        }
         break;
       default:
         this.dropdownGroupSources = [{
           label: 'Sources', // TODO: change
           items: [
-            { label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu },
-            { label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam },
-            { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
+            {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
+            {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
+            {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
           ]
         }];
         break;
@@ -175,6 +181,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   processData(): void {
+    debugger;
     this.showPreview = false;
     if (this.dashboardChart.showCommon) {
       this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
@@ -182,7 +189,7 @@ export class EditChartComponent implements OnInit, OnChanges {
     } else {
       debugger;
       this.dashboardChart.data = this.dataService.prepareProcessData(this.dashboardChart.chartType.type,
-        this.processDataSource, this.collectedDataForChart, this.processesNumber);
+        this.processDataSource, this.collectedDataForChart, this.dashboardChart.mostLoaded);
     }
 
     switch (this.dashboardChart.chartType.type) {
@@ -207,7 +214,6 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   closeDialog() {
     this.visible = false;
-    this.chartForm.reset();
     this.closed.emit();
   }
 
@@ -246,11 +252,18 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   createChartRequest(): ChartRequest {
+    debugger;
+    let src: string;
+    if (!this.dashboardChart.showCommon) { // TODO: add conditions
+      src = this.processDataSource.toString();
+    } else {
+      src = this.dashboardChart.dataSources.join();
+    }
     const chart: ChartRequest = {
       showCommon: this.dashboardChart.showCommon,
       threshold: this.dashboardChart.threshold,
-      mostLoaded: '' + this.chartForm.get('mostLoaded').value,
-      schemeType: this.dashboardChart.schemeType,
+      mostLoaded: this.dashboardChart.mostLoaded,
+      schemeType: this.dashboardChart.colorScheme.name, // this.dashboardChart.schemeType,
       dashboardId: this.dashboardId,
       showLegend: this.dashboardChart.showLegend,
       legendTitle: this.dashboardChart.legendTitle,
@@ -269,9 +282,8 @@ export class EditChartComponent implements OnInit, OnChanges {
       isShowSeriesOnHover: this.dashboardChart.showSeriesOnHover,
       title: this.dashboardChart.title,
       type: this.dashboardChart.chartType.type,
-      sources: this.dashboardChart.dataSources.join(),
+      sources: src,
       isLightTheme: this.dashboardChart.theme === 'light',
-      scheme: this.dashboardChart.colorScheme
     };
     return chart;
   }

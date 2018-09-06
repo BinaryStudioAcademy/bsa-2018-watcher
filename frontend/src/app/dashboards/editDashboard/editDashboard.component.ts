@@ -2,16 +2,16 @@ import { Component, OnInit, OnChanges, Output, Input } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import {NgModel} from '@angular/forms';
 import { SelectItem } from 'primeng/api';
-import { DashboardChart } from './../models/dashboard-chart';
-import { ChartType, chartTypes } from './../../shared/models/chart-type.enum';
-import { DataProperty } from './../../shared/models/data-property.enum';
-import { CollectedDataService } from './../../core/services/collected-data.service';
-import { CollectedData } from './../../shared/models/collected-data.model';
-import { DataService } from './../../core/services/data.service';
-import { ChartService } from './../../core/services/chart.service';
+import { DashboardChart } from '../models/dashboard-chart';
+import { ChartType, chartTypes } from '../../shared/models/chart-type.enum';
+import { DataProperty } from '../../shared/models/data-property.enum';
+import { CollectedDataService } from '../../core/services/collected-data.service';
+import { CollectedData } from '../../shared/models/collected-data.model';
+import { DataService } from '../../core/services/data.service';
+import { ChartService } from '../../core/services/chart.service';
 import { defaultOptions } from '../charts/models/chart-options';
-import {dashboardChartTypes} from './../charts/models/dashboardChartTypes';
-import { ChartRequest } from './../../shared/requests/chart-request.model';
+import {dashboardChartTypes} from '../charts/models/dashboardChartTypes';
+import { ChartRequest } from '../../shared/requests/chart-request.model';
 
 @Component({
   selector: 'app-edit-dashboard',
@@ -26,17 +26,12 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   @Input() display: boolean;
   @Input() dashboardTitle: string;
 
-  // @Output() added = new EventEmitter<Array<ChartRequest>>();
-
   showPreview = false;
   dropdownSources: SelectItem[];
   collectedDataForChart: CollectedData[] = [];
   dashboardCharts: DashboardChart[] = [];
   newCharts: ChartRequest[] = [];
-  dashboardChart1 = { ...defaultOptions };
-  dashboardChart2 = { ...defaultOptions };
-  dashboardChart3 = { ...defaultOptions };
-  dashboardChart = { ...defaultOptions };
+
   isSource: Boolean = false;
   isCustomize: Boolean = false;
   sources: DataProperty[];
@@ -50,14 +45,12 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.closed.emit();
     this.title = '';
     // this.dashboardTitle = '';
-    this.sources = [];
-    this.isSource = false;
-    this.isCustomize = false;
-    this.showPreview = false;
+    this.reset();
   }
 
   generateAll() {
     this.isSource = true;
+    this.isCustomize = false;
   }
 
   customize() {
@@ -66,17 +59,30 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   edit(model: NgModel): void {
+    let correction = 0;
     for (let i = 0; i < 4; i++) {
-      this.newCharts.push(this.createChartRequest(this.dashboardCharts[i]));
       if (!this.isIncluded[i] && this.isCustomize) {
-         this.newCharts.splice(i, 1);
+         this.dashboardCharts.splice(i - correction, 1);
+         correction++;
       }
     }
-    this.edited.emit({title: this.title, charts: this.newCharts});
+    this.edited.emit({title: this.title, charts: this.isSource ? this.dashboardCharts : null});
     // this.edited.emit(this.title);
     this.title = '';
     model.reset();
-    /*this.added.emit(this.newCharts);*/
+    this.reset();
+  }
+
+  reset() {
+    this.sources = [];
+    this.isSource = false;
+    this.isCustomize = false;
+    this.showPreview = false;
+    this.dashboardCharts = [];
+    this.isIncluded = [];
+    this.dashboardCharts = [];
+    this.isIncluded = [];
+    this.fillCharts();
   }
 
   ngOnChanges(changes) {
@@ -84,32 +90,33 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.collectedDataService.getBuilderData()
-    .subscribe(value => {
+    this.collectedDataService.getBuilderData().subscribe(value => {
       this.collectedDataForChart = value;
     });
 
-    this.dropdownSources = [
-      { label: 'CPU', value: DataProperty.cpuUsagePercent },
-      { label: 'RAM', value: DataProperty.ramUsagePercent },
-      { label: 'DISC', value: DataProperty.localDiskFreeSpacePercent }
-    ];
+    // this.dropdownSources = [
+    //     { label: 'CPU', value: DataProperty.cpuUsagePercent },
+    //     { label: 'RAM', value: DataProperty.ramUsagePercent },
+    //     { label: 'DISC', value: DataProperty.localDiskFreeSpacePercent }
+    // ];
 
     this.fillCharts();
   }
 
   fillCharts() {
-    this.dashboardCharts.push(this.dashboardChart);
-    this.dashboardCharts.push(this.dashboardChart1);
-    this.dashboardCharts.push(this.dashboardChart2);
-    this.dashboardCharts.push(this.dashboardChart3);
     for (let i = 0; i < 4; i++) {
         this.isIncluded.push(true);
-        this.dashboardCharts[i].view = [476, 247];
+        const dashboardChart = { ...defaultOptions };
+        this.dashboardCharts.push(dashboardChart);
+        this.dashboardCharts[i].view = [378, 204];
         this.dashboardCharts[i].chartType = dashboardChartTypes[i];
         this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
         this.dashboardCharts[i].chartType.type = dashboardChartTypes[i].type;
         this.dashboardCharts[i].chartType.title = dashboardChartTypes[i].title;
+        this.dashboardCharts[i].title = dashboardChartTypes[i].title;
+        this.dashboardCharts[i].showXAxis = false;
+        this.dashboardCharts[i].showYAxis = false;
+        this.dashboardCharts[i].showLegend = false;
     }
   }
 
@@ -121,6 +128,8 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.showPreview = false;
     dashboardChart.data = this.dataService.prepareData(dashboardChart.chartType.type,
       this.sources, this.collectedDataForChart);
+
+    dashboardChart.dataSources = this.sources;
 
     switch (dashboardChart.chartType.type) {
       case ChartType.BarVertical:
@@ -147,7 +156,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     const chart: ChartRequest = {
       showCommon: dashboardChart.showCommon,
       threshold: dashboardChart.threshold,
-      mostLoaded: '',
+      mostLoaded: 1,
       schemeType: dashboardChart.schemeType,
       dashboardId: 0,
       showLegend: dashboardChart.showLegend,
@@ -169,7 +178,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
       type: dashboardChart.chartType.type,
       sources: this.sources.join(),
       isLightTheme: dashboardChart.theme === 'light',
-      scheme: dashboardChart.colorScheme
     };
     return chart;
   }

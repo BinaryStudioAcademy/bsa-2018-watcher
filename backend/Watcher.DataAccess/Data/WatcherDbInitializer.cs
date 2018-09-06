@@ -137,7 +137,7 @@
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 //.RuleFor(o => o.ShowCommon, true)
                 .RuleFor(o => o.Threshold, f => f.Random.Number(100))
-                .RuleFor(o => o.MostLoaded, f => f.PickRandom("MostLoaded1", "MostLoaded2", "MostLoaded3"))
+                .RuleFor(o => o.MostLoaded, 1)
                 .RuleFor(o => o.DashboardId, f => f.PickRandom(dashboards).Id)
                 .RuleFor(o => o.SchemeType, "ordinal")
                 .RuleFor(o => o.ShowLegend, true)

@@ -10,14 +10,14 @@ import {DashboardChart} from '../../dashboards/models/dashboard-chart';
 import {dashboardChartTypes} from '../../dashboards/charts/models/dashboardChartTypes';
 import {defaultOptions} from '../../dashboards/charts/models/chart-options';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
-import {ProcessData} from '../../shared/models/process-data.model';
+import {colorSets} from '@swimlane/ngx-charts/release/utils';
 
 @Injectable()
 export class DataService {
   constructor() {
   }
 
-  convertStringToArrEnum(sources: string) {
+  convertStringToArrEnum(sources: string): DataProperty[] {
     const array: DataProperty[] = [];
     const arrNumbers = sources.split(',');
 
@@ -29,14 +29,21 @@ export class DataService {
   }
 
   instantiateDashboardChart(value: Chart, collData: CollectedData[]): DashboardChart {
+    debugger;
     const dataProps = this.convertStringToArrEnum(value.sources);
+    let chartData = [];
+    if (value.showCommon) {
+      chartData = this.prepareData(value.type, dataProps, collData);
+    } else {
+      chartData = this.prepareProcessData(value.type, dataProps[0], collData, value.mostLoaded);
+    }
     const dashChart: DashboardChart = {
       view: [600, 300],
       id: value.id,
       showCommon: value.showCommon,
       threshold: value.threshold,
       mostLoaded: value.mostLoaded,
-      colorScheme: {...defaultOptions.colorScheme},
+      colorScheme: {...colorSets.find(s => s.name === value.schemeType)}, // {...defaultOptions.colorScheme},
       schemeType: defaultOptions.schemeType,
       showLegend: value.showLegend,
       legendTitle: value.legendTitle,
@@ -47,6 +54,8 @@ export class DataService {
       showYAxisLabel: value.showYAxisLabel,
       yAxisLabel: value.yAxisLabel,
       xAxisLabel: value.xAxisLabel,
+      yScaleMin: defaultOptions.yScaleMin,
+      yScaleMax: defaultOptions.yScaleMax,
       autoScale: value.autoScale,
       showGridLines: value.showGridLines,
       rangeFillOpacity: value.rangeFillOpacity,
@@ -57,7 +66,7 @@ export class DataService {
       curveClosed: defaultOptions.curveClosed,
       title: value.title,
       dataSources: dataProps,
-      data: this.prepareData(value.type, dataProps, collData),
+      data: chartData,
       activeEntries: [],
       chartType: {...dashboardChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
       theme: value.isLightTheme ? 'light' : 'dark'
@@ -69,7 +78,8 @@ export class DataService {
   instantiateDashboardChartFromRequest(value: ChartRequest, chartId: number, collData: CollectedData[]): DashboardChart {
     const chart: Chart = {
       id: chartId,
-      ...value
+      ...value,
+      scheme: {...colorSets.find(s => s.name === value.schemeType)}
     };
 
     return this.instantiateDashboardChart(chart, collData);

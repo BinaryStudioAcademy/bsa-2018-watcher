@@ -10,8 +10,4 @@
     <None Remove="Dtos\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\backend\Watcher.Common\Watcher.Common.csproj" />
-  </ItemGroup>
-
 </Project>

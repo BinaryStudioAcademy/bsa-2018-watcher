@@ -45,19 +45,17 @@
                   (onChange)="dropDownSelect($event)"
                   [group]="true">
       </p-dropdown>
-      <form [formGroup]="chartForm">
-        <p class="field">Number of heavy processes:</p>
-        <div class="number-spiner">
-          <p-spinner size="17"
-                     [(ngModel)]="processesNumber"
-                     (onChange)="processData()"
-                     [disabled]="spinnerDisabled"
-                     formControlName="mostLoaded"
-                     [min]="1"
-                     [max]="100">
-          </p-spinner>
-        </div>
-      </form>
+
+      <p class="field">Number of heavy processes:</p>
+      <div class="number-spiner">
+        <p-spinner size="17"
+                   [(ngModel)]="dashboardChart.mostLoaded"
+                   (onChange)="processData()"
+                   [disabled]="spinnerDisabled"
+                   [step]="1"
+                   [min]="1"
+                   [max]="100"></p-spinner>
+      </div>
       <p class="field">Threshold: {{dashboardChart.threshold}}</p>
       <div class="field">
         <p-slider [(ngModel)]="dashboardChart.threshold"
@@ -127,7 +125,8 @@
     <div class="center">
       <!-- [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))"-->
       <!--&& selectedSource <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
-      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onEditChart()" label="Save"></button>
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onEditChart()"
+              label="Save"></button>
       <button type="button" pButton (click)="closeDialog()" label="Cancel" class="ui-button-warning"></button>
     </div>
   </p-footer>

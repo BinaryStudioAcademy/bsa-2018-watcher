@@ -42,7 +42,7 @@
                         <div class="ui-g ui-fluid">
                             <div class="ui-g-12">
                                 <div class="ui-inputgroup">
-                                    <input [(ngModel)]="organization.name" type="text" pInputText placeholder="Company name" required id="cName" required minlength="4"
+                                    <input [(ngModel)]="name" type="text" pInputText placeholder="Company name" required id="cName" required minlength="4"
                                         #cName="ngModel" />
                                     <div *ngIf="cName?.invalid && (cName?.dirty || cName?.touched)" class="alert alert-danger">
                                         <div *ngIf="cName.errors.required">Company name is required.</div>

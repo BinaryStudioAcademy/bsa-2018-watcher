@@ -11,6 +11,7 @@ export enum DataProperty {
   totalRamMBytes,
   ramUsagePercentage,
   interruptsPerSeconds,
+  localDiskFreeMBytes,
   localDiskUsageMBytes,
   localDiskTotalMBytes,
   localDiskUsagePercentage,
@@ -34,6 +35,7 @@ dataPropertyLables[DataProperty.totalRamMBytes] = 'Total Ram MegaBytes';
 dataPropertyLables[DataProperty.ramUsagePercentage] = 'Ram usage %';
 dataPropertyLables[DataProperty.interruptsPerSeconds] = '# of interrupts per second';
 dataPropertyLables[DataProperty.localDiskUsageMBytes] = 'Disc usage MegaBytes';
+dataPropertyLables[DataProperty.localDiskFreeMBytes] = 'Disc free MegaBytes';
 dataPropertyLables[DataProperty.localDiskTotalMBytes] = 'Total Disc MegaBytes';
 dataPropertyLables[DataProperty.localDiskUsagePercentage] = 'Disc usage %';
 dataPropertyLables[DataProperty.time] = 'Time';

@@ -4,9 +4,6 @@ using DataAccumulator.Shared.Interfaces;
 
 namespace DataAccumulator.Shared.Models
 {
-    using Watcher.Common.MoveToFrontend;
-
-    [ExportClassToTypescript]
     public class CollectedDataDto : ICollectedDataDto
     {
         // Id to reference
