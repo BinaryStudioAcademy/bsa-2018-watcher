@@ -1,21 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CropperSettings } from 'ngx-img-cropper/src/cropperSettings';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { UserOrganizationService } from '../../core/services/user-organization.service';
-import { RoleService } from '../../core/services/role.service';
+import { OrganizationRoleService } from '../../core/services/organization-role.service';
 import { Organization } from '../../shared/models/organization.model';
 import { User } from '../../shared/models/user.model';
 import { OrganizationInvite } from '../../shared/models/organization-invite.model';
 import { Role } from '../../shared/models/role.model';
 import { SelectItem, LazyLoadEvent } from 'primeng/api';
 import { UserService } from '../../core/services/user.service';
-import { OrganizationService } from '../../core/services/organization.service';
-import { ImageCropperComponent } from 'ngx-img-cropper';
 import { ToastrService } from '../../core/services/toastr.service';
-import { OrganizationInvitesService } from '../../core/services/organization-invites.service';
-import { PathService } from '../../core/services/path.service';
 import { OrganizationInviteState } from '../../shared/models/organization-invite-state.enum';
+import { UserOrganization } from '../../shared/models/user-organization.model';
 
 @Component({
   selector: 'app-organization-members',
@@ -24,10 +19,9 @@ import { OrganizationInviteState } from '../../shared/models/organization-invite
 })
 export class OrganizationMembersComponent implements OnInit {
 
-  users: User[];
-  user: User;
+  userOrganizationsAll: UserOrganization[];
+  userOrganizations: UserOrganization[];
   currentUser: User;
-  displayPopup: boolean;
   totalRecords: number;
   lstOrganizations: Organization[];
   lstUserCompany: Organization[];
@@ -46,17 +40,12 @@ export class OrganizationMembersComponent implements OnInit {
   display: Boolean = false;
 
   constructor(
-    private fb: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
-    private organizationService: OrganizationService,
-    private organizationInvitesService: OrganizationInvitesService,
-    private roleService: RoleService,
-    private pathService: PathService,
     private userOrganizationService: UserOrganizationService,
+    private organizationRoleService: OrganizationRoleService,
     private toastrService: ToastrService) {
 
-    this.displayPopup = false;
     this.lstUserCompany = new Array<Organization>();
     this.dropdownRole = new Array<SelectItem>();
     this.dropdownCompany = new Array<SelectItem>();
@@ -73,16 +62,15 @@ export class OrganizationMembersComponent implements OnInit {
 
     this.userService.getNumber().subscribe((value: number) => this.totalRecords = value);
 
-    this.userService.getRange(1, 5).subscribe((value: User[]) => {
-      this.users = value;
-    });
+    this.userOrganizationService
+        .getByOrganizationId(this.currentUser.lastPickedOrganizationId)
+        .subscribe((value: UserOrganization[]) => {
+          this.userOrganizationsAll = value;
+          const rows = this.userOrganizationsAll.length >= 5 ? 5 : (this.userOrganizationsAll.length - 1);
+          this.userOrganizations = this.userOrganizationsAll.slice(0, rows);
+        });
 
-    this.organizationService.getAll().subscribe((value: Organization[]) => {
-      this.lstOrganizations = value;
-      this.fillDropdownCompany();
-    });
-
-    this.roleService.getAll().subscribe((value: Role[]) => {
+    this.organizationRoleService.getAll().subscribe((value: Role[]) => {
       this.lstRoles = value;
       this.fillDropdownRole();
     });
@@ -91,12 +79,6 @@ export class OrganizationMembersComponent implements OnInit {
   private fillDropdownRole(): void {
     this.lstRoles.forEach(element => {
       this.dropdownRole.push({ label: element.name, value: element });
-    });
-  }
-
-  private fillDropdownCompany(): void {
-    this.lstOrganizations.forEach(element => {
-      this.dropdownCompany.push({ label: element.name, value: element });
     });
   }
 
@@ -109,7 +91,7 @@ export class OrganizationMembersComponent implements OnInit {
     return null;
   }
 
-  onUnassign(company: Organization, i: number) {
+  /*onUnassign(company: Organization, i: number) {
     this.lstUnassign[i] = true;
     if (this.lstUserCompany.length <= 1) {
       this.toastrService.warning('The user must have at least one organization.');
@@ -130,18 +112,11 @@ export class OrganizationMembersComponent implements OnInit {
         }
       },
       error => {
-        this.toastrService.error(`Error ocured status: ${error.message}`);
+        this.toastrService.error(`Error occurred status: ${error.message}`);
       }
     );
   }
-
-
-  onCancel() {
-    this.displayPopup = false;
-    this.user = null;
-    this.lstUnassign = [];
-  }
-
+*/
   onInvite(id: number) {
     const invite: OrganizationInvite = {
       id: 0,
@@ -152,32 +127,10 @@ export class OrganizationMembersComponent implements OnInit {
       createdByUser: null,
       organization: null,
       createdDate: null,
-      experationDate: null,
+      expirationDate: null,
       link: null,
       state: OrganizationInviteState.Pending
     };
     this.invite = invite;
   }
-
-  onSentInviteToEmail() {
-    if (this.user.email === null) { return; }
-    this.onInvite(this.selectedCompany.id);
-
-    this.invite.inviteEmail = this.user.email;
-    this.organizationInvitesService.createdAndSend(this.invite).subscribe(
-      value => {
-        this.toastrService.success('Organization Invite was created and sends to email.');
-      },
-      error => {
-        this.toastrService.error(`Error ocured status: ${error.message}`);
-      });
-  }
-
-  loadUsersLazy(event: LazyLoadEvent) {
-    const currentPage = event.first / event.rows + 1;
-    this.userService.getRange(currentPage, event.rows).subscribe((value: User[]) => {
-      this.users = value;
-    });
-  }
-
 }

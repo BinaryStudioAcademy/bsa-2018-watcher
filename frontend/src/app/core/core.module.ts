@@ -37,6 +37,7 @@ import { DashboardsHub} from './hubs/dashboards.hub';
 import { ChatHub } from './hubs/chat.hub';
 import { NotificationsHubService } from './hubs/notifications.hub';
 import { OrganizationInvitesHub } from './hubs/organization-invites.hub';
+import { OrganizationRoleService } from './services/organization-role.service';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { OrganizationInvitesHub } from './hubs/organization-invites.hub';
     PathService,
     ResponseService,
     RoleService,
+    OrganizationRoleService,
     SystemToastrService,
     ToastrService,
     TokenService,

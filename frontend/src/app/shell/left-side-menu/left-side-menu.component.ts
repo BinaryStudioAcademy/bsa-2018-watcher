@@ -66,7 +66,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       routerLink: ['/user/settings/notification-settings']
     }, {
       label: 'Colleagues',
-      icon: 'fa fa-users',
+      icon: 'fa fa-fw fa-users',
       routerLink: [`/user/settings/organization-members`],
     }];
 

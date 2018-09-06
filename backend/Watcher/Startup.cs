@@ -111,6 +111,7 @@ namespace Watcher
             services.AddTransient<IOrganizationInvitesService, OrganizationInvitesService>();
             services.AddTransient<ICollectedDataService, CollectedDataService>();
             services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IOrganizationRoleService, OrganizationRoleService>();
             services.AddTransient<IUserOrganizationService, UserOrganizationService>();
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();

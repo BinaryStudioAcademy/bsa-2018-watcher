@@ -14,6 +14,6 @@ export interface OrganizationInvite  {
    inviteEmail: string;
    invitedUserId: string;
    createdDate: Date;
-   experationDate: Date;
+   expirationDate: Date;
    state: OrganizationInviteState;
 }

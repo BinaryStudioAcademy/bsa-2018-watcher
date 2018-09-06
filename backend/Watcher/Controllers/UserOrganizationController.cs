@@ -62,7 +62,7 @@ namespace Watcher.Controllers
             return Ok(dtos);
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         [AllowAnonymous]
         public virtual async Task<ActionResult<IEnumerable<UserOrganizationDto>>> GetByOrganization(int id)
         {
