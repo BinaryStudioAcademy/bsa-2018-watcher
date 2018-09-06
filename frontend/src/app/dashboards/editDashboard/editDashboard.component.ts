@@ -89,11 +89,11 @@ export class EditDashboardComponent implements OnInit, OnChanges {
       this.collectedDataForChart = value;
     });
 
-    this.dropdownSources = [
-      { label: 'CPU', value: DataProperty.cpuUsagePercent },
-      { label: 'RAM', value: DataProperty.ramUsagePercent },
-      { label: 'DISC', value: DataProperty.localDiskFreeSpacePercent }
-    ];
+    // this.dropdownSources = [
+    //     { label: 'CPU', value: DataProperty.cpuUsagePercent },
+    //     { label: 'RAM', value: DataProperty.ramUsagePercent },
+    //     { label: 'DISC', value: DataProperty.localDiskFreeSpacePercent }
+    // ];
 
     this.fillCharts();
   }

@@ -47,6 +47,8 @@ export class DataService {
       showYAxisLabel: value.showYAxisLabel,
       yAxisLabel: value.yAxisLabel,
       xAxisLabel: value.xAxisLabel,
+      yScaleMin: defaultOptions.yScaleMin,
+      yScaleMax: defaultOptions.yScaleMax,
       autoScale: value.autoScale,
       showGridLines: value.showGridLines,
       rangeFillOpacity: value.rangeFillOpacity,

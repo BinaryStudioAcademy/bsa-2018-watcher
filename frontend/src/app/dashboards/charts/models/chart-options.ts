@@ -23,6 +23,8 @@ export const defaultOptions = {
   showYAxisLabel: true,
   yAxisLabel: '',
   xAxisLabel: '',
+  yScaleMax: 100,
+  yScaleMin: 0,
   autoScale: true,
   showGridLines: true,
   rangeFillOpacity: 0.5,

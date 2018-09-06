@@ -18,6 +18,8 @@ export interface DashboardChart {
   showYAxisLabel: boolean;
   yAxisLabel: string;
   xAxisLabel: string;
+  yScaleMax: number;
+  yScaleMin: number;
   autoScale: boolean;
   showGridLines: boolean;
   rangeFillOpacity: number;
