@@ -3,7 +3,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
-
+using System.Management;
+using System.Linq;
 
 namespace DataCollector
 {
@@ -14,13 +15,9 @@ namespace DataCollector
         private readonly Dictionary<string, PerformanceCounter> _processCpuCounters;
         private readonly Dictionary<string, PerformanceCounter> _processRamCounters;
         private readonly Dictionary<string, PerformanceCounter> _systemCounters;
-        private Timer _tm;
-
-        public ConcurrentBag<CollectedData> Data;
 
         private Collector()
         {
-            Data = new ConcurrentBag<CollectedData>();
             _processCpuCounters = new Dictionary<string, PerformanceCounter>();
             _processRamCounters = new Dictionary<string, PerformanceCounter>();
             _systemCounters = new Dictionary<string, PerformanceCounter>
@@ -33,86 +30,112 @@ namespace DataCollector
                 { "InterruptsTime", new PerformanceCounter("Processor", "Interrupts/sec", "_Total") },
                 { "LocalDisk", new PerformanceCounter("LogicalDisk", "% Free Space", "_Total") }
             };
-            Start();
         }
+
+       
 
         public static Collector Instance => Value.Value;
 
-        public void Start()
-        {
-            _tm = new Timer(500);
-            _tm.Elapsed += (sender, e) => Collect();
-            _tm.AutoReset = false;
-            _tm.Enabled = true;
-        }
 
-        public void Collect()
+        public CollectedData Collect()
         {
+            CollectedData dataItem = new CollectedData();
             try
             {
-                var dataItem = new CollectedData
+                var allProcesses = GetProcesses();
+                dataItem = new CollectedData
                 {
-                    AvaliableRamBytes = _systemCounters["FreeRam"].NextValue(),
                     InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
-                    LocalDiskFreeMBytes = _systemCounters["DiskFreeMb"].NextValue(),
-                    CpuUsagePercent = _systemCounters["CPU"].NextValue(),
-                    RamUsagePercent = _systemCounters["RAM"].NextValue(),
                     InterruptsTimePercent = _systemCounters["InterruptsTime"].NextValue(),
-                    LocalDiskFreeSpacePercent = _systemCounters["LocalDisk"].NextValue(),
-                    ProcessesCpu = GetProcessesCpu(out var processes),
-                    ProcessesRam = GetProcessesRam(),
-                    ProcessesCount = processes,
+
+                    TotalRamMBytes = GetTotalRAM(),
+                    RamUsagePercentage = 100 - (_systemCounters["FreeRam"].NextValue() / (GetTotalRAM() / 100)),
+                    UsageRamMBytes = GetTotalRAM() - _systemCounters["FreeRam"].NextValue(),
+
+                    CpuUsagePercentage = _systemCounters["CPU"].NextValue(),
+
+                    LocalDiskTotalMBytes = GetDiskTotalMbytes(),
+                    LocalDiskUsageMBytes = GetDiskUsageMbytes(),
+                    LocalDiskUsagePercentage = 100 - _systemCounters["LocalDisk"].NextValue(),
+
+                    Processes = allProcesses,
+                    ProcessesCount = allProcesses.Count,
                     Time = DateTime.Now
                 };
-                Data.Add(dataItem);
+                
             }
             catch (Exception)
             {
                 // ignored
             }
-
-            _tm.Start();
+            return dataItem;
         }
 
-        private Dictionary<string, float> GetProcessesCpu(out int processesCount)
+        private float GetDiskTotalMbytes()
         {
-            var result = new Dictionary<string, float>();
-            var processes = Process.GetProcesses();
-            processesCount = processes.Length;
-            foreach (var item in processes)
+            return (_systemCounters["DiskFreeMb"].NextValue() / _systemCounters["LocalDisk"].NextValue()) * 100.0f;
+        }
+
+        private float GetDiskUsageMbytes()
+        {
+            return GetDiskTotalMbytes() - _systemCounters["DiskFreeMb"].NextValue();
+        }
+
+        private float GetTotalRAM()
+        {
+            float totalRam = 1.0f;
+
+            ManagementObjectSearcher ramMonitor =    //запрос к WMI для получения памяти ПК
+            new ManagementObjectSearcher("SELECT TotalVisibleMemorySize,FreePhysicalMemory FROM Win32_OperatingSystem");
+
+            foreach (ManagementObject objram in ramMonitor.Get())
             {
-                if (!_processCpuCounters.ContainsKey(item.ProcessName))
-                    _processCpuCounters.Add(item.ProcessName,
-                        new PerformanceCounter("Process", "% Processor Time", item.ProcessName));
-                try
-                {
-                    if (!result.ContainsKey(item.ProcessName))
-                        result.Add(item.ProcessName, _processCpuCounters[item.ProcessName].NextValue());
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    _processCpuCounters.Remove(item.ProcessName);
-                }
+                totalRam = Convert.ToUInt64(objram["TotalVisibleMemorySize"]) / 1024;    //общая память ОЗУ
+                float busyRam = totalRam - Convert.ToUInt64(objram["FreePhysicalMemory"]);//занятная память = (total-free)
+                
             }
-           
 
-            return result;
+            return totalRam;
         }
 
-        private Dictionary<string, float> GetProcessesRam()
+
+        private List<ProcessData> GetProcesses()
         {
-            var result = new Dictionary<string, float>();
+            var result = new List<ProcessData>();
             var processes = Process.GetProcesses();
+
+
             foreach (var item in processes)
             {
+                //item.pro
                 if (!_processRamCounters.ContainsKey(item.ProcessName))
                     _processRamCounters.Add(item.ProcessName,
-                        new PerformanceCounter("Process", "Working Set", item.ProcessName));
+                        new PerformanceCounter("Process", "Working Set", item.ProcessName, true));
+
+                if (!_processCpuCounters.ContainsKey(item.ProcessName))
+                    _processCpuCounters.Add(item.ProcessName,
+                        new PerformanceCounter("Process", "% Processor Time", item.ProcessName, true));
+            }
+
+            foreach (var item in processes)
+            {
+                if (item.ProcessName == "Idle") continue; // cpu > 350%
+              
+
                 try
                 {
-                    if (!result.ContainsKey(item.ProcessName))
-                        result.Add(item.ProcessName, _processRamCounters[item.ProcessName].NextValue() / 1024);
+                    var name = item.ProcessName;
+                    //var ramMBytes = _processRamCounters[item.ProcessName].NextValue() / 1024 / 1024;
+                    var pCpu = (float)Math.Round(_processCpuCounters[item.ProcessName].NextValue() / Environment.ProcessorCount, 2);
+                    //var pRam = (ramMBytes / GetTotalRAM()) * 100;
+
+                    result.Add(new ProcessData
+                    {
+                        Name = name,
+                        //RamMBytes = ramMBytes,
+                        PCpu = pCpu,
+                        //PRam = pRam
+                    });  
                 }
                 catch (Exception e)
                 {
@@ -120,8 +143,22 @@ namespace DataCollector
                     _processRamCounters.Remove(item.ProcessName);
                 }
             }
+            result = GroupProcesses(result);
 
-            return result;
+            return result; // DODO merge processes if Processes with the same name
+        }
+
+        private List<ProcessData> GroupProcesses(List<ProcessData> processes)
+        {
+            var temp = processes.GroupBy(proc => proc.Name).Select(
+                    group => new ProcessData
+                    {
+                        Name = group.Key,
+                        PCpu = group.Sum(proc => proc.PCpu),
+                        PRam = group.Sum(proc => proc.PRam),
+                        RamMBytes = group.Sum(proc => proc.RamMBytes)
+                    }).ToList();
+            return temp;
         }
     }
 #endif

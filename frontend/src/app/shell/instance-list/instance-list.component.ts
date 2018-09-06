@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AfterContentChecked, AfterViewChecked} from '@angular/core';
 import { InstanceService } from '../../core/services/instance.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -8,13 +9,14 @@ import { Instance } from '../../shared/models/instance.model';
 import { Router } from '@angular/router';
 import { OrganizationRole } from '../../shared/models/organization-role.model';
 import { UserOrganizationService } from '../../core/services/user-organization.service';
+import { NavigationStart} from '@angular/router';
 
 @Component({
   selector: 'app-instance-list',
   templateUrl: './instance-list.component.html',
   styleUrls: ['./instance-list.component.sass']
 })
-export class InstanceListComponent implements OnInit {
+export class InstanceListComponent implements OnInit, AfterContentChecked, AfterViewChecked  {
 constructor(private instanceService: InstanceService,
   private toastrService: ToastrService,
   private authService: AuthService,
@@ -22,7 +24,13 @@ constructor(private instanceService: InstanceService,
   private router: Router) {
   this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
   this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-}
+  router.events.forEach((event) => {
+    if (event instanceof NavigationStart) {
+      this.clearSettings(this.router.url);
+    }
+  });
+ }
+
 
   menuItems: MenuItem[];
   user: User;
@@ -32,10 +40,11 @@ constructor(private instanceService: InstanceService,
   isLoading: boolean;
   isDeleting: boolean;
   isMember = true;
+  previousSettingUrl: string;
 
   currentQuery = '';
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.authService.currentUser.subscribe(
       user => {
         this.user = user;
@@ -47,6 +56,13 @@ constructor(private instanceService: InstanceService,
     );
    }
 
+   ngAfterContentChecked(): void {
+    this.highlightCurrentSetting();
+  }
+
+  ngAfterViewChecked(): void {
+    this.highlightCurrentSetting();
+  }
 
   configureInstances(organizationId: number): void {
     this.menuItems = [{
@@ -84,6 +100,11 @@ constructor(private instanceService: InstanceService,
         styleClass: 'instance-options',
         disabled: this.isMember
       }, {
+        label: 'Activities',
+        icon: 'fa fa fa-history',
+        routerLink: [`/user/instances/${instance.guidId}/activities`],
+        styleClass: 'instance-options'
+      }, {
         label: 'Download app',
         icon: 'fa fa-download',
         styleClass: 'instance-options',
@@ -92,6 +113,11 @@ constructor(private instanceService: InstanceService,
           this.showDownloadModal = true;
           this.currentGuidId = instance.guidId;
         }
+      }, {
+        label: 'Report',
+        icon: 'fa fa-stack-exchange',
+        routerLink: [`/user/instances/${instance.id}/${instance.guidId}/report`],
+        styleClass: 'instance-options'
       }, {
         label: 'Delete',
         icon: 'fa fa-close',
@@ -158,5 +184,33 @@ constructor(private instanceService: InstanceService,
   }
   onClose(): void {
     this.showDownloadModal = false;
+  }
+
+  private clearSettings(url: string): void {
+    if (this.router.url !== this.previousSettingUrl) {
+      const setting = this.getSettingByUrl(url);
+
+      if (setting !== null) {
+        setting.classList.remove('ui-state-active');
+        setting.parentElement.classList.remove('ui-state-active');
+
+      }
+      this.previousSettingUrl = this.router.url;
+    }
+  }
+
+  private highlightCurrentSetting(): void {
+    const setting = this.getSettingByUrl(this.router.url);
+
+    if (setting !== null) {
+      this.clearSettings(this.previousSettingUrl);
+
+      setting.classList.add('ui-state-active');
+      setting.parentElement.classList.add('ui-state-active');
+    }
+  }
+
+  private getSettingByUrl(url: string): Element {
+    return document.querySelector(`div.ui-panelmenu-header a[href="${url}"]`);
   }
 }

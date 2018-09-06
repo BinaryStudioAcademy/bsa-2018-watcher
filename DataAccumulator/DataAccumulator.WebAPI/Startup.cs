@@ -61,6 +61,9 @@ namespace DataAccumulator
             services.AddTransient<IAggregatorService<CollectedDataDto>, AggregatorService>();
             services.AddTransient<IDataAggregatorCore<CollectedDataDto>, DataAggregatorCore>();
 
+            services.AddTransient<ILogService, LogService>();
+            services.AddTransient<ILogRepository, LogRepository>();
+
             services.AddTransient<IJobFactory, JobFactory>(
                 (provider) =>
                 {
@@ -116,7 +119,8 @@ namespace DataAccumulator
                 options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>(
                 options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage"));
-
+            services.AddTransient<ILogRepository, LogRepository>(
+                options => new LogRepository(connectionString, "bsa-watcher-data-storage"));
         }
 
         public MapperConfiguration MapperConfiguration()
@@ -126,6 +130,7 @@ namespace DataAccumulator
                 cfg.CreateMap<CollectedData, CollectedDataDto>();
                 cfg.CreateMap<CollectedDataDto, CollectedData>();
                 cfg.CreateMap<CollectedData, CollectedData>();
+                cfg.CreateMap<ActionLogDto, ActionLog>();
             });
 
             return config;

@@ -61,7 +61,7 @@ export class DonutChartComponent implements OnInit {
   }
 
   private drawChart(data: any[]) {
-    let g = this.svg.selectAll('.arc')
+    const g = this.svg.selectAll('.arc')
       .data(this.pie(data))
       .enter().append('g')
       .attr('class', 'arc');
