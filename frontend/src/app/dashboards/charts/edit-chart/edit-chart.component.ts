@@ -1,25 +1,27 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
-import {DataProperty, dataPropertyLables} from '../../../shared/models/data-property.enum';
+import {Component, EventEmitter, Input, OnInit, OnChanges, Output} from '@angular/core';
 import {SelectItem, SelectItemGroup} from 'primeng/api';
-import {DashboardChart} from '../../models/dashboard-chart';
-import {FormBuilder} from '@angular/forms';
-import {ChartRequest} from '../../../shared/requests/chart-request.model';
+import {colorSets} from '@swimlane/ngx-charts/release/utils';
+
 import {CollectedDataService} from '../../../core/services/collected-data.service';
-import {CollectedData} from '../../../shared/models/collected-data.model';
 import {DataService} from '../../../core/services/data.service';
 import {ChartService} from '../../../core/services/chart.service';
 import {ToastrService} from '../../../core/services/toastr.service';
+
 import {Chart} from '../../../shared/models/chart.model';
+import {CollectedData} from '../../../shared/models/collected-data.model';
+import {ChartRequest} from '../../../shared/requests/chart-request.model';
+import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
+import {DataProperty, dataPropertyLables} from '../../../shared/models/data-property.enum';
+
 import {dashboardChartTypes} from '../models/dashboardChartTypes';
-import {colorSets} from '@swimlane/ngx-charts/release/utils';
+import {DashboardChart} from '../../models/dashboard-chart';
 
 @Component({
   selector: 'app-edit-chart',
   templateUrl: './edit-chart.component.html',
   styleUrls: ['./edit-chart.component.sass']
 })
-export class EditChartComponent implements OnInit, OnChanges {
+export class EditChartComponent implements OnInit {
   @Output() editChart = new EventEmitter<DashboardChart>();
   @Output() closed = new EventEmitter();
   @Output() dashboardChartChange = new EventEmitter();
@@ -28,35 +30,35 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   @Input() onDisplay: EventEmitter<boolean>;
   @Input() dashboardId: number;
-
   @Input() dashboardChart: DashboardChart;
 
-  type: ChartType;
   dropdownTypes: SelectItem[];
   dropdownSources: SelectItem[];
   dropdownGroupSources: SelectItemGroup[];
 
   collectedDataForChart: CollectedData[] = [];
-  showPreview = false;
 
+  type = ChartType;
   colorSchemes = colorSets;
+
   historyTime: number;
+  isPreviewAvailable: boolean;
+  isTimeAvailable: boolean;
+  isXAxisAvailable: boolean;
+  isYAxisAvailable: boolean;
 
   get dialogTitle() {
-    if (this.dashboardChart && this.dashboardChart.id) {
-      return 'Edit chart';
-    } else {
-      // this.dashboardChart.chartType.type = null;
-      return 'Create chart';
-    }
+    return (this.dashboardChart && this.dashboardChart.id) ? 'Edit chart' : 'Create chart';
   }
 
   get spinnerDisabled() {
     return this.dashboardChart && this.dashboardChart.showCommon;
   }
+  get isValid(): boolean {
+    return this.dashboardChart.dataSources.length ? true : false;
+  }
 
-  constructor(private fb: FormBuilder,
-              private collectedDataService: CollectedDataService,
+  constructor(private collectedDataService: CollectedDataService,
               private dataService: DataService,
               private chartService: ChartService,
               private toastrService: ToastrService) {
@@ -64,7 +66,6 @@ export class EditChartComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.onDisplay.subscribe((isShow: boolean) => this.visible = isShow);
-    this.createSourceItems();
     this.collectedDataService.getBuilderData()
       .subscribe(value => {
         this.collectedDataForChart = value;
@@ -87,10 +88,20 @@ export class EditChartComponent implements OnInit, OnChanges {
       {label: dataPropertyLables[DataProperty.interruptsPerSeconds], value: DataProperty.interruptsPerSeconds},
       {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
     ];
+    this.resetBuilderForm();
   }
 
   getMultiSelectNumber() {
     return this.dashboardChart.chartType.type === ChartType.Pie ? 1 : null;
+  }
+
+  updtateReviewAllowing() {
+    this.isPreviewAvailable = this.dashboardChart.showCommon;
+  }
+
+  dropDownSelect(event) {
+    this.dashboardChart.dataSources = [event.value];
+    this.processData();
   }
 
   multiSelect(event) {
@@ -99,6 +110,7 @@ export class EditChartComponent implements OnInit, OnChanges {
       return;
     }
 
+    // Disabling another groups
     if (dataPropertyLables[event.itemValue].includes('%')) {
       this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => dataPropertyLables[s].includes('%'));
       this.dropdownSources.forEach(item => !item.label.includes('%') ? item.disabled = true : item.disabled = false);
@@ -110,9 +122,39 @@ export class EditChartComponent implements OnInit, OnChanges {
     this.processData();
   }
 
-  dropDownSelect(event) {
-    this.dashboardChart.dataSources = [event.value];
-    this.processData();
+  resetBuilderForm() {
+    this.dashboardChart.dataSources = [];
+    this.createSourceItems();
+    this.updtateReviewAllowing();
+    this.dropdownSources.forEach(item => item.disabled = false);
+
+    switch (this.dashboardChart.chartType.type) {
+      case ChartType.LineChart:
+        this.isTimeAvailable = true;
+        this.isXAxisAvailable = true;
+        this.dashboardChart.xAxisLabel = 'Time';
+        this.isYAxisAvailable = true;
+        this.dashboardChart.yAxisLabel = 'Percentage %';
+        break;
+      case ChartType.BarVertical:
+        this.isTimeAvailable = false;
+        this.isXAxisAvailable = true;
+        this.dashboardChart.xAxisLabel = 'Parameters';
+        this.isYAxisAvailable = true;
+        this.dashboardChart.yAxisLabel = 'Percentage %';
+        break;
+      case ChartType.Guage:
+        this.isTimeAvailable = false;
+        this.isYAxisAvailable = true;
+        this.dashboardChart.yAxisLabel = 'Process';
+        this.isXAxisAvailable = false;
+        this.dashboardChart.xAxisLabel = '';
+      break;
+      default:
+        this.isYAxisAvailable = false;
+        this.isXAxisAvailable = false;
+        break;
+    }
   }
 
   createSourceItems() {
@@ -122,68 +164,53 @@ export class EditChartComponent implements OnInit, OnChanges {
           this.dropdownGroupSources = [{
             label: 'Percentage',
             items: [
-              {label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage},
-              {label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage},
-              {label: dataPropertyLables[DataProperty.localDiskUsagePercentage], value: DataProperty.localDiskUsagePercentage},
+              { label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage },
+              { label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage },
+              { label: dataPropertyLables[DataProperty.localDiskUsagePercentage], value: DataProperty.localDiskUsagePercentage },
             ]
           }, {
             label: 'Memory',
             items: [
-              {label: dataPropertyLables[DataProperty.usageRamMBytes], value: DataProperty.usageRamMBytes},
-              {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
+              { label: dataPropertyLables[DataProperty.usageRamMBytes], value: DataProperty.usageRamMBytes },
+              { label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes }
             ]
           }];
-        } else {
-          this.dropdownGroupSources = [{
-            label: 'Percentage',
-            items: [
-              {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
-              {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
-            ]
-          }, {
-            label: 'Memory',
-            items: [
-              {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
-            ]
-          }];
+          return;
         }
-        break;
-      default:
-        this.dropdownGroupSources = [{
-          label: 'Sources', // TODO: change
-          items: [
-            {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
-            {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
-            {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
-          ]
-        }];
-        break;
     }
+
+    // Default for all another types
+    this.dropdownGroupSources = [{
+      label: 'Percentage',
+      items: [
+        { label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu },
+        { label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam },
+      ]
+    }, {
+      label: 'Memory',
+      items: [
+        { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
+      ]
+    }];
   }
 
   processChartType() {
-    debugger;
-    this.showPreview = false;
     this.dashboardChart.chartType = dashboardChartTypes.find(t => t.type === this.dashboardChart.chartType.type);
     // .name = chartTypes[this.dashboardChart.chartType.type];
-    this.createSourceItems();
+    this.resetBuilderForm();
     this.processData();
   }
 
-  resetDataSources() {
-    this.dashboardChart.dataSources = [];
-  }
-
-  ngOnChanges(changes) {
-    // this.title = changes.dashboardTitle && changes.dashboardTitle.currentValue;
-  }
-
-  isGuage() {
-    return this.dashboardChart.chartType.type === ChartType.Guage;
+  showPreview() {
+    this.isPreviewAvailable = true;
+    this.processData();
   }
 
   processData(): void {
-    this.showPreview = false;
+    // if (!this.dashboardChart.showCommon && !this.isPreviewAvailable) {
+    //   return;
+    // }
+
     if (this.dashboardChart.showCommon) {
       this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
         this.dashboardChart.dataSources, this.collectedDataForChart);
@@ -192,24 +219,7 @@ export class EditChartComponent implements OnInit, OnChanges {
         this.dashboardChart.dataSources[0], this.collectedDataForChart, this.dashboardChart.mostLoaded);
     }
 
-    switch (this.dashboardChart.chartType.type) {
-      case ChartType.BarVertical:
-        this.dashboardChart.xAxisLabel = 'Parameters';
-        this.dashboardChart.yAxisLabel = 'Percentage %';
-        break;
-      case ChartType.LineChart:
-        this.dashboardChart.xAxisLabel = 'Time';
-        this.dashboardChart.yAxisLabel = 'Percentage %';
-        break;
-      case ChartType.Guage:
-        this.dashboardChart.yAxisLabel = 'Process';
-        this.dashboardChart.xAxisLabel = '';
-        break;
-    }
-
-    if (this.dashboardChart.data && this.dashboardChart.data.length > 0) {
-      this.showPreview = true;
-    }
+    this.isPreviewAvailable = false;
   }
 
   closeDialog() {

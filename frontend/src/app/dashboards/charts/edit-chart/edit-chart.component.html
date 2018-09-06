@@ -24,12 +24,12 @@
       <p class="field">Show total:
         <p-checkbox [ngModel]="dashboardChart?.showCommon"
                     (ngModelChange)="dashboardChart.showCommon=$event"
-                    (onChange)="resetDataSources()"
+                    (onChange)="resetBuilderForm()"
                     binary="true">
         </p-checkbox>
       </p><!--type [disabled]="!dashboardChart.dataSources.length<1"-->
       <p class="field">Select source: </p>
-      <p-multiSelect *ngIf="dashboardChart.showCommon && dashboardChart.chartType.type !== 2"
+      <p-multiSelect *ngIf="dashboardChart.showCommon && dashboardChart.chartType.type !== type.Pie"
                      class="custom-multiselect"
                      [filter]="false"
                      [showHeader]="false"
@@ -39,7 +39,7 @@
                      [selectionLimit]="getMultiSelectNumber()"
                      (onChange)="multiSelect($event)">
       </p-multiSelect>
-      <p-dropdown *ngIf="!dashboardChart.showCommon || dashboardChart.chartType.type === 2"
+      <p-dropdown *ngIf="!dashboardChart.showCommon || dashboardChart.chartType.type == type.Pie"
                   [autoWidth]="false"
                   [options]="dropdownGroupSources"
                   placeholder="Select a type"
@@ -85,11 +85,12 @@
       </p-dropdown>
       <p class="field">Y axis label (optional): </p>
       <input type="text"
+             [disabled]="!isYAxisAvailable"
              [(ngModel)]="dashboardChart.yAxisLabel"
              pInputText/>
       <p class="field">X axis label (optional): </p>
       <input type="text"
-             [disabled]="isGuage()"
+             [disabled]="!isXAxisAvailable"
              [(ngModel)]="dashboardChart.xAxisLabel"
              pInputText/>
       <p class="field">Width: </p>
@@ -107,13 +108,12 @@
         </p-spinner>
       </div>
     </div>
-
     </div>
 
     <div class="visualization-wapper">
       <div class="chart-panel-menu-title field-top text-center" style="border: 0">Visualization</div>
       <div class="view-chart">
-        <div *ngIf="showPreview && dashboardChart.data && dashboardChart.data.length > 0">
+        <div *ngIf="dashboardChart.data && dashboardChart.data.length">
           <div class="chart-title">{{dashboardChart.title}}</div>
           <app-chart [chart]="dashboardChart"
                      [data]="dashboardChart.data"
@@ -126,11 +126,26 @@
   </div>
   <p-footer>
     <div class="text-center">
-      <!-- [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))"-->
-      <!--&& selectedSource <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
-      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onEditChart()"
-              label="Save"></button>
-      <button type="button" pButton (click)="closeDialog()" label="Cancel" class="ui-button-warning"></button>
+      <button *ngIf="false"
+              type="button"
+              pButton
+              class="ui-button-raised ui-button-icon-primary"
+              (click)="showPreview()"
+              label="Preview">
+      </button>
+      <button type="button"
+              pButton
+              class="ui-button-raised ui-button-success"
+              [disabled]="!isValid"
+              (click)="onEditChart()"
+              label="Save">
+      </button>
+      <button type="button"
+              pButton
+              class="ui-button-warning"
+              (click)="closeDialog()"
+              label="Cancel">
+      </button>
     </div>
   </p-footer>
 
