@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Timers;
 
 namespace DataCollector
@@ -139,8 +140,23 @@ namespace DataCollector
                     });
                 }
             }
-            
+            processData = GroupProcesses(processData);
+
+
             return processData;
+        }
+
+        private List<ProcessData> GroupProcesses(List<ProcessData> processes)
+        {
+            var temp = processes.GroupBy(proc => proc.Name).Select(
+                    group => new ProcessData
+                    {
+                        Name = group.Key,
+                        PCpu = group.Sum(proc => proc.PCpu),
+                        PRam = group.Sum(proc => proc.PRam),
+                        RamMBytes = group.Sum(proc => proc.RamMBytes)
+                    }).ToList();
+            return temp;
         }
 
 

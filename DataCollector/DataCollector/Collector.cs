@@ -158,9 +158,6 @@ namespace DataCollector
                         PRam = group.Sum(proc => proc.PRam),
                         RamMBytes = group.Sum(proc => proc.RamMBytes)
                     }).ToList();
-
-            float cpuSum = 0;
-
             return temp;
         }
     }
