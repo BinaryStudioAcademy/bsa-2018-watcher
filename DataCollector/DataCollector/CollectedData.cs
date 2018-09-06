@@ -128,10 +128,16 @@ namespace DataCollector
             var str = new StringBuilder();
             str.Append($"Instance id: {ClientId}\n");
             str.Append($"Processes count: {ProcessesCount}\n");
-            //str.Append($"CPU usage: {CpuUsagePercent:0.##}%\n");
-            //str.Append($"Ram avalaible: {AvaliableRamMBytes:0.##} MB\n");
-            //str.Append($"Ram usage: {RamUsagePercent:0.##}%\n");
-            //str.Append($"Local disk avalaible: {LocalDiskFreeMBytes:0.##} MB\n");
+
+            str.Append($"UsageRamMBytes: {UsageRamMBytes:0.##}\n");
+            str.Append($"TotalRamMBytes: {TotalRamMBytes:0.##}\n");
+            str.Append($"RamUsagePercentage: {RamUsagePercentage:0.##}%\n");
+
+            str.Append($"CpuUsagePercentage: {CpuUsagePercentage:0.##}%\n");
+
+            str.Append($"LocalDiskUsageMBytes: {LocalDiskUsageMBytes:0.##}\n");
+            str.Append($"LocalDiskTotalMBytes: {LocalDiskTotalMBytes:0.##}\n");
+            str.Append($"LocalDiskUsagePercentage: {LocalDiskUsagePercentage:0.##}%\n");
             return str.ToString();
         }
 

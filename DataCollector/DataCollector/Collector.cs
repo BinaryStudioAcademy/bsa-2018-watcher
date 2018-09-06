@@ -73,7 +73,7 @@ namespace DataCollector
                     InterruptsTimePercent = _systemCounters["InterruptsTime"].NextValue(),
 
                     TotalRamMBytes = GetTotalRAM(),
-                    RamUsagePercentage = GetTotalRAM() - _systemCounters["RAM"].NextValue(),
+                    RamUsagePercentage = _systemCounters["RAM"].NextValue(),
                     UsageRamMBytes = GetTotalRAM() - _systemCounters["FreeRam"].NextValue(),
 
                     CpuUsagePercentage = _systemCounters["CPU"].NextValue(),
@@ -87,6 +87,7 @@ namespace DataCollector
                     Time = DateTime.Now
                 };
                 Data.Add(dataItem);
+                
             }
             catch (Exception)
             {
