@@ -25,24 +25,22 @@ namespace DataAccumulator.DataAccessLayer.Entities
         public CollectedDataType CollectedDataType { get; set; }
 
         public int ProcessesCount { get; set; }
+        public List<ProcessData> Processes { get; set; }
 
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
-        public Dictionary<string, float> ProcessesCPU { get; set; }
+        public float UsageRamMBytes { get; set; }
+        public float TotalRamMBytes { get; set; }
+        public float RamUsagePercentage { get; set; }
 
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfDocuments)]
-        public Dictionary<string, float> ProcessesRAM { get; set; }
-
-        #region Percentage
-        public float CpuUsagePercent { get; set; }
-        public float RamUsagePercent { get; set; }
-        public float InterruptsTimePercent { get; set; }
-        public float LocalDiskFreeSpacePercent { get; set; }
-        #endregion
-        public float AvaliableRamBytes { get; set; }
         public float InterruptsPerSeconds { get; set; }
-        public float LocalDiskFreeMBytes { get; set; }
+
+        public float LocalDiskUsageMBytes { get; set; }
+        public float LocalDiskTotalMBytes { get; set; }
+        public float LocalDiskUsagePercentage { get; set; }
+
+        public float CpuUsagePercentage { get; set; }
 
         [BsonDateTimeOptions]
         public DateTime Time { get; set; }
+
     }
 }
