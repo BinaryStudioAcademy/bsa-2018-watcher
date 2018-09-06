@@ -35,33 +35,42 @@ namespace DataAccumulator.DataAggregator
                     {
                         ClientId = collectedDataGroup.Key,
                         CollectedDataType = destinationType,
+
                         ProcessesCount = Convert.ToInt32(collectedDataGroup
                             .Average(d => d.ProcessesCount)),
-                        FreeRamMBytes = collectedDataGroup
-                            .Average(d => d.FreeRamMBytes),
+                        Processes = collectedDataGroup
+                            .SelectMany(d => d.Processes)
+                            .GroupBy(p => p.Name)
+                            .Select(g => new ProcessData()
+                            {
+                                Name = g.Key,
+                                PCpu = g.Average(c => c.PCpu),
+                                PRam = g.Average(r => r.PRam),
+                                RamMBytes = g.Average(b => b.RamMBytes)
+                            }).ToList(),
+
+                        UsageRamMBytes = collectedDataGroup
+                            .Average(d => d.UsageRamMBytes),
                         TotalRamMBytes = collectedDataGroup
                             .Average(d => d.TotalRamMBytes),
-                        FreeRamPercentage = collectedDataGroup
-                            .Average(d => d.FreeRamPercentage),
+                        RamUsagePercentage = collectedDataGroup
+                            .Average(d => d.RamUsagePercentage),
+
                         InterruptsPerSeconds = collectedDataGroup
                             .Average(d => d.InterruptsPerSeconds),
-                        LocalDiskFreeMBytes = collectedDataGroup
-                            .Average(d => d.LocalDiskFreeMBytes),
+
+                        LocalDiskUsageMBytes = collectedDataGroup
+                            .Average(d => d.LocalDiskUsageMBytes),
                         LocalDiskTotalMBytes = collectedDataGroup
                             .Average(d => d.LocalDiskTotalMBytes),
-                        LocalDiskFreePercentage = collectedDataGroup
-                            .Average(d => d.LocalDiskFreePercentage),
-                        Time = collectedDataGroup
-                            .Max(d => d.Time),
-                        //Processes = collectedDataGroup
-                        //    .SelectMany(d => d.Processes)
-                        //    .ToLookup(pair => pair.Key, pair => pair.Value)
-                        //    .ToDictionary(l => l.Key, l => l.Average()),
+                        LocalDiskUsagePercentage = collectedDataGroup
+                            .Average(d => d.LocalDiskUsagePercentage),
 
-                        //ProcessesRAM = collectedDataGroup
-                        //    .SelectMany(d => d.ProcessesRAM)
-                        //    .ToLookup(pair => pair.Key, pair => pair.Value)
-                        //    .ToDictionary(l => l.Key, l => l.Average()),
+                        CpuUsagePercentage = collectedDataGroup
+                            .Average(d => d.CpuUsagePercentage),
+
+                        Time = collectedDataGroup
+                            .Max(d => d.Time)
                     };
 
                 // Save aggregated CollectedDataDto to destination table MongoDb

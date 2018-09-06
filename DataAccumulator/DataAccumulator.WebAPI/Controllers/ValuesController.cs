@@ -61,41 +61,10 @@ namespace DataAccumulator.WebAPI.Controllers
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
-                        CollectedDataType = CollectedDataType.AggregationForHour,
-                        ProcessesCount = 2,
-                        Processes = new List<ProcessData>()
-                        {
-                            new ProcessData()
-                            {
-                                Name = "chrome",
-                                RamMBytes = 20,
-                                PRam = 5,
-                                PCpu = 7
-                            },
-                            new ProcessData()
-                            {
-                                Name = "ie",
-                                RamMBytes = 10,
-                                PRam = 3,
-                                PCpu = 5
-                            },
-                        },
-                        FreeRamMBytes = 20,
-                        TotalRamMBytes = 20,
-                        FreeRamPercentage = 80,
-                        InterruptsPerSeconds = 80,
-                        LocalDiskFreeMBytes = 10,
-                        LocalDiskTotalMBytes = 20,
-                        LocalDiskFreePercentage = 10,
-                        Time = DateTime.Now
-                    });
+                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
 
-                    await _repository.AddEntity(new CollectedData()
-                    {
-                        Id = Guid.NewGuid(),
-                        ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
                         CollectedDataType = CollectedDataType.Accumulation,
+
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -114,21 +83,29 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
-                        FreeRamMBytes = 20,
+
+                        UsageRamMBytes = 18,
                         TotalRamMBytes = 20,
-                        FreeRamPercentage = 80,
+                        RamUsagePercentage = 20,
+
                         InterruptsPerSeconds = 80,
-                        LocalDiskFreeMBytes = 10,
-                        LocalDiskTotalMBytes = 20,
-                        LocalDiskFreePercentage = 10,
+
+                        LocalDiskUsageMBytes = 80,
+                        LocalDiskTotalMBytes = 10,
+                        LocalDiskUsagePercentage = 20,
+
+                        CpuUsagePercentage = 10,
+
                         Time = DateTime.Now
                     });
 
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
-                        CollectedDataType = CollectedDataType.AggregationForHour,
+                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+
+                        CollectedDataType = CollectedDataType.Accumulation,
+
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -147,30 +124,38 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
-                        FreeRamMBytes = 20,
+
+                        UsageRamMBytes = 18,
                         TotalRamMBytes = 20,
-                        FreeRamPercentage = 80,
+                        RamUsagePercentage = 20,
+
                         InterruptsPerSeconds = 80,
-                        LocalDiskFreeMBytes = 10,
-                        LocalDiskTotalMBytes = 20,
-                        LocalDiskFreePercentage = 10,
+
+                        LocalDiskUsageMBytes = 80,
+                        LocalDiskTotalMBytes = 10,
+                        LocalDiskUsagePercentage = 20,
+
+                        CpuUsagePercentage = 10,
+
                         Time = DateTime.Now
                     });
 
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
-                        CollectedDataType = CollectedDataType.AggregationForHour,
+                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+
+                        CollectedDataType = CollectedDataType.Accumulation,
+
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
                             new ProcessData()
                             {
                                 Name = "chrome",
-                                RamMBytes = 20,
-                                PRam = 5,
-                                PCpu = 7
+                                RamMBytes = 30,
+                                PRam = 20,
+                                PCpu = 9
                             },
                             new ProcessData()
                             {
@@ -180,21 +165,29 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
-                        FreeRamMBytes = 20,
+
+                        UsageRamMBytes = 33,
                         TotalRamMBytes = 20,
-                        FreeRamPercentage = 80,
+                        RamUsagePercentage = 20,
+
                         InterruptsPerSeconds = 80,
-                        LocalDiskFreeMBytes = 10,
-                        LocalDiskTotalMBytes = 20,
-                        LocalDiskFreePercentage = 10,
+
+                        LocalDiskUsageMBytes = 80,
+                        LocalDiskTotalMBytes = 10,
+                        LocalDiskUsagePercentage = 20,
+
+                        CpuUsagePercentage = 10,
+
                         Time = DateTime.Now
                     });
 
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("5f2bb16e-0f16-41ed-9327-5477caaf2be6"),
-                        CollectedDataType = CollectedDataType.AggregationForHour,
+                        ClientId = new Guid("76053df4-6687-4353-8937-b45556748abe"),
+
+                        CollectedDataType = CollectedDataType.Accumulation,
+
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
                         {
@@ -213,13 +206,60 @@ namespace DataAccumulator.WebAPI.Controllers
                                 PCpu = 5
                             },
                         },
-                        FreeRamMBytes = 20,
+
+                        UsageRamMBytes = 18,
                         TotalRamMBytes = 20,
-                        FreeRamPercentage = 80,
+                        RamUsagePercentage = 20,
+
                         InterruptsPerSeconds = 80,
-                        LocalDiskFreeMBytes = 10,
-                        LocalDiskTotalMBytes = 20,
-                        LocalDiskFreePercentage = 10,
+
+                        LocalDiskUsageMBytes = 80,
+                        LocalDiskTotalMBytes = 10,
+                        LocalDiskUsagePercentage = 20,
+
+                        CpuUsagePercentage = 10,
+
+                        Time = DateTime.Now
+                    });
+
+                    await _repository.AddEntity(new CollectedData()
+                    {
+                        Id = Guid.NewGuid(),
+                        ClientId = new Guid("76053df4-6687-4353-8937-b45556748abe"),
+
+                        CollectedDataType = CollectedDataType.Accumulation,
+
+                        ProcessesCount = 2,
+                        Processes = new List<ProcessData>()
+                        {
+                            new ProcessData()
+                            {
+                                Name = "chrome",
+                                RamMBytes = 20,
+                                PRam = 5,
+                                PCpu = 7
+                            },
+                            new ProcessData()
+                            {
+                                Name = "ie",
+                                RamMBytes = 10,
+                                PRam = 3,
+                                PCpu = 5
+                            },
+                        },
+
+                        UsageRamMBytes = 18,
+                        TotalRamMBytes = 20,
+                        RamUsagePercentage = 20,
+
+                        InterruptsPerSeconds = 80,
+
+                        LocalDiskUsageMBytes = 80,
+                        LocalDiskTotalMBytes = 10,
+                        LocalDiskUsagePercentage = 20,
+
+                        CpuUsagePercentage = 10,
+
                         Time = DateTime.Now
                     });
 

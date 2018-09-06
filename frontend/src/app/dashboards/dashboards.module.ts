@@ -16,6 +16,7 @@ import {
   TabMenuModule,
   ProgressSpinnerModule,
   TooltipModule,
+  ScrollPanelModule,
   InputTextModule} from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
@@ -72,7 +73,9 @@ import { ReportComponent } from './report/report.component';
     SpinnerModule,
     TableModule,
     TooltipModule,
-    CalendarModule
+    CalendarModule,
+    ScrollPanelModule,
+    TooltipModule
   ],
   declarations: [
     DashboardComponent,
