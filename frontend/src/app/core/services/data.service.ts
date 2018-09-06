@@ -11,12 +11,13 @@ import {dashboardChartTypes} from '../../dashboards/charts/models/dashboardChart
 import {defaultOptions} from '../../dashboards/charts/models/chart-options';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
+
 @Injectable()
 export class DataService {
   constructor() {
   }
 
-  convertStringToArrEnum(sources: string) {
+  convertStringToArrEnum(sources: string): DataProperty[] {
     const array: DataProperty[] = [];
     const arrNumbers = sources.split(',');
 
@@ -28,7 +29,14 @@ export class DataService {
   }
 
   instantiateDashboardChart(value: Chart, collData: CollectedData[]): DashboardChart {
+    debugger;
     const dataProps = this.convertStringToArrEnum(value.sources);
+    let chartData = [];
+    if (value.showCommon) {
+      chartData = this.prepareData(value.type, dataProps, collData);
+    } else {
+      chartData = this.prepareProcessData(value.type, dataProps[0], collData, value.mostLoaded);
+    }
     const dashChart: DashboardChart = {
       view: [600, 300],
       id: value.id,
@@ -58,7 +66,7 @@ export class DataService {
       curveClosed: defaultOptions.curveClosed,
       title: value.title,
       dataSources: dataProps,
-      data: this.prepareData(value.type, dataProps, collData),
+      data: chartData,
       activeEntries: [],
       chartType: {...dashboardChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
       theme: value.isLightTheme ? 'light' : 'dark'

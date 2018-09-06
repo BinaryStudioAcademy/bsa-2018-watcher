@@ -98,7 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                   } else {
                     debugger;
                     tempData = this.dataService.prepareProcessData(this.dashboardMenuItems[i].charts[j].chartType.type,
-                      this.dashboardMenuItems[i].charts[j].dataSources[0], data);
+                      this.dashboardMenuItems[i].charts[j].dataSources[0], data, this.dashboardMenuItems[i].charts[j].mostLoaded);
                   }
                   this.dashboardMenuItems[i].charts[j].data = [...tempData];
                 }
