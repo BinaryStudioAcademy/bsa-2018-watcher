@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DataAccumulator\DataAccumulator.Shared\DataAccumulator.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="MoveToFrontend\chart-request.model.ts">
       <CustomToolNamespace>Requests\ChartRequest.cs</CustomToolNamespace>
     </None>

@@ -55,7 +55,7 @@ namespace DataAccumulator.WebAPI.Controllers
             {
                 if (setting == "init")
                 {
-                    await _repository.RemoveAllEntities();
+                    //await _repository.RemoveAllEntities();
                     var name = _repository.CreateIndex();
 
                     await _repository.AddEntity(new CollectedData()

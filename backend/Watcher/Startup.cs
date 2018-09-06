@@ -112,6 +112,8 @@ namespace Watcher
             services.AddTransient<ICollectedDataService, CollectedDataService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUserOrganizationService, UserOrganizationService>();
+            services.AddTransient<IAggregateDataService, AggregatedDataService>();
+            services.AddTransient<ICollectorActionLogService, CollectorActionLogService>();
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
@@ -276,6 +278,11 @@ namespace Watcher
 
             services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
                   options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
+
+            services.AddScoped<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>(
+                options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage"));
+            services.AddScoped<ILogRepository, LogRepository>(
+                    options => new LogRepository(connectionString, "bsa-watcher-data-storage"));
         }
 
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
@@ -324,6 +331,7 @@ namespace Watcher
                     cfg.AddProfile<InstancesProfile>();
                     cfg.AddProfile<OrganizationInvitesProfile>();
                     cfg.AddProfile<CollectedDataProfile>();
+                    cfg.AddProfile<CollectorActionLogProfile>();
 
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/
