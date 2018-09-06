@@ -38,6 +38,7 @@ export class OrganizationProfileComponent implements OnInit {
 
   editable: boolean;
   organization: Organization;
+  name: string;
 
   inviteLink = '';
   inviteEmail: string;
@@ -63,6 +64,7 @@ export class OrganizationProfileComponent implements OnInit {
         this.user = { ...userData };
         if (this.user.lastPickedOrganization !== undefined) {
           this.organization = this.user.lastPickedOrganization;
+          this.name = this.organization.name;
         }
         this.imageUrl = this.user.lastPickedOrganization.imageURL;
         if (this.organization.createdByUserId === this.user.id) {
@@ -75,6 +77,7 @@ export class OrganizationProfileComponent implements OnInit {
     if (this.editable) {
       // Update Organization
       this.isUpdating = true;
+      this.organization.name = this.name;
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
           // Update lastPickedOrganization in User on frontend
