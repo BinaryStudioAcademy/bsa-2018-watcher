@@ -116,14 +116,14 @@ export class EditChartComponent implements OnInit, OnChanges {
         this.dropdownGroupSources = [{
           label: 'Percentage',
           items: [
-            { label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage },
-            { label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage },
+            {label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage},
+            {label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage},
           ]
         }, {
           label: 'Memory',
           items: [
-            { label: dataPropertyLables[DataProperty.localDiskFreeMBytes], value: DataProperty.localDiskFreeMBytes },
-            { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
+            {label: dataPropertyLables[DataProperty.localDiskFreeMBytes], value: DataProperty.localDiskFreeMBytes},
+            {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
           ]
         }];
         break;
@@ -131,9 +131,9 @@ export class EditChartComponent implements OnInit, OnChanges {
         this.dropdownGroupSources = [{
           label: 'Sources', // TODO: change
           items: [
-            { label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu },
-            { label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam },
-            { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
+            {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
+            {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
+            {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
           ]
         }];
         break;
@@ -231,11 +231,18 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   createChartRequest(): ChartRequest {
+    debugger;
+    let src: string;
+    if (!this.dashboardChart.showCommon) { // TODO: add conditions
+      src = this.processDataSource.toString();
+    } else {
+      src = this.dashboardChart.dataSources.join();
+    }
     const chart: ChartRequest = {
       showCommon: this.dashboardChart.showCommon,
       threshold: this.dashboardChart.threshold,
       mostLoaded: '' + this.chartForm.get('mostLoaded').value,
-      schemeType: this.dashboardChart.schemeType,
+      schemeType: this.dashboardChart.colorScheme.name, //this.dashboardChart.schemeType,
       dashboardId: this.dashboardId,
       showLegend: this.dashboardChart.showLegend,
       legendTitle: this.dashboardChart.legendTitle,
@@ -254,7 +261,7 @@ export class EditChartComponent implements OnInit, OnChanges {
       isShowSeriesOnHover: this.dashboardChart.showSeriesOnHover,
       title: this.dashboardChart.title,
       type: this.dashboardChart.chartType.type,
-      sources: this.dashboardChart.dataSources.join(),
+      sources: src,
       isLightTheme: this.dashboardChart.theme === 'light',
       scheme: this.dashboardChart.colorScheme
     };

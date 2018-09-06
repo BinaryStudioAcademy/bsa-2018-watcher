@@ -102,13 +102,8 @@ namespace DataCollector
             str.Append($"LocalDiskUsageMBytes: {LocalDiskUsageMBytes:0.##}\n");
             str.Append($"LocalDiskTotalMBytes: {LocalDiskTotalMBytes:0.##}\n");
             str.Append($"LocalDiskUsagePercentage: {LocalDiskUsagePercentage:0.##}%\n");
-
-           
-
             return str.ToString();
         }
-
-
     }
 
     public class ProcessData

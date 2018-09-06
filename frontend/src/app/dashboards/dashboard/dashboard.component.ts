@@ -239,6 +239,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       type: dashboardChart.chartType.type,
       sources: dashboardChart.dataSources.join(),
       isLightTheme: dashboardChart.theme === 'light',
+      scheme: dashboardChart.colorScheme
     };
     return chart;
   }

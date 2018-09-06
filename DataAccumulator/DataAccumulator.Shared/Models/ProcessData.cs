@@ -1,8 +1,5 @@
 ﻿namespace DataAccumulator.Shared.Models
 {
-    using Watcher.Common.MoveToFrontend;
-
-    [ExportClassToTypescript]
     public class ProcessData
     {
         public string Name { get; set; }
