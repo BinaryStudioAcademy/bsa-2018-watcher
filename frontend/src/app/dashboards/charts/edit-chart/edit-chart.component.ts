@@ -112,6 +112,7 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   dropDownSelect(event) {
+    debugger;
     this.dashboardChart.dataSources = [event.value];
     this.processData();
   }
@@ -187,7 +188,7 @@ export class EditChartComponent implements OnInit, OnChanges {
         this.dashboardChart.dataSources, this.collectedDataForChart);
     } else {
       this.dashboardChart.data = this.dataService.prepareProcessData(this.dashboardChart.chartType.type,
-        this.processDataSource, this.collectedDataForChart, this.dashboardChart.mostLoaded);
+        this.dashboardChart.dataSources[0], this.collectedDataForChart, this.dashboardChart.mostLoaded);
     }
 
     switch (this.dashboardChart.chartType.type) {
