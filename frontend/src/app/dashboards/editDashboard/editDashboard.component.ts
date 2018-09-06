@@ -66,11 +66,11 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.isCustomize = true;
   }
 
-  edit(model: NgModel): void {
+  edit(model: NgModel): void { console.log(this.isIncluded);
     for (let i = 0; i < 4; i++) {
-      this.dashboardCharts[i].showXAxis = true;
-      this.dashboardCharts[i].showYAxis = true;
-      this.dashboardCharts[i].view = [600, 337];
+      // this.dashboardCharts[i].showXAxis = true;
+      // this.dashboardCharts[i].showYAxis = true;
+      // this.dashboardCharts[i].view = [600, 337];
       // this.newCharts.push(this.createChartRequest(this.dashboardCharts[i]));
       if (!this.isIncluded[i] && this.isCustomize) {
          this.dashboardCharts.splice(i, 1);

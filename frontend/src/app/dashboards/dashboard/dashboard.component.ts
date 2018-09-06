@@ -193,7 +193,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const newCharts: ChartRequest[] = [];
     this.dashboardsService.create(newDashboard)
       .subscribe((dto) => {
-          charts.forEach(c => newCharts.push(this.createChartRequest(c)));
+          charts.forEach(c => {
+            c.showXAxis = true;
+            c.showYAxis = true;
+            c.view =  [600, 337];
+            newCharts.push(this.createChartRequest(c));
+          });
           this.onAddedCharts(newCharts, dto.id);
           const item: DashboardMenuItem = this.transformToMenuItem(dto);
           this.dashboardMenuItems.unshift(item);
