@@ -3,7 +3,7 @@ import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
 import {DataProperty, dataPropertyLables} from '../../../shared/models/data-property.enum';
 import {SelectItem, SelectItemGroup} from 'primeng/api';
 import {DashboardChart} from '../../models/dashboard-chart';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder} from '@angular/forms';
 import {ChartRequest} from '../../../shared/requests/chart-request.model';
 import {CollectedDataService} from '../../../core/services/collected-data.service';
 import {CollectedData} from '../../../shared/models/collected-data.model';
@@ -165,13 +165,11 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   processData(): void {
-    debugger;
     this.showPreview = false;
     if (this.dashboardChart.showCommon) {
       this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
         this.dashboardChart.dataSources, this.collectedDataForChart);
     } else {
-      debugger;
       this.dashboardChart.data = this.dataService.prepareProcessData(this.dashboardChart.chartType.type,
         this.processDataSource, this.collectedDataForChart, this.dashboardChart.mostLoaded);
     }
@@ -236,7 +234,6 @@ export class EditChartComponent implements OnInit, OnChanges {
   }
 
   createChartRequest(): ChartRequest {
-    debugger;
     let src: string;
     if (!this.dashboardChart.showCommon) { // TODO: add conditions
       src = this.processDataSource.toString();

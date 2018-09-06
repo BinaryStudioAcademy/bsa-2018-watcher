@@ -29,7 +29,6 @@ export class DataService {
   }
 
   instantiateDashboardChart(value: Chart, collData: CollectedData[]): DashboardChart {
-    debugger;
     const dataProps = this.convertStringToArrEnum(value.sources);
     let chartData = [];
     if (value.showCommon) {
@@ -134,10 +133,19 @@ export class DataService {
   }
 
   mapToProcessMultiData(data: CollectedData[], property: DataProperty, processesAmount: number = 1) {
+    debugger;
     const items: MultiChartItem[] = [];
+    const stringProperty = DataProperty[property];
+    const lastData = data[data.length - 1];
+    lastData.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
+    const topProcessesNames: string[] = [];
     for (let i = 0; i < processesAmount; i++) {
-      const item: MultiChartItem = {name: data[data.length - 1].processes[i].name, series: []};
-      item.series = data.map(d => this.mapToProcessesLineChartSeriesItem(d, i, property));
+      topProcessesNames.push(lastData.processes[i].name);
+    }
+    for (let i = 0; i < processesAmount; i++) {
+      const pName = topProcessesNames[i];
+      const item: MultiChartItem = {name: pName, series: []}; // {name: data[data.length - 1].processes[i].name, series: []};
+      item.series = data.map(d => this.mapToProcessesLineChartSeriesItem(d, pName, stringProperty));
       items.push(item);
     }
 
@@ -145,7 +153,6 @@ export class DataService {
   }
 
   mapToProcessesSeriesItem(data: CollectedData, property: DataProperty, processesAmount: number = 1): NumberSeriesItem[] {
-    debugger;
     const items: NumberSeriesItem[] = [];
     const stringProperty = DataProperty[property];
     data.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
@@ -191,12 +198,19 @@ export class DataService {
     return items;
   }
 
-  mapToProcessesLineChartSeriesItem(data: CollectedData, processIndex, property: DataProperty): SeriesItem {
+  mapToProcessesLineChartSeriesItem(data: CollectedData, processName: string, property: string): SeriesItem {
     debugger;
+    const process = data.processes.find((value, index, obj) => {
+      return value.name === processName;
+    });
     const seriesItem: SeriesItem = {
-      value: data.processes[processIndex][DataProperty[property]],
+      value: 0, // data.processes[processIndex][DataProperty[property]],
       name: new Date(data.time)
     };
+
+    if (process) {
+      seriesItem.value = process[property];
+    }
 
     return seriesItem;
   }

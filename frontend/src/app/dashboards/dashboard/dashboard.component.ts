@@ -96,7 +96,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
                       this.dashboardMenuItems[i].charts[j].dataSources, data);
                   } else {
-                    debugger;
                     tempData = this.dataService.prepareProcessData(this.dashboardMenuItems[i].charts[j].chartType.type,
                       this.dashboardMenuItems[i].charts[j].dataSources[0], data, this.dashboardMenuItems[i].charts[j].mostLoaded);
                   }
@@ -398,7 +397,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
-    debugger; // TODO: check how data source looks for multiple chart
+    // debugger; // TODO: check how data source looks for multiple chart
     const item: DashboardMenuItem = {
       label: dashboard.title,
       dashId: dashboard.id,
