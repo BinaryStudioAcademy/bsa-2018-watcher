@@ -111,6 +111,11 @@ namespace DataCollector
         {
             var result = new List<ProcessData>();
             var processes = Process.GetProcesses();
+
+            
+
+
+
             foreach (var item in processes)
             {
                 if (!_processRamCounters.ContainsKey(item.ProcessName))
@@ -121,14 +126,21 @@ namespace DataCollector
                     _processCpuCounters.Add(item.ProcessName,
                         new PerformanceCounter("Process", "% Processor Time", item.ProcessName));
 
+                
+
                 try
                 {
+                    var name = item.ProcessName;
+                    var ramMBytes = _processRamCounters[item.ProcessName].NextValue() / 1024 / 1024;
+                    var pCpu = _processCpuCounters[item.ProcessName].NextValue();
+                    var pRam = (ramMBytes / GetTotalRAM()) * 100;
+
                     result.Add(new ProcessData
                     {
-                        Name = item.ProcessName,
-                        RamMBytes = _processRamCounters[item.ProcessName].NextValue() / 1024,
-                        PCpu = _processCpuCounters[item.ProcessName].NextValue(),
-                        PRam = ((_processRamCounters[item.ProcessName].NextValue() / 1024) / GetTotalRAM()) * 100
+                        Name = name,
+                        RamMBytes = ramMBytes,
+                        PCpu = pCpu,
+                        PRam = pRam
                     });  
                 }
                 catch (Exception e)

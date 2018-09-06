@@ -41,18 +41,13 @@ namespace DataCollector
 
         public static CollectedData operator +(CollectedData firstItem, CollectedData secondItem)
         {
-            var processes = firstItem.Processes;
-
-            secondItem.Processes
-                .ForEach(item => ConcatProcessInfo(processes, item));
-
-
             return new CollectedData
             {
+                
                 InterruptsTimePercent = firstItem.InterruptsTimePercent + secondItem.InterruptsTimePercent,
                 InterruptsPerSeconds = firstItem.InterruptsPerSeconds + secondItem.InterruptsPerSeconds,
 
-                ProcessesCount = firstItem.ProcessesCount + secondItem.ProcessesCount,
+                ProcessesCount = secondItem.ProcessesCount,
 
                 UsageRamMBytes = firstItem.UsageRamMBytes + secondItem.UsageRamMBytes,
                 TotalRamMBytes = firstItem.TotalRamMBytes + secondItem.TotalRamMBytes,
@@ -65,43 +60,12 @@ namespace DataCollector
                 CpuUsagePercentage = firstItem.CpuUsagePercentage + secondItem.CpuUsagePercentage,
 
                 Time = secondItem.Time,
-                //Processes = processes,
+                Processes = secondItem.Processes,
             };
-        }
-
-        public static void ConcatProcessInfo(List<ProcessData> listProcessData, ProcessData item)
-        {
-            if(null == listProcessData.FirstOrDefault(p => p.Name == item.Name))
-            {
-                listProcessData.Add(item);
-            }
-
-
-            foreach (var p in listProcessData)
-            {
-                if(p.Name == item.Name)
-                {
-                    p.PCpu += item.PCpu;
-                    p.PRam += item.PRam;
-                    p.RamMBytes += item.RamMBytes;
-                }
-            }
-            // BUG: If the process has lived less than 10 seconds or has ended
         }
 
         public static CollectedData operator /(CollectedData item, int scalar)
         {
-            var process = new List<ProcessData>();
-
-            item.Processes
-                .ForEach(p => process.Add(new ProcessData
-                {
-                    Name = p.Name,
-                    PCpu = p.PCpu / scalar,
-                    PRam = p.PRam / scalar,
-                    RamMBytes = p.RamMBytes / scalar
-                }));
-
             return new CollectedData
             {
                 InterruptsTimePercent = item.InterruptsTimePercent / scalar,
@@ -119,7 +83,7 @@ namespace DataCollector
 
                 ProcessesCount = item.ProcessesCount,
                 Time = item.Time,
-                Processes = process
+                Processes = item.Processes
             };
         }
 
@@ -138,6 +102,12 @@ namespace DataCollector
             str.Append($"LocalDiskUsageMBytes: {LocalDiskUsageMBytes:0.##}\n");
             str.Append($"LocalDiskTotalMBytes: {LocalDiskTotalMBytes:0.##}\n");
             str.Append($"LocalDiskUsagePercentage: {LocalDiskUsagePercentage:0.##}%\n");
+
+            foreach( var item in Processes)
+            {
+                Console.WriteLine($"{item.Name}\t\t {item.PCpu} \t {item.PRam} \t {item.RamMBytes}");
+            }
+
             return str.ToString();
         }
 

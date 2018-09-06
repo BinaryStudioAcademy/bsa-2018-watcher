@@ -135,8 +135,14 @@ namespace DataCollector
             int counter = 0;
             foreach (string row in output.Split("\n"))
             {
-                if (counter == 0) continue;
-                counter++;
+                if (counter == 0)
+                {
+                    counter++;
+                    continue;
+                }
+
+                
+
                 var cols = row.Split(";");
                 if(cols.Length == 4)
                 {
@@ -149,6 +155,9 @@ namespace DataCollector
                     });
                 }
             }
+
+            Console.WriteLine(processData.Count);
+            
             return processData;
         }
 
