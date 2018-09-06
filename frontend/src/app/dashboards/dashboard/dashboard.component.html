@@ -1,30 +1,19 @@
 <app-edit-dashboard (edited)="onEdited($event)" (closed)="onClosed()" [display]="displayEditDashboard" [dashboardTitle]="editTitle"></app-edit-dashboard>
-
+<!-- (added)="onAddedCharts($event)" -->
 <app-edit-chart (editChart)="onChartEdited($event)" (closed)="onChartEditClosed()" [onDisplay]="onDisplayChartEditing"
   [dashboardId]="activeDashboardItem ? activeDashboardItem.dashId : 0" [dashboardChart]="chartToEdit">
 </app-edit-chart>
 
 <p-progressSpinner class=spinner *ngIf="isLoading" strokeWidth="3"></p-progressSpinner>
-<div class="site-wrap" *ngIf="!isLoading">
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-lg-6">
-      <div class="title">DASHBOARDS</div>
-      <div *ngIf="!instanceId" class="placeholder">
-
-          <div>
-            <i class="fa fa-plus"></i> 1. Create a VM instance
-          </div>
-          <div>
-            <i class="fa fa-download"></i> 2. Download the application
-          </div>
-          <div>
-            <i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity
-          </div>
-      </div>
-
-    </div>
-
+<div class="dashboard-wrap" *ngIf="!isLoading">
+  <div class="title">DASHBOARDS</div>
+  <hr *ngIf="!instanceId">
+  <div *ngIf="!instanceId" class="tutorial">
+    <p class="tutorial-item"><i class="fa fa-plus"></i> 1. Create a VM instance</p>
+    <p class="tutorial-item"><i class="fa fa-download"></i> 2. Download the application</p>
+    <p class="tutorial-item"><i class="fa fa-dashboard"></i> 3. Create your dashboard to track VM activity</p>
   </div>
+
   <!--Item showAddItemPopup() -->
   <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
   <div class="workspace" *ngIf="instanceId">
@@ -32,20 +21,18 @@
       <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
       <button #btn type="button" class="gear" pButton icon="fa fa-fw fa-gear" (click)="cog.toggle($event)"></button>
     </div>
-    <div *ngIf="dashboardMenuItems.length == 1">
-        <p class="text-pl">Click <i class="fa fa-plus"></i> to add a dashboard</p>
-      </div>
-    <div *ngIf="activeDashboardItem?.charts?.length<1 && dashboardMenuItems.length > 1">
-      <p class="text-pl">Click <i class="fa fa-gear"></i> and add chart or plot</p>
+    <div class="tutorial" *ngIf="dashboardMenuItems.length == 1">
+      <p class="tutorial-item">Click <i class="fa fa-plus"></i> to add a dashboard</p>
+    </div>
+    <div class="tutorial" *ngIf="activeDashboardItem?.charts?.length<1 && dashboardMenuItems.length > 1">
+      <p class="tutorial-item">Click <i class="fa fa-gear"></i> and add chart or plot</p>
     </div>
 
     <app-chart-dashboard *ngIf="activeDashboardItem && dashboardMenuItems.length > 1"
-                         [charts]="activeDashboardItem.charts"
-                         [dashboardId]="activeDashboardItem.dashId"
-                         (editChart)="onEditChart($event)"
-                         (deleteChart)="onChartDeleted($event)">
+                          [dashboardCharts]="activeDashboardItem.charts"
+                          [dashboardId]="activeDashboardItem.dashId"
+                          (editChart)="onEditChart($event)"
+                          (deleteChart)="onChartDeleted($event)">
     </app-chart-dashboard>
   </div>
-
-
 </div>

@@ -2,7 +2,12 @@
   [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]="false" (onAfterToggle)="closeDialog()">
   <div class="ui-g ui-fluid">
     <div class="ui-g-3">
-      <p class="field-top">Select chart type: </p>
+        <p class="field-top">Title: </p>
+        <input class="width-left-part"
+        type="text"
+        [(ngModel)]="dashboardChart.title"
+        pInputText/>
+      <p class="field">Select chart type: </p>
       <p-dropdown [options]="dropdownTypes"
                   [(ngModel)]="dashboardChart.chartType"
                   placeholder="Select a type"
@@ -60,6 +65,7 @@
     <div class="ui-g-9">
       <p class="field-top center">Visualization</p>
       <div class="view-chart" *ngIf="showPreview && dashboardChart.data && dashboardChart.data.length > 0">
+        <div class="chart-title">{{dashboardChart.title}}</div>
         <app-chart [chart]="dashboardChart"
                    [data]="dashboardChart.data"
                    [chartType]="dashboardChart.chartType"

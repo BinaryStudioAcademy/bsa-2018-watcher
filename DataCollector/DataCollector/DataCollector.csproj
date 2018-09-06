@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;Windows</DefineConstants>
+    <DefineConstants>TRACE;Linux</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -46,6 +46,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="4.5.0" />
+    <PackageReference Include="System.Management" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
