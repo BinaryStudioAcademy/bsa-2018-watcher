@@ -1,12 +1,14 @@
-<p-dialog [header]="dialogTitle" [(visible)]="visible" [modal]="true" [responsive]="true" [width]="1000" [minWidth]="850"
-  [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]="false" (onAfterToggle)="closeDialog()">
+<p-dialog [header]="dialogTitle" [(visible)]="visible" [modal]="true" [responsive]="true" [width]="1000"
+          [minWidth]="850"
+          [minY]="70" [maximizable]="false" [contentStyle]="{'overflow':'visible'}" [draggable]="false"
+          (onAfterToggle)="closeDialog()">
   <div class="ui-g ui-fluid">
     <div class="ui-g-3">
-        <p class="field-top">Title: </p>
-        <input class="width-left-part"
-        type="text"
-        [(ngModel)]="dashboardChart.title"
-        pInputText/>
+      <p class="field-top">Title: </p>
+      <input class="width-left-part"
+             type="text"
+             [(ngModel)]="dashboardChart.title"
+             pInputText/>
       <p class="field">Select chart type: </p>
       <p-dropdown [options]="dropdownTypes"
                   [(ngModel)]="dashboardChart.chartType"
@@ -39,17 +41,16 @@
                   (onChange)="processData()"
                   [group]="true">
       </p-dropdown>
-      <form [formGroup]="chartForm">
-        <p class="field">Number of heavy processes:</p>
-        <div class="width-left-part">
-          <p-spinner size="17"
-                     [(ngModel)]="dashboardChart.mostLoaded"
-                     (onChange)="processData()"
-                     [disabled]="spinnerDisabled"
-                     [min]="0"
-                     [max]="100"></p-spinner>
-        </div>
-      </form>
+      <p class="field">Number of heavy processes:</p>
+      <div class="width-left-part">
+        <p-spinner size="17"
+                   [(ngModel)]="dashboardChart.mostLoaded"
+                   (onChange)="processData()"
+                   [disabled]="spinnerDisabled"
+                   [step]="1"
+                   [min]="0"
+                   [max]="100"></p-spinner>
+      </div>
       <p class="field">Threshold: {{dashboardChart.threshold}}</p>
       <div class="field">
         <p-slider [(ngModel)]="dashboardChart.threshold"
@@ -92,7 +93,8 @@
     <div class="center">
       <!-- [disabled]="!((selectedType || selectedType === 0) && (selectedSource.length>0))"-->
       <!--&& selectedSource <button type="button" pButton class="ui-button-raised ui-button-icon-primary" (click)="processData()" label="Preview"></button>-->
-      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onEditChart()" label="Save"></button>
+      <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onEditChart()"
+              label="Save"></button>
       <button type="button" pButton (click)="closeDialog()" label="Cancel" class="ui-button-warning"></button>
     </div>
   </p-footer>
