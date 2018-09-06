@@ -66,12 +66,11 @@ export class EditDashboardComponent implements OnInit, OnChanges {
          correction++;
       }
     }
-    this.edited.emit({title: this.title, charts: this.dashboardCharts});
+    this.edited.emit({title: this.title, charts: this.isSource ? this.dashboardCharts : null});
     // this.edited.emit(this.title);
     this.title = '';
     model.reset();
     this.reset();
-    /*this.added.emit(this.newCharts);*/
   }
 
   reset() {
@@ -109,7 +108,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         this.isIncluded.push(true);
         const dashboardChart = { ...defaultOptions };
         this.dashboardCharts.push(dashboardChart);
-        this.dashboardCharts[i].view = [378, 204];
+        this.dashboardCharts[i].view = [373, 202];
         this.dashboardCharts[i].chartType = dashboardChartTypes[i];
         this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
         this.dashboardCharts[i].chartType.type = dashboardChartTypes[i].type;

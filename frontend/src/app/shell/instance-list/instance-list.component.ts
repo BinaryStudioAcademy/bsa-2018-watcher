@@ -78,6 +78,11 @@ export class InstanceListComponent implements OnInit {
         routerLink: [`/user/instances/${instance.id}/edit`],
         styleClass: 'instance-options'
       }, {
+        label: 'Activities',
+        icon: 'fa fa fa-history',
+        routerLink: [`/user/instances/${instance.guidId}/activities`],
+        styleClass: 'instance-options'
+      }, {
         label: 'Download app',
         icon: 'fa fa-download',
         styleClass: 'instance-options',
@@ -85,6 +90,11 @@ export class InstanceListComponent implements OnInit {
           this.showDownloadModal = true;
           this.currentGuidId = instance.guidId;
         }
+      }, {
+        label: 'Report',
+        icon: 'fa fa-stack-exchange',
+        routerLink: [`/user/instances/${instance.id}/${instance.guidId}/report`],
+        styleClass: 'instance-options'
       }, {
         label: 'Delete',
         icon: 'fa fa-close',

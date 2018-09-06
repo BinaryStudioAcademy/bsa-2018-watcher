@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
+import { ReportComponent } from './report/report.component';
+import { InstanceActivityComponent } from './instance-activity/instance-activity.component';
 
 const dashboardRoutes: Routes = [
   {
@@ -18,8 +20,16 @@ const dashboardRoutes: Routes = [
     component: EditInstanceComponent
   },
   {
+    path: ':insId/activities',
+    component: InstanceActivityComponent
+  },
+  {
     path: ':insId/:guidId/dashboards',
     component: DashboardComponent
+  },
+  {
+    path: ':insId/:guidId/report',
+    component: ReportComponent
   }];
 
 @NgModule({
