@@ -8,7 +8,7 @@ export const defaultOptions = {
   id: 0,
   showCommon: true,
   threshold: 0,
-  mostLoaded: '',
+  mostLoaded: 1,
   // colorScheme:  {
   //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   // },

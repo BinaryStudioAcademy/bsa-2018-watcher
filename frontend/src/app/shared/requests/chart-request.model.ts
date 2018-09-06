@@ -1,10 +1,9 @@
 ﻿import { ChartType } from '../models/chart-type.enum';
-import { ColorScheme } from '../models/color-scheme.model';
 
 export interface ChartRequest  {
    showCommon: boolean;
    threshold: number;
-   mostLoaded: string;
+   mostLoaded: number;
    dashboardId: number;
    schemeType: string;
    showLegend: boolean;
@@ -26,7 +25,6 @@ export interface ChartRequest  {
    type: ChartType;
    sources: string;
    isLightTheme: boolean;
-   scheme: ColorScheme;
 }
 
 

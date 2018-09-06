@@ -156,7 +156,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     const chart: ChartRequest = {
       showCommon: dashboardChart.showCommon,
       threshold: dashboardChart.threshold,
-      mostLoaded: '',
+      mostLoaded: 1,
       schemeType: dashboardChart.schemeType,
       dashboardId: 0,
       showLegend: dashboardChart.showLegend,
@@ -178,7 +178,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
       type: dashboardChart.chartType.type,
       sources: this.sources.join(),
       isLightTheme: dashboardChart.theme === 'light',
-      scheme: dashboardChart.colorScheme
     };
     return chart;
   }

@@ -10,8 +10,7 @@ import {DashboardChart} from '../../dashboards/models/dashboard-chart';
 import {dashboardChartTypes} from '../../dashboards/charts/models/dashboardChartTypes';
 import {defaultOptions} from '../../dashboards/charts/models/chart-options';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
-import {ProcessData} from '../../shared/models/process-data.model';
-
+import {colorSets} from '@swimlane/ngx-charts/release/utils';
 @Injectable()
 export class DataService {
   constructor() {
@@ -36,7 +35,7 @@ export class DataService {
       showCommon: value.showCommon,
       threshold: value.threshold,
       mostLoaded: value.mostLoaded,
-      colorScheme: {...defaultOptions.colorScheme},
+      colorScheme: {...colorSets.find(s => s.name === value.schemeType)}, // {...defaultOptions.colorScheme},
       schemeType: defaultOptions.schemeType,
       showLegend: value.showLegend,
       legendTitle: value.legendTitle,
@@ -71,7 +70,8 @@ export class DataService {
   instantiateDashboardChartFromRequest(value: ChartRequest, chartId: number, collData: CollectedData[]): DashboardChart {
     const chart: Chart = {
       id: chartId,
-      ...value
+      ...value,
+      scheme: {...colorSets.find(s => s.name === value.schemeType)}
     };
 
     return this.instantiateDashboardChart(chart, collData);

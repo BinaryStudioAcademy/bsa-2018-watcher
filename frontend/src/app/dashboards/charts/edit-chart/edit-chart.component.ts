@@ -12,7 +12,6 @@ import {ChartService} from '../../../core/services/chart.service';
 import {ToastrService} from '../../../core/services/toastr.service';
 import {Chart} from '../../../shared/models/chart.model';
 import {dashboardChartTypes} from '../models/dashboardChartTypes';
-// import { eventNames } from 'cluster';
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 
 @Component({
@@ -241,8 +240,8 @@ export class EditChartComponent implements OnInit, OnChanges {
     const chart: ChartRequest = {
       showCommon: this.dashboardChart.showCommon,
       threshold: this.dashboardChart.threshold,
-      mostLoaded: '' + this.chartForm.get('mostLoaded').value,
-      schemeType: this.dashboardChart.colorScheme.name, //this.dashboardChart.schemeType,
+      mostLoaded: this.dashboardChart.mostLoaded,
+      schemeType: this.dashboardChart.colorScheme.name, // this.dashboardChart.schemeType,
       dashboardId: this.dashboardId,
       showLegend: this.dashboardChart.showLegend,
       legendTitle: this.dashboardChart.legendTitle,
@@ -263,7 +262,6 @@ export class EditChartComponent implements OnInit, OnChanges {
       type: this.dashboardChart.chartType.type,
       sources: src,
       isLightTheme: this.dashboardChart.theme === 'light',
-      scheme: this.dashboardChart.colorScheme
     };
     return chart;
   }

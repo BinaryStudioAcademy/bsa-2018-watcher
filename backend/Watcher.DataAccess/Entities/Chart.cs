@@ -1,13 +1,12 @@
-﻿using Watcher.Common.Interfaces.Entities;
-
-namespace Watcher.DataAccess.Entities
+﻿namespace Watcher.DataAccess.Entities
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     using Common.Enums;
-    
+
+    using Watcher.Common.Interfaces.Entities;
+
     public class Chart : Entity<int>, ISoftDeletable
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,7 +17,7 @@ namespace Watcher.DataAccess.Entities
 
         public int Threshold { get; set; } // = 1;
 
-        public string MostLoaded { get; set; }
+        public int MostLoaded { get; set; }
 
         public int DashboardId { get; set; }
         public Dashboard Dashboard { get; set; }
@@ -31,9 +30,7 @@ namespace Watcher.DataAccess.Entities
             IsDeleted = true;
         }
 
-        // public ColorSchemeTypeName ColorScheme { get; set; }
-
-        public string SchemeType { get; set; } = "ordinal";
+        public string SchemeType { get; set; } // = "ordinal";
 
         public bool ShowLegend { get; set; }
 
@@ -64,10 +61,6 @@ namespace Watcher.DataAccess.Entities
         public bool IsTooltipDisabled { get; set; }
 
         public bool IsShowSeriesOnHover { get; set; }
-
-        //public CurveType CurveType { get; set; }
-
-        //public CurveClosedType CurveClosedType { get; set; }
 
         public string Title { get; set; }
 

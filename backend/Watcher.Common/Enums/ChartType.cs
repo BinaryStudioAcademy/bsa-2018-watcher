@@ -5,7 +5,7 @@ namespace Watcher.Common.Enums
     [ExportEnumToTypescript]
     public enum ChartType
     {
-        BarVertical,
+        BarVertical = 0,
         LineChart,
         Pie,
         Guage
