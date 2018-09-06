@@ -31,7 +31,7 @@ constructor(private instanceService: InstanceService,
   popupMessage: string;
   isLoading: boolean;
   isDeleting: boolean;
-  isMember: boolean;
+  isMember = true;
 
   currentQuery = '';
 
@@ -39,14 +39,12 @@ constructor(private instanceService: InstanceService,
     this.authService.currentUser.subscribe(
       user => {
         this.user = user;
+        this.userOrganizationService.getOrganizationRole().subscribe((role: OrganizationRole) => {
+        this.isMember = role.name === 'Member' ? true : false;
         this.configureInstances(this.user.lastPickedOrganizationId);
+    });
       }
     );
-    this.userOrganizationService.currentOrganizationRole.subscribe((role: OrganizationRole) => {
-      this.isMember = role.name === 'Member' ? true : false;
-      console.log('ISMEMBER');
-      console.log(this.isMember);
-    });
    }
 
 
@@ -58,7 +56,6 @@ constructor(private instanceService: InstanceService,
       routerLink: ['instances/create'],
       disabled: this.isMember
     }];
-
 
     this.isLoading = true;
     this.instanceService.getAllByOrganization(organizationId).subscribe((data: Instance[]) => {
