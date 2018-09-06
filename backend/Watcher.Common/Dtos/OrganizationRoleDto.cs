@@ -12,3 +12,4 @@ namespace Watcher.Common.Dtos
         public string Name { get; set; }
     }
 }
+
