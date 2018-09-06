@@ -66,12 +66,11 @@ export class EditDashboardComponent implements OnInit, OnChanges {
          correction++;
       }
     }
-    this.edited.emit({title: this.title, charts: this.dashboardCharts});
+    this.edited.emit({title: this.title, charts: this.isSource ? this.dashboardCharts : null});
     // this.edited.emit(this.title);
     this.title = '';
     model.reset();
     this.reset();
-    /*this.added.emit(this.newCharts);*/
   }
 
   reset() {
