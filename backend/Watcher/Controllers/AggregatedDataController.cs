@@ -27,10 +27,6 @@ namespace Watcher.Controllers
         public virtual async Task<ActionResult<IEnumerable<CollectedDataDto>>> GetDataByInstance(Guid id, CollectedDataType type, DateTime from, DateTime to)
         {
             var dtos = await _aggregateDataService.GetAggregatedDataInTime(id, type, from, to);
-            if (!dtos.Any())
-            {
-                return NoContent();
-            }
 
             return Ok(dtos);
         }
