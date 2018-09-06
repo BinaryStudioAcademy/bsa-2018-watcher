@@ -152,7 +152,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         const tempData = this.dataService.prepareDataTick(this.activeDashboardItem.charts[i], latestData);
         this.activeDashboardItem.charts[i].data = [...tempData];
-        this.activeDashboardItem.charts = [...this.activeDashboardItem.charts];
       }
     });
   }
