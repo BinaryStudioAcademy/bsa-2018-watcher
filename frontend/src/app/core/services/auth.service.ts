@@ -8,11 +8,10 @@ import { UserLoginRequest } from '../../shared/models/user-login-request';
 import * as firebase from 'firebase';
 import { UserInfoProfile } from '../../shared/models/user-info-profile';
 import { User } from '../../shared/models/user.model';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, first } from 'rxjs/operators';
 import { Token } from '../../shared/models/token.model';
 import { UserProfile} from '../../shared/models/user-profile';
 import { JwtHelperService } from '@auth0/angular-jwt';
-
 
 @Injectable()
 export class AuthService {
@@ -22,52 +21,41 @@ export class AuthService {
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
   public isAuthenticated: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
 
-  private user: Observable<firebase.User>;
   private userDetails: firebase.User = null;
   public userRegisterRequest: UserRegisterRequest = null;
 
   private tokenHelper: JwtHelperService = new JwtHelperService();
 
   constructor(private _firebaseAuth: AngularFireAuth,
-    private tokenService: TokenService,
-    private router: Router,
-    ) {
-    this.user = _firebaseAuth.authState;
-    this.user.subscribe(
-      (user) => {
-        if (user) {
-          this.userDetails = user;
-        } else {
-          this.userDetails = null;
-        }
-      }
-    );
+              private tokenService: TokenService,
+              private router: Router,
+              ) {
+    _firebaseAuth.authState.subscribe((user) => {
+      this.userDetails = user ? user : null;
+    });
   }
 
   // Verify JWT in localstorage with server & load user's info.
   // This runs once on application startup.
   async populate(): Promise<any> {
-    console.log('POPULATE');
     // If JWT detected, attempt to get & store user's info
     const fToken = await this.getFirebaseToken();
     const wToken = await this.getWatcherToken();
-    console.log(fToken);
-    console.log(wToken);
 
-    if (fToken && wToken) {
-      return this.tokenService.getUserByTokens().toPromise()
-        .then(currUser => {
-          this.setAuth(currUser);
-          return currUser;
-        })
-        .catch(err => {
-          console.log(err);
-          this.purgeAuth();
-        });
-    } else {
-      // Remove any potential remnants of previous auth states
+    if (!fToken || !wToken) {
       this.purgeAuth();
+      return;
     }
+
+    return this.tokenService.getUserByTokens().toPromise()
+      .then(currUser => {
+        this.setAuth(currUser);
+        return currUser;
+      })
+      .catch(err => {
+        console.log(err);
+        this.purgeAuth();
+      });
   }
 
   setAuth(token: Token): void {
@@ -137,8 +125,6 @@ export class AuthService {
     const firebaseToken = await credential.user.getIdToken(true);
 
     localStorage.setItem('firebaseToken', firebaseToken);
-    console.log('LOGIN');
-    console.log(credential.user.photoURL);
     return this.tokenService.login(request).toPromise()
       .then(tokenDto => {
         this.setAuth(tokenDto);
@@ -234,21 +220,11 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    if (this.userDetails == null) {
-      return false;
-    } else {
-      return true;
-    }
+    return !!this.userDetails;
   }
 
   isAuthorized(): boolean {
-    const user = this.getCurrentUserLS();
-
-    if (user != null) {
-      return true;
-    } else {
-      return false;
-    }
+    return !!this.getCurrentUserLS();
   }
 
   getCurrentUser(): User | null {
@@ -257,8 +233,7 @@ export class AuthService {
 
   getCurrentUserLS(): User {
     const userStr = localStorage.getItem('currentUser');
-    const userDto = (<User>JSON.parse(userStr));
-    return userDto;
+    return (<User>JSON.parse(userStr));
   }
 
   updateCurrentUser(user: User) {
@@ -288,30 +263,14 @@ export class AuthService {
   }
 
   async refreshFirebaseToken() {
-    console.log('REFRESHING FIREBASE TOKEN');
-    const token = localStorage.getItem('firebaseToken');
-    if (!token) {
-      return;
-    }
-    if (!this.tokenHelper.isTokenExpired(token)) {
-      return;
-    }
+    const firebaseToken = this._firebaseAuth.auth.currentUser
+                          ? await this._firebaseAuth.auth.currentUser.getIdToken(true)
+                          : await this._firebaseAuth.authState.pipe(first()).toPromise().then(user => user.getIdToken(true));
 
-    const firebaseToken = await this._firebaseAuth.auth.currentUser.getIdToken(true);
-    console.log('FIREBASE TOKEN HAS BEEN REFRESHED');
     localStorage.setItem('firebaseToken', firebaseToken);
   }
 
   async refreshWatcherToken() {
-    console.log('REFRESHING WATCHER TOKEN');
-    const token = localStorage.getItem('watcherToken');
-    if (!token) {
-      return;
-    }
-    if (!this.tokenHelper.isTokenExpired(token)) {
-      return;
-    }
-
     const userInfo = this.getCurrentUserLS();
      const req: UserLoginRequest = {
       uid: userInfo.id,
@@ -319,7 +278,6 @@ export class AuthService {
     };
 
     const tokenDto = await this.tokenService.login(req).toPromise();
-    console.log('WATCHER TOKEN HAS BEEN REFRESHED');
     localStorage.setItem('watcherToken', tokenDto.watcherJWT);
   }
 
