@@ -62,6 +62,19 @@ namespace Watcher.Controllers
             return Ok(dtos);
         }
 
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public virtual async Task<ActionResult<IEnumerable<UserOrganizationDto>>> GetByOrganization(int id)
+        {
+            var dtos = await _userOrganizationService.GetEntitiesByOrganizationId(id);
+            if (!dtos.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(dtos);
+        }
+
         /// <summary>
         /// Add new UserOrganization
         /// </summary>
@@ -89,6 +102,35 @@ namespace Watcher.Controllers
             }
 
             return dto;
+        }
+
+        // PUT: /userorganization
+        [HttpPut]
+        public virtual async Task<ActionResult> Update([FromBody] UserOrganizationRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _userOrganizationService.UpdateEntityAsync(request);
+            if (result == null)
+            {
+                return StatusCode(500);
+            }
+
+            return NoContent();
+        }
+
+        [HttpGet("user/{uId}/organization/{oId}")]
+        public virtual async Task<ActionResult> GetUserOrganizationRole(string uId, int oId)
+        {
+            var organizationRole = await _userOrganizationService.GetUserOrganizationRoleAsync(uId, oId);
+            if(organizationRole == null)
+            {
+                return NotFound();
+            }
+            return Ok(organizationRole);
         }
 
         /// <summary>

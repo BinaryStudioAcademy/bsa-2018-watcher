@@ -4,6 +4,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsComponent } from './settings.component';
 import { NotificationSettingsComponent } from './notification-settings/notification-settings.component';
 import { OrganizationProfileComponent } from './organization-profile/organization-profile.component';
+import { OrganizationMembersComponent } from './organization-members/organization-members.component';
 
 const settingsRoutes: Routes = [{
   path: '',
@@ -20,6 +21,9 @@ const settingsRoutes: Routes = [{
   }, {
     path: 'notification-settings',
     component: NotificationSettingsComponent
+  }, {
+    path: 'organization-members',
+    component: OrganizationMembersComponent
   }]
 }];
 

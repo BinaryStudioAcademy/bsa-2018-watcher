@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EditInstanceComponent } from './edit-instance/edit-instance.component';
+import { ManagerGuard } from '../core/guards/manager.guard';
 import { ReportComponent } from './report/report.component';
 import { InstanceActivityComponent } from './instance-activity/instance-activity.component';
 
@@ -13,11 +14,13 @@ const dashboardRoutes: Routes = [
   },
   {
     path: ':insId/edit',
-    component: EditInstanceComponent
+    component: EditInstanceComponent,
+    canActivate: [ManagerGuard]
   },
   {
     path: 'create',
-    component: EditInstanceComponent
+    component: EditInstanceComponent,
+    canActivate: [ManagerGuard]
   },
   {
     path: ':insId/activities',

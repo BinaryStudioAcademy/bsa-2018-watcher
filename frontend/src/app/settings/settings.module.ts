@@ -20,6 +20,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DataViewModule } from 'primeng/dataview';
 import { InvitesListComponent } from './organization-profile/invites-list.component';
 import { CalendarModule } from 'primeng/calendar';
+import { OrganizationMembersComponent } from './organization-members/organization-members.component';
+import { SpinnerPopupComponent } from './spinner-popup/spinner-popup.component';
 
 @NgModule({
   imports: [
@@ -50,7 +52,9 @@ import { CalendarModule } from 'primeng/calendar';
     UserProfileComponent,
     OrganizationProfileComponent,
     UserPictureComponent,
-    InvitesListComponent
+    InvitesListComponent,
+    OrganizationMembersComponent,
+    SpinnerPopupComponent
   ]
 })
 export class SettingsModule { }

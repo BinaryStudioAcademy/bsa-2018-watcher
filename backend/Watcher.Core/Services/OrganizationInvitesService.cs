@@ -114,10 +114,13 @@
 
                 if (invitedUser.UserOrganizations == null) invitedUser.UserOrganizations = new List<UserOrganization>();
 
+                //TODO: organization role in request
+                //id 2 is member
                 invitedUser.UserOrganizations.Add(new UserOrganization
                 {
                     UserId = invitedUser.Id,
-                    OrganizationId = entity.OrganizationId
+                    OrganizationId = entity.OrganizationId,
+                    OrganizationRoleId = 2
                 });
 
                 invitedUser.LastPickedOrganizationId = entity.OrganizationId;

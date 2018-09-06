@@ -7,6 +7,8 @@ import { MenuItem } from 'primeng/api';
 import { User } from '../../shared/models/user.model';
 import { Instance } from '../../shared/models/instance.model';
 import { Router } from '@angular/router';
+import { OrganizationRole } from '../../shared/models/organization-role.model';
+import { UserOrganizationService } from '../../core/services/user-organization.service';
 import { NavigationStart} from '@angular/router';
 
 @Component({
@@ -14,21 +16,21 @@ import { NavigationStart} from '@angular/router';
   templateUrl: './instance-list.component.html',
   styleUrls: ['./instance-list.component.sass']
 })
-export class InstanceListComponent implements OnInit, AfterContentChecked, AfterViewChecked {
+export class InstanceListComponent implements OnInit, AfterContentChecked, AfterViewChecked  {
+constructor(private instanceService: InstanceService,
+  private toastrService: ToastrService,
+  private authService: AuthService,
+  private userOrganizationService: UserOrganizationService,
+  private router: Router) {
+  this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
+  this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
+  router.events.forEach((event) => {
+    if (event instanceof NavigationStart) {
+      this.clearSettings(this.router.url);
+    }
+  });
+ }
 
-  constructor(private instanceService: InstanceService,
-              private toastrService: ToastrService,
-              private authService: AuthService,
-              private router: Router) {
-                this.instanceService.instanceAdded.subscribe(instance => {this.onInstanceAdded(instance);
-                  console.log('SUBSCRIBED ON EVENT'); });
-                this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-                router.events.forEach((event) => {
-                  if (event instanceof NavigationStart) {
-                    this.clearSettings(this.router.url);
-                  }
-                });
-               }
 
   menuItems: MenuItem[];
   user: User;
@@ -37,6 +39,7 @@ export class InstanceListComponent implements OnInit, AfterContentChecked, After
   popupMessage: string;
   isLoading: boolean;
   isDeleting: boolean;
+  isMember = true;
   previousSettingUrl: string;
 
   currentQuery = '';
@@ -45,7 +48,10 @@ export class InstanceListComponent implements OnInit, AfterContentChecked, After
     this.authService.currentUser.subscribe(
       user => {
         this.user = user;
+        this.userOrganizationService.getOrganizationRole().subscribe((role: OrganizationRole) => {
+        this.isMember = role.name === 'Member' ? true : false;
         this.configureInstances(this.user.lastPickedOrganizationId);
+    });
       }
     );
    }
@@ -64,8 +70,8 @@ export class InstanceListComponent implements OnInit, AfterContentChecked, After
       title: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
       routerLink: ['instances/create'],
+      disabled: this.isMember
     }];
-
 
     this.isLoading = true;
     this.instanceService.getAllByOrganization(organizationId).subscribe((data: Instance[]) => {
@@ -91,7 +97,8 @@ export class InstanceListComponent implements OnInit, AfterContentChecked, After
         label: 'Edit',
         icon: 'fa fa-pencil',
         routerLink: [`/user/instances/${instance.id}/edit`],
-        styleClass: 'instance-options'
+        styleClass: 'instance-options',
+        disabled: this.isMember
       }, {
         label: 'Activities',
         icon: 'fa fa fa-history',
@@ -101,6 +108,7 @@ export class InstanceListComponent implements OnInit, AfterContentChecked, After
         label: 'Download app',
         icon: 'fa fa-download',
         styleClass: 'instance-options',
+        disabled: this.isMember,
         command: () => {
           this.showDownloadModal = true;
           this.currentGuidId = instance.guidId;
@@ -117,7 +125,8 @@ export class InstanceListComponent implements OnInit, AfterContentChecked, After
           const index = this.menuItems.findIndex(i => i === item);
           this.deleteInstance(instance.id, index);
         },
-        styleClass: 'instance-options'
+        styleClass: 'instance-options',
+        disabled: this.isMember
       } ]
     };
     return item;

@@ -7,5 +7,8 @@
 
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
+
+        public int OrganizationRoleId { get; set; }
+        public OrganizationRole OrganizationRole { get; set; }
     }
 }
