@@ -148,9 +148,22 @@ namespace DataCollector
                     _processRamCounters.Remove(item.ProcessName);
                 }
             }
+            result = GroupProcesses(result);
 
             return result; // DODO merge processes if Processes with the same name
         } 
+
+        private List<ProcessData> GroupProcesses(List<ProcessData> processes)
+        {
+            return processes.GroupBy(proc => proc.Name).Select(
+                    group => new ProcessData
+                    {
+                        Name = group.Key,
+                        PCpu = group.Sum(proc => proc.PCpu),
+                        PRam = group.Sum(proc => proc.PRam),
+                        RamMBytes = group.Sum(proc => proc.RamMBytes)
+                    }).ToList();
+        }
     }
 #endif
 }
