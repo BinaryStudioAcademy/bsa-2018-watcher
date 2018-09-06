@@ -2,16 +2,16 @@ import { Component, OnInit, OnChanges, Output, Input } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import {NgModel} from '@angular/forms';
 import { SelectItem } from 'primeng/api';
-import { DashboardChart } from './../models/dashboard-chart';
-import { ChartType, chartTypes } from './../../shared/models/chart-type.enum';
-import { DataProperty } from './../../shared/models/data-property.enum';
-import { CollectedDataService } from './../../core/services/collected-data.service';
-import { CollectedData } from './../../shared/models/collected-data.model';
-import { DataService } from './../../core/services/data.service';
-import { ChartService } from './../../core/services/chart.service';
+import { DashboardChart } from '../models/dashboard-chart';
+import { ChartType, chartTypes } from '../../shared/models/chart-type.enum';
+import { DataProperty } from '../../shared/models/data-property.enum';
+import { CollectedDataService } from '../../core/services/collected-data.service';
+import { CollectedData } from '../../shared/models/collected-data.model';
+import { DataService } from '../../core/services/data.service';
+import { ChartService } from '../../core/services/chart.service';
 import { defaultOptions } from '../charts/models/chart-options';
-import {dashboardChartTypes} from './../charts/models/dashboardChartTypes';
-import { ChartRequest } from './../../shared/requests/chart-request.model';
+import {dashboardChartTypes} from '../charts/models/dashboardChartTypes';
+import { ChartRequest } from '../../shared/requests/chart-request.model';
 
 @Component({
   selector: 'app-edit-dashboard',
