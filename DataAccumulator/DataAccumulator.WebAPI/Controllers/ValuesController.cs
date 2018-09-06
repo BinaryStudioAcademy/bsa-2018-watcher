@@ -153,9 +153,9 @@ namespace DataAccumulator.WebAPI.Controllers
                             new ProcessData()
                             {
                                 Name = "chrome",
-                                RamMBytes = 20,
-                                PRam = 5,
-                                PCpu = 7
+                                RamMBytes = 30,
+                                PRam = 20,
+                                PCpu = 9
                             },
                             new ProcessData()
                             {
