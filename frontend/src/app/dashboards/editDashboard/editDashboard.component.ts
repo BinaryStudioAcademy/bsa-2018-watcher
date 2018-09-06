@@ -26,17 +26,12 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   @Input() display: boolean;
   @Input() dashboardTitle: string;
 
-  // @Output() added = new EventEmitter<Array<ChartRequest>>();
-
   showPreview = false;
   dropdownSources: SelectItem[];
   collectedDataForChart: CollectedData[] = [];
   dashboardCharts: DashboardChart[] = [];
   newCharts: ChartRequest[] = [];
-  dashboardChart1 = { ...defaultOptions };
-  dashboardChart2 = { ...defaultOptions };
-  dashboardChart3 = { ...defaultOptions };
-  dashboardChart = { ...defaultOptions };
+
   isSource: Boolean = false;
   isCustomize: Boolean = false;
   sources: DataProperty[];
@@ -50,10 +45,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.closed.emit();
     this.title = '';
     // this.dashboardTitle = '';
-    this.sources = [];
-    this.isSource = false;
-    this.isCustomize = false;
-    this.showPreview = false;
+    this.reset();
   }
 
   generateAll() {
@@ -66,25 +58,32 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.isCustomize = true;
   }
 
-  edit(model: NgModel): void { console.log(this.isIncluded);
+  edit(model: NgModel): void {
+    let correction = 0;
     for (let i = 0; i < 4; i++) {
-      // this.dashboardCharts[i].showXAxis = true;
-      // this.dashboardCharts[i].showYAxis = true;
-      // this.dashboardCharts[i].view = [600, 337];
-      // this.newCharts.push(this.createChartRequest(this.dashboardCharts[i]));
       if (!this.isIncluded[i] && this.isCustomize) {
-         this.dashboardCharts.splice(i, 1);
+         this.dashboardCharts.splice(i - correction, 1);
+         correction++;
       }
     }
     this.edited.emit({title: this.title, charts: this.dashboardCharts});
+    // this.edited.emit(this.title);
+    this.title = '';
+    model.reset();
+    this.reset();
+    /*this.added.emit(this.newCharts);*/
+  }
+
+  reset() {
     this.sources = [];
     this.isSource = false;
     this.isCustomize = false;
     this.showPreview = false;
-    // this.edited.emit(this.title);
-    this.title = '';
-    model.reset();
-    /*this.added.emit(this.newCharts);*/
+    this.dashboardCharts = [];
+    this.isIncluded = [];
+    this.dashboardCharts = [];
+    this.isIncluded = [];
+    this.fillCharts();
   }
 
   ngOnChanges(changes) {
@@ -92,8 +91,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.collectedDataService.getBuilderData()
-    .subscribe(value => {
+    this.collectedDataService.getBuilderData().subscribe(value => {
       this.collectedDataForChart = value;
     });
 
@@ -107,12 +105,10 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   fillCharts() {
-    this.dashboardCharts.push(this.dashboardChart);
-    this.dashboardCharts.push(this.dashboardChart1);
-    this.dashboardCharts.push(this.dashboardChart2);
-    this.dashboardCharts.push(this.dashboardChart3);
     for (let i = 0; i < 4; i++) {
         this.isIncluded.push(true);
+        const dashboardChart = { ...defaultOptions };
+        this.dashboardCharts.push(dashboardChart);
         this.dashboardCharts[i].view = [378, 204];
         this.dashboardCharts[i].chartType = dashboardChartTypes[i];
         this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
@@ -121,6 +117,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         this.dashboardCharts[i].title = dashboardChartTypes[i].title;
         this.dashboardCharts[i].showXAxis = false;
         this.dashboardCharts[i].showYAxis = false;
+        this.dashboardCharts[i].showLegend = false;
     }
   }
 
@@ -132,7 +129,9 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.showPreview = false;
     dashboardChart.data = this.dataService.prepareData(dashboardChart.chartType.type,
       this.sources, this.collectedDataForChart);
+
     dashboardChart.dataSources = this.sources;
+
     switch (dashboardChart.chartType.type) {
       case ChartType.BarVertical:
         dashboardChart.xAxisLabel = 'Parameters';
@@ -153,6 +152,5 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     }
     return dashboardChart;
   }
-
 
 }
