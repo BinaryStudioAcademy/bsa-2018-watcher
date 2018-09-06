@@ -72,17 +72,21 @@
             DbSet.Remove(entityToDelete);
         }
 
-        public async Task<UserOrganization> UpdateAsync(UserOrganization userOrganization)
+        public async Task<UserOrganization> UpdateAsync(UserOrganization entity)
         {
-            var findEntity = await DbSet.FindAsync(userOrganization.OrganizationId, userOrganization.UserId);
+            IQueryable<UserOrganization> query = DbSet;
+
+
+            var findEntity = await query.FirstOrDefaultAsync(e => 
+            e.OrganizationId.Equals(entity.OrganizationId) && 
+            e.UserId.Equals(entity.UserId));
 
             if (findEntity == null)
             {
-                throw new HttpStatusCodeException(HttpStatusCode.NotFound, $"Entity {userOrganization.GetType().Name} not found");
+                throw new HttpStatusCodeException(HttpStatusCode.NotFound, $"Entity {entity.GetType().Name} not found");
             }
 
-            findEntity.OrganizationRoleId = userOrganization.OrganizationRoleId;
-
+            findEntity.OrganizationRoleId = entity.OrganizationRoleId;
             return findEntity;
         }
 

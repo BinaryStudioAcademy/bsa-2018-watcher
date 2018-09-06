@@ -122,6 +122,17 @@ namespace Watcher.Controllers
             return NoContent();
         }
 
+        [HttpGet("{user/{uId}/organization/{oId}}")]
+        public virtual async Task<ActionResult> GetUserOrganizationRole(string uId, int oId)
+        {
+            var organizationRole = await _userOrganizationService.GetUserOrganizationRoleAsync(uId, oId);
+            if(organizationRole == null)
+            {
+                return NotFound();
+            }
+            return Ok(organizationRole);
+        }
+
         /// <summary>
         /// Delete UserOrganization
         /// </summary>

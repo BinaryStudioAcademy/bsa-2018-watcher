@@ -3,6 +3,7 @@
 namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -86,6 +87,18 @@ namespace Watcher.Core.Services
             var result = await _uow.SaveAsync();
 
             return result;
+        }
+
+        public async Task<OrganizationRoleDto> GetUserOrganizationRoleAsync(string userId, int organizationId)
+        {
+            var entities = await _uow.UserOrganizationRepository.GetAllByOrganizationId(organizationId);
+            if (entities == null) return null;
+
+            var userOrganization = entities.FirstOrDefault(u => u.UserId == userId);
+            if (userOrganization == null) return null;
+
+            var roleDto = _mapper.Map<OrganizationRole, OrganizationRoleDto>(userOrganization.OrganizationRole);
+            return roleDto;
         }
     }
 }

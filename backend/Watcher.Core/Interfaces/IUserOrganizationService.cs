@@ -9,7 +9,7 @@
     public interface IUserOrganizationService
     {
         Task<IEnumerable<UserOrganizationDto>> GetAllEntitiesAsync();
-
+        Task<OrganizationRoleDto> GetUserOrganizationRoleAsync(string userId, int organizationId);
         Task<UserOrganizationDto> CreateEntityAsync(UserOrganizationRequest request);
 
         Task<bool> DeleteEntityAsync(int companyId, string userId);

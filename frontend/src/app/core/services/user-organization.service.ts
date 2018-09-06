@@ -24,7 +24,11 @@ export class UserOrganizationService {
     return this.http.delete(`${this.ctrlUrl}/?companyId=${companyId}&userId=${userId}`);
   }
 
-  getByOrganizationId(id: number) {
+  getByOrganizationId(id: number): Observable<UserOrganization[]> {
     return this.http.get<UserOrganization[]>(`${this.ctrlUrl}/${id}`);
+  }
+
+  update(entity: UserOrganization) {
+    return this.http.put(this.ctrlUrl, entity);
   }
 }

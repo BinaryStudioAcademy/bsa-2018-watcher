@@ -77,68 +77,15 @@ export class OrganizationMembersComponent implements OnInit {
 
   async changeRole(dropdown: Dropdown, userOrganization: UserOrganization ) {
     const selectedOption: OrganizationRole = dropdown.selectedOption.value;
-    console.log(dropdown.selectedOption);
-    console.log(typeof(dropdown));
     if (await this.toastrService.confirm(`You sure you want to make ${userOrganization.user.displayName} a ${selectedOption.name}`)) {
         console.log('CONFIRMED');
-        console.log(selectedOption);
-    } else {
+        const updating: UserOrganization = Object.assign({}, userOrganization);
+        updating.organizationRole = Object.assign({}, selectedOption);
+        this.userOrganizationService.update(updating).subscribe( (value) => {
+          this.toastrService.success('User permissions was updated');
+        });
+      } else {
       dropdown.selectedOption = this.toSelectItem(userOrganization.organizationRole);
     }
   }
-  loaded() {
-    console.log('loaded');
-  }
-
- /* findWithAttr(array, attr1, value1, attr2, value2) {
-    for (let i = 0; i < array.length; i += 1) {
-      if (array[i][attr1] === value1 && array[i][attr2] === value2) {
-        return array[i];
-      }
-    }
-    return null;
-  }*/
-
-  /*onUnassign(company: Organization, i: number) {
-    this.lstUnassign[i] = true;
-    if (this.lstUserCompany.length <= 1) {
-      this.toastrService.warning('The user must have at least one organization.');
-      return;
-    }
-    if (this.user.lastPickedOrganizationId === company.id) {
-      this.user.lastPickedOrganizationId = 0;
-      this.user.lastPickedOrganization = null;
-    }
-    this.userOrganizationService.delete(company.id, this.user.id).subscribe(
-      value => {
-        this.toastrService.success(`Now last picked organization - not selected.`);
-        if (this.user.id === this.currentUser.id) {
-          console.log('I am here');
-          const index = this.currentUser.organizations.indexOf(company);
-          this.currentUser.organizations.splice(index, 1);
-          this.authService.updateCurrentUser(this.currentUser);
-        }
-      },
-      error => {
-        this.toastrService.error(`Error occurred status: ${error.message}`);
-      }
-    );
-  }
-*/
-  /*onInvite(id: number) {
-    const invite: OrganizationInvite = {
-      id: 0,
-      organizationId: id,
-      createdByUserId: this.authService.getCurrentUser().id,
-      inviteEmail: null,
-      invitedUserId: null,
-      createdByUser: null,
-      organization: null,
-      createdDate: null,
-      expirationDate: null,
-      link: null,
-      state: OrganizationInviteState.Pending
-    };
-    this.invite = invite;
-  }*/
 }
