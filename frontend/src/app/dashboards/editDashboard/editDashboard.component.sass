@@ -42,11 +42,13 @@
 .footerbuttons
     margin-top: 20px
     width: 100%
+    display: flex
+    justify-content: space-around
     .save
-        width: 45%
+        width: 20%
         float: left
     .close
-        width: 45%
+        width: 20%
         float: right
 
 .center
@@ -66,11 +68,15 @@ hr
     width: 380px
     height: 227px
     border: 1px solid #a6a6a6
-    display: inline-block
+    // display: inline-block // flex  
     margin: 0 5px 10px
 
+.wrapper
+    display: flex
+    flex-wrap: wrap
+
 .wr-source
-    margin: 51px 0 0 0
+    margin: 20px 0 0 0
     width: 100%
 
 .view-inline
@@ -85,6 +91,3 @@ hr
 
 /deep/ .ui-scrollpanel-content
     height: 100%
-
-.btns-generate
-    margin: 0 0 50px 0

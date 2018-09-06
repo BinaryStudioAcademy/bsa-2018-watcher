@@ -117,6 +117,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         this.dashboardCharts[i].title = dashboardChartTypes[i].title;
         this.dashboardCharts[i].showXAxis = false;
         this.dashboardCharts[i].showYAxis = false;
+        this.dashboardCharts[i].showLegend = false;
     }
   }
 
