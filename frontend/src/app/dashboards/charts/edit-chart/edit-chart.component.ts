@@ -12,7 +12,6 @@ import {ChartService} from '../../../core/services/chart.service';
 import {ToastrService} from '../../../core/services/toastr.service';
 import {Chart} from '../../../shared/models/chart.model';
 import {dashboardChartTypes} from '../models/dashboardChartTypes';
-import { eventNames } from 'cluster';
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 
 @Component({
@@ -122,7 +121,7 @@ export class EditChartComponent implements OnInit, OnChanges {
         }, {
           label: 'Memory',
           items: [
-            { label: dataPropertyLables[DataProperty.localDiskFreeMBytes], value: DataProperty.localDiskFreeMBytes },
+            { label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes },
             { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
           ]
         }];
