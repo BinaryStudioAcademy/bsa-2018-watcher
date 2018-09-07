@@ -207,6 +207,7 @@ export class EditChartComponent implements OnInit {
   }
 
   processData(): void {
+    debugger;
     // if (!this.dashboardChart.showCommon && !this.isPreviewAvailable) {
     //   return;
     // }
