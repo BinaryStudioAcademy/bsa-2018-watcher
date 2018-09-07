@@ -108,7 +108,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         this.isIncluded.push(true);
         const dashboardChart = { ...defaultOptions };
         this.dashboardCharts.push(dashboardChart);
-        this.dashboardCharts[i].view = [373, 202];
         this.dashboardCharts[i].chartType = dashboardChartTypes[i];
         this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
         this.dashboardCharts[i].chartType.type = dashboardChartTypes[i].type;

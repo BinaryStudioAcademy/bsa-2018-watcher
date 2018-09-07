@@ -111,13 +111,13 @@
         </div>
       </div>
     </div>
-
-    <div class="visualization-wapper">
-      <div class="chart-panel-menu-title field-top text-center" style="border: 0">Visualization</div>
-      <div class="view-chart">
-        <div *ngIf="dashboardChart.data && dashboardChart.data.length">
+    <div class="ui-g-9">
+      <div class="visualization-wrapper">
+        <p class="field-top center">Preview</p>
+        <div class="view-chart" *ngIf="showPreview && dashboardChart.data && dashboardChart.data.length > 0">
           <div class="chart-title">{{dashboardChart.title}}</div>
-          <app-chart [chart]="dashboardChart"
+          <app-chart class="chart"
+                     [chart]="dashboardChart"
                      [data]="dashboardChart.data"
                      [chartType]="dashboardChart.chartType"
                      [showDownload]="false">

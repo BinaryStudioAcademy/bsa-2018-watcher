@@ -86,8 +86,18 @@ export class ReportComponent implements OnInit {
 
     if (this.id) {
       this.aggregatedDateService.getDataByInstanceIdAndTypeInTime(request).subscribe((data: CollectedData[]) => {
-        data.forEach(item => {
+        console.log(data);
+        data.forEach((item: CollectedData) => {
           item.time = new Date(item.time);
+          item.processes.forEach(p => {
+            p.pCpu = +p.pCpu.toFixed(2);
+            p.pRam = +p.pRam.toFixed(2);
+            p.ramMBytes = +p.ramMBytes.toFixed(2);
+          });
+
+          item.processes.sort((item1, item2) => {
+            return item2.pCpu - item1.pCpu;
+          });
         });
         this.collectedData = data;
       });
