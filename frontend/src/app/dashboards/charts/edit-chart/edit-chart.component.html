@@ -108,6 +108,57 @@
           </p-spinner>
         </div>
       </div>
+      <p class="field">Threshold: {{dashboardChart.threshold}}</p>
+      <div class="field">
+        <p-slider [(ngModel)]="dashboardChart.threshold"
+                  [disabled]="dashboardChart.showCommon">
+        </p-slider>
+      </div>
+      <p class="field">Show data for (5-60 min): {{historyTime}}</p>
+      <div class="field">
+        <p-slider [(ngModel)]="historyTime"
+                  [disabled]="!isTimeAvailable"
+                  [min]="5"
+                  [max]="60">
+        </p-slider>
+      </div>
+      <div class="chart-panel-menu-title field" style="margin-top:30px">Stylization:</div>
+      <p class="field">Title: </p>
+      <input type="text"
+             [(ngModel)]="dashboardChart.title"
+             pInputText/>
+      <p class="field">Color schemes:</p>
+      <p-dropdown [options]="colorSchemes"
+                  [autoWidth]="false"
+                  optionLabel="name"
+                  [(ngModel)]="dashboardChart.colorScheme"
+                  placeholder="Select a scheme"
+                  (onChange)="processData()">
+      </p-dropdown>
+      <p class="field">Y axis label (optional): </p>
+      <input type="text"
+             [disabled]="!isYAxisAvailable"
+             [(ngModel)]="dashboardChart.yAxisLabel"
+             pInputText/>
+      <p class="field">X axis label (optional): </p>
+      <input type="text"
+             [disabled]="!isXAxisAvailable"
+             [(ngModel)]="dashboardChart.xAxisLabel"
+             pInputText/>
+      <p class="field">Width: </p>
+      <div class="number-spiner">
+        <p-spinner size="17"
+                   [min]="200"
+                   [max]="1000">
+        </p-spinner>
+      </div>
+      <p class="field">Height: </p>
+      <div class="number-spiner">
+        <p-spinner size="17"
+                   [min]="200"
+                   [max]="1000">
+        </p-spinner>
+      </div>
     </div>
 
     <div class="visualization-wapper">
