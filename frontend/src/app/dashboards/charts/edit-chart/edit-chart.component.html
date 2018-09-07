@@ -11,7 +11,7 @@
           (onAfterToggle)="closeDialog()">
 
   <div class="ui-g ui-fluid">
-    <div class="menu-wapper ui-g-nopad">
+    <div class="ui-g-3">
       <div class="chart-panel-menu">
         <div class="chart-panel-menu-title field-top">Data:</div>
         <p class="field">Select chart type: </p>
@@ -72,7 +72,7 @@
                     [max]="60">
           </p-slider>
         </div>
-        <div class="chart-panel-menu-title field" style="margin-top:30px">Stylization:</div>
+        <div class="chart-panel-menu-title field">Stylization:</div>
         <p class="field">Title: </p>
         <input type="text"
                [(ngModel)]="dashboardChart.title"
@@ -95,25 +95,11 @@
                [disabled]="!isXAxisAvailable"
                [(ngModel)]="dashboardChart.xAxisLabel"
                pInputText/>
-        <p class="field">Width: </p>
-        <div class="chart-menu-spiner">
-          <p-spinner size="17"
-                     [min]="200"
-                     [max]="1000">
-          </p-spinner>
-        </div>
-        <p class="field">Height: </p>
-        <div class="chart-menu-spiner">
-          <p-spinner size="17"
-                     [min]="200"
-                     [max]="1000">
-          </p-spinner>
-        </div>
       </div>
     </div>
     <div class="ui-g-9">
       <div class="visualization-wrapper">
-        <p class="field-top center">Preview</p>
+        <p class="field-top text-center">Preview</p>
         <div class="view-chart" *ngIf="showPreview && dashboardChart.data && dashboardChart.data.length > 0">
           <div class="chart-title">{{dashboardChart.title}}</div>
           <app-chart class="chart"
