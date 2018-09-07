@@ -94,6 +94,10 @@ export class ReportComponent implements OnInit {
             p.pRam = +p.pRam.toFixed(2);
             p.ramMBytes = +p.ramMBytes.toFixed(2);
           });
+
+          item.processes.sort((item1, item2) => {
+            return item1.pCpu - item2.pCpu;
+          });
         });
         this.collectedData = data;
       });
