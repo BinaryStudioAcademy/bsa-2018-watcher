@@ -23,6 +23,9 @@ import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {CustomData} from '../charts/models';
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {DataProperty} from '../../shared/models/data-property.enum';
+import { UserOrganizationService } from '../../core/services/user-organization.service';
+import { OrganizationRole } from '../../shared/models/organization-role.model';
+import { ChartRequest } from '../../shared/requests/chart-request.model';
 
 
 @Component({
@@ -48,6 +51,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
   chartToEdit = {...defaultOptions};
+  isMember = true;
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -57,10 +61,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private activateRoute: ActivatedRoute,
               private authService: AuthService,
               private chartService: ChartService,
-              private dataService: DataService) {
+              private dataService: DataService,
+              private userOrganizationService: UserOrganizationService) {
   }
 
   async ngOnInit(): Promise<void> {
+    this.userOrganizationService.currentOrganizationRole.subscribe((role: OrganizationRole) => {
+      this.isMember = role.name === 'Member' ? true : false;
+    });
+
     try {
       const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
       await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
@@ -116,7 +125,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.toastrService.error('Error occurred while fetching instance\'s Dashboards');
         this.isLoading = false;
       });
-
     });
 
     this.cogItems = [{
@@ -186,7 +194,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.activeDashboardItem = lastItem;
         this.showCreatePopup(true);
       },
-      id: 'lastTab'
+      id: 'lastTab',
+      disabled: this.isMember,
     };
 
     return lastItem;

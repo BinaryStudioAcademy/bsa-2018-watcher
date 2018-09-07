@@ -3,6 +3,7 @@
 namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -30,11 +31,33 @@ namespace Watcher.Core.Services
         {
             var entities = await _uow.UserOrganizationRepository.GetRangeAsync(include: x => x
                 .Include(o => o.User)
-                .Include(o => o.Organization));
+                .Include(o => o.Organization)
+                .Include(o => o.OrganizationRole));
 
             var dtos = _mapper.Map<List<UserOrganization>, List<UserOrganizationDto>>(entities);
 
             return dtos;
+        }
+
+        public async Task<IEnumerable<UserOrganizationDto>> GetEntitiesByOrganizationId(int organizationId)
+        {
+            var entities = await _uow.UserOrganizationRepository.GetAllByOrganizationId(organizationId);
+            if (entities == null) return null; 
+            var dtos = _mapper.Map<List<UserOrganization>, List<UserOrganizationDto>>(entities);
+            return dtos;
+        } 
+
+        public async Task<UserOrganizationDto> UpdateEntityAsync(UserOrganizationRequest request)
+        {
+            var entity = _mapper.Map<UserOrganizationRequest, UserOrganization>(request);
+
+            var res = await _uow.UserOrganizationRepository.UpdateAsync(entity);
+            var result = await _uow.SaveAsync();
+            if(!result) return null;
+ 
+            if (entity == null) return null;
+
+            return _mapper.Map<UserOrganization, UserOrganizationDto>(res);
         }
 
         public async Task<UserOrganizationDto> CreateEntityAsync(UserOrganizationRequest request)
@@ -64,6 +87,18 @@ namespace Watcher.Core.Services
             var result = await _uow.SaveAsync();
 
             return result;
+        }
+
+        public async Task<OrganizationRoleDto> GetUserOrganizationRoleAsync(string userId, int organizationId)
+        {
+            var entities = await _uow.UserOrganizationRepository.GetAllByOrganizationId(organizationId);
+            if (entities == null) return null;
+
+            var userOrganization = entities.FirstOrDefault(u => u.UserId == userId);
+            if (userOrganization == null) return null;
+
+            var roleDto = _mapper.Map<OrganizationRole, OrganizationRoleDto>(userOrganization.OrganizationRole);
+            return roleDto;
         }
     }
 }
