@@ -96,7 +96,7 @@ export class ReportComponent implements OnInit {
           });
 
           item.processes.sort((item1, item2) => {
-            return item1.pCpu - item2.pCpu;
+            return item2.pCpu - item1.pCpu;
           });
         });
         this.collectedData = data;
