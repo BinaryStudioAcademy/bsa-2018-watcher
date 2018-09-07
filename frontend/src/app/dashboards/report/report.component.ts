@@ -86,6 +86,7 @@ export class ReportComponent implements OnInit {
 
     if (this.id) {
       this.aggregatedDateService.getDataByInstanceIdAndTypeInTime(request).subscribe((data: CollectedData[]) => {
+        console.log(data);
         data.forEach(item => {
           item.time = new Date(item.time);
         });
