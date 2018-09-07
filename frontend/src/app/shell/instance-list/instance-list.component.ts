@@ -27,6 +27,7 @@ constructor(private instanceService: InstanceService,
   router.events.forEach((event) => {
     if (event instanceof NavigationStart) {
       this.clearSettings(this.router.url);
+      this.previousSettingUrl = this.router.url;
     }
   });
  }
@@ -195,7 +196,6 @@ constructor(private instanceService: InstanceService,
         setting.parentElement.classList.remove('ui-state-active');
 
       }
-      this.previousSettingUrl = this.router.url;
     }
   }
 
