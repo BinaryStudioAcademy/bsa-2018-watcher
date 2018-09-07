@@ -18,7 +18,7 @@
   <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
   <div class="workspace" *ngIf="instanceId">
     <div *ngIf="activeDashboardItem && dashboardMenuItems.length > 1" class="dashboard-options">
-      <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
+      <p-tieredMenu class="text-left" #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
       <span class="fa fa-fw fa-gear options-btn" (click)="cog.toggle($event)" *ngIf="!isMember"></span>
     </div>
     <div class="tutorial" *ngIf="dashboardMenuItems.length == 1">
