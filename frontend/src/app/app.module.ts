@@ -36,7 +36,7 @@ import { SystemNotificationComponent } from './notification/system-notification/
     InviteComponent,
     AuthorizationComponent,
     CustomConfirmDialogComponent,
-    SystemNotificationComponent
+    SystemNotificationComponent,
   ],
   imports: [
     BrowserModule,

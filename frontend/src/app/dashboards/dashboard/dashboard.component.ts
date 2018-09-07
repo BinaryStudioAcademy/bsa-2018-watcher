@@ -19,6 +19,8 @@ import {DashboardChart} from '../models/dashboard-chart';
 import {Dashboard} from '../../shared/models/dashboard.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
+import { UserOrganizationService } from '../../core/services/user-organization.service';
+import { OrganizationRole } from '../../shared/models/organization-role.model';
 import { ChartRequest } from '../../shared/requests/chart-request.model';
 
 
@@ -45,6 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
   chartToEdit = {...defaultOptions};
+  isMember = true;
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -54,10 +57,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private activateRoute: ActivatedRoute,
               private authService: AuthService,
               private chartService: ChartService,
-              private dataService: DataService) {
+              private dataService: DataService,
+              private userOrganizationService: UserOrganizationService) {
   }
 
   async ngOnInit(): Promise<void> {
+    this.userOrganizationService.currentOrganizationRole.subscribe((role: OrganizationRole) => {
+      this.isMember = role.name === 'Member' ? true : false;
+    });
+
     try {
       const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
       await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
@@ -112,7 +120,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.toastrService.error('Error occurred while fetching instance\'s Dashboards');
         this.isLoading = false;
       });
-
     });
 
     this.cogItems = [{
@@ -152,7 +159,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         const tempData = this.dataService.prepareDataTick(this.activeDashboardItem.charts[i], latestData);
         this.activeDashboardItem.charts[i].data = [...tempData];
-        this.activeDashboardItem.charts = [...this.activeDashboardItem.charts];
       }
     });
   }
@@ -183,7 +189,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.activeDashboardItem = lastItem;
         this.showCreatePopup(true);
       },
-      id: 'lastTab'
+      id: 'lastTab',
+      disabled: this.isMember,
     };
 
     return lastItem;

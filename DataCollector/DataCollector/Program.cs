@@ -56,6 +56,8 @@ namespace DataCollector
 
             _logger = new Logger(_client, ClientIdentifier, uri+"/log");
             _logger.Log("Data collection began").GetAwaiter().GetResult();
+
+
             // setting timer for collecting proccess
             TimerItem = new Timer(Timercallback, payload, 0, delay);
 

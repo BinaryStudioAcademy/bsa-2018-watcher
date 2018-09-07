@@ -104,42 +104,37 @@ namespace DataCollector
             var result = new List<ProcessData>();
             var processes = Process.GetProcesses();
 
+
             foreach (var item in processes)
             {
+                //item.pro
                 if (!_processRamCounters.ContainsKey(item.ProcessName))
                     _processRamCounters.Add(item.ProcessName,
-                        new PerformanceCounter("Process", "Working Set", item.ProcessName));
+                        new PerformanceCounter("Process", "Working Set", item.ProcessName, true));
 
                 if (!_processCpuCounters.ContainsKey(item.ProcessName))
                     _processCpuCounters.Add(item.ProcessName,
-                        new PerformanceCounter("Process", "% Processor Time", item.ProcessName));
+                        new PerformanceCounter("Process", "% Processor Time", item.ProcessName, true));
             }
 
             foreach (var item in processes)
             {
-                if (item.ProcessName == "Idle") continue;
-
-                if (!_processRamCounters.ContainsKey(item.ProcessName))
-                    _processRamCounters.Add(item.ProcessName,
-                        new PerformanceCounter("Process", "Working Set", item.ProcessName));
-
-                if (!_processCpuCounters.ContainsKey(item.ProcessName))
-                    _processCpuCounters.Add(item.ProcessName,
-                        new PerformanceCounter("Process", "% Processor Time", item.ProcessName));
+                if (item.ProcessName == "Idle") continue; // cpu > 350%
+              
 
                 try
                 {
                     var name = item.ProcessName;
-                    var ramMBytes = _processRamCounters[item.ProcessName].NextValue() / 1024 / 1024;
-                    var pCpu = _processCpuCounters[item.ProcessName].NextValue();
-                    var pRam = (ramMBytes / GetTotalRAM()) * 100;
+                    //var ramMBytes = _processRamCounters[item.ProcessName].NextValue() / 1024 / 1024;
+                    var pCpu = (float)Math.Round(_processCpuCounters[item.ProcessName].NextValue() / Environment.ProcessorCount, 2);
+                    //var pRam = (ramMBytes / GetTotalRAM()) * 100;
 
                     result.Add(new ProcessData
                     {
                         Name = name,
-                        RamMBytes = ramMBytes,
+                        //RamMBytes = ramMBytes,
                         PCpu = pCpu,
-                        PRam = pRam
+                        //PRam = pRam
                     });  
                 }
                 catch (Exception e)
@@ -148,9 +143,23 @@ namespace DataCollector
                     _processRamCounters.Remove(item.ProcessName);
                 }
             }
+            result = GroupProcesses(result);
 
             return result; // DODO merge processes if Processes with the same name
-        } 
+        }
+
+        private List<ProcessData> GroupProcesses(List<ProcessData> processes)
+        {
+            var temp = processes.GroupBy(proc => proc.Name).Select(
+                    group => new ProcessData
+                    {
+                        Name = group.Key,
+                        PCpu = group.Sum(proc => proc.PCpu),
+                        PRam = group.Sum(proc => proc.PRam),
+                        RamMBytes = group.Sum(proc => proc.RamMBytes)
+                    }).ToList();
+            return temp;
+        }
     }
 #endif
 }
