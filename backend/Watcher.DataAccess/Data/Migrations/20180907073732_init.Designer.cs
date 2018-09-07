@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Watcher.DataAccess.Data;
 
 namespace Watcher.DataAccess.Data.Migrations
 {
     [DbContext(typeof(WatcherDbContext))]
-    partial class WatcherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180907073732_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +43,7 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<string>("LegendTitle");
 
-                    b.Property<int>("MostLoaded");
+                    b.Property<string>("MostLoaded");
 
                     b.Property<double>("RangeFillOpacity");
 
