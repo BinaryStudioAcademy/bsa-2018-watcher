@@ -20,9 +20,9 @@ import {Dashboard} from '../../shared/models/dashboard.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {CustomData} from '../charts/models';
-import { UserOrganizationService } from '../../core/services/user-organization.service';
-import { OrganizationRole } from '../../shared/models/organization-role.model';
-import { ChartRequest } from '../../shared/requests/chart-request.model';
+import {UserOrganizationService} from '../../core/services/user-organization.service';
+import {OrganizationRole} from '../../shared/models/organization-role.model';
+import {ChartRequest} from '../../shared/requests/chart-request.model';
 
 
 @Component({
@@ -93,6 +93,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId)
           .subscribe(data => {
+            debugger;
             this.collectedDataForChart = data || [];
 
             if (data && data.length > 0) {
@@ -161,6 +162,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         const tempData = this.dataService.prepareDataTick(this.activeDashboardItem.charts[i], latestData);
         this.activeDashboardItem.charts[i].data = [...tempData];
+
       }
     });
   }
@@ -192,7 +194,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.showCreatePopup(true);
       },
       id: 'lastTab',
-      disabled: this.isMember,
+      // disabled: this.isMember,
     };
 
     return lastItem;

@@ -1,5 +1,5 @@
 <div class="charts-area">
-  <div class="chart-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
+  <div class="chart-item" [ngClass]="chart.theme" *ngFor="let chart of dashboardCharts">
 
     <div class="icon-panel action-icon fa fa-fw fa-cog" (click)="cog.toggle($event)" pTooltip="Options" tooltipPosition="top">
       <p-tieredMenu #cog appendTo="body" [model]="chart.chartMenu" [popup]="true"></p-tieredMenu>
