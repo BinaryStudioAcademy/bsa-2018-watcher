@@ -93,7 +93,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId)
           .subscribe(data => {
-            debugger;
             this.collectedDataForChart = data || [];
 
             if (data && data.length > 0) {

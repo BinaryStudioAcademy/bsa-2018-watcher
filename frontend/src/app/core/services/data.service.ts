@@ -214,6 +214,9 @@ export class DataService {
     for (let i = processesAmount; i < data.processes.length; i++) {
       othersSum += data.processes[i][stringProperty];
     }
+    if (free < 0) {
+      free = 0;
+    }
     items.push(
       {
         name: 'Others',
@@ -266,16 +269,20 @@ export class DataService {
     return seriesItem;
   }
 
+  // TODO: change to swithch
   prepareDataTick(chartToUpdate: DashboardChart, newData: CollectedData): CustomData[] {
     if (!newData) {
       return chartToUpdate.data ? chartToUpdate.data : [];
     }
 
     if (chartToUpdate.showCommon) {
-      if (chartToUpdate.chartType.type === ChartType.LineChart) {
-        return this.mapToMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources);
-      } else {
-        return this.mapToSeriesItem(newData, chartToUpdate.dataSources);
+      switch (chartToUpdate.chartType.type) {
+        case ChartType.LineChart:
+          return this.mapToMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources);
+        case ChartType.Pie:
+          return this.mapToPieSeriesItem(newData, chartToUpdate.dataSources[0]);
+        default:
+          return this.mapToSeriesItem(newData, chartToUpdate.dataSources);
       }
     } else {
       if (chartToUpdate.chartType.type === ChartType.LineChart) {
