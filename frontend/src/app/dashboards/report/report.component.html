@@ -1,39 +1,50 @@
 <div class="ui-g filters">
-    <div class="ui-g-4 ui-fluid">
+    <div class="ui-g-3 ui-fluid">
         <p class="filter-label">Type:</p>
         <p-dropdown [autoWidth]="false" [options]="types" [(ngModel)]="selectedType" (onChange)="changeType($event)"></p-dropdown>
     </div>
-    <div class="ui-g-4 ui-fluid">
+    <div class="ui-g-3 ui-fluid">
         <p class="filter-label">Periods:</p>
         <p-calendar #cf [(ngModel)]="dates" selectionMode="range" [readonlyInput]="true"></p-calendar>
     </div>
-    <div class="ui-g-4 ui-fluid bottom-flex">
+    <div class="ui-g-3 ui-fluid bottom-flex">
         <p-button label="Get info" (click)="getInfo()"></p-button>
+    </div>
+    <div class="ui-g-3 ui-fluid bottom-flex">
+        <p-button label="Convert to PDF" [disabled]="!collectedData" (click)="convertPDF()"></p-button>
     </div>
 </div>
 
-<div *ngFor="let collected of collectedData" class="table">
-  <p-table #dt [columns]="cols" [value]="collected.processes">
-    <ng-template pTemplate="header" let-columns>
-        <tr class="row-header" class="">
-            <th class="left-align name-header t-header">Name</th>
-            <th class="data-header t-header">CPU, %</th>
-            <th class="data-header t-header">RAM, %</th>
-            <th class="data-header t-header">RAM, MB</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData" class="row-content">
-            <td *ngFor="let col of columns" class="center-align">
-                {{rowData[col.field]}}
-            </td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="summary">
-        <div class="time">
-            <span class="time-label">Time:</span>
-            <p-calendar #ct [(ngModel)]="collected.time" dateFormat="dd/mm/yy" [showTime]="true" [disabled]="true"></p-calendar>
-        </div>
-    </ng-template>
-  </p-table>
+<div #pdfContainner>
+    <div *ngFor="let collected of collectedData" class="table">
+    <p-table #dt [columns]="cols" [value]="collected.processes">
+        <ng-template pTemplate="caption">
+            <div class="ui-helper-clearfix left-flex">
+                <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Eport to CSV" (click)="dt.exportCSV()"></button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr class="row-header" class="">
+                <th class="left-align name-header t-header">Name</th>
+                <th class="data-header t-header">CPU, %</th>
+                <th class="data-header t-header">RAM, %</th>
+                <th class="data-header t-header">RAM, MB</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData" class="row-content">
+                <td *ngFor="let col of columns" class="text-center">
+                    {{rowData[col.field]}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="time">
+                <span class="time-label">Time:</span>
+                <span class="time-value">{{collected.time | date: 'dd/MM/yyyy HH:mm'}}</span>
+                <!-- <p-calendar #ct id="ct" [(ngModel)]="collected.time" dateFormat="dd/mm/yy" [showTime]="true" [disabled]="true"></p-calendar> -->
+            </div>
+        </ng-template>
+    </p-table>
+    </div>
 </div>
