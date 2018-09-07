@@ -84,10 +84,12 @@ namespace Watcher.Core.Services
             result = await _uow.SaveAsync();
             if (result)
             {
+                //id 1 is for admin
                 CreatedEntity.UserOrganizations.Add(new UserOrganization
                 {
                     UserId = entity.CreatedByUserId,
-                    OrganizationId = entity.Id
+                    OrganizationId = entity.Id,
+                    OrganizationRoleId = 1,
                 });
             }
             result &= await _uow.SaveAsync();

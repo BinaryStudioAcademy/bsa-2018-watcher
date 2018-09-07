@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AggregatedDataService } from '../../core/services/aggregated-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { DataType } from '../../shared/models/data-type.enum';
@@ -6,6 +6,7 @@ import { CollectedData } from '../../shared/models/collected-data.model';
 import { AggregateDataRequest } from '../../shared/models/aggregate-data-request.model';
 import { SelectItem } from 'primeng/api';
 import { Calendar } from 'primeng/primeng';
+import * as jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-report',
@@ -15,6 +16,8 @@ import { Calendar } from 'primeng/primeng';
 export class ReportComponent implements OnInit {
 
   @ViewChild('cf') calendarFilter: Calendar;
+  @ViewChild('ct') timeInput: Calendar;
+  @ViewChild('pdfContainner') el: ElementRef;
 
   private id: string;
 
@@ -89,6 +92,17 @@ export class ReportComponent implements OnInit {
         this.collectedData = data;
       });
     }
+
+  }
+
+  convertPDF(): void {
+    const doc = new jsPDF();
+
+    const content = this.el.nativeElement;
+
+    doc.fromHTML(content.innerHTML, 15, 15);
+
+    doc.save('pdf sample');
   }
 
 }

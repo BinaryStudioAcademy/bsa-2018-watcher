@@ -99,6 +99,10 @@
                .WithOne(f => f.Organization)
                .OnDelete(DeleteBehavior.Cascade);
 
+            //1 is id of admin role
+            modelBuilder.Entity<UserOrganization>()
+                .Property(o => o.OrganizationRoleId)
+                .HasDefaultValue(1);
             // Configure entity filters
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
@@ -129,6 +133,8 @@
         public DbSet<Organization> Organizations { get; set; }
 
         public DbSet<UserOrganization> UserOrganizations { get; set; }
+
+        public DbSet<OrganizationRole> OrganizationRoles { get; set; }
         
         public DbSet<Instance> Instances { get; set; }
 

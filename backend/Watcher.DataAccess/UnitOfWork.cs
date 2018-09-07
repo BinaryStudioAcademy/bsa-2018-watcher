@@ -31,6 +31,8 @@
         private IResponseRepository _responseRepository;
 
         private IRoleRepository _roleRepository;
+        private IOrganizationRoleRepository _organizationRoleRepository;
+
 
         private INotificationSettingsRepository _notificationSettingsRepository;
 
@@ -88,6 +90,8 @@
         public IResponseRepository ResponseRepository => _responseRepository ?? (_responseRepository = new ResponseRepository(_context, _mapper));
 
         public IRoleRepository RoleRepository => _roleRepository ?? (_roleRepository = new RoleRepository(_context, _mapper));
+
+        public IOrganizationRoleRepository OrganizationRoleRepository => _organizationRoleRepository ?? (_organizationRoleRepository = new OrganizationRoleRepository(_context, _mapper));
 
         public IChatsRepository ChatsRepository => _chatsRepository ?? (_chatsRepository = new ChatsRepository(_context, _mapper));
 
