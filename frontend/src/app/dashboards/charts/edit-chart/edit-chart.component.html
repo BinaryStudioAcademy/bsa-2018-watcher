@@ -66,6 +66,7 @@
       <p class="field">Show data for (5-60 min): {{historyTime}}</p>
       <div class="field">
         <p-slider [(ngModel)]="historyTime"
+                  [disabled]="!isTimeAvailable"
                   [min]="5"
                   [max]="60">
         </p-slider>
