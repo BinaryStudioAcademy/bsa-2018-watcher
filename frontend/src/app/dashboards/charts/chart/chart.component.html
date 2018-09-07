@@ -1,7 +1,6 @@
 <ngx-charts-line-chart
   *ngIf="chartType.name === 'line-chart'"
   class="chart-container"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -29,7 +28,6 @@
 <ngx-charts-bar-vertical
   *ngIf="chartType.name === 'bar-vertical'"
   class="chart-container"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -52,7 +50,6 @@
 <ngx-charts-bar-horizontal
   *ngIf="chartType.name === 'bar-horizontal'"
   class="chart-container"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -72,7 +69,6 @@
 
 <ngx-charts-pie-chart
   *ngIf="chartType.name === 'pie'"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"
@@ -87,7 +83,6 @@
 
 <ngx-charts-gauge
   *ngIf="chartType.name === 'guage'"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"
@@ -96,14 +91,12 @@
 
 <ngx-charts-pie-grid
   *ngIf="chartType.name === 'pie-grid'"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data">
 </ngx-charts-pie-grid>
 
 <ngx-charts-tree-map
   *ngIf="chartType.name === 'tree-map'"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data"
   [gradient]="chart.gradient"
@@ -112,7 +105,6 @@
 
 <ngx-charts-number-card
   *ngIf="chartType.name === 'number-cards'"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data">
 
@@ -121,7 +113,6 @@
 <ngx-charts-bar-vertical-2d
   *ngIf="chartType.name === 'bar-vertical-2d'"
   class="chart-container"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -145,7 +136,6 @@
 <ngx-charts-bar-horizontal-2d
   *ngIf="chartType.name === 'bar-horizontal-2d'"
   class="chart-container"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -166,7 +156,6 @@
 <ngx-charts-bar-vertical-stacked
   *ngIf="chartType.name === 'bar-vertical-stacked'"
   class="chart-container"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -187,7 +176,6 @@
 <ngx-charts-bar-horizontal-stacked
   *ngIf="chartType.name === 'bar-horizontal-stacked'"
   class="chart-container"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -207,7 +195,6 @@
 <ngx-charts-bar-vertical-normalized
   *ngIf="chartType.name === 'bar-vertical-normalized'"
   class="chart-container"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -228,7 +215,6 @@
 <ngx-charts-bar-horizontal-normalized
   *ngIf="chartType.name === 'bar-horizontal-normalized'"
   class="chart-container"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -249,7 +235,6 @@
 <ngx-charts-polar-chart
   *ngIf="chartType.name === 'polar-chart'"
   class="chart-container"
-  [view]="chart.view"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
   [results]="data"
@@ -274,7 +259,6 @@
 
 <ngx-charts-heat-map
   *ngIf="chartType.name === 'heat-map'"
-  [view]="chart.view"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [results]="data"

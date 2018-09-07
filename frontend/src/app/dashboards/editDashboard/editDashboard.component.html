@@ -38,7 +38,11 @@
             <div class="checkbox-margin center">
               <p-checkbox [(ngModel)]="isIncluded[i]" [disabled]="!isCustomize" binary="true"></p-checkbox>
             </div>
-            <app-chart [chart]="dashboardChart" [data]="dashboardChart.data" [chartType]="dashboardChart.chartType"
+            <app-chart
+              class="chart"
+              [chart]="dashboardChart"
+              [data]="dashboardChart.data"
+              [chartType]="dashboardChart.chartType"
               [showDownload]="false">
             </app-chart>
           </div>
