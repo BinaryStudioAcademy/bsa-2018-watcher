@@ -85,13 +85,13 @@ namespace DataCollector
         {
             float totalRam = 1.0f;
 
-            ManagementObjectSearcher ramMonitor =    //запрос к WMI для получения памяти ПК
+            ManagementObjectSearcher ramMonitor =    //query to WMI
             new ManagementObjectSearcher("SELECT TotalVisibleMemorySize,FreePhysicalMemory FROM Win32_OperatingSystem");
 
             foreach (ManagementObject objram in ramMonitor.Get())
             {
-                totalRam = Convert.ToUInt64(objram["TotalVisibleMemorySize"]) / 1024;    //общая память ОЗУ
-                float busyRam = totalRam - Convert.ToUInt64(objram["FreePhysicalMemory"]);//занятная память = (total-free)
+                totalRam = Convert.ToUInt64(objram["TotalVisibleMemorySize"]) / 1024;    // Total RAM
+                float busyRam = totalRam - Convert.ToUInt64(objram["FreePhysicalMemory"]);// Usage RAM
                 
             }
 
@@ -125,16 +125,16 @@ namespace DataCollector
                 try
                 {
                     var name = item.ProcessName;
-                    //var ramMBytes = _processRamCounters[item.ProcessName].NextValue() / 1024 / 1024;
+                    var ramMBytes = _processRamCounters[item.ProcessName].NextValue() / 1024 / 1024;
                     var pCpu = (float)Math.Round(_processCpuCounters[item.ProcessName].NextValue() / Environment.ProcessorCount, 2);
-                    //var pRam = (ramMBytes / GetTotalRAM()) * 100;
+                    var pRam = (ramMBytes / GetTotalRAM()) * 100;
 
                     result.Add(new ProcessData
                     {
                         Name = name,
-                        //RamMBytes = ramMBytes,
+                        RamMBytes = ramMBytes,
                         PCpu = pCpu,
-                        //PRam = pRam
+                        PRam = pRam
                     });  
                 }
                 catch (Exception e)
