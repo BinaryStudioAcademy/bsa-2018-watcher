@@ -19,7 +19,7 @@
   <div class="workspace" *ngIf="instanceId">
     <div *ngIf="activeDashboardItem && dashboardMenuItems.length > 1" class="dashboard-options">
       <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
-      <button #btn type="button" class="gear" pButton icon="fa fa-fw fa-gear" (click)="cog.toggle($event)" [disabled]="isMember"></button>
+      <span class="fa fa-fw fa-gear options-btn" (click)="cog.toggle($event)" *ngIf="!isMember"></span>
     </div>
     <div class="tutorial" *ngIf="dashboardMenuItems.length == 1">
       <p class="tutorial-item">Click <i class="fa fa-plus"></i> to add a dashboard</p>
