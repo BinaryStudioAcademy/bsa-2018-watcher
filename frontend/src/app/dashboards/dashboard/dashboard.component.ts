@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
   chartToEdit = {...defaultOptions};
-  isMember = true;
+  isMember: boolean;
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -62,9 +62,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.userOrganizationService.currentOrganizationRole.subscribe((role: OrganizationRole) => {
+    this.userOrganizationService.currentOrganizationRole.subscribe(async (role: OrganizationRole) => {
       this.isMember = role.name === 'Member' ? true : false;
-    });
 
     try {
       const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
@@ -73,10 +72,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(e));
     }
 
-      // .then(async ([firebaseToken, watcherToken]) => {
-      //   await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
-      // })
-      // .catch(reason => console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(reason)));
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
 
     this.paramsSubscription = this.activateRoute.params.subscribe(params => {
@@ -144,6 +139,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ];
 
     this.subscribeToCollectedData();
+  });
   }
 
   ngOnDestroy(): void {

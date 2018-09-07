@@ -40,7 +40,7 @@ constructor(private instanceService: InstanceService,
   popupMessage: string;
   isLoading: boolean;
   isDeleting: boolean;
-  isMember = true;
+  isMember: boolean;
   previousSettingUrl: string;
 
   currentQuery = '';
@@ -52,8 +52,7 @@ constructor(private instanceService: InstanceService,
         this.userOrganizationService.getOrganizationRole().subscribe((role: OrganizationRole) => {
         this.isMember = role.name === 'Member' ? true : false;
         this.configureInstances(this.user.lastPickedOrganizationId);
-    });
-      }
+    }); }
     );
    }
 
