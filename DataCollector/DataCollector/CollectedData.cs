@@ -56,8 +56,6 @@ namespace DataCollector
 
             return str.ToString();
         }
-
-
     }
 
     public class ProcessData

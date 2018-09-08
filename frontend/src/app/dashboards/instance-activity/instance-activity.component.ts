@@ -11,7 +11,7 @@ import { CollectorLogLevel } from '../../shared/models/log-level.enum';
 })
 export class InstanceActivityComponent implements OnInit {
 
-  logs: CollectorLog[];
+  logs: CollectorLog[] = [];
   instanceId: string;
 
   constructor(private activateRoute: ActivatedRoute,
@@ -21,17 +21,20 @@ export class InstanceActivityComponent implements OnInit {
   ngOnInit() {
     this.activateRoute.params.subscribe(params => {
       this.instanceId = params['insId'];
-      console.log(this.instanceId);
-      if (this.instanceId) {
-        this.collectorLogService.getAllLogs(this.instanceId).subscribe((data: CollectorLog[]) => {          
-          if (data) {
-            console.log(data);
-            this.logs = data.map(log =>
-            Object.assign({}, log, {logLevelName: CollectorLogLevel[log.logLevel]}));
-          }
-        });
-      }
+      this.getLogs();
     });
+  }
+
+  getLogs() {
+    if (this.instanceId) {
+      this.collectorLogService.getAllLogs(this.instanceId).subscribe((data: CollectorLog[]) => {
+        if (data) {
+          console.log(data);
+          this.logs = data.map(log =>
+          Object.assign({}, log, {logLevelName: CollectorLogLevel[log.logLevel]}));
+        }
+      });
+    }
   }
 
 }

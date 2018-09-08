@@ -4,7 +4,7 @@ import { ChartType } from './chart-type.enum';
 export interface ChartRequest  {
    showCommon: boolean;
    threshold: number;
-   mostLoaded: string;
+   mostLoaded: number;
    dashboardId: number;
    schemeType: string;
    showLegend: boolean;

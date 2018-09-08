@@ -19,10 +19,9 @@
   [curve]="chart.curve"
   [rangeFillOpacity]="chart.rangeFillOpacity"
   [roundDomains]="chart.roundDomains"
-  [tooltipDisabled]="chart.tooltipDisabled"
-  [yScaleMin]="0"
-  [yScaleMax]="100">
-
+  [tooltipDisabled]="chart.tooltipDisabled">
+  <!--[yScaleMin]="chart.yScaleMin"-->
+  <!--[yScaleMax]="chart.yScaleMax"-->
 </ngx-charts-line-chart>
 
 <ngx-charts-bar-vertical
@@ -43,8 +42,9 @@
   [xAxisLabel]="chart.xAxisLabel"
   [yAxisLabel]="chart.yAxisLabel"
   [showGridLines]="chart.showGridLines"
-  [yScaleMin]="0"
-  [yScaleMax]="100">
+  >
+  <!--[yScaleMin]="chart.yScaleMin"-->
+  <!--[yScaleMax]="chart.yScaleMax"-->
 </ngx-charts-bar-vertical>
 
 <ngx-charts-bar-horizontal
@@ -64,7 +64,10 @@
   [tooltipDisabled]="chart.tooltipDisabled"
   [xAxisLabel]="chart.xAxisLabel"
   [yAxisLabel]="chart.yAxisLabel"
-  [showGridLines]="chart.showGridLines">
+  [showGridLines]="chart.showGridLines"
+  >
+  <!--[xScaleMin]="chart.yScaleMin"-->
+  <!--[xScaleMax]="chart.yScaleMax"-->
 </ngx-charts-bar-horizontal>
 
 <ngx-charts-pie-chart
@@ -81,12 +84,21 @@
   [tooltipDisabled]="chart.tooltipDisabled">
 </ngx-charts-pie-chart>
 
+<ngx-charts-pie-grid
+  *ngIf="chartType.name === 'pie-grid'"
+  [view]="chart.view"
+  [scheme]="chart.colorScheme"
+  [results]="data">
+</ngx-charts-pie-grid>
+
 <ngx-charts-gauge
   *ngIf="chartType.name === 'guage'"
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"
-  [units]="chart.yAxisLabel">
+  [units]="chart.yAxisLabel"
+  [min]="chart.yScaleMin"
+  [max]="chart.yScaleMax">
 </ngx-charts-gauge>
 
 <ngx-charts-pie-grid
