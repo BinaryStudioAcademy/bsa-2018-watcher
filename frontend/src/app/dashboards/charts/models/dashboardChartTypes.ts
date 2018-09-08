@@ -23,6 +23,11 @@ export const dashboardChartTypes: DashboardChartType[] = [
     type: ChartType.Guage,
   },
   {
+    title: 'Number cards',
+    name: 'number-cards',
+    type: ChartType.NumberCards,
+  },
+  {
     title: 'Resources table',
     name: 'resources-table',
     type: ChartType.ResourcesTable,

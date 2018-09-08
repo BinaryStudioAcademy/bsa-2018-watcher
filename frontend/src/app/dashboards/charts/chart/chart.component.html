@@ -122,10 +122,9 @@
 </ngx-charts-tree-map>
 
 <ngx-charts-number-card
-  *ngIf="chartType.name === 'number-cards'"
+  *ngIf="chartType.type === type.NumberCards"
   [scheme]="chart.colorScheme"
   [results]="data">
-
 </ngx-charts-number-card>
 
 <ngx-charts-bar-vertical-2d

@@ -79,6 +79,7 @@ export class EditChartComponent implements OnInit {
       {label: dashboardChartTypes[2].title, value: dashboardChartTypes[2]},
       {label: dashboardChartTypes[3].title, value: dashboardChartTypes[3]},
       {label: dashboardChartTypes[4].title, value: dashboardChartTypes[4]},
+      {label: dashboardChartTypes[5].title, value: dashboardChartTypes[5]},
     ];
 
     this.resetBuilderForm();

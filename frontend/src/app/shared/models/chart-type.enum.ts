@@ -5,6 +5,7 @@ export enum ChartType {
     LineChart,
     Pie,
     Guage,
+    NumberCards,
     ResourcesTable
 }
 
@@ -14,3 +15,4 @@ chartTypes[ChartType.LineChart] = 'line-chart';
 chartTypes[ChartType.Pie] = 'pie';
 chartTypes[ChartType.Guage] = 'guage';
 chartTypes[ChartType.ResourcesTable] = 'resources-table';
+chartTypes[ChartType.NumberCards] = 'number-cards';
