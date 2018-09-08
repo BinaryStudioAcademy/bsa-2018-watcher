@@ -63,7 +63,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // TODO: maybe do unrelated request with fork join to reduce # of request
     this.collectedDataService.getBuilderData()
       .subscribe(value => {
-        debugger;
         this.dataService.fakeCollectedData = value;
       });
 
@@ -89,7 +88,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       this.isLoading = true;
       this.getDashboardsByInstanceId(this.instanceId).then(value => {
-        debugger;
         this.onDashboards(value);
         this.isLoading = false;
         this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId)
@@ -173,7 +171,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async getOrganizationPermissions(): Promise<boolean> {
     const role = await this.userOrganizationService.getOrganizationRole();
-    return role.name === 'Manager' ? true : false;
+    return role.name === 'Manager';
   }
 
   onDashboards(value) {
@@ -317,11 +315,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onEdited(event: any) { // title: string
-    const title = event.title;
-    const charts = event.charts;
     if (this.creation === true) {
-      const newdash: DashboardRequest = {title: title, instanceId: this.instanceId};
-      this.createDashboard(newdash, charts);
+      const newdash: DashboardRequest = {title: event.title, instanceId: this.instanceId};
+      this.createDashboard(newdash, event.charts);
       let index = 0;
       // switching to new tab
       if (this.dashboardMenuItems.length >= 2) {
@@ -329,14 +325,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.activeDashboardItem = this.dashboardMenuItems[index];
       }
     } else {
-      this.updateDashboard(title);
+      this.updateDashboard(event.title);
     }
     this.creation = false;
     this.displayEditDashboard = false;
-
   }
 
-  onAddedCharts(array: Array<ChartRequest>, id: number) {
+  onAddedCharts(array: ChartRequest[], id: number) {
     array.forEach(chart => {
       chart.dashboardId = id;
       this.chartService.create(chart).subscribe(value => {
@@ -391,14 +386,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onChartEdited(chart?: DashboardChart) {
     // TODO: don't fill this chart with data, it's already filled in edit chart component
-    // this.dataService.fulfillChart(chart);
-    // if (chart.showCommon) {
-    //   chart.data = this.dataService.prepareData(chart.chartType.type, chart.dataSources, this.collectedDataForChart);
-    //   this.dataService.fulfillChart(chart);
-    // } else {
-    //   chart.data = this.dataService.prepareProcessData(chart.chartType.type,
-    //     chart.dataSources[0], this.collectedDataForChart, chart.mostLoaded);
-    // }
     const updateChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chart.id);
     if (updateChartIndex >= 0) {
       this.activeDashboardItem.charts[updateChartIndex] = chart;
@@ -417,7 +404,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
-    // debugger; // TODO: check how data source looks for multiple chart
     const item: DashboardMenuItem = {
       label: dashboard.title,
       dashId: dashboard.id,

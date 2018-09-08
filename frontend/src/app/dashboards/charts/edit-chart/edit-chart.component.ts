@@ -89,7 +89,7 @@ export class EditChartComponent implements OnInit {
     return this.dashboardChart.chartType.type === ChartType.Pie ? 1 : null;
   }
 
-  updtateReviewAllowing() {
+  updateReviewAllowing() {
     this.isPreviewAvailable = this.dashboardChart.showCommon;
   }
 
@@ -119,7 +119,7 @@ export class EditChartComponent implements OnInit {
   resetBuilderForm() {
     this.dashboardChart.dataSources = [];
     this.createSourceItems();
-    this.updtateReviewAllowing();
+    this.updateReviewAllowing();
     this.dropdownSources.forEach(item => item.disabled = false);
 
     switch (this.dashboardChart.chartType.type) {
@@ -200,15 +200,7 @@ export class EditChartComponent implements OnInit {
   }
 
   processData(): void {
-    debugger;
     this.isPreviewAvailable = this.dataService.fulfillChart(this.dataService.fakeCollectedData, this.dashboardChart);
-    // if (this.dashboardChart.showCommon) {
-    //   this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
-    //     this.dashboardChart.dataSources, this.collectedDataForChart);
-    // } else {
-    //   this.dashboardChart.data = this.dataService.prepareProcessData(this.dashboardChart.chartType.type,
-    //     this.dashboardChart.dataSources[0], this.collectedDataForChart, this.dashboardChart.mostLoaded);
-    // }
   }
 
   closeDialog() {
@@ -217,7 +209,6 @@ export class EditChartComponent implements OnInit {
   }
 
   onEditChart() {
-    debugger;
     const chartRequest = this.createChartRequest();
     if (!this.dashboardChart.id) {
       this.chartService.create(chartRequest).subscribe((val) => {
