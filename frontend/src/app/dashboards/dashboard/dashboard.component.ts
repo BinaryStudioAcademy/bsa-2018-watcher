@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
   chartToEdit = {...defaultOptions};
-  isMember = true;
+  isManager: boolean;
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -62,9 +62,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.userOrganizationService.currentOrganizationRole.subscribe((role: OrganizationRole) => {
-      this.isMember = role.name === 'Member' ? true : false;
-    });
 
     try {
       const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
@@ -73,10 +70,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(e));
     }
 
-      // .then(async ([firebaseToken, watcherToken]) => {
-      //   await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
-      // })
-      // .catch(reason => console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(reason)));
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
 
     this.paramsSubscription = this.activateRoute.params.subscribe(params => {
@@ -163,10 +156,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  getDashboardsByInstanceId(id: number): Promise<Dashboard[]> {
+  async getDashboardsByInstanceId(id: number): Promise<Dashboard[]> {
+    this.isManager = await this.getOrganizationPermissions();
     const plusItem = this.createPlusItem();
     this.dashboardMenuItems.push(plusItem);
     return this.dashboardsService.getAllByInstance(id).toPromise();
+  }
+
+  async getOrganizationPermissions(): Promise<boolean> {
+    const role = await this.userOrganizationService.getOrganizationRole();
+    return role.name === 'Manager' ? true : false;
   }
 
   onDashboards(value) {
@@ -190,7 +189,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.showCreatePopup(true);
       },
       id: 'lastTab',
-      // disabled: this.isMember,
+      visible: this.isManager,
     };
 
     return lastItem;
@@ -407,7 +406,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       dashId: dashboard.id,
       createdAt: dashboard.createdAt,
       charts: dashboard.charts.map(c => this.dataService.instantiateDashboardChart(c, this.collectedDataForChart)),
-      // routerLink: `/user/instances/${this.instanceId}/${this.instanceGuidId}/dashboards/${dashboard.id}`,
       command: () => this.activeDashboardItem = item
     };
     return item;

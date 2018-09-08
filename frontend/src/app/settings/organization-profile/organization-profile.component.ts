@@ -9,6 +9,8 @@ import { OrganizationInviteState } from '../../shared/models/organization-invite
 import { environment } from '../../../environments/environment';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { User } from '../../shared/models/user.model';
+import { UserOrganizationService } from '../../core/services/user-organization.service';
+import { OrganizationRole } from '../../shared/models/organization-role.model';
 
 @Component({
   selector: 'app-organization-profile',
@@ -21,6 +23,7 @@ export class OrganizationProfileComponent implements OnInit {
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,
     private authService: AuthService,
+    private userOrganizationService: UserOrganizationService,
     private toastrService: ToastrService) {
       this.cropperSettings = new CropperSettings();
       this.cropperSettings.width = 400;
@@ -60,16 +63,15 @@ export class OrganizationProfileComponent implements OnInit {
 
   ngOnInit() {
     this.authService.currentUser.subscribe(
-      (userData) => {
+      async (userData) => {
         this.user = { ...userData };
         if (this.user.lastPickedOrganization !== undefined) {
           this.organization = this.user.lastPickedOrganization;
           this.name = this.organization.name;
         }
         this.imageUrl = this.user.lastPickedOrganization.imageURL;
-        if (this.organization.createdByUserId === this.user.id) {
-          this.editable = true;
-        }
+        const role = await this.userOrganizationService.getOrganizationRole();
+        this.editable = role.name === 'Manager' ? true : false;
       });
   }
 

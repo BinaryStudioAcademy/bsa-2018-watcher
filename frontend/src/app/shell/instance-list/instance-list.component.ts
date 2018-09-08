@@ -40,22 +40,20 @@ constructor(private instanceService: InstanceService,
   popupMessage: string;
   isLoading: boolean;
   isDeleting: boolean;
-  isMember = true;
+  isManager: boolean;
   previousSettingUrl: string;
 
   currentQuery = '';
 
   ngOnInit(): void {
     this.authService.currentUser.subscribe(
-      user => {
+      async user => {
         this.user = user;
-        this.userOrganizationService.getOrganizationRole().subscribe((role: OrganizationRole) => {
-        this.isMember = role.name === 'Member' ? true : false;
+        const role = await this.userOrganizationService.getOrganizationRole();
+        this.isManager = role.name === 'Manager' ? true : false;
         this.configureInstances(this.user.lastPickedOrganizationId);
-    });
-      }
-    );
-   }
+    }); }
+
 
    ngAfterContentChecked(): void {
     this.highlightCurrentSetting();
@@ -71,7 +69,7 @@ constructor(private instanceService: InstanceService,
       title: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
       routerLink: ['instances/create'],
-      disabled: this.isMember
+      visible: this.isManager
     }];
 
     this.isLoading = true;
@@ -99,7 +97,7 @@ constructor(private instanceService: InstanceService,
         icon: 'fa fa-pencil',
         routerLink: [`/user/instances/${instance.id}/edit`],
         styleClass: 'instance-options',
-        disabled: this.isMember
+        visible: this.isManager
       }, {
         label: 'Activities',
         icon: 'fa fa fa-history',
@@ -109,7 +107,7 @@ constructor(private instanceService: InstanceService,
         label: 'Download app',
         icon: 'fa fa-download',
         styleClass: 'instance-options',
-        disabled: this.isMember,
+        visible: this.isManager,
         command: () => {
           this.showDownloadModal = true;
           this.currentGuidId = instance.guidId;
@@ -127,7 +125,7 @@ constructor(private instanceService: InstanceService,
           this.deleteInstance(instance.id, index);
         },
         styleClass: 'instance-options',
-        disabled: this.isMember
+        visible: this.isManager
       } ]
     };
     return item;
