@@ -6,8 +6,9 @@ import { CollectedData } from '../../shared/models/collected-data.model';
 import { AggregateDataRequest } from '../../shared/models/aggregate-data-request.model';
 import { SelectItem } from 'primeng/api';
 import { Calendar } from 'primeng/primeng';
-import * as jsPDF from 'jspdf';
 import { formatDate } from '@angular/common';
+import * as jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 @Component({
   selector: 'app-report',
@@ -129,9 +130,27 @@ export class ReportComponent implements OnInit {
   convertPDF(): void {
     const doc = new jsPDF('p', 'mm', 'a4');
 
-    const content = this.el.nativeElement;
+    const tables = [];
 
-    doc.fromHTML(content.innerHTML);
+    const cols: string[] = [];
+    this.cols.forEach(item => {
+      cols.push(item.header);
+    });
+
+    this.collectedData.forEach(item => {
+      const rows = [];
+
+      item.processes.forEach(p => rows.push([p.name, p.pCpu.toString(), p.pRam.toString(), p.ramMBytes.toString()]));
+
+      tables.push({
+        cols: cols,
+        rows: rows
+      });
+    });
+
+    tables.forEach(item => {
+      doc.autoTable(item.cols, item.rows);
+    });
 
     // tslint:disable-next-line:max-line-length
     doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
