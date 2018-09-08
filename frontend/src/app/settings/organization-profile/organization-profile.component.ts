@@ -10,6 +10,7 @@ import { environment } from '../../../environments/environment';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { User } from '../../shared/models/user.model';
 import { UserOrganizationService } from '../../core/services/user-organization.service';
+import { OrganizationRole } from '../../shared/models/organization-role.model';
 
 @Component({
   selector: 'app-organization-profile',
@@ -62,18 +63,16 @@ export class OrganizationProfileComponent implements OnInit {
 
   ngOnInit() {
     this.authService.currentUser.subscribe(
-      async (userData) => {
+      (userData) => {
         this.user = { ...userData };
-        if (!this.user.lastPickedOrganization) {
+        if (this.user.lastPickedOrganization !== undefined) {
           this.organization = this.user.lastPickedOrganization;
           this.name = this.organization.name;
         }
         this.imageUrl = this.user.lastPickedOrganization.imageURL;
-       /*  if (this.organization.createdByUserId === this.user.id) {
-          this.editable = true;
-        } */
-        const role = await this.userOrganizationService.getOrganizationRole().toPromise();
-        this.editable = role.name === 'Manager' ? true : false;
+        this.userOrganizationService.getOrganizationRole().subscribe((role: OrganizationRole) => {
+          this.editable = role.name === 'Manager' ? true : false;
+        });
       });
   }
 
