@@ -144,12 +144,15 @@ export class ReportComponent implements OnInit {
 
       tables.push({
         cols: cols,
-        rows: rows
+        rows: rows,
+        time: formatDate(item.time, 'dd/MM/yy HH:mm', 'en-US')
       });
     });
 
     tables.forEach(item => {
       doc.autoTable(item.cols, item.rows);
+      doc.setFontSize(8);
+      doc.text(20, doc.autoTable.previous.finalY + 5, `Time: ${item.time}`);
     });
 
     // tslint:disable-next-line:max-line-length
