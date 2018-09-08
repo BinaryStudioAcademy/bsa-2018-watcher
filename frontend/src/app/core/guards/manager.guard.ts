@@ -12,11 +12,11 @@ export class ManagerGuard implements CanActivate {
   currentRole: OrganizationRole;
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise < boolean > {
 
-    this.currentRole = await this.userOrganizationService.currentOrganizationRole.toPromise();
+    this.currentRole = await this.userOrganizationService.currentOrganizationRole;
     if (this.currentRole.name === 'Manager') {
       return true;
     } else {
-      this.router.navigate(['/user/dashboards']);
+      this.router.navigate(['/user/instances']);
       return false;
     }
   }

@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
   chartToEdit = {...defaultOptions};
-  isMember: boolean;
+  isManager: boolean;
 
   constructor(private dashboardsService: DashboardService,
               private collectedDataService: CollectedDataService,
@@ -62,8 +62,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.userOrganizationService.currentOrganizationRole.subscribe(async (role: OrganizationRole) => {
-      this.isMember = role.name === 'Member' ? true : false;
+    const role = await this.userOrganizationService.currentOrganizationRole;
+    this.isManager = role.name === 'Manager' ? true : false;
 
     try {
       const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
@@ -139,7 +139,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ];
 
     this.subscribeToCollectedData();
-  });
   }
 
   ngOnDestroy(): void {
@@ -186,7 +185,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.showCreatePopup(true);
       },
       id: 'lastTab',
-      // disabled: this.isMember,
+      visible: this.isManager,
     };
 
     return lastItem;

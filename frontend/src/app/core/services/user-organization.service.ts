@@ -11,7 +11,7 @@ import { User } from '../../shared/models/user.model';
 export class UserOrganizationService {
   ctrlUrl = environment.server_url + '/UserOrganization';
 
-  currentOrganizationRole: Observable<OrganizationRole> = this.getOrganizationRole();
+  currentOrganizationRole: Promise<OrganizationRole> = this.getOrganizationRole();
 
   constructor(private http: HttpClient,
   private authService: AuthService) {
@@ -41,8 +41,8 @@ export class UserOrganizationService {
     return this.http.get<OrganizationRole>(`${this.ctrlUrl}/user/${userId}/organization/${organizationId}`);
   }
 
-  getOrganizationRole(): Observable<OrganizationRole> {
+  getOrganizationRole(): Promise<OrganizationRole> {
     const user: User = this.authService.getCurrentUser();
-    return this.getUserOrganizationRole(user.id, user.lastPickedOrganizationId);
+    return this.getUserOrganizationRole(user.id, user.lastPickedOrganizationId).toPromise();
   }
 }
