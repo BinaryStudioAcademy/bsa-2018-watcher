@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Timers;
 using System.Management;
 using System.Linq;
+using System.Threading;
 
 namespace DataCollector
 {
@@ -12,51 +13,60 @@ namespace DataCollector
     public class Collector
     {
         private static readonly Lazy<Collector> Value = new Lazy<Collector>(() => new Collector());
-        private readonly Dictionary<string, PerformanceCounter> _processCpuCounters;
-        private readonly Dictionary<string, PerformanceCounter> _processRamCounters;
-        private readonly Dictionary<string, PerformanceCounter> _systemCounters;
+
+        private float totalRamMbyte;
 
         private Collector()
         {
-            _processCpuCounters = new Dictionary<string, PerformanceCounter>();
-            _processRamCounters = new Dictionary<string, PerformanceCounter>();
-            _systemCounters = new Dictionary<string, PerformanceCounter>
-            {
-                { "FreeRam", new PerformanceCounter("Memory", "Available MBytes") },
-                { "Interrupts", new PerformanceCounter("Processor", "Interrupts/sec", "_Total") },
-                { "DiskFreeMb", new PerformanceCounter("LogicalDisk", "Free Megabytes", "_Total") },
-                { "CPU", new PerformanceCounter("Processor Information", "% Processor Time", "_Total") },
-                { "RAM", new PerformanceCounter("Memory", "% Committed Bytes In Use") },
-                { "InterruptsTime", new PerformanceCounter("Processor", "Interrupts/sec", "_Total") },
-                { "LocalDisk", new PerformanceCounter("LogicalDisk", "% Free Space", "_Total") }
-            };
+            totalRamMbyte = GetTotalRAM();
         }
 
-       
-
         public static Collector Instance => Value.Value;
-
 
         public CollectedData Collect()
         {
             CollectedData dataItem = new CollectedData();
             try
             {
+                float freeRam, cpu, disk, diskTotalMb, diskFreeMb;
+                using (PerformanceCounter counter = new PerformanceCounter("Memory", "Available MBytes"))
+                {
+                    float tmp = counter.NextValue();
+                    freeRam = tmp;
+                }
+                using (PerformanceCounter counter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total"))
+                {
+                    counter.NextValue();
+                    Thread.Sleep(1000);
+
+                    float tmp = counter.NextValue();
+                    cpu = tmp;
+                }
+                using (PerformanceCounter counter = new PerformanceCounter("LogicalDisk", "% Free Space", "C:"))
+                {
+                    float tmp = counter.NextValue();
+                    disk = tmp;
+                }
+                using (PerformanceCounter counter = new PerformanceCounter("LogicalDisk", "Free Megabytes", "C:"))
+                {
+                    float tmp = counter.NextValue();
+                    diskFreeMb = tmp;
+                    diskTotalMb = (diskFreeMb / disk) * 100;
+                }
+
+
                 var allProcesses = GetProcesses();
                 dataItem = new CollectedData
                 {
-                    InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
-                    InterruptsTimePercent = _systemCounters["InterruptsTime"].NextValue(),
+                    TotalRamMBytes = totalRamMbyte,
+                    RamUsagePercentage = 100 - (freeRam / (totalRamMbyte / 100)),
+                    UsageRamMBytes = totalRamMbyte - freeRam,
 
-                    TotalRamMBytes = GetTotalRAM(),
-                    RamUsagePercentage = 100 - (_systemCounters["FreeRam"].NextValue() / (GetTotalRAM() / 100)),
-                    UsageRamMBytes = GetTotalRAM() - _systemCounters["FreeRam"].NextValue(),
+                    CpuUsagePercentage = cpu,
 
-                    CpuUsagePercentage = _systemCounters["CPU"].NextValue(),
-
-                    LocalDiskTotalMBytes = GetDiskTotalMbytes(),
-                    LocalDiskUsageMBytes = GetDiskUsageMbytes(),
-                    LocalDiskUsagePercentage = 100 - _systemCounters["LocalDisk"].NextValue(),
+                    LocalDiskTotalMBytes = diskTotalMb,
+                    LocalDiskUsageMBytes = diskTotalMb - diskFreeMb,
+                    LocalDiskUsagePercentage = 100 - disk,
 
                     Processes = allProcesses,
                     ProcessesCount = allProcesses.Count,
@@ -64,27 +74,17 @@ namespace DataCollector
                 };
                 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 // ignored
             }
             return dataItem;
         }
 
-        private float GetDiskTotalMbytes()
-        {
-            return (_systemCounters["DiskFreeMb"].NextValue() / _systemCounters["LocalDisk"].NextValue()) * 100.0f;
-        }
-
-        private float GetDiskUsageMbytes()
-        {
-            return GetDiskTotalMbytes() - _systemCounters["DiskFreeMb"].NextValue();
-        }
-
         private float GetTotalRAM()
         {
             float totalRam = 1.0f;
-
             ManagementObjectSearcher ramMonitor =    //query to WMI
             new ManagementObjectSearcher("SELECT TotalVisibleMemorySize,FreePhysicalMemory FROM Win32_OperatingSystem");
 
@@ -92,9 +92,7 @@ namespace DataCollector
             {
                 totalRam = Convert.ToUInt64(objram["TotalVisibleMemorySize"]) / 1024;    // Total RAM
                 float busyRam = totalRam - Convert.ToUInt64(objram["FreePhysicalMemory"]);// Usage RAM
-                
             }
-
             return totalRam;
         }
 
@@ -102,47 +100,33 @@ namespace DataCollector
         private List<ProcessData> GetProcesses()
         {
             var result = new List<ProcessData>();
-            var processes = Process.GetProcesses();
-
-
-            foreach (var item in processes)
+           
+            foreach (Process process in Process.GetProcesses())
             {
-                //item.pro
-                if (!_processRamCounters.ContainsKey(item.ProcessName))
-                    _processRamCounters.Add(item.ProcessName,
-                        new PerformanceCounter("Process", "Working Set", item.ProcessName, true));
-
-                if (!_processCpuCounters.ContainsKey(item.ProcessName))
-                    _processCpuCounters.Add(item.ProcessName,
-                        new PerformanceCounter("Process", "% Processor Time", item.ProcessName, true));
-            }
-
-            foreach (var item in processes)
-            {
-                if (item.ProcessName == "Idle") continue; // cpu > 350%
-              
-
-                try
+                if (process.ProcessName == "Idle") continue; // cpu > 350%
+                float pCpu;
+                using (PerformanceCounter counter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName))
                 {
-                    var name = item.ProcessName;
-                    var ramMBytes = _processRamCounters[item.ProcessName].NextValue() / 1024 / 1024;
-                    var pCpu = (float)Math.Round(_processCpuCounters[item.ProcessName].NextValue() / Environment.ProcessorCount, 2);
-                    var pRam = (ramMBytes / GetTotalRAM()) * 100;
+                    float tmp = counter.NextValue();
+                    pCpu = (float)(Math.Round((double)tmp, 1));
+                }
 
-                    result.Add(new ProcessData
-                    {
-                        Name = name,
-                        RamMBytes = ramMBytes,
-                        PCpu = pCpu,
-                        PRam = pRam
-                    });  
-                }
-                catch (Exception e)
+                var name = process.ProcessName;
+                float ramMBytes = (float)Math.Round((double)process.WorkingSet64 / 1024 / 1024, 2);
+
+
+                //var pCpu = (float)Math.Round(counter.NextValue() / Environment.ProcessorCount, 5);
+                var pRam = (float)Math.Round((ramMBytes / totalRamMbyte) * 100, 2);
+
+                result.Add(new ProcessData
                 {
-                    Console.WriteLine(e.Message);
-                    _processRamCounters.Remove(item.ProcessName);
-                }
+                    Name = name,
+                    RamMBytes = ramMBytes,
+                    PCpu = pCpu,
+                    PRam = pRam
+                });
             }
+           
             result = GroupProcesses(result);
 
             return result; // DODO merge processes if Processes with the same name
