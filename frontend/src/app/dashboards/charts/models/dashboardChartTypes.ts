@@ -21,6 +21,11 @@ export const dashboardChartTypes: DashboardChartType[] = [
     title: 'Guage',
     name: 'guage',
     type: ChartType.Guage,
+  },
+  {
+    title: 'Resources table',
+    name: 'resources-table',
+    type: ChartType.ResourcesTable,
   }
 
   // createChartType({

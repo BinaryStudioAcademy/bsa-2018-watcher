@@ -54,6 +54,7 @@ export class EditChartComponent implements OnInit {
   get spinnerDisabled() {
     return this.dashboardChart && this.dashboardChart.showCommon;
   }
+
   get isValid(): boolean {
     return this.dashboardChart.dataSources.length ? true : false;
   }
@@ -77,6 +78,7 @@ export class EditChartComponent implements OnInit {
       {label: dashboardChartTypes[1].title, value: dashboardChartTypes[1]},
       {label: dashboardChartTypes[2].title, value: dashboardChartTypes[2]},
       {label: dashboardChartTypes[3].title, value: dashboardChartTypes[3]},
+      {label: dashboardChartTypes[4].title, value: dashboardChartTypes[4]},
     ];
 
     this.dropdownSources = [
