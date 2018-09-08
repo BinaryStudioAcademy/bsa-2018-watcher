@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, OnChanges, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SelectItem, SelectItemGroup} from 'primeng/api';
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 
@@ -10,7 +10,7 @@ import {ToastrService} from '../../../core/services/toastr.service';
 import {Chart} from '../../../shared/models/chart.model';
 import {CollectedData} from '../../../shared/models/collected-data.model';
 import {ChartRequest} from '../../../shared/requests/chart-request.model';
-import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
+import {ChartType} from '../../../shared/models/chart-type.enum';
 import {DataProperty, dataPropertyLables} from '../../../shared/models/data-property.enum';
 
 import {dashboardChartTypes} from '../models/dashboardChartTypes';
@@ -55,7 +55,7 @@ export class EditChartComponent implements OnInit {
     return this.dashboardChart && this.dashboardChart.showCommon;
   }
   get isValid(): boolean {
-    return this.dashboardChart.dataSources.length ? true : false;
+    return !!this.dashboardChart.dataSources.length;
   }
 
   constructor(private collectedDataService: CollectedDataService,
@@ -196,7 +196,6 @@ export class EditChartComponent implements OnInit {
 
   processChartType() {
     this.dashboardChart.chartType = dashboardChartTypes.find(t => t.type === this.dashboardChart.chartType.type);
-    // .name = chartTypes[this.dashboardChart.chartType.type];
     this.resetBuilderForm();
     this.processData();
   }
@@ -207,15 +206,14 @@ export class EditChartComponent implements OnInit {
   }
 
   processData(): void {
-    if (this.dashboardChart.showCommon) {
-      this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
-        this.dashboardChart.dataSources, this.collectedDataForChart);
-    } else {
-      this.dashboardChart.data = this.dataService.prepareProcessData(this.dashboardChart.chartType.type,
-        this.dashboardChart.dataSources[0], this.collectedDataForChart, this.dashboardChart.mostLoaded);
-    }
-
-    this.isPreviewAvailable = false;
+      this.isPreviewAvailable = this.dataService.fulfillChart(this.dashboardChart);
+    // if (this.dashboardChart.showCommon) {
+    //   this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
+    //     this.dashboardChart.dataSources, this.collectedDataForChart);
+    // } else {
+    //   this.dashboardChart.data = this.dataService.prepareProcessData(this.dashboardChart.chartType.type,
+    //     this.dashboardChart.dataSources[0], this.collectedDataForChart, this.dashboardChart.mostLoaded);
+    // }
   }
 
   closeDialog() {
@@ -241,13 +239,13 @@ export class EditChartComponent implements OnInit {
   }
 
   handleSuccessfulCreate(chart: Chart): void {
-    const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(chart, this.collectedDataForChart);
+    const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(chart);
     this.editChart.emit(dashboardChart);
     this.closeDialog();
   }
 
   handleSuccessfulEdit(request: ChartRequest, id: number): void {
-    const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChartFromRequest(request, id, this.collectedDataForChart);
+    const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChartFromRequest(request, id);
     this.editChart.emit(dashboardChart);
     this.closeDialog();
   }

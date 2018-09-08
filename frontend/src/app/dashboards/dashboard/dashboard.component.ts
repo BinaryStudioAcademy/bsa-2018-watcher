@@ -19,9 +19,7 @@ import {DashboardChart} from '../models/dashboard-chart';
 import {Dashboard} from '../../shared/models/dashboard.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
-import {CustomData} from '../charts/models';
 import {UserOrganizationService} from '../../core/services/user-organization.service';
-import {OrganizationRole} from '../../shared/models/organization-role.model';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
 
 
@@ -45,7 +43,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   creation: boolean;
   isLoading = false;
   displayEditDashboard = false;
-  collectedDataForChart: CollectedData[] = [];
   cogItems: MenuItem[];
   chartToEdit = {...defaultOptions};
   isManager: boolean;
@@ -90,21 +87,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId)
           .subscribe(data => {
-            this.collectedDataForChart = data || [];
-
+            // this.collectedDataForChart = data || [];
+            this.dataService.hourlyCollectedData = data;
             if (data && data.length > 0) {
               // -1 is last item - plus sign
               for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
                 for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
-                  let tempData: CustomData[];
-                  if (this.dashboardMenuItems[i].charts[j].showCommon) {
-                    tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
-                      this.dashboardMenuItems[i].charts[j].dataSources, data);
-                  } else {
-                    tempData = this.dataService.prepareProcessData(this.dashboardMenuItems[i].charts[j].chartType.type,
-                      this.dashboardMenuItems[i].charts[j].dataSources[0], data, this.dashboardMenuItems[i].charts[j].mostLoaded);
-                  }
-                  this.dashboardMenuItems[i].charts[j].data = [...tempData];
+                  this.dataService.fulfillChart(this.dashboardMenuItems[i].charts[j]);
+                  // let tempData: CustomData[];
+                  // if (this.dashboardMenuItems[i].charts[j].showCommon) {
+                  //   tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
+                  //     this.dashboardMenuItems[i].charts[j].dataSources, data);
+                  // } else {
+                  //   tempData = this.dataService.prepareProcessData(this.dashboardMenuItems[i].charts[j].chartType.type,
+                  //     this.dashboardMenuItems[i].charts[j].dataSources[0], data, this.dashboardMenuItems[i].charts[j].mostLoaded);
+                  // }
+                  // this.dashboardMenuItems[i].charts[j].data = [...tempData];
                 }
               }
             }
@@ -151,14 +149,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   subscribeToCollectedData(): void {
     this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
-      this.collectedDataForChart = this.collectedDataForChart || [];
-      this.collectedDataForChart.push(latestData); // TODO: check current array on size to remove super old useless data elements
-      // TODO: use this operation only for current dashboard and then on switching dashboard make data preparing on existing
-      // collectedDataForChart to reduce amount of operations and time
+      this.dataService.pushLatestCollectedData(latestData);
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
-        const tempData = this.dataService.prepareDataTick(this.activeDashboardItem.charts[i], latestData);
-        this.activeDashboardItem.charts[i].data = [...tempData];
-
+        this.dataService.updateChartWithLatestData(this.activeDashboardItem.charts[i]);
+        // const tempData =
+        // this.activeDashboardItem.charts[i].data = [...tempData];
       }
     });
   }
@@ -389,12 +384,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onChartEdited(chart?: DashboardChart) {
-    if (chart.showCommon) {
-      chart.data = this.dataService.prepareData(chart.chartType.type, chart.dataSources, this.collectedDataForChart);
-    } else {
-      chart.data = this.dataService.prepareProcessData(chart.chartType.type,
-        chart.dataSources[0], this.collectedDataForChart, chart.mostLoaded);
-    }
+    // TODO: don't fill this chart with data, it's already filled in edit chart component
+    // this.dataService.fulfillChart(chart);
+    // if (chart.showCommon) {
+    //   chart.data = this.dataService.prepareData(chart.chartType.type, chart.dataSources, this.collectedDataForChart);
+    //   this.dataService.fulfillChart(chart);
+    // } else {
+    //   chart.data = this.dataService.prepareProcessData(chart.chartType.type,
+    //     chart.dataSources[0], this.collectedDataForChart, chart.mostLoaded);
+    // }
     const updateChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chart.id);
     if (updateChartIndex >= 0) {
       this.activeDashboardItem.charts[updateChartIndex] = chart;
@@ -418,7 +416,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       label: dashboard.title,
       dashId: dashboard.id,
       createdAt: dashboard.createdAt,
-      charts: dashboard.charts.map(c => this.dataService.instantiateDashboardChart(c, this.collectedDataForChart)),
+      charts: dashboard.charts.map(c => this.dataService.instantiateDashboardChart(c)),
       command: () => this.activeDashboardItem = item
     };
     return item;

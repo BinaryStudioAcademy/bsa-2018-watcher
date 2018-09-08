@@ -3,7 +3,7 @@ import { EventEmitter } from '@angular/core';
 import {NgModel} from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { DashboardChart } from '../models/dashboard-chart';
-import { ChartType, chartTypes } from '../../shared/models/chart-type.enum';
+import { ChartType } from '../../shared/models/chart-type.enum';
 import { DataProperty } from '../../shared/models/data-property.enum';
 import { CollectedDataService } from '../../core/services/collected-data.service';
 import { CollectedData } from '../../shared/models/collected-data.model';
@@ -124,12 +124,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   processData(dashboardChart: DashboardChart) {
-    this.showPreview = false;
-    dashboardChart.data = this.dataService.prepareData(dashboardChart.chartType.type,
-      this.sources, this.collectedDataForChart);
-
     dashboardChart.dataSources = this.sources;
-
     switch (dashboardChart.chartType.type) {
       case ChartType.BarVertical:
         dashboardChart.xAxisLabel = 'Parameters';
@@ -144,10 +139,14 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         dashboardChart.xAxisLabel = '';
         break;
     }
+    this.showPreview = this.dataService.fulfillChart(dashboardChart);
 
-    if (dashboardChart.data && dashboardChart.data.length > 0) {
-      this.showPreview = true;
-    }
+    // dashboardChart.data = this.dataService.prepareData(dashboardChart.chartType.type,
+    //   this.sources, this.collectedDataForChart);
+
+    // if (dashboardChart.data && dashboardChart.data.length > 0) {
+    //   this.showPreview = true;
+    // }
     return dashboardChart;
   }
 
