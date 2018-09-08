@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using DataAccumulator.Shared.Models;
+
 using Watcher.Common.Dtos.Plots;
 
 namespace Watcher.Core.Interfaces

@@ -9,7 +9,6 @@ using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.Shared.Models;
 using Watcher.Common.Dtos.Plots;
 using Watcher.Core.Interfaces;
-using CollectedDataDto = Watcher.Common.Dtos.Plots.CollectedDataDto;
 
 namespace Watcher.Core.Services
 {
@@ -138,10 +137,9 @@ namespace Watcher.Core.Services
             var random = new Random();
             var processData = new List<ProcessData>();
 
-            int processes = random.Next(0, 7);
-            for (int i = 0; i < processes; i++)
+            var processes = processNames.Count;
+            for (var i = 0; i < processes; i++)
             {
-                //ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
                 processData.Add(new ProcessData()
                 {
                     Name = processNames[i],
@@ -156,23 +154,17 @@ namespace Watcher.Core.Services
                 ClientId = instanceId, // Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"), // instanceId
 
                 CollectedDataType = CollectedDataType.Accumulation,
-
-                ProcessesCount = random.Next(0, 300),
-                Processes = processData,
-
-                UsageRamMBytes = (float)Math.Round(random.NextDouble() * 100, 2),
-                TotalRamMBytes = (float)Math.Round(random.NextDouble() * 100, 2),
+                Time = dateTime,
+                ProcessesCount = random.Next(10, 300),
+                CpuUsagePercentage = (float)random.NextDouble() * 10,
+                UsageRamMBytes = random.Next(0, 5_000), // (float)Math.Round(random.NextDouble() * 100, 2),
+                TotalRamMBytes = random.Next(5_000, 10_000), // (float)Math.Round(random.NextDouble() * 100, 2) + (float)Math.Round(random.NextDouble() * 100, 2),
                 RamUsagePercentage = (float)Math.Round(random.NextDouble() * 100, 2),
-
                 InterruptsPerSeconds = random.Next(100, 4096),
-
-                LocalDiskUsageMBytes = (float)Math.Round(random.NextDouble() * 100, 2),
-                LocalDiskTotalMBytes = random.Next(0, 100),
-                LocalDiskUsagePercentage = random.Next(0, 1000000000),
-
-                CpuUsagePercentage = random.Next(0, 100),
-
-                Time = DateTime.UtcNow
+                LocalDiskUsageMBytes = random.Next(0, 5000),
+                LocalDiskTotalMBytes = random.Next(5000, 1_000_000),
+                LocalDiskUsagePercentage = random.Next(0, 100),
+                Processes = processData
             };
 
             return data;

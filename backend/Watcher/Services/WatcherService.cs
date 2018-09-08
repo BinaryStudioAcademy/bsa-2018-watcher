@@ -8,6 +8,7 @@
 
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.DataAccessLayer.Interfaces;
+    using DataAccumulator.Shared.Models;
 
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.DependencyInjection;
