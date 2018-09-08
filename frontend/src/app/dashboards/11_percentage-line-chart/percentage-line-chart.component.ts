@@ -93,9 +93,9 @@ export class PercentageLineChartComponent implements OnInit, OnChanges {
       items.push({name: new Date(info.time), value: 0});
     }
 
-    items[0].value = Math.floor(info.cpuUsagePercent);
-    items[1].value = Math.floor(info.ramUsagePercent);
-    items[2].value = Math.floor(info.localDiskFreeSpacePercent);
+    // items[0].value = Math.floor(info.cpuUsagePercent);
+    // items[1].value = Math.floor(info.ramUsagePercent);
+    // items[2].value = Math.floor(info.localDiskFreeSpacePercent);
     // items[3].value = Math.floor(info.interruptsTimePercent);
 
     return items;

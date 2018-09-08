@@ -16,7 +16,7 @@ export class DashboardsHub {
   private connectionEstablishedSub = new Subject<boolean>();
   public connectionEstablished$ = from(this.connectionEstablishedSub);
 
-  private infoSub = new Subject<PercentageInfo>();
+  private infoSub = new Subject<CollectedData>();
   public infoSubObservable = from(this.infoSub);
 
   constructor(private apiService: ApiService,

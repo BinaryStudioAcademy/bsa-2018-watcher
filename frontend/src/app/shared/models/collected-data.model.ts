@@ -1,19 +1,21 @@
-﻿import {PercentageInfo} from '../../dashboards/models/percentage-info';
-import { ProcessData } from './process-data.model';
+﻿import {CollectedDataType} from './collected-data-type.enum';
+import {ProcessData} from './process-data.model';
 
-
-export interface CollectedData extends PercentageInfo {
-   id: string;
-   time: Date;
-   processesCount: number;
-   processes: ProcessData[];
-   cpuUsagePercent: number;
-   ramUsagePercent: number;
-   interruptsTimePercent: number;
-   localDiskFreeSpacePercent: number;
-   avaliableRamBytes: number;
-   interruptsPerSeconds: number;
-   localDiskFreeMBytes: number;
+export interface CollectedData {
+  id: string;
+  clientId: string;
+  collectedDataType: CollectedDataType;
+  processesCount: number;
+  processes: ProcessData[];
+  cpuUsagePercentage: number;
+  usageRamMBytes: number;
+  totalRamMBytes: number;
+  freeRamPercentage: number;
+  interruptsPerSeconds: number;
+  localDiskUsageMBytes: number;
+  localDiskTotalMBytes: number;
+  localDiskFreePercentage: number;
+  time: Date;
 }
 
 

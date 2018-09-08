@@ -4,6 +4,8 @@ using Watcher.Common.Dtos.Plots;
 
 namespace Watcher.Core.MappingProfiles
 {
+    using DataAccumulator.Shared.Models;
+
     public class CollectedDataProfile: Profile
     {
         public CollectedDataProfile()

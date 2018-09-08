@@ -172,7 +172,6 @@ export class HeaderComponent implements OnInit {
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
       .subscribe(value => {
         // update user in frontend
-
         this.currentUser.lastPickedOrganizationId = item.id;
         this.currentUser.lastPickedOrganization = item;
         this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
