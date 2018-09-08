@@ -127,7 +127,7 @@ export class ReportComponent implements OnInit {
   }
 
   convertPDF(): void {
-    const doc = new jsPDF();
+    const doc = new jsPDF('p', 'mm', 'a4');
 
     const content = this.el.nativeElement;
 
