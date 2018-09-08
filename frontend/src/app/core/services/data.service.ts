@@ -29,7 +29,6 @@ export class DataService {
   }
 
   instantiateDashboardChart(value: Chart, collData: CollectedData[]): DashboardChart {
-    debugger;
     const dataProps = this.convertStringToArrEnum(value.sources);
     let chartData = [];
     if (value.showCommon) {
@@ -244,7 +243,6 @@ export class DataService {
   }
 
   mapToProcessesLineChartSeriesItem(data: CollectedData, processName: string, property: string): SeriesItem {
-    debugger;
     const process = data.processes.find((value, index, obj) => {
       return value.name === processName;
     });

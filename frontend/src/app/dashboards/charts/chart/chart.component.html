@@ -1,5 +1,7 @@
 <app-resource-table
-  *ngIf="chartType.type === type.ResourcesTable">
+  *ngIf="chartType.type === type.ResourcesTable"
+  [sources]="chart.dataSources"
+  [data]="chart.data">
 </app-resource-table>
 
 <ngx-charts-line-chart

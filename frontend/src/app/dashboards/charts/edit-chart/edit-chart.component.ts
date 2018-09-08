@@ -81,15 +81,6 @@ export class EditChartComponent implements OnInit {
       {label: dashboardChartTypes[4].title, value: dashboardChartTypes[4]},
     ];
 
-    this.dropdownSources = [
-      {label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage},
-      {label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage},
-      {label: dataPropertyLables[DataProperty.localDiskUsagePercentage], value: DataProperty.localDiskUsagePercentage},
-      {label: dataPropertyLables[DataProperty.processesCount], value: DataProperty.processesCount},
-      {label: dataPropertyLables[DataProperty.usageRamMBytes], value: DataProperty.usageRamMBytes},
-      {label: dataPropertyLables[DataProperty.interruptsPerSeconds], value: DataProperty.interruptsPerSeconds},
-      {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
-    ];
     this.resetBuilderForm();
   }
 
@@ -112,15 +103,20 @@ export class EditChartComponent implements OnInit {
       return;
     }
 
-    // Disabling another groups
-    if (dataPropertyLables[event.itemValue].includes('%')) {
-      this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => dataPropertyLables[s].includes('%'));
-      this.dropdownSources.forEach(item => !item.label.includes('%') ? item.disabled = true : item.disabled = false);
-    } else {
-      this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => !dataPropertyLables[s].includes('%'));
-      this.dropdownSources.forEach(item => item.label.includes('%') ? item.disabled = true : item.disabled = false);
+    switch (this.dashboardChart.chartType.type) {
+      case ChartType.ResourcesTable:
+        break;
+      default:
+        // Disabling another groups
+        if (dataPropertyLables[event.itemValue].includes('%')) {
+          this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => dataPropertyLables[s].includes('%'));
+          this.dropdownSources.forEach(item => !item.label.includes('%') ? item.disabled = true : item.disabled = false);
+        } else {
+          this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => !dataPropertyLables[s].includes('%'));
+          this.dropdownSources.forEach(item => item.label.includes('%') ? item.disabled = true : item.disabled = false);
+        }
+        break;
     }
-
     this.processData();
   }
 
@@ -131,6 +127,10 @@ export class EditChartComponent implements OnInit {
     this.dropdownSources.forEach(item => item.disabled = false);
 
     switch (this.dashboardChart.chartType.type) {
+      case ChartType.ResourcesTable:
+        this.dashboardChart.showCommon = true; //TODO: change
+        this.dashboardChart.dataSources = [DataProperty.name];
+        break;
       case ChartType.LineChart:
         this.isTimeAvailable = true;
         this.isXAxisAvailable = true;
@@ -161,6 +161,14 @@ export class EditChartComponent implements OnInit {
 
   createSourceItems() {
     switch (this.dashboardChart.chartType.type) {
+      case ChartType.ResourcesTable: {
+        this.dropdownSources = [
+          {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
+          {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
+          {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
+        ];
+        return;
+      }
       case ChartType.Pie:
         if (this.dashboardChart.showCommon) {
           this.dropdownGroupSources = [{
@@ -194,6 +202,16 @@ export class EditChartComponent implements OnInit {
         { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
       ]
     }];
+
+    this.dropdownSources = [
+      {label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage},
+      {label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage},
+      {label: dataPropertyLables[DataProperty.localDiskUsagePercentage], value: DataProperty.localDiskUsagePercentage},
+      {label: dataPropertyLables[DataProperty.processesCount], value: DataProperty.processesCount},
+      {label: dataPropertyLables[DataProperty.usageRamMBytes], value: DataProperty.usageRamMBytes},
+      {label: dataPropertyLables[DataProperty.interruptsPerSeconds], value: DataProperty.interruptsPerSeconds},
+      {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
+    ];
   }
 
   processChartType() {
@@ -209,6 +227,11 @@ export class EditChartComponent implements OnInit {
   }
 
   processData(): void {
+    if (this.dashboardChart.chartType.type === ChartType.ResourcesTable) {
+      this.dashboardChart.data = this.collectedDataForChart[0].processes;
+      return;
+    }
+
     if (this.dashboardChart.showCommon) {
       this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
         this.dashboardChart.dataSources, this.collectedDataForChart);

@@ -1,3 +1,26 @@
 <p>
   resource-table works!
 </p>
+<p-table [columns]="sources" [value]="data"
+  [resizableColumns]="true" sortMode="multiple" [scrollable]="true" scrollHeight="200px">
+<!-- 
+  <ng-template pTemplate="caption">
+    Processes
+  </ng-template> -->
+
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let source of columns" pResizableColumn [pSortableColumn]="property[source]">
+        {{labels[source]}}
+        <p-sortIcon [field]="property[source]"></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-process let-columns="columns">
+    <tr>
+      <td *ngFor="let source of columns" class="ui-resizable-column">
+        {{process[property[source]]}}
+      </td>
+    </tr>
+  </ng-template>

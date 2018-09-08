@@ -31,7 +31,7 @@ export interface DashboardChart {
   curveClosed: any;
   title: string;
   dataSources: DataProperty[];
-  data: CustomData[];
+  data: any; //CustomData[];
   activeEntries: CustomData[];
   chartType: DashboardChartType;
   theme: string;
