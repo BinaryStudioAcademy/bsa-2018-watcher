@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
 
     using DataAccumulator.DataAccessLayer.Entities;
+    using DataAccumulator.Shared.Models;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -152,7 +153,7 @@
             var dateTime = DateTime.UtcNow;
             for (var i = 0; i < 20; i++)
             {
-                var entity = CollectedDataService.GetFakeData(Guid.Empty, dateTime.AddSeconds(15 * i));
+                var entity = CollectedDataService.GetFakeData(Guid.Empty, dateTime.AddSeconds(10 * i));
                 entity.Id = Guid.NewGuid();
                 var dto = _mapper.Map<CollectedData, CollectedDataDto>(entity);
                 data.Add(dto);

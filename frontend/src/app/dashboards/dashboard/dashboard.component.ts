@@ -19,9 +19,10 @@ import {DashboardChart} from '../models/dashboard-chart';
 import {Dashboard} from '../../shared/models/dashboard.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
-import { UserOrganizationService } from '../../core/services/user-organization.service';
-import { OrganizationRole } from '../../shared/models/organization-role.model';
-import { ChartRequest } from '../../shared/requests/chart-request.model';
+import {CustomData} from '../charts/models';
+import {UserOrganizationService} from '../../core/services/user-organization.service';
+import {OrganizationRole} from '../../shared/models/organization-role.model';
+import {ChartRequest} from '../../shared/requests/chart-request.model';
 
 
 @Component({
@@ -69,7 +70,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } catch (e) {
       console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(e));
     }
-
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
 
     this.paramsSubscription = this.activateRoute.params.subscribe(params => {
@@ -96,8 +96,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
               // -1 is last item - plus sign
               for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
                 for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
-                  const tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
-                    this.dashboardMenuItems[i].charts[j].dataSources, data);
+                  let tempData: CustomData[];
+                  if (this.dashboardMenuItems[i].charts[j].showCommon) {
+                    tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
+                      this.dashboardMenuItems[i].charts[j].dataSources, data);
+                  } else {
+                    tempData = this.dataService.prepareProcessData(this.dashboardMenuItems[i].charts[j].chartType.type,
+                      this.dashboardMenuItems[i].charts[j].dataSources[0], data, this.dashboardMenuItems[i].charts[j].mostLoaded);
+                  }
                   this.dashboardMenuItems[i].charts[j].data = [...tempData];
                 }
               }
@@ -152,6 +158,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         const tempData = this.dataService.prepareDataTick(this.activeDashboardItem.charts[i], latestData);
         this.activeDashboardItem.charts[i].data = [...tempData];
+
       }
     });
   }
@@ -208,7 +215,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               c.showXAxis = true;
               c.showYAxis = true;
               c.showLegend = true;
-              c.view =  [600, 337];
+              c.view = [600, 337];
               newCharts.push(this.createChartRequest(c));
             });
             this.onAddedCharts(newCharts, dto.id);
@@ -219,11 +226,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.toastrService.error(`Error occurred status: ${error}`);
         });
   }
+
   createChartRequest(dashboardChart: DashboardChart): ChartRequest {
     const chart: ChartRequest = {
       showCommon: dashboardChart.showCommon,
       threshold: dashboardChart.threshold,
-      mostLoaded: '',
+      mostLoaded: 1,
       schemeType: dashboardChart.schemeType,
       dashboardId: 0,
       showLegend: dashboardChart.showLegend,
@@ -328,15 +336,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onAddedCharts(array: Array<ChartRequest>, id: number) {
-    array.forEach( chart => {
+    array.forEach(chart => {
       chart.dashboardId = id;
-    this.chartService.create(chart).subscribe(value => {
-      this.toastrService.success('Chart was created');
-    }, error => {
-      this.toastrService.error(`Error occurred status: ${error.message}`);
+      this.chartService.create(chart).subscribe(value => {
+        this.toastrService.success('Chart was created');
+      }, error => {
+        this.toastrService.error(`Error occurred status: ${error.message}`);
+      });
     });
-    });
-
   }
 
   onChartDeleted(chartId: number) {
@@ -382,7 +389,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onChartEdited(chart?: DashboardChart) {
-    chart.data = this.dataService.prepareData(chart.chartType.type, chart.dataSources, this.collectedDataForChart);
+    if (chart.showCommon) {
+      chart.data = this.dataService.prepareData(chart.chartType.type, chart.dataSources, this.collectedDataForChart);
+    } else {
+      chart.data = this.dataService.prepareProcessData(chart.chartType.type,
+        chart.dataSources[0], this.collectedDataForChart, chart.mostLoaded);
+    }
     const updateChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chart.id);
     if (updateChartIndex >= 0) {
       this.activeDashboardItem.charts[updateChartIndex] = chart;
@@ -401,6 +413,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
+    // debugger; // TODO: check how data source looks for multiple chart
     const item: DashboardMenuItem = {
       label: dashboard.title,
       dashId: dashboard.id,

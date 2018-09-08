@@ -54,6 +54,7 @@ namespace DataCollector
                 new DataSender(_client, uri),
                 Collector.Instance);
 
+            // TODO: Comment
             _logger = new Logger(_client, ClientIdentifier, uri+"/log");
             _logger.Log("Data collection began").GetAwaiter().GetResult();
 

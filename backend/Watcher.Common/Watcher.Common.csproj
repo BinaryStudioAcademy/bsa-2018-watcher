@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dtos\Plots\Temp\**" />
+    <EmbeddedResource Remove="Dtos\Plots\Temp\**" />
+    <None Remove="Dtos\Plots\Temp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="MoveToFrontend\collected-data-type.enum.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="7.6.104" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.2.4" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
@@ -31,7 +41,7 @@
       <CustomToolNamespace>Dtos\ChatDto.cs</CustomToolNamespace>
     </None>
     <None Update="MoveToFrontend\collected-data.model.ts">
-      <CustomToolNamespace>Dtos\Plots\CollectedDataDto.cs</CustomToolNamespace>
+      <CustomToolNamespace>Dtos\Plots\Temp\CollectedDataDto.cs</CustomToolNamespace>
     </None>
     <None Update="MoveToFrontend\dashboard.model.ts">
       <CustomToolNamespace>Dtos\DashboardDto.cs</CustomToolNamespace>
@@ -71,6 +81,9 @@
     </None>
     <None Update="MoveToFrontend\organization.model.ts">
       <CustomToolNamespace>Dtos\OrganizationDto.cs</CustomToolNamespace>
+    </None>
+    <None Update="MoveToFrontend\process-data.model.ts">
+      <CustomToolNamespace>Dtos\Plots\Temp\ProcessData.cs</CustomToolNamespace>
     </None>
     <None Update="MoveToFrontend\response.model.ts">
       <CustomToolNamespace>Dtos\ResponseDto.cs</CustomToolNamespace>

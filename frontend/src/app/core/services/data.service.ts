@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {CustomData} from '../../dashboards/charts/models';
+import {CustomData, date_sort_asc} from '../../dashboards/charts/models';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {NumberSeriesItem, SeriesItem} from '../../dashboards/models/series-item';
 import {MultiChartItem} from '../../dashboards/models/multi-chart-item';
@@ -10,12 +10,14 @@ import {DashboardChart} from '../../dashboards/models/dashboard-chart';
 import {dashboardChartTypes} from '../../dashboards/charts/models/dashboardChartTypes';
 import {defaultOptions} from '../../dashboards/charts/models/chart-options';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
+import {colorSets} from '@swimlane/ngx-charts/release/utils';
 
 @Injectable()
 export class DataService {
-  constructor() { }
+  constructor() {
+  }
 
-  convertStringToArrEnum(sources: string) {
+  convertStringToArrEnum(sources: string): DataProperty[] {
     const array: DataProperty[] = [];
     const arrNumbers = sources.split(',');
 
@@ -27,14 +29,21 @@ export class DataService {
   }
 
   instantiateDashboardChart(value: Chart, collData: CollectedData[]): DashboardChart {
+    debugger;
     const dataProps = this.convertStringToArrEnum(value.sources);
+    let chartData = [];
+    if (value.showCommon) {
+      chartData = this.prepareData(value.type, dataProps, collData);
+    } else {
+      chartData = this.prepareProcessData(value.type, dataProps[0], collData, value.mostLoaded);
+    }
     const dashChart: DashboardChart = {
       view: [600, 300],
       id: value.id,
       showCommon: value.showCommon,
       threshold: value.threshold,
       mostLoaded: value.mostLoaded,
-      colorScheme: {...defaultOptions.colorScheme},
+      colorScheme: {...colorSets.find(s => s.name === value.schemeType)}, // {...defaultOptions.colorScheme},
       schemeType: defaultOptions.schemeType,
       showLegend: value.showLegend,
       legendTitle: value.legendTitle,
@@ -45,6 +54,8 @@ export class DataService {
       showYAxisLabel: value.showYAxisLabel,
       yAxisLabel: value.yAxisLabel,
       xAxisLabel: value.xAxisLabel,
+      yScaleMin: defaultOptions.yScaleMin,
+      yScaleMax: defaultOptions.yScaleMax,
       autoScale: value.autoScale,
       showGridLines: value.showGridLines,
       rangeFillOpacity: value.rangeFillOpacity,
@@ -55,7 +66,7 @@ export class DataService {
       curveClosed: defaultOptions.curveClosed,
       title: value.title,
       dataSources: dataProps,
-      data: this.prepareData(value.type, dataProps, collData),
+      data: chartData,
       activeEntries: [],
       chartType: {...dashboardChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
       theme: value.isLightTheme ? 'light' : 'dark'
@@ -67,7 +78,8 @@ export class DataService {
   instantiateDashboardChartFromRequest(value: ChartRequest, chartId: number, collData: CollectedData[]): DashboardChart {
     const chart: Chart = {
       id: chartId,
-      ...value
+      ...value,
+      scheme: {...colorSets.find(s => s.name === value.schemeType)}
     };
 
     return this.instantiateDashboardChart(chart, collData);
@@ -75,23 +87,80 @@ export class DataService {
 
   // dataSource - property to show on the chart
   prepareData(chartType: ChartType, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
-    if (!dataSources || (!chartType && chartType !== ChartType.BarVertical) || (!dataToTransform || dataToTransform.length < 1)) {
+    if (!dataSources
+      || (!chartType && chartType !== ChartType.BarVertical)
+      || (!dataToTransform || dataToTransform.length < 1)) {
+      return [];
+    }
+
+    switch (chartType) {
+      case ChartType.LineChart:
+        const data = this.mapToMultiData(dataToTransform, dataSources);
+        for (let i = 0; i < data.length; i++) {
+          data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
+        }
+        return data;
+      case ChartType.Pie:
+        return this.mapToPieSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources[0]);
+      default:
+        return this.mapToSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources);
+    }
+  }
+
+  mapToPieSeriesItem(data: CollectedData, prop: DataProperty): NumberSeriesItem[] {
+    const items: NumberSeriesItem[] = [];
+    const propStr = DataProperty[prop];
+    items.push(
+      {
+        name: dataPropertyLables[prop],
+        value: data[propStr]
+      });
+
+    let itemName = '';
+    let itemValue = 0;
+    switch (prop) {
+      case DataProperty.cpuUsagePercentage:
+      case DataProperty.ramUsagePercentage:
+      case DataProperty.localDiskUsagePercentage:
+        itemName = 'Available';
+        itemValue = 100;
+        break;
+      case DataProperty.usageRamMBytes:
+        itemName = 'Free Ram MegaBytes';
+        itemValue = data[DataProperty[DataProperty.totalRamMBytes]];
+        break;
+      case DataProperty.localDiskUsageMBytes:
+        itemName = 'Free Local Disc MegaBytes';
+        itemValue = data[DataProperty[DataProperty.localDiskTotalMBytes]];
+        break;
+      default:
+    }
+
+    items.push(
+      {
+        name: itemName,
+        value: itemValue - data[propStr]
+      });
+
+    return items;
+  }
+
+  // dataSource - property to show on the chart
+  prepareProcessData(chartType: ChartType, dataSource: DataProperty, dataToTransform: CollectedData[], processesAmount = 0): CustomData[] {
+    if (!dataSource
+      || (!chartType && chartType !== ChartType.BarVertical)
+      || (!dataToTransform || dataToTransform.length < 1)
+      || processesAmount < 1) {
       return [];
     }
     if (chartType === ChartType.LineChart) {
-      const data = this.mapToMultiData(dataToTransform, dataSources);
+      const data = this.mapToProcessMultiData(dataToTransform, dataSource, processesAmount);
       for (let i = 0; i < data.length; i++) {
-        data[i].series.sort((a, b) => {
-          if (a.name > b.name) { return 1; }
-          if (a.name < b.name) { return -1; }
-          return 0;
-        });
+        data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
       }
-
       return data;
-      // order ascending to in future remove first element (the oldest)
     } else {
-      return this.mapToSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources);
+      return this.mapToProcessesSeriesItem(dataToTransform[dataToTransform.length - 1], dataSource, processesAmount);
     }
   }
 
@@ -102,6 +171,62 @@ export class DataService {
       item.series = data.map(p => this.mapToLineChartSeriesItem(p, properties[i]));
       items.push(item);
     }
+
+    return items;
+  }
+
+  mapToProcessMultiData(data: CollectedData[], property: DataProperty, processesAmount: number = 1) {
+    const items: MultiChartItem[] = [];
+    const stringProperty = DataProperty[property];
+    const lastData = data[data.length - 1];
+    lastData.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
+    const topProcessesNames: string[] = [];
+    for (let i = 0; i < processesAmount; i++) {
+      topProcessesNames.push(lastData.processes[i].name);
+    }
+    for (let i = 0; i < processesAmount; i++) {
+      const pName = topProcessesNames[i];
+      const item: MultiChartItem = {name: pName, series: []}; // {name: data[data.length - 1].processes[i].name, series: []};
+      item.series = data.map(d => this.mapToProcessesLineChartSeriesItem(d, pName, stringProperty));
+      items.push(item);
+    }
+
+    return items;
+  }
+
+  mapToProcessesSeriesItem(data: CollectedData, property: DataProperty, processesAmount: number = 1): NumberSeriesItem[] {
+    const items: NumberSeriesItem[] = [];
+    const stringProperty = DataProperty[property];
+    data.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
+    for (let i = 0; i < Math.min(data.processes.length, processesAmount); i++) {
+      items.push(
+        {
+          name: data.processes[i].name,
+          value: data.processes[i][stringProperty]
+        });
+    }
+
+    let free = 100;
+    for (let i = 0; i < data.processes.length; i++) {
+      free -= data.processes[i][stringProperty];
+    }
+    let othersSum = 0;
+    for (let i = processesAmount; i < data.processes.length; i++) {
+      othersSum += data.processes[i][stringProperty];
+    }
+    if (free < 0) {
+      free = 0;
+    }
+    items.push(
+      {
+        name: 'Others',
+        value: othersSum
+      });
+    items.push(
+      {
+        name: 'Free',
+        value: free
+      });
 
     return items;
   }
@@ -118,6 +243,23 @@ export class DataService {
     return items;
   }
 
+  mapToProcessesLineChartSeriesItem(data: CollectedData, processName: string, property: string): SeriesItem {
+    debugger;
+    const process = data.processes.find((value, index, obj) => {
+      return value.name === processName;
+    });
+    const seriesItem: SeriesItem = {
+      value: 0, // data.processes[processIndex][DataProperty[property]],
+      name: new Date(data.time)
+    };
+
+    if (process) {
+      seriesItem.value = process[property];
+    }
+
+    return seriesItem;
+  }
+
   mapToLineChartSeriesItem(data: CollectedData, property: DataProperty): SeriesItem {
     const seriesItem: SeriesItem = {
       value: data[DataProperty[property]],
@@ -127,16 +269,62 @@ export class DataService {
     return seriesItem;
   }
 
+  // TODO: change to swithch
   prepareDataTick(chartToUpdate: DashboardChart, newData: CollectedData): CustomData[] {
     if (!newData) {
       return chartToUpdate.data ? chartToUpdate.data : [];
     }
 
-    if (chartToUpdate.chartType.type === ChartType.LineChart) {
-      return this.mapToMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources);
+    if (chartToUpdate.showCommon) {
+      switch (chartToUpdate.chartType.type) {
+        case ChartType.LineChart:
+          return this.mapToMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources);
+        case ChartType.Pie:
+          return this.mapToPieSeriesItem(newData, chartToUpdate.dataSources[0]);
+        default:
+          return this.mapToSeriesItem(newData, chartToUpdate.dataSources);
+      }
     } else {
-      return this.mapToSeriesItem(newData, chartToUpdate.dataSources);
+      if (chartToUpdate.chartType.type === ChartType.LineChart) {
+        return this.mapToProcessMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources[0], chartToUpdate.mostLoaded);
+      } else {
+        return this.mapToProcessesSeriesItem(newData, chartToUpdate.dataSources[0], chartToUpdate.mostLoaded);
+      }
     }
+  }
+
+  mapToProcessMultiDataOnUpdate(oldData: CustomData[],
+                                newData: CollectedData,
+                                property: DataProperty,
+                                procAmount: number = 1): CustomData[] {
+    const prop = DataProperty[property];
+    if (oldData[0].series.length > 20) { // TODO: refactor
+      for (let i = 0; i < oldData.length; i++) {
+        // oldData.push(oldData.slice(1)); // Start from first element(removes oldest data el)
+        oldData[i].series.shift();
+      }
+      // TODO: remove oldest element from array - use order by or sort or smt coz data can be not ordered by date
+      // TODO: maybe depend on chart's setting get from old array specific amount of data or etc.
+    }
+
+    const processes = this.getMostLoadedProcesses(newData, prop, procAmount);
+
+    const newDataToPush = this.mapToProcessMultiData([newData], property, procAmount);
+    for (let i = 0; i < procAmount; i++) {
+      oldData[i].series.push(...newDataToPush[i].series);
+    }
+
+    return oldData;
+  }
+
+  getMostLoadedProcesses(data: CollectedData, stringProperty: string, procAmount: number = 1): string[] {
+    data.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
+    const topProcessesNames: string[] = [];
+    for (let i = 0; i < procAmount; i++) {
+      topProcessesNames.push(data.processes[i].name);
+    }
+
+    return topProcessesNames;
   }
 
   mapToMultiDataOnUpdate(oldData: CustomData[], newData: CollectedData, properties: DataProperty[]): CustomData[] {
