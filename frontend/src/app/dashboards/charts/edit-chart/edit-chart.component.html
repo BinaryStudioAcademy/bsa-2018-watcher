@@ -1,7 +1,7 @@
 <p-dialog [header]="dialogTitle"
           [(visible)]="visible"
           [modal]="true"
-          [minWidth]="1050"
+          [minWidth]="1150"
           [minHeight]="620"
           [minY]="100"
           [resizable]="true"
@@ -11,7 +11,7 @@
           (onAfterToggle)="closeDialog()">
 
   <div class="ui-g ui-fluid">
-    <div class="ui-g-3">
+    <div class="ui-g-3 ui-g-nopad">
       <div class="chart-panel-menu">
         <div class="chart-panel-menu-title field-top">Data:</div>
         <p class="field">Select chart type: </p>
