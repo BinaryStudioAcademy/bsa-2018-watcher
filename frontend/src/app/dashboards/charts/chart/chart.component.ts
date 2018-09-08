@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, On
 import * as SvgSaver from 'svgsaver';
 import {DashboardChartType, CustomData} from '../models';
 import {DashboardChart} from '../../models/dashboard-chart';
+import { ChartType } from '../../../shared/models/chart-type.enum';
 
 const EMPTY = [];
 
@@ -20,6 +21,7 @@ export class ChartComponent implements OnInit {
   @Input() data: CustomData[];
   @Input() showDownload = false;
 
+  type = ChartType;
   svgSaver = new SvgSaver();
 
   @Input() set activeEntries(value: CustomData[]) {

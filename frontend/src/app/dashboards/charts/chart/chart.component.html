@@ -1,5 +1,9 @@
+<app-resource-table
+  *ngIf="chartType.type === type.ResourcesTable">
+</app-resource-table>
+
 <ngx-charts-line-chart
-  *ngIf="chartType.name === 'line-chart'"
+  *ngIf="chartType.type === type.LineChart"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -25,7 +29,7 @@
 </ngx-charts-line-chart>
 
 <ngx-charts-bar-vertical
-  *ngIf="chartType.name === 'bar-vertical'"
+  *ngIf="chartType.type === type.BarVertical"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -71,7 +75,7 @@
 </ngx-charts-bar-horizontal>
 
 <ngx-charts-pie-chart
-  *ngIf="chartType.name === 'pie'"
+  *ngIf="chartType.type === type.Pie"
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"
@@ -92,7 +96,7 @@
 </ngx-charts-pie-grid>
 
 <ngx-charts-gauge
-  *ngIf="chartType.name === 'guage'"
+  *ngIf="chartType.type === type.Guage"
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"
