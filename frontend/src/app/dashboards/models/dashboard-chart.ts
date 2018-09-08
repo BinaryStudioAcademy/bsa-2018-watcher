@@ -35,4 +35,5 @@ export interface DashboardChart {
   activeEntries: CustomData[];
   chartType: DashboardChartType;
   theme: string;
+  isIncluded: boolean;
 }

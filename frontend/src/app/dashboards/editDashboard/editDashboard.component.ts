@@ -21,7 +21,7 @@ import { ChartRequest } from '../../shared/requests/chart-request.model';
 export class EditDashboardComponent implements OnInit, OnChanges {
   title = '';
 
-  @Output() edited = new EventEmitter<any>(); // string
+  @Output() edited = new EventEmitter<any>();
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardTitle: string;
@@ -35,7 +35,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   isSource: Boolean = false;
   isCustomize: Boolean = false;
   sources: DataProperty[];
-  isIncluded: Boolean[] = [];
+  countToGenerate = 4;
 
   constructor(private collectedDataService: CollectedDataService,
               private dataService: DataService,
@@ -44,7 +44,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   closeDialog(): void {
     this.closed.emit();
     this.title = '';
-    // this.dashboardTitle = '';
     this.reset();
   }
 
@@ -59,15 +58,8 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   edit(model: NgModel): void {
-    let correction = 0;
-    for (let i = 0; i < 4; i++) {
-      if (!this.isIncluded[i] && this.isCustomize) {
-         this.dashboardCharts.splice(i - correction, 1);
-         correction++;
-      }
-    }
+    this.dashboardCharts = this.dashboardCharts.filter(chart => chart.isIncluded);
     this.edited.emit({title: this.title, charts: this.isSource ? this.dashboardCharts : null});
-    // this.edited.emit(this.title);
     this.title = '';
     model.reset();
     this.reset();
@@ -79,9 +71,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.isCustomize = false;
     this.showPreview = false;
     this.dashboardCharts = [];
-    this.isIncluded = [];
-    this.dashboardCharts = [];
-    this.isIncluded = [];
     this.fillCharts();
   }
 
@@ -104,19 +93,15 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   fillCharts() {
-    for (let i = 0; i < 4; i++) {
-        this.isIncluded.push(true);
-        const dashboardChart = { ...defaultOptions };
-        this.dashboardCharts.push(dashboardChart);
-        this.dashboardCharts[i].chartType = dashboardChartTypes[i];
-        this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
-        this.dashboardCharts[i].chartType.type = dashboardChartTypes[i].type;
-        this.dashboardCharts[i].chartType.title = dashboardChartTypes[i].title;
-        this.dashboardCharts[i].title = dashboardChartTypes[i].title;
-        this.dashboardCharts[i].showXAxis = false;
-        this.dashboardCharts[i].showYAxis = false;
-        this.dashboardCharts[i].showLegend = false;
-    }
+    this.dashboardCharts = dashboardChartTypes.slice(0, this.countToGenerate).map(chartType => Object.assign({
+      ...defaultOptions,
+    }, {
+        chartType,
+        title: chartType.title,
+        showXAxis: false,
+        showYAxis: false,
+        showLegend: false
+    }));
   }
 
   processDataForAll() {
