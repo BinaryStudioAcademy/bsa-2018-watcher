@@ -7,7 +7,6 @@ import { MenuItem } from 'primeng/api';
 import { User } from '../../shared/models/user.model';
 import { Instance } from '../../shared/models/instance.model';
 import { Router } from '@angular/router';
-import { OrganizationRole } from '../../shared/models/organization-role.model';
 import { UserOrganizationService } from '../../core/services/user-organization.service';
 import { NavigationStart} from '@angular/router';
 
@@ -24,6 +23,7 @@ constructor(private instanceService: InstanceService,
   private router: Router) {
   this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
   this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
+
   router.events.forEach((event) => {
     if (event instanceof NavigationStart) {
       this.clearSettings(this.router.url);
@@ -31,7 +31,6 @@ constructor(private instanceService: InstanceService,
     }
   });
  }
-
 
   menuItems: MenuItem[];
   user: User;
@@ -52,8 +51,8 @@ constructor(private instanceService: InstanceService,
         const role = await this.userOrganizationService.getOrganizationRole();
         this.isManager = role.name === 'Manager' ? true : false;
         this.configureInstances(this.user.lastPickedOrganizationId);
-    }); }
-
+      });
+  }
 
    ngAfterContentChecked(): void {
     this.highlightCurrentSetting();
@@ -166,15 +165,14 @@ constructor(private instanceService: InstanceService,
   onSearchChange(searchQuery: string): void {
     this.currentQuery = searchQuery;
     this.menuItems = this.menuItems.map( (menuitem: MenuItem) => {
-      if (!menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase())) {
-        menuitem.visible = false;
-      } else {
-        menuitem.visible = true;
-      }
+      menuitem.visible = !menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase())
+                         ? false
+                         : true ;
       return menuitem;
     });
+
     // [0] element of menuItems is Create button
-    this.menuItems[0].visible = true;
+    this.menuItems[0].visible = this.isManager;
   }
 
   expandElement(menuitem: MenuItem): void {
@@ -189,10 +187,9 @@ constructor(private instanceService: InstanceService,
     if (this.router.url !== this.previousSettingUrl) {
       const setting = this.getSettingByUrl(url);
 
-      if (setting !== null) {
+      if (setting) {
         setting.classList.remove('ui-state-active');
         setting.parentElement.classList.remove('ui-state-active');
-
       }
     }
   }
@@ -200,7 +197,7 @@ constructor(private instanceService: InstanceService,
   private highlightCurrentSetting(): void {
     const setting = this.getSettingByUrl(this.router.url);
 
-    if (setting !== null) {
+    if (setting) {
       this.clearSettings(this.previousSettingUrl);
 
       setting.classList.add('ui-state-active');
