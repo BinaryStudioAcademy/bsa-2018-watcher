@@ -214,10 +214,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
               c.showXAxis = true;
               c.showYAxis = true;
               c.showLegend = true;
-              c.view = [600, 337];
             });
             this.onAddedCharts(charts, dto.id);
-            // this.activeDashboardItem.charts = charts;
           }
         },
         error => {
@@ -334,7 +332,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onAddedCharts(array: Array<DashboardChart>, id: number) {
-
     array.forEach(chart => {
       const newChart = this.createChartRequest(chart);
       newChart.dashboardId = id;
@@ -342,7 +339,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         chart.id = value.id;
         // const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value);
         this.onChartEdited(chart); // dashboardChart);
-        this.toastrService.success('Chart was created');
+        // this.toastrService.success('Chart was created');
       }, error => {
         this.toastrService.error(`Error occurred status: ${error.message}`);
       });

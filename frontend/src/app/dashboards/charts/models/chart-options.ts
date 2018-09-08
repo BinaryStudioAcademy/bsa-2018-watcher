@@ -38,4 +38,5 @@ export const defaultOptions = {
   activeEntries: [],
   chartType: dashboardChartTypes[0],
   theme: 'light',
+  isIncluded: true,
 } as DashboardChart;
