@@ -66,6 +66,9 @@
     <None Update="MoveToFrontend\organization-invite.model.ts">
       <CustomToolNamespace>Dtos\OrganizationInviteDto.cs</CustomToolNamespace>
     </None>
+    <None Update="MoveToFrontend\organization-role.model.ts">
+      <CustomToolNamespace>Dtos\OrganizationRoleDto.cs</CustomToolNamespace>
+    </None>
     <None Update="MoveToFrontend\organization.model.ts">
       <CustomToolNamespace>Dtos\OrganizationDto.cs</CustomToolNamespace>
     </None>
