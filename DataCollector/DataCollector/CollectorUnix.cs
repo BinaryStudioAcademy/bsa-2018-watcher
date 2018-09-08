@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Timers;
 
 namespace DataCollector
@@ -12,65 +13,63 @@ namespace DataCollector
     {
         private static readonly Lazy<Collector> Value = new Lazy<Collector>(() => new Collector());
 
-        private Timer _tm;
-
         private List<ProcessData> processData;
-
-        public ConcurrentBag<CollectedData> Data;
 
         private Collector()
         {
-            Data = new ConcurrentBag<CollectedData>();
-          
-            Start();
         }
 
         public static Collector Instance => Value.Value;
 
-        public void Start()
+        public CollectedData Collect()
         {
-            _tm = new Timer(500);
-            _tm.Elapsed += (sender, e) => Collect();
-            _tm.AutoReset = false;
-            _tm.Enabled = true;
-        }
-
-        public void Collect()
-        {
+            CollectedData dataItem = new CollectedData();
             try
             {
-                
+                var allProcesses = GetProcesses();
 
-                var dataItem = new CollectedData
+                dataItem = new CollectedData
                 {
-                    AvaliableRamBytes = GetFreeRam(),
+
                     //InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
-                    LocalDiskFreeMBytes = GetDiscFree(),
-                    CpuUsagePercent = GetUsageCpuPercentages(),
-                    RamUsagePercent = GetUsageRamPercentages(),
                     //InterruptsTimePercent = _systemCounters["InterruptsTime"].NextValue(),
-                    LocalDiskFreeSpacePercent = GetLocalDiskFreeSpacePercent(),
-                    
-                    ProcessesCount = GetProcesses().Count,
-                    ProcessesCpu = GetProcessesCpu(),
-                    ProcessesRam = GetProcessesRam(),
+
+                    TotalRamMBytes = GetTotalRam(),
+                    RamUsagePercentage = GetUsageRamPercentages(),
+                    UsageRamMBytes = GetUsageRam(),
+
+                    CpuUsagePercentage = GetUsageCpuPercentages(),
+
+                    LocalDiskTotalMBytes = GetDiskTotalMbytes(),
+                    LocalDiskUsageMBytes = GetDiskTotalMbytes() - GetDiskFreeMbytes(),
+                    LocalDiskUsagePercentage = GetLocalDiskFreeSpacePercent(),
+
+                    Processes = allProcesses,
+                    ProcessesCount = allProcesses.Count,
                     Time = DateTime.Now
+
                 };
-                Data.Add(dataItem);
             }
             catch (Exception e)
             {
                  // ignored 
             }
-
-            _tm.Start();
+            return dataItem;
         }
-        private float GetFreeRam()
+        private float GetTotalRam()
         {
             string ramData = Bash("free -b | awk '{print $2 \";\" $3 \";\" $4}'");
             var ramSwap  = ramData.Split("\n");
             var ram = ramSwap[1].Split(";");
-            return float.Parse(ram[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f / 1024.0f;
+            return float.Parse(ram[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f / 1024.0f;
+        }
+
+        private float GetUsageRam()
+        {
+            string ramData = Bash("free -b | awk '{print $2 \";\" $3 \";\" $4}'");
+            var ramSwap = ramData.Split("\n");
+            var ram = ramSwap[1].Split(";");
+            return float.Parse(ram[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f / 1024.0f;
         }
 
         private float GetUsageCpuPercentages()
@@ -90,12 +89,20 @@ namespace DataCollector
             return freeRam/totalRam*100.0f;
         }
 
-        private float GetDiscFree()
+        private float GetDiskTotalMbytes()
         {
             string strData = Bash("df -t xfs -t ext4 | awk '{print $2 \";\" $3 \";\" $4}'");
             var allParts = strData.Split("\n");
             var disc = allParts[1].Split(";");
-            return float.Parse(disc[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture)/1024.0f;
+            return float.Parse(disc[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture)/1024.0f;
+        }
+
+        private float GetDiskFreeMbytes()
+        {
+            string strData = Bash("df -t xfs -t ext4 | awk '{print $2 \";\" $3 \";\" $4}'");
+            var allParts = strData.Split("\n");
+            var disc = allParts[1].Split(";");
+            return float.Parse(disc[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f;
         }
 
         private float GetLocalDiskFreeSpacePercent()
@@ -108,65 +115,50 @@ namespace DataCollector
 
         private List<ProcessData> GetProcesses()
         {
-            string output = Bash("ps -xo pmem,pcpu,command | awk '{print $1 \";\" $2 \";\" $3}'");
+            string output = Bash("ps -xo rss,pmem,pcpu,comm | awk '{print $1 \";\" $2 \";\" $3  \";\" $4}'");
             processData = new List<ProcessData>();
             int counter = 0;
             foreach (string row in output.Split("\n"))
             {
-                if (counter == 0) continue;
-                counter++;
-                var cols = row.Split(";");
-                if(cols.Length == 3)
+                if (counter == 0)
                 {
-                    var pmem = float.Parse(cols[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
-                    var pcpu = float.Parse(cols[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
-                    var command = cols[2];
+                    counter++;
+                    continue;
+                }
 
+                
+
+                var cols = row.Split(";");
+                if(cols.Length == 4)
+                {
                     processData.Add( new ProcessData
                     {
-                        Ram = pmem,
-                        Cpu = pcpu,
-                        ProcessName = command
-
+                        RamMBytes = float.Parse(cols[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture),
+                        PRam = float.Parse(cols[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture),
+                        PCpu = float.Parse(cols[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture),
+                        Name = cols[3]
                     });
                 }
             }
+            processData = GroupProcesses(processData);
+
+
             return processData;
         }
 
-        private Dictionary<string, float> GetProcessesRam()
+        private List<ProcessData> GroupProcesses(List<ProcessData> processes)
         {
-            Dictionary<string, float> processRam = new Dictionary<string, float>();
-            foreach (var item in GetProcesses())
-            {
-                try
-                {
-                    processRam.Add(item.ProcessName, item.Ram);
-                }
-                catch(Exception e)
-                {
-                    //
-                }
-            }
-            return processRam;
+            var temp = processes.GroupBy(proc => proc.Name).Select(
+                    group => new ProcessData
+                    {
+                        Name = group.Key,
+                        PCpu = group.Sum(proc => proc.PCpu),
+                        PRam = group.Sum(proc => proc.PRam),
+                        RamMBytes = group.Sum(proc => proc.RamMBytes)
+                    }).ToList();
+            return temp;
         }
 
-        private Dictionary<string, float> GetProcessesCpu()
-        {
-            Dictionary<string, float> processRam = new Dictionary<string, float>();
-            foreach (var item in GetProcesses())
-            {
-                try
-                {
-                    processRam.Add(item.ProcessName, (float)item.Cpu);
-                }
-                catch(Exception e)
-                {
-                    //
-                }
-            }
-            return processRam;
-        }
 
         private static string Bash(string cmd)
         {
@@ -189,14 +181,6 @@ namespace DataCollector
             return result;
         }
 
-
-    }
-
-    public class ProcessData
-    {
-        public string ProcessName { get; set; }
-        public float Cpu { get; set; }    
-        public float Ram { get; set; } 
     }
 #endif
 }

@@ -119,30 +119,43 @@ namespace DataAccumulator.BusinessLayer.Services
                                        "mongodbcompass"
                                    };
             var random = new Random();
-            var ProcessesCPU = new Dictionary<string, float>();
-            var ProcessesRAM = new Dictionary<string, float>();
+            var processData = new List<ProcessData>();
 
             int processes = random.Next(0, 7);
             for (int i = 0; i < processes; i++)
             {
-                ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
-                ProcessesRAM.Add(processNames[i], (float)random.NextDouble() * 1000);
+                //ProcessesCPU.Add(processNames[i], (float)random.NextDouble() * 10);
+                processData.Add(new ProcessData()
+                {
+                    Name = processNames[i],
+                    RamMBytes = (float)random.NextDouble() * 10,
+                    PRam = (float)random.NextDouble() * 10,
+                    PCpu = (float)random.NextDouble() * 10
+                });
             }
             var data = new CollectedData
             {
                 Id = collectedDataId,
                 ClientId = instanceId, // Guid.Parse("7FE193DE-B3DC-4DF5-8646-A81EDBE047E2"), // instanceId
-                Time = DateTime.UtcNow,
-                CpuUsagePercent = (float)Math.Round(random.NextDouble() * 100, 2),
-                RamUsagePercent = (float)Math.Round(random.NextDouble() * 100, 2),
-                InterruptsTimePercent = (float)Math.Round(random.NextDouble() * 100, 2),
-                LocalDiskFreeSpacePercent = (float)Math.Round(random.NextDouble() * 100, 2),
-                AvaliableRamBytes = random.Next(100, 4096),
-                InterruptsPerSeconds = random.Next(0, 100),
-                LocalDiskFreeMBytes = random.Next(0, 1000000000),
-                ProcessesCPU = ProcessesCPU,
-                ProcessesRAM = ProcessesRAM,
-                ProcessesCount = random.Next(0, 300)
+
+                CollectedDataType = CollectedDataType.Accumulation,
+
+                ProcessesCount = random.Next(0, 300),
+                Processes = processData,
+
+                UsageRamMBytes = (float)Math.Round(random.NextDouble() * 100, 2),
+                TotalRamMBytes = (float)Math.Round(random.NextDouble() * 100, 2),
+                RamUsagePercentage = (float)Math.Round(random.NextDouble() * 100, 2),
+
+                InterruptsPerSeconds = random.Next(100, 4096),
+
+                LocalDiskUsageMBytes = (float)Math.Round(random.NextDouble() * 100, 2),
+                LocalDiskTotalMBytes = random.Next(0, 100),
+                LocalDiskUsagePercentage = random.Next(0, 1000000000),
+
+                CpuUsagePercentage = random.Next(0, 100),
+
+                Time = DateTime.UtcNow
             };
 
             return data;

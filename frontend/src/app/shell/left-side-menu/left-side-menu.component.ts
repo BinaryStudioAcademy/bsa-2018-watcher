@@ -1,11 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {AfterContentChecked, AfterViewChecked} from '@angular/core';
-import {NavigationStart} from '@angular/router';
-import {Router, RouterEvent} from '@angular/router';
-import {MenuItem} from 'primeng/api';
-
-
-import {Instance} from '../../shared/models/instance.model';
+import { Component, OnInit} from '@angular/core';
+import { AfterContentChecked, AfterViewChecked} from '@angular/core';
+import { NavigationStart} from '@angular/router';
+import { Router, RouterEvent} from '@angular/router';
+import { MenuItem} from 'primeng/api';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -26,7 +23,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   isComponentInvisible: boolean;
   menuItems: MenuItem[];
-
   constructor(private router: Router) {
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
@@ -63,6 +59,10 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       label: 'Notification Settings',
       icon: 'fa fa-fw fa-send',
       routerLink: ['/user/settings/notification-settings']
+    }, {
+      label: 'Members',
+      icon: 'fa fa-fw fa-users',
+      routerLink: [`/user/settings/organization-members`],
     }];
 
     this.adminItems = [{

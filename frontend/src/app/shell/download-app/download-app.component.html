@@ -1,5 +1,5 @@
 <p-dialog class="download-dialog" header="DOWNLOAD DATA COLLECTOR" (onHide)="closeDialog()" appendTo="body" [(visible)]="display" [modal]="true" [responsive]="true"
-    [draggable]="false" [width]="650" [minWidth]="650" [maximizable]="false" [baseZIndex]="999">
+    [draggable]="false" [width]="720" [minWidth]="720" [maximizable]="false" [baseZIndex]="999">
     <div class="wrapper">
         <div class="box header">
             <div class="ui-g">
@@ -20,24 +20,18 @@
                     <p class="lableOS">Windows installer</p>
                 </div>
                 <div class="ui-g-12 ui-md-12">
-                        <div class="ui-input">
-                            <div class="windowsSteps">
-                                <p >
-                                     1. Download and run installer.
-                                </p>
-                                <p>
-                                    2. Set the guid.
-                                </p>
-                            </div>
+                    <div class="ui-input">
+                        <div class="windows-steps">
+                            <p >
+                                    1. Download and run installer.
+                            </p>
+                            <p>
+                                2. Set the guid.
+                            </p>
                         </div>
                     </div>
-                <div class="ui-g-12 ui-md-12">
-                    <div class="ui-input">
-                        <a href="https://filestoragetestbsa2018.blob.core.windows.net/watcher/DataCollector.exe"
-                            pButton label="Download" (click)="closeDialog()" class="ui-button-info">
-                        </a>      
-                    </div>
                 </div>
+            
             </div>
         </div>
         <div class="box linux">
@@ -47,7 +41,7 @@
                 </div>
                 <div class="ui-g-12 ui-md-12">
                     <div class="ui-input">
-                        <div class="linuxCmd">
+                        <div class="linux-cmd">
                             <p >
                                  # The first start should be with the rights of root,
                             </p>
@@ -60,23 +54,37 @@
                         </div>
                     </div>
                 </div>
-               
-            
-                <div class="ui-g-12 ui-md-6">
-                    <div class="ui-input">
-                        <a href="https://bsawatcherfiles.blob.core.windows.net/watcher/DataCollector-1.0-1.deb"
-                            pButton label="Download .deb" (click)="closeDialog()" class="ui-button-info">
-                        </a>      
+              </div>
+            </div>
+            <div class="box win-btn">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-input">
+                            <a href="https://bsawatcherfiles.blob.core.windows.net/watcher/DataCollector.exe"
+                                pButton label="Download" (click)="closeDialog()" class="ui-button-info">
+                            </a>      
+                        </div>
                     </div>
                 </div>
-                <div class="ui-g-12 ui-md-6">
-                    <div class="ui-input">
-                        <a href="https://bsawatcherfiles.blob.core.windows.net/watcher/DataCollector-1.0.tgz"
-                            pButton label="Download .tgz" (click)="closeDialog()" class="ui-button-info">
-                        </a>      
+            </div>
+            <div class="box linux-btn">
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-6">
+                        <div class="ui-input">
+                            <a href="https://bsawatcherfiles.blob.core.windows.net/watcher/DataCollector-1.0-3.deb"
+                                pButton label="Download .deb" (click)="closeDialog()" class="ui-button-info">
+                            </a>      
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <div class="ui-input">
+                            <a href="https://bsawatcherfiles.blob.core.windows.net/watcher/DataCollector-1.0.tgz"
+                                pButton label="Download .tgz" (click)="closeDialog()" class="ui-button-info">
+                            </a>      
+                        </div>
                     </div>
                 </div>
+            </div>
         </div>
-        </div>
-    </div>
+   
 </p-dialog>

@@ -38,7 +38,7 @@ export class MultiSeriesComponent implements OnInit {
     ngOnInit() {
 
         this.data = TEMPERATURES.map((v) => v.values.map((v) => v.date ))[0];
-        //.reduce((a, b) => a.concat(b), []);
+        // .reduce((a, b) => a.concat(b), []);
 
         this.initChart();
         this.drawAxis();
@@ -90,7 +90,7 @@ export class MultiSeriesComponent implements OnInit {
     }
 
     private drawPath(): void {
-        let city = this.g.selectAll('.city')
+        const city = this.g.selectAll('.city')
             .data(TEMPERATURES)
             .enter().append('g')
             .attr('class', 'city');
