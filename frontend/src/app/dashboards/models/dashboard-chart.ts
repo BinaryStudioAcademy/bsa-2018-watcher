@@ -1,6 +1,8 @@
 import {DashboardChartType, CustomData} from '../charts/models';
 import {DataProperty} from '../../shared/models/data-property.enum';
 import {ColorScheme} from '../../shared/models/color-scheme.model';
+import {CollectedData} from '../../shared/models/collected-data.model';
+
 
 export interface DashboardChart {
   view: any;
@@ -31,8 +33,9 @@ export interface DashboardChart {
   curveClosed: any;
   title: string;
   dataSources: DataProperty[];
-  data: any; //CustomData[];
+  data: CustomData[];
   activeEntries: CustomData[];
+  colectedData: CollectedData;
   chartType: DashboardChartType;
   theme: string;
 }

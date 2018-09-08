@@ -23,6 +23,7 @@ import {CustomData} from '../charts/models';
 import {UserOrganizationService} from '../../core/services/user-organization.service';
 import {OrganizationRole} from '../../shared/models/organization-role.model';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
+import { ChartType } from '../../shared/models/chart-type.enum';
 
 
 @Component({
@@ -159,9 +160,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // TODO: use this operation only for current dashboard and then on switching dashboard make data preparing on existing
       // collectedDataForChart to reduce amount of operations and time
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
+        if (this.activeDashboardItem.charts[i].chartType.type === ChartType.ResourcesTable) {
+          this.activeDashboardItem.charts[i].colectedData = latestData;
+          continue;
+        }
         const tempData = this.dataService.prepareDataTick(this.activeDashboardItem.charts[i], latestData);
         this.activeDashboardItem.charts[i].data = [...tempData];
-
       }
     });
   }

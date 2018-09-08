@@ -1,7 +1,7 @@
 <app-resource-table
   *ngIf="chartType.type === type.ResourcesTable"
   [sources]="chart.dataSources"
-  [data]="chart.data">
+  [data]="chart.colectedData">
 </app-resource-table>
 
 <ngx-charts-line-chart

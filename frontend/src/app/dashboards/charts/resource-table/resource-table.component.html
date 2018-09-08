@@ -1,5 +1,5 @@
 <div class="resources-table-wrapper">
-  <p-table [columns]="sources" [value]="data" selectionMode="single" sortMode="multiple" [scrollable]="true" scrollHeight="350px"
+  <p-table [columns]="sources" [value]="data?.processes" selectionMode="single" sortMode="multiple" [scrollable]="true" scrollHeight="350px"
     [resizableColumns]="true">
     <!-- 
     <ng-template pTemplate="caption">
@@ -13,7 +13,7 @@
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th *ngFor="let col of columns" pResizableColumn [pSortableColumn]="property[col]">
-          {{labels[col]}}
+          {{getHeader(col)}}
           <p-sortIcon [field]="property[col]"></p-sortIcon>
         </th>
       </tr>
@@ -22,7 +22,7 @@
     <ng-template pTemplate="body" let-process let-columns="columns">
       <tr [pSelectableRow]="process">
         <td *ngFor="let col of columns" class="ui-resizable-column" [style.backgroundColor]="getColor(process[property[col]])">
-          {{floorIfNumber(process[property[col]])}}
+          {{getValue(process[property[col]])}}
         </td>
       </tr>
     </ng-template>

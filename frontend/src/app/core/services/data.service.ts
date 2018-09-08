@@ -68,8 +68,8 @@ export class DataService {
       data: chartData,
       activeEntries: [],
       chartType: {...dashboardChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
-      theme: value.isLightTheme ? 'light' : 'dark'
-    };
+      theme: value.isLightTheme ? 'light' : 'dark',
+    } as DashboardChart;
 
     return dashChart;
   }

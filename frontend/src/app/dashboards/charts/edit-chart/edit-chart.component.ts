@@ -234,8 +234,7 @@ export class EditChartComponent implements OnInit {
 
   processData(): void {
     if (this.dashboardChart.chartType.type === ChartType.ResourcesTable) {
-      this.dashboardChart.data = this.collectedDataForChart[0].processes;
-      return;
+      this.dashboardChart.colectedData = this.collectedDataForChart[0];
     }
 
     if (this.dashboardChart.showCommon) {
