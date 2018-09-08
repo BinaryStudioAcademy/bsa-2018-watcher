@@ -9,13 +9,13 @@
     </div>
   </div>
 
-  <p-table [value]="userOrganizationsAll" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
+  <p-table [value]="userOrganizations" [paginator]="true" [rows]="5" [totalRecords]="userOrganizations.length" [rowsPerPageOptions]="[5,10,20]">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th style="width:10%">JOINED</th>
         <th style="width:10%">PHOTO</th>
         <th style="width:10%">DISPLAY NAME</th>
-        <th style="width:8%">CHAT</th>
+        <th style="width:8%">NEW CHAT</th>
         <th style="width:20%">BIO</th>
         <th style="width:20%">EMAIL</th>
         <th style="width:8%">ACTIVE</th>

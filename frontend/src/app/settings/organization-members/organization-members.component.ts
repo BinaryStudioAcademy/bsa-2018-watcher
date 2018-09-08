@@ -22,26 +22,23 @@ import { NotificationSetting } from 'src/app/shared/models/notification-setting.
 })
 export class OrganizationMembersComponent implements OnInit {
 
-  userOrganizationsAll: UserOrganization[];
   userOrganizations: UserOrganization[];
   currentUser: User;
-  totalRecords: number;
   lstRoles: OrganizationRole[];
-  isManager: boolean;
   dropdownRole: SelectItem[];
+
+  isManager: boolean;
+
   isLoading = false;
   popupMessage = '';
 
   constructor(
     private authService: AuthService,
-    private userService: UserService,
     private userOrganizationService: UserOrganizationService,
     private organizationRoleService: OrganizationRoleService,
     private chatHub: ChatHub,
     private toastrService: ToastrService) {
-
-    this.dropdownRole = new Array<SelectItem>();
-
+    this.dropdownRole = [];
   }
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -49,23 +46,23 @@ export class OrganizationMembersComponent implements OnInit {
       return;
     }
 
-    this.userService.getNumber().subscribe((value: number) => this.totalRecords = value);
-
     this.userOrganizationService
         .getByOrganizationId(this.currentUser.lastPickedOrganizationId)
         .subscribe((value: UserOrganization[]) => {
-          this.userOrganizationsAll = value;
+          this.userOrganizations = value;
           this.toastrService.success('Get info from server');
-          const role = this.userOrganizationsAll
-          .find( usOrg => usOrg.user.id === this.currentUser.id )
-          .organizationRole.name;
+          const role = this.userOrganizations
+                        .find( usOrg => usOrg.user.id === this.currentUser.id )
+                        .organizationRole.name;
+
           this.isManager = role === 'Manager' ? true : false;
         });
 
-    this.organizationRoleService.getAll().subscribe((value: OrganizationRole[]) => {
-      this.lstRoles = value;
-      this.fillDropdownRole();
-    });
+    this.organizationRoleService.getAll()
+      .subscribe((value: OrganizationRole[]) => {
+        this.lstRoles = value;
+        this.fillDropdownRole();
+      });
   }
 
   private fillDropdownRole(): void {
@@ -107,9 +104,9 @@ export class OrganizationMembersComponent implements OnInit {
     const newChat: ChatRequest = {
       name: targetUser.displayName,
       createdById: this.currentUser.id,
-      type: ChatType.BetweenUsers,
       users: users,
       organizationId: null,
+      type: ChatType.BetweenUsers,
       usersSettings: [{
         type: NotificationType.Chat,
         userId: this.currentUser.id,
