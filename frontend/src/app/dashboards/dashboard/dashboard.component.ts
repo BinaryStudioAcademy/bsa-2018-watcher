@@ -186,7 +186,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.showCreatePopup(true);
       },
       id: 'lastTab',
-      disabled: this.isMember,
+      // disabled: this.isMember,
     };
 
     return lastItem;
