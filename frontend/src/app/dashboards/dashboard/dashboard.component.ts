@@ -62,8 +62,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    const role = await this.userOrganizationService.currentOrganizationRole;
-    this.isManager = role.name === 'Manager' ? true : false;
 
     try {
       const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
@@ -158,10 +156,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  getDashboardsByInstanceId(id: number): Promise<Dashboard[]> {
+  async getDashboardsByInstanceId(id: number): Promise<Dashboard[]> {
+    this.isManager = await this.getOrganizationPermissions();
     const plusItem = this.createPlusItem();
     this.dashboardMenuItems.push(plusItem);
     return this.dashboardsService.getAllByInstance(id).toPromise();
+  }
+
+  async getOrganizationPermissions(): Promise<boolean> {
+    const role = await this.userOrganizationService.getOrganizationRole();
+    return role.name === 'Manager' ? true : false;
   }
 
   onDashboards(value) {
@@ -402,7 +406,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       dashId: dashboard.id,
       createdAt: dashboard.createdAt,
       charts: dashboard.charts.map(c => this.dataService.instantiateDashboardChart(c, this.collectedDataForChart)),
-      // routerLink: `/user/instances/${this.instanceId}/${this.instanceGuidId}/dashboards/${dashboard.id}`,
       command: () => this.activeDashboardItem = item
     };
     return item;
