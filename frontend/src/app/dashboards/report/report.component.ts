@@ -152,7 +152,7 @@ export class ReportComponent implements OnInit {
     tables.forEach(item => {
       doc.autoTable(item.cols, item.rows);
       doc.setFontSize(8);
-      doc.text(20, doc.autoTable.previous.finalY + 5, `Time: ${item.time}`);
+      doc.text(`Time: ${item.time}`, 20, doc.autoTable.previous.finalY);
     });
 
     // tslint:disable-next-line:max-line-length
