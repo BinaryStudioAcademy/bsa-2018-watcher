@@ -14,7 +14,6 @@ namespace DataCollector
 
         private static readonly HttpClient _client = new HttpClient();
         private static Logger _logger;
-        private static bool isFirstCollection = true;
 
         //event for exiting by pressing ctrl+c
         private static readonly AutoResetEvent Closing = new AutoResetEvent(false);
@@ -57,6 +56,7 @@ namespace DataCollector
             _logger = new Logger(_client, ClientIdentifier, uri+"/log");
             _logger.Log("Data collection began").GetAwaiter().GetResult();
 
+            AppDomain.CurrentDomain.ProcessExit += CollectorClosing;
             AppDomain.CurrentDomain.UnhandledException += GlobalExceptionHandler;
 
             // setting timer for collecting proccess
@@ -64,6 +64,11 @@ namespace DataCollector
 
             Console.CancelKeyPress += OnExit;
             Closing.WaitOne();
+        }
+
+        private static async void CollectorClosing(object sender, EventArgs e)
+        {
+            await _logger.Log("Data collection stopped");
         }
 
         protected static void OnExit(object sender, EventArgs e)
