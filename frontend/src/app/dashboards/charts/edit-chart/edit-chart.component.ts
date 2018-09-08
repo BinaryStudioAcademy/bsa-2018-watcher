@@ -129,7 +129,12 @@ export class EditChartComponent implements OnInit {
     switch (this.dashboardChart.chartType.type) {
       case ChartType.ResourcesTable:
         this.dashboardChart.showCommon = true; //TODO: change
-        this.dashboardChart.dataSources = [DataProperty.name];
+        this.dashboardChart.dataSources = [
+          DataProperty.name,
+          DataProperty.pCpu,
+          DataProperty.ramMBytes,
+          DataProperty.pRam
+        ];
         break;
       case ChartType.LineChart:
         this.isTimeAvailable = true;
@@ -163,6 +168,7 @@ export class EditChartComponent implements OnInit {
     switch (this.dashboardChart.chartType.type) {
       case ChartType.ResourcesTable: {
         this.dropdownSources = [
+          {label: dataPropertyLables[DataProperty.name], value: DataProperty.name},
           {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
           {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
           {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
