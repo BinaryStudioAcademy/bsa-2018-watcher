@@ -60,6 +60,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    // TODO: maybe do unrelated request with fork join to reduce # of request
+    this.collectedDataService.getBuilderData()
+      .subscribe(value => {
+        debugger;
+        this.dataService.fakeCollectedData = value;
+      });
 
     try {
       const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
@@ -83,17 +89,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       this.isLoading = true;
       this.getDashboardsByInstanceId(this.instanceId).then(value => {
+        debugger;
         this.onDashboards(value);
         this.isLoading = false;
         this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId)
           .subscribe(data => {
-            // this.collectedDataForChart = data || [];
             this.dataService.hourlyCollectedData = data;
             if (data && data.length > 0) {
               // -1 is last item - plus sign
               for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
                 for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
-                  this.dataService.fulfillChart(this.dashboardMenuItems[i].charts[j]);
+                  this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.dashboardMenuItems[i].charts[j]);
                   // let tempData: CustomData[];
                   // if (this.dashboardMenuItems[i].charts[j].showCommon) {
                   //   tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,

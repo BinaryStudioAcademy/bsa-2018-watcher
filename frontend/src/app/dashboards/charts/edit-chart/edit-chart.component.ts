@@ -8,7 +8,6 @@ import {ChartService} from '../../../core/services/chart.service';
 import {ToastrService} from '../../../core/services/toastr.service';
 
 import {Chart} from '../../../shared/models/chart.model';
-import {CollectedData} from '../../../shared/models/collected-data.model';
 import {ChartRequest} from '../../../shared/requests/chart-request.model';
 import {ChartType} from '../../../shared/models/chart-type.enum';
 import {DataProperty, dataPropertyLables} from '../../../shared/models/data-property.enum';
@@ -36,8 +35,6 @@ export class EditChartComponent implements OnInit {
   dropdownSources: SelectItem[];
   dropdownGroupSources: SelectItemGroup[];
 
-  collectedDataForChart: CollectedData[] = [];
-
   type = ChartType;
   colorSchemes = colorSets;
 
@@ -54,6 +51,7 @@ export class EditChartComponent implements OnInit {
   get spinnerDisabled() {
     return this.dashboardChart && this.dashboardChart.showCommon;
   }
+
   get isValid(): boolean {
     return !!this.dashboardChart.dataSources.length;
   }
@@ -66,10 +64,6 @@ export class EditChartComponent implements OnInit {
 
   ngOnInit() {
     this.onDisplay.subscribe((isShow: boolean) => this.visible = isShow);
-    this.collectedDataService.getBuilderData()
-      .subscribe(value => {
-        this.collectedDataForChart = value;
-      });
 
     this.dashboardChart.showCommon = false;
     this.dropdownTypes = [
@@ -149,7 +143,7 @@ export class EditChartComponent implements OnInit {
         this.dashboardChart.yAxisLabel = 'Process';
         this.isXAxisAvailable = false;
         this.dashboardChart.xAxisLabel = '';
-      break;
+        break;
       default:
         this.isYAxisAvailable = false;
         this.isXAxisAvailable = false;
@@ -164,15 +158,15 @@ export class EditChartComponent implements OnInit {
           this.dropdownGroupSources = [{
             label: 'Percentage',
             items: [
-              { label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage },
-              { label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage },
-              { label: dataPropertyLables[DataProperty.localDiskUsagePercentage], value: DataProperty.localDiskUsagePercentage },
+              {label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage},
+              {label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage},
+              {label: dataPropertyLables[DataProperty.localDiskUsagePercentage], value: DataProperty.localDiskUsagePercentage},
             ]
           }, {
             label: 'Memory',
             items: [
-              { label: dataPropertyLables[DataProperty.usageRamMBytes], value: DataProperty.usageRamMBytes },
-              { label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes }
+              {label: dataPropertyLables[DataProperty.usageRamMBytes], value: DataProperty.usageRamMBytes},
+              {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
             ]
           }];
           return;
@@ -183,13 +177,13 @@ export class EditChartComponent implements OnInit {
     this.dropdownGroupSources = [{
       label: 'Percentage',
       items: [
-        { label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu },
-        { label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam },
+        {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
+        {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
       ]
     }, {
       label: 'Memory',
       items: [
-        { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
+        {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
       ]
     }];
   }
@@ -206,7 +200,8 @@ export class EditChartComponent implements OnInit {
   }
 
   processData(): void {
-      this.isPreviewAvailable = this.dataService.fulfillChart(this.dashboardChart);
+    debugger;
+    this.isPreviewAvailable = this.dataService.fulfillChart(this.dataService.fakeCollectedData, this.dashboardChart);
     // if (this.dashboardChart.showCommon) {
     //   this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
     //     this.dashboardChart.dataSources, this.collectedDataForChart);
@@ -222,6 +217,7 @@ export class EditChartComponent implements OnInit {
   }
 
   onEditChart() {
+    debugger;
     const chartRequest = this.createChartRequest();
     if (!this.dashboardChart.id) {
       this.chartService.create(chartRequest).subscribe((val) => {
