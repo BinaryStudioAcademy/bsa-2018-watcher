@@ -203,7 +203,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   createDashboard(newDashboard: DashboardRequest, charts: Array<DashboardChart>): void {
-    const newCharts: ChartRequest[] = [];
     this.dashboardsService.create(newDashboard)
       .subscribe((dto) => {
           const item: DashboardMenuItem = this.transformToMenuItem(dto);
@@ -216,10 +215,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
               c.showYAxis = true;
               c.showLegend = true;
               c.view = [600, 337];
-              newCharts.push(this.createChartRequest(c));
             });
-            this.onAddedCharts(newCharts, dto.id);
-            this.activeDashboardItem.charts = charts;
+            this.onAddedCharts(charts, dto.id);
+            // this.activeDashboardItem.charts = charts;
           }
         },
         error => {
@@ -335,10 +333,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   }
 
-  onAddedCharts(array: Array<ChartRequest>, id: number) {
+  onAddedCharts(array: Array<DashboardChart>, id: number) {
+
     array.forEach(chart => {
-      chart.dashboardId = id;
-      this.chartService.create(chart).subscribe(value => {
+      const newChart = this.createChartRequest(chart);
+      newChart.dashboardId = id;
+      this.chartService.create(newChart).subscribe(value => {
+        chart.id = value.id;
+        // const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value);
+        this.onChartEdited(chart); // dashboardChart);
         this.toastrService.success('Chart was created');
       }, error => {
         this.toastrService.error(`Error occurred status: ${error.message}`);
