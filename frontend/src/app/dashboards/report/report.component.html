@@ -24,7 +24,7 @@
     <p-table #dt [columns]="cols" [value]="collected.processes">
         <ng-template pTemplate="caption">
             <div class="ui-helper-clearfix left-flex">
-                <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Eport to CSV" (click)="dt.exportCSV()"></button>
+                <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Export to CSV" (click)="dt.exportCSV()"></button>
             </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -34,17 +34,17 @@
                 </th>
                 <th class="data-header t-header" [pSortableColumn]="columns[1].field">
                     CPU, %
-                    <p-sortIcon [field]="columns[1].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" 
+                    <p-sortIcon [field]="columns[1].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
                                                                                         ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
                 </th>
                 <th class="data-header t-header" [pSortableColumn]="columns[2].field">
                     RAM, %
-                    <p-sortIcon [field]="columns[2].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" 
+                    <p-sortIcon [field]="columns[2].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
                                                                                         ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
                 </th>
                 <th class="data-header t-header" [pSortableColumn]="columns[3].field">
                     RAM, MB
-                    <p-sortIcon [field]="columns[3].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" 
+                    <p-sortIcon [field]="columns[3].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
                                                                                         ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
                 </th>
             </tr>
