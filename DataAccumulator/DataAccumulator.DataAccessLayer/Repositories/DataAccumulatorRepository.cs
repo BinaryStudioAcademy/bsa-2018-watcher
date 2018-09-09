@@ -60,6 +60,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             {
                 return _context.Datasets
                     .Find(data => data.CollectedDataType == dataType // It will get all data for last hour(Aggregation) or for last day(AggregationForHour)
+                                  && data.Time > DateTime.UtcNow.AddHours(-1)
                                   && data.ClientId == instanceId)
                     .SortByDescending(cd => cd.Time)
                     .Limit(400) // max get 400 documents(60 * 6 = 360) - for hour

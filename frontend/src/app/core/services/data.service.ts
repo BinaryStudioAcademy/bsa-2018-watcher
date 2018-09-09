@@ -33,7 +33,7 @@ export class DataService {
   get hourlyCollectedData(): CollectedData[] {
     return this._hourlyCollectedData;
   }
-
+// Залив нові чарти на продакшн, пофіксив баги з чартами на білдері, удосконалив дата сервіс, порефакторив компоненти. Зараз займаюсь тим, щоб на лінійних чартах показувати данні за певний проміжок часу і обновляти їх
   // get latestCollectedData(): CollectedData {
   //   if (this._hourlyCollectedData && this._hourlyCollectedData.length) {
   //     return this._hourlyCollectedData[this._hourlyCollectedData.length - 1];
@@ -418,7 +418,9 @@ export class DataService {
     // TODO: use this operation only for current dashboard and then on switching dashboard make data preparing on existing
     // collectedDataForChart to reduce amount of operations and time
     // TODO: filter all data that younger than 1 hour and push there this data
-    this._hourlyCollectedData.push(latestData);
+    const hourAgo = new Date(Date.now() - 60 * 60000);
+    this._hourlyCollectedData = [...this._hourlyCollectedData.filter(value => value.time > hourAgo), latestData];
+    // this._hourlyCollectedData.push(latestData);
   }
 
   convertStringToArrEnum(sources: string): DataProperty[] {
