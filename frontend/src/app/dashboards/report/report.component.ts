@@ -45,14 +45,14 @@ export class ReportComponent implements OnInit {
     this.cols = [
       { field: 'name', header: 'Name' },
       { field: 'pCpu', header: 'CPU,%' },
-      { field: 'pCpuMax', header: 'Max,%' },
-      { field: 'pCpuMin', header: 'Min,%' },
+      { field: 'pCpuMax', header: 'Max' },
+      { field: 'pCpuMin', header: 'Min' },
       { field: 'pRam', header: 'RAM, %' },
-      { field: 'pRamMax', header: 'Max, %' },
-      { field: 'pRamMin', header: 'Min, %' },
+      { field: 'pRamMax', header: 'Max' },
+      { field: 'pRamMin', header: 'Min' },
       { field: 'ramMBytes', header: 'RAM, Mb' },
-      { field: 'ramMBytesMax', header: 'Max, Mb' },
-      { field: 'ramMBytesMin', header: 'Min, Mb' }
+      { field: 'ramMBytesMax', header: 'Max' },
+      { field: 'ramMBytesMin', header: 'Min' }
     ];
 
     this.types = [
