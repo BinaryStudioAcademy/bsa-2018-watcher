@@ -62,6 +62,7 @@ export class OrganizationProfileComponent implements OnInit {
 
   ngOnInit() {
       this.authService.currentUser.subscribe(user => {
+        console.log(user);
         this.user = user;
 
         this.organizationService.get(this.user.lastPickedOrganizationId).subscribe(async (org) => {
