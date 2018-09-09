@@ -85,6 +85,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.instanceId = params.insId;
       this.instanceGuidId = params.guidId;
       this.dashboardMenuItems = [];
+      this.dashboards = [];
+      this.dataService.hourlyCollectedData = [];
       if (!this.instanceId) {
         return;
       }

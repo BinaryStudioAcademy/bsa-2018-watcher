@@ -33,14 +33,6 @@ export class DataService {
   get hourlyCollectedData(): CollectedData[] {
     return this._hourlyCollectedData;
   }
-// Залив нові чарти на продакшн, пофіксив баги з чартами на білдері, удосконалив дата сервіс, порефакторив компоненти. Зараз займаюсь тим, щоб на лінійних чартах показувати данні за певний проміжок часу і обновляти їх
-  // get latestCollectedData(): CollectedData {
-  //   if (this._hourlyCollectedData && this._hourlyCollectedData.length) {
-  //     return this._hourlyCollectedData[this._hourlyCollectedData.length - 1];
-  //   } else {
-  //     return null; // TODO: return default value with 0 or
-  //   }
-  // }
 
   getLastCollectedData(dataArr: CollectedData[]): CollectedData {
     if (dataArr && dataArr.length) {

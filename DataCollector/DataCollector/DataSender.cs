@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json;
 
 namespace DataCollector
 {
@@ -30,9 +31,7 @@ namespace DataCollector
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var response = await _client.PostAsync(_uri, byteContent);
-            if (response.StatusCode == HttpStatusCode.Created)
-                return true;
-            return false;
+            return response.StatusCode == HttpStatusCode.Created;
         }
 
         private void TestData(CollectedData date)
@@ -40,9 +39,9 @@ namespace DataCollector
             float cpu = 0;
             float ram = 0;
             float pram = 0;
-            foreach(var item in date.Processes)
+            foreach (var item in date.Processes)
             {
-                 cpu += item.PCpu;
+                cpu += item.PCpu;
                  ram += item.RamMBytes;
                  pram += item.PRam;
             }
