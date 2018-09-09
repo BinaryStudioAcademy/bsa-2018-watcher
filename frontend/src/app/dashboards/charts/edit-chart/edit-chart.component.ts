@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, OnChanges, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SelectItem, SelectItemGroup} from 'primeng/api';
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 
@@ -8,12 +8,10 @@ import {ChartService} from '../../../core/services/chart.service';
 import {ToastrService} from '../../../core/services/toastr.service';
 
 import {Chart} from '../../../shared/models/chart.model';
-import {CollectedData} from '../../../shared/models/collected-data.model';
 import {ChartRequest} from '../../../shared/requests/chart-request.model';
-import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
+import {ChartType, chartTypeLabels} from '../../../shared/models/chart-type.enum';
 import {DataProperty, dataPropertyLables} from '../../../shared/models/data-property.enum';
 
-import {dashboardChartTypes} from '../models/dashboardChartTypes';
 import {DashboardChart} from '../../models/dashboard-chart';
 
 @Component({
@@ -36,8 +34,6 @@ export class EditChartComponent implements OnInit {
   dropdownSources: SelectItem[];
   dropdownGroupSources: SelectItemGroup[];
 
-  collectedDataForChart: CollectedData[] = [];
-
   type = ChartType;
   colorSchemes = colorSets;
 
@@ -54,8 +50,9 @@ export class EditChartComponent implements OnInit {
   get spinnerDisabled() {
     return this.dashboardChart && this.dashboardChart.showCommon;
   }
+
   get isValid(): boolean {
-    return this.dashboardChart.dataSources.length ? true : false;
+    return !!this.dashboardChart.dataSources.length;
   }
 
   constructor(private collectedDataService: CollectedDataService,
@@ -66,33 +63,21 @@ export class EditChartComponent implements OnInit {
 
   ngOnInit() {
     this.onDisplay.subscribe((isShow: boolean) => this.visible = isShow);
-    this.collectedDataService.getBuilderData()
-      .subscribe(value => {
-        this.collectedDataForChart = value;
-      });
-
     this.dashboardChart.showCommon = false;
     this.dropdownTypes = [
-      {label: dashboardChartTypes[0].title, value: dashboardChartTypes[0]},
-      {label: dashboardChartTypes[1].title, value: dashboardChartTypes[1]},
-      {label: dashboardChartTypes[2].title, value: dashboardChartTypes[2]},
-      {label: dashboardChartTypes[3].title, value: dashboardChartTypes[3]},
+      {label: chartTypeLabels[ChartType.ResourcesTable], value: ChartType.ResourcesTable},
+      {label: chartTypeLabels[ChartType.LineChart], value: ChartType.LineChart},
+      {label: chartTypeLabels[ChartType.BarVertical], value: ChartType.BarVertical},
+      {label: chartTypeLabels[ChartType.Guage], value: ChartType.Guage},
+      {label: chartTypeLabels[ChartType.Pie], value: ChartType.Pie},
+      {label: chartTypeLabels[ChartType.NumberCards], value: ChartType.NumberCards}
     ];
 
-    this.dropdownSources = [
-      {label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage},
-      {label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage},
-      {label: dataPropertyLables[DataProperty.localDiskUsagePercentage], value: DataProperty.localDiskUsagePercentage},
-      {label: dataPropertyLables[DataProperty.processesCount], value: DataProperty.processesCount},
-      {label: dataPropertyLables[DataProperty.usageRamMBytes], value: DataProperty.usageRamMBytes},
-      {label: dataPropertyLables[DataProperty.interruptsPerSeconds], value: DataProperty.interruptsPerSeconds},
-      {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
-    ];
     this.resetBuilderForm();
   }
 
   getMultiSelectNumber() {
-    return this.dashboardChart.chartType.type === ChartType.Pie ? 1 : null;
+    return this.dashboardChart.type === ChartType.Pie ? 1 : null;
   }
 
   updtateReviewAllowing() {
@@ -110,15 +95,20 @@ export class EditChartComponent implements OnInit {
       return;
     }
 
-    // Disabling another groups
-    if (dataPropertyLables[event.itemValue].includes('%')) {
-      this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => dataPropertyLables[s].includes('%'));
-      this.dropdownSources.forEach(item => !item.label.includes('%') ? item.disabled = true : item.disabled = false);
-    } else {
-      this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => !dataPropertyLables[s].includes('%'));
-      this.dropdownSources.forEach(item => item.label.includes('%') ? item.disabled = true : item.disabled = false);
+    switch (this.dashboardChart.type) {
+      case ChartType.ResourcesTable:
+        break;
+      default:
+        // Disabling another groups
+        if (dataPropertyLables[event.itemValue].includes('%')) {
+          this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => dataPropertyLables[s].includes('%'));
+          this.dropdownSources.forEach(item => !item.label.includes('%') ? item.disabled = true : item.disabled = false);
+        } else {
+          this.dashboardChart.dataSources = this.dashboardChart.dataSources.filter(s => !dataPropertyLables[s].includes('%'));
+          this.dropdownSources.forEach(item => item.label.includes('%') ? item.disabled = true : item.disabled = false);
+        }
+        break;
     }
-
     this.processData();
   }
 
@@ -128,7 +118,16 @@ export class EditChartComponent implements OnInit {
     this.updtateReviewAllowing();
     this.dropdownSources.forEach(item => item.disabled = false);
 
-    switch (this.dashboardChart.chartType.type) {
+    switch (this.dashboardChart.type) {
+      case ChartType.ResourcesTable:
+        this.dashboardChart.showCommon = true; // TODO: change
+        this.dashboardChart.dataSources = [
+          DataProperty.name,
+          DataProperty.pCpu,
+          DataProperty.ramMBytes,
+          DataProperty.pRam
+        ];
+        break;
       case ChartType.LineChart:
         this.isTimeAvailable = true;
         this.isXAxisAvailable = true;
@@ -158,7 +157,16 @@ export class EditChartComponent implements OnInit {
   }
 
   createSourceItems() {
-    switch (this.dashboardChart.chartType.type) {
+    switch (this.dashboardChart.type) {
+      case ChartType.ResourcesTable: {
+        this.dropdownSources = [
+          {label: dataPropertyLables[DataProperty.name], value: DataProperty.name},
+          {label: dataPropertyLables[DataProperty.pCpu], value: DataProperty.pCpu},
+          {label: dataPropertyLables[DataProperty.pRam], value: DataProperty.pRam},
+          {label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes}
+        ];
+        return;
+      }
       case ChartType.Pie:
         if (this.dashboardChart.showCommon) {
           this.dropdownGroupSources = [{
@@ -192,11 +200,19 @@ export class EditChartComponent implements OnInit {
         { label: dataPropertyLables[DataProperty.ramMBytes], value: DataProperty.ramMBytes }
       ]
     }];
+
+    this.dropdownSources = [
+      {label: dataPropertyLables[DataProperty.cpuUsagePercentage], value: DataProperty.cpuUsagePercentage},
+      {label: dataPropertyLables[DataProperty.ramUsagePercentage], value: DataProperty.ramUsagePercentage},
+      {label: dataPropertyLables[DataProperty.localDiskUsagePercentage], value: DataProperty.localDiskUsagePercentage},
+      {label: dataPropertyLables[DataProperty.processesCount], value: DataProperty.processesCount},
+      {label: dataPropertyLables[DataProperty.usageRamMBytes], value: DataProperty.usageRamMBytes},
+      {label: dataPropertyLables[DataProperty.interruptsPerSeconds], value: DataProperty.interruptsPerSeconds},
+      {label: dataPropertyLables[DataProperty.localDiskUsageMBytes], value: DataProperty.localDiskUsageMBytes}
+    ];
   }
 
   processChartType() {
-    this.dashboardChart.chartType = dashboardChartTypes.find(t => t.type === this.dashboardChart.chartType.type);
-    // .name = chartTypes[this.dashboardChart.chartType.type];
     this.resetBuilderForm();
     this.processData();
   }
@@ -207,15 +223,14 @@ export class EditChartComponent implements OnInit {
   }
 
   processData(): void {
-    if (this.dashboardChart.showCommon) {
-      this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
-        this.dashboardChart.dataSources, this.collectedDataForChart);
-    } else {
-      this.dashboardChart.data = this.dataService.prepareProcessData(this.dashboardChart.chartType.type,
-        this.dashboardChart.dataSources[0], this.collectedDataForChart, this.dashboardChart.mostLoaded);
+    if (this.dashboardChart.type === ChartType.ResourcesTable) {
+      this.dashboardChart.colectedData = this.dataService.fakeCollectedData[0];
+      this.dashboardChart.data = [ {} ]; // If data undefine than it not appeared
+      this.isPreviewAvailable = true;
+      return;
     }
 
-    this.isPreviewAvailable = false;
+    this.isPreviewAvailable = this.dataService.fulfillChart(this.dataService.fakeCollectedData, this.dashboardChart);
   }
 
   closeDialog() {
@@ -241,13 +256,13 @@ export class EditChartComponent implements OnInit {
   }
 
   handleSuccessfulCreate(chart: Chart): void {
-    const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(chart, this.collectedDataForChart);
+    const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(chart);
     this.editChart.emit(dashboardChart);
     this.closeDialog();
   }
 
   handleSuccessfulEdit(request: ChartRequest, id: number): void {
-    const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChartFromRequest(request, id, this.collectedDataForChart);
+    const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChartFromRequest(request, id);
     this.editChart.emit(dashboardChart);
     this.closeDialog();
   }
@@ -279,7 +294,7 @@ export class EditChartComponent implements OnInit {
       isTooltipDisabled: this.dashboardChart.tooltipDisabled,
       isShowSeriesOnHover: this.dashboardChart.showSeriesOnHover,
       title: this.dashboardChart.title,
-      type: this.dashboardChart.chartType.type,
+      type: this.dashboardChart.type,
       sources: this.dashboardChart.dataSources.join(),
       isLightTheme: this.dashboardChart.theme === 'light',
     };

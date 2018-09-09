@@ -53,8 +53,7 @@ namespace DataCollector
                 new DataSender(_client, uri),
                 Collector.Instance);
 
-            // TODO: Comment
-            _logger = new Logger(_client, ClientIdentifier, uri+"/log");
+            _logger = new Logger(_client, ClientIdentifier, uri + "/log");
             _logger.Log("Data collection began").GetAwaiter().GetResult();
 
             AppDomain.CurrentDomain.ProcessExit += CollectorClosing;
@@ -111,10 +110,10 @@ namespace DataCollector
         }
 
         public static async void Timercallback(object payload)
-        {            
+        {
             Console.WriteLine($"Current instance: {ClientIdentifier}");
 
-            var turple = (ValueTuple<DataSender, Collector>) payload;
+            var turple = (ValueTuple<DataSender, Collector>)payload;
 
             var sender = turple.Item1;
             var collector = turple.Item2;
@@ -145,7 +144,7 @@ namespace DataCollector
 
         private static async void GlobalExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            await _logger.Log( ((Exception) e.ExceptionObject).Message , LogLevel.Critical);
+            await _logger.Log(((Exception)e.ExceptionObject).Message, LogLevel.Critical);
             Environment.Exit(1);
         }
     }
