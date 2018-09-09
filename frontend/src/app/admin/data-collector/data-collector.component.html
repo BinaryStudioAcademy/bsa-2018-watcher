@@ -7,6 +7,33 @@
     </div>
   </div>
 
-
+  <p-table [value]="collectorApps" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]" [lazy]="true" (onLazyLoad)="loadUsersLazy($event)">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th style="width:10%">CREATED AT</th>
+        <th style="width:10%">VERSION</th>
+        <th style="width:15%">EXE Link</th>
+        <th style="width:15%">DEB Link</th>
+        <th style="width:15%">TGZ Link</th>
+        <th style="width:10%">IS ACTUAL</th>
+        <th style="width:10%">EDIT</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-collectorApp>
+      <tr>
+        <td class="center">{{collectorApp.createdAt}}</td>
+        <td class="center"></td>
+        <td class="center"></td>
+        <td class="center"></td>
+        <td class="center"></td>
+        <td class="center"></td>
+        <td>
+          <div class="center">
+            <button pButton type="button " label="Edit " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(user)"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 
 </div>
