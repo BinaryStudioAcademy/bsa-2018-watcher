@@ -6,7 +6,6 @@ import { DashboardChart } from '../models/dashboard-chart';
 
 import { ChartType } from '../../shared/models/chart-type.enum';
 import { DataProperty } from '../../shared/models/data-property.enum';
-import { CollectedDataService } from '../../core/services/collected-data.service';
 import { DataService } from '../../core/services/data.service';
 import { defaultOptions } from '../charts/models/chart-options';
 
@@ -82,15 +81,32 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   fillCharts() {
-    this.dashboardCharts = dashboardChartTypes.slice(0, this.countToGenerate).map(chartType => Object.assign({
-      ...defaultOptions,
-    }, {
-        chartType,
-        title: chartType.title,
+    // this.dashboardCharts = dashboardChartTypes.slice(0, this.countToGenerate).map(chartType => Object.assign({
+    //   ...defaultOptions,
+    //
+    // }, {
+    //
+    //   chartType,
+    //
+    //     title: chartType.title,
+    //     showXAxis: false,
+    //     showYAxis: false,
+    //     showLegend: false
+    // }));
+
+    for (let i = 0; i < this.countToGenerate; i++) {
+      const chart = Object.assign({
+        ...defaultOptions,
+      }, {
+        type: i,
+        title: ChartType[i],
         showXAxis: false,
         showYAxis: false,
         showLegend: false
-    }));
+      });
+
+      this.dashboardCharts.push(chart);
+    }
   }
 
   processDataForAll() {

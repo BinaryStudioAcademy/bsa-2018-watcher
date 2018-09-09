@@ -48,43 +48,6 @@ export class DataService {
     } else {
       return defaultCollectedData; // TODO: return default value with 0 or
     }
-    const dashChart: DashboardChart = {
-      view: [600, 300],
-      id: value.id,
-      showCommon: value.showCommon,
-      threshold: value.threshold,
-      mostLoaded: value.mostLoaded,
-      colorScheme: {...colorSets.find(s => s.name === value.schemeType)}, // {...defaultOptions.colorScheme},
-      schemeType: defaultOptions.schemeType,
-      showLegend: value.showLegend,
-      legendTitle: value.legendTitle,
-      gradient: value.gradient,
-      showXAxis: value.showXAxis,
-      showYAxis: value.showYAxis,
-      showXAxisLabel: value.showXAxisLabel,
-      showYAxisLabel: value.showYAxisLabel,
-      yAxisLabel: value.yAxisLabel,
-      xAxisLabel: value.xAxisLabel,
-      yScaleMin: defaultOptions.yScaleMin,
-      yScaleMax: defaultOptions.yScaleMax,
-      autoScale: value.autoScale,
-      showGridLines: value.showGridLines,
-      rangeFillOpacity: value.rangeFillOpacity,
-      roundDomains: value.roundDomains,
-      tooltipDisabled: value.isTooltipDisabled,
-      showSeriesOnHover: value.isShowSeriesOnHover,
-      curve: defaultOptions.curve,
-      curveClosed: defaultOptions.curveClosed,
-      title: value.title,
-      dataSources: dataProps,
-      data: chartData,
-      activeEntries: [],
-      chartType: {...dashboardChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
-      theme: value.isLightTheme ? 'light' : 'dark',
-      isIncluded: true
-    };
-
-    return dashChart;
   }
 
   constructor() {
@@ -407,7 +370,8 @@ export class DataService {
       activeEntries: [],
       colectedData: {} as CollectedData,
       type: value.type,
-      theme: value.isLightTheme ? 'light' : 'dark'
+      theme: value.isLightTheme ? 'light' : 'dark',
+      isIncluded: false
     };
 
     this.fulfillChart(this._hourlyCollectedData, dashChart);

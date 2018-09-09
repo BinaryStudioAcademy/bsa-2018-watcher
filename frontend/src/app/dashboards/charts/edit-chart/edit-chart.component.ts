@@ -120,7 +120,7 @@ export class EditChartComponent implements OnInit {
 
     switch (this.dashboardChart.type) {
       case ChartType.ResourcesTable:
-        this.dashboardChart.showCommon = true; //TODO: change
+        this.dashboardChart.showCommon = true; // TODO: change
         this.dashboardChart.dataSources = [
           DataProperty.name,
           DataProperty.pCpu,
