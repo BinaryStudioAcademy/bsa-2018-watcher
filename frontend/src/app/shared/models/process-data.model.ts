@@ -1,15 +1,15 @@
 export interface ProcessData {
     name: string;
 
-    ramMBytes: number;
-    ramMBytesMax?: number;
-    ramMBytesMin?: number;
+    pCpu: number;
+    pCpuMax?: number;
+    pCpuMin?: number;
 
     pRam: number;
     pRamMax?: number;
     pRamMin?: number;
 
-    pCpu: number;
-    pCpuMax?: number;
-    pCpuMin?: number;
+    ramMBytes: number;
+    ramMBytesMax?: number;
+    ramMBytesMin?: number;
 }

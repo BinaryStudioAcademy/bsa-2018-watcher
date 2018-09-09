@@ -29,25 +29,66 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr class="row-header">
-                <th class="left-align name-header t-header" [pSortableColumn]="columns[0].field">
+                <th class="left-align name-header t-header" [pSortableColumn]="columns[0].field" rowspan="2">
                     Name
                 </th>
-                <th class="data-header t-header" [pSortableColumn]="columns[1].field">
+                <th class="data-header t-header" colspan="3">
                     CPU, %
-                    <p-sortIcon [field]="columns[1].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
-                                                                                        ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-                </th>
-                <th class="data-header t-header" [pSortableColumn]="columns[2].field">
+                   </th>
+                <th class="data-header t-header" colspan="3">
                     RAM, %
-                    <p-sortIcon [field]="columns[2].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
-                                                                                        ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-                </th>
-                <th class="data-header t-header" [pSortableColumn]="columns[3].field">
+               </th>
+                <th class="data-header t-header" colspan="3">
                     RAM, MB
-                    <p-sortIcon [field]="columns[3].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
-                                                                                        ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
                 </th>
             </tr>
+            <tr class="row-header">
+              <th class="data-header t-header" [pSortableColumn]="columns[1].field">
+                  CPUAVARAGE, %
+                  <p-sortIcon [field]="columns[1].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                                                                      ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+              </th>
+              <th class="data-header t-header" [pSortableColumn]="columns[2].field">
+                CPUMAX, %
+                <p-sortIcon [field]="columns[3].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                                                                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+            <th class="data-header t-header" [pSortableColumn]="columns[3].field">
+              CPUMIN, %
+              <p-sortIcon [field]="columns[3].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                                                                  ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+              <th class="data-header t-header" [pSortableColumn]="columns[4].field">
+                  RAMAVARAGE, %
+                  <p-sortIcon [field]="columns[4].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                                                                      ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+              </th>
+              <th class="data-header t-header" [pSortableColumn]="columns[5].field">
+                RAMMAX, %
+                <p-sortIcon [field]="columns[5].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                                                                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+            <th class="data-header t-header" [pSortableColumn]="columns[6].field">
+              RAMMIN, %
+              <p-sortIcon [field]="columns[6].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                                                                  ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+              <th class="data-header t-header" [pSortableColumn]="columns[7].field">
+                  RAMAVARAGE, MB
+                  <p-sortIcon [field]="columns[7].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                                                                      ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+              </th>
+              <th class="data-header t-header" [pSortableColumn]="columns[8].field">
+                RAMMAX, MB
+                <p-sortIcon [field]="columns[8].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                                                                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+            <th class="data-header t-header" [pSortableColumn]="columns[9].field">
+              RAMMIN, MB
+              <p-sortIcon [field]="columns[9].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+                                                                                  ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+          </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" class="row-content">
