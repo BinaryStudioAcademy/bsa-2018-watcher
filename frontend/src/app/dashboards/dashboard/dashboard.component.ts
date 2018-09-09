@@ -19,8 +19,10 @@ import {DashboardChart} from '../models/dashboard-chart';
 import {Dashboard} from '../../shared/models/dashboard.model';
 import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
+
 import {UserOrganizationService} from '../../core/services/user-organization.service';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
+import {ChartType} from '../../shared/models/chart-type.enum';
 
 
 @Component({
@@ -155,7 +157,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
       this.dataService.pushLatestCollectedData(latestData);
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
-        this.dataService.updateChartWithLatestData(this.activeDashboardItem.charts[i]);
+        switch (this.activeDashboardItem.charts[i].type) {
+          case ChartType.ResourcesTable:
+          case ChartType.NumberCards:
+            this.activeDashboardItem.charts[i].colectedData = latestData;
+            break;
+          default:
+            this.dataService.updateChartWithLatestData(this.activeDashboardItem.charts[i]);
+            break;
+        }
+
         // const tempData =
         // this.activeDashboardItem.charts[i].data = [...tempData];
       }
@@ -249,7 +260,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       isTooltipDisabled: dashboardChart.tooltipDisabled,
       isShowSeriesOnHover: dashboardChart.showSeriesOnHover,
       title: dashboardChart.title,
-      type: dashboardChart.chartType.type,
+      type: dashboardChart.type,
       sources: dashboardChart.dataSources.join(),
       isLightTheme: dashboardChart.theme === 'light',
     };
@@ -400,10 +411,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   decomposeChart(chart: DashboardChart): void {
     this.chartToEdit = {...chart};
     this.chartToEdit.colorScheme = {...chart.colorScheme};
-    this.chartToEdit.chartType = {...chart.chartType};
+    this.chartToEdit.type = chart.type;
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
+    // debugger; // TODO: check how data source looks for multiple chart
     const item: DashboardMenuItem = {
       label: dashboard.title,
       dashId: dashboard.id,

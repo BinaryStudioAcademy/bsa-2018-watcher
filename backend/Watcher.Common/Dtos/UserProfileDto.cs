@@ -26,5 +26,7 @@ namespace Watcher.Common.Dtos
         public string PhotoURL { get; set; }
 
         public string PhotoType { get; set; }
+
+        public RoleDto Role { get; set; }
     }
 }

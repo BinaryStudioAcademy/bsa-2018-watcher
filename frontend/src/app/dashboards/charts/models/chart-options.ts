@@ -1,7 +1,7 @@
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 import * as shape from 'd3-shape';
 import {DashboardChart} from '../../models/dashboard-chart';
-import {dashboardChartTypes} from './dashboardChartTypes';
+import { ChartType } from '../../../shared/models/chart-type.enum';
 
 export const defaultOptions = {
   view: [716, 337],
@@ -36,6 +36,6 @@ export const defaultOptions = {
   title: '',
   dataSources: [],
   activeEntries: [],
-  chartType: dashboardChartTypes[0],
+  type: ChartType.LineChart,
   theme: 'light',
 } as DashboardChart;
