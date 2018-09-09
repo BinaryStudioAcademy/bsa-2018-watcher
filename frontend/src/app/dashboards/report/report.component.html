@@ -19,7 +19,7 @@
   </div>
 </div>
 
-<div *ngIf="collectedData" class="paginator">
+<div *ngIf="collectedData && collectedData?.length > 0" class="paginator">
     <p-paginator [rows]="recordsPerPage" [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
 </div>
 
