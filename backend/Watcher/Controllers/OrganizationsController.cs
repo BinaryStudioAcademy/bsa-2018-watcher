@@ -219,7 +219,7 @@
         }
 
         [HttpPost("logo")]
-        public virtual async Task<ActionResult> Logo(int id)
+        public virtual async Task<ActionResult> Logo()
         {
             await _organizationService.Logo();
 
