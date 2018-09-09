@@ -162,9 +162,10 @@ namespace Watcher.Core.Services
                 await _uow.OrganizationRepository.GetRangeAsync(1, int.MaxValue, o => o.ImageURL == null);
 
             foreach (var organization in organizations)
-                organization.ImageURL = await _fileStorageProvider.UploadFileBase64Async(
-                "data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZGF0YS1wcmVmaXg9ImZhciIgZGF0YS1pY29uPSJidWlsZGluZyIgY2xhc3M9InN2Zy1pbmxpbmUtLWZhIGZhLWJ1aWxkaW5nIGZhLXctMTQiIHJvbGU9ImltZyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNDQ4IDUxMiI+PHBhdGggZmlsbD0iY3VycmVudENvbG9yIiBkPSJNMTI4IDE0OHYtNDBjMC02LjYgNS40LTEyIDEyLTEyaDQwYzYuNiAwIDEyIDUuNCAxMiAxMnY0MGMwIDYuNi01LjQgMTItMTIgMTJoLTQwYy02LjYgMC0xMi01LjQtMTItMTJ6bTE0MCAxMmg0MGM2LjYgMCAxMi01LjQgMTItMTJ2LTQwYzAtNi42LTUuNC0xMi0xMi0xMmgtNDBjLTYuNiAwLTEyIDUuNC0xMiAxMnY0MGMwIDYuNiA1LjQgMTIgMTIgMTJ6bS0xMjggOTZoNDBjNi42IDAgMTItNS40IDEyLTEydi00MGMwLTYuNi01LjQtMTItMTItMTJoLTQwYy02LjYgMC0xMiA1LjQtMTIgMTJ2NDBjMCA2LjYgNS40IDEyIDEyIDEyem0xMjggMGg0MGM2LjYgMCAxMi01LjQgMTItMTJ2LTQwYzAtNi42LTUuNC0xMi0xMi0xMmgtNDBjLTYuNiAwLTEyIDUuNC0xMiAxMnY0MGMwIDYuNiA1LjQgMTIgMTIgMTJ6bS03NiA4NHYtNDBjMC02LjYtNS40LTEyLTEyLTEyaC00MGMtNi42IDAtMTIgNS40LTEyIDEydjQwYzAgNi42IDUuNCAxMiAxMiAxMmg0MGM2LjYgMCAxMi01LjQgMTItMTJ6bTc2IDEyaDQwYzYuNiAwIDEyLTUuNCAxMi0xMnYtNDBjMC02LjYtNS40LTEyLTEyLTEyaC00MGMtNi42IDAtMTIgNS40LTEyIDEydjQwYzAgNi42IDUuNCAxMiAxMiAxMnptMTgwIDEyNHYzNkgwdi0zNmMwLTYuNiA1LjQtMTIgMTItMTJoMTkuNVYyNGMwLTEzLjMgMTAuNy0yNCAyNC0yNGgzMzdjMTMuMyAwIDI0IDEwLjcgMjQgMjR2NDQwSDQzNmM2LjYgMCAxMiA1LjQgMTIgMTJ6TTc5LjUgNDYzSDE5MnYtNjdjMC02LjYgNS40LTEyIDEyLTEyaDQwYzYuNiAwIDEyIDUuNCAxMiAxMnY2N2gxMTIuNVY0OUw4MCA0OGwtLjUgNDE1eiI+PC9wYXRoPjwvc3ZnPg==");
+                organization.ImageURL = await _fileStorageProvider.UploadFileFromStreamAsync(
+                    "https://bsawatcherfiles.blob.core.windows.net/watcher/9580e672-01f4-4429-9d04-4f8d1984b25b.png");
 
+            await _uow.SaveAsync();
         }
     }
 }

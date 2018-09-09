@@ -40,7 +40,7 @@ namespace Watcher.Controllers
         {
             try
             {
-                await _provider.UploadFileBase64Async(base64StingImage, containerName: "watcher");
+                await _provider.UploadFileBase64Async(base64StingImage, imageType: "image/png", containerName: "watcher");
             }
             catch (Exception e)
             {

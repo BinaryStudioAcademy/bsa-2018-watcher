@@ -289,7 +289,7 @@ namespace Watcher
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (enviroment == EnvironmentName.Production)
+            if (enviroment == EnvironmentName.Development)
             {
                 var fileStorageString = configuration.GetConnectionString("AzureFileStorageConnection");
                 if (!string.IsNullOrWhiteSpace(fileStorageString))
