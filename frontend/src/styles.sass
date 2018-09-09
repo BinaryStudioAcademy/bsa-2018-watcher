@@ -104,4 +104,19 @@ p-panelMenu
     /deep/ .ui-menuitem-icon
       color: $dashboardLastTabMenuItemTextColor
 
+.ui-paginator-page.ui-state-active
+  background-color: $paginatorBackColor !important
+
+.ui-radiobutton-box
+  .ui-state-active,.ui-state-active:not(.ui-state-disabled):hover
+  background-color: $radiobuttoBackColor !important
+  border-color: $radiobuttoBorderColor !important
+
+//chat
+.ui-accordion-header:not(.ui-state-disabled).ui-state-active
+  a
+    background-color: $chatHeaderColor !important
+    border-color: $chatHeaderColor !important
+
 .send-button
+  color: $chatSendButtomColor !important
