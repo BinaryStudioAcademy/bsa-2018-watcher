@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CustomData, date_sort_asc} from '../../dashboards/charts/models';
+
 import {CollectedData, defaultCollectedData} from '../../shared/models/collected-data.model';
 import {NumberSeriesItem, SeriesItem} from '../../dashboards/models/series-item';
 import {MultiChartItem} from '../../dashboards/models/multi-chart-item';
@@ -7,7 +8,6 @@ import {DataProperty, dataPropertyLables} from '../../shared/models/data-propert
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {Chart} from '../../shared/models/chart.model';
 import {DashboardChart} from '../../dashboards/models/dashboard-chart';
-import {dashboardChartTypes} from '../../dashboards/charts/models/dashboardChartTypes';
 import {defaultOptions} from '../../dashboards/charts/models/chart-options';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
@@ -62,7 +62,7 @@ export class DataService {
     }
 
     if (chart.showCommon) {
-      switch (chart.chartType.type) {
+      switch (chart.type) {
         case ChartType.LineChart:
           const data = this.mapToMultiData(dataArr, chart.dataSources);
           if (data && data.length > 0) {
@@ -80,7 +80,7 @@ export class DataService {
           break;
       }
     } else {
-      switch (chart.chartType.type) {
+      switch (chart.type) {
         case ChartType.LineChart:
           const data = this.mapToProcessMultiData(dataArr, this.getFirstSource(chart.dataSources), chart.mostLoaded);
           for (let i = 0; i < data.length; i++) {
@@ -119,6 +119,7 @@ export class DataService {
 
     return items;
   }
+
 
   mapToProcessMultiData(dataArr: CollectedData[], property: DataProperty, processesAmount: number = 1) {
     const items: MultiChartItem[] = [];
@@ -188,6 +189,7 @@ export class DataService {
     const process = data.processes.find((value, index, obj) => {
       return value.name === processName;
     });
+
     const seriesItem: SeriesItem = {
       value: 0, // data.processes[processIndex][DataProperty[property]],
       name: new Date(data.time)
@@ -210,7 +212,7 @@ export class DataService {
 
     let chartData: CustomData[] = [];
     if (chartToUpdate.showCommon) {
-      switch (chartToUpdate.chartType.type) {
+      switch (chartToUpdate.type) {
         case ChartType.LineChart:
           chartData = this.mapToMultiDataOnUpdate(chartToUpdate.data, latestData, chartToUpdate.dataSources);
           break;
@@ -223,7 +225,7 @@ export class DataService {
       }
     } else {
       const source = this.getFirstSource(chartToUpdate.dataSources);
-      switch (chartToUpdate.chartType.type) {
+      switch (chartToUpdate.type) {
         case ChartType.LineChart:
           chartData = this.mapToProcessMultiDataOnUpdate(chartToUpdate.data, source, chartToUpdate.mostLoaded);
           break;
@@ -364,7 +366,8 @@ export class DataService {
       dataSources: dataProps,
       data: [],
       activeEntries: [],
-      chartType: {...dashboardChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
+      colectedData: {} as CollectedData,
+      type: value.type,
       theme: value.isLightTheme ? 'light' : 'dark'
     };
 
