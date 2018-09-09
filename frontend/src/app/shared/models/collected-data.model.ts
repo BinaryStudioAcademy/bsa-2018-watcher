@@ -7,16 +7,33 @@ export interface CollectedData {
   collectedDataType: CollectedDataType;
   processesCount: number;
   processes: ProcessData[];
-  cpuUsagePercentage: number;
   usageRamMBytes: number;
   totalRamMBytes: number;
-  freeRamPercentage: number;
+  ramUsagePercentage: number;
   interruptsPerSeconds: number;
   localDiskUsageMBytes: number;
   localDiskTotalMBytes: number;
-  localDiskFreePercentage: number;
+  localDiskUsagePercentage: number;
+  cpuUsagePercentage: number;
   time: Date;
 }
+
+export const defaultCollectedData: CollectedData = {
+  id: '0',
+  clientId: '0',
+  collectedDataType: CollectedDataType.Accumulation,
+  processesCount: 0,
+  processes: [],
+  usageRamMBytes: 0,
+  totalRamMBytes: 0,
+  ramUsagePercentage: 0,
+  interruptsPerSeconds: 0,
+  localDiskUsageMBytes: 0,
+  localDiskTotalMBytes: 0,
+  localDiskUsagePercentage: 0,
+  cpuUsagePercentage: 0,
+  time: new Date()
+};
 
 
 

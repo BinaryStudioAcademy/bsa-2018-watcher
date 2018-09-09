@@ -1,6 +1,7 @@
 import {CustomData} from '../charts/models';
 import {DataProperty} from '../../shared/models/data-property.enum';
 import {ColorScheme} from '../../shared/models/color-scheme.model';
+
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {ChartType} from '../../shared/models/chart-type.enum';
 

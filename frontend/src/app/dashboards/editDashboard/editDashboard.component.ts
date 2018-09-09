@@ -1,16 +1,14 @@
 import { Component, OnInit, OnChanges, Output, Input } from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import {NgModel} from '@angular/forms';
+import { NgModel} from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { DashboardChart } from '../models/dashboard-chart';
-import { ChartType, chartTypeLabels } from '../../shared/models/chart-type.enum';
+
+import { ChartType } from '../../shared/models/chart-type.enum';
 import { DataProperty } from '../../shared/models/data-property.enum';
 import { CollectedDataService } from '../../core/services/collected-data.service';
-import { CollectedData } from '../../shared/models/collected-data.model';
 import { DataService } from '../../core/services/data.service';
-import { ChartService } from '../../core/services/chart.service';
 import { defaultOptions } from '../charts/models/chart-options';
-import { ChartRequest } from '../../shared/requests/chart-request.model';
 
 @Component({
   selector: 'app-edit-dashboard',
@@ -27,23 +25,18 @@ export class EditDashboardComponent implements OnInit, OnChanges {
 
   showPreview = false;
   dropdownSources: SelectItem[];
-  collectedDataForChart: CollectedData[] = [];
   dashboardCharts: DashboardChart[] = [];
-  newCharts: ChartRequest[] = [];
 
   isSource: Boolean = false;
   isCustomize: Boolean = false;
   sources: DataProperty[];
   isIncluded: Boolean[] = [];
 
-  constructor(private collectedDataService: CollectedDataService,
-              private dataService: DataService,
-              private chartService: ChartService) { }
+  constructor(private dataService: DataService) { }
 
   closeDialog(): void {
     this.closed.emit();
     this.title = '';
-    // this.dashboardTitle = '';
     this.reset();
   }
 
@@ -66,7 +59,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
       }
     }
     this.edited.emit({title: this.title, charts: this.isSource ? this.dashboardCharts : null});
-    // this.edited.emit(this.title);
     this.title = '';
     model.reset();
     this.reset();
@@ -79,8 +71,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.showPreview = false;
     this.dashboardCharts = [];
     this.isIncluded = [];
-    this.dashboardCharts = [];
-    this.isIncluded = [];
     this.fillCharts();
   }
 
@@ -89,10 +79,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.collectedDataService.getBuilderData().subscribe(value => {
-      this.collectedDataForChart = value;
-    });
-
     this.dropdownSources = [
         { label: 'CPU %', value: DataProperty.cpuUsagePercentage},
         { label: 'RAM %', value: DataProperty.ramUsagePercentage },
@@ -107,6 +93,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         this.isIncluded.push(true);
         const dashboardChart = { ...defaultOptions };
         this.dashboardCharts.push(dashboardChart);
+        this.dashboardCharts[i].type = i;
         // this.dashboardCharts[i].chartType = dashboardChartTypes[i];
         // this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
         // this.dashboardCharts[i].chartType.type = dashboardChartTypes[i].type;
@@ -123,12 +110,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   processData(dashboardChart: DashboardChart) {
-    this.showPreview = false;
-    dashboardChart.data = this.dataService.prepareData(dashboardChart.type,
-      this.sources, this.collectedDataForChart);
-
     dashboardChart.dataSources = this.sources;
-
     switch (dashboardChart.type) {
       case ChartType.BarVertical:
         dashboardChart.xAxisLabel = 'Parameters';
@@ -143,41 +125,8 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         dashboardChart.xAxisLabel = '';
         break;
     }
+    this.showPreview = this.dataService.fulfillChart(this.dataService.fakeCollectedData, dashboardChart);
 
-    if (dashboardChart.data && dashboardChart.data.length > 0) {
-      this.showPreview = true;
-    }
     return dashboardChart;
   }
-
-  createChartRequest(dashboardChart: DashboardChart): ChartRequest {
-    const chart: ChartRequest = {
-      showCommon: dashboardChart.showCommon,
-      threshold: dashboardChart.threshold,
-      mostLoaded: 1,
-      schemeType: dashboardChart.schemeType,
-      dashboardId: 0,
-      showLegend: dashboardChart.showLegend,
-      legendTitle: dashboardChart.legendTitle,
-      gradient: dashboardChart.gradient,
-      showXAxis: dashboardChart.showXAxis,
-      showYAxis: dashboardChart.showYAxis,
-      showXAxisLabel: dashboardChart.showXAxisLabel,
-      showYAxisLabel: dashboardChart.showYAxisLabel,
-      yAxisLabel: dashboardChart.yAxisLabel,
-      xAxisLabel: dashboardChart.xAxisLabel,
-      autoScale: dashboardChart.autoScale,
-      showGridLines: dashboardChart.showGridLines,
-      rangeFillOpacity: dashboardChart.rangeFillOpacity,
-      roundDomains: dashboardChart.roundDomains,
-      isTooltipDisabled: dashboardChart.tooltipDisabled,
-      isShowSeriesOnHover: dashboardChart.showSeriesOnHover,
-      title: dashboardChart.title,
-      type: dashboardChart.type,
-      sources: this.sources.join(),
-      isLightTheme: dashboardChart.theme === 'light',
-    };
-    return chart;
-  }
-
 }

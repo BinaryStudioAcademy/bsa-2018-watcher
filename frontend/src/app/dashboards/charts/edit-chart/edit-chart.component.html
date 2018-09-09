@@ -39,6 +39,7 @@
                        [selectionLimit]="getMultiSelectNumber()"
                        (onChange)="multiSelect($event)">
         </p-multiSelect>
+
         <p-dropdown *ngIf="!dashboardChart.showCommon || dashboardChart.type == type.Pie"
                     [autoWidth]="false"
                     [options]="dropdownGroupSources"

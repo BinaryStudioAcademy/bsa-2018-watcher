@@ -23,7 +23,7 @@ export class InstanceActivityComponent implements OnInit {
       this.instanceId = params['insId'];
       console.log(this.instanceId);
       if (this.instanceId) {
-        this.collectorLogService.getAllLogs(this.instanceId).subscribe((data: CollectorLog[]) => {          
+        this.collectorLogService.getAllLogs(this.instanceId).subscribe((data: CollectorLog[]) => {
           if (data) {
             console.log(data);
             this.logs = data.map(log =>
