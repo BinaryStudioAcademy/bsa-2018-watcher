@@ -121,6 +121,8 @@ namespace DataCollector
 
             var sendDataItem = collector.Collect();
 
+            if (sendDataItem == null) return;
+
             sendDataItem.ClientId = ClientIdentifier;
 
             Console.Clear();
