@@ -23,13 +23,13 @@ export class ResourceTableComponent {
     }
     switch (value) {
       case DataProperty.name:
-        return `Name (${this.data.processesCount})`;
+        return `Name (${this.data.processesCount || '...'})`;
       case DataProperty.pCpu:
-        return `CPU (${Math.round(this.data.cpuUsagePercentage)}%)`;
+        return `CPU (${Math.round(this.data.cpuUsagePercentage) || '...'}%)`;
       case DataProperty.pRam:
-        return `RAM (${Math.round(100 - this.data.freeRamPercentage)}%)`;
+        return `RAM (${Math.round(this.data.ramUsagePercentage) || '...'}%)`;
       case DataProperty.ramMBytes:
-        return `RAM (${this.data.usageRamMBytes}MB)`;
+        return `RAM (${this.data.usageRamMBytes || '...'}MB)`;
       default:
         return this.labels[value];
     }
