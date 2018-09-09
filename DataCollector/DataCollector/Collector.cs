@@ -64,7 +64,7 @@ namespace DataCollector
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                Thread.Sleep(5000);
+                // Thread.Sleep(5000);
             }
             return dataItem;
         }
