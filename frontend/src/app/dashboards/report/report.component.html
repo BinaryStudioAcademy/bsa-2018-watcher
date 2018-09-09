@@ -19,6 +19,10 @@
     </div>
 </div>
 
+<div *ngIf="collectedData" class="paginator">
+    <p-paginator [rows]="recordsPerPage" [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
+</div>
+
 <div *ngFor="let collected of collectedData" class="table">
     <p-table #dt [columns]="cols" [value]="collected.processes">
         <ng-template pTemplate="caption">
