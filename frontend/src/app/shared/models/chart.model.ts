@@ -30,6 +30,3 @@ export interface Chart  {
    isLightTheme: boolean;
    scheme: ColorScheme;
 }
-
-
-

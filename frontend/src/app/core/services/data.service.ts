@@ -64,6 +64,10 @@ export class DataService {
     if (chart.showCommon) {
       switch (chart.type) {
         case ChartType.LineChart:
+        case ChartType.PolarChart:
+        case ChartType.AreaChart:
+        case ChartType.AreaChartNormalized:
+        case ChartType.AreaChartStacked:
           const data = this.mapToMultiData(dataArr, chart.dataSources);
           if (data && data.length > 0) {
             for (let i = 0; i < data.length; i++) {
@@ -82,6 +86,10 @@ export class DataService {
     } else {
       switch (chart.type) {
         case ChartType.LineChart:
+        case ChartType.PolarChart:
+        case ChartType.AreaChart:
+        case ChartType.AreaChartNormalized:
+        case ChartType.AreaChartStacked:
           const data = this.mapToProcessMultiData(dataArr, this.getFirstSource(chart.dataSources), chart.mostLoaded);
           for (let i = 0; i < data.length; i++) {
             data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
