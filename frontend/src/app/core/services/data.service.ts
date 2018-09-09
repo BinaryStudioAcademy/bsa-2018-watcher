@@ -113,6 +113,8 @@ export class DataService {
     const items: MultiChartItem[] = [];
     for (let i = 0; i < properties.length; i++) {
       const item: MultiChartItem = {name: dataPropertyLables[properties[i]], series: []};
+      const fiveMinAgo = new Date(Date.now() - 10 * 60000);
+      const dataForLast10Minutes = dataArr.filter(value => value.time > fiveMinAgo);
       item.series = dataArr.map(p => this.mapToLineChartSeriesItem(p, properties[i]));
       items.push(item);
     }
