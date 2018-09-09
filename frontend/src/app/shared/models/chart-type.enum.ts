@@ -51,4 +51,4 @@ chartTypeLabels[ChartType.Guage] = 'Guage';
 chartTypeLabels[ChartType.NumberCards] = 'Number Cards';
 chartTypeLabels[ChartType.PolarChart] = 'Polar Chart';
 chartTypeLabels[ChartType.TreeMap] = 'Tree Map';
-chartTypeLabels[ChartType.TreeMap] = 'Heat Map';
+chartTypeLabels[ChartType.HeatMap] = 'Heat Map';

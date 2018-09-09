@@ -325,6 +325,22 @@ class="chart-container"
   [max]="chart.yScaleMax">
 </ngx-charts-gauge>
 
+<ngx-charts-heat-map
+*ngIf="chart.type === type.HeatMap"
+class="chart-container"
+[scheme]="chart.colorScheme"
+[results]="data"
+[legend]="chart.showLegend"
+[gradient]="chart.gradient"
+[xAxis]="chart.showXAxis"
+[yAxis]="chart.showYAxis"
+[showXAxisLabel]="chart.showXAxisLabel"
+[showYAxisLabel]="chart.showYAxisLabel"
+[xAxisLabel]="chart.xAxisLabel"
+[yAxisLabel]="chart.yAxisLabel"
+[tooltipDisabled]="chart.tooltipDisabled">
+</ngx-charts-heat-map>
+
 <ngx-charts-tree-map
   *ngIf="chart.type === type.TreeMap"
   [scheme]="chart.colorScheme"
