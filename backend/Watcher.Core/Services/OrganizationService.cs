@@ -162,8 +162,11 @@ namespace Watcher.Core.Services
                 await _uow.OrganizationRepository.GetRangeAsync(1, int.MaxValue, o => o.ImageURL == null);
 
             foreach (var organization in organizations)
+            {
                 organization.ImageURL = await _fileStorageProvider.UploadFileFromStreamAsync(
                     "https://bsawatcherfiles.blob.core.windows.net/watcher/9580e672-01f4-4429-9d04-4f8d1984b25b.png");
+                await _uow.OrganizationRepository.UpdateAsync(organization);
+            }
 
             await _uow.SaveAsync();
         }
