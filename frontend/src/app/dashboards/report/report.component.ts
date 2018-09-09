@@ -129,7 +129,7 @@ export class ReportComponent implements OnInit {
 
   convertPDF(): void {
     const doc = new jsPDF('p', 'mm', 'a4');
-    doc.setFontSize(8);
+    doc.setFontSize(10);
 
     const tables = [];
 
@@ -154,7 +154,7 @@ export class ReportComponent implements OnInit {
     tables.forEach(item => {
       doc.addPage();
       doc.autoTable(item.cols, item.rows);
-      doc.text(`Time: ${item.time}`, 20, doc.autoTable.previous.finalY);
+      doc.text(`Time: ${item.time}`, 20, doc.autoTable.previous.finalY + 10);
     });
 
     // tslint:disable-next-line:max-line-length
