@@ -1,4 +1,7 @@
+@import 'theme.sass'
+  
 body
+
   margin: 0
   padding: 0
   border: 0
@@ -48,32 +51,32 @@ a
 .ui-scrollpanel-content
   padding: 0 18px 18px 0 !important
 
-.ui-panelmenu
-  .ui-panelmenu-header.ui-state-active > a
-    border: 1px solid #ff0000 !important
-    background-color: #ff0000 !important
-
-.ui-button
-  font-size: 20px !important
-  height: 45px !important
-
 body
-  background-color: #00FF00
+  background-color: $bodyColor
 
 .header
-  background-color: rgb(255,255,255)
+  background-color: $headerColor
   .ui-button
-        background-color: #999999
-        border: 1px solid #999999
-        color: #000000
+        background-color: $headerButtonBackgroundColor
+        border: $headerButtonBorder
+        color: $headerButtonColor
 
 .logo
-  color: #000000
+  color: $logoColor
+
+.ui-panelmenu
+  .ui-panelmenu-header.ui-state-active > a
+    background-color: $panelmenuStateActiveColor
+    border: $panelmenuStateActiveBorder
+
+.ui-button
+  font-size: $buttonFontSize
+  height: $buttonHeight
 
 input
-  height: 45px !important
+  height: $inputHeight
 
 app-instance-list
   div.menu
-    background-color: #00FF00
-    border-right: 1px solid #0000FF
+    background-color: $leftSideMenuColor
+    border-right: $leftSideMenuBorderRight
