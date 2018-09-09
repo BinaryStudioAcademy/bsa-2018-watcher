@@ -50,7 +50,7 @@ namespace DataAccumulator.DataAggregator
 
                                 PRam = g.Average(r => r.PRam),
                                 PRamMax = g.Max(r => r.PRam),
-                                PRmaMin = g.Min(r => r.PRam),
+                                PRamMin = g.Min(r => r.PRam),
 
                                 RamMBytes = g.Average(b => b.RamMBytes),
                                 RamMBytesMax = g.Max(b => b.RamMBytes),

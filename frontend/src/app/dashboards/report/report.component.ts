@@ -124,7 +124,7 @@ export class ReportComponent implements OnInit {
 
             p.pRam = +p.pRam.toFixed(2);
             p.pRamMax = +p.pRamMax.toFixed(2);
-            p.pRmaMin = +p.pRmaMin.toFixed(2);
+            p.pRamMin = +p.pRamMin.toFixed(2);
 
             p.ramMBytes = +p.ramMBytes.toFixed(2);
             p.ramMBytesMax = +p.ramMBytesMax.toFixed(2);
@@ -163,7 +163,7 @@ export class ReportComponent implements OnInit {
          p.pCpuMin.toString(),
          p.pRam.toString(),
          p.pRamMax.toString(),
-         p.pRmaMin.toString(),
+         p.pRamMin.toString(),
          p.ramMBytes.toString(),
          p.ramMBytesMax.toString(),
          p.ramMBytesMin.toString(),

@@ -10,7 +10,7 @@
 
         public float PRam { get; set; }
         public float? PRamMax { get; set; }
-        public float? PRmaMin { get; set; }
+        public float? PRamMin { get; set; }
 
         public float PCpu { get; set; }
         public float? PCpuMax { get; set; }
