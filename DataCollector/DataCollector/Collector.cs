@@ -7,6 +7,8 @@ using System.Threading;
 
 namespace DataCollector
 {
+    using System.Threading.Tasks;
+
 #if Windows
     public class Collector
     {
@@ -34,12 +36,12 @@ namespace DataCollector
         public static Collector Instance => Value.Value;
 
 
-        public CollectedData Collect()
+        public async Task<CollectedData> Collect()
         {
             CollectedData dataItem = null;
             try
             {
-                var allProcesses = GetProcesses();
+                var allProcesses = await GetProcesses();
                 dataItem = new CollectedData
                 {
                     InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
@@ -95,7 +97,7 @@ namespace DataCollector
         }
 
 
-        private List<ProcessData> GetProcesses()
+        private async Task<List<ProcessData>> GetProcesses()
         {
             var processes = Process.GetProcesses();
             var result = new List<ProcessData>(processes.Length);
@@ -113,13 +115,16 @@ namespace DataCollector
                 cpu.NextValue();
                 _processCpuCounters.Add(item.Id, cpu);
             }
-            Thread.Sleep(1000);
+
+            await Task.Delay(1000);
+            // Thread.Sleep(1000);
 
             foreach (var item in processes.Where(item => item.ProcessName != "Idle"))
             {
-                ListCPU.Add(item.Id, (float)Math.Round(_processCpuCounters[item.Id].NextValue() / Environment.ProcessorCount, 2));
+                if (!_processCpuCounters.TryGetValue(item.Id, out var counter)) continue;
+                ListCPU.Add(item.Id, (float)Math.Round(counter.NextValue() / Environment.ProcessorCount, 2));
+                counter.Dispose();
             }
-
 
             foreach (var item in processes.Where(item => item.ProcessName != "Idle"))
             {

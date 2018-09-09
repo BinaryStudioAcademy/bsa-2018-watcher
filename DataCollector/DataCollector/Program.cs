@@ -118,7 +118,7 @@ namespace DataCollector
             var sender = turple.Item1;
             var collector = turple.Item2;
 
-            var sendDataItem = collector.Collect();
+            var sendDataItem = await collector.Collect();
 
             if (sendDataItem == null) return;
 
