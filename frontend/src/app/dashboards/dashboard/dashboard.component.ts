@@ -93,7 +93,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.getDashboardsByInstanceId(this.instanceId).then(value => {
         this.onDashboards(value);
         this.isLoading = false;
-        this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId, CollectedDataType.Accumulation)
+        this.collectedDataService.getCollectedDataByInstanceId(this.instanceGuidId, CollectedDataType.Accumulation)
           .subscribe(data => {
             this.dataService.hourlyCollectedData = data;
             if (data && data.length > 0) {
@@ -147,7 +147,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   subscribeToCollectedData(): void {
     this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
-      debugger;
       this.dataService.pushLatestCollectedData(latestData);
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         switch (this.activeDashboardItem.charts[i].type) {
@@ -157,11 +156,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
             break;
           default:
             this.dataService.updateChartWithLatestData(this.activeDashboardItem.charts[i]);
+            // const tempData =
+            // this.activeDashboardItem.charts[i].data = [...tempData];
             break;
         }
-
-        // const tempData =
-        // this.activeDashboardItem.charts[i].data = [...tempData];
       }
     });
   }
