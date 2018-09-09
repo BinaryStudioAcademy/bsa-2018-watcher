@@ -67,6 +67,6 @@ export class ResourceTableComponent {
   }
 
   calculateColor(percent: number) {
-    return 'rgba(' + [255, 255 - percent * 7, 255 - percent * 18, 0.6].join(',') + ')';
+    return 'rgba(' + [255, 245 - percent * 4, 200 - percent * 15, 0.6].join(',') + ')';
   }
 }
