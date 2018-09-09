@@ -10,6 +10,7 @@ import { formatDate } from '@angular/common';
 import * as jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { Observable } from 'rxjs';
+import { ProcessData } from '../../shared/models/process-data.model';
 
 @Component({
   selector: 'app-report',
@@ -122,11 +123,7 @@ export class ReportComponent implements OnInit {
     this.getCollectedData(request, 1, this.recordsPerPage).subscribe((data: CollectedData[]) => {
       data.forEach(item => {
         item.time = new Date(item.time);
-        item.processes.forEach(p => {
-          p.pCpu = +p.pCpu.toFixed(2);
-          p.pRam = +p.pRam.toFixed(2);
-          p.ramMBytes = +p.ramMBytes.toFixed(2);
-        });
+        item.processes = item.processes.map(p => this.roundProcess(p));
 
         item.processes.sort((item1, item2) => {
           return item2.pCpu - item1.pCpu;
@@ -154,11 +151,7 @@ export class ReportComponent implements OnInit {
     this.getCollectedData(this.createRequest(), event.page + 1, this.recordsPerPage).subscribe((data: CollectedData[]) => {
       data.forEach(item => {
         item.time = new Date(item.time);
-        item.processes.forEach(p => {
-          p.pCpu = +p.pCpu.toFixed(2);
-          p.pRam = +p.pRam.toFixed(2);
-          p.ramMBytes = +p.ramMBytes.toFixed(2);
-        });
+        item.processes = item.processes.map(p => this.roundProcess(p));
 
         item.processes.sort((item1, item2) => {
           return item2.pCpu - item1.pCpu;
@@ -168,6 +161,25 @@ export class ReportComponent implements OnInit {
     });
   }
 
+  roundProcess(processData: ProcessData) {
+    const item: ProcessData = {
+      name: processData.name,
+      pCpu: +processData.pCpu.toFixed(2),
+      pCpuMax: +processData.pCpuMax.toFixed(2),
+      pCpuMin: +processData.pCpuMin.toFixed(2),
+
+      pRam: +processData.pRam.toFixed(2),
+      pRamMax: +processData.pRamMax.toFixed(2),
+      pRamMin: +processData.pRamMin.toFixed(2),
+
+      ramMBytes: +processData.ramMBytes.toFixed(2),
+      ramMBytesMax: +processData.ramMBytesMax.toFixed(2),
+      ramMBytesMin: +processData.ramMBytesMin.toFixed(2)
+    };
+    console.log(item);
+    return item;
+  }
+
   convertPDF(): void {
     const doc = new jsPDF('p', 'mm', 'a4');
     doc.setFontSize(10);
@@ -175,12 +187,7 @@ export class ReportComponent implements OnInit {
     this.getCollectedData(this.createRequest()).subscribe((data: CollectedData[]) => {
       data.forEach(item => {
         item.time = new Date(item.time);
-        item.processes.forEach(p => {
-          p.pCpu = +p.pCpu.toFixed(2);
-          p.pRam = +p.pRam.toFixed(2);
-          p.ramMBytes = +p.ramMBytes.toFixed(2);
-        });
-
+        item.processes = item.processes.map(p => this.roundProcess(p));
         item.processes.sort((item1, item2) => {
           return item2.pCpu - item1.pCpu;
         });
