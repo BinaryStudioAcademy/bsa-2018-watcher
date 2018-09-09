@@ -45,8 +45,16 @@ namespace DataAccumulator.DataAggregator
                             {
                                 Name = g.Key,
                                 PCpu = g.Average(c => c.PCpu),
+                                PCpuMax = g.Max(c => c.PCpu),
+                                PCpuMin = g.Min(c => c.PCpu),
+
                                 PRam = g.Average(r => r.PRam),
-                                RamMBytes = g.Average(b => b.RamMBytes)
+                                PRamMax = g.Max(r => r.PRam),
+                                PRmaMin = g.Min(r => r.PRam),
+
+                                RamMBytes = g.Average(b => b.RamMBytes),
+                                RamMBytesMax = g.Max(b => b.RamMBytesMax),
+                                RamMBytesMin = g.Min(b => b.RamMBytesMin)
                             }).ToList(),
 
                         UsageRamMBytes = collectedDataGroup
