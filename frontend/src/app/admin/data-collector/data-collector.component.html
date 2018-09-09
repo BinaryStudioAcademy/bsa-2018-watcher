@@ -16,20 +16,20 @@
         <th style="width:15%">DEB Link</th>
         <th style="width:15%">TGZ Link</th>
         <th style="width:10%">IS ACTUAL</th>
-        <th style="width:10%">EDIT</th>
+        <th style="width:10%">REMOVE</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-collectorApp>
       <tr>
         <td class="center">{{collectorApp.createdAt}}</td>
-        <td class="center"></td>
-        <td class="center"></td>
-        <td class="center"></td>
-        <td class="center"></td>
-        <td class="center"></td>
+        <td class="center">{{collectorApp.version}}</td>
+        <td class="center">{{collectorApp.exeLink}}</td>
+        <td class="center">{{collectorApp.debLink}}</td>
+        <td class="center">{{collectorApp.tgzLink}}</td>
+        <td class="center">{{collectorApp.isActual}}</td>
         <td>
           <div class="center">
-            <button pButton type="button " label="Edit " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(user)"></button>
+            <button pButton type="button " label="Remove" class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(user)"></button>
           </div>
         </td>
       </tr>

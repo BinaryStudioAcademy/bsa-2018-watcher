@@ -12,17 +12,17 @@ export class DataCollectorComponent implements OnInit {
     id: 1,
     createdAt: new Date(),
     version: '1.0.3',
-    exeLink: '',
-    debLink: '',
-    tgzLink: '',
+    exeLink: 'exe',
+    debLink: 'deb',
+    tgzLink: 'tgz',
     isActual: true
   }, {
     id: 2,
     createdAt: new Date(),
     version: '1.0.4',
-    exeLink: '',
-    debLink: '',
-    tgzLink: '',
+    exeLink: 'exe',
+    debLink: 'deb',
+    tgzLink: 'tgz',
     isActual: false
   }];
   collectorApp: CollectorApp;
