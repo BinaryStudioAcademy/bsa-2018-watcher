@@ -69,61 +69,6 @@
   [showGridLines]="chart.showGridLines">
 </ngx-charts-bar-horizontal>
 
-<ngx-charts-gauge
-  *ngIf="chart.type === type.Guage"
-  [scheme]="chart.colorScheme"
-  [results]="data"
-  [activeEntries]="activeEntries"
-  [units]="chart.yAxisLabel"
-  [min]="chart.yScaleMin"
-  [max]="chart.yScaleMax">
-</ngx-charts-gauge>
-
-<ngx-charts-pie-chart
-  *ngIf="chart.type === type.Pie"
-  [scheme]="chart.colorScheme"
-  [results]="data"
-  [activeEntries]="activeEntries"
-  [legend]="chart.showLegend"
-  [legendTitle]="chart.legendTitle"
-  [explodeSlices]="false"
-  [labels]="chart.showXAxisLabel"
-  [doughnut]="false"
-  [gradient]="chart.gradient"
-  [tooltipDisabled]="chart.tooltipDisabled">
-</ngx-charts-pie-chart>
-
-<ngx-charts-pie-grid
-  *ngIf="chart.type === type.PieGrid"
-  [scheme]="chart.colorScheme"
-  [results]="data">
-</ngx-charts-pie-grid>
-
-<ngx-charts-advanced-pie-chart
-*ngIf="chart.type === type.AdvancedPie"
-class="chart-container"
-[scheme]="chart.colorScheme"
-[results]="data"
-[valueFormatting]="valueFormatting"
-[gradient]="chart.gradient"
-[tooltipDisabled]="chart.tooltipDisabled"
-[tooltipText]="chart.pieTooltipText">
-</ngx-charts-advanced-pie-chart>
-
-<ngx-charts-tree-map
-  *ngIf="chart.type === type.TreeMap"
-  [scheme]="chart.colorScheme"
-  [results]="data"
-  [gradient]="chart.gradient"
-  [tooltipDisabled]="chart.tooltipDisabled">
-</ngx-charts-tree-map>
-
-<ngx-charts-number-card
-  *ngIf="chart.type === type.NumberCards"
-  [scheme]="chart.colorScheme"
-  [results]="data">
-</ngx-charts-number-card>
-
 <ngx-charts-bar-vertical-2d
   *ngIf="chart.type === type.BarVertical2D"
   class="chart-container"
@@ -338,6 +283,61 @@ class="chart-container"
   [tooltipDisabled]="chart.tooltipDisabled"
   [curve]="chart.curve">
 </ngx-charts-area-chart-normalized>
+
+<ngx-charts-pie-chart
+  *ngIf="chart.type === type.Pie"
+  [scheme]="chart.colorScheme"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [legend]="chart.showLegend"
+  [legendTitle]="chart.legendTitle"
+  [explodeSlices]="false"
+  [labels]="chart.showXAxisLabel"
+  [doughnut]="false"
+  [gradient]="chart.gradient"
+  [tooltipDisabled]="chart.tooltipDisabled">
+</ngx-charts-pie-chart>
+
+<ngx-charts-pie-grid
+  *ngIf="chart.type === type.PieGrid"
+  [scheme]="chart.colorScheme"
+  [results]="data">
+</ngx-charts-pie-grid>
+
+<ngx-charts-advanced-pie-chart
+*ngIf="chart.type === type.AdvancedPie"
+class="chart-container"
+[scheme]="chart.colorScheme"
+[results]="data"
+[valueFormatting]="valueFormatting"
+[gradient]="chart.gradient"
+[tooltipDisabled]="chart.tooltipDisabled"
+[tooltipText]="chart.pieTooltipText">
+</ngx-charts-advanced-pie-chart>
+
+<ngx-charts-gauge
+  *ngIf="chart.type === type.Guage"
+  [scheme]="chart.colorScheme"
+  [results]="data"
+  [activeEntries]="activeEntries"
+  [units]="chart.yAxisLabel"
+  [min]="chart.yScaleMin"
+  [max]="chart.yScaleMax">
+</ngx-charts-gauge>
+
+<ngx-charts-tree-map
+  *ngIf="chart.type === type.TreeMap"
+  [scheme]="chart.colorScheme"
+  [results]="data"
+  [gradient]="chart.gradient"
+  [tooltipDisabled]="chart.tooltipDisabled">
+</ngx-charts-tree-map>
+
+<ngx-charts-number-card
+  *ngIf="chart.type === type.NumberCards"
+  [scheme]="chart.colorScheme"
+  [results]="data">
+</ngx-charts-number-card>
 
 <div class="svg-saver-container" *ngIf="showDownload">
   Download:

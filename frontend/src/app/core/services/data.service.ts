@@ -64,6 +64,12 @@ export class DataService {
     if (chart.showCommon) {
       switch (chart.type) {
         case ChartType.LineChart:
+        case ChartType.BarHorizontal2D:
+        case ChartType.BarHorizontalNormalized:
+        case ChartType.BarHorizontalStacked:
+        case ChartType.BarVertical2D:
+        case ChartType.BarVerticalNormalized:
+        case ChartType.BarVerticalStacked:
         case ChartType.PolarChart:
         case ChartType.AreaChart:
         case ChartType.AreaChartNormalized:
@@ -86,6 +92,12 @@ export class DataService {
     } else {
       switch (chart.type) {
         case ChartType.LineChart:
+        case ChartType.BarHorizontal2D:
+        case ChartType.BarHorizontalNormalized:
+        case ChartType.BarHorizontalStacked:
+        case ChartType.BarVertical2D:
+        case ChartType.BarVerticalNormalized:
+        case ChartType.BarVerticalStacked:
         case ChartType.PolarChart:
         case ChartType.AreaChart:
         case ChartType.AreaChartNormalized:

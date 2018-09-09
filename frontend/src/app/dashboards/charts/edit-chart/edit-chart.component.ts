@@ -229,7 +229,6 @@ export class EditChartComponent implements OnInit {
       return;
     }
 
-    debugger
     this.isPreviewAvailable = this.dataService.fulfillChart(this.dataService.fakeCollectedData, this.dashboardChart);
   }
 
