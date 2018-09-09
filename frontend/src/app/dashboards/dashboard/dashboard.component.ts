@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {MenuItem} from 'primeng/api';
@@ -23,6 +23,7 @@ import {CollectedData} from '../../shared/models/collected-data.model';
 import {UserOrganizationService} from '../../core/services/user-organization.service';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {ChartType} from '../../shared/models/chart-type.enum';
+import {CollectedDataType} from '../../shared/models/collected-data-type.enum';
 
 
 @Component({
@@ -84,6 +85,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.instanceId = params.insId;
       this.instanceGuidId = params.guidId;
       this.dashboardMenuItems = [];
+      this.dashboards = [];
+      this.dataService.hourlyCollectedData = [];
       if (!this.instanceId) {
         return;
       }
@@ -92,23 +95,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.getDashboardsByInstanceId(this.instanceId).then(value => {
         this.onDashboards(value);
         this.isLoading = false;
-        this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId)
-          .subscribe(data => {
+        this.collectedDataService.getCollectedDataByInstanceId(this.instanceGuidId, CollectedDataType.Accumulation)
+          .subscribe( data => {
             this.dataService.hourlyCollectedData = data;
-            if (data && data.length > 0) {
+            if (this.dataService.hourlyCollectedData && this.dataService.hourlyCollectedData.length > 0) {
               // -1 is last item - plus sign
               for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
                 for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
                   this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.dashboardMenuItems[i].charts[j]);
-                  // let tempData: CustomData[];
-                  // if (this.dashboardMenuItems[i].charts[j].showCommon) {
-                  //   tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
-                  //     this.dashboardMenuItems[i].charts[j].dataSources, data);
-                  // } else {
-                  //   tempData = this.dataService.prepareProcessData(this.dashboardMenuItems[i].charts[j].chartType.type,
-                  //     this.dashboardMenuItems[i].charts[j].dataSources[0], data, this.dashboardMenuItems[i].charts[j].mostLoaded);
-                  // }
-                  // this.dashboardMenuItems[i].charts[j].data = [...tempData];
                 }
               }
             }
@@ -164,11 +158,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
             break;
           default:
             this.dataService.updateChartWithLatestData(this.activeDashboardItem.charts[i]);
+            // const tempData =
+            // this.activeDashboardItem.charts[i].data = [...tempData];
             break;
         }
-
-        // const tempData =
-        // this.activeDashboardItem.charts[i].data = [...tempData];
       }
     });
   }
@@ -213,7 +206,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   createDashboard(newDashboard: DashboardRequest, charts: Array<DashboardChart>): void {
-    const newCharts: ChartRequest[] = [];
     this.dashboardsService.create(newDashboard)
       .subscribe((dto) => {
           const item: DashboardMenuItem = this.transformToMenuItem(dto);
@@ -225,11 +217,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
               c.showXAxis = true;
               c.showYAxis = true;
               c.showLegend = true;
-              c.view = [600, 337];
-              newCharts.push(this.createChartRequest(c));
             });
-            this.onAddedCharts(newCharts, dto.id);
-            this.activeDashboardItem.charts = charts;
+            this.onAddedCharts(charts, dto.id);
           }
         },
         error => {
@@ -342,11 +331,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.displayEditDashboard = false;
   }
 
-  onAddedCharts(array: ChartRequest[], id: number) {
+  onAddedCharts(array: Array<DashboardChart>, id: number) {
     array.forEach(chart => {
-      chart.dashboardId = id;
-      this.chartService.create(chart).subscribe(value => {
-        this.toastrService.success('Chart was created');
+      const newChart = this.createChartRequest(chart);
+      newChart.dashboardId = id;
+      this.chartService.create(newChart).subscribe(value => {
+        chart.id = value.id;
+        // const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value);
+        this.onChartEdited(chart); // dashboardChart);
+        // this.toastrService.success('Chart was created');
       }, error => {
         this.toastrService.error(`Error occurred status: ${error.message}`);
       });

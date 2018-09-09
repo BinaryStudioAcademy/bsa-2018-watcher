@@ -14,7 +14,6 @@ namespace DataCollector
 
         private static readonly HttpClient _client = new HttpClient();
         private static Logger _logger;
-        private static bool isFirstCollection = true;
 
         //event for exiting by pressing ctrl+c
         private static readonly AutoResetEvent Closing = new AutoResetEvent(false);
@@ -54,17 +53,22 @@ namespace DataCollector
                 new DataSender(_client, uri),
                 Collector.Instance);
 
-            // TODO: Comment
-            _logger = new Logger(_client, ClientIdentifier, uri+"/log");
+            _logger = new Logger(_client, ClientIdentifier, uri + "/log");
             _logger.Log("Data collection began").GetAwaiter().GetResult();
 
+            AppDomain.CurrentDomain.ProcessExit += CollectorClosing;
+            AppDomain.CurrentDomain.UnhandledException += GlobalExceptionHandler;
 
             // setting timer for collecting proccess
             TimerItem = new Timer(Timercallback, payload, 0, delay);
 
-
             Console.CancelKeyPress += OnExit;
             Closing.WaitOne();
+        }
+
+        private static async void CollectorClosing(object sender, EventArgs e)
+        {
+            await _logger.Log("Data collection stopped");
         }
 
         protected static void OnExit(object sender, EventArgs e)
@@ -106,15 +110,17 @@ namespace DataCollector
         }
 
         public static async void Timercallback(object payload)
-        {            
+        {
             Console.WriteLine($"Current instance: {ClientIdentifier}");
 
-            var turple = (ValueTuple<DataSender, Collector>) payload;
+            var turple = (ValueTuple<DataSender, Collector>)payload;
 
             var sender = turple.Item1;
             var collector = turple.Item2;
 
-            var sendDataItem = collector.Collect();
+            var sendDataItem = await collector.Collect();
+
+            if (sendDataItem == null) return;
 
             sendDataItem.ClientId = ClientIdentifier;
 
@@ -134,6 +140,12 @@ namespace DataCollector
             }
 
             Console.WriteLine("Press ctr+c for exit");
+        }
+
+        private static async void GlobalExceptionHandler(object sender, UnhandledExceptionEventArgs e)
+        {
+            await _logger.Log(((Exception)e.ExceptionObject).Message, LogLevel.Critical);
+            Environment.Exit(1);
         }
     }
 }

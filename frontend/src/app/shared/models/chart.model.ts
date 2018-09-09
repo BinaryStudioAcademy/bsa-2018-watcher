@@ -1,5 +1,4 @@
-﻿
-import { ChartType } from './chart-type.enum';
+﻿import { ChartType } from './chart-type.enum';
 import { ColorScheme } from './color-scheme.model';
 
 export interface Chart  {

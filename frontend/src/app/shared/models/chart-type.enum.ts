@@ -20,7 +20,8 @@ export enum ChartType {
     BarVerticalStacked,
     BarHorizontalStacked,
     BarVerticalNormalized,
-    BarHorizontalNormalized
+    BarHorizontalNormalized,
+    HeatMap
 }
 
 export const chartTypeLabels: ProperiesMap<string> = {};
@@ -50,3 +51,4 @@ chartTypeLabels[ChartType.Guage] = 'Guage';
 chartTypeLabels[ChartType.NumberCards] = 'Number Cards';
 chartTypeLabels[ChartType.PolarChart] = 'Polar Chart';
 chartTypeLabels[ChartType.TreeMap] = 'Tree Map';
+chartTypeLabels[ChartType.TreeMap] = 'Heat Map';

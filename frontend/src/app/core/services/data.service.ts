@@ -34,14 +34,6 @@ export class DataService {
     return this._hourlyCollectedData;
   }
 
-  // get latestCollectedData(): CollectedData {
-  //   if (this._hourlyCollectedData && this._hourlyCollectedData.length) {
-  //     return this._hourlyCollectedData[this._hourlyCollectedData.length - 1];
-  //   } else {
-  //     return null; // TODO: return default value with 0 or
-  //   }
-  // }
-
   getLastCollectedData(dataArr: CollectedData[]): CollectedData {
     if (dataArr && dataArr.length) {
       return dataArr[dataArr.length - 1];
@@ -133,6 +125,8 @@ export class DataService {
     const items: MultiChartItem[] = [];
     for (let i = 0; i < properties.length; i++) {
       const item: MultiChartItem = {name: dataPropertyLables[properties[i]], series: []};
+      const fiveMinAgo = new Date(Date.now() - 10 * 60000);
+      const dataForLast10Minutes = dataArr.filter(value => value.time > fiveMinAgo);
       item.series = dataArr.map(p => this.mapToLineChartSeriesItem(p, properties[i]));
       items.push(item);
     }
@@ -388,7 +382,8 @@ export class DataService {
       activeEntries: [],
       colectedData: {} as CollectedData,
       type: value.type,
-      theme: value.isLightTheme ? 'light' : 'dark'
+      theme: value.isLightTheme ? 'light' : 'dark',
+      isIncluded: false
     };
 
     this.fulfillChart(this._hourlyCollectedData, dashChart);
@@ -435,7 +430,9 @@ export class DataService {
     // TODO: use this operation only for current dashboard and then on switching dashboard make data preparing on existing
     // collectedDataForChart to reduce amount of operations and time
     // TODO: filter all data that younger than 1 hour and push there this data
-    this._hourlyCollectedData.push(latestData);
+    const hourAgo = new Date(Date.now() - 60 * 60000);
+    this._hourlyCollectedData = [...this._hourlyCollectedData.filter(value => value.time > hourAgo), latestData];
+    // this._hourlyCollectedData.push(latestData);
   }
 
   convertStringToArrEnum(sources: string): DataProperty[] {

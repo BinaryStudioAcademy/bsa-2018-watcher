@@ -9,7 +9,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   './landing.component.header.sass'],
 })
 export class LandingComponent implements OnInit, OnDestroy {
-
+  isAbout: Boolean = false;
   constructor() {}
 
   headerScroll(): any {
@@ -18,7 +18,7 @@ export class LandingComponent implements OnInit, OnDestroy {
       document.getElementById('header').style.background = 'rgba(0,0,0,0.2)';
     } else { document.getElementById('header').style.background = 'rgba(0,0,0,0.8)'; }}
 
-  scrollTo(id: string): void {
+  scrollTo(id: string): void {this.isAbout = false;
     const element = document.getElementById(id);
     element.scrollIntoView( {block: 'start', behavior: 'smooth'});
     const menu = document.getElementById('nav');

@@ -38,6 +38,7 @@ export class NotificationsHubService {
       this.hubConnection.start()
         .then(() => {
           console.log('NotificationsHub connected');
+          this.isConnect = true;
           this.registerOnServerEvents();
         })
         .catch(err => {
