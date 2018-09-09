@@ -66,5 +66,5 @@
 </div>
 
 <div *ngIf="collectedData" class="paginator">
-    <p-paginator [rows]="recordsPerPage" [totalRecords]="totalRecords"></p-paginator>
+    <p-paginator [rows]="recordsPerPage" [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
 </div>

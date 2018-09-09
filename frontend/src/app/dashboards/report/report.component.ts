@@ -144,6 +144,24 @@ export class ReportComponent implements OnInit {
     }
   }
 
+  paginate(event) {
+    this.getCollectedData(this.createRequest(), event.page, this.recordsPerPage).subscribe((data: CollectedData[]) => {
+      data.forEach(item => {
+        item.time = new Date(item.time);
+        item.processes.forEach(p => {
+          p.pCpu = +p.pCpu.toFixed(2);
+          p.pRam = +p.pRam.toFixed(2);
+          p.ramMBytes = +p.ramMBytes.toFixed(2);
+        });
+
+        item.processes.sort((item1, item2) => {
+          return item2.pCpu - item1.pCpu;
+        });
+      });
+      this.collectedData = data;
+    });
+  }
+
   convertPDF(): void {
     const doc = new jsPDF('p', 'mm', 'a4');
     doc.setFontSize(10);
