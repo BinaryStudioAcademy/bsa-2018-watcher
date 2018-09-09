@@ -1,18 +1,21 @@
 ﻿
+import { CollectedDataType } from './collected-data-type.enum';
+import { ProcessData } from './process-data.model';
 
 export interface CollectedData  {
    id: string;
-   time: Date;
+   clientId: string;
+   collectedDataType: CollectedDataType;
    processesCount: number;
-   processesCPU: { [key: string]: number; };
-   processesRAM: { [key: string]: number; };
-   cpuUsagePercent: number;
-   ramUsagePercent: number;
-   interruptsTimePercent: number;
-   localDiskFreeSpacePercent: number;
-   avaliableRamBytes: number;
+   processes: ProcessData[];
+   freeRamMBytes: number;
+   totalRamMBytes: number;
+   freeRamPercentage: number;
    interruptsPerSeconds: number;
    localDiskFreeMBytes: number;
+   localDiskTotalMBytes: number;
+   localDiskFreePercentage: number;
+   time: Date;
 }
 
 

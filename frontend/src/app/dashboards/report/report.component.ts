@@ -6,7 +6,9 @@ import { CollectedData } from '../../shared/models/collected-data.model';
 import { AggregateDataRequest } from '../../shared/models/aggregate-data-request.model';
 import { SelectItem } from 'primeng/api';
 import { Calendar } from 'primeng/primeng';
+import { formatDate } from '@angular/common';
 import * as jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 @Component({
   selector: 'app-report',
@@ -15,7 +17,8 @@ import * as jsPDF from 'jspdf';
 })
 export class ReportComponent implements OnInit {
 
-  @ViewChild('cf') calendarFilter: Calendar;
+  @ViewChild('cf1') calendarFilter1: Calendar;
+  @ViewChild('cf2') calendarFilter2: Calendar;
   @ViewChild('ct') timeInput: Calendar;
   @ViewChild('pdfContainner') el: ElementRef;
 
@@ -26,7 +29,8 @@ export class ReportComponent implements OnInit {
   types: SelectItem[];
   selectedType: DataType;
 
-  dates: Date[];
+  dateFrom: Date;
+  dateTo: Date;
 
   cols: any[];
 
@@ -42,17 +46,19 @@ export class ReportComponent implements OnInit {
     ];
 
     this.types = [
-      { label: 'AggregationForHour', value: DataType.AggregationForHour },
-      { label: 'AggregationForDay', value: DataType.AggregationForDay },
-      { label: 'AggregationForWeek', value: DataType.AggregationForWeek },
-      { label: 'AggregationForMonth', value: DataType.AggregationForMonth }
+      { label: 'Hourly', value: DataType.AggregationForHour },
+      { label: 'Daily', value: DataType.AggregationForDay },
+      { label: 'Weekly', value: DataType.AggregationForWeek },
+      { label: 'Monthly', value: DataType.AggregationForMonth }
     ];
 
     this.selectedType = this.types[0].value;
 
-    this.calendarFilter.showTime = true;
+    this.calendarFilter1.showTime = true;
+    this.calendarFilter2.showTime = true;
 
-    this.dates = [new Date(Date.now())];
+    this.calendarFilter1.dateFormat = 'dd/mm/yy';
+    this.calendarFilter2.dateFormat = 'dd/mm/yy';
 
     const x = this.activateRoute.params.subscribe(params => {
       this.id = params['guidId'];
@@ -62,16 +68,32 @@ export class ReportComponent implements OnInit {
   changeType(ev): void {
     switch (DataType[ev.value]) {
       case 'AggregationForHour':
-        this.calendarFilter.showTime = true;
+        this.calendarFilter1.showTime = true;
+        this.calendarFilter2.showTime = true;
         break;
       case 'AggregationForDay':
-        this.calendarFilter.showTime = false;
+        this.dateFrom.setHours(0);
+        this.dateFrom.setMinutes(0);
+        this.dateTo.setHours(0);
+        this.dateTo.setMinutes(0);
+        this.calendarFilter1.showTime = false;
+        this.calendarFilter2.showTime = false;
         break;
       case 'AggregationForWeek':
-        this.calendarFilter.showTime = false;
+        this.dateFrom.setHours(0);
+        this.dateFrom.setMinutes(0);
+        this.dateTo.setHours(0);
+        this.dateTo.setMinutes(0);
+        this.calendarFilter1.showTime = false;
+        this.calendarFilter2.showTime = false;
         break;
       case 'AggregationForMonth':
-        this.calendarFilter.showTime = false;
+        this.dateFrom.setHours(0);
+        this.dateFrom.setMinutes(0);
+        this.dateTo.setHours(0);
+        this.dateTo.setMinutes(0);
+        this.calendarFilter1.showTime = false;
+        this.calendarFilter2.showTime = false;
         break;
     }
   }
@@ -80,8 +102,8 @@ export class ReportComponent implements OnInit {
     const request: AggregateDataRequest = {
       id: this.id,
       type: this.selectedType,
-      from: this.dates[0],
-      to: this.dates[this.dates.length - 1]
+      from: this.dateFrom,
+      to: this.dateTo
     };
 
     if (this.id) {
@@ -106,13 +128,37 @@ export class ReportComponent implements OnInit {
   }
 
   convertPDF(): void {
-    const doc = new jsPDF();
+    const doc = new jsPDF('p', 'mm', 'a4');
+    doc.setFontSize(10);
 
-    const content = this.el.nativeElement;
+    const tables = [];
 
-    doc.fromHTML(content.innerHTML, 15, 15);
+    const cols: string[] = [];
+    this.cols.forEach(item => {
+      cols.push(item.header);
+    });
 
-    doc.save('pdf sample');
+    this.collectedData.forEach(item => {
+      const rows = [];
+
+      item.processes.forEach(p => rows.push([p.name, p.pCpu.toString(), p.pRam.toString(), p.ramMBytes.toString()]));
+
+      tables.push({
+        cols: cols,
+        rows: rows,
+        time: formatDate(item.time, 'dd/MM/yy HH:mm', 'en-US')
+      });
+    });
+
+    doc.deletePage(1);
+    tables.forEach(item => {
+      doc.addPage();
+      doc.autoTable(item.cols, item.rows);
+      doc.text(`Time: ${item.time}`, 20, doc.autoTable.previous.finalY + 10);
+    });
+
+    // tslint:disable-next-line:max-line-length
+    doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
   }
 
 }

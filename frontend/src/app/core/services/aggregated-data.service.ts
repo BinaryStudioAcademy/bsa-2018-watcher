@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { CollectedData } from '../../shared/models/collected-data.model';
 import { Observable } from 'rxjs';
-import { DataType } from '../../shared/models/data-type.enum';
 import { AggregateDataRequest } from '../../shared/models/aggregate-data-request.model';
 
 @Injectable({

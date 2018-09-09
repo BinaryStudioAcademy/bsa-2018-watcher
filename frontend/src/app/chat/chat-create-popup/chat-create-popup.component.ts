@@ -79,7 +79,6 @@ export class ChatCreatePopupComponent implements OnInit {
         } as NotificationSetting
       ]
     };
-
     this.chatHub.createNewChat(newChat);
     this.display = false;
   }
