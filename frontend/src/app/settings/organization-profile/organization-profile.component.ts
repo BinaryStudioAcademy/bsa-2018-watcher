@@ -61,14 +61,13 @@ export class OrganizationProfileComponent implements OnInit {
   isSending: Boolean = false;
 
   ngOnInit() {
-    this.authService.currentUser.subscribe(
-      async (userData) => {
-        this.user = { ...userData };
-        if (this.user.lastPickedOrganization !== undefined) {
-          this.organization = this.user.lastPickedOrganization;
-          this.name = this.organization.name;
-        }
-        this.imageUrl = this.user.lastPickedOrganization.imageURL;
+      this.user = this.authService.getCurrentUser();
+
+      this.organizationService.get(this.user.lastPickedOrganizationId).subscribe(async (org) => {
+        console.log(org);
+        this.organization = org;
+        this.name = this.organization.name;
+        this.imageUrl = org.imageURL;
         const role = await this.userOrganizationService.getOrganizationRole();
         this.editable = role.name === 'Manager' ? true : false;
         console.log('EDITABLE');
