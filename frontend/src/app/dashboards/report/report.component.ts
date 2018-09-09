@@ -129,6 +129,7 @@ export class ReportComponent implements OnInit {
 
   convertPDF(): void {
     const doc = new jsPDF('p', 'mm', 'a4');
+    doc.setFontSize(8);
 
     const tables = [];
 
@@ -149,9 +150,10 @@ export class ReportComponent implements OnInit {
       });
     });
 
+    doc.deletePage(1);
     tables.forEach(item => {
+      doc.addPage();
       doc.autoTable(item.cols, item.rows);
-      doc.setFontSize(8);
       doc.text(`Time: ${item.time}`, 20, doc.autoTable.previous.finalY);
     });
 
