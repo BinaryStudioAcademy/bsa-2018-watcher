@@ -8,7 +8,7 @@ export const defaultOptions = {
   id: 0,
   showCommon: true,
   threshold: 0,
-  mostLoaded: '',
+  mostLoaded: 1,
   // colorScheme:  {
   //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   // },
@@ -23,6 +23,8 @@ export const defaultOptions = {
   showYAxisLabel: true,
   yAxisLabel: '',
   xAxisLabel: '',
+  yScaleMax: 100,
+  yScaleMin: 0,
   autoScale: true,
   showGridLines: true,
   rangeFillOpacity: 0.5,
@@ -36,4 +38,5 @@ export const defaultOptions = {
   activeEntries: [],
   chartType: dashboardChartTypes[0],
   theme: 'light',
+  isIncluded: true,
 } as DashboardChart;

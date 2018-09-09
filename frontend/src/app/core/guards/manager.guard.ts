@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { UserOrganizationService } from '../services/user-organization.service';
 import { OrganizationRole } from '../../shared/models/organization-role.model';
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class ManagerGuard implements CanActivate {
@@ -11,12 +10,11 @@ export class ManagerGuard implements CanActivate {
 
   currentRole: OrganizationRole;
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise < boolean > {
-
-    this.currentRole = await this.userOrganizationService.currentOrganizationRole.toPromise();
+    this.currentRole = await this.userOrganizationService.getOrganizationRole();
     if (this.currentRole.name === 'Manager') {
       return true;
     } else {
-      this.router.navigate(['/user/dashboards']);
+      this.router.navigate(['/user/instances']);
       return false;
     }
   }

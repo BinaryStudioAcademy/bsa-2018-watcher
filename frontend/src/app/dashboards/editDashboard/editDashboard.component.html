@@ -36,9 +36,13 @@
         <div class="wrapper">
           <div *ngFor="let dashboardChart of dashboardCharts; let i = index" class="view-chart">
             <div class="checkbox-margin center">
-              <p-checkbox [(ngModel)]="isIncluded[i]" [disabled]="!isCustomize" binary="true"></p-checkbox>
+              <p-checkbox [(ngModel)]="dashboardChart.isIncluded" [disabled]="!isCustomize" binary="true"></p-checkbox>
             </div>
-            <app-chart [chart]="dashboardChart" [data]="dashboardChart.data" [chartType]="dashboardChart.chartType"
+            <app-chart
+              class="chart"
+              [chart]="dashboardChart"
+              [data]="dashboardChart.data"
+              [chartType]="dashboardChart.chartType"
               [showDownload]="false">
             </app-chart>
           </div>

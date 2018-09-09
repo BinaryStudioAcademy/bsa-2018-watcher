@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../core/services/auth.service';
 import {Router, RouterEvent} from '@angular/router';
 
 @Component({
@@ -15,7 +14,7 @@ export class ShellComponent implements OnInit {
   showInstanceList: boolean;
 
   ngOnInit(): void {
-    this.showInstanceList = true;
+    this.checkRoute();
     this.subscribeRouteChanges();
   }
 

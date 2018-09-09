@@ -1,8 +1,12 @@
 .charts-area
   display: grid
-  grid-template-columns: repeat(auto-fill, 630px)
+  grid-template-columns: repeat(auto-fill, minmax(600px, 1fr))
   grid-gap: 20px
   justify-content: center
+
+  .chart
+    display: flex
+    min-height: 400px
 
   .chart-title
     text-align: center

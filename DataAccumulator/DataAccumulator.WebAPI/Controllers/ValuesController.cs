@@ -61,9 +61,9 @@ namespace DataAccumulator.WebAPI.Controllers
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        ClientId = new Guid("b733a60b-c35b-4705-ab84-d10e34950950"),
 
-                        CollectedDataType = CollectedDataType.Accumulation,
+                        CollectedDataType = CollectedDataType.AggregationForHour,
 
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
@@ -96,15 +96,15 @@ namespace DataAccumulator.WebAPI.Controllers
 
                         CpuUsagePercentage = 10,
 
-                        Time = DateTime.Now
+                        Time = new DateTime(2018, 09, 7, 8, 0, 0)
                     });
 
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        ClientId = new Guid("b733a60b-c35b-4705-ab84-d10e34950950"),
 
-                        CollectedDataType = CollectedDataType.Accumulation,
+                        CollectedDataType = CollectedDataType.AggregationForHour,
 
                         ProcessesCount = 2,
                         Processes = new List<ProcessData>()
@@ -137,7 +137,7 @@ namespace DataAccumulator.WebAPI.Controllers
 
                         CpuUsagePercentage = 10,
 
-                        Time = DateTime.Now
+                        Time = new DateTime(2018, 09, 7, 7, 0, 0)
                     });
 
                     await _repository.AddEntity(new CollectedData()
