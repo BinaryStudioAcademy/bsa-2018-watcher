@@ -17,7 +17,7 @@
         <p class="field">Select chart type: </p>
         <p-dropdown [options]="dropdownTypes"
                     [autoWidth]="false"
-                    [(ngModel)]="dashboardChart.chartType"
+                    [(ngModel)]="dashboardChart.type"
                     placeholder="Select a type"
                     (onChange)="processChartType()">
         </p-dropdown>
@@ -29,7 +29,7 @@
           </p-checkbox>
         </p><!--type [disabled]="!dashboardChart.dataSources.length<1"-->
         <p class="field">Select source: </p>
-        <p-multiSelect *ngIf="dashboardChart.showCommon && dashboardChart.chartType.type !== type.Pie"
+        <p-multiSelect *ngIf="dashboardChart.showCommon && dashboardChart.type !== type.Pie"
                        class="custom-multiselect"
                        [filter]="false"
                        [showHeader]="false"
@@ -39,7 +39,7 @@
                        [selectionLimit]="getMultiSelectNumber()"
                        (onChange)="multiSelect($event)">
         </p-multiSelect>
-        <p-dropdown *ngIf="!dashboardChart.showCommon || dashboardChart.chartType.type == type.Pie"
+        <p-dropdown *ngIf="!dashboardChart.showCommon || dashboardChart.type == type.Pie"
                     [autoWidth]="false"
                     [options]="dropdownGroupSources"
                     placeholder="Select a type"
@@ -105,7 +105,6 @@
           <app-chart class="chart"
                      [chart]="dashboardChart"
                      [data]="dashboardChart.data"
-                     [chartType]="dashboardChart.chartType"
                      [showDownload]="false">
           </app-chart>
         </div>

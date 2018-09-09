@@ -10,10 +10,9 @@ import {ToastrService} from '../../../core/services/toastr.service';
 import {Chart} from '../../../shared/models/chart.model';
 import {CollectedData} from '../../../shared/models/collected-data.model';
 import {ChartRequest} from '../../../shared/requests/chart-request.model';
-import {ChartType, chartTypes} from '../../../shared/models/chart-type.enum';
+import {ChartType, chartTypeLabels} from '../../../shared/models/chart-type.enum';
 import {DataProperty, dataPropertyLables} from '../../../shared/models/data-property.enum';
 
-import {dashboardChartTypes} from '../models/dashboardChartTypes';
 import {DashboardChart} from '../../models/dashboard-chart';
 
 @Component({
@@ -74,19 +73,19 @@ export class EditChartComponent implements OnInit {
 
     this.dashboardChart.showCommon = false;
     this.dropdownTypes = [
-      {label: dashboardChartTypes[0].title, value: dashboardChartTypes[0]},
-      {label: dashboardChartTypes[1].title, value: dashboardChartTypes[1]},
-      {label: dashboardChartTypes[2].title, value: dashboardChartTypes[2]},
-      {label: dashboardChartTypes[3].title, value: dashboardChartTypes[3]},
-      {label: dashboardChartTypes[4].title, value: dashboardChartTypes[4]},
-      {label: dashboardChartTypes[5].title, value: dashboardChartTypes[5]},
+      {label: chartTypeLabels[ChartType.ResourcesTable], value: ChartType.ResourcesTable},
+      {label: chartTypeLabels[ChartType.LineChart], value: ChartType.LineChart},
+      {label: chartTypeLabels[ChartType.BarVertical], value: ChartType.BarVertical},
+      {label: chartTypeLabels[ChartType.Guage], value: ChartType.Guage},
+      {label: chartTypeLabels[ChartType.Pie], value: ChartType.Pie},
+      {label: chartTypeLabels[ChartType.NumberCards], value: ChartType.NumberCards}
     ];
 
     this.resetBuilderForm();
   }
 
   getMultiSelectNumber() {
-    return this.dashboardChart.chartType.type === ChartType.Pie ? 1 : null;
+    return this.dashboardChart.type === ChartType.Pie ? 1 : null;
   }
 
   updtateReviewAllowing() {
@@ -104,7 +103,7 @@ export class EditChartComponent implements OnInit {
       return;
     }
 
-    switch (this.dashboardChart.chartType.type) {
+    switch (this.dashboardChart.type) {
       case ChartType.ResourcesTable:
         break;
       default:
@@ -127,7 +126,7 @@ export class EditChartComponent implements OnInit {
     this.updtateReviewAllowing();
     this.dropdownSources.forEach(item => item.disabled = false);
 
-    switch (this.dashboardChart.chartType.type) {
+    switch (this.dashboardChart.type) {
       case ChartType.ResourcesTable:
         this.dashboardChart.showCommon = true; //TODO: change
         this.dashboardChart.dataSources = [
@@ -166,7 +165,7 @@ export class EditChartComponent implements OnInit {
   }
 
   createSourceItems() {
-    switch (this.dashboardChart.chartType.type) {
+    switch (this.dashboardChart.type) {
       case ChartType.ResourcesTable: {
         this.dropdownSources = [
           {label: dataPropertyLables[DataProperty.name], value: DataProperty.name},
@@ -222,8 +221,6 @@ export class EditChartComponent implements OnInit {
   }
 
   processChartType() {
-    this.dashboardChart.chartType = dashboardChartTypes.find(t => t.type === this.dashboardChart.chartType.type);
-    // .name = chartTypes[this.dashboardChart.chartType.type];
     this.resetBuilderForm();
     this.processData();
   }
@@ -234,15 +231,15 @@ export class EditChartComponent implements OnInit {
   }
 
   processData(): void {
-    if (this.dashboardChart.chartType.type === ChartType.ResourcesTable) {
+    if (this.dashboardChart.type === ChartType.ResourcesTable) {
       this.dashboardChart.colectedData = this.collectedDataForChart[0];
     }
 
     if (this.dashboardChart.showCommon) {
-      this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.chartType.type,
+      this.dashboardChart.data = this.dataService.prepareData(this.dashboardChart.type,
         this.dashboardChart.dataSources, this.collectedDataForChart);
     } else {
-      this.dashboardChart.data = this.dataService.prepareProcessData(this.dashboardChart.chartType.type,
+      this.dashboardChart.data = this.dataService.prepareProcessData(this.dashboardChart.type,
         this.dashboardChart.dataSources[0], this.collectedDataForChart, this.dashboardChart.mostLoaded);
     }
 
@@ -310,7 +307,7 @@ export class EditChartComponent implements OnInit {
       isTooltipDisabled: this.dashboardChart.tooltipDisabled,
       isShowSeriesOnHover: this.dashboardChart.showSeriesOnHover,
       title: this.dashboardChart.title,
-      type: this.dashboardChart.chartType.type,
+      type: this.dashboardChart.type,
       sources: this.dashboardChart.dataSources.join(),
       isLightTheme: this.dashboardChart.theme === 'light',
     };

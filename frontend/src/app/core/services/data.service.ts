@@ -7,7 +7,6 @@ import {DataProperty, dataPropertyLables} from '../../shared/models/data-propert
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {Chart} from '../../shared/models/chart.model';
 import {DashboardChart} from '../../dashboards/models/dashboard-chart';
-import {dashboardChartTypes} from '../../dashboards/charts/models/dashboardChartTypes';
 import {defaultOptions} from '../../dashboards/charts/models/chart-options';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
@@ -67,9 +66,10 @@ export class DataService {
       dataSources: dataProps,
       data: chartData,
       activeEntries: [],
-      chartType: {...dashboardChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
+      colectedData: {} as CollectedData,
+      type: value.type,
       theme: value.isLightTheme ? 'light' : 'dark',
-    } as DashboardChart;
+    };
 
     return dashChart;
   }
@@ -274,7 +274,7 @@ export class DataService {
     }
 
     if (chartToUpdate.showCommon) {
-      switch (chartToUpdate.chartType.type) {
+      switch (chartToUpdate.type) {
         case ChartType.LineChart:
           return this.mapToMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources);
         case ChartType.Pie:
@@ -283,7 +283,7 @@ export class DataService {
           return this.mapToSeriesItem(newData, chartToUpdate.dataSources);
       }
     } else {
-      if (chartToUpdate.chartType.type === ChartType.LineChart) {
+      if (chartToUpdate.type === ChartType.LineChart) {
         return this.mapToProcessMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources[0], chartToUpdate.mostLoaded);
       } else {
         return this.mapToProcessesSeriesItem(newData, chartToUpdate.dataSources[0], chartToUpdate.mostLoaded);

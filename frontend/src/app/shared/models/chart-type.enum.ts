@@ -9,10 +9,10 @@ export enum ChartType {
     ResourcesTable
 }
 
-export const chartTypes: ProperiesMap<string> = {};
-chartTypes[ChartType.BarVertical] = 'bar-vertical';
-chartTypes[ChartType.LineChart] = 'line-chart';
-chartTypes[ChartType.Pie] = 'pie';
-chartTypes[ChartType.Guage] = 'guage';
-chartTypes[ChartType.ResourcesTable] = 'resources-table';
-chartTypes[ChartType.NumberCards] = 'number-cards';
+export const chartTypeLabels: ProperiesMap<string> = {};
+chartTypeLabels[ChartType.BarVertical] = 'Bar Vertical';
+chartTypeLabels[ChartType.LineChart] = 'Line Chart';
+chartTypeLabels[ChartType.Pie] = 'Pie';
+chartTypeLabels[ChartType.Guage] = 'Guage';
+chartTypeLabels[ChartType.NumberCards] = 'Number Cards';
+chartTypeLabels[ChartType.ResourcesTable] = 'Resources Table';

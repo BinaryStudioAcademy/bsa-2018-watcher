@@ -3,14 +3,13 @@ import { EventEmitter } from '@angular/core';
 import {NgModel} from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { DashboardChart } from '../models/dashboard-chart';
-import { ChartType, chartTypes } from '../../shared/models/chart-type.enum';
+import { ChartType, chartTypeLabels } from '../../shared/models/chart-type.enum';
 import { DataProperty } from '../../shared/models/data-property.enum';
 import { CollectedDataService } from '../../core/services/collected-data.service';
 import { CollectedData } from '../../shared/models/collected-data.model';
 import { DataService } from '../../core/services/data.service';
 import { ChartService } from '../../core/services/chart.service';
 import { defaultOptions } from '../charts/models/chart-options';
-import {dashboardChartTypes} from '../charts/models/dashboardChartTypes';
 import { ChartRequest } from '../../shared/requests/chart-request.model';
 
 @Component({
@@ -108,11 +107,11 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         this.isIncluded.push(true);
         const dashboardChart = { ...defaultOptions };
         this.dashboardCharts.push(dashboardChart);
-        this.dashboardCharts[i].chartType = dashboardChartTypes[i];
-        this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
-        this.dashboardCharts[i].chartType.type = dashboardChartTypes[i].type;
-        this.dashboardCharts[i].chartType.title = dashboardChartTypes[i].title;
-        this.dashboardCharts[i].title = dashboardChartTypes[i].title;
+        // this.dashboardCharts[i].chartType = dashboardChartTypes[i];
+        // this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
+        // this.dashboardCharts[i].chartType.type = dashboardChartTypes[i].type;
+        // this.dashboardCharts[i].chartType.title = dashboardChartTypes[i].title;
+        // this.dashboardCharts[i].title = dashboardChartTypes[i].title;
         this.dashboardCharts[i].showXAxis = false;
         this.dashboardCharts[i].showYAxis = false;
         this.dashboardCharts[i].showLegend = false;
@@ -125,12 +124,12 @@ export class EditDashboardComponent implements OnInit, OnChanges {
 
   processData(dashboardChart: DashboardChart) {
     this.showPreview = false;
-    dashboardChart.data = this.dataService.prepareData(dashboardChart.chartType.type,
+    dashboardChart.data = this.dataService.prepareData(dashboardChart.type,
       this.sources, this.collectedDataForChart);
 
     dashboardChart.dataSources = this.sources;
 
-    switch (dashboardChart.chartType.type) {
+    switch (dashboardChart.type) {
       case ChartType.BarVertical:
         dashboardChart.xAxisLabel = 'Parameters';
         dashboardChart.yAxisLabel = 'Percentage %';
@@ -174,7 +173,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
       isTooltipDisabled: dashboardChart.tooltipDisabled,
       isShowSeriesOnHover: dashboardChart.showSeriesOnHover,
       title: dashboardChart.title,
-      type: dashboardChart.chartType.type,
+      type: dashboardChart.type,
       sources: this.sources.join(),
       isLightTheme: dashboardChart.theme === 'light',
     };

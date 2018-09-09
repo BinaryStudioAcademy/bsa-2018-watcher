@@ -102,10 +102,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
                   let tempData: CustomData[];
                   if (this.dashboardMenuItems[i].charts[j].showCommon) {
-                    tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
+                    tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].type,
                       this.dashboardMenuItems[i].charts[j].dataSources, data);
                   } else {
-                    tempData = this.dataService.prepareProcessData(this.dashboardMenuItems[i].charts[j].chartType.type,
+                    tempData = this.dataService.prepareProcessData(this.dashboardMenuItems[i].charts[j].type,
                       this.dashboardMenuItems[i].charts[j].dataSources[0], data, this.dashboardMenuItems[i].charts[j].mostLoaded);
                   }
                   this.dashboardMenuItems[i].charts[j].data = [...tempData];
@@ -160,7 +160,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // TODO: use this operation only for current dashboard and then on switching dashboard make data preparing on existing
       // collectedDataForChart to reduce amount of operations and time
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
-        if (this.activeDashboardItem.charts[i].chartType.type === ChartType.ResourcesTable) {
+        if (this.activeDashboardItem.charts[i].type === ChartType.ResourcesTable) {
           this.activeDashboardItem.charts[i].colectedData = latestData;
           continue;
         }
@@ -251,7 +251,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       isTooltipDisabled: dashboardChart.tooltipDisabled,
       isShowSeriesOnHover: dashboardChart.showSeriesOnHover,
       title: dashboardChart.title,
-      type: dashboardChart.chartType.type,
+      type: dashboardChart.type,
       sources: dashboardChart.dataSources.join(),
       isLightTheme: dashboardChart.theme === 'light',
     };
@@ -391,9 +391,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onChartEdited(chart?: DashboardChart) {
     if (chart.showCommon) {
-      chart.data = this.dataService.prepareData(chart.chartType.type, chart.dataSources, this.collectedDataForChart);
+      chart.data = this.dataService.prepareData(chart.type, chart.dataSources, this.collectedDataForChart);
     } else {
-      chart.data = this.dataService.prepareProcessData(chart.chartType.type,
+      chart.data = this.dataService.prepareProcessData(chart.type,
         chart.dataSources[0], this.collectedDataForChart, chart.mostLoaded);
     }
     const updateChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chart.id);
@@ -410,7 +410,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   decomposeChart(chart: DashboardChart): void {
     this.chartToEdit = {...chart};
     this.chartToEdit.colorScheme = {...chart.colorScheme};
-    this.chartToEdit.chartType = {...chart.chartType};
+    this.chartToEdit.type = chart.type;
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {

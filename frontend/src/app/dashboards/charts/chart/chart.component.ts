@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import * as SvgSaver from 'svgsaver';
-import {DashboardChartType, CustomData} from '../models';
+import {CustomData} from '../models';
 import {DashboardChart} from '../../models/dashboard-chart';
 import { ChartType } from '../../../shared/models/chart-type.enum';
 
@@ -17,7 +17,6 @@ export class ChartComponent implements OnInit {
   @Output() select: EventEmitter<{ chart: DashboardChart, value?: any }> = new EventEmitter();
 
   @Input() chart: DashboardChart;
-  @Input() chartType: DashboardChartType;
   @Input() data: CustomData[];
   @Input() showDownload = false;
 

@@ -1,11 +1,11 @@
 <app-resource-table
-  *ngIf="chartType.type === type.ResourcesTable"
+  *ngIf="chart.type === type.ResourcesTable"
   [sources]="chart.dataSources"
   [data]="chart.colectedData">
 </app-resource-table>
 
 <ngx-charts-line-chart
-  *ngIf="chartType.type === type.LineChart"
+  *ngIf="chart.type === type.LineChart"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -31,7 +31,7 @@
 </ngx-charts-line-chart>
 
 <ngx-charts-bar-vertical
-  *ngIf="chartType.type === type.BarVertical"
+  *ngIf="chart.type === type.BarVertical"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -54,7 +54,7 @@
 </ngx-charts-bar-vertical>
 
 <ngx-charts-bar-horizontal
-  *ngIf="chartType.name === 'bar-horizontal'"
+  *ngIf="chart.type === 'bar-horizontal'"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -77,7 +77,7 @@
 </ngx-charts-bar-horizontal>
 
 <ngx-charts-pie-chart
-  *ngIf="chartType.type === type.Pie"
+  *ngIf="chart.type === type.Pie"
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"
@@ -91,14 +91,14 @@
 </ngx-charts-pie-chart>
 
 <ngx-charts-pie-grid
-  *ngIf="chartType.name === 'pie-grid'"
+  *ngIf="chart.type === 'pie-grid'"
   [view]="chart.view"
   [scheme]="chart.colorScheme"
   [results]="data">
 </ngx-charts-pie-grid>
 
 <ngx-charts-gauge
-  *ngIf="chartType.type === type.Guage"
+  *ngIf="chart.type === type.Guage"
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"
@@ -108,13 +108,13 @@
 </ngx-charts-gauge>
 
 <ngx-charts-pie-grid
-  *ngIf="chartType.name === 'pie-grid'"
+  *ngIf="chart.type === 'pie-grid'"
   [scheme]="chart.colorScheme"
   [results]="data">
 </ngx-charts-pie-grid>
 
 <ngx-charts-tree-map
-  *ngIf="chartType.name === 'tree-map'"
+  *ngIf="chart.type === 'tree-map'"
   [scheme]="chart.colorScheme"
   [results]="data"
   [gradient]="chart.gradient"
@@ -122,13 +122,13 @@
 </ngx-charts-tree-map>
 
 <ngx-charts-number-card
-  *ngIf="chartType.type === type.NumberCards"
+  *ngIf="chart.type === type.NumberCards"
   [scheme]="chart.colorScheme"
   [results]="data">
 </ngx-charts-number-card>
 
 <ngx-charts-bar-vertical-2d
-  *ngIf="chartType.name === 'bar-vertical-2d'"
+  *ngIf="chart.type === 'bar-vertical-2d'"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -151,7 +151,7 @@
 </ngx-charts-bar-vertical-2d>
 
 <ngx-charts-bar-horizontal-2d
-  *ngIf="chartType.name === 'bar-horizontal-2d'"
+  *ngIf="chart.type === 'bar-horizontal-2d'"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -171,7 +171,7 @@
   [roundDomains]="chart.roundDomains">
 </ngx-charts-bar-horizontal-2d>
 <ngx-charts-bar-vertical-stacked
-  *ngIf="chartType.name === 'bar-vertical-stacked'"
+  *ngIf="chart.type === 'bar-vertical-stacked'"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -191,7 +191,7 @@
   [roundDomains]="chart.roundDomains">
 </ngx-charts-bar-vertical-stacked>
 <ngx-charts-bar-horizontal-stacked
-  *ngIf="chartType.name === 'bar-horizontal-stacked'"
+  *ngIf="chart.type === 'bar-horizontal-stacked'"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -210,7 +210,7 @@
   [roundDomains]="chart.roundDomains">
 </ngx-charts-bar-horizontal-stacked>
 <ngx-charts-bar-vertical-normalized
-  *ngIf="chartType.name === 'bar-vertical-normalized'"
+  *ngIf="chart.type === 'bar-vertical-normalized'"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -230,7 +230,7 @@
   [roundDomains]="chart.roundDomains">
 </ngx-charts-bar-vertical-normalized>
 <ngx-charts-bar-horizontal-normalized
-  *ngIf="chartType.name === 'bar-horizontal-normalized'"
+  *ngIf="chart.type === 'bar-horizontal-normalized'"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -250,7 +250,7 @@
   [roundDomains]="chart.roundDomains">
 </ngx-charts-bar-horizontal-normalized>
 <ngx-charts-polar-chart
-  *ngIf="chartType.name === 'polar-chart'"
+  *ngIf="chart.type === 'polar-chart'"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [schemeType]="chart.schemeType"
@@ -275,7 +275,7 @@
 </ngx-charts-polar-chart>
 
 <ngx-charts-heat-map
-  *ngIf="chartType.name === 'heat-map'"
+  *ngIf="chart.type === 'heat-map'"
   class="chart-container"
   [scheme]="chart.colorScheme"
   [results]="data"
