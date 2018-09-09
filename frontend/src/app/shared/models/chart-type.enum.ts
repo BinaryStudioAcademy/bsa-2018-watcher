@@ -1,12 +1,23 @@
 ﻿import {ProperiesMap} from './map';
 
 export enum ChartType {
-    BarVertical = 0,
-    LineChart,
-    Pie,
-    Guage,
-    NumberCards,
-    ResourcesTable
+  BarVertical = 0,
+  LineChart,
+  Pie,
+  Guage,
+  NumberCards,
+  ResourcesTable,
+  BarHorizontal,
+  PieGrid,
+  TreeMap,
+  BarVertical2d,
+  BarHorizontal2d,
+  BarVerticalStacked,
+  BarHorizontalStacked,
+  BarVerticalNormalized,
+  BarHorizontalNormalized,
+  PolarChart,
+  HeatMap,
 }
 
 export const chartTypeLabels: ProperiesMap<string> = {};
