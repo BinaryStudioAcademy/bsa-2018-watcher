@@ -126,14 +126,12 @@ namespace DataCollector
                     continue;
                 }
 
-                
-
                 var cols = row.Split(";");
                 if(cols.Length == 4)
                 {
                     processData.Add( new ProcessData
                     {
-                        RamMBytes = float.Parse(cols[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture),
+                        RamMBytes = float.Parse(cols[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024,
                         PRam = float.Parse(cols[1], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture),
                         PCpu = float.Parse(cols[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture),
                         Name = cols[3]
