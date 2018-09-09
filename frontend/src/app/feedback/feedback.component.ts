@@ -75,7 +75,9 @@ export class FeedbackComponent implements OnInit {
       informatively: informatively,
       friendliness: friendliness,
       quickness: quickness,
-      response: null
+      response: null,
+      name: this.user.displayName,
+      email: this.user.email
     };
 
     this.feedbackService.create(newFeedback).
