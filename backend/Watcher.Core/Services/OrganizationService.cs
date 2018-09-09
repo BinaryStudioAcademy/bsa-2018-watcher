@@ -80,6 +80,9 @@ namespace Watcher.Core.Services
             var entity = _mapper.Map<OrganizationRequest, Organization>(request);
             var result = false;
 
+            entity.ImageURL = await _fileStorageProvider.UploadFileFromStreamAsync(
+                "https://bsawatcherfiles.blob.core.windows.net/watcher/9580e672-01f4-4429-9d04-4f8d1984b25b.png");
+
             var CreatedEntity = await _uow.OrganizationRepository.CreateAsync(entity);
             result = await _uow.SaveAsync();
             if (result)
