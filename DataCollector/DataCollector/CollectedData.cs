@@ -26,6 +26,7 @@ namespace DataCollector
 
         public float UsageRamMBytes { get; set; }
         public float TotalRamMBytes { get; set; }
+        public float TotalVirtualRamMBytes { get; set; }
         public float RamUsagePercentage { get; set; }
 
 
@@ -62,6 +63,8 @@ namespace DataCollector
 
     public class ProcessData
     {
+
+        public int prcID { get; set; }
         public string Name { get; set; }
         public float RamMBytes { get; set; }
         public float PRam { get; set; }

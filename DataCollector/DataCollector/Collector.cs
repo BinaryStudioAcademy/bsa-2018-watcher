@@ -15,10 +15,11 @@ namespace DataCollector
         private static readonly Lazy<Collector> Value = new Lazy<Collector>(() => new Collector());
 
         private float totalRamMbyte;
+        private float totalVirtualRamMbyte;
 
         private Collector()
         {
-            totalRamMbyte = GetTotalRAM();
+           SetTotalRAM();
         }
 
         public static Collector Instance => Value.Value;
@@ -59,6 +60,7 @@ namespace DataCollector
                 dataItem = new CollectedData
                 {
                     TotalRamMBytes = totalRamMbyte,
+                    TotalVirtualRamMBytes = totalVirtualRamMbyte,
                     RamUsagePercentage = 100 - (freeRam / (totalRamMbyte / 100)),
                     UsageRamMBytes = totalRamMbyte - freeRam,
 
@@ -82,16 +84,17 @@ namespace DataCollector
             return dataItem;
         }
 
-        private float GetTotalRAM()
+        private float SetTotalRAM()
         {
             float totalRam = 1.0f;
             ManagementObjectSearcher ramMonitor =    //query to WMI
-            new ManagementObjectSearcher("SELECT TotalVisibleMemorySize,FreePhysicalMemory FROM Win32_OperatingSystem");
+            new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
 
             foreach (ManagementObject objram in ramMonitor.Get())
             {
-                totalRam = Convert.ToUInt64(objram["TotalVisibleMemorySize"]) / 1024;    // Total RAM
-                float busyRam = totalRam - Convert.ToUInt64(objram["FreePhysicalMemory"]);// Usage RAM
+                totalRamMbyte = Convert.ToUInt64(objram["TotalVisibleMemorySize"]) / 1024;    // Total RAM
+                float busyRam = totalRam - Convert.ToUInt64(objram["FreePhysicalMemory"]) /1024;// Usage RAM
+                totalVirtualRamMbyte = Convert.ToUInt64(objram["TotalVirtualMemorySize"]) / 1024;
             }
             return totalRam;
         }
@@ -100,36 +103,55 @@ namespace DataCollector
         private List<ProcessData> GetProcesses()
         {
             var result = new List<ProcessData>();
-           
-            foreach (Process process in Process.GetProcesses())
+
+            Process[] processes = Process.GetProcesses();
+
+            var counters = new List<PerformanceCounter>();
+
+
+            foreach (Process process in processes)
             {
                 if (process.ProcessName == "Idle") continue; // cpu > 350%
-                float pCpu;
-                using (PerformanceCounter counter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName))
-                {
-                    float tmp = counter.NextValue();
-                    pCpu = (float)(Math.Round((double)tmp, 1));
-                }
+
+                var counter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName);
+                counter.NextValue();
+                counters.Add(counter);
+            }
+
+            int i = 0;
+            Thread.Sleep(10000); // for counters get values
+
+
+            foreach (Process process in processes)
+            {
+                if (process.ProcessName == "Idle" ) continue; // cpu > 350%
+
+                counters[i].NextValue();
+                float tmp = counters[i].NextValue() / Environment.ProcessorCount ;
+                float pCpu = (float)Math.Round(tmp, 2);
+                counters[i].Dispose();
 
                 var name = process.ProcessName;
-                float ramMBytes = (float)Math.Round((double)process.WorkingSet64 / 1024 / 1024, 2);
+                process.Refresh();
+                float ramMBytes = (process.PrivateMemorySize64 / 1024) / 1024;
 
-
-                //var pCpu = (float)Math.Round(counter.NextValue() / Environment.ProcessorCount, 5);
+                
                 var pRam = (float)Math.Round((ramMBytes / totalRamMbyte) * 100, 2);
 
                 result.Add(new ProcessData
                 {
+                    prcID = process.Id,
                     Name = name,
                     RamMBytes = ramMBytes,
                     PCpu = pCpu,
                     PRam = pRam
                 });
+                ++i;
             }
            
-            result = GroupProcesses(result);
+             result = GroupProcesses(result);
 
-            return result; // DODO merge processes if Processes with the same name
+            return result;
         }
 
         private List<ProcessData> GroupProcesses(List<ProcessData> processes)
