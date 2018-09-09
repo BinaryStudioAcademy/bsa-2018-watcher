@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SelectItem, SelectItemGroup} from 'primeng/api';
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 
-import {CollectedDataService} from '../../../core/services/collected-data.service';
 import {DataService} from '../../../core/services/data.service';
 import {ChartService} from '../../../core/services/chart.service';
 import {ToastrService} from '../../../core/services/toastr.service';
@@ -13,6 +12,7 @@ import {ChartType, chartTypeLabels} from '../../../shared/models/chart-type.enum
 import {DataProperty, dataPropertyLables} from '../../../shared/models/data-property.enum';
 
 import {DashboardChart} from '../../models/dashboard-chart';
+
 
 @Component({
   selector: 'app-edit-chart',
@@ -30,7 +30,7 @@ export class EditChartComponent implements OnInit {
   @Input() dashboardId: number;
   @Input() dashboardChart: DashboardChart;
 
-  dropdownTypes: SelectItem[];
+  dropdownTypes: SelectItem[] = [];
   dropdownSources: SelectItem[];
   dropdownGroupSources: SelectItemGroup[];
 
@@ -55,8 +55,7 @@ export class EditChartComponent implements OnInit {
     return !!this.dashboardChart.dataSources.length;
   }
 
-  constructor(private collectedDataService: CollectedDataService,
-              private dataService: DataService,
+  constructor(private dataService: DataService,
               private chartService: ChartService,
               private toastrService: ToastrService) {
   }
@@ -64,14 +63,14 @@ export class EditChartComponent implements OnInit {
   ngOnInit() {
     this.onDisplay.subscribe((isShow: boolean) => this.visible = isShow);
     this.dashboardChart.showCommon = false;
-    this.dropdownTypes = [
-      {label: chartTypeLabels[ChartType.ResourcesTable], value: ChartType.ResourcesTable},
-      {label: chartTypeLabels[ChartType.LineChart], value: ChartType.LineChart},
-      {label: chartTypeLabels[ChartType.BarVertical], value: ChartType.BarVertical},
-      {label: chartTypeLabels[ChartType.Guage], value: ChartType.Guage},
-      {label: chartTypeLabels[ChartType.Pie], value: ChartType.Pie},
-      {label: chartTypeLabels[ChartType.NumberCards], value: ChartType.NumberCards}
-    ];
+
+    // Fill dropdawn with sources
+    Object.keys(ChartType).forEach(type => {
+      const number = Number(type);
+      if (!isNaN(number)) {
+        this.dropdownTypes.push({label: chartTypeLabels[number], value: number });
+      }
+    });
 
     this.resetBuilderForm();
   }

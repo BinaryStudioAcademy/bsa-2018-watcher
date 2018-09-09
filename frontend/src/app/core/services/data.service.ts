@@ -56,6 +56,17 @@ export class DataService {
     if (chart.showCommon) {
       switch (chart.type) {
         case ChartType.LineChart:
+        case ChartType.BarHorizontal2D:
+        case ChartType.BarHorizontalNormalized:
+        case ChartType.BarHorizontalStacked:
+        case ChartType.BarVertical2D:
+        case ChartType.BarVerticalNormalized:
+        case ChartType.BarVerticalStacked:
+        case ChartType.PolarChart:
+        case ChartType.AreaChart:
+        case ChartType.AreaChartNormalized:
+        case ChartType.AreaChartStacked:
+        case ChartType.HeatMap:
           const data = this.mapToMultiData(dataArr, chart.dataSources);
           if (data && data.length > 0) {
             for (let i = 0; i < data.length; i++) {
@@ -74,6 +85,17 @@ export class DataService {
     } else {
       switch (chart.type) {
         case ChartType.LineChart:
+        case ChartType.BarHorizontal2D:
+        case ChartType.BarHorizontalNormalized:
+        case ChartType.BarHorizontalStacked:
+        case ChartType.BarVertical2D:
+        case ChartType.BarVerticalNormalized:
+        case ChartType.BarVerticalStacked:
+        case ChartType.PolarChart:
+        case ChartType.AreaChart:
+        case ChartType.AreaChartNormalized:
+        case ChartType.AreaChartStacked:
+        case ChartType.HeatMap:
           const data = this.mapToProcessMultiData(dataArr, this.getFirstSource(chart.dataSources), chart.mostLoaded);
           for (let i = 0; i < data.length; i++) {
             data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
@@ -208,6 +230,17 @@ export class DataService {
     if (chartToUpdate.showCommon) {
       switch (chartToUpdate.type) {
         case ChartType.LineChart:
+        case ChartType.BarHorizontal2D:
+        case ChartType.BarHorizontalNormalized:
+        case ChartType.BarHorizontalStacked:
+        case ChartType.BarVertical2D:
+        case ChartType.BarVerticalNormalized:
+        case ChartType.BarVerticalStacked:
+        case ChartType.PolarChart:
+        case ChartType.AreaChart:
+        case ChartType.AreaChartNormalized:
+        case ChartType.AreaChartStacked:
+        case ChartType.HeatMap:
           chartData = this.mapToMultiDataOnUpdate(chartToUpdate.data, latestData, chartToUpdate.dataSources);
           break;
         case ChartType.Pie:
@@ -221,6 +254,17 @@ export class DataService {
       const source = this.getFirstSource(chartToUpdate.dataSources);
       switch (chartToUpdate.type) {
         case ChartType.LineChart:
+        case ChartType.BarHorizontal2D:
+        case ChartType.BarHorizontalNormalized:
+        case ChartType.BarHorizontalStacked:
+        case ChartType.BarVertical2D:
+        case ChartType.BarVerticalNormalized:
+        case ChartType.BarVerticalStacked:
+        case ChartType.PolarChart:
+        case ChartType.AreaChart:
+        case ChartType.AreaChartNormalized:
+        case ChartType.AreaChartStacked:
+        case ChartType.HeatMap:
           chartData = this.mapToProcessMultiDataOnUpdate(chartToUpdate.data, source, chartToUpdate.mostLoaded);
           break;
         case ChartType.Pie:
