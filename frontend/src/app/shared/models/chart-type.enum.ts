@@ -14,14 +14,14 @@ export enum ChartType {
     AdvancedPie,
     PieGrid,
     TreeMap,
+    HeatMap,
     BarHorizontal,
     BarVertical2D,
     BarHorizontal2D,
     BarVerticalStacked,
     BarHorizontalStacked,
     BarVerticalNormalized,
-    BarHorizontalNormalized,
-    HeatMap
+    BarHorizontalNormalized
 }
 
 export const chartTypeLabels: ProperiesMap<string> = {};
