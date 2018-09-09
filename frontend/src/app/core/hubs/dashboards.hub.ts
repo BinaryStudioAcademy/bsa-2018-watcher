@@ -103,6 +103,7 @@ export class DashboardsHub {
       .then(() => {
         console.log('DashboardHub connected');
         this.connectionEstablishedSub.next(true);
+        this.isConnect = true;
         // this.getSignalRClaims();
       })
       .catch(err => {

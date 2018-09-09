@@ -10,7 +10,6 @@ import { environment } from '../../../environments/environment';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { User } from '../../shared/models/user.model';
 import { UserOrganizationService } from '../../core/services/user-organization.service';
-import { OrganizationRole } from '../../shared/models/organization-role.model';
 
 @Component({
   selector: 'app-organization-profile',
@@ -72,6 +71,8 @@ export class OrganizationProfileComponent implements OnInit {
         this.imageUrl = this.user.lastPickedOrganization.imageURL;
         const role = await this.userOrganizationService.getOrganizationRole();
         this.editable = role.name === 'Manager' ? true : false;
+        console.log('EDITABLE');
+        console.log(this.editable);
       });
   }
 

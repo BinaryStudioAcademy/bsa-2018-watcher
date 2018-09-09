@@ -40,4 +40,5 @@ export interface DashboardChart {
   colectedData: CollectedData;
   type: ChartType;
   theme: string;
+  isIncluded: boolean;
 }
