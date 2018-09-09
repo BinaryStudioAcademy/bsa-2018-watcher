@@ -1,22 +1,22 @@
 <div class="ui-g filters">
-    <div class="ui-g-2 ui-fluid">
-        <p class="filter-label">Type:</p>
-        <p-dropdown [autoWidth]="false" [options]="types" [(ngModel)]="selectedType" (onChange)="changeType($event)"></p-dropdown>
-    </div>
-    <div class="ui-g-2 ui-fluid">
-        <p class="filter-label">From:</p>
-        <p-calendar #cf1 [(ngModel)]="dateFrom" [readonlyInput]="true"></p-calendar>
-    </div>
-    <div class="ui-g-2 ui-fluid">
-        <p class="filter-label">To:</p>
-        <p-calendar #cf2 [(ngModel)]="dateTo" [readonlyInput]="true"></p-calendar>
-    </div>
-    <div class="ui-g-2 ui-fluid bottom-flex">
-        <p-button label="Get info" [disabled]="!dateTo || !dateFrom" (click)="getInfo()"></p-button>
-    </div>
-    <div class="ui-g-2 ui-fluid bottom-flex">
-        <p-button label="Convert to PDF" [disabled]="!collectedData" (click)="convertPDF()"></p-button>
-    </div>
+  <div class="ui-g-2 ui-fluid">
+    <p class="filter-label">Type:</p>
+    <p-dropdown [autoWidth]="false" [options]="types" [(ngModel)]="selectedType" (onChange)="changeType($event)"></p-dropdown>
+  </div>
+  <div class="ui-g-2 ui-fluid">
+    <p class="filter-label">From:</p>
+    <p-calendar #cf1 [(ngModel)]="dateFrom" [readonlyInput]="true"></p-calendar>
+  </div>
+  <div class="ui-g-2 ui-fluid">
+    <p class="filter-label">To:</p>
+    <p-calendar #cf2 [(ngModel)]="dateTo" [readonlyInput]="true"></p-calendar>
+  </div>
+  <div class="ui-g-2 ui-fluid bottom-flex">
+    <p-button label="Get info" [disabled]="!dateTo || !dateFrom" (click)="getInfo()"></p-button>
+  </div>
+  <div class="ui-g-2 ui-fluid bottom-flex">
+    <p-button label="Convert to PDF" [disabled]="!collectedData" (click)="convertPDF()"></p-button>
+  </div>
 </div>
 
 <div *ngIf="collectedData" class="paginator">
@@ -25,47 +25,87 @@
 
 <div *ngFor="let collected of collectedData" class="table">
     <p-table #dt [columns]="cols" [value]="collected.processes">
-        <ng-template pTemplate="caption">
-            <div class="ui-helper-clearfix left-flex">
-                <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Export to CSV" (click)="dt.exportCSV()"></button>
-            </div>
-        </ng-template>
-        <ng-template pTemplate="header" let-columns>
-            <tr class="row-header">
-                <th class="left-align name-header t-header" [pSortableColumn]="columns[0].field">
-                    Name
-                </th>
-                <th class="data-header t-header" [pSortableColumn]="columns[1].field">
-                    CPU, %
-                    <p-sortIcon [field]="columns[1].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
-                                                                                        ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-                </th>
-                <th class="data-header t-header" [pSortableColumn]="columns[2].field">
-                    RAM, %
-                    <p-sortIcon [field]="columns[2].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
-                                                                                        ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-                </th>
-                <th class="data-header t-header" [pSortableColumn]="columns[3].field">
-                    RAM, MB
-                    <p-sortIcon [field]="columns[3].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
-                                                                                        ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr [pSelectableRow]="rowData" class="row-content">
-                <td *ngFor="let col of columns" class="text-center">
-                    {{rowData[col.field]}}
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="summary">
-            <div class="time">
-                <span class="time-label">Time:</span>
-                <span class="time-value">{{collected.time | date: 'dd/MM/yyyy HH:mm'}}</span>
-                <!-- <p-calendar #ct id="ct" [(ngModel)]="collected.time" dateFormat="dd/mm/yy" [showTime]="true" [disabled]="true"></p-calendar> -->
-            </div>
-        </ng-template>
+      <ng-template pTemplate="caption">
+        <div class="ui-helper-clearfix left-flex">
+          <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Export to CSV" (click)="dt.exportCSV()"></button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr class="row-header">
+          <th class="text-center name-header t-header" [pSortableColumn]="columns[0].field" rowspan="2">
+            Name
+          </th>
+          <th class="data-header t-header" colspan="3">
+            CPU
+          </th>
+          <th class="data-header t-header" colspan="3">
+            RAM
+          </th>
+          <th class="data-header t-header" colspan="3">
+            RAM
+          </th>
+        </tr>
+        <tr class="row-header">
+          <th class="data-header t-header" [pSortableColumn]="columns[1].field">
+            AVER
+            <p-sortIcon [field]="columns[1].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+          <th class="data-header t-header" [pSortableColumn]="columns[2].field">
+            MAX
+            <p-sortIcon [field]="columns[2].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+          <th class="data-header t-header" [pSortableColumn]="columns[3].field">
+            MIN
+            <p-sortIcon [field]="columns[3].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+          <th class="data-header t-header" [pSortableColumn]="columns[4].field">
+            AVER
+            <p-sortIcon [field]="columns[4].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+          <th class="data-header t-header" [pSortableColumn]="columns[5].field">
+            MAX
+            <p-sortIcon [field]="columns[5].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+          <th class="data-header t-header" [pSortableColumn]="columns[6].field">
+            MIN
+            <p-sortIcon [field]="columns[6].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+          <th class="data-header t-header" [pSortableColumn]="columns[7].field">
+            AVER
+            <p-sortIcon [field]="columns[7].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+          <th class="data-header t-header" [pSortableColumn]="columns[8].field">
+            MAX
+            <p-sortIcon [field]="columns[8].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+          <th class="data-header t-header" [pSortableColumn]="columns[9].field">
+            MIN
+            <p-sortIcon [field]="columns[9].field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData" class="row-content">
+          <td *ngFor="let col of columns" class="text-center">
+            {{rowData[col.field]}}
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="time">
+          <span class="time-label">Time:</span>
+          <span class="time-value">{{collected.time | date: 'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+      </ng-template>
     </p-table>
 </div>
 
