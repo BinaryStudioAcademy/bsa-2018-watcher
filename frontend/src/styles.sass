@@ -1,4 +1,4 @@
-@import 'theme.sass'
+@import 'app/themes/theme.sass'
   
 body
 
@@ -77,9 +77,9 @@ body
     border: $headerButtonBorder
     color: $headerButtonColor !important
   .ui-button:active:hover, .ui-button:enabled:hover, .ui-button:enabled:active, .ui-button:enabled:focus
-    background-color: $headerButtonColor !important
-    color: $headerButtonBackgroundColor !important
-    border-color: $headerButtonColor !important
+    background-color: $headerActiveButtonBackgroundColor !important
+    color: $headerActiveButtonColor !important
+    border-color: $headerActiveButtonBackgroundColor !important
   .ui-button-icon-only
     font-size: $headerIconButtonFontSize !important
 
