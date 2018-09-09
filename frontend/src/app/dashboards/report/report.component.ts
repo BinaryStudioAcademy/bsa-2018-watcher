@@ -145,7 +145,7 @@ export class ReportComponent implements OnInit {
   }
 
   paginate(event) {
-    this.getCollectedData(this.createRequest(), event.page, this.recordsPerPage).subscribe((data: CollectedData[]) => {
+    this.getCollectedData(this.createRequest(), event.page + 1, this.recordsPerPage).subscribe((data: CollectedData[]) => {
       data.forEach(item => {
         item.time = new Date(item.time);
         item.processes.forEach(p => {
