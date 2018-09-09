@@ -1,16 +1,29 @@
 ﻿import {ProperiesMap} from './map';
 
-
 export enum ChartType {
-    BarVertical = 0,
-    LineChart,
-    Pie,
-    Guage
+  BarVertical = 0,
+  LineChart,
+  Pie,
+  Guage,
+  NumberCards,
+  ResourcesTable,
+  BarHorizontal,
+  PieGrid,
+  TreeMap,
+  BarVertical2d,
+  BarHorizontal2d,
+  BarVerticalStacked,
+  BarHorizontalStacked,
+  BarVerticalNormalized,
+  BarHorizontalNormalized,
+  PolarChart,
+  HeatMap,
 }
 
-export const chartTypes: ProperiesMap<string> = {};
-chartTypes[ChartType.BarVertical] = 'bar-vertical';
-chartTypes[ChartType.LineChart] = 'line-chart';
-chartTypes[ChartType.Pie] = 'pie';
-chartTypes[ChartType.Guage] = 'guage';
-
+export const chartTypeLabels: ProperiesMap<string> = {};
+chartTypeLabels[ChartType.BarVertical] = 'Bar Vertical';
+chartTypeLabels[ChartType.LineChart] = 'Line Chart';
+chartTypeLabels[ChartType.Pie] = 'Pie';
+chartTypeLabels[ChartType.Guage] = 'Guage';
+chartTypeLabels[ChartType.NumberCards] = 'Number Cards';
+chartTypeLabels[ChartType.ResourcesTable] = 'Resources Table';

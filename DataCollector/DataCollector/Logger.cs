@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json;
 
 namespace DataCollector
 {
@@ -20,7 +21,7 @@ namespace DataCollector
             _uri = uri;
         }
 
-        public async Task Log(string message, LogLevel logLevel = LogLevel.Info)
+        public Task Log(string message, LogLevel logLevel = LogLevel.Info)
         {
             var actionLog = new ActionLog(message, DateTime.Now, logLevel);
 
@@ -32,7 +33,7 @@ namespace DataCollector
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            await _client.PostAsync(_uri, byteContent);
+            return _client.PostAsync(_uri, byteContent);
         }
     }
 }
