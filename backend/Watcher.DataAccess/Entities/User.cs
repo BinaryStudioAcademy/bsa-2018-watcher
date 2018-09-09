@@ -43,7 +43,10 @@
         
         public int? LastPickedOrganizationId { get; set; }
         public Organization LastPickedOrganization { get; set; }
-        
+
+        public int? ThemeId { get; set; }
+        public Theme Theme { get; set; }
+
         public IList<NotificationSetting> NotificationSettings { get; set; }
 
         public IList<UserOrganization> UserOrganizations { get; set; }

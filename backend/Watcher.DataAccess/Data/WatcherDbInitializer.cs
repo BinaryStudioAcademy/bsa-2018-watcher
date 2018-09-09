@@ -32,6 +32,11 @@
                 new OrganizationRole {Id = 2, Name = "Member", IsDeleted = false}
             };
 
+            var themes = new Theme[] {
+                new Theme { Id = 1, Name="Default", BodyColor = "#F8FAFC !global", ThemePrimaryColor = "none", ThemeSecondaryColor = "none", ControlsHeight = "33px", ButtonFontSize = "14px !global", IsDeleted = false },
+                new Theme { Id = 2, Name="Pink", BodyColor = "#F8FAFC !global", ThemePrimaryColor = "#ff5a5f", ThemeSecondaryColor = "#ffffff", ControlsHeight = "38px", ButtonFontSize = "16px !global", IsDeleted = false }
+            };
+
             var userFaker = new Faker<User>()
                 .RuleFor(o => o.Id, f => Guid.NewGuid().ToString())
                 .RuleFor(o => o.FirstName, f => f.Name.FirstName())
@@ -42,6 +47,7 @@
                 .RuleFor(o => o.IsActive, true)
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
                 .RuleFor(o => o.RoleId, f => f.PickRandom(roles).Id)
+                .RuleFor(o => o.ThemeId, f => f.PickRandom(themes).Id )
                 .RuleFor(o => o.IsDeleted, false);
 
             var users = userFaker.Generate(amount).ToArray();
@@ -95,15 +101,6 @@
                 .RuleFor(o => o.IsDeleted, false);
 
             var responces = responceFaker.Generate(amount).ToArray();
-
-            var themeFaker = new Faker<Theme>()
-                .RuleFor(o => o.Id, f => f.UniqueIndex)
-                .RuleFor(o => o.Name, f => f.PickRandom("Theme" + f.Random.Number(999)))
-                .RuleFor(o => o.BackgroundColor, f => f.PickRandom("White", "Gray", "Yellow"))
-                .RuleFor(o => o.FontFamily, f => f.PickRandom("Helvetica", "Univers", "Frutiger", "Trade"))
-                .RuleFor(o => o.IsDeleted, false);
-
-            var themes = themeFaker.Generate(amount).ToArray();
 
             var organizationFaker = new Faker<Organization>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
