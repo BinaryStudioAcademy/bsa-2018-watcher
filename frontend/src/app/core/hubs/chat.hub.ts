@@ -45,6 +45,7 @@ export class ChatHub {
                 .start()
                 .then(() => {
                     console.log('ChatHub connected');
+                    this.isConnect = true;
                     this.registerOnEvents();
                 })
                 .catch(err => {

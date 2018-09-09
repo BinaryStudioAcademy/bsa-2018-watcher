@@ -36,7 +36,7 @@ namespace DataCollector
 
         public CollectedData Collect()
         {
-            CollectedData dataItem = new CollectedData();
+            CollectedData dataItem = null;
             try
             {
                 var allProcesses = GetProcesses();
@@ -64,7 +64,6 @@ namespace DataCollector
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                Thread.Sleep(5000);
             }
             return dataItem;
         }
@@ -149,7 +148,6 @@ namespace DataCollector
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    Thread.Sleep(5000);
                 }
             }
             result = GroupProcesses(result);

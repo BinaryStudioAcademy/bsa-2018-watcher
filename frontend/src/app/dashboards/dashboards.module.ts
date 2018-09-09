@@ -20,6 +20,7 @@ import {
   InputTextModule} from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
+import { PaginatorModule } from 'primeng/paginator';
 import { EditDashboardComponent } from './editDashboard/editDashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
@@ -77,7 +78,8 @@ import { ReportComponent } from './report/report.component';
     CalendarModule,
     ScrollPanelModule,
     TooltipModule,
-    TableModule
+    TableModule,
+    PaginatorModule
   ],
   declarations: [
     DashboardComponent,
