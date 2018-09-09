@@ -19,8 +19,7 @@
     </div>
 </div>
 
-<div #pdfContainner>
-    <div *ngFor="let collected of collectedData" class="table">
+<div *ngFor="let collected of collectedData" class="table">
     <p-table #dt [columns]="cols" [value]="collected.processes">
         <ng-template pTemplate="caption">
             <div class="ui-helper-clearfix left-flex">
@@ -64,5 +63,8 @@
             </div>
         </ng-template>
     </p-table>
-    </div>
+</div>
+
+<div *ngIf="collectedData" class="paginator">
+    <p-paginator [rows]="recordsPerPage" [totalRecords]="totalRecords"></p-paginator>
 </div>

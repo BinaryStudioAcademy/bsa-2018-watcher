@@ -123,6 +123,23 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
+        public async Task<long> GetCountOfEntities(Guid id, CollectedDataType collectedDataType,
+            DateTime timeFrom, DateTime timeTo)
+        {
+            try
+            {
+                var query = _context.Datasets
+                    .Find(d => d.ClientId == id && d.CollectedDataType == collectedDataType && d.Time >= timeFrom && d.Time <= timeTo);
+
+                return await query.CountAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public async Task AddEntity(CollectedData collectedData)
         {
             try
