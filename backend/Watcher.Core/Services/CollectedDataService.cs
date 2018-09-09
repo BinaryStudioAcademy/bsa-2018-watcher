@@ -66,6 +66,18 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<List<CollectedDataDto>> GetCollectedDataByInstanceId(Guid id, CollectedDataType dataType)
+        {
+            var entities = await _repository.GetCollectedDataByInstanceIdAsync(id, dataType);
+
+            if (entities == null)
+            {
+                return null;
+            }
+            var dtos = _mapper.Map<IEnumerable<CollectedData>, List<CollectedDataDto>>(entities);
+            return dtos;
+        }
+
         public async Task<ProcessesCpuInfo> GetInstanceProcessCpuInfo(Guid id)
         {
             var entity = await _repository.GetEntityByInstanceIdAsync(id);

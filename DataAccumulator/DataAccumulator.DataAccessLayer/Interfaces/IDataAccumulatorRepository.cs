@@ -5,6 +5,8 @@ using DataAccumulator.DataAccessLayer.Entities;
 
 namespace DataAccumulator.DataAccessLayer.Interfaces
 {
+    using DataAccumulator.Shared.Models;
+
     using MongoDB.Bson;
 
     public interface IDataAccumulatorRepository<TEntity> where TEntity : IEntity
@@ -46,5 +48,7 @@ namespace DataAccumulator.DataAccessLayer.Interfaces
         Task<bool> EntityExistsAsync(Guid id);
 
         Task<List<CollectedData>> GetPercentageInfoByInstanceIdAsync(Guid id, int count);
+
+        Task<List<CollectedData>> GetCollectedDataByInstanceIdAsync(Guid instanceId, CollectedDataType dataType);
     }
 }

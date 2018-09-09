@@ -1,5 +1,4 @@
-﻿
-import { ChartType } from './chart-type.enum';
+﻿import { ChartType } from './chart-type.enum';
 import { ColorScheme } from './color-scheme.model';
 
 export interface Chart  {
@@ -30,6 +29,3 @@ export interface Chart  {
    isLightTheme: boolean;
    scheme: ColorScheme;
 }
-
-
-
