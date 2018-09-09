@@ -99,7 +99,8 @@ namespace DataAccumulator.WebAPI.TasksScheduler
             ITrigger jobTrigger = TriggerBuilder.Create()
                 .WithIdentity(name + "Trigger", group)
                 .StartNow() // Start now
-                .WithSchedule(CronScheduleBuilder.CronSchedule("0 0 0/1 * * ?")) // With repetition every hour
+                .WithSimpleSchedule(t => t.WithIntervalInMinutes(3).RepeatForever())
+                //.WithSchedule(CronScheduleBuilder.CronSchedule("0 0 0/1 * * ?")) // With repetition every hour
                 .Build();
 
             // Attach job

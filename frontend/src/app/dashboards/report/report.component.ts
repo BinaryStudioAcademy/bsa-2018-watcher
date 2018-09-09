@@ -41,8 +41,14 @@ export class ReportComponent implements OnInit {
     this.cols = [
       { field: 'name', header: 'Name' },
       { field: 'pCpu', header: 'CPU,%' },
+      { field: 'pCpuMax', header: 'Max,%' },
+      { field: 'pCpuMin', header: 'Min,%' },
       { field: 'pRam', header: 'RAM, %' },
-      { field: 'ramMBytes', header: 'RAM, Mb' }
+      { field: 'pRamMax', header: 'Max, %' },
+      { field: 'pRmaMin', header: 'Min, %' },
+      { field: 'ramMBytes', header: 'RAM, Mb' },
+      { field: 'ramMBytesMax', header: 'Max, Mb' },
+      { field: 'ramMBytesMin', header: 'Min, Mb' }
     ];
 
     this.types = [
@@ -113,8 +119,16 @@ export class ReportComponent implements OnInit {
           item.time = new Date(item.time);
           item.processes.forEach(p => {
             p.pCpu = +p.pCpu.toFixed(2);
+            p.pCpuMax = +p.pCpu.toFixed(2);
+            p.pCpuMin = +p.pCpuMin.toFixed(2);
+
             p.pRam = +p.pRam.toFixed(2);
+            p.pRamMax = +p.pRamMax.toFixed(2);
+            p.pRmaMin = +p.pRmaMin.toFixed(2);
+
             p.ramMBytes = +p.ramMBytes.toFixed(2);
+            p.ramMBytesMax = +p.ramMBytesMax.toFixed(2);
+            p.ramMBytesMin = +p.ramMBytesMin.toFixed(2);
           });
 
           item.processes.sort((item1, item2) => {
@@ -122,6 +136,7 @@ export class ReportComponent implements OnInit {
           });
         });
         this.collectedData = data;
+        console.log(this.collectedData);
       });
     }
 
@@ -141,7 +156,18 @@ export class ReportComponent implements OnInit {
     this.collectedData.forEach(item => {
       const rows = [];
 
-      item.processes.forEach(p => rows.push([p.name, p.pCpu.toString(), p.pRam.toString(), p.ramMBytes.toString()]));
+      item.processes.forEach(p => rows.push(
+        [p.name,
+         p.pCpu.toString(),
+         p.pCpuMax.toString(),
+         p.pCpuMin.toString(),
+         p.pRam.toString(),
+         p.pRamMax.toString(),
+         p.pRmaMin.toString(),
+         p.ramMBytes.toString(),
+         p.ramMBytesMax.toString(),
+         p.ramMBytesMin.toString(),
+        ]));
 
       tables.push({
         cols: cols,

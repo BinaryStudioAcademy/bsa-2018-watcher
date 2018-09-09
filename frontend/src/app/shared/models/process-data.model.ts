@@ -7,7 +7,7 @@ export interface ProcessData {
 
     pRam: number;
     pRamMax?: number;
-    pRamMin?: number;
+    pRmaMin?: number;
 
     ramMBytes: number;
     ramMBytesMax?: number;
