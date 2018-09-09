@@ -22,7 +22,7 @@
     <ng-template pTemplate="body" let-process let-columns="columns">
       <tr [pSelectableRow]="process">
         <td *ngFor="let col of columns" class="ui-resizable-column" [style.backgroundColor]="getColor(process, col)">
-          {{getValueFor(process, col)}}
+          {{getValue(process, col)}}
         </td>
       </tr>
     </ng-template>

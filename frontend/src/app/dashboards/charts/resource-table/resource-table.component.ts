@@ -36,31 +36,7 @@ export class ResourceTableComponent {
     }
   }
 
-  getColor(process: ProcessData, col: DataProperty) {
-    switch (col) {
-      case DataProperty.ramMBytes:
-        const percent = (process[DataProperty[col]] / this.data.totalRamMBytes) * 100;
-        return this.calculateColor(percent);
-      case DataProperty.pCpu:
-      case DataProperty.pRam:
-      const value = process[DataProperty[col]];
-        return this.calculateColor(value);
-    }
-  }
-
-  calculateColor(percent: number) {
-    return 'rgba(' + [255, 255 - percent * 3, 255 - percent * 18, 0.6].join(',') + ')';
-  }
-
-  getValue(value) {
-    const result = isNaN(value);
-    if (result) {
-      return value;
-    }
-    return Math.round(value * 100) / 100;
-  }
-
-  getValueFor(process: ProcessData, col: DataProperty) {
+  getValue(process: ProcessData, col: DataProperty) {
     const value = process[DataProperty[col]];
     const result = isNaN(value);
     if (result) {
@@ -76,5 +52,21 @@ export class ResourceTableComponent {
       default:
         return Math.round(value * 100) / 100;
     }
+  }
+
+  getColor(process: ProcessData, col: DataProperty) {
+    switch (col) {
+      case DataProperty.ramMBytes:
+        const percent = (process[DataProperty[col]] / this.data.totalRamMBytes) * 100;
+        return this.calculateColor(percent);
+      case DataProperty.pCpu:
+      case DataProperty.pRam:
+      const value = process[DataProperty[col]];
+        return this.calculateColor(value);
+    }
+  }
+
+  calculateColor(percent: number) {
+    return 'rgba(' + [255, 255 - percent * 7, 255 - percent * 18, 0.6].join(',') + ')';
   }
 }
