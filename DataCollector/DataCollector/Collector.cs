@@ -102,7 +102,7 @@ namespace DataCollector
 
         private async Task<List<ProcessData>> GetProcesses()
         {
-            var processes = Process.GetProcesses();
+            var processes = Process.GetProcesses().Where(item => item.ProcessName != "Idle").ToArray();
             var result = new List<ProcessData>(processes.Length);
             var ListCPU = new Dictionary<int, float>(processes.Length);
 
@@ -123,14 +123,14 @@ namespace DataCollector
             await Task.Delay(1000);
             // Thread.Sleep(1000);
 
-            foreach (var item in processes.Where(item => item.ProcessName != "Idle"))
+            foreach (var item in processes)
             {
                 if (!_processCpuCounters.TryGetValue(item.Id, out var counter)) continue;
                 ListCPU.Add(item.Id, (float)Math.Round(counter.NextValue() / Environment.ProcessorCount, 2));
                 counter.Dispose();
             }
 
-            foreach (var item in processes.Where(item => item.ProcessName != "Idle"))
+            foreach (var item in processes)
             {
                 try
                 {
