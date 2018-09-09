@@ -45,7 +45,7 @@ export class ReportComponent implements OnInit {
       { field: 'pCpuMin', header: 'Min,%' },
       { field: 'pRam', header: 'RAM, %' },
       { field: 'pRamMax', header: 'Max, %' },
-      { field: 'pRmaMin', header: 'Min, %' },
+      { field: 'pRamMin', header: 'Min, %' },
       { field: 'ramMBytes', header: 'RAM, Mb' },
       { field: 'ramMBytesMax', header: 'Max, Mb' },
       { field: 'ramMBytesMin', header: 'Min, Mb' }
@@ -119,7 +119,7 @@ export class ReportComponent implements OnInit {
           item.time = new Date(item.time);
           item.processes.forEach(p => {
             p.pCpu = +p.pCpu.toFixed(2);
-            p.pCpuMax = +p.pCpu.toFixed(2);
+            p.pCpuMax = +p.pCpuMax.toFixed(2);
             p.pCpuMin = +p.pCpuMin.toFixed(2);
 
             p.pRam = +p.pRam.toFixed(2);
