@@ -21,5 +21,7 @@ namespace Watcher.Core.Interfaces
         Task<List<PercentageInfo>> GetInstancePercentageInfo(Guid id, int count);
 
         Task<List<CollectedDataDto>> GetCollectedDataByInstanceId(Guid id, int count);
+
+        Task<List<CollectedDataDto>> GetCollectedDataByInstanceId(Guid id, CollectedDataType dataType);
     }
 }

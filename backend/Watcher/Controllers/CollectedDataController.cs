@@ -93,9 +93,9 @@
 
         [HttpGet("Data/{id}")]
         [AllowAnonymous]
-        public virtual async Task<ActionResult<PercentageInfo>> GetCollectedDataByInstanceId([FromRoute] Guid id, [FromQuery] int count)
+        public virtual async Task<ActionResult<CollectedDataDto>> GetCollectedDataByInstanceId([FromRoute] Guid id, [FromQuery] CollectedDataType dataType)
         {
-            var dtos = await _collectedDataService.GetCollectedDataByInstanceId(id, count);
+            var dtos = await _collectedDataService.GetCollectedDataByInstanceId(id, dataType);
             if (dtos == null)
             {
                 return NoContent();
@@ -103,6 +103,19 @@
 
             return Ok(dtos);
         }
+
+        //[HttpGet("Data/{id}")]
+        //[AllowAnonymous]
+        //public virtual async Task<ActionResult<CollectedDataDto>> GetCollectedDataByInstanceId([FromRoute] Guid id, [FromQuery] int count)
+        //{
+        //    var dtos = await _collectedDataService.GetCollectedDataByInstanceId(id, count);
+        //    if (dtos == null)
+        //    {
+        //        return NoContent();
+        //    }
+
+        //    return Ok(dtos);
+        //}
 
         [HttpGet("Percentage/{id}")]
         [AllowAnonymous]

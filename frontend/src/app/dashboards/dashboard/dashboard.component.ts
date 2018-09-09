@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {MenuItem} from 'primeng/api';
@@ -21,6 +21,7 @@ import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
 import {UserOrganizationService} from '../../core/services/user-organization.service';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
+import {CollectedDataType} from '../../shared/models/collected-data-type.enum';
 
 
 @Component({
@@ -90,7 +91,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.getDashboardsByInstanceId(this.instanceId).then(value => {
         this.onDashboards(value);
         this.isLoading = false;
-        this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId)
+        this.collectedDataService.getRecentCollectedDataByInstanceId(this.instanceGuidId, CollectedDataType.Accumulation)
           .subscribe(data => {
             this.dataService.hourlyCollectedData = data;
             if (data && data.length > 0) {
@@ -98,15 +99,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
               for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
                 for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
                   this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.dashboardMenuItems[i].charts[j]);
-                  // let tempData: CustomData[];
-                  // if (this.dashboardMenuItems[i].charts[j].showCommon) {
-                  //   tempData = this.dataService.prepareData(this.dashboardMenuItems[i].charts[j].chartType.type,
-                  //     this.dashboardMenuItems[i].charts[j].dataSources, data);
-                  // } else {
-                  //   tempData = this.dataService.prepareProcessData(this.dashboardMenuItems[i].charts[j].chartType.type,
-                  //     this.dashboardMenuItems[i].charts[j].dataSources[0], data, this.dashboardMenuItems[i].charts[j].mostLoaded);
-                  // }
-                  // this.dashboardMenuItems[i].charts[j].data = [...tempData];
                 }
               }
             }
@@ -153,6 +145,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   subscribeToCollectedData(): void {
     this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
+      debugger;
       this.dataService.pushLatestCollectedData(latestData);
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         this.dataService.updateChartWithLatestData(this.activeDashboardItem.charts[i]);
