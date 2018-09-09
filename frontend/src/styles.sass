@@ -54,29 +54,54 @@ a
 body
   background-color: $bodyColor
 
-.header
-  background-color: $headerColor
-  .ui-button
-        background-color: $headerButtonBackgroundColor
-        border: $headerButtonBorder
-        color: $headerButtonColor
-
 .logo
   color: $logoColor
+.logo:hover
+  color: $logoActiveColor
 
 .ui-panelmenu
   .ui-panelmenu-header.ui-state-active > a
-    background-color: $panelmenuStateActiveColor
-    border: $panelmenuStateActiveBorder
+    background-color: $panelmenuStateActiveColor !important
+    border: $panelmenuStateActiveBorder !important
 
 .ui-button
-  font-size: $buttonFontSize
+  background-color: $buttonColor !important
+  border-color: $buttonColor !important
+  font-size: $buttonFontSize !important
   height: $buttonHeight
 
-input
-  height: $inputHeight
+.header
+  background-color: $headerColor
+  .ui-button
+    background-color: $headerButtonBackgroundColor
+    border: $headerButtonBorder
+    color: $headerButtonColor !important
+  .ui-button:active:hover, .ui-button:enabled:hover, .ui-button:enabled:active, .ui-button:enabled:focus
+    background-color: $headerButtonColor !important
+    color: $headerButtonBackgroundColor !important
+    border-color: $headerButtonColor !important
+  .ui-button-icon-only
+    font-size: $headerIconButtonFontSize !important
 
-app-instance-list
+input
+  height: $inputHeight !important
+
+p-panelMenu
   div.menu
     background-color: $leftSideMenuColor
-    border-right: $leftSideMenuBorderRight
+    
+    
+
+
+.ui-tabmenuitem.ui-state-active
+  background-color: $dashboardTabMenuItemColor !important
+  border-color: $dashboardTabMenuItemColor !important
+  color: $dashboardTabMenuItemTextColor
+
+#lastTab
+    /deep/ .ui-menuitem-text
+      color: $dashboardLastTabMenuItemTextColor
+    /deep/ .ui-menuitem-icon
+      color: $dashboardLastTabMenuItemTextColor
+
+.send-button
