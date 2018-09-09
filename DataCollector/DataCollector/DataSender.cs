@@ -21,6 +21,7 @@ namespace DataCollector
 
         public async Task<bool> SendAsync(CollectedData dataItem)
         {
+            TestData(dataItem);
             var myContent = JsonConvert.SerializeObject(dataItem);
 
             var buffer = Encoding.UTF8.GetBytes(myContent);
@@ -32,6 +33,20 @@ namespace DataCollector
             if (response.StatusCode == HttpStatusCode.Created)
                 return true;
             return false;
+        }
+
+        private void TestData(CollectedData date)
+        {
+            float cpu = 0;
+            float ram = 0;
+            float pram = 0;
+            foreach(var item in date.Processes)
+            {
+                 cpu += item.PCpu;
+                 ram += item.RamMBytes;
+                 pram += item.PRam;
+            }
+            System.Console.WriteLine($"cpu:{cpu} \t ram:{ram} \t pram:{pram}");
         }
     }
 }

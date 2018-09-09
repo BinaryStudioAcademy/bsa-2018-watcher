@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Timers;
 using System.Management;
 using System.Linq;
+using System.Threading;
 
 namespace DataCollector
 {
@@ -12,34 +11,32 @@ namespace DataCollector
     public class Collector
     {
         private static readonly Lazy<Collector> Value = new Lazy<Collector>(() => new Collector());
-        private readonly Dictionary<string, PerformanceCounter> _processCpuCounters;
-        private readonly Dictionary<string, PerformanceCounter> _processRamCounters;
+        private readonly Dictionary<int, PerformanceCounter> _processCpuCounters;
         private readonly Dictionary<string, PerformanceCounter> _systemCounters;
 
         private Collector()
         {
-            _processCpuCounters = new Dictionary<string, PerformanceCounter>();
-            _processRamCounters = new Dictionary<string, PerformanceCounter>();
+            _processCpuCounters = new Dictionary<int, PerformanceCounter>();
             _systemCounters = new Dictionary<string, PerformanceCounter>
             {
                 { "FreeRam", new PerformanceCounter("Memory", "Available MBytes") },
                 { "Interrupts", new PerformanceCounter("Processor", "Interrupts/sec", "_Total") },
-                { "DiskFreeMb", new PerformanceCounter("LogicalDisk", "Free Megabytes", "_Total") },
+                { "DiskFreeMb", new PerformanceCounter("LogicalDisk", "Free Megabytes", "C:") },
                 { "CPU", new PerformanceCounter("Processor Information", "% Processor Time", "_Total") },
                 { "RAM", new PerformanceCounter("Memory", "% Committed Bytes In Use") },
                 { "InterruptsTime", new PerformanceCounter("Processor", "Interrupts/sec", "_Total") },
-                { "LocalDisk", new PerformanceCounter("LogicalDisk", "% Free Space", "_Total") }
+                { "LocalDisk", new PerformanceCounter("LogicalDisk", "% Free Space", "C:") }
             };
+            _systemCounters["CPU"].NextValue();
+            Thread.Sleep(1000);
         }
-
-       
 
         public static Collector Instance => Value.Value;
 
 
         public CollectedData Collect()
         {
-            CollectedData dataItem = new CollectedData();
+            CollectedData dataItem = null;
             try
             {
                 var allProcesses = GetProcesses();
@@ -64,9 +61,9 @@ namespace DataCollector
                 };
                 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                // ignored
+                Console.WriteLine(e.Message);
             }
             return dataItem;
         }
@@ -104,31 +101,42 @@ namespace DataCollector
             var result = new List<ProcessData>();
             var processes = Process.GetProcesses();
 
+            _processCpuCounters.Clear();
 
             foreach (var item in processes)
             {
-                //item.pro
-                if (!_processRamCounters.ContainsKey(item.ProcessName))
-                    _processRamCounters.Add(item.ProcessName,
-                        new PerformanceCounter("Process", "Working Set", item.ProcessName, true));
 
-                if (!_processCpuCounters.ContainsKey(item.ProcessName))
-                    _processCpuCounters.Add(item.ProcessName,
-                        new PerformanceCounter("Process", "% Processor Time", item.ProcessName, true));
+                if (item.ProcessName == "Idle") continue; // cpu > 350%
+
+                if (!_processCpuCounters.ContainsKey(item.Id))
+                {
+                    var cpu = new PerformanceCounter("Process", "% Processor Time", item.ProcessName, true);
+                    cpu.NextValue();
+                    _processCpuCounters.Add(item.Id, cpu);
+                }
             }
+            Thread.Sleep(1000);
+
+            var ListCPU = new Dictionary<int, float>();
 
             foreach (var item in processes)
             {
                 if (item.ProcessName == "Idle") continue; // cpu > 350%
-              
+                ListCPU.Add(item.Id, (float)Math.Round(_processCpuCounters[item.Id].NextValue() / Environment.ProcessorCount, 2));
+            }
 
+
+            foreach (var item in processes)
+            {
+                if (item.ProcessName == "Idle") continue; // cpu > 350%
                 try
                 {
                     var name = item.ProcessName;
-                    var ramMBytes = _processRamCounters[item.ProcessName].NextValue() / 1024 / 1024;
-                    var pCpu = (float)Math.Round(_processCpuCounters[item.ProcessName].NextValue() / Environment.ProcessorCount, 2);
+                    item.Refresh();
+                    var ramMBytes = (item.PrivateMemorySize64 / 1024) / 1024;
+                    var pCpu = ListCPU[item.Id];
                     var pRam = (ramMBytes / GetTotalRAM()) * 100;
-
+                    _processCpuCounters[item.Id].Dispose();
                     result.Add(new ProcessData
                     {
                         Name = name,
@@ -140,12 +148,11 @@ namespace DataCollector
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    _processRamCounters.Remove(item.ProcessName);
                 }
             }
             result = GroupProcesses(result);
 
-            return result; // DODO merge processes if Processes with the same name
+            return result; 
         }
 
         private List<ProcessData> GroupProcesses(List<ProcessData> processes)

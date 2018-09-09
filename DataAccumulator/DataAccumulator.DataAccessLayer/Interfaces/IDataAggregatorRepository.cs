@@ -17,7 +17,8 @@ namespace DataAccumulator.DataAccessLayer.Interfaces
         // query after multiple parameters
         Task<IEnumerable<CollectedData>> GetEntitiesInTime(DateTime timeFrom, DateTime timeTo);
         Task<IEnumerable<CollectedData>> GetEntitiesByTypeInTime(CollectedDataType collectedDataType, DateTime timeFrom, DateTime timeTo);
-        Task<IEnumerable<CollectedData>> GetEntitiesByInstanceIdAndTypeInTime(Guid id, CollectedDataType collectedDataType, DateTime timeFrom, DateTime timeTo);
+        Task<IEnumerable<CollectedData>> GetEntitiesByInstanceIdAndTypeInTime(Guid id, CollectedDataType collectedDataType, DateTime timeFrom, DateTime timeTo, int page = 1, int count = 10);
+        Task<long> GetCountOfEntities(Guid id, CollectedDataType collectedDataType, DateTime timeFrom, DateTime timeTo);
 
         // add new entity
         Task AddEntity(CollectedData item);
