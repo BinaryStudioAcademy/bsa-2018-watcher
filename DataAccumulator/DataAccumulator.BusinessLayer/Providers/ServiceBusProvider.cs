@@ -20,6 +20,7 @@
 
         private readonly QueueClient _instanceDataQueueClient;
         private readonly QueueClient _instanceErrorQueueClient;
+        private readonly QueueClient _instanceSettingsQueueClient;
 
         public ServiceBusProvider(ILoggerFactory loggerFactory,
                                   IOptions<AzureQueueSettings> queueOptions,
@@ -30,6 +31,7 @@
             _queueOptions = queueOptions;
             _instanceDataQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.DataQueueName);
             _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
+            _instanceSettingsQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.SettingsQueueName);
         }
 
         public Task SendDataMessage(InstanceCollectedDataMessage message)
