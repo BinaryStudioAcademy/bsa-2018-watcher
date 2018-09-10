@@ -153,7 +153,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         switch (this.activeDashboardItem.charts[i].type) {
           case ChartType.ResourcesTable:
-          case ChartType.NumberCards:
             this.activeDashboardItem.charts[i].colectedData = latestData;
             break;
           default:
@@ -227,11 +226,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   createChartRequest(dashboardChart: DashboardChart): ChartRequest {
-    const chart: ChartRequest = {
+    return {
       showCommon: dashboardChart.showCommon,
       threshold: dashboardChart.threshold,
       mostLoaded: 1,
-      schemeType: dashboardChart.schemeType,
+      schemeType: dashboardChart.colorScheme.name,
       dashboardId: 0,
       showLegend: dashboardChart.showLegend,
       legendTitle: dashboardChart.legendTitle,
@@ -253,7 +252,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       sources: dashboardChart.dataSources.join(),
       isLightTheme: dashboardChart.theme === 'light',
     };
-    return chart;
   }
 
   updateDashboard(editTitle: string): void {
@@ -333,6 +331,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onAddedCharts(array: Array<DashboardChart>, id: number) {
     array.forEach(chart => {
+      debugger
       const newChart = this.createChartRequest(chart);
       newChart.dashboardId = id;
       this.chartService.create(newChart).subscribe(value => {
