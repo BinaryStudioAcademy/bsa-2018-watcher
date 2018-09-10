@@ -3,6 +3,7 @@ import { Dashboard } from '../../shared/models/dashboard.model';
 import { Observable } from 'rxjs';
 import { DashboardRequest } from '../../shared/models/dashboard-request.model';
 import { ApiService } from './api.service';
+import {CreateDashboardRequest} from '../../shared/requests/create-dashboard-request';
 
 @Injectable()
 export class DashboardService {
@@ -19,7 +20,7 @@ export class DashboardService {
     return this.apiService.get(`/${this.ctrlUrl}/${id}`);
 }
 
-  create(request: DashboardRequest): Observable<Dashboard> {
+  create(request: DashboardRequest | CreateDashboardRequest): Observable<Dashboard> {
     return this.apiService.post(`/${this.ctrlUrl}`, request);
   }
 

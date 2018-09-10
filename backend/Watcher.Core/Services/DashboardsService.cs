@@ -53,9 +53,9 @@
             return dto;
         }
 
-        public async Task<DashboardDto> CreateDashboardAsync(DashboardRequest request)
+        public async Task<DashboardDto> CreateDashboardAsync(CreateDashboardRequest request)
         {
-            var entity = _mapper.Map<DashboardRequest, Dashboard>(request);
+            var entity = _mapper.Map<CreateDashboardRequest, Dashboard>(request);
             entity.CreatedAt = DateTime.UtcNow;
 
             entity = await _uow.DashboardsRepository.CreateAsync(entity);

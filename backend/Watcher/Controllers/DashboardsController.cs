@@ -50,7 +50,7 @@
 
         // POST: /dashboards
         [HttpPost]
-        public virtual async Task<ActionResult<DashboardDto>> Create([FromBody]DashboardRequest request)
+        public virtual async Task<ActionResult<DashboardDto>> Create([FromBody]CreateDashboardRequest request)
         {
             if (!ModelState.IsValid)
             {
