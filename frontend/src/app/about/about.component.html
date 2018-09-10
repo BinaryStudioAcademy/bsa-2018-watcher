@@ -1,7 +1,7 @@
 <header id="header">
   <div class="container">
     <h1>
-      <a (click)="scrollTo('startbanner')">Watcher</a>
+      <a (click)="onBack()">Watcher</a>
       <i class="fas fa-bars" id="mobile" (click)="show()"></i>
     </h1>
     <nav id="nav">
@@ -38,23 +38,53 @@
         and emergency feedback.</p>
     </div>
   </section>
-  <div class="section-wrp">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt nam temporibus odio neque vel rerum culpa quae reiciendis
-    quia. Cupiditate, laboriosam. Recusandae laborum dolorem temporibus eaque aperiam eius quos iusto voluptate saepe ipsum.
-    Inventore odio nobis molestiae autem architecto, rem consequatur officia pariatur delectus ipsa minima reprehenderit
-    vero minus omnis fugit! Accusamus eum blanditiis nemo similique autem! Architecto nulla, inventore modi ab sed, ratione
-    nobis cupiditate natus at doloremque accusantium minus, animi dolor voluptatibus fugiat. Ad corporis laudantium dolorum.
-    Unde corporis quae excepturi illum pariatur officiis aut quo dolore delectus, dignissimos repudiandae, odit ipsam cum
-    eveniet fugit hic in nulla.</div>
-  <div class="section-wrp">Ratione, neque culpa eaque, officiis voluptates deleniti perferendis vero distinctio nesciunt sapiente placeat perspiciatis
-    quos ab, tempora enim? Distinctio debitis dignissimos odio harum, pariatur iure maxime quos provident exercitationem
-    culpa sequi eaque unde sed hic quia. Optio, repellendus! Exercitationem amet tempore ipsam quibusdam enim voluptatibus,
-    praesentium cum vero harum necessitatibus maxime non quasi voluptatum aliquam sint quis facilis porro quia, sunt dolores
-    commodi quisquam excepturi. Temporibus tempore, aperiam ipsam dignissimos, magnam eius quam fugit odit eaque aspernatur
-    optio veniam quo velit error fuga nihil officia consectetur exercitationem modi assumenda illum minima aliquam atque?
-    Laborum nesciunt dicta, dignissimos corrupti temporibus iusto.</div>
+  <div class="section-wrp">
+    <h1 class="page-title title">Our coaches</h1>
+    <div class="ui-g text-center">
+      <div class="ui-lg-4 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Alik_Rakhmonov.jpg" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-4 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Maxim_Goncharuk_1.png" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-4 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Nikita_Potapenko_1.jpg" alt="photo" class="small-photo" />
+      </div>
+    </div>
+  </div>
+  <div class="section-wrp">
+    <h1 class="page-title title">Students</h1>
+    <div class="ui-g text-center">
+        <div class="ui-lg-3 ui-g-12 ">
+          <img src="\assets\TeamPhotos\Volodymyr_Bilyk_1.jpg" alt="photo" class="small-photo" />
+        </div>
+        <div class="ui-lg-3 ui-g-12 ">
+          <img src="\assets\TeamPhotos\Oleksii_Tymchenko_1.jpg" alt="photo" class="small-photo" />
+        </div>
+        <div class="ui-lg-3 ui-g-12 ">
+          <img src="\assets\TeamPhotos\Alexander_Gorban_1.jpg" alt="photo" class="small-photo" />
+        </div>
+        <div class="ui-lg-3 ui-g-12 ">
+          <img src="\assets\TeamPhotos\Bohdan_Mosiyuk_1.jpg" alt="photo" class="small-photo" />
+        </div>
+      </div>
+    <div class="ui-g text-center">
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Pavlo_Boliubash.jpg" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Rostyslav_Diakiv.JPG" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Kostya_Hrytsyuk.png" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Tetiana_Zaichuk.jpg" alt="photo" class="small-photo" />
+      </div>
+    </div>    
+  </div>
 </div>
 <footer class="footer-distributed ">
-
   <div class="footer-right ">
     <a href="https://www.facebook.com/bsa.watcher.1">
       <i class="fa fa-facebook "></i>
@@ -72,7 +102,7 @@
 
   <div class="footer-left ">
     <p class="footer-links ">
-      <a (click)="scrollTo( 'startbanner') ">Home</a> ·
+      <a (click)="onBack()">Home</a> ·
       <a (click)="scrollTo( 'why-watcher') ">Why watcher</a> ·
       <a (click)="scrollTo( 'cards') ">Advantages</a> ·
       <a (click)="onAbout() ">About</a> ·
