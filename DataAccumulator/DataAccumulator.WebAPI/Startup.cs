@@ -54,13 +54,9 @@ namespace DataAccumulator
                     o.SettingsQueueName = serviceBusSection["SettingsQueueName"];
                 });
 
-            services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
-            services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>();
-            services.AddTransient<IInstanceSettingsRepository<InstanceSettings>, InstanceSettingsRepository>();
-
-            services.AddScoped<IDataAccumulatorService<CollectedDataDto>, DataAccumulatorService>();
-            services.AddScoped<IDataAggregatorService<CollectedDataDto>, DataAggregatorService>();
-            services.AddScoped<IInstanceSettingsService<InstanceSettingsDto>, InstanceSettingsService>();
+            services.AddTransient<IDataAccumulatorService<CollectedDataDto>, DataAccumulatorService>();
+            services.AddTransient<IDataAggregatorService<CollectedDataDto>, DataAggregatorService>();
+            services.AddTransient<IInstanceSettingsService<InstanceSettingsDto>, InstanceSettingsService>();
 
             services.AddTransient<IAggregatorService<CollectedDataDto>, AggregatorService>();
             services.AddTransient<IDataAggregatorCore<CollectedDataDto>, DataAggregatorCore>();
@@ -76,16 +72,17 @@ namespace DataAccumulator
                     return new JobFactory(provider);
                 });
 
+            // repo initialization localhost while development env, azure in prod
+            ConfigureCosmosDb(services, Configuration);
+
             services.AddTransient<CollectedDataAggregatingByHourJob>();
             services.AddTransient<CollectedDataAggregatingByDayJob>();
             services.AddTransient<CollectedDataAggregatingByWeekJob>();
             services.AddTransient<CollectedDataAggregatingByMonthJob>();
 
             services.AddTransient<IAzureQueueSender, AzureQueueSender>();
+            services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
-
-            // repo initialization localhost while development env, azure in prod
-            ConfigureCosmosDb(services, Configuration);
 
             var mapper = MapperConfiguration().CreateMapper();
             services.AddTransient(_ => mapper);
@@ -115,6 +112,8 @@ namespace DataAccumulator
                     quartz.AddMonthlyJob<CollectedDataAggregatingByMonthJob>("CollectedDataAggregatingByMonth", "DataAggregator");
                 }
             });
+
+            var provider = app.ApplicationServices.GetService<IServiceBusProvider>();
         }
         public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
         {
@@ -127,6 +126,8 @@ namespace DataAccumulator
                 options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage"));
             services.AddTransient<ILogRepository, LogRepository>(
                 options => new LogRepository(connectionString, "bsa-watcher-data-storage"));
+            services.AddTransient<IInstanceSettingsRepository<InstanceSettings>, InstanceSettingsRepository>(
+              options => new InstanceSettingsRepository(connectionString, "bsa-watcher-data-storage"));
         }
 
         public MapperConfiguration MapperConfiguration()
