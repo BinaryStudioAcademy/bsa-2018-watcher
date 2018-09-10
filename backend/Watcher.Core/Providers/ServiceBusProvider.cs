@@ -23,7 +23,6 @@
     using ServiceBus.Shared.Messages;
     using ServiceBus.Shared.Queue;
 
-    using Watcher.Common.Dtos.Plots;
     using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
 
@@ -164,7 +163,7 @@
             {
                 await _instanceDataQueueClient.CloseAsync();
                 await _instanceErrorQueueClient.CloseAsync();
-
+                await _instanceDataQueueClient.CloseAsync();
                 disposedValue = true;
             }
         }
