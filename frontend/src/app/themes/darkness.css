@@ -1,0 +1,90 @@
+.ui-state-default {
+  border: 1px solid #666666;
+  background-color: #555555;
+  color: #eeeeee; }
+  .ui-state-default a {
+    color: #eeeeee; }
+
+.ui-accordion .ui-accordion-header:not(.ui-state-active):not(.ui-state-disabled):hover {
+  border-radius: 0px;
+  border-color: #59b4d4;
+  background-color: #0078a3;
+  color: #ffffff; }
+  .ui-accordion .ui-accordion-header:not(.ui-state-active):not(.ui-state-disabled):hover a {
+    color: #ffffff; }
+
+.ui-widget-header {
+  border: 1px solid #323232;
+  background-color: #333333;
+  color: #cccccc;
+  font-weight: bold; }
+  .ui-widget-header a {
+    color: #cccccc; }
+
+.ui-state-active {
+  border-color: #ffaf0f;
+  background-color: #f58400;
+  color: #ffffff; }
+  .ui-state-active a {
+    color: #000000; }
+
+.ui-panelmenu .ui-panelmenu-header:not(.ui-state-active):hover {
+  border-color: #59b4d4;
+  background-color: #0078a3;
+  color: #ffffff;
+  border-color: #666666; }
+  .ui-panelmenu .ui-panelmenu-header:not(.ui-state-active):hover a {
+    color: #ffffff; }
+  .ui-panelmenu .ui-panelmenu-header:not(.ui-state-active):hover a {
+    color: #ffffff; }
+.ui-panelmenu .ui-panelmenu-header.ui-state-active a {
+  color: #ffffff; }
+.ui-panelmenu .ui-panelmenu-content .ui-menuitem-link {
+  color: #cccccc; }
+  .ui-panelmenu .ui-panelmenu-content .ui-menuitem-link:hover {
+    border-color: #59b4d4;
+    background-color: #0078a3;
+    color: #ffffff;
+    border-color: transparent; }
+    .ui-panelmenu .ui-panelmenu-content .ui-menuitem-link:hover a {
+      color: #ffffff; }
+
+.ui-menuitem .ui-menuitem-link {
+  color: #cccccc; }
+  .ui-menuitem .ui-menuitem-link:hover {
+    border-color: #59b4d4;
+    background-color: #0078a3;
+    color: #ffffff;
+    border-color: transparent; }
+    .ui-menuitem .ui-menuitem-link:hover a {
+      color: #ffffff; }
+.ui-menuitem.ui-menuitem-active > .ui-menuitem-link {
+  border-color: #59b4d4;
+  background-color: #0078a3;
+  color: #ffffff;
+  border-color: transparent; }
+  .ui-menuitem.ui-menuitem-active > .ui-menuitem-link a {
+    color: #ffffff; }
+
+
+.ui-datepicker .ui-datepicker-header a {
+  color: #cccccc; }
+  .ui-state-highlight { color: #000000; }
+  .ui-datepicker .ui-datepicker-header a:hover {
+    border-color: #59b4d4;
+    background-color: #0078a3;
+    color: #ffffff; }
+    .ui-datepicker .ui-datepicker-header a:hover a {
+      color: #ffffff; }
+.ui-datepicker .ui-datepicker-calendar td:not(.ui-state-disabled) a:hover {
+  border-color: #59b4d4;
+  background-color: #0078a3;
+  color: #ffffff; }
+  .ui-datepicker .ui-datepicker-calendar td:not(.ui-state-disabled) a:hover a {
+    color: #ffffff; }
+.ui-datepicker .ui-monthpicker .ui-monthpicker-month:hover {
+  border-color: #59b4d4;
+  background-color: #0078a3;
+  color: #ffffff; }
+  .ui-datepicker .ui-monthpicker .ui-monthpicker-month:hover a {
+    color: #ffffff; }

@@ -121,6 +121,7 @@ namespace Watcher.Core.Services
                                                 .Include(u => u.Notifications)
                                                 .Include(u => u.NotificationSettings)
                                                 .Include(u => u.LastPickedOrganization)
+                                                    .ThenInclude(o => o.Theme)
                                                 .Include(u => u.UserOrganizations)
                                                     .ThenInclude(uo => uo.Organization)
                                                 .Include(u => u.UserChats)
