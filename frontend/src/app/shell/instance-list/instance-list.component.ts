@@ -101,7 +101,8 @@ constructor(private instanceService: InstanceService,
         label: 'Activities',
         icon: 'fa fa fa-history',
         routerLink: [`/user/instances/${instance.guidId}/activities`],
-        styleClass: 'instance-options'
+        styleClass: 'instance-options',
+        command: () =>  this.expandElement(item)
       }, {
         label: 'Download app',
         icon: 'fa fa-download',
@@ -110,12 +111,14 @@ constructor(private instanceService: InstanceService,
         command: () => {
           this.showDownloadModal = true;
           this.currentGuidId = instance.guidId;
+          this.expandElement(item);
         }
       }, {
         label: 'Report',
         icon: 'fa fa-stack-exchange',
         routerLink: [`/user/instances/${instance.id}/${instance.guidId}/report`],
-        styleClass: 'instance-options'
+        styleClass: 'instance-options',
+        command: () =>  this.expandElement(item)
       }, {
         label: 'Delete',
         icon: 'fa fa-close',

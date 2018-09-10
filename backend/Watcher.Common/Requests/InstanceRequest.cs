@@ -13,6 +13,14 @@ namespace Watcher.Common.Requests
 
         public Guid GuidId { get; set; }
 
+        public bool AggregationForHour { get; set; }
+        public bool AggregationForDay { get; set; }
+        public bool AggregationForMonth { get; set; }
+
+        public float CpuMaxPercent { get; set; }
+        public float RamMaxPercent { get; set; }
+        public float DiskMaxPercent { get; set; }
+
         public bool IsActive { get; set; }
 
         public int OrganizationId { get; set; }
