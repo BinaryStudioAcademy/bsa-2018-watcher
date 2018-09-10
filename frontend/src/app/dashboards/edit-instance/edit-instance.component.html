@@ -43,13 +43,13 @@
     <div class="label">Receive notifications on:</div>
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-md-6 ui-lg-4">
-          <div class="label">Max cpu percent: {{instanceForm.controls.cpuMax.value}}</div>
+          <div class="secondary-label">Max cpu percent: {{instanceForm.controls.cpuMax.value}}</div>
           <p-slider formControlName="cpuMax" [min]="0" [max]="100"></p-slider>
 
-          <div class="label">Max ram percent: {{instanceForm.controls.ramMax.value}}</div>
+          <div class="secondary-label">Max ram percent: {{instanceForm.controls.ramMax.value}}</div>
           <p-slider formControlName="ramMax" [min]="0" [max]="100"></p-slider>
 
-          <div class="label">Max disk percent: {{instanceForm.controls.diskMax.value}}</div>
+          <div class="secondary-label">Max disk percent: {{instanceForm.controls.diskMax.value}}</div>
           <p-slider formControlName="diskMax" [min]="0" [max]="100"></p-slider>
       </div>
     </div>
