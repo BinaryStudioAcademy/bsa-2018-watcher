@@ -117,6 +117,7 @@ namespace Watcher
             services.AddTransient<ICollectorActionLogService, CollectorActionLogService>();
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
+            services.AddTransient<IAzureQueueSender, AzureQueueSender>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
             
             // repo initialization localhost while development env, azure in prod

@@ -2,8 +2,12 @@
 {
     using System;
 
-    class InstanceSettingsMessage : InstanceMessage
+    public class InstanceSettingsMessage : InstanceMessage
     {
+        public InstanceSettingsMessage()
+        {
+        }
+
         public InstanceSettingsMessage(Guid instanceId, 
                                        bool hourAggregation,
                                        bool dayAggregation,
@@ -19,6 +23,7 @@
             RamMaxPercent = ramMax;
             DiskMaxPercent = diskMax;
         }
+
         public bool AggregationForHour { get; set; }
         public bool AggregationForDay { get; set; }
         public bool AggregationForMonth { get; set; }
