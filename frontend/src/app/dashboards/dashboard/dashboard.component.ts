@@ -159,9 +159,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.activeDashboardItem.charts[i].colectedData = latestData;
             break;
           default:
-            this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.activeDashboardItem.charts[i]);
-            // const tempData =
-            // this.activeDashboardItem.charts[i].data = [...tempData];
+            this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.activeDashboardItem.charts[i], false);
             break;
         }
       }
@@ -318,8 +316,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onEdited(event: any) { // title: string
     if (this.creation === true) {
-      const newdash: DashboardRequest = {title: event.title, instanceId: this.instanceId};
-      this.createDashboard(newdash, event.charts);
+      const newDash: DashboardRequest = {title: event.title, instanceId: this.instanceId};
+      this.createDashboard(newDash, event.charts);
       let index = 0;
       // switching to new tab
       if (this.dashboardMenuItems.length >= 2) {
@@ -335,10 +333,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onAddedCharts(array: Array<DashboardChart>, id: number) {
     array.forEach(chart => {
-      const newChart = this.createChartRequest(chart);
-      newChart.dashboardId = id;
-      this.chartService.create(newChart).subscribe(value => {
-        chart.id = value.id;
+      const request = this.createChartRequest(chart);
+      request.dashboardId = id;
+      this.chartService.create(request).subscribe(value => {
+        chart = this.dataService.instantiateDashboardChart(value);
         this.onChartEdited(chart);
         this.toastrService.success('Chart was created');
       }, error => {
@@ -425,7 +423,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   fillDashboardChartsWithData(dashboardItem: DashboardMenuItem): void {
     for (let j = 0; j < dashboardItem.charts.length; j++) {
-      this.dataService.fulfillChart(this.dataService.hourlyCollectedData, dashboardItem.charts[j]);
+      this.dataService.fulfillChart(this.dataService.hourlyCollectedData, dashboardItem.charts[j], false);
     }
   }
 
