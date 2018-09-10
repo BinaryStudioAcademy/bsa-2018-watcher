@@ -82,26 +82,32 @@ export class ReportComponent implements OnInit {
         this.calendarFilter2.showTime = true;
         break;
       case 'AggregationForDay':
-        this.dateFrom.setHours(0);
-        this.dateFrom.setMinutes(0);
-        this.dateTo.setHours(0);
-        this.dateTo.setMinutes(0);
+        if (this.dateFrom && this.dateTo) {
+          this.dateFrom.setHours(0);
+          this.dateFrom.setMinutes(0);
+          this.dateTo.setHours(0);
+          this.dateTo.setMinutes(0);
+        }
         this.calendarFilter1.showTime = false;
         this.calendarFilter2.showTime = false;
         break;
       case 'AggregationForWeek':
-        this.dateFrom.setHours(0);
-        this.dateFrom.setMinutes(0);
-        this.dateTo.setHours(0);
-        this.dateTo.setMinutes(0);
+        if (this.dateFrom && this.dateTo) {
+          this.dateFrom.setHours(0);
+          this.dateFrom.setMinutes(0);
+          this.dateTo.setHours(0);
+          this.dateTo.setMinutes(0);
+        }
         this.calendarFilter1.showTime = false;
         this.calendarFilter2.showTime = false;
         break;
       case 'AggregationForMonth':
-        this.dateFrom.setHours(0);
-        this.dateFrom.setMinutes(0);
-        this.dateTo.setHours(0);
-        this.dateTo.setMinutes(0);
+        if (this.dateFrom && this.dateTo) {
+          this.dateFrom.setHours(0);
+          this.dateFrom.setMinutes(0);
+          this.dateTo.setHours(0);
+          this.dateTo.setMinutes(0);
+        }
         this.calendarFilter1.showTime = false;
         this.calendarFilter2.showTime = false;
         break;
