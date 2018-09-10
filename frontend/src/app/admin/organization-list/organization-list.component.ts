@@ -85,6 +85,12 @@ export class OrganizationListComponent implements OnInit {
       address: instance.address,
       platform: instance.platform,
       isActive: instance.isActive,
+      aggregationForHour: instance.aggregationForHour,
+      aggregationForDay: instance.aggregationForDay,
+      aggregationForMonth: instance.aggregationForMonth,
+      cpuMaxPercent: instance.cpuMaxPercent,
+      ramMaxPercent: instance.ramMaxPercent,
+      diskMaxPercent: instance.diskMaxPercent,
       organizationId: this.organization.id
     };
     return newInstance;
@@ -120,7 +126,7 @@ export class OrganizationListComponent implements OnInit {
           this.toastrService.success('Organization was updated');
         },
         error => {
-          this.toastrService.error(`Error ocured status: ${error.message}`);
+          this.toastrService.error(`Error ocurred status: ${error.message}`);
         }
       );
     } else {
@@ -133,7 +139,7 @@ export class OrganizationListComponent implements OnInit {
           this.toastrService.success(`Instance with id ${instance.id} was updated`);
         },
         error => {
-          this.toastrService.error(`Error ocured status: ${error.message}`);
+          this.toastrService.error(`Error ocurred status: ${error.message}`);
         }
       ); });
   }

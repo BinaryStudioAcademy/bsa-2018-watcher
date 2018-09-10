@@ -15,13 +15,17 @@ hr
 
 input
   font-size: 15px
-    
-.label
+
+.label, .secondary-label
     padding-left: 10px
     padding-top: 10px
     padding-bottom: 5px
     font-size: 14px
-    
+
+.secondary-label
+  font-size: 12px
+
+
 .invalid
     color: red
     padding-left: 10px
@@ -35,3 +39,9 @@ input
 
 /deep/body p-dropdown.ng-dirty.ng-invalid > .ui-dropdown:hover
     border: 1px solid black
+
+/deep/.aggregation-checks
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+  font-size: 12px

@@ -10,6 +10,7 @@
         Task SendDataMessage(InstanceCollectedDataMessage message);
 
         Task SendDataMessage(Guid instanceId, Guid dataId);
+        Task SendDataMessage(InstanceValidatorMessage message);
 
         Task SendErrorMessage(InstanceErrorMessage message);
 

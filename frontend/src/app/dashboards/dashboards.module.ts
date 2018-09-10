@@ -74,7 +74,8 @@ import { ResourceTableComponent } from './charts/resource-table/resource-table.c
     ScrollPanelModule,
     TooltipModule,
     TableModule,
-    PaginatorModule
+    PaginatorModule,
+    SliderModule
   ],
   declarations: [
     DashboardComponent,

@@ -25,5 +25,10 @@ namespace DataAccumulator.DataAccessLayer.Data
         {
             get { return _database.GetCollection<ActionLog>("ActionLogs"); }
         }
+
+        public IMongoCollection<InstanceSettings> InstanceSettingsCollection
+        {
+            get { return _database.GetCollection<InstanceSettings>("InstanceSettings"); }
+        }
     }
 }
