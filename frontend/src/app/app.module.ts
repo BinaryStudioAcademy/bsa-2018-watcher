@@ -4,10 +4,17 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AccordionModule, TabViewModule, ProgressSpinnerModule, ButtonModule } from 'primeng/primeng';
-import { PanelModule } from 'primeng/primeng';
-import { RadioButtonModule } from 'primeng/primeng';
-import { DialogModule } from 'primeng/primeng';
+import {
+  AccordionModule,
+  TabViewModule,
+  ProgressSpinnerModule,
+  ButtonModule,
+  InputTextareaModule,
+  InputTextModule,
+  PanelModule,
+  RadioButtonModule,
+  DialogModule } from 'primeng/primeng';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
@@ -16,7 +23,6 @@ import { InviteComponent } from './invite/invite.component';
 import { CoreModule } from './core/core.module';
 import { AuthorizationComponent } from './authorization/authorization.component';
 import { AdminModule } from './admin/admin.module';
-import {GMapModule} from 'primeng/gmap';
 
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
@@ -53,7 +59,8 @@ import { SystemNotificationComponent } from './notification/system-notification/
     ToastModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
-    GMapModule,
+    InputTextareaModule,
+    InputTextModule,
 
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,

@@ -4,8 +4,6 @@ import { ToastrService } from '../core/services/toastr.service';
 import { LongAnswerType } from '../shared/models/long-answer-type.enum';
 import { ShortAnswerType } from '../shared/models/short-answer-type.enum';
 import { Feedback } from '../shared/models/feedback.model';
-import {GMapModule} from 'primeng/gmap';
-declare var google: any;
 
 @Component({
   selector: 'app-landing',
@@ -16,12 +14,11 @@ declare var google: any;
   './landing.component.header.sass'],
 })
 export class LandingComponent implements OnInit, OnDestroy {
+
   isAbout: Boolean = false;
   name: string;
   email: string;
   text: string;
-  options: any;
-  overlays: any[];
 
   constructor(private feedbackService: FeedbackService, private toastrService: ToastrService) {}
 
@@ -43,13 +40,13 @@ export class LandingComponent implements OnInit, OnDestroy {
     subscribe(
       value => {
         this.toastrService.success('Added new feedback');
-        if (!this.email) {
-          this.toastrService.info('If you want to receive emails, fill out the email field.');
-        }
       },
       error => {
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
+    this.name = '';
+    this.email = '';
+    this.text = '';
   }
 
   headerScroll(): any {
@@ -79,13 +76,6 @@ export class LandingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     window.addEventListener('resize', this.resize, true);
     window.addEventListener('scroll', this.headerScroll, true);
-    this.options = {
-      center: {lat: 36.890257, lng: 30.707417},
-      zoom: 12
-    };
-
-    this.overlays = [
-      new google.maps.Marker({position: {lat: 36.879466, lng: 30.667648}, title: 'Konyaalti'})];
   }
   ngOnDestroy() {
     window.removeEventListener('scroll', this.headerScroll, true);
