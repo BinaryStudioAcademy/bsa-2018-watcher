@@ -50,7 +50,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   edit(model: NgModel): void {
-    this.dashboardCharts = this.dashboardCharts.filter(chart => chart.isIncluded);
+    this.dashboardCharts = this.dashboardCharts.filter(chart => chart.isIncluded && chart.dataSources && chart.dataSources.length > 0);
     this.edited.emit({title: this.title, charts: this.isSource ? this.dashboardCharts : null});
     this.title = '';
     model.reset();
