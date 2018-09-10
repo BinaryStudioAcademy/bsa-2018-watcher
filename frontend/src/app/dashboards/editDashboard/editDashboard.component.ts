@@ -81,19 +81,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   fillCharts() {
-    // this.dashboardCharts = dashboardChartTypes.slice(0, this.countToGenerate).map(chartType => Object.assign({
-    //   ...defaultOptions,
-    //
-    // }, {
-    //
-    //   chartType,
-    //
-    //     title: chartType.title,
-    //     showXAxis: false,
-    //     showYAxis: false,
-    //     showLegend: false
-    // }));
-
     for (let i = 0; i < this.countToGenerate; i++) {
       const chart = Object.assign({
         ...defaultOptions,
@@ -129,7 +116,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         dashboardChart.xAxisLabel = '';
         break;
     }
-    this.showPreview = this.dataService.fulfillChart(this.dataService.fakeCollectedData, dashboardChart);
+    this.showPreview = this.dataService.fulfillChart(this.dataService.fakeCollectedData, dashboardChart, true);
 
     return dashboardChart;
   }

@@ -34,7 +34,7 @@ export class InvitesListComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
     this.organizationInvitesService.getByUser(this.currentUser.id).subscribe((value: OrganizationInvite[]) => {
-      value.forEach(item => item.expirationDate = new Date(item.expirationDate));
+      value.forEach(item => item.experationDate = new Date(item.experationDate));
       this.invites = value.map(item => {
         return {
           invite: item,
@@ -102,7 +102,7 @@ export class InvitesListComponent implements OnInit {
 
   registerOnHubEvents(): void {
     this.organizationInvitesHub.onAddInvite.subscribe((invite: OrganizationInvite) => {
-      invite.expirationDate = new Date(invite.expirationDate);
+      invite.experationDate = new Date(invite.experationDate);
       this.invites.push({
         invite: invite,
         showLink: this.fullLink(invite.link)
