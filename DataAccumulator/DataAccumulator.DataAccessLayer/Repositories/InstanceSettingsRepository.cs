@@ -23,7 +23,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                return await _context.InstanceValidatorCollection
+                return await _context.InstanceSettingsCollection
                     .Find(_ => true)
                     .ToListAsync();
             }
@@ -38,7 +38,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                var data = await _context.InstanceValidatorCollection
+                var data = await _context.InstanceSettingsCollection
                     .Find(i => i.ClientId == id)
                     .FirstOrDefaultAsync();
 
@@ -55,7 +55,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                var data = await _context.InstanceValidatorCollection
+                var data = await _context.InstanceSettingsCollection
                     .Find(i => i.ClientId == clientId)
                     .FirstOrDefaultAsync();
 
@@ -72,7 +72,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                await _context.InstanceValidatorCollection
+                await _context.InstanceSettingsCollection
                     .InsertOneAsync(item);
             }
             catch (Exception e)
@@ -86,7 +86,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                ReplaceOneResult actionResult = await _context.InstanceValidatorCollection
+                ReplaceOneResult actionResult = await _context.InstanceSettingsCollection
                     .ReplaceOneAsync(data => data.Id.Equals(item.Id), item, new UpdateOptions { IsUpsert = true });
 
                 return actionResult.IsAcknowledged && actionResult.ModifiedCount > 0;
@@ -103,7 +103,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             try
             {
                 DeleteResult actionResult =
-                    await _context.InstanceValidatorCollection
+                    await _context.InstanceSettingsCollection
                         .DeleteOneAsync(Builders<InstanceSettings>.Filter.Eq("Id", id));
 
                 return actionResult.IsAcknowledged && actionResult.DeletedCount > 0;
@@ -119,7 +119,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             try
             {
-                DeleteResult actionResult = await _context.InstanceValidatorCollection
+                DeleteResult actionResult = await _context.InstanceSettingsCollection
                     .DeleteManyAsync(new BsonDocument());
 
                 return actionResult.IsAcknowledged && actionResult.DeletedCount > 0;
@@ -133,7 +133,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
 
         public Task<bool> EntityExistsAsync(Guid id)
         {
-            return _context.InstanceValidatorCollection.Find(entity => entity.Id == id).AnyAsync();
+            return _context.InstanceSettingsCollection.Find(entity => entity.Id == id).AnyAsync();
         }
     }
 }
