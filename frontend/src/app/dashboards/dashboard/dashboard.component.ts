@@ -160,7 +160,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.activeDashboardItem.charts[i].colectedData = latestData;
             break;
           default:
-            this.dataService.updateChartWithLatestData(this.activeDashboardItem.charts[i]);
+            this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.activeDashboardItem.charts[i]);
             // const tempData =
             // this.activeDashboardItem.charts[i].data = [...tempData];
             break;

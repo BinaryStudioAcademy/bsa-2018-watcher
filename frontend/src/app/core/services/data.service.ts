@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {CustomData, date_sort_asc} from '../../dashboards/charts/models';
+import {CustomData} from '../../dashboards/charts/models';
 
 import {CollectedData, defaultCollectedData} from '../../shared/models/collected-data.model';
 import {NumberSeriesItem, SeriesItem} from '../../dashboards/models/series-item';
@@ -45,7 +45,7 @@ export class DataService {
   constructor() {
   }
 
-  fulfillChart(dataArr: CollectedData[], chart: DashboardChart): boolean {
+  fulfillChart(dataArr: CollectedData[], chart: DashboardChart, isFake: boolean = false): boolean {
     let chartData: CustomData[] = [];
 
     if (!chart.dataSources || chart.dataSources.length < 1) {
@@ -67,13 +67,13 @@ export class DataService {
         case ChartType.AreaChartNormalized:
         case ChartType.AreaChartStacked:
         case ChartType.HeatMap:
-          const data = this.mapToMultiData(dataArr, chart.dataSources);
-          if (data && data.length > 0) {
-            for (let i = 0; i < data.length; i++) {
-              data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
-            }
+          let filteredData: CollectedData[] = [];
+          if (isFake) {
+            filteredData = dataArr;
+          } else {
+            filteredData = this.getDataByMinutes(dataArr, chart.historyTime);
           }
-          chartData = data;
+          chartData = this.mapToMultiData(filteredData, chart.dataSources);
           break;
         case ChartType.Pie:
           chartData = this.mapToPieSeriesItem(this.getLastCollectedData(dataArr), this.getFirstSource(chart.dataSources));
@@ -96,11 +96,13 @@ export class DataService {
         case ChartType.AreaChartNormalized:
         case ChartType.AreaChartStacked:
         case ChartType.HeatMap:
-          const data = this.mapToProcessMultiData(dataArr, this.getFirstSource(chart.dataSources), chart.mostLoaded);
-          for (let i = 0; i < data.length; i++) {
-            data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
+          let filteredData: CollectedData[] = [];
+          if (isFake) {
+            filteredData = dataArr;
+          } else {
+            filteredData = this.getDataByMinutes(dataArr, chart.historyTime);
           }
-          chartData = data;
+          chartData = this.mapToProcessMultiData(filteredData, this.getFirstSource(chart.dataSources), chart.mostLoaded);
           break;
         case ChartType.Pie:
           chartData = this.mapToProcessesSeriesItem(this.getLastCollectedData(dataArr),
@@ -127,8 +129,6 @@ export class DataService {
     const items: MultiChartItem[] = [];
     for (let i = 0; i < properties.length; i++) {
       const item: MultiChartItem = {name: dataPropertyLables[properties[i]], series: []};
-      const fiveMinAgo = new Date(Date.now() - 10 * 60000);
-      const dataForLast10Minutes = dataArr.filter(value => value.time > fiveMinAgo);
       item.series = dataArr.map(p => this.mapToLineChartSeriesItem(p, properties[i]));
       items.push(item);
     }
@@ -144,12 +144,17 @@ export class DataService {
     latestData.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
     for (let i = 0; i < Math.min(processesAmount, latestData.processes.length); i++) {
       const pName = latestData.processes[i].name;
-      const item: MultiChartItem = {name: pName, series: []}; // {name: data[data.length - 1].processes[i].name, series: []};
+      const item: MultiChartItem = {name: pName, series: []};
       item.series = dataArr.map(d => this.mapToProcessesLineChartSeriesItem(d, pName, stringProperty));
       items.push(item);
     }
 
     return items;
+  }
+
+  getDataByMinutes(dataArr: CollectedData[], minutes: number = 5) {
+    const minutesAgo = new Date(Date.now() - minutes * 60000);
+    return dataArr.filter(value => value.time > minutesAgo);
   }
 
   mapToProcessesSeriesItem(data: CollectedData, property: DataProperty, processesAmount: number = 1): NumberSeriesItem[] {
@@ -219,67 +224,72 @@ export class DataService {
   }
 
   // UPDATE
-  updateChartWithLatestData(chartToUpdate: DashboardChart): boolean {
-    const latestData = this.getLastCollectedData(this._hourlyCollectedData);
-    if (!latestData) {
-      return false; // Update was unsuccessful
-      // return chartToUpdate.data ? chartToUpdate.data : [];
-    }
+  // updateChartWithLatestData(chartToUpdate: DashboardChart): boolean {
+  //   const latestData = this.getLastCollectedData(this._hourlyCollectedData);
+  //   if (!latestData) {
+  //     return false; // Update was unsuccessful
+  //     // return chartToUpdate.data ? chartToUpdate.data : [];
+  //   }
+  //
+  //   let chartData: CustomData[] = [];
+  //   if (chartToUpdate.showCommon) {
+  //     switch (chartToUpdate.type) {
+  //       case ChartType.LineChart:
+  //       case ChartType.BarHorizontal2D:
+  //       case ChartType.BarHorizontalNormalized:
+  //       case ChartType.BarHorizontalStacked:
+  //       case ChartType.BarVertical2D:
+  //       case ChartType.BarVerticalNormalized:
+  //       case ChartType.BarVerticalStacked:
+  //       case ChartType.PolarChart:
+  //       case ChartType.AreaChart:
+  //       case ChartType.AreaChartNormalized:
+  //       case ChartType.AreaChartStacked:
+  //       case ChartType.HeatMap:
+  //         chartData = this.mapToMultiData(this._hourlyCollectedData, chartToUpdate.dataSources);
+  //         break;
+  //       case ChartType.Pie:
+  //         chartData = this.mapToPieSeriesItem(latestData, this.getFirstSource(chartToUpdate.dataSources));
+  //         break;
+  //       default:
+  //         chartData = this.mapToSeriesItem(latestData, chartToUpdate.dataSources);
+  //         break;
+  //     }
+  //   } else {
+  //     const source = this.getFirstSource(chartToUpdate.dataSources);
+  //     switch (chartToUpdate.type) {
+  //       case ChartType.LineChart:
+  //       case ChartType.BarHorizontal2D:
+  //       case ChartType.BarHorizontalNormalized:
+  //       case ChartType.BarHorizontalStacked:
+  //       case ChartType.BarVertical2D:
+  //       case ChartType.BarVerticalNormalized:
+  //       case ChartType.BarVerticalStacked:
+  //       case ChartType.PolarChart:
+  //       case ChartType.AreaChart:
+  //       case ChartType.AreaChartNormalized:
+  //       case ChartType.AreaChartStacked:
+  //       case ChartType.HeatMap:
+  //
+  //         chartData = this.mapToProcessMultiData(chartToUpdate.data, source, chartToUpdate.mostLoaded);
+  //         // chartData = this.mapToProcessMultiDataOnUpdate(chartToUpdate.data, source, chartToUpdate.mostLoaded);
+  //         break;
+  //       case ChartType.Pie:
+  //         chartData = this.mapToProcessesSeriesItem(latestData, source, chartToUpdate.mostLoaded);
+  //         break;
+  //       default:
+  //         chartData = this.mapToProcessesSeriesItem(latestData, source, chartToUpdate.mostLoaded);
+  //         break;
+  //     }
+  //   }
+  //
+  //   chartToUpdate.data = chartData; // [...tempData];
+  // }
 
-    let chartData: CustomData[] = [];
-    if (chartToUpdate.showCommon) {
-      switch (chartToUpdate.type) {
-        case ChartType.LineChart:
-        case ChartType.BarHorizontal2D:
-        case ChartType.BarHorizontalNormalized:
-        case ChartType.BarHorizontalStacked:
-        case ChartType.BarVertical2D:
-        case ChartType.BarVerticalNormalized:
-        case ChartType.BarVerticalStacked:
-        case ChartType.PolarChart:
-        case ChartType.AreaChart:
-        case ChartType.AreaChartNormalized:
-        case ChartType.AreaChartStacked:
-        case ChartType.HeatMap:
-          chartData = this.mapToMultiDataOnUpdate(chartToUpdate.data, latestData, chartToUpdate.dataSources);
-          break;
-        case ChartType.Pie:
-          chartData = this.mapToPieSeriesItem(latestData, this.getFirstSource(chartToUpdate.dataSources));
-          break;
-        default:
-          chartData = this.mapToSeriesItem(latestData, chartToUpdate.dataSources);
-          break;
-      }
-    } else {
-      const source = this.getFirstSource(chartToUpdate.dataSources);
-      switch (chartToUpdate.type) {
-        case ChartType.LineChart:
-        case ChartType.BarHorizontal2D:
-        case ChartType.BarHorizontalNormalized:
-        case ChartType.BarHorizontalStacked:
-        case ChartType.BarVertical2D:
-        case ChartType.BarVerticalNormalized:
-        case ChartType.BarVerticalStacked:
-        case ChartType.PolarChart:
-        case ChartType.AreaChart:
-        case ChartType.AreaChartNormalized:
-        case ChartType.AreaChartStacked:
-        case ChartType.HeatMap:
-          chartData = this.mapToProcessMultiDataOnUpdate(chartToUpdate.data, source, chartToUpdate.mostLoaded);
-          break;
-        case ChartType.Pie:
-          chartData = this.mapToProcessesSeriesItem(latestData, source, chartToUpdate.mostLoaded);
-          break;
-        default:
-          chartData = this.mapToProcessesSeriesItem(latestData, source, chartToUpdate.mostLoaded);
-          break;
-      }
-    }
+  mapToMultiDataOnUpdate(oldData: CustomData[], newData: CollectedData, properties: DataProperty[], minutes: number): CustomData[] {
+    const minutesAgo = new Date(Date.now() - minutes * 60000);
+    // const dataForLast10Minutes = dataArr.filter(value => value.time > fiveMinAgo);
 
-    chartToUpdate.data = chartData; // [...tempData];
-  }
-
-  mapToMultiDataOnUpdate(oldData: CustomData[], newData: CollectedData, properties: DataProperty[]): CustomData[] {
     if (oldData[0].series.length > 20) { // TODO: refactor
       for (let i = 0; i < oldData.length; i++) {
         // oldData.push(oldData.slice(1)); // Start from first element(removes oldest data el)
@@ -379,6 +389,7 @@ export class DataService {
       showCommon: value.showCommon,
       threshold: value.threshold,
       mostLoaded: value.mostLoaded,
+      historyTime: value.historyTime,
       colorScheme: {...colorSets.find(s => s.name === value.schemeType)},
       schemeType: defaultOptions.schemeType,
       showLegend: value.showLegend,
@@ -411,13 +422,6 @@ export class DataService {
     };
 
     this.fulfillChart(this._hourlyCollectedData, dashChart);
-    // let chartData = [];
-    // if (value.showCommon) {
-    //   chartData = this.prepareData(value.type, dataProps, collData);
-    // } else {
-    //   chartData = this.prepareProcessData(value.type, dataProps[0], collData, value.mostLoaded);
-    // }
-
     return dashChart;
   }
 

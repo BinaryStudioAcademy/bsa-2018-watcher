@@ -229,7 +229,7 @@ export class EditChartComponent implements OnInit {
       return;
     }
 
-    this.isPreviewAvailable = this.dataService.fulfillChart(this.dataService.fakeCollectedData, this.dashboardChart);
+    this.isPreviewAvailable = this.dataService.fulfillChart(this.dataService.fakeCollectedData, this.dashboardChart, true);
   }
 
   closeDialog() {
