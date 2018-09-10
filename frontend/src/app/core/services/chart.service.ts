@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Chart } from '../../shared/models/chart.model';
-import { ChartRequest } from '../../shared/requests/chart-request.model';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Chart} from '../../shared/models/chart.model';
+import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {ApiService} from './api.service';
 import {DashboardChart} from '../../dashboards/models/dashboard-chart';
+import {CreateDashboardRequest} from '../../shared/requests/create-dashboard-request';
 
 @Injectable()
 export class ChartService {
@@ -61,4 +62,25 @@ export class ChartService {
       isLightTheme: dashboardChart.theme === 'light',
     };
   }
+
+  instantiateCreateDashboardRequest(title: string, instanceId: number, charts: DashboardChart[]): CreateDashboardRequest {
+    const createRequest: CreateDashboardRequest = {
+      title: title,
+      instanceId: instanceId,
+      chartRequests: []
+    };
+
+    if (charts && charts.length > 0) {
+      createRequest.chartRequests = charts.map(this.createChartRequest).map(c => {
+          c.showXAxis = true;
+          c.showYAxis = true;
+          c.showLegend = true;
+          return c;
+        }
+      );
+    }
+
+    return createRequest;
+  }
+
 }

@@ -21,7 +21,6 @@ import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
 
 import {UserOrganizationService} from '../../core/services/user-organization.service';
-import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {CollectedDataType} from '../../shared/models/collected-data-type.enum';
 import {CreateDashboardRequest} from '../../shared/requests/create-dashboard-request';
@@ -59,6 +58,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private activateRoute: ActivatedRoute,
               private authService: AuthService,
               private dataService: DataService,
+              private chartService: ChartService,
               private userOrganizationService: UserOrganizationService) {
   }
 
@@ -204,17 +204,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   createDashboard(title: string, instanceId: number, charts: DashboardChart[]): void {
-    const createRequest: CreateDashboardRequest = {
-      title: title,
-      instanceId: instanceId,
-      chartRequests: charts.map(this.createChartRequest).map(c => {
-          c.showXAxis = true;
-          c.showYAxis = true;
-          c.showLegend = true;
-          return c;
-        }
-      )
-    };
+    const createRequest = this.chartService.instantiateCreateDashboardRequest(title, instanceId, charts);
     this.dashboardsService.create(createRequest)
       .subscribe((dto) => {
           const item: DashboardMenuItem = this.transformToMenuItem(dto);
