@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Watcher.DataAccess.Data;
 
 namespace Watcher.DataAccess.Data.Migrations
 {
     [DbContext(typeof(WatcherDbContext))]
-    partial class WatcherDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180910073705_AddHistoryTimeToChart")]
+    partial class AddHistoryTimeToChart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,15 +183,11 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("Email");
-
                     b.Property<int>("Friendliness");
 
                     b.Property<int>("Informatively");
 
                     b.Property<bool>("IsDeleted");
-
-                    b.Property<string>("Name");
 
                     b.Property<int>("Quickness");
 

@@ -12,6 +12,7 @@ export interface DashboardChart {
   showCommon: boolean;
   threshold: number;
   mostLoaded: number;
+  historyTime: number; // 5 - 60
   colorScheme: ColorScheme;
   schemeType: string;
   showLegend: boolean;
