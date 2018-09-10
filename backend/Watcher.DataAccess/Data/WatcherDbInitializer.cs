@@ -47,7 +47,6 @@
                 .RuleFor(o => o.IsActive, true)
                 .RuleFor(o => o.CreatedAt, f => f.Date.Recent())
                 .RuleFor(o => o.RoleId, f => f.PickRandom(roles).Id)
-                .RuleFor(o => o.ThemeId, f => f.PickRandom(themes).Id )
                 .RuleFor(o => o.IsDeleted, false);
 
             var users = userFaker.Generate(amount).ToArray();
