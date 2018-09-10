@@ -13,6 +13,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { HomeGuard } from './guards/home.guard';
 import { NotexistGuard } from './guards/notexist.guard';
+import { ManagerGuard } from './guards/manager.guard';
 
 import { ApiService } from './services/api.service';
 import { FeedbackService } from './services/feedback.service';
@@ -37,7 +38,7 @@ import { DashboardsHub} from './hubs/dashboards.hub';
 import { ChatHub } from './hubs/chat.hub';
 import { NotificationsHubService } from './hubs/notifications.hub';
 import { OrganizationInvitesHub } from './hubs/organization-invites.hub';
-
+import { OrganizationRoleService } from './services/organization-role.service';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { OrganizationInvitesHub } from './hubs/organization-invites.hub';
     PathService,
     ResponseService,
     RoleService,
+    OrganizationRoleService,
     SystemToastrService,
     ToastrService,
     TokenService,
@@ -74,6 +76,7 @@ import { OrganizationInvitesHub } from './hubs/organization-invites.hub';
     AdminGuard,
     HomeGuard,
     NotexistGuard,
+    ManagerGuard,
 
     DashboardsHub,
     ChatHub,

@@ -1,14 +1,14 @@
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 import * as shape from 'd3-shape';
 import {DashboardChart} from '../../models/dashboard-chart';
-import {dashboardChartTypes} from './dashboardChartTypes';
+import { ChartType } from '../../../shared/models/chart-type.enum';
 
 export const defaultOptions = {
   view: [716, 337],
   id: 0,
   showCommon: true,
   threshold: 0,
-  mostLoaded: '',
+  mostLoaded: 1,
   // colorScheme:  {
   //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   // },
@@ -23,6 +23,8 @@ export const defaultOptions = {
   showYAxisLabel: true,
   yAxisLabel: '',
   xAxisLabel: '',
+  yScaleMax: 100,
+  yScaleMin: 0,
   autoScale: true,
   showGridLines: true,
   rangeFillOpacity: 0.5,
@@ -34,6 +36,7 @@ export const defaultOptions = {
   title: '',
   dataSources: [],
   activeEntries: [],
-  chartType: dashboardChartTypes[0],
+  type: ChartType.LineChart,
   theme: 'light',
+  isIncluded: true,
 } as DashboardChart;

@@ -26,6 +26,12 @@
                 new Role { Id = 2, Name = "User", IsDeleted = false}
             };
 
+            var organizationRoles = new OrganizationRole[]
+            {
+                new OrganizationRole {Id = 1, Name = "Manager", IsDeleted = false},
+                new OrganizationRole {Id = 2, Name = "Member", IsDeleted = false}
+            };
+
             var userFaker = new Faker<User>()
                 .RuleFor(o => o.Id, f => Guid.NewGuid().ToString())
                 .RuleFor(o => o.FirstName, f => f.Name.FirstName())
@@ -137,7 +143,7 @@
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 //.RuleFor(o => o.ShowCommon, true)
                 .RuleFor(o => o.Threshold, f => f.Random.Number(100))
-                .RuleFor(o => o.MostLoaded, f => f.PickRandom("MostLoaded1", "MostLoaded2", "MostLoaded3"))
+                .RuleFor(o => o.MostLoaded, 1)
                 .RuleFor(o => o.DashboardId, f => f.PickRandom(dashboards).Id)
                 .RuleFor(o => o.SchemeType, "ordinal")
                 .RuleFor(o => o.ShowLegend, true)
@@ -177,10 +183,12 @@
                 new UserOrganization
                 {
                     UserId = x.Id,
-                    OrganizationId = organizations[Randomizer.Seed.Next(0, organizations.Length - 1)].Id
+                    OrganizationId = organizations[Randomizer.Seed.Next(0, organizations.Length - 1)].Id,
+                    OrganizationRoleId = organizationRoles[0].Id
                 }).ToArray();
 
             modelBuilder.Entity<Role>().HasData(roles);
+            modelBuilder.Entity<OrganizationRole>().HasData(organizationRoles);
             modelBuilder.Entity<User>().HasData(users);
             modelBuilder.Entity<Chat>().HasData(userChats);
             modelBuilder.Entity<Message>().HasData(messages);

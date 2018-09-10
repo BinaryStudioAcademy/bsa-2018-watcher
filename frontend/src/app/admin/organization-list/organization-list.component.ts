@@ -102,7 +102,7 @@ export class OrganizationListComponent implements OnInit {
     const currentPage = event.first / event.rows + 1;
     this.organizationService.getRange(currentPage, event.rows).subscribe((value: Organization[]) => {
       this.organizations = value;
-    });;
+    });
   }
 
   onSubmit() {

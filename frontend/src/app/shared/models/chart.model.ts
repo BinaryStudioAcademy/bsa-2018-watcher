@@ -1,11 +1,11 @@
-﻿
-import { ChartType } from './chart-type.enum';
+﻿import { ChartType } from './chart-type.enum';
+import { ColorScheme } from './color-scheme.model';
 
 export interface Chart  {
    id: number;
    showCommon: boolean;
    threshold: number;
-   mostLoaded: string;
+   mostLoaded: number;
    dashboardId: number;
    schemeType: string;
    showLegend: boolean;
@@ -27,7 +27,5 @@ export interface Chart  {
    type: ChartType;
    sources: string;
    isLightTheme: boolean;
+   scheme: ColorScheme;
 }
-
-
-

@@ -1,13 +1,18 @@
-import {DashboardChartType, CustomData} from '../charts/models';
+import {CustomData} from '../charts/models';
 import {DataProperty} from '../../shared/models/data-property.enum';
+import {ColorScheme} from '../../shared/models/color-scheme.model';
+
+import {CollectedData} from '../../shared/models/collected-data.model';
+import {ChartType} from '../../shared/models/chart-type.enum';
+
 
 export interface DashboardChart {
   view: any;
   id: number;
   showCommon: boolean;
   threshold: number;
-  mostLoaded: string;
-  colorScheme: any;
+  mostLoaded: number;
+  colorScheme: ColorScheme;
   schemeType: string;
   showLegend: boolean;
   legendTitle: string;
@@ -18,6 +23,8 @@ export interface DashboardChart {
   showYAxisLabel: boolean;
   yAxisLabel: string;
   xAxisLabel: string;
+  yScaleMax: number;
+  yScaleMin: number;
   autoScale: boolean;
   showGridLines: boolean;
   rangeFillOpacity: number;
@@ -30,6 +37,8 @@ export interface DashboardChart {
   dataSources: DataProperty[];
   data: CustomData[];
   activeEntries: CustomData[];
-  chartType: DashboardChartType;
+  colectedData: CollectedData;
+  type: ChartType;
   theme: string;
+  isIncluded: boolean;
 }

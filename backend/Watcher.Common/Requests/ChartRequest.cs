@@ -13,13 +13,11 @@ namespace Watcher.Common.Requests
 
         public int Threshold { get; set; }
 
-        public string MostLoaded { get; set; }
+        public int MostLoaded { get; set; }
 
         public int DashboardId { get; set; }
-
-        // public ColorSchemeTypeName ColorScheme { get; set; }
-
-        public string SchemeType { get; set; } = "ordinal";
+        
+        public string SchemeType { get; set; } // = "ordinal";
 
         public bool ShowLegend { get; set; }
 
@@ -50,10 +48,6 @@ namespace Watcher.Common.Requests
         public bool IsTooltipDisabled { get; set; }
 
         public bool IsShowSeriesOnHover { get; set; }
-
-        //public CurveType CurveType { get; set; }
-
-        //public CurveClosedType CurveClosedType { get; set; }
 
         public string Title { get; set; }
 

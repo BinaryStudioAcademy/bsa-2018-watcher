@@ -88,6 +88,11 @@ export class HeaderComponent implements OnInit {
       routerLink: ['/user/settings/organization-profile'],
     },
     {
+      label: 'Members',
+      icon: 'fa fa-fw fa-users',
+      routerLink: [`/user/settings/organization-members`],
+    },
+    {
       label: 'Notifications',
       icon: 'fa fa-fw fa-send',
       routerLink: ['/user/settings/notification-settings'],
@@ -167,16 +172,15 @@ export class HeaderComponent implements OnInit {
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
       .subscribe(value => {
         // update user in frontend
-
         this.currentUser.lastPickedOrganizationId = item.id;
         this.currentUser.lastPickedOrganization = item;
         this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
         // notify user about changes
-        this.toastrService.success(`Organization by defaul was updated. Curent organization: "${item.name}"`);
+        this.toastrService.success(`Organization by default was updated. Current organization: "${item.name}"`);
         this.isChangingOrganization = false;
       },
         err => {
-          this.toastrService.error('Organization by defaul was not updated.');
+          this.toastrService.error('Organization by default was not updated.');
           this.isChangingOrganization = false;
         });
   }

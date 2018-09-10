@@ -20,6 +20,7 @@ import {
   InputTextModule} from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
+import { PaginatorModule } from 'primeng/paginator';
 import { EditDashboardComponent } from './editDashboard/editDashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
@@ -45,6 +46,7 @@ import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
 import { NgxSmoothDnDModule } from 'ngx-smooth-dnd';
 import { InstanceActivityComponent } from './instance-activity/instance-activity.component';
 import { ReportComponent } from './report/report.component';
+import { ResourceTableComponent } from './charts/resource-table/resource-table.component';
 
 @NgModule({
   imports: [
@@ -77,7 +79,8 @@ import { ReportComponent } from './report/report.component';
     CalendarModule,
     ScrollPanelModule,
     TooltipModule,
-    TableModule
+    TableModule,
+    PaginatorModule
   ],
   declarations: [
     DashboardComponent,
@@ -99,7 +102,8 @@ import { ReportComponent } from './report/report.component';
     EditChartComponent,
     EditChartComponent,
     ReportComponent,
-    InstanceActivityComponent
+    InstanceActivityComponent,
+    ResourceTableComponent
   ],
   exports: []
 })

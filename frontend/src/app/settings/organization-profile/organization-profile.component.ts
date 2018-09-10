@@ -9,6 +9,7 @@ import { OrganizationInviteState } from '../../shared/models/organization-invite
 import { environment } from '../../../environments/environment';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { User } from '../../shared/models/user.model';
+import { UserOrganizationService } from '../../core/services/user-organization.service';
 
 @Component({
   selector: 'app-organization-profile',
@@ -21,6 +22,7 @@ export class OrganizationProfileComponent implements OnInit {
     private organizationService: OrganizationService,
     private organizationInvitesService: OrganizationInvitesService,
     private authService: AuthService,
+    private userOrganizationService: UserOrganizationService,
     private toastrService: ToastrService) {
       this.cropperSettings = new CropperSettings();
       this.cropperSettings.width = 400;
@@ -59,17 +61,20 @@ export class OrganizationProfileComponent implements OnInit {
   isSending: Boolean = false;
 
   ngOnInit() {
-    this.authService.currentUser.subscribe(
-      (userData) => {
-        this.user = { ...userData };
-        if (this.user.lastPickedOrganization !== undefined) {
-          this.organization = this.user.lastPickedOrganization;
+      this.authService.currentUser.subscribe(user => {
+        console.log(user);
+        this.user = user;
+
+        this.organizationService.get(this.user.lastPickedOrganizationId).subscribe(async (org) => {
+          console.log(org);
+          this.organization = org;
           this.name = this.organization.name;
-        }
-        this.imageUrl = this.user.lastPickedOrganization.imageURL;
-        if (this.organization.createdByUserId === this.user.id) {
-          this.editable = true;
-        }
+          this.imageUrl = org.imageURL;
+          const role = await this.userOrganizationService.getOrganizationRole();
+          this.editable = role.name === 'Manager' ? true : false;
+          console.log('EDITABLE');
+          console.log(this.editable);
+        });
       });
   }
 

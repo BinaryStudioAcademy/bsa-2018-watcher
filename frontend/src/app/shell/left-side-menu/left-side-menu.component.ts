@@ -4,9 +4,6 @@ import { NavigationStart} from '@angular/router';
 import { Router, RouterEvent} from '@angular/router';
 import { MenuItem} from 'primeng/api';
 
-
-import {Instance} from '../../shared/models/instance.model';
-
 @Component({
   selector: 'app-left-side-menu',
   templateUrl: './left-side-menu.component.html',
@@ -21,8 +18,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
   private regexSettingsUrl: RegExp = /\/user\/settings/;
   private regexFeedbackUrl: RegExp = /\/user\/feedback/;
-  private regexDashboardUrl: RegExp = /\/user(\/dashboards)?/;
-  private regexAdminUrl = /\/admin/;
+  private regexAdminUrl: RegExp = /\/admin/;
 
   isComponentInvisible: boolean;
   menuItems: MenuItem[];
@@ -60,6 +56,10 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       icon: 'fa fa-fw fa-building',
       routerLink: ['/user/settings/organization-profile']
     }, {
+      label: 'Members',
+      icon: 'fa fa-fw fa-users',
+      routerLink: [`/user/settings/organization-members`],
+    }, {
       label: 'Notification Settings',
       icon: 'fa fa-fw fa-send',
       routerLink: ['/user/settings/notification-settings']
@@ -90,17 +90,27 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   }
 
   private changeMenu(): void {
-    if (this.activeUrl.match(this.regexSettingsUrl)) {
+    if (this.checkRoute(this.regexSettingsUrl)) {
       this.menuItems = this.settingsItems;
       this.isComponentInvisible = false;
-    } else if (this.activeUrl.match(this.regexFeedbackUrl)) {
-      this.isComponentInvisible = true;
-    } else if (this.activeUrl.match(this.regexAdminUrl)) {
+      return;
+    }
+
+    if (this.checkRoute(this.regexAdminUrl)) {
       this.menuItems = this.adminItems;
       this.isComponentInvisible = false;
-    } else if (this.activeUrl.match(this.regexDashboardUrl)) {
-      this.isComponentInvisible = true;
+      return;
     }
+
+    if (this.checkRoute(this.regexFeedbackUrl)) {
+      this.isComponentInvisible = true;
+      this.menuItems = this.settingsItems;
+      return;
+    }
+  }
+
+  private checkRoute(regex: RegExp): boolean {
+    return (this.activeUrl.match(regex)) ? true : false;
   }
 
   private clearSettings(url: string): void {
@@ -108,7 +118,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
 
       const setting = this.getSettingByUrl(url);
 
-      if (setting !== null) {
+      if (setting) {
         setting.classList.remove('ui-state-active');
         setting.parentElement.classList.remove('ui-state-active');
         this.previousSettingUrl = this.activeUrl;
@@ -119,7 +129,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
   private highlightCurrentSetting(): void {
     const setting = this.getSettingByUrl(this.activeUrl);
 
-    if (setting !== null) {
+    if (setting) {
       this.clearSettings(this.previousSettingUrl);
 
       setting.classList.add('ui-state-active');

@@ -6,7 +6,7 @@ import { InstanceService } from '../../core/services/instance.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Instance } from '../../shared/models/instance.model';
 import { InstanceRequest } from '../models/instance-request.model';
-import { SelectItem } from '../../../../node_modules/primeng/api';
+import { SelectItem } from 'primeng/api';
 
 @Component({
   selector: 'app-edit-instance',

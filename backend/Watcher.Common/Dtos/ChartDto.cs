@@ -13,13 +13,11 @@
 
         public int Threshold { get; set; } // = 1;
 
-        public string MostLoaded { get; set; }
+        public int MostLoaded { get; set; } // = 1'
 
         public int DashboardId { get; set; }
 
-        // public ColorSchemeTypeName ColorScheme { get; set; }
-
-        public string SchemeType { get; set; } = "ordinal";
+        public string SchemeType { get; set; } // = "ordinal"; // by default it will change depend on user choise
 
         public bool ShowLegend { get; set; }
 
@@ -51,15 +49,11 @@
 
         public bool IsShowSeriesOnHover { get; set; }
 
-        //public CurveType CurveType { get; set; }
-
-        //public CurveClosedType CurveClosedType { get; set; }
-
         public string Title { get; set; }
 
         public ChartType Type { get; set; }
 
-        public string Sources { get; set; }
+        public string Sources { get; set; } // 0,1 or 15
 
         public bool IsLightTheme { get; set; }
     }

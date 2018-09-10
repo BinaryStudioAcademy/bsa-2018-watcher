@@ -1,0 +1,8 @@
+<p-dialog 
+  [(visible)]="display" [width]="350" [minHeight]="160" [minWidth]="200" [minY]="70" [closable]="false" [blockScroll]="true"
+  [modal]="true" [responsive]="true" [showHeader]="false" [draggable]="false" [maximizable]="false" [baseZIndex]="999">
+  <div class="ui-dialog-content">
+    <span class="spinner-header"> {{header}} </span>
+    <p-progressSpinner [style]="{width: '75px', height: '75px'}" class="spinner"></p-progressSpinner>
+  </div>
+</p-dialog>

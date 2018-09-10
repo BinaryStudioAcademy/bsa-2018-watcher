@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using DataAccumulator.Shared.Models;
+
 using Watcher.Common.Dtos.Plots;
 
 namespace Watcher.Core.Interfaces
@@ -18,5 +21,7 @@ namespace Watcher.Core.Interfaces
         Task<List<PercentageInfo>> GetInstancePercentageInfo(Guid id, int count);
 
         Task<List<CollectedDataDto>> GetCollectedDataByInstanceId(Guid id, int count);
+
+        Task<List<CollectedDataDto>> GetCollectedDataByInstanceId(Guid id, CollectedDataType dataType);
     }
 }

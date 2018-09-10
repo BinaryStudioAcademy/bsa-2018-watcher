@@ -13,6 +13,7 @@ export class ChartDashboardComponent implements OnChanges {
 
   @Input() dashboardCharts: DashboardChart[] = [];
   @Input() dashboardId: number;
+  @Input() isManager: boolean;
   @Output() editChart = new EventEmitter<DashboardChart>();
   @Output() deleteChart = new EventEmitter<number>();
 

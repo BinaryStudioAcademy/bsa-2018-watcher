@@ -16,11 +16,10 @@ export class DashboardsHub {
   private connectionEstablishedSub = new Subject<boolean>();
   public connectionEstablished$ = from(this.connectionEstablishedSub);
 
-  private infoSub = new Subject<PercentageInfo>();
+  private infoSub = new Subject<CollectedData>();
   public infoSubObservable = from(this.infoSub);
 
-  constructor(private apiService: ApiService,
-              private authService: AuthService) {
+  constructor() {
   }
 
   connectToSignalR(firebaseToken: string, watcherToken: string): Promise<void> {
@@ -70,6 +69,7 @@ export class DashboardsHub {
   private registerOnServerEvents(): void {
 
     this.hubConnection.on('InstanceDataTick', (info: CollectedData) => {
+        info.time = new Date(info.time);
         this.infoSub.next(info);
       }
     );
@@ -95,12 +95,15 @@ export class DashboardsHub {
 
   // Reconnect loop
   private startDashboardHubConnection(): Promise<void> {
-    if (this.isConnect) { return; }
+    if (this.isConnect) {
+      return;
+    }
     console.log('DashboardHub trying to connect');
     return this.hubConnection.start()
       .then(() => {
         console.log('DashboardHub connected');
         this.connectionEstablishedSub.next(true);
+        this.isConnect = true;
         // this.getSignalRClaims();
       })
       .catch(err => {

@@ -18,8 +18,8 @@
   <p-tabMenu [model]="dashboardMenuItems" [activeItem]="activeDashboardItem" *ngIf="instanceId"></p-tabMenu>
   <div class="workspace" *ngIf="instanceId">
     <div *ngIf="activeDashboardItem && dashboardMenuItems.length > 1" class="dashboard-options">
-      <p-tieredMenu #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
-      <button #btn type="button" class="gear" pButton icon="fa fa-fw fa-gear" (click)="cog.toggle($event)"></button>
+      <p-tieredMenu class="text-left" #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
+      <span class="fa fa-fw fa-gear options-btn" (click)="cog.toggle($event)" *ngIf="isManager"></span>
     </div>
     <div class="tutorial" *ngIf="dashboardMenuItems.length == 1">
       <p class="tutorial-item">Click <i class="fa fa-plus"></i> to add a dashboard</p>
@@ -32,7 +32,8 @@
                           [dashboardCharts]="activeDashboardItem.charts"
                           [dashboardId]="activeDashboardItem.dashId"
                           (editChart)="onEditChart($event)"
-                          (deleteChart)="onChartDeleted($event)">
+                          (deleteChart)="onChartDeleted($event)"
+                          [isManager]="isManager">
     </app-chart-dashboard>
   </div>
 </div>

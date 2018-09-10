@@ -16,6 +16,7 @@ import { InviteComponent } from './invite/invite.component';
 import { CoreModule } from './core/core.module';
 import { AuthorizationComponent } from './authorization/authorization.component';
 import { AdminModule } from './admin/admin.module';
+import {GMapModule} from 'primeng/gmap';
 
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
@@ -36,7 +37,7 @@ import { SystemNotificationComponent } from './notification/system-notification/
     InviteComponent,
     AuthorizationComponent,
     CustomConfirmDialogComponent,
-    SystemNotificationComponent
+    SystemNotificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,6 +53,7 @@ import { SystemNotificationComponent } from './notification/system-notification/
     ToastModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
+    GMapModule,
 
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,

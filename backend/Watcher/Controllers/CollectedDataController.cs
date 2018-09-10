@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
 
     using DataAccumulator.DataAccessLayer.Entities;
+    using DataAccumulator.Shared.Models;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -92,9 +93,9 @@
 
         [HttpGet("Data/{id}")]
         [AllowAnonymous]
-        public virtual async Task<ActionResult<PercentageInfo>> GetCollectedDataByInstanceId([FromRoute] Guid id, [FromQuery] int count)
+        public virtual async Task<ActionResult<CollectedDataDto>> GetCollectedDataByInstanceId([FromRoute] Guid id, [FromQuery] CollectedDataType dataType)
         {
-            var dtos = await _collectedDataService.GetCollectedDataByInstanceId(id, count);
+            var dtos = await _collectedDataService.GetCollectedDataByInstanceId(id, dataType);
             if (dtos == null)
             {
                 return NoContent();
@@ -102,6 +103,19 @@
 
             return Ok(dtos);
         }
+
+        //[HttpGet("Data/{id}")]
+        //[AllowAnonymous]
+        //public virtual async Task<ActionResult<CollectedDataDto>> GetCollectedDataByInstanceId([FromRoute] Guid id, [FromQuery] int count)
+        //{
+        //    var dtos = await _collectedDataService.GetCollectedDataByInstanceId(id, count);
+        //    if (dtos == null)
+        //    {
+        //        return NoContent();
+        //    }
+
+        //    return Ok(dtos);
+        //}
 
         [HttpGet("Percentage/{id}")]
         [AllowAnonymous]
@@ -152,7 +166,7 @@
             var dateTime = DateTime.UtcNow;
             for (var i = 0; i < 20; i++)
             {
-                var entity = CollectedDataService.GetFakeData(Guid.Empty, dateTime.AddSeconds(15 * i));
+                var entity = CollectedDataService.GetFakeData(Guid.Empty, dateTime.AddSeconds(10 * i));
                 entity.Id = Guid.NewGuid();
                 var dto = _mapper.Map<CollectedData, CollectedDataDto>(entity);
                 data.Add(dto);
