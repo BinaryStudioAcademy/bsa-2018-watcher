@@ -4,14 +4,13 @@ import { ToastrService } from '../core/services/toastr.service';
 import { LongAnswerType } from '../shared/models/long-answer-type.enum';
 import { ShortAnswerType } from '../shared/models/short-answer-type.enum';
 import { Feedback } from '../shared/models/feedback.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.sass',
-  './landing.component.cards.sass',
-  './landing.component.footer.sass',
-  './landing.component.header.sass'],
+  './landing.component.cards.sass'],
 })
 export class LandingComponent implements OnInit, OnDestroy {
 
@@ -20,7 +19,10 @@ export class LandingComponent implements OnInit, OnDestroy {
   email: string;
   text: string;
 
-  constructor(private feedbackService: FeedbackService, private toastrService: ToastrService) {}
+  constructor(
+    private feedbackService: FeedbackService,
+    private toastrService: ToastrService,
+    private router: Router) {}
 
   onFeedback() {
     const newFeedback: Feedback = {
@@ -47,6 +49,10 @@ export class LandingComponent implements OnInit, OnDestroy {
     this.name = '';
     this.email = '';
     this.text = '';
+  }
+
+  onAbout(): void {
+    this.router.navigate(['/about']);
   }
 
   headerScroll(): any {

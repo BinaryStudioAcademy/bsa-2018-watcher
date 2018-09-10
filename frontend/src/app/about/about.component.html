@@ -1,0 +1,84 @@
+<header id="header">
+  <div class="container">
+    <h1>
+      <a (click)="scrollTo('startbanner')">Watcher</a>
+      <i class="fas fa-bars" id="mobile" (click)="show()"></i>
+    </h1>
+    <nav id="nav">
+      <ul id="desktop">
+        <li>
+          <a (click)="scrollTo('startbanner')">Home</a>
+        </li>
+        <li>
+          <a (click)="scrollTo('why-watcher')">Why watcher</a>
+        </li>
+        <li>
+          <a (click)="scrollTo('cards')">Advantages</a>
+        </li>
+        <li>
+          <a (click)="onAbout()">About</a>
+        </li>
+        <li>
+          <a (click)="scrollTo('contacts')">Contact us</a>
+        </li>
+        <li id="btnAutorization">
+          <app-authorization></app-authorization>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="content-wrp">
+  <section class="section-wrp main-section">
+    <h1 class="page-title">About us</h1>
+    <div class="description">
+      <p>We are a friendly team of developers.</p>
+      <p>This is a group project of the Binary Studio Academy 2018.</p>
+      <p>A platform for monitoring the consumption of resources and other system information on virtual machines for analysis
+        and emergency feedback.</p>
+    </div>
+  </section>
+  <div class="section-wrp">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt nam temporibus odio neque vel rerum culpa quae reiciendis
+    quia. Cupiditate, laboriosam. Recusandae laborum dolorem temporibus eaque aperiam eius quos iusto voluptate saepe ipsum.
+    Inventore odio nobis molestiae autem architecto, rem consequatur officia pariatur delectus ipsa minima reprehenderit
+    vero minus omnis fugit! Accusamus eum blanditiis nemo similique autem! Architecto nulla, inventore modi ab sed, ratione
+    nobis cupiditate natus at doloremque accusantium minus, animi dolor voluptatibus fugiat. Ad corporis laudantium dolorum.
+    Unde corporis quae excepturi illum pariatur officiis aut quo dolore delectus, dignissimos repudiandae, odit ipsam cum
+    eveniet fugit hic in nulla.</div>
+  <div class="section-wrp">Ratione, neque culpa eaque, officiis voluptates deleniti perferendis vero distinctio nesciunt sapiente placeat perspiciatis
+    quos ab, tempora enim? Distinctio debitis dignissimos odio harum, pariatur iure maxime quos provident exercitationem
+    culpa sequi eaque unde sed hic quia. Optio, repellendus! Exercitationem amet tempore ipsam quibusdam enim voluptatibus,
+    praesentium cum vero harum necessitatibus maxime non quasi voluptatum aliquam sint quis facilis porro quia, sunt dolores
+    commodi quisquam excepturi. Temporibus tempore, aperiam ipsam dignissimos, magnam eius quam fugit odit eaque aspernatur
+    optio veniam quo velit error fuga nihil officia consectetur exercitationem modi assumenda illum minima aliquam atque?
+    Laborum nesciunt dicta, dignissimos corrupti temporibus iusto.</div>
+</div>
+<footer class="footer-distributed ">
+
+  <div class="footer-right ">
+    <a href="https://www.facebook.com/bsa.watcher.1">
+      <i class="fa fa-facebook "></i>
+    </a>
+    <a href="https://twitter.com/BsaWatcher">
+      <i class="fa fa-twitter "></i>
+    </a>
+    <a href="https://www.linkedin.com/in/bsa-watcher-7b510016b/">
+      <i class="fa fa-linkedin "></i>
+    </a>
+    <a href="https://github.com/BinaryStudioAcademy/bsa-2018-watcher">
+      <i class="fa fa-github "></i>
+    </a>
+  </div>
+
+  <div class="footer-left ">
+    <p class="footer-links ">
+      <a (click)="scrollTo( 'startbanner') ">Home</a> ·
+      <a (click)="scrollTo( 'why-watcher') ">Why watcher</a> ·
+      <a (click)="scrollTo( 'cards') ">Advantages</a> ·
+      <a (click)="onAbout() ">About</a> ·
+      <a (click)="scrollTo( 'contacts') ">Contact us</a>
+    </p>
+
+    <p>Watcher © 2018</p>
+  </div>
+</footer>

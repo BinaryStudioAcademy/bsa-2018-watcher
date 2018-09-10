@@ -34,7 +34,7 @@ import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdia
 import { ShellModule } from './shell/shell.module';
 import { CustomConfirmDialogComponent } from './notification/custom-confirm-dialog/custom-confirm-dialog.component';
 import { SystemNotificationComponent } from './notification/system-notification/system-notification.component';
-
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +44,7 @@ import { SystemNotificationComponent } from './notification/system-notification/
     AuthorizationComponent,
     CustomConfirmDialogComponent,
     SystemNotificationComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
