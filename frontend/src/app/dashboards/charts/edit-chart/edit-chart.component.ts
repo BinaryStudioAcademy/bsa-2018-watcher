@@ -96,6 +96,7 @@ export class EditChartComponent implements OnInit {
 
     switch (this.dashboardChart.type) {
       case ChartType.ResourcesTable:
+      case ChartType.NumberCards:
         break;
       default:
         // Disabling another groups
