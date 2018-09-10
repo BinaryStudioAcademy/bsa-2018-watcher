@@ -86,6 +86,7 @@ namespace Watcher
                     o.ConnectionString = serviceBusSection["ConnectionString"];
                     o.DataQueueName = serviceBusSection["DataQueueName"];
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
+                    o.SettingsQueueName = serviceBusSection["SettingsQueueName"];
                 });
             
             services.ConfigureSwagger(Configuration);
