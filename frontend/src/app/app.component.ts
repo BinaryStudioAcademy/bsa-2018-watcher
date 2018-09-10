@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
 
     const user =  this.authService.getCurrentUserLS();
 
-    this.cssUrl = this.themeService.applyTheme(user);
+    this.themeService.applyTheme(user);
 
   }
 }
