@@ -18,6 +18,9 @@ namespace Watcher.DataAccess.Entities
         public LongAnswerType Friendliness { get; set; }
         public LongAnswerType Quickness { get; set; }
 
+        public string Name { get; set; }
+        public string Email { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
 

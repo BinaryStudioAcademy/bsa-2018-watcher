@@ -181,11 +181,15 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<string>("Email");
+
                     b.Property<int>("Friendliness");
 
                     b.Property<int>("Informatively");
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("Name");
 
                     b.Property<int>("Quickness");
 

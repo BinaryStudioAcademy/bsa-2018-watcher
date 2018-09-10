@@ -1,4 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FeedbackService } from '../core/services/feedback.service';
+import { ToastrService } from '../core/services/toastr.service';
+import { LongAnswerType } from '../shared/models/long-answer-type.enum';
+import { ShortAnswerType } from '../shared/models/short-answer-type.enum';
+import { Feedback } from '../shared/models/feedback.model';
+import {GMapModule} from 'primeng/gmap';
+declare var google: any;
 
 @Component({
   selector: 'app-landing',
@@ -10,7 +17,40 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class LandingComponent implements OnInit, OnDestroy {
   isAbout: Boolean = false;
-  constructor() {}
+  name: string;
+  email: string;
+  text: string;
+  options: any;
+  overlays: any[];
+
+  constructor(private feedbackService: FeedbackService, private toastrService: ToastrService) {}
+
+  onFeedback() {
+    const newFeedback: Feedback = {
+      id: 0,
+      createdAt: new Date(),
+      user: null,
+      text: this.text,
+      willUse: ShortAnswerType.Abstain,
+      informatively: LongAnswerType.Abstain,
+      friendliness: LongAnswerType.Abstain,
+      quickness: LongAnswerType.Abstain,
+      response: null,
+      name: this.name,
+      email: this.email
+    };
+    this.feedbackService.create(newFeedback).
+    subscribe(
+      value => {
+        this.toastrService.success('Added new feedback');
+        if (!this.email) {
+          this.toastrService.info('If you want to receive emails, fill out the email field.');
+        }
+      },
+      error => {
+        this.toastrService.error(`Error ocured status: ${error.message}`);
+      });
+  }
 
   headerScroll(): any {
     const scrolled = window.pageYOffset || document.documentElement.scrollTop;
@@ -18,7 +58,8 @@ export class LandingComponent implements OnInit, OnDestroy {
       document.getElementById('header').style.background = 'rgba(0,0,0,0.2)';
     } else { document.getElementById('header').style.background = 'rgba(0,0,0,0.8)'; }}
 
-  scrollTo(id: string): void {this.isAbout = false;
+  scrollTo(id: string): void {
+    this.isAbout = false;
     const element = document.getElementById(id);
     element.scrollIntoView( {block: 'start', behavior: 'smooth'});
     const menu = document.getElementById('nav');
@@ -38,6 +79,13 @@ export class LandingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     window.addEventListener('resize', this.resize, true);
     window.addEventListener('scroll', this.headerScroll, true);
+    this.options = {
+      center: {lat: 36.890257, lng: 30.707417},
+      zoom: 12
+    };
+
+    this.overlays = [
+      new google.maps.Marker({position: {lat: 36.879466, lng: 30.667648}, title: 'Konyaalti'})];
   }
   ngOnDestroy() {
     window.removeEventListener('scroll', this.headerScroll, true);

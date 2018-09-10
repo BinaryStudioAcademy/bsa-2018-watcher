@@ -26,6 +26,7 @@
         /// </summary>
         private readonly IResponseService _responseService;
         private readonly INotificationService _notificationService;
+        private readonly IEmailProvider _emailProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResponsesController"/> class. 
@@ -34,10 +35,11 @@
         /// Responses service
         /// </param>
         /// <param name="provider"></param>
-        public ResponsesController(IResponseService service, INotificationService notificationService)
+        public ResponsesController(IResponseService service, INotificationService notificationService, IEmailProvider provider)
         {
             _responseService = service;
             _notificationService = notificationService;
+            _emailProvider = provider;
         }
 
         /// <summary>
@@ -114,14 +116,20 @@
             {
                 return StatusCode(500);
             }
-           
-            var notificationDto = new NotificationDto();
-            notificationDto.CreatedAt = request.CreatedAt;
-            notificationDto.Text = request.Text;
             var userFeedback = request.Feedback.User;
-            notificationDto.UserId = userFeedback.Id;
-            notificationDto.OrganizationId = userFeedback.LastPickedOrganizationId;
-            await _notificationService.CreateEntityAsync(notificationDto, NotificationType.Info);
+            if(userFeedback!=null) {
+                var notificationDto = new NotificationDto();
+                notificationDto.CreatedAt = request.CreatedAt;
+                notificationDto.Text = request.Text;
+                notificationDto.UserId = userFeedback.Id;
+                notificationDto.OrganizationId = userFeedback.LastPickedOrganizationId;
+                await _notificationService.CreateEntityAsync(notificationDto, NotificationType.Info);
+            }
+            else
+            {
+                await _emailProvider.SendMessageOneToOne("watcher@net.com", "Thanks for feedback", request.Feedback.Email,
+                    request.Text, "");
+            }
             return CreatedAtAction("GetById", new { id = dto.Id }, dto);
         }
     }

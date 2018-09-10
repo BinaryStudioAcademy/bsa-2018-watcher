@@ -4,7 +4,6 @@ import { FeedbackService } from '../core/services/feedback.service';
 import { AuthService } from '../core/services/auth.service';
 import { ToastrService } from '../core/services/toastr.service';
 import { Feedback } from '../shared/models/feedback.model';
-// import { UserService } from '../core/services/user.service';
 import { User } from '../shared/models/user.model';
 import { LongAnswerType } from '../shared/models/long-answer-type.enum';
 import { ShortAnswerType } from '../shared/models/short-answer-type.enum';
@@ -20,7 +19,6 @@ import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
 export class FeedbackComponent implements OnInit {
 
   feedback: Feedback;
-  // feedbacks: Feedback[];
   user: User;
   isSubmiting: Boolean = false;
 
@@ -28,7 +26,6 @@ export class FeedbackComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private feedbackService: FeedbackService,
-    // private userService: UserService,
     private toastrService: ToastrService,
     private router: Router) { }
 
@@ -55,8 +52,6 @@ export class FeedbackComponent implements OnInit {
     if (this.user == null) {
       return;
     }
-
-    // this.feedbackService.getAll().subscribe((value: Feedback[]) => this.feedbacks = value);
   }
 
   async onSubmit() {
@@ -80,9 +75,11 @@ export class FeedbackComponent implements OnInit {
       informatively: informatively,
       friendliness: friendliness,
       quickness: quickness,
-      response: null
+      response: null,
+      name: this.user.displayName,
+      email: this.user.email
     };
-    console.log(newFeedback);
+
     this.feedbackService.create(newFeedback).
       subscribe(
         value => {
