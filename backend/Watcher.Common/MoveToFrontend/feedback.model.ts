@@ -1,6 +1,8 @@
 ﻿
 import { ShortAnswerType } from './short-answer-type.enum';
 import { LongAnswerType } from './long-answer-type.enum';
+import { LongAnswerType } from './long-answer-type.enum';
+import { LongAnswerType } from './long-answer-type.enum';
 import { User } from './user.model';
 import { Response } from './response.model';
 
@@ -11,6 +13,8 @@ export interface Feedback  {
    informatively: LongAnswerType;
    friendliness: LongAnswerType;
    quickness: LongAnswerType;
+   name: string;
+   email: string;
    createdAt: Date;
    user: User;
    response: Response;

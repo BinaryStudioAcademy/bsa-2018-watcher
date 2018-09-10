@@ -7,7 +7,7 @@
   </div>
 
   <div class="grid-container">
-    <div class="grid-item logo">
+    <div *ngIf="organization" class="grid-item logo">
       <div class="ui-g-12 ui-md-8 ui-lg-5">
         <div class="label">Organization logo</div>
         <figure class="cap-bot">
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="grid-item orgData">
+    <div *ngIf="organization" class="grid-item orgData">
       <div class="ui-g">
         <div class="ui-g-12 ui-md-12 ui-lg-12">
           <div class="label">Name*:</div>

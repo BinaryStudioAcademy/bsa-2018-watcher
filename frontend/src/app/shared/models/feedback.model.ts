@@ -11,6 +11,8 @@ export interface Feedback  {
    informatively: LongAnswerType;
    friendliness: LongAnswerType;
    quickness: LongAnswerType;
+   name: string;
+   email: string;
    createdAt: Date;
    user: User;
    response: Response;

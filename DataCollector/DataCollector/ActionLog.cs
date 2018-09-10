@@ -2,7 +2,7 @@
 
 namespace DataCollector
 {
-    class ActionLog
+    internal class ActionLog
     {
         // Id - Action log number
         public Guid Id { get; set; }
