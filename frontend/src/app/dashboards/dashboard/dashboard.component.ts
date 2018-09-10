@@ -331,14 +331,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onAddedCharts(array: Array<DashboardChart>, id: number) {
     array.forEach(chart => {
-      debugger
       const newChart = this.createChartRequest(chart);
       newChart.dashboardId = id;
       this.chartService.create(newChart).subscribe(value => {
         chart.id = value.id;
-        // const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value);
-        this.onChartEdited(chart); // dashboardChart);
-        // this.toastrService.success('Chart was created');
+        this.onChartEdited(chart);
+        this.toastrService.success('Chart was created');
       }, error => {
         this.toastrService.error(`Error occurred status: ${error.message}`);
       });
