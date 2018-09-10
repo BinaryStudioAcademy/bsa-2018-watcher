@@ -16,14 +16,17 @@ namespace DataAccumulator.BusinessLayer.Services
     {
         private readonly IMapper _mapper;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;
+        private readonly IThresholdsValidatorCore<CollectedDataDto> _thresholdsValidatorCore;
         private readonly IServiceBusProvider _serviceBusProvider;
 
         public DataAccumulatorService(IMapper mapper,
                                       IDataAccumulatorRepository<CollectedData> repository,
+                                      IThresholdsValidatorCore<CollectedDataDto> thresholdsValidatorCore,
                                       IServiceBusProvider serviceBusProvider)
         {
             _mapper = mapper;
             _repository = repository;
+            _thresholdsValidatorCore = thresholdsValidatorCore;
             _serviceBusProvider = serviceBusProvider;
         }
 
@@ -58,6 +61,9 @@ namespace DataAccumulator.BusinessLayer.Services
 
             var mappedEntity = _mapper.Map<CollectedDataDto, CollectedData>(collectedDataDto);
             await _repository.AddEntity(mappedEntity);
+
+            // Thresholds Validator
+            await _thresholdsValidatorCore.Validate(collectedDataDto);
 
             var message = new InstanceCollectedDataMessage
             {

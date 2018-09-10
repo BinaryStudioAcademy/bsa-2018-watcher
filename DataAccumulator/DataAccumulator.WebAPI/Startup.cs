@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using DataAccumulator.BusinessLayer.Interfaces;
 using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.BusinessLayer.Providers;
+using DataAccumulator.BusinessLayer.Validators;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
@@ -54,12 +55,16 @@ namespace DataAccumulator
 
             services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
             services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>();
+            services.AddTransient<IInstanceSettingsRepository<InstanceSettings>, InstanceSettingsRepository>();
 
             services.AddScoped<IDataAccumulatorService<CollectedDataDto>, DataAccumulatorService>();
             services.AddScoped<IDataAggregatorService<CollectedDataDto>, DataAggregatorService>();
+            services.AddScoped<IInstanceSettingsService<InstanceSettingsDto>, InstanceSettingsService>();
 
             services.AddTransient<IAggregatorService<CollectedDataDto>, AggregatorService>();
             services.AddTransient<IDataAggregatorCore<CollectedDataDto>, DataAggregatorCore>();
+
+            services.AddTransient<IThresholdsValidatorCore<CollectedDataDto>, ThresholdsValidatorCore>();
 
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ILogRepository, LogRepository>();
@@ -131,6 +136,9 @@ namespace DataAccumulator
                 cfg.CreateMap<CollectedDataDto, CollectedData>();
                 cfg.CreateMap<CollectedData, CollectedData>();
                 cfg.CreateMap<ActionLogDto, ActionLog>();
+                cfg.CreateMap<InstanceSettings, InstanceSettingsDto>();
+                cfg.CreateMap<InstanceSettingsDto, InstanceSettings>();
+                cfg.CreateMap<InstanceSettings, InstanceSettings>();
             });
 
             return config;
