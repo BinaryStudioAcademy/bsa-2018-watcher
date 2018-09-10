@@ -37,7 +37,7 @@ export class EditChartComponent implements OnInit {
   type = ChartType;
   colorSchemes = colorSets;
 
-  historyTime: number;
+  // historyTime: number; // in minutes
   isPreviewAvailable: boolean;
   isTimeAvailable: boolean;
   isXAxisAvailable: boolean;
@@ -64,7 +64,7 @@ export class EditChartComponent implements OnInit {
     this.onDisplay.subscribe((isShow: boolean) => this.visible = isShow);
     this.dashboardChart.showCommon = false;
 
-    // Fill dropdawn with sources
+    // Fill dropdown with sources
     Object.keys(ChartType).forEach(type => {
       const number = Number(type);
       if (!isNaN(number)) {
@@ -275,6 +275,7 @@ export class EditChartComponent implements OnInit {
       showCommon: this.dashboardChart.showCommon,
       threshold: this.dashboardChart.threshold,
       mostLoaded: this.dashboardChart.mostLoaded,
+      historyTime: this.dashboardChart.historyTime,
       schemeType: this.dashboardChart.colorScheme.name,
       dashboardId: this.dashboardId,
       showLegend: this.dashboardChart.showLegend,

@@ -15,6 +15,8 @@
 
         public int MostLoaded { get; set; } // = 1'
 
+        public int HistoryTime { get; set; }
+
         public int DashboardId { get; set; }
 
         public string SchemeType { get; set; } // = "ordinal"; // by default it will change depend on user choise

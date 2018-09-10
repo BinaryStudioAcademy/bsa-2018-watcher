@@ -96,15 +96,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.onDashboards(value);
         this.isLoading = false;
         this.collectedDataService.getCollectedDataByInstanceId(this.instanceGuidId, CollectedDataType.Accumulation)
-          .subscribe( data => {
+          .subscribe(data => {
             this.dataService.hourlyCollectedData = data;
             if (this.dataService.hourlyCollectedData && this.dataService.hourlyCollectedData.length > 0) {
               // -1 is last item - plus sign
-              for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
-                for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
-                  this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.dashboardMenuItems[i].charts[j]);
-                }
+              if (this.dashboardMenuItems && this.dashboardMenuItems.length > 1) {
+                this.fillDashboardChartsWithData(this.activeDashboardItem);
               }
+              // for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
+              //   for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
+              //     this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.dashboardMenuItems[i].charts[j]);
+              //   }
+              // }
             }
             this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
           }, err => {
@@ -231,6 +234,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       showCommon: dashboardChart.showCommon,
       threshold: dashboardChart.threshold,
       mostLoaded: 1,
+      historyTime: dashboardChart.historyTime,
       schemeType: dashboardChart.schemeType,
       dashboardId: 0,
       showLegend: dashboardChart.showLegend,
@@ -414,12 +418,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
       dashId: dashboard.id,
       createdAt: dashboard.createdAt,
       charts: dashboard.charts.map(c => this.dataService.instantiateDashboardChart(c)),
-      command: () => this.activeDashboardItem = item
+      command: () => {
+        this.activeDashboardItem = item;
+        this.fillDashboardChartsWithData(this.activeDashboardItem);
+      }
     };
     return item;
   }
 
-  onInstanceRemoved(id: number) {
+  fillDashboardChartsWithData(dashboardItem: DashboardMenuItem): void {
+    for (let j = 0; j < dashboardItem.charts.length; j++) {
+      this.dataService.fulfillChart(this.dataService.hourlyCollectedData, dashboardItem.charts[j]);
+    }
+  }
+
+  onInstanceRemoved(id: number): void {
     this.instanceId = null;
     this.dashboards = [];
     this.dashboardMenuItems = [];
