@@ -86,10 +86,11 @@ export class LandingComponent implements OnInit, OnDestroy {
 
   scrollTo(id: string): void {
     const element = document.getElementById(id);
+    if (element) {
     element.scrollIntoView({
       block: 'start',
       behavior: 'smooth'
-    });
+    }); }
     const menu = document.getElementById('nav');
     if (menu.style.display === 'block') {
       this.show();
