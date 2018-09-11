@@ -94,7 +94,7 @@
         <div class="label">Theme</div>
 				<div class="ui-g ui-fluid">
 					<div class="ui-g-12">
-						<p-dropdown [options]="themeDropdown" [(ngModel)]="organization.theme" (onChange)="onChange($event.value)"></p-dropdown>
+						<p-dropdown [options]="themeDropdown" [(ngModel)]="selectedThemeName" [placeholder]="organization.theme.name" (onChange)="onChange($event.value)" [style]="{'width':'110px'}"></p-dropdown>
 					</div>
 				</div>
 

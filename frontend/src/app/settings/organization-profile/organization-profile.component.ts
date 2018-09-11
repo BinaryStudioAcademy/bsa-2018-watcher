@@ -74,19 +74,19 @@ export class OrganizationProfileComponent implements OnInit {
         if (this.user.lastPickedOrganization !== undefined) {
           this.organization = this.user.lastPickedOrganization;
           this.name = this.organization.name;
+          this.selectedTheme = this.organization.theme;
         }
         this.imageUrl = this.user.lastPickedOrganization.imageURL;
         const role = await this.userOrganizationService.getOrganizationRole();
         this.editable = role.name === 'Manager' ? true : false;
+        this.fillDropdown();
         console.log('EDITABLE');
         console.log(this.editable);
       });
 
       this.themeService.getAll().subscribe(
         (data) => {
-          debugger;
           if (data.length > 0) {
-            data.forEach(d => this.themeDropdown.push({label: d.name, value: d.name}));
             this.themes = data;
           }
         }
@@ -98,6 +98,7 @@ export class OrganizationProfileComponent implements OnInit {
       // Update Organization
       this.isUpdating = true;
       this.organization.name = this.name;
+      this.organization.themeId = this.selectedTheme.id;
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
           // Update lastPickedOrganization in User on frontend
@@ -210,9 +211,14 @@ export class OrganizationProfileComponent implements OnInit {
   }
 
   onChange(value: string): void {
-
-    const selectedTheme = this.themes.find(t => t.name === value);
-    this.themeService.applyTheme(selectedTheme);
     debugger;
+    this.selectedTheme = this.themes.find(t => t.name === value);
+    this.themeService.applyTheme(this.selectedTheme);
+  }
+
+  private fillDropdown(): void {
+    this.themeDropdown.push(
+      { label: 'Default', value: 'Default' },
+      { label: 'Darkness', value: 'Darkness' });
   }
 }

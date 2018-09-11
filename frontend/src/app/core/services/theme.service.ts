@@ -30,7 +30,7 @@ export class ThemeService {
 
     link.setAttribute('href', `/assets/${theme.name}.css`);
     link.setAttribute('rel', 'stylesheet');
-    debugger;
+
     head.appendChild(link);
   }
 }
