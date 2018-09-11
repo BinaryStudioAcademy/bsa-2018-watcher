@@ -31,7 +31,7 @@
         </p><!--type [disabled]="!dashboardChart.dataSources.length<1"-->
         <p class="field">Select source: </p>
         <p-multiSelect *ngIf="dashboardChart.showCommon && dashboardChart.type !== type.Pie
-                              && dashboardChart.type != type.AdvancedPie && dashboardChart.type != type.GridPie"
+                              && dashboardChart.type != type.AdvancedPie && dashboardChart.type != type.PieGrid"
                        class="custom-multiselect"
                        [filter]="false"
                        [showHeader]="false"
@@ -42,7 +42,7 @@
         </p-multiSelect>
 
         <p-dropdown *ngIf="!dashboardChart.showCommon || dashboardChart.type == type.Pie
-                          || dashboardChart.type == type.AdvancedPie || dashboardChart.type == type.GridPie"
+                          || dashboardChart.type == type.AdvancedPie || dashboardChart.type == type.PieGrid"
                     [autoWidth]="false"
                     [options]="dropdownGroupSources"
                     placeholder="Select a type"
