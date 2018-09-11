@@ -683,11 +683,18 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 /* Panel menu */
 
-.ui-panelmenu .ui-panelmenu-header.ui-state-active > a, a:hover {
+.ui-panelmenu .ui-panelmenu-header.ui-state-active > a,a:hover:focus {
   
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: #F56C00 !important;
+  color: #ffffff;
+}
+
+.ui-panelmenu .ui-panelmenu-header.ui-state-active > a:hover,
+.ui-panelmenu .ui-panelmenu-header:not(.ui-state-active) > a:hover {
+  border-color: #F8BD7F !important;
+  background-color: #F8BD7F !important;
   color: #ffffff;
 }
 
@@ -754,16 +761,44 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   .ui-radiobutton-box:not(.ui-state-disabled):not(.ui-state-active):hover a {
     color: #ffffff; }
 
+/* Checkbox */
+
+.ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover {
+  background-color: #F56C00;
+}
+
 /* Dropdown*/
 
 .ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item {
-  color: #ffffff !important;
+  color: #000000 !important;
 }
 
 .ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item:hover {
   color: #000000 !important;
 }
 
+.ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item,
+.ui-dropdown-list {
+  background-color: #ffffff !important;
+}
+
+.ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item.ui-state-highlight {
+  color: #000000 !important;  
+}
+
+.ui-multiselect:not(.ui-state-disabled):hover {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.ui-multiselect-label, .ui-dropdown-list{
+  color: #000000 !important;
+}
+
+.ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item.ui-state-highlight,
+.ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item-group.ui-state-highlight {
+  background-color: #F56C00 !important;
+}
 /* Header */
 
 .header button:hover {
