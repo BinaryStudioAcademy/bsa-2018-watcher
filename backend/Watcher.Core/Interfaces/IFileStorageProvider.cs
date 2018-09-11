@@ -10,7 +10,7 @@ namespace Watcher.Core.Interfaces
     {
         Task<string> UploadFormFileAsync(IFormFile formFile);
 
-        Task<string> UploadFormFileAsync(IFormFile formFile, OperatingSystems system);
+        Task<string> UploadFormFileWithNameAsync(IFormFile formFile);
 
 
         Task<string> UploadFileAsync(string path, string containerName = "watcher");
