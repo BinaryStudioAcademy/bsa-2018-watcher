@@ -163,10 +163,10 @@
                 return StatusCode(500);
             }
             
-            if (!string.IsNullOrEmpty(request.User.Email))
+            if (!string.IsNullOrEmpty(request.Email))
             {
-                await _emailProvider.SendMessageOneToOne("watcher@net.com", "Thanks for feedback", request.User.Email,
-                    "Hello, " + request.User.DisplayName +
+                await _emailProvider.SendMessageOneToOne("watcher@net.com", "Thanks for feedback", request.Email,
+                    "Hello, " + request.Name +
                     ". Thank you for taking the time to type feedback. " +
                     "Best regards, Watcher.", "");
             }
