@@ -10,6 +10,8 @@ import {UserOrganizationService} from '../../core/services/user-organization.ser
 import {CollectedDataService} from '../../core/services/collected-data.service';
 import {DataService} from '../../core/services/data.service';
 import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+import {InstanceMenuItem} from '../models/instance-menu-item';
+import {timer} from 'rxjs';
 
 @Component({
   selector: 'app-instance-list',
@@ -29,7 +31,7 @@ export class InstanceListComponent implements OnInit {
     this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
   }
 
-  menuItems: MenuItem[];
+  menuItems: InstanceMenuItem[];
   user: User;
   currentGuidId: string;
   showDownloadModal: boolean;
@@ -40,7 +42,6 @@ export class InstanceListComponent implements OnInit {
   currentQuery = '';
 
   ngOnInit(): void {
-    // TODO: maybe do unrelated request with fork join to reduce # of request
     this.collectedDataService.getBuilderData()
       .subscribe(value => {
         this.dataService.fakeCollectedData = value;
@@ -55,11 +56,32 @@ export class InstanceListComponent implements OnInit {
       });
     this.dashboardsHub.instanceCheckedSubObservable.subscribe(value => {
       console.log(`Instance: ${value.instanceGuidId}, was checked at ${value.statusCheckedAt}`);
+      const instanceMenuItem = this.menuItems.find(value1 => value1.guidId === value.instanceGuidId);
+      instanceMenuItem.statusCheckedAt = value.statusCheckedAt;
+      instanceMenuItem.label = instanceMenuItem.label.substring(0, instanceMenuItem.label.length - 1) +
+        this.instanceService.calculateSign(instanceMenuItem.statusCheckedAt);
     });
+
+    /* timer takes a second argument, how often to emit subsequent values
+    in this case we will emit first value after 1 second and subsequent
+    values every 2 seconds after */
+    const source = timer(10000, 2000);
+    const subscribe = source.subscribe(val => {
+      this.checkInstancesStatus();
+    });
+  }
+
+  checkInstancesStatus() {
+    if (this.menuItems && this.menuItems.length > 1) {
+      this.menuItems.slice(1, this.menuItems.length).map(item => item.label = item.label.substring(0, item.label.length - 1) +
+        this.instanceService.calculateSign(item.statusCheckedAt));
+    }
   }
 
   configureInstances(organizationId: number): void {
     this.menuItems = [{
+      guidId: '',
+      statusCheckedAt: new Date(),
       label: 'Create Instance',
       title: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
@@ -78,11 +100,13 @@ export class InstanceListComponent implements OnInit {
     });
   }
 
-
-  instanceToMenuItem(instance: Instance): MenuItem {
-    const item: MenuItem = {
-      label: instance.title,
+  instanceToMenuItem(instance: Instance): InstanceMenuItem {
+    const item: InstanceMenuItem = {
+      guidId: instance.guidId,
+      statusCheckedAt: instance.statusCheckedAt,
       id: instance.id.toString(),
+      // TODO: Add here icon or something else that specifying Status of instance
+      label: instance.title + this.instanceService.calculateSign(instance.statusCheckedAt),
       routerLink: [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
         this.currentGuidId = instance.guidId;
@@ -150,14 +174,14 @@ export class InstanceListComponent implements OnInit {
   }
 
   onInstanceAdded(instance: Instance): void {
-    const item: MenuItem = this.instanceToMenuItem(instance);
+    const item: InstanceMenuItem = this.instanceToMenuItem(instance);
     this.menuItems.push(item);
     this.onSearchChange(this.currentQuery);
     this.highlightCurrent(item);
   }
 
   onInstanceEdited(instance: Instance): void {
-    const item: MenuItem = this.instanceToMenuItem(instance);
+    const item: InstanceMenuItem = this.instanceToMenuItem(instance);
     const index: number = this.menuItems.findIndex(inst => inst.id === instance.id.toString());
     this.menuItems[index] = item;
     this.onSearchChange(this.currentQuery);
@@ -166,9 +190,9 @@ export class InstanceListComponent implements OnInit {
 
   onSearchChange(searchQuery: string): void {
     this.currentQuery = searchQuery;
-    this.menuItems = this.menuItems.map((menuitem: MenuItem) => {
-      menuitem.visible = menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase());
-      return menuitem;
+    this.menuItems = this.menuItems.map((instanceMenuItem: InstanceMenuItem) => {
+      instanceMenuItem.visible = instanceMenuItem.label.toLowerCase().startsWith(searchQuery.toLowerCase());
+      return instanceMenuItem;
     });
 
     // [0] element of menuItems is Create button

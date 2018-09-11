@@ -63,5 +63,18 @@ export class InstanceService {
     res.statusCheckedAt = new Date(res.statusCheckedAt);
     return res;
   }
+
+  calculateSign(date: Date): string {
+    const secondsDifference = (Date.now() - date.getTime()) / 1000;
+    let sign: string;
+    if (secondsDifference <= 10) {
+      sign = '+';
+    } else if (secondsDifference > 10 && secondsDifference < 20) {
+      sign = '^';
+    } else if (secondsDifference >= 20) {
+      sign = '-';
+    }
+    return sign;
+  }
 }
 
