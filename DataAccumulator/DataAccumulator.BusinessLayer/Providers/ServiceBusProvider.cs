@@ -59,11 +59,6 @@
             return _azureQueueSender.SendAsync(_instanceDataQueueClient, message);
         }
 
-        public Task SendDataMessage(InstanceNotificationMessage message)
-        {
-            return _azureQueueSender.SendAsync(_instanceDataQueueClient, message);
-        }
-
         public Task SendDataMessage(Guid instanceId, Guid dataId)
         {
             var message = new InstanceCollectedDataMessage { InstanceId = instanceId, CollectedDataId = dataId };

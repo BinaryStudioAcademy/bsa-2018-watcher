@@ -51,7 +51,7 @@ namespace DataAccumulator.BusinessLayer.Validators
                         InstanceId = instanceValidatorDto.ClientId,
                         Text = validationResult.ToString()
                     };
-                    await _serviceBusProvider.SendDataMessage(message);
+                    await _serviceBusProvider.SendNotificationMessage(message);
                 }
             }
             catch (NotFoundException e)
