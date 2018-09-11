@@ -7,21 +7,21 @@
     </div>
   </div>
 
-  <p-table [value]="collectorApps" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]" [lazy]="true" (onLazyLoad)="loadUsersLazy($event)">
+  <p-table [value]="collectorApps" [paginator]="false" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th style="width:10%">CREATED AT</th>
         <th style="width:10%">VERSION</th>
-        <th style="width:15%">EXE Link</th>
-        <th style="width:15%">DEB Link</th>
-        <th style="width:15%">TGZ Link</th>
+        <th style="width:8%">EXE Link</th>
+        <th style="width:8%">DEB Link</th>
+        <th style="width:8%">TGZ Link</th>
         <th style="width:10%">IS ACTUAL</th>
         <th style="width:10%">REMOVE</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-collectorApp>
       <tr>
-        <td class="center">{{collectorApp.createdAt}}</td>
+        <td class="center">{{collectorApp.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
         <td class="center">{{collectorApp.version}}</td>
         <td class="center">{{collectorApp.exeLink}}</td>
         <td class="center">{{collectorApp.debLink}}</td>
@@ -35,5 +35,85 @@
       </tr>
     </ng-template>
   </p-table>
-
+  <button pButton type="button " label="Add new" class="btnedit ui-button-primary ui-button-raised " (click)="showAddWindow()"></button>
 </div>
+
+<p-dialog header="Add new dataCollector version." [(visible)]="displayAddWindow" [modal]="true"
+  [maximizable]="false" [baseZIndex]="10000">
+
+  <form [formGroup]="dataCollectorAppForm">
+
+    <div class="ui-g ui-fluid">
+      <p class="field">Ceated At:</p>
+      <input size="41" type="text" formControlName="ceatedAt" pInputText placeholder="Ceated At" />
+<!--       <div class="invalid" *ngIf="dataCollectorAppForm.get('ceatedAt').errors && dataCollectorAppForm.get('ceatedAt').dirty">
+        <label>Name is required.</label>
+      </div> -->
+    </div>
+
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-8 spacePad">
+        <p class="field">Version:</p>
+        <input size="41" type="text" formControlName="version" pInputText placeholder="Contact number" />
+        <div class="invalid" *ngIf="dataCollectorAppForm.get('version').errors && dataCollectorAppForm.get('version').dirty">
+          <label>Wrong version format.</label>
+        </div>
+      </div>
+      <div class="ui-g-4">
+        <p class="center space">isActual:</p>
+        <div class="center">
+          <p-checkbox formControlName="isActual" binary="false"></p-checkbox>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-g ui-fluid">
+      <p class="field">EXE file:</p>
+      <input size="41" type="file" formControlName="exeFile" pInputText placeholder="Deb file" />
+      <div class="invalid" *ngIf="dataCollectorAppForm.get('exeFile').errors && dataCollectorAppForm.get('exeFile').dirty">
+        <label>Wrong debLink.</label>
+      </div>
+    </div>
+
+      <div class="ui-g ui-fluid">
+        <p class="field">DEB file:</p>
+        <input size="41" type="file" formControlName="debFile" pInputText placeholder="Deb file" />
+        <div class="invalid" *ngIf="dataCollectorAppForm.get('debFile').errors && dataCollectorAppForm.get('debFile').dirty">
+          <label>Wrong debLink.</label>
+        </div>
+      </div>
+
+    <div class="ui-g ui-fluid">
+      <p class="field">TGZ file:</p>
+
+      <div class="form-group">
+        <label for="file">Choose File</label>
+        <input #file type="file" multiple (change)="uploadFile(file.files)" />
+          <br/>
+        <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+          {{progress}}%
+        </span>
+
+        <span style="font-weight:bold;color:green;" *ngIf="message">
+          {{message}}
+        </span>
+      </div>
+
+      <div class="invalid" *ngIf="dataCollectorAppForm.get('tgzFile').errors && dataCollectorAppForm.get('tgzFile').dirty">
+        <label>Wrong debLink.</label>
+      </div>
+      </div>
+
+    <div class="ui-g ui-fluid">
+      <p class="field">Description</p>
+      <textarea rows="3" [cols]="42" formControlName="description" pInputTextarea></textarea>
+    </div>
+  </form>
+
+  <p-footer>
+    <div class="center">
+      <button type="button" pButton (click)="uploadFileToActivity()" class="ui-button-raised ui-button-success"  label="Save"></button>
+      <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
+    </div>
+  </p-footer>
+  </p-dialog>
