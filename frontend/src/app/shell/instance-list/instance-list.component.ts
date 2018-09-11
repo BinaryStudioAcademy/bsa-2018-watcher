@@ -54,7 +54,7 @@ export class InstanceListComponent implements OnInit {
         this.configureInstances(this.user.lastPickedOrganizationId);
       });
     this.dashboardsHub.instanceCheckedSubObservable.subscribe(value => {
-      console.log(`Instance: ${value.instanceId}, was checked at ${value.statusCheckedAt}`);
+      console.log(`Instance: ${value.instanceGuidId}, was checked at ${value.statusCheckedAt}`);
     });
   }
 

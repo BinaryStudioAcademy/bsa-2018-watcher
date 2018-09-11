@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormControl, Validators, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ToastrService} from '../../core/services/toastr.service';
 import {InstanceService} from '../../core/services/instance.service';
 import {AuthService} from '../../core/services/auth.service';
@@ -21,7 +21,6 @@ export class EditInstanceComponent implements OnInit {
   instance: Instance;
   instanceTitle: string;
   platformsDropdown: SelectItem[];
-  selectedPlatform: string;
   isSaving: Boolean = false;
 
   constructor(private activateRoute: ActivatedRoute,
@@ -59,25 +58,23 @@ export class EditInstanceComponent implements OnInit {
 
   getInstanceForm(instance: Instance) {
     let form: FormGroup;
-
     if (instance) {
       this.instanceTitle = 'EDIT INSTANCE';
     } else {
-      instance = {
-        title: '',
-        platform: '',
-        address: '',
-        guidId: '',
-        aggregationForHour: true,
-        aggregationForDay: true,
-        aggregationForMonth: true,
-        cpuMaxPercent: 90,
-        ramMaxPercent: 90,
-        diskMaxPercent: 90,
-        isActive: true
-      };
+      instance.title = '';
+      instance.platform = '';
+      instance.address = '';
+      instance.guidId = '';
+      instance.aggregationForHour = true;
+      instance.aggregationForDay = true;
+      instance.aggregationForMonth = true;
+      instance.cpuMaxPercent = 90;
+      instance.ramMaxPercent = 90;
+      instance.diskMaxPercent = 90;
+      instance.isActive = true;
       this.instanceTitle = 'NEW INSTANCE';
     }
+
     form = this.fb.group({
       title: new FormControl({value: instance.title, disabled: false}, Validators.required),
       platform: new FormControl({value: instance.platform, disabled: false}, Validators.required),
@@ -129,8 +126,7 @@ export class EditInstanceComponent implements OnInit {
   }
 
   getNewInstance(): InstanceRequest {
-
-    const newInstance: InstanceRequest = {
+    return {
       title: this.instanceForm.controls.title.value,
       address: this.instanceForm.controls.address.value,
       platform: this.instanceForm.controls.platform.value,
@@ -143,7 +139,6 @@ export class EditInstanceComponent implements OnInit {
       diskMaxPercent: this.instanceForm.controls.diskMax.value,
       organizationId: this.organizationId
     };
-    return newInstance;
   }
 
   private fillPlatformsDropdown(): void {
