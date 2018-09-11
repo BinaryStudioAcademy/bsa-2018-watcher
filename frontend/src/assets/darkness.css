@@ -36,8 +36,8 @@
     color: #eeeeee; }
 
 .ui-state-active {
-  border-color: #f58400 !important;
-  background-color: #f58400 !important;
+  border-color: #F56C00 !important;
+  background-color: #F56C00 !important;
   color: #ffffff; }
   .ui-state-active a {
     color: #ffffff; }
@@ -133,8 +133,8 @@
 
 .ui-button:enabled:active,
 .ui-fileupload-choose:not(.ui-state-disabled):active {
-  border-color: #ffaf0f;
-  background-color: #f58400;
+  border-color: #F56C00;
+  background-color: #F56C00;
   color: #ffffff; }
 
 .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover {
@@ -216,8 +216,8 @@
     color: #ffffff; }
 
 .ui-spinner:not(.ui-state-disabled) .ui-spinner-button:enabled:active {
-  border-color: #ffaf0f;
-  background-color: #f58400;
+  border-color: #F56C00;
+  background-color: #F56C00;
   color: #ffffff; }
 
 .ui-selectbutton .ui-button:not(.ui-state-disabled):not(.ui-state-active):hover {
@@ -290,7 +290,7 @@
   .ui-tree .ui-treenode-content.ui-treenode-selectable .ui-treenode-label:not(.ui-state-highlight):hover a {
     color: #ffffff; }
 .ui-tree .ui-treenode-content.ui-treenode-dragover {
-  background-color: #f58400;
+  background-color: #F56C00;
   color: #ffffff; }
 .ui-tree.ui-tree-horizontal .ui-treenode-content.ui-treenode-selectable .ui-treenode-label:not(.ui-state-highlight):hover {
   background-color: inherit;
@@ -423,12 +423,6 @@
     border-color: transparent; }
     .ui-panelmenu .ui-panelmenu-content .ui-menuitem-link:hover a {
       color: #ffffff; }
-
-.ui-panelmenu .ui-panelmenu-header.ui-state-active > a, a:hover {
-  border: 1px solid #FFAF0D !important ;
-  background-color: #f58400 !important;
-  color: #ffffff;
-}
 
 .ui-datepicker .ui-datepicker-header a {
   color: #cccccc; }
@@ -694,6 +688,18 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 /* Custom */
 
+/* Panel menu */
+
+.ui-panelmenu .ui-panelmenu-header.ui-state-active > a, a:hover {
+  
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  background-color: #F56C00 !important;
+  color: #ffffff;
+}
+
+/*Accordion*/
+
 .ui-accordion-header {
   border-bottom-left-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
@@ -703,7 +709,45 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
               .ui-accordion-header:not(.ui-state-active):not(.ui-state-disabled):hover,
               .ui-accordion-header:not(.ui-state-disabled).ui-state-active:hover a,
               .ui-accordion-header:not(.ui-state-disabled).ui-state-active a {
-  background-color: #f58400 !important;
-  border-color: #f58400 !important;
+  background-color: #F56C00 !important;
+  border-color: #F56C00 !important;
+}
 
+/* Tabmenu */
+
+.ui-tabmenu {
+  background-color: #ffffff !important;
+}
+
+.ui-tabmenu .ui-widget-header {
+  border: none;
+}
+
+.ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem.ui-state-active {
+  border: 1px solid #F56C00 !important;
+}
+
+/* Buttons */
+
+.ui-button{
+  background-color: #F56C00 !important;
+  border-color: #F56C00 !important;
+}
+
+.ui-button.ui-state-default.ui-button-success,
+.ui-buttonset.ui-button-success > .ui-button.ui-state-default {
+  background-color: #BB0DFF !important;
+  border-color: #BB0DFF !important;
+}
+
+.ui-button.ui-state-default.ui-button-danger,
+.ui-buttonset.ui-button-danger > .ui-button.ui-state-default {
+  background-color: #e91224 !important;
+  border-color: #e91224 !important;
+}
+
+.ui-dataview-content .ui-widget-content {
+  border: none;
+  background-color: #ffffff;
+  color: #000000;
 }
