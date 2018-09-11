@@ -7,6 +7,6 @@
 
     public interface IInstanceRepository : IRepository<Instance, int>
     {
-        Task<bool> UpateLastCheckedAsync(Guid instanceId, DateTime time);
+        Task<Instance> UpateLastCheckedAsync(Guid instanceId, DateTime time);
     }
 }

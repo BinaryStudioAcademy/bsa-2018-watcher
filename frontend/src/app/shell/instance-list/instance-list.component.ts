@@ -37,8 +37,6 @@ export class InstanceListComponent implements OnInit {
   isLoading: boolean;
   isDeleting: boolean;
   isManager: boolean;
-  previousSettingUrl: string;
-
   currentQuery = '';
 
   ngOnInit(): void {
@@ -52,14 +50,12 @@ export class InstanceListComponent implements OnInit {
         this.user = user;
         const role = await this.userOrganizationService.getOrganizationRole();
         this.isManager = role.name === 'Manager';
+        this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
         this.configureInstances(this.user.lastPickedOrganizationId);
       });
-    // try {
-    //   const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
-    //   await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
-    // } catch (e) {
-    //   console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(e));
-    // }
+    this.dashboardsHub.instanceCheckedSubObservable.subscribe(value => {
+      console.log(`Instance: ${value.instanceId}, was checked at ${value.statusCheckedAt}`);
+    });
   }
 
   configureInstances(organizationId: number): void {
@@ -171,9 +167,7 @@ export class InstanceListComponent implements OnInit {
   onSearchChange(searchQuery: string): void {
     this.currentQuery = searchQuery;
     this.menuItems = this.menuItems.map((menuitem: MenuItem) => {
-      menuitem.visible = !menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase())
-        ? false
-        : true;
+      menuitem.visible = menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase());
       return menuitem;
     });
 

@@ -15,13 +15,13 @@
         {
         }
 
-        public async Task<bool> UpateLastCheckedAsync(Guid instanceId, DateTime time)
+        public async Task<Instance> UpateLastCheckedAsync(Guid instanceId, DateTime time)
         {
             var entity = await GetFirstOrDefaultAsync(i => i.GuidId == instanceId);
-            if (entity == null) return false;
+            if (entity == null) return null;
             // entity.
-
-            return true;
+            entity.StatusCheckedAt = time;
+            return entity;
         }
     }
 }

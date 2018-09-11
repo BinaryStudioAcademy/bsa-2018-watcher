@@ -5,6 +5,7 @@ import {environment} from '../../../environments/environment';
 import {from, Subject} from 'rxjs';
 import {AuthService} from '../services/auth.service';
 import {CollectedData} from '../../shared/models/collected-data.model';
+import {InstanceChecked} from '../../shared/models/instance-checked';
 
 
 @Injectable()
@@ -17,6 +18,8 @@ export class DashboardsHub {
 
   private infoSub = new Subject<CollectedData>();
   public infoSubObservable = from(this.infoSub);
+  private instanceCheckedSub = new Subject<InstanceChecked>();
+  public instanceCheckedSubObservable = from(this.instanceCheckedSub);
 
   constructor(private authService: AuthService) {
     this.startConnection();
@@ -57,12 +60,9 @@ export class DashboardsHub {
         this.infoSub.next(info);
       });
 
-    this.hubConnection.on('UserClaimsData', (claimsData: any[]) => {
-        console.log(claimsData);
-      });
-
-    this.hubConnection.on('Send', (item: string) => {
-      console.log(`Message from Service Bus: ${item}`);
+    this.hubConnection.on('InstanceStatusCheck', (info: InstanceChecked) => {
+      info.statusCheckedAt = new Date(info.statusCheckedAt);
+      this.instanceCheckedSub.next(info);
     });
 
     // On Close open connection again
@@ -75,40 +75,6 @@ export class DashboardsHub {
     });
   }
 
-
-  // Reconnect loop
-  // private startDashboardHubConnection(): Promise<void> {
-  //   if (this.isConnect) {
-  //     return;
-  //   }
-  //   console.log('DashboardHub trying to connect');
-  //   return this.hubConnection.start()
-  //     .then(() => {
-  //       console.log('DashboardHub connected');
-  //       this.connectionEstablishedSub.next(true);
-  //       this.isConnect = true;
-  //       // this.getSignalRClaims();
-  //     })
-  //     .catch(err => {
-  //       console.log('Error while establishing connection (DashboardHub)');
-  //       console.error(err);
-  //       setTimeout(this.startDashboardHubConnection(), 3000);
-  //     });
-  // }
-
-  // connectToSignalR(firebaseToken: string, watcherToken: string): Promise<void> {
-  //   this.buildConnection(firebaseToken, watcherToken);
-  //   this.registerOnEvents();
-  //   return this.startDashboardHubConnection();
-  // }
-
-  getSignalRClaims() {
-    if (this.hubConnection) {
-      this.hubConnection.invoke('GetClaims')
-        .catch(err => console.error(err));
-    }
-  }
-
   subscribeToInstanceById(instanceGuidId: string): void {
     if (this.hubConnection) {
       this.hubConnection.invoke('SubscribeToInstanceById', instanceGuidId)
@@ -116,9 +82,23 @@ export class DashboardsHub {
     }
   }
 
+  subscribeToOrganizationById(id: number): void {
+    if (this.hubConnection) {
+      this.hubConnection.invoke('SubscribeToOrganizationById', id)
+        .catch(err => console.error(err));
+    }
+  }
+
   unSubscribeFromInstanceById(instanceGuidId: string): void {
     if (this.hubConnection) {
       this.hubConnection.invoke('UnSubscribeFromInstanceById', instanceGuidId)
+        .catch(err => console.error(err));
+    }
+  }
+
+  unSubscribeFromOrganizationById(id: number): void {
+    if (this.hubConnection) {
+      this.hubConnection.invoke('UnSubscribeFromOrganizationById', id)
         .catch(err => console.error(err));
     }
   }
