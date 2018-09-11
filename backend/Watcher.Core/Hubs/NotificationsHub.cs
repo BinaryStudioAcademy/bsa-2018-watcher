@@ -1,4 +1,5 @@
 ﻿using Watcher.Common.Enums;
+using Watcher.Common.Requests;
 
 namespace Watcher.Core.Hubs
 {
@@ -28,7 +29,8 @@ namespace Watcher.Core.Hubs
         [Authorize]
         public async Task SendNotification(NotificationDto notificationDto, NotificationType type)
         {
-            var result = await _notificationService.CreateEntityAsync(notificationDto, type);
+            // TODO: check if needed
+            //var result = await _notificationService.CreateEntityAsync(notificationDto, type);
 
             //if (result != null)
             //{
@@ -37,17 +39,24 @@ namespace Watcher.Core.Hubs
             //}
         }
 
+        //[Authorize]
+        //public async Task SendNotification(NotificationRequest notificationRequest)
+        //{
+        //    await _notificationService.CreateEntityAsync(notificationRequest);
+        //}
+
         [Authorize]
         public async Task Send(string userId, string message)
         {
-            var notificationDto = new NotificationDto()
+            var notificationRequest = new NotificationRequest()
             {
                 UserId = userId,
                 Text = message,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                Type = NotificationType.Info
             };
 
-            await _notificationService.CreateEntityAsync(notificationDto, NotificationType.Warning);
+            await _notificationService.CreateEntityAsync(notificationRequest);
         }
 
         [Authorize]

@@ -24,7 +24,8 @@
             CreateMap<NotificationDto, Notification>()
                 .ForMember(d => d.NotificationSetting, o => o.Ignore());
 
-            CreateMap<NotificationRequest, Notification>();
+            CreateMap<NotificationRequest, Notification>()
+                .ForMember(d => d.NotificationSetting, o => o.Ignore());
 
             CreateMap<NotificationUpdateRequest, Notification>()
                 .ForMember(d => d.NotificationSettingId, o => o.Ignore())

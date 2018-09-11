@@ -31,7 +31,6 @@
         private readonly ILogger<ServiceBusProvider> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IHubContext<DashboardsHub> _dashboardsHubContext;
-        private readonly IHubContext<NotificationsHub> _notificationsHubContext;
         private readonly IOptions<AzureQueueSettings> _queueOptions;
         private readonly IAzureQueueReceiver _azureQueueReceiver;
         private readonly IAzureQueueSender _azureQueueSender;
@@ -45,7 +44,6 @@
             ILoggerFactory loggerFactory,
             IServiceScopeFactory scopeFactory,
             IHubContext<DashboardsHub> dashboardsHubContext,
-            IHubContext<NotificationsHub> notificationsHubContext,
             IOptions<AzureQueueSettings> queueOptions,
             IAzureQueueReceiver azureQueueReceiver,
             IAzureQueueSender azureQueueSender)
@@ -53,7 +51,6 @@
             _logger = loggerFactory?.CreateLogger<ServiceBusProvider>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _scopeFactory = scopeFactory;
             _dashboardsHubContext = dashboardsHubContext;
-            _notificationsHubContext = notificationsHubContext;
             _queueOptions = queueOptions;
             _instanceDataQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.DataQueueName);
             _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
@@ -126,7 +123,25 @@
                 return MessageProcessResponse.Abandon;
             }
 
-            await _notificationsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ValidatorMessage);
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
+                var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+
+                var result = await notificationService.CreateEntityAsync(
+                    new Common.Requests.NotificationRequest { Text = arg.ValidatorMessage, InstanceId = arg.InstanceId });
+
+                //if (data != null)
+                //{
+                //    dto = mapper.Map<CollectedData, CollectedDataDto>(data);
+                //}
+                //else
+                //{
+                //    return MessageProcessResponse.Abandon; // No such entity
+                //}
+            }
+
+            //await _notificationsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ValidatorMessage);
             _logger.LogInformation("Validator Message with to Dashboards hub clients was sent.");
             return MessageProcessResponse.Complete;
         }

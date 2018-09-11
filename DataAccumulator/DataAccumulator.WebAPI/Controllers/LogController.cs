@@ -22,6 +22,21 @@ namespace DataAccumulator.WebAPI.Controllers
             _service = service;
         }
 
+        [HttpGet("test")]
+        public async Task Test()
+
+        {
+            try
+            {
+                await _service.SaveActionLog(new ActionLogDto("test message", DateTime.Now, Shared.Enums.LogLevel.State));
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+                Console.WriteLine(e);
+            }
+        }
+
         [HttpPost]
         public async Task SaveActionLog([FromBody] ActionLogDto actionLogDto)
         {
