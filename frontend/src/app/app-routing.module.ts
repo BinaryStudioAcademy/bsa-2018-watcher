@@ -8,7 +8,7 @@ import { InviteComponent } from './invite/invite.component';
 import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
-  { path: '',
+  { path: '', // /id
     component: LandingComponent,
     canActivate: [HomeGuard]
   }, {

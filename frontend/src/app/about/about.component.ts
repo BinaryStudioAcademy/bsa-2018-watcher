@@ -16,7 +16,7 @@ export class AboutComponent implements OnInit {
   }
 
   onBack(id: string): void {
-    this.router.navigate(['']);
+    this.router.navigate([`/${id}`]);
     // to this.scrollTo(id);
   }
 

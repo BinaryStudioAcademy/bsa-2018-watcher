@@ -4,7 +4,7 @@ import { ToastrService } from '../core/services/toastr.service';
 import { LongAnswerType } from '../shared/models/long-answer-type.enum';
 import { ShortAnswerType } from '../shared/models/short-answer-type.enum';
 import { Feedback } from '../shared/models/feedback.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
@@ -21,6 +21,7 @@ export class LandingComponent implements OnInit, OnDestroy {
 
   constructor(
     private feedbackService: FeedbackService,
+    private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService,
     private router: Router) {}
 
@@ -82,6 +83,11 @@ export class LandingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     window.addEventListener('resize', this.resize, true);
     window.addEventListener('scroll', this.headerScroll, true);
+
+    this.activatedRoute.params.subscribe(params => {
+      if (params['id']) {
+      this.scrollTo(params['id']); }
+   });
   }
   ngOnDestroy() {
     window.removeEventListener('scroll', this.headerScroll, true);
