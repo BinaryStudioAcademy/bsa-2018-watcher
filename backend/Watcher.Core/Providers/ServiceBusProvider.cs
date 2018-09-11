@@ -31,6 +31,7 @@
         private readonly ILogger<ServiceBusProvider> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IHubContext<DashboardsHub> _dashboardsHubContext;
+        private readonly IHubContext<NotificationsHub> _notificationsHubContext;
         private readonly IOptions<AzureQueueSettings> _queueOptions;
         private readonly IAzureQueueReceiver _azureQueueReceiver;
         private readonly IAzureQueueSender _azureQueueSender;
@@ -44,6 +45,7 @@
             ILoggerFactory loggerFactory,
             IServiceScopeFactory scopeFactory,
             IHubContext<DashboardsHub> dashboardsHubContext,
+            IHubContext<NotificationsHub> notificationsHubContext,
             IOptions<AzureQueueSettings> queueOptions,
             IAzureQueueReceiver azureQueueReceiver,
             IAzureQueueSender azureQueueSender)
@@ -51,6 +53,7 @@
             _logger = loggerFactory?.CreateLogger<ServiceBusProvider>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _scopeFactory = scopeFactory;
             _dashboardsHubContext = dashboardsHubContext;
+            _notificationsHubContext = notificationsHubContext;
             _queueOptions = queueOptions;
             _instanceDataQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.DataQueueName);
             _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
@@ -123,8 +126,8 @@
                 return MessageProcessResponse.Abandon;
             }
 
-            await _dashboardsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ValidatorMessage);
-            _logger.LogInformation("Notify Message with to Dashboards hub clients was sent.");
+            await _notificationsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ValidatorMessage);
+            _logger.LogInformation("Validator Message with to Dashboards hub clients was sent.");
             return MessageProcessResponse.Complete;
         }
 

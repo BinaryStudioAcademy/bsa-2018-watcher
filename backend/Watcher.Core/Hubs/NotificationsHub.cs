@@ -38,6 +38,19 @@ namespace Watcher.Core.Hubs
         }
 
         [Authorize]
+        public async Task Send(string userId, string message)
+        {
+            var notificationDto = new NotificationDto()
+            {
+                UserId = userId,
+                Text = message,
+                CreatedAt = DateTime.Now
+            };
+
+            await _notificationService.CreateEntityAsync(notificationDto, NotificationType.Warning);
+        }
+
+        [Authorize]
         public async Task DeleteNotification(NotificationDto notificationDto)
         {
             var result = await _notificationService.DeleteEntityByIdAsync(notificationDto.Id);
