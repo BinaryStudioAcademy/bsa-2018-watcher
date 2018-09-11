@@ -1,7 +1,7 @@
 <header id="header">
   <div class="container">
     <h1>
-      <a (click)="onBack()">Watcher</a>
+      <a (click)="onBack('startbanner')">Watcher</a>
       <i class="fas fa-bars" id="mobile" (click)="show()"></i>
     </h1>
     <nav id="nav">
@@ -30,12 +30,13 @@
 </header>
 <div class="content-wrp">
   <section class="section-wrp main-section">
+    <p class="part-proj">A platform for monitoring the consumption of resources and other system information on virtual machines for analysis
+        and emergency feedback.</p>
     <h1 class="page-title">About us</h1>
     <div class="description">
       <p>We are a friendly team of developers.</p>
       <p>This is a group project of the Binary Studio Academy 2018.</p>
-      <p>A platform for monitoring the consumption of resources and other system information on virtual machines for analysis
-        and emergency feedback.</p>
+      
     </div>
   </section>
   <div class="section-wrp">
@@ -102,7 +103,7 @@
 
   <div class="footer-left ">
     <p class="footer-links ">
-      <a (click)="onBack()">Home</a> ·
+      <a (click)="onBack('startbanner')">Home</a> ·
       <a (click)="scrollTo( 'why-watcher') ">Why watcher</a> ·
       <a (click)="scrollTo( 'cards') ">Advantages</a> ·
       <a (click)="onAbout() ">About</a> ·

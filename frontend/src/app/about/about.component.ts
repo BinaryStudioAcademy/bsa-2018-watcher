@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-about',
@@ -8,11 +8,16 @@ import { Router } from '@angular/router';
 })
 export class AboutComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  isAbout: Boolean = false;
+
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
   }
-  onBack(): void {
+
+  onBack(id: string): void {
     this.router.navigate(['']);
+    // to this.scrollTo(id);
   }
+
 }
