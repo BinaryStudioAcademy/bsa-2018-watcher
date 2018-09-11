@@ -50,6 +50,7 @@ export class NotificationBlockComponent implements OnInit {
   private subscribeToEvents(): void {
     this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
       if (!value.notificationSetting.isDisable) {
+        console.log(value);
         this.notificationCounter++;
         if (!value.notificationSetting.isMute) {
           this.systemToastrService.send(value);

@@ -1,5 +1,6 @@
 <div class="notifications-wrapper">
-  <p-progressSpinner class="spinner notifications-empty" [style]="{width: '75px', height: '75px'}" *ngIf="isLoading" strokeWidth="2"></p-progressSpinner>
+  <p-progressSpinner class="spinner notifications-empty" [style]="{width: '75px', height: '75px'}" *ngIf="isLoading"
+    strokeWidth="2"></p-progressSpinner>
   <div class="notifications-empty" *ngIf="notifications.length == 0 && !isLoading">
     You don`t have notifications yet.
   </div>
@@ -13,20 +14,17 @@
         <div class="action-icon read-icon fa fa-fw fa-eye" *ngIf="!notification.wasRead" (click)="markAsRead(notification.id)"></div>
         <div class="action-icon close-icon fa fa-fw fa-times" (click)="remove(notification.id)"></div>
 
-        <span class="message-img icon-style fa fa-3x info"
-          [ngClass]="{
+        <span class="message-img icon-style fa fa-3x info" [ngClass]="{
             'warning': notification?.notificationSetting?.type == type.Warning,
             'error': notification?.notificationSetting?.type == type.Error}">
         </span>
-        <div class="message-content" [ngClass]="{'unread-message': !notification.wasRead}">
+        <a class="message-content" [ngClass]="{'unread-message': !notification.wasRead}"></a>
+        <span *ngIf="notification.instanceGuidId" routerlink='/user/instances'>Instance message</span>
           <span class="message-title text-overflow" style="width:240px">System message</span>
-          <div *ngIf="notification.instanceId && notification.instanceGuidId"
-          class="message-text">{{notification.instanceGuidId}}</div>
           <div class="message-text">{{notification.text}}</div>
           <div class="message-date text-overflow">{{notification.createdAt | date:'short'}}</div>
-        </div>
       </div>
     </div>
-
   </div>
+
 </div>
