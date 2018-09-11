@@ -52,6 +52,7 @@ namespace DataAccumulator
                     o.DataQueueName = serviceBusSection["DataQueueName"];
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
                     o.SettingsQueueName = serviceBusSection["SettingsQueueName"];
+                    o.NotifyQueueName = serviceBusSection["NotifyQueueName"];
                 });
 
             services.AddTransient<IDataAccumulatorService<CollectedDataDto>, DataAccumulatorService>();

@@ -18,19 +18,11 @@ namespace DataAccumulator.BusinessLayer.Validators
             {
                 RuleFor(d => d.RamUsagePercentage)
                     .NotNull()
-                    .LessThan(instanceValidatorDto.UsageRamMBytesMax);
-
-                RuleFor(d => d.RamUsagePercentage)
-                    .NotNull()
                     .LessThan(instanceValidatorDto.RamUsagePercentageMax);
             });
 
             RuleSet("LocalDiskUsage", () =>
             {
-                RuleFor(d => d.LocalDiskUsagePercentage)
-                    .NotNull()
-                    .LessThan(instanceValidatorDto.LocalDiskUsageMBytesMax);
-
                 RuleFor(d => d.LocalDiskUsagePercentage)
                     .NotNull()
                     .LessThan(instanceValidatorDto.LocalDiskUsagePercentageMax);

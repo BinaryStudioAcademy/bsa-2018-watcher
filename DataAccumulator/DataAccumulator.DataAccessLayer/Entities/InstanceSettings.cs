@@ -23,11 +23,9 @@ namespace DataAccumulator.DataAccessLayer.Entities
         public bool IsActive { get; set; }
 
         public bool RamValidator { get; set; } = false;
-        public float UsageRamMBytesMax { get; set; }
         public float RamUsagePercentageMax { get; set; }
 
         public bool LocalDiskVallidator { get; set; } = false;
-        public float LocalDiskUsageMBytesMax { get; set; }
         public float LocalDiskUsagePercentageMax { get; set; }
 
         public bool CpuValidator { get; set; } = false;

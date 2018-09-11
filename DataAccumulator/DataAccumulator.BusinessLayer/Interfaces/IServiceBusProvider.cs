@@ -15,5 +15,6 @@
         Task SendErrorMessage(InstanceErrorMessage message);
 
         Task SendErrorMessage(Guid instanceId, string errorMessage);
+        Task SendValidatorMessage(InstanceValidatorMessage message);
     }
 }
