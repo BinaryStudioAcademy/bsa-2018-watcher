@@ -15,6 +15,8 @@ namespace Watcher.Common.Dtos
 
         public int? OrganizationId { get; set; }
 
+        public int? InstanceId { get; set; }
+
         public string UserId { get; set; }
 
         public bool WasRead { get; set; }
