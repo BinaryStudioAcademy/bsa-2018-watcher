@@ -1,16 +1,19 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { AggregatedDataService } from '../../core/services/aggregated-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { DataType } from '../../shared/models/data-type.enum';
 import { CollectedData } from '../../shared/models/collected-data.model';
 import { AggregateDataRequest } from '../../shared/models/aggregate-data-request.model';
-import { SelectItem } from 'primeng/api';
+import { SelectItem, MenuItem } from 'primeng/api';
 import { Calendar } from 'primeng/primeng';
 import { formatDate } from '@angular/common';
 import * as jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { Observable } from 'rxjs';
 import { ProcessData } from '../../shared/models/process-data.model';
+import { DashboardChart } from '../models/dashboard-chart';
+import { defaultOptions } from '../charts/models/chart-options';
+import { DataService } from '../../core/services/data.service';
 
 @Component({
   selector: 'app-report',
@@ -25,6 +28,7 @@ export class ReportComponent implements OnInit {
 
   private id: string;
 
+  collectedDataTable: CollectedData[];
   collectedData: CollectedData[];
 
   types: SelectItem[];
@@ -38,10 +42,44 @@ export class ReportComponent implements OnInit {
   recordsPerPage = 1;
   totalRecords: number;
 
+  chartToEdit: DashboardChart;
+  charts: DashboardChart[];
+
+  edit: boolean;
+  close: boolean;
+
+  cogItems: MenuItem[];
+
+  tabs: MenuItem[];
+  activeTab: MenuItem;
+
+  onDisplayChartEditing: EventEmitter<boolean>;
+
   constructor(private aggregatedDateService: AggregatedDataService,
-              private activateRoute: ActivatedRoute) { }
+              private activateRoute: ActivatedRoute,
+              private dataService: DataService) { }
 
   ngOnInit() {
+    this.tabs = [
+      { label: 'Table', command: () => this.activeTab = this.tabs[0] },
+      { label: 'Chart', command: () => this.activeTab = this.tabs[1] }
+    ];
+
+    this.activeTab = this.tabs[0];
+
+    this.cogItems = [{
+      label: 'Add item',
+      icon: 'fa fa-fw fa-plus',
+
+      command: (event?: any) => {
+        this.edit = false;
+        this.close = false;
+
+        this.decomposeChart(defaultOptions);
+        this.showChartCreating();
+      },
+    }];
+
     this.cols = [
       { field: 'name', header: 'Name' },
       { field: 'pCpu', header: 'CPU,%' },
@@ -126,7 +164,7 @@ export class ReportComponent implements OnInit {
   getInfo(): void {
     const request: AggregateDataRequest = this.createRequest();
 
-    this.getCollectedData(request, 1, this.recordsPerPage).subscribe((data: CollectedData[]) => {
+    this.getCollectedData(request).subscribe((data: CollectedData[]) => {
       data.forEach(item => {
         item.time = new Date(item.time);
         item.processes = item.processes.map(p => this.roundProcess(p));
@@ -136,6 +174,8 @@ export class ReportComponent implements OnInit {
         });
       });
       this.collectedData = data;
+      this.charts.forEach(item => this.dataService.fulfillChart(this.collectedData, item, true));
+      this.collectedDataTable = data.slice(0, this.recordsPerPage);
     });
 
     this.aggregatedDateService.getCountOfEntities(request).subscribe(totalRecords => {
@@ -144,27 +184,14 @@ export class ReportComponent implements OnInit {
     });
   }
 
-  private getCollectedData(request: AggregateDataRequest, page: number = -1, records: number = -1): Observable<CollectedData[]> {
-    if (page >= 0 && records >= 0) {
-      return this.aggregatedDateService.getDataByInstanceIdAndTypeInTimePaging(request,
-        page, records);
-    } else {
+  private getCollectedData(request: AggregateDataRequest): Observable<CollectedData[]> {
       return this.aggregatedDateService.getDataByInstanceIdAndTypeInTime(request);
-    }
   }
 
   paginate(event) {
-    this.getCollectedData(this.createRequest(), event.page + 1, this.recordsPerPage).subscribe((data: CollectedData[]) => {
-      data.forEach(item => {
-        item.time = new Date(item.time);
-        item.processes = item.processes.map(p => this.roundProcess(p));
-
-        item.processes.sort((item1, item2) => {
-          return item2.pCpu - item1.pCpu;
-        });
-      });
-      this.collectedData = data;
-    });
+    const start = event.page * this.recordsPerPage;
+    const end = event.page * this.recordsPerPage + this.recordsPerPage;
+    this.collectedDataTable = this.collectedData.slice(start, end);
   }
 
   roundProcess(processData: ProcessData) {
@@ -190,23 +217,13 @@ export class ReportComponent implements OnInit {
     const doc = new jsPDF('p', 'mm', 'a4');
     doc.setFontSize(10);
 
-    this.getCollectedData(this.createRequest()).subscribe((data: CollectedData[]) => {
-      data.forEach(item => {
-        item.time = new Date(item.time);
-        item.processes = item.processes.map(p => this.roundProcess(p));
-        item.processes.sort((item1, item2) => {
-          return item2.pCpu - item1.pCpu;
-        });
-      });
+    const tables = this.createTables(this.collectedData);
 
-      const tables = this.createTables(data);
-
-      doc.deletePage(1);
-      tables.forEach(item => {
-        doc.addPage();
-        doc.autoTable(item.cols, item.rows);
-        doc.text(`Time: ${item.time}`, 20, doc.autoTable.previous.finalY + 10);
-      });
+    doc.deletePage(1);
+    tables.forEach(item => {
+      doc.addPage();
+      doc.autoTable(item.cols, item.rows);
+      doc.text(`Time: ${item.time}`, 20, doc.autoTable.previous.finalY + 10);
 
       // tslint:disable-next-line:max-line-length
       doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
@@ -246,6 +263,16 @@ export class ReportComponent implements OnInit {
     });
 
     return tables;
+  }
+
+  decomposeChart(chart: DashboardChart): void {
+    this.chartToEdit = {...chart};
+    this.chartToEdit.colorScheme = {...chart.colorScheme};
+    this.chartToEdit.type = chart.type;
+  }
+
+  showChartCreating() {
+    this.onDisplayChartEditing.emit(true);
   }
 
 }
