@@ -23,7 +23,6 @@ import {CollectedData} from '../../shared/models/collected-data.model';
 import {UserOrganizationService} from '../../core/services/user-organization.service';
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {CollectedDataType} from '../../shared/models/collected-data-type.enum';
-import {CreateDashboardRequest} from '../../shared/requests/create-dashboard-request';
 
 
 @Component({

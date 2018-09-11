@@ -40,7 +40,7 @@ constructor(private instanceService: InstanceService,
       async user => {
         this.user = user;
         const role = await this.userOrganizationService.getOrganizationRole();
-        this.isManager = role.name === 'Manager' ? true : false;
+        this.isManager = role.name === 'Manager';
         this.configureInstances(this.user.lastPickedOrganizationId);
       });
   }
@@ -72,6 +72,8 @@ constructor(private instanceService: InstanceService,
       id: instance.id.toString(),
       routerLink:  [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
+        // TODO: Check if this command will work with routerLink
+        debugger;
         this.instanceService.instanceChecked.emit(instance);
       },
       items: [{
