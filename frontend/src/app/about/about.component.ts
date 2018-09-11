@@ -16,4 +16,9 @@ export class AboutComponent implements OnInit {
   goToLink(section: string): void {
     this.router.navigate(['/', section]);
   }
+
+  show(): void {
+    const menu = document.getElementById('nav');
+    menu.style.visibility = menu.style.visibility === 'visible' ? 'hidden' : 'visible';
+  }
 }
