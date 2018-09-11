@@ -17,6 +17,8 @@
 
         Task<IEnumerable<NotificationDto>> CreateEntityAsync(NotificationRequest notificationRequest);
 
+        Task<IEnumerable<NotificationDto>> CreateEntityForAllAsync(NotificationRequest notificationRequest);
+
         Task<bool> UpdateEntityByIdAsync(NotificationUpdateRequest request, int id);
 
         Task<bool> UpdateEntitiesAsync(IEnumerable<NotificationUpdateRequest> requests);
