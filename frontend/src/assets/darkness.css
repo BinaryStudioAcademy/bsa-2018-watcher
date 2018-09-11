@@ -144,13 +144,6 @@
   .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover a {
     color: #ffffff; }
 
-.ui-radiobutton-box:not(.ui-state-disabled):not(.ui-state-active):hover {
-  border-color: #59b4d4;
-  background-color: #0078a3;
-  color: #ffffff; }
-  .ui-radiobutton-box:not(.ui-state-disabled):not(.ui-state-active):hover a {
-    color: #ffffff; }
-
 .ui-dropdown .ui-dropdown-clear-icon {
   color: #999999; }
 
@@ -751,3 +744,12 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   background-color: #ffffff;
   color: #000000;
 }
+
+/* Radiobutton */
+
+.ui-radiobutton-box:not(.ui-state-disabled):not(.ui-state-active):hover {
+  border-color: #F56C00;
+  background-color: #F56C00;
+  color: #ffffff; }
+  .ui-radiobutton-box:not(.ui-state-disabled):not(.ui-state-active):hover a {
+    color: #ffffff; }

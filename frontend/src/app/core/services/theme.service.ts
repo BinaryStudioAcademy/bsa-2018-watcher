@@ -32,5 +32,43 @@ export class ThemeService {
     link.setAttribute('rel', 'stylesheet');
 
     head.appendChild(link);
+
+    const style = document.createElement('style');
+    style.setAttribute('type', 'text/css');
+    const styleText = document.createTextNode(`
+      body {
+        background-color: ${theme.bodyColor};
+      };
+
+      .header {
+        background-color: ${theme.themeSecondaryColor};
+      }
+
+      .header button:hover {
+        color: #F56C00 !important;
+        background-color: transparent !important;
+        border-color: transparent !important;
+      }
+
+      .ui-tabmenuitem #lastTab .ui-menuitem-icon {
+        color: ${theme.themePrimaryColor};
+      }
+
+      .ui-tabmenuitem #lastTab .ui-menuitem-icon:hover {
+        color: ${theme.themeSecondaryColor};
+      }
+
+      input {
+        height: ${theme.controlsHeight};
+      }
+
+      .logo, .logo:hover{
+        background-color: transparent !important;
+        color: ${theme.themeSecondaryColor} !important;
+      }`);
+
+      style.appendChild(styleText);
+
+      head.appendChild(style);
   }
 }
