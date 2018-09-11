@@ -10,7 +10,6 @@
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
-    using Watcher.Common.Enums;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Interfaces;
     using Watcher.Core.Hubs;
@@ -94,8 +93,8 @@
             {
                 notificationRequest.UserId = receiver.Id;
 
-                var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(ns => ns.Type == notificationRequest.Type
-                                                                                                                 && ns.UserId == notificationRequest.UserId);
+                var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(
+                    ns => ns.Type == notificationRequest.Type && ns.UserId == notificationRequest.UserId);
 
                 if (notificationSetting == null) return null;
                 

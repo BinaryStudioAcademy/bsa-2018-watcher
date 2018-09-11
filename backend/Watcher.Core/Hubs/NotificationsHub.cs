@@ -1,7 +1,4 @@
-﻿using Watcher.Common.Enums;
-using Watcher.Common.Requests;
-
-namespace Watcher.Core.Hubs
+﻿namespace Watcher.Core.Hubs
 {
     using System;
     using System.Collections.Generic;
@@ -14,6 +11,8 @@ namespace Watcher.Core.Hubs
     using Watcher.Core.Interfaces;
     using Watcher.Common.Dtos;
     using Watcher.Common.Helpers.Extensions;
+    using Watcher.Common.Enums;
+    using Watcher.Common.Requests;
 
     public class NotificationsHub : Hub
     {
@@ -27,10 +26,10 @@ namespace Watcher.Core.Hubs
         }
 
         [Authorize]
-        public async Task SendNotification(NotificationDto notificationDto, NotificationType type)
+        public async Task SendNotification(NotificationRequest notificationRequest, NotificationType type)
         {
-            // TODO: check if needed
-            //var result = await _notificationService.CreateEntityAsync(notificationDto, type);
+            notificationRequest.Type = type;
+            var result = await _notificationService.CreateEntityAsync(notificationRequest);
 
             //if (result != null)
             //{
@@ -38,12 +37,6 @@ namespace Watcher.Core.Hubs
             //        await Clients.Client(connectionId).SendAsync("AddNotification", result);
             //}
         }
-
-        //[Authorize]
-        //public async Task SendNotification(NotificationRequest notificationRequest)
-        //{
-        //    await _notificationService.CreateEntityAsync(notificationRequest);
-        //}
 
         [Authorize]
         public async Task Send(string userId, string message)

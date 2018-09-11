@@ -24,7 +24,6 @@ namespace DataAccumulator.WebAPI.Controllers
 
         [HttpGet("test")]
         public async Task Test()
-
         {
             try
             {

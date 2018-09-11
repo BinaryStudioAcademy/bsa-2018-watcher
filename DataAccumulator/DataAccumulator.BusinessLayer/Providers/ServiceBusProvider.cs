@@ -56,7 +56,7 @@
             return _azureQueueSender.SendAsync(_instanceDataQueueClient, message);
         }
 
-        public Task SendDataMessage(InstanceValidatorMessage message)
+        public Task SendDataMessage(InstanceNotificationMessage message)
         {
             return _azureQueueSender.SendAsync(_instanceDataQueueClient, message);
         }
@@ -80,7 +80,7 @@
             return _azureQueueSender.SendAsync(_instanceErrorQueueClient, message);
         }
 
-        public Task SendValidatorMessage(InstanceValidatorMessage message)
+        public Task SendNotificationMessage(InstanceNotificationMessage message)
         {
             return _azureQueueSender.SendAsync(_instanceNotifyQueueClient, message);
         }

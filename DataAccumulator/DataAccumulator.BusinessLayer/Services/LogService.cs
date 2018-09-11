@@ -10,6 +10,7 @@ using DataAccumulator.Shared.Models;
 using DataAccumulator.Shared.Enums;
 
 using ServiceBus.Shared.Messages;
+using ServiceBus.Shared.Enums;
 
 namespace DataAccumulator.BusinessLayer.Services
 {
@@ -37,12 +38,16 @@ namespace DataAccumulator.BusinessLayer.Services
 
             if (actionLog.LogLevel != LogLevel.Info)
             {
-                var message = new InstanceValidatorMessage()
+                var message = new InstanceNotificationMessage()
                 {
                     InstanceId = actionLog.ClientId,
-                    ValidatorMessage = "Test"
+                    Text = actionLog.Message,
+                    CreatedAt = actionLog.Timestamp,
+                    Type = (NotificationType)actionLog.LogLevel
                 };
-                await _serviceBusProvider.SendValidatorMessage(message);
+
+                // Send log to backend like notification
+                await _serviceBusProvider.SendNotificationMessage(message);
             }
 
             //await _repository.AddEntity(actionLog);

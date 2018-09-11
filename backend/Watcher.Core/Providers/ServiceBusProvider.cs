@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Core.Providers
 {
     using System;
+    using System.Linq;
     using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
@@ -22,9 +23,13 @@
     using ServiceBus.Shared.Common;
     using ServiceBus.Shared.Messages;
     using ServiceBus.Shared.Queue;
+    using ServiceBus.Shared.Enums;
 
     using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
+    using Watcher.Common.Enums;
+    using Watcher.Common.Requests;
+
 
     public class ServiceBusProvider : IServiceBusProvider, IDisposable
     {
@@ -72,7 +77,7 @@
                 ExceptionWhileProcessingHandler,
                 OnWait);
 
-            _azureQueueReceiver.Receive<InstanceValidatorMessage>(
+            _azureQueueReceiver.Receive<InstanceNotificationMessage>(
                 _instanceNotifyQueueClient,
                 OnNotifyProcessAsync,
                 ExceptionReceivedHandler,
@@ -110,7 +115,7 @@
             return MessageProcessResponse.Complete;
         }
 
-        private async Task<MessageProcessResponse> OnNotifyProcessAsync(InstanceValidatorMessage arg, CancellationToken stoppingToken)
+        private async Task<MessageProcessResponse> OnNotifyProcessAsync(InstanceNotificationMessage arg, CancellationToken stoppingToken)
         {
             if (stoppingToken.IsCancellationRequested)
             {
@@ -126,23 +131,39 @@
             using (var scope = _scopeFactory.CreateScope())
             {
                 var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
-                var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
-                var result = await notificationService.CreateEntityAsync(
-                    new Common.Requests.NotificationRequest { Text = arg.ValidatorMessage, InstanceId = arg.InstanceId });
+                var notificationRequest = new NotificationRequest
+                {
+                    Text = arg.Text,
+                    CreatedAt = arg.CreatedAt,
+                    InstanceId = arg.InstanceId
+                };
 
-                //if (data != null)
-                //{
-                //    dto = mapper.Map<CollectedData, CollectedDataDto>(data);
-                //}
-                //else
-                //{
-                //    return MessageProcessResponse.Abandon; // No such entity
-                //}
+                switch (arg.Type)
+                {
+                    case InstanceNotifyType.Critical:
+                        notificationRequest.Type = NotificationType.Error;
+                        break;
+                    case InstanceNotifyType.Error:
+                        notificationRequest.Type = NotificationType.Warning;
+                        break;
+                    default:
+                        notificationRequest.Type = NotificationType.Info;
+                        break;
+                }
+
+                var result = await notificationService.CreateEntityAsync(notificationRequest);
+
+                if (!result.Any())
+                {
+                    return MessageProcessResponse.Abandon;
+                }
             }
 
             //await _notificationsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ValidatorMessage);
+
             _logger.LogInformation("Validator Message with to Dashboards hub clients was sent.");
+
             return MessageProcessResponse.Complete;
         }
 
