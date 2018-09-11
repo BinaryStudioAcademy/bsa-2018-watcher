@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { InstanceService } from '../../core/services/instance.service';
-import { ToastrService } from '../../core/services/toastr.service';
-import { AuthService } from '../../core/services/auth.service';
-import { MenuItem } from 'primeng/api';
-import { User } from '../../shared/models/user.model';
-import { Instance } from '../../shared/models/instance.model';
-import { Router } from '@angular/router';
-import { UserOrganizationService } from '../../core/services/user-organization.service';
+import {Component, OnInit} from '@angular/core';
+import {InstanceService} from '../../core/services/instance.service';
+import {ToastrService} from '../../core/services/toastr.service';
+import {AuthService} from '../../core/services/auth.service';
+import {MenuItem} from 'primeng/api';
+import {User} from '../../shared/models/user.model';
+import {Instance} from '../../shared/models/instance.model';
+import {Router} from '@angular/router';
+import {UserOrganizationService} from '../../core/services/user-organization.service';
+import {CollectedDataService} from '../../core/services/collected-data.service';
+import {DataService} from '../../core/services/data.service';
+import {DashboardsHub} from '../../core/hubs/dashboards.hub';
 
 @Component({
   selector: 'app-instance-list',
@@ -14,14 +17,17 @@ import { UserOrganizationService } from '../../core/services/user-organization.s
   styleUrls: ['./instance-list.component.sass']
 })
 export class InstanceListComponent implements OnInit {
-constructor(private instanceService: InstanceService,
-  private toastrService: ToastrService,
-  private authService: AuthService,
-  private userOrganizationService: UserOrganizationService,
-  private router: Router) {
-  this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
-  this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
- }
+  constructor(private instanceService: InstanceService,
+              private collectedDataService: CollectedDataService,
+              private dataService: DataService,
+              private toastrService: ToastrService,
+              private authService: AuthService,
+              private dashboardsHub: DashboardsHub,
+              private userOrganizationService: UserOrganizationService,
+              private router: Router) {
+    this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
+    this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
+  }
 
   menuItems: MenuItem[];
   user: User;
@@ -36,6 +42,11 @@ constructor(private instanceService: InstanceService,
   currentQuery = '';
 
   ngOnInit(): void {
+    // TODO: maybe do unrelated request with fork join to reduce # of request
+    this.collectedDataService.getBuilderData()
+      .subscribe(value => {
+        this.dataService.fakeCollectedData = value;
+      });
     this.authService.currentUser.subscribe(
       async user => {
         this.user = user;
@@ -43,6 +54,12 @@ constructor(private instanceService: InstanceService,
         this.isManager = role.name === 'Manager';
         this.configureInstances(this.user.lastPickedOrganizationId);
       });
+    // try {
+    //   const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
+    //   await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
+    // } catch (e) {
+    //   console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(e));
+    // }
   }
 
   configureInstances(organizationId: number): void {
@@ -70,10 +87,9 @@ constructor(private instanceService: InstanceService,
     const item: MenuItem = {
       label: instance.title,
       id: instance.id.toString(),
-      routerLink:  [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
+      routerLink: [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
-        // TODO: Check if this command will work with routerLink
-        debugger;
+        this.currentGuidId = instance.guidId;
         this.instanceService.instanceChecked.emit(instance);
       },
       items: [{
@@ -87,7 +103,7 @@ constructor(private instanceService: InstanceService,
         icon: 'fa fa fa-history',
         routerLink: [`/user/instances/${instance.guidId}/activities`],
         styleClass: 'instance-options',
-        command: () =>  this.highlightCurrent(item)
+        command: () => this.highlightCurrent(item)
       }, {
         label: 'Download app',
         icon: 'fa fa-download',
@@ -103,7 +119,7 @@ constructor(private instanceService: InstanceService,
         icon: 'fa fa-stack-exchange',
         routerLink: [`/user/instances/${instance.id}/${instance.guidId}/report`],
         styleClass: 'instance-options',
-        command: () =>  this.highlightCurrent(item)
+        command: () => this.highlightCurrent(item)
       }, {
         label: 'Delete',
         icon: 'fa fa-close',
@@ -111,20 +127,21 @@ constructor(private instanceService: InstanceService,
           const index = this.menuItems.findIndex(i => i === item);
           this.deleteInstance(instance.id, index);
           this.highlightCurrent(item);
+          this.dataService.hourlyCollectedData = [];
         },
         styleClass: 'instance-options',
         visible: this.isManager
-      } ]
+      }]
     };
     return item;
   }
 
   async deleteInstance(id: number, index: number) {
     if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
-        this.isDeleting = true;
-        this.popupMessage = 'Deleting instance';
+      this.isDeleting = true;
+      this.popupMessage = 'Deleting instance';
 
-        this.instanceService.delete(id).subscribe((res: Response) => {
+      this.instanceService.delete(id).subscribe((res: Response) => {
         this.instanceService.instanceRemoved.emit(id);
         this.toastrService.success('Deleted instance');
         this.menuItems.splice(index, 1);
@@ -153,10 +170,10 @@ constructor(private instanceService: InstanceService,
 
   onSearchChange(searchQuery: string): void {
     this.currentQuery = searchQuery;
-    this.menuItems = this.menuItems.map( (menuitem: MenuItem) => {
+    this.menuItems = this.menuItems.map((menuitem: MenuItem) => {
       menuitem.visible = !menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase())
-                         ? false
-                         : true ;
+        ? false
+        : true;
       return menuitem;
     });
 
@@ -170,8 +187,10 @@ constructor(private instanceService: InstanceService,
 
 
   highlightCurrent(menuitem: MenuItem) {
-    this.menuItems = this.menuItems.map(i => {i.expanded = false;
-                                              return i; });
+    this.menuItems = this.menuItems.map(i => {
+      i.expanded = false;
+      return i;
+    });
     menuitem.expanded = true;
   }
 }
