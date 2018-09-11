@@ -26,39 +26,23 @@ namespace Watcher.Controllers
 
         }
         
-        [HttpPost, DisableRequestSizeLimit]
-        public virtual async Task<ActionResult> CreatedAndSend()
+        [HttpPost("uploadApp"), DisableRequestSizeLimit]
+        public virtual async Task<ActionResult> UploadFile()
         {
+
             try
             {
                 var file = Request.Form.Files[0];
+                if (file.Length > 0)
+                {
+                    string fileName = file.FileName;
+                }
+                return Ok(file.FileName);  // path
             }
-            catch(Exception e)
+            catch (System.Exception ex)
             {
-                Console.WriteLine(e.Message);
+                return BadRequest();
             }
-
-            
-            //long size = files.Length;
-
-            // full path to file in temp location
-            var filePath = Path.GetTempFileName();
-
-            //foreach (var formFile in files)
-            //{
-            //    if (formFile.Length > 0)
-            //    {
-            //        using (var stream = new FileStream(filePath, FileMode.Create))
-            //        {
-            //            await formFile.CopyToAsync(stream);
-            //        }
-            //    }
-            //}
-
-            // process uploaded files
-            // Don't rely on or trust the FileName property without validation.
-
-            return Ok(true);
         }
     }
 }

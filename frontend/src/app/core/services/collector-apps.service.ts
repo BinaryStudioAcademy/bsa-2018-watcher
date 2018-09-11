@@ -10,8 +10,8 @@ export class CollectorAppsService {
   constructor(private apiService: ApiService) { }
 
   public uploadInstaller(file): Observable<HttpEvent<{}>> {
-    
-    return this.apiService.uploadFile(`/${this.ctrlUrl}`, file);
+
+    return this.apiService.uploadFile(`/${this.ctrlUrl}/uploadApp`, file);
   }
 
 

@@ -41,9 +41,11 @@ export class ApiService {
   public uploadFile(path: string, file): Observable<HttpEvent<{}>> {
       if (!file) { return; }
       const formData = new FormData();
-      formData.append('fileItem', file, file.name);
-
-      const uploadReq = new HttpRequest('POST', `${environment.server_url}${path}`, formData);
+      formData.append('fileItem', file[0], file[0].name);
+      debugger;
+      const uploadReq = new HttpRequest('POST', `${environment.server_url}${path}`, formData, {
+        reportProgress: true,
+      });
       return this.http.request(uploadReq);
   }
 

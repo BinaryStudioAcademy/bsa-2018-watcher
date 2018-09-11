@@ -35,28 +35,20 @@ export class DataCollectorComponent implements OnInit {
   }];
 
   collectorApp: CollectorApp;
-  currentCollectorApp: CollectorApp;
+
   displayAddWindow: boolean;
-
-  public progress: number;
-  public message: string;
-
-  fileToUpload: File = null;
-
-  dataCollectorAppForm = this.fb.group({
-    ceatedAt: new FormControl({ value: '', disabled: false }, Validators.required),
-    version: new FormControl({ value: '', disabled: false }, Validators.required),
-    exeFile: new FormControl({ value: '', disabled: false }, Validators.required),
-    debFile: new FormControl({ value: '', disabled: false }, Validators.required),
-    tgzFile: new FormControl({ value: '', disabled: false }, Validators.required),
-    description: new FormControl({ value: '', disabled: false }),
-    isActual: new FormControl({ value: false, disabled: false }, Validators.required)
-  });
-  http: any;
 
   constructor(private fb: FormBuilder, private toastrService: ToastrService, private collectorAppsService: CollectorAppsService ) {
     this.displayAddWindow = false;
-
+    this.collectorApp = {
+      id: 0,
+      createdAt: new Date(),
+      exeLink: '',
+      tgzLink: '',
+      debLink: '',
+      isActual: false,
+      version: ''
+    };
   }
 
   ngOnInit() {
@@ -75,14 +67,15 @@ export class DataCollectorComponent implements OnInit {
     this.fileInput.upload();
   }
 
-  uploadFile(fileToUpload) {
+  uploadDebFile(files) {
+    const fileToUpload = files.files[0];
     this.collectorAppsService.uploadInstaller(fileToUpload).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
-          this.progress = Math.round(100 * event.loaded / event.total);
+          this.collectorApp.debLink = Math.round(100 * event.loaded / event.total).toString();
         } else if (event.type === HttpEventType.Response) {
-          this.message = event.body.toString();
-             }
+          this.collectorApp.debLink = event.body.toString();
+        }
       });
   }
 

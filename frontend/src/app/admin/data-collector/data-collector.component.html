@@ -41,74 +41,42 @@
 <p-dialog header="Add new dataCollector version." [(visible)]="displayAddWindow" [modal]="true"
   [maximizable]="false" [baseZIndex]="10000">
 
-  <form [formGroup]="dataCollectorAppForm">
-
     <div class="ui-g ui-fluid">
-      <p class="field">Ceated At:</p>
-      <input size="41" type="text" formControlName="ceatedAt" pInputText placeholder="Ceated At" />
-<!--       <div class="invalid" *ngIf="dataCollectorAppForm.get('ceatedAt').errors && dataCollectorAppForm.get('ceatedAt').dirty">
-        <label>Name is required.</label>
-      </div> -->
+      <div class="ui-g-12">
+        <p class="field">Ceated At:</p>
+        <input type="text"  pInputText placeholder="Ceated At" />
+      </div>
     </div>
 
     <div class="ui-g ui-fluid">
-      <div class="ui-g-8 spacePad">
+      <div class="ui-g-8">
         <p class="field">Version:</p>
-        <input size="41" type="text" formControlName="version" pInputText placeholder="Contact number" />
-        <div class="invalid" *ngIf="dataCollectorAppForm.get('version').errors && dataCollectorAppForm.get('version').dirty">
-          <label>Wrong version format.</label>
-        </div>
+        <input  type="text"  pInputText placeholder="Version number" />
       </div>
       <div class="ui-g-4">
         <p class="center space">isActual:</p>
         <div class="center">
-          <p-checkbox formControlName="isActual" binary="false"></p-checkbox>
+          <p-checkbox  binary="false"></p-checkbox>
         </div>
       </div>
     </div>
 
     <div class="ui-g ui-fluid">
-      <p class="field">EXE file:</p>
-      <input size="41" type="file" formControlName="exeFile" pInputText placeholder="Deb file" />
-      <div class="invalid" *ngIf="dataCollectorAppForm.get('exeFile').errors && dataCollectorAppForm.get('exeFile').dirty">
-        <label>Wrong debLink.</label>
-      </div>
-    </div>
-
-      <div class="ui-g ui-fluid">
-        <p class="field">DEB file:</p>
-        <input size="41" type="file" formControlName="debFile" pInputText placeholder="Deb file" />
-        <div class="invalid" *ngIf="dataCollectorAppForm.get('debFile').errors && dataCollectorAppForm.get('debFile').dirty">
-          <label>Wrong debLink.</label>
+      <div class="ui-g-12 ui-md-12">
+        <div class="ui-inputgroup">
+          <input type="text"  [(ngModel)]="collectorApp.debLink" pInputText placeholder="Deb file" />
+          <div class="upload-btn-wrapper">
+            <button pButton class="ui-button-raised ui-button-success btn" label="Upload"></button>
+            <input type="file"  #files (change)="uploadDebFile(files)" />
+          </div>
         </div>
       </div>
-
-    <div class="ui-g ui-fluid">
-      <p class="field">TGZ file:</p>
-
-      <div class="form-group">
-        <label for="file">Choose File</label>
-        <input #file type="file" multiple (change)="uploadFile(file.files)" />
-          <br/>
-        <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
-          {{progress}}%
-        </span>
-
-        <span style="font-weight:bold;color:green;" *ngIf="message">
-          {{message}}
-        </span>
-      </div>
-
-      <div class="invalid" *ngIf="dataCollectorAppForm.get('tgzFile').errors && dataCollectorAppForm.get('tgzFile').dirty">
-        <label>Wrong debLink.</label>
-      </div>
-      </div>
-
-    <div class="ui-g ui-fluid">
-      <p class="field">Description</p>
-      <textarea rows="3" [cols]="42" formControlName="description" pInputTextarea></textarea>
     </div>
-  </form>
+
+    <div class="ui-g ui-fluid">
+        <p class="field">TGZ file:</p>
+        <input size="41" type="file" placeholder="Deb file" />
+    </div>
 
   <p-footer>
     <div class="center">
