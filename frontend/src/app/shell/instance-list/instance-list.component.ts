@@ -1,12 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { InstanceService } from '../../core/services/instance.service';
-import { ToastrService } from '../../core/services/toastr.service';
-import { AuthService } from '../../core/services/auth.service';
-import { MenuItem } from 'primeng/api';
-import { User } from '../../shared/models/user.model';
-import { Instance } from '../../shared/models/instance.model';
-import { Router } from '@angular/router';
-import { UserOrganizationService } from '../../core/services/user-organization.service';
+import {Component, OnInit} from '@angular/core';
+import {InstanceService} from '../../core/services/instance.service';
+import {ToastrService} from '../../core/services/toastr.service';
+import {AuthService} from '../../core/services/auth.service';
+import {MenuItem} from 'primeng/api';
+import {User} from '../../shared/models/user.model';
+import {Instance} from '../../shared/models/instance.model';
+import {Router} from '@angular/router';
+import {UserOrganizationService} from '../../core/services/user-organization.service';
+import {CollectedDataService} from '../../core/services/collected-data.service';
+import {DataService} from '../../core/services/data.service';
+import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+import {InstanceMenuItem} from '../models/instance-menu-item';
+import {timer} from 'rxjs';
 
 @Component({
   selector: 'app-instance-list',
@@ -14,16 +19,19 @@ import { UserOrganizationService } from '../../core/services/user-organization.s
   styleUrls: ['./instance-list.component.sass']
 })
 export class InstanceListComponent implements OnInit {
-constructor(private instanceService: InstanceService,
-  private toastrService: ToastrService,
-  private authService: AuthService,
-  private userOrganizationService: UserOrganizationService,
-  private router: Router) {
-  this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
-  this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
- }
+  constructor(private instanceService: InstanceService,
+              private collectedDataService: CollectedDataService,
+              private dataService: DataService,
+              private toastrService: ToastrService,
+              private authService: AuthService,
+              private dashboardsHub: DashboardsHub,
+              private userOrganizationService: UserOrganizationService,
+              private router: Router) {
+    this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
+    this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
+  }
 
-  menuItems: MenuItem[];
+  menuItems: InstanceMenuItem[];
   user: User;
   currentGuidId: string;
   showDownloadModal: boolean;
@@ -31,22 +39,49 @@ constructor(private instanceService: InstanceService,
   isLoading: boolean;
   isDeleting: boolean;
   isManager: boolean;
-  previousSettingUrl: string;
-
   currentQuery = '';
 
   ngOnInit(): void {
+    this.collectedDataService.getBuilderData()
+      .subscribe(value => {
+        this.dataService.fakeCollectedData = value;
+      });
     this.authService.currentUser.subscribe(
       async user => {
         this.user = user;
         const role = await this.userOrganizationService.getOrganizationRole();
-        this.isManager = role.name === 'Manager' ? true : false;
+        this.isManager = role.name === 'Manager';
+        this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
         this.configureInstances(this.user.lastPickedOrganizationId);
       });
+    this.dashboardsHub.instanceCheckedSubObservable.subscribe(value => {
+      console.log(`Instance: ${value.instanceGuidId}, was checked at ${value.statusCheckedAt}`);
+      const instanceMenuItem = this.menuItems.find(value1 => value1.guidId === value.instanceGuidId);
+      instanceMenuItem.statusCheckedAt = value.statusCheckedAt;
+      instanceMenuItem.label = instanceMenuItem.label.substring(0, instanceMenuItem.label.length - 1) +
+        this.instanceService.calculateSign(instanceMenuItem.statusCheckedAt);
+    });
+
+    /* timer takes a second argument, how often to emit subsequent values
+    in this case we will emit first value after 1 second and subsequent
+    values every 2 seconds after */
+    const source = timer(10000, 2000);
+    const subscribe = source.subscribe(val => {
+      this.checkInstancesStatus();
+    });
+  }
+
+  checkInstancesStatus() {
+    if (this.menuItems && this.menuItems.length > 1) {
+      this.menuItems.slice(1, this.menuItems.length).map(item => item.label = item.label.substring(0, item.label.length - 1) +
+        this.instanceService.calculateSign(item.statusCheckedAt));
+    }
   }
 
   configureInstances(organizationId: number): void {
     this.menuItems = [{
+      guidId: '',
+      statusCheckedAt: new Date(),
       label: 'Create Instance',
       title: 'Create Instance',
       icon: 'pi pi-pw pi-plus',
@@ -65,13 +100,16 @@ constructor(private instanceService: InstanceService,
     });
   }
 
-
-  instanceToMenuItem(instance: Instance): MenuItem {
-    const item: MenuItem = {
-      label: instance.title,
+  instanceToMenuItem(instance: Instance): InstanceMenuItem {
+    const item: InstanceMenuItem = {
+      guidId: instance.guidId,
+      statusCheckedAt: instance.statusCheckedAt,
       id: instance.id.toString(),
-      routerLink:  [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
+      // TODO: Add here icon or something else that specifying Status of instance
+      label: instance.title + this.instanceService.calculateSign(instance.statusCheckedAt),
+      routerLink: [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
+        this.currentGuidId = instance.guidId;
         this.instanceService.instanceChecked.emit(instance);
       },
       items: [{
@@ -85,7 +123,7 @@ constructor(private instanceService: InstanceService,
         icon: 'fa fa fa-history',
         routerLink: [`/user/instances/${instance.guidId}/activities`],
         styleClass: 'instance-options',
-        command: () =>  this.highlightCurrent(item)
+        command: () => this.highlightCurrent(item)
       }, {
         label: 'Download app',
         icon: 'fa fa-download',
@@ -101,7 +139,7 @@ constructor(private instanceService: InstanceService,
         icon: 'fa fa-stack-exchange',
         routerLink: [`/user/instances/${instance.id}/${instance.guidId}/report`],
         styleClass: 'instance-options',
-        command: () =>  this.highlightCurrent(item)
+        command: () => this.highlightCurrent(item)
       }, {
         label: 'Delete',
         icon: 'fa fa-close',
@@ -109,20 +147,21 @@ constructor(private instanceService: InstanceService,
           const index = this.menuItems.findIndex(i => i === item);
           this.deleteInstance(instance.id, index);
           this.highlightCurrent(item);
+          this.dataService.hourlyCollectedData = [];
         },
         styleClass: 'instance-options',
         visible: this.isManager
-      } ]
+      }]
     };
     return item;
   }
 
   async deleteInstance(id: number, index: number) {
     if (await this.toastrService.confirm('You sure you want to delete this instance? ')) {
-        this.isDeleting = true;
-        this.popupMessage = 'Deleting instance';
+      this.isDeleting = true;
+      this.popupMessage = 'Deleting instance';
 
-        this.instanceService.delete(id).subscribe((res: Response) => {
+      this.instanceService.delete(id).subscribe((res: Response) => {
         this.instanceService.instanceRemoved.emit(id);
         this.toastrService.success('Deleted instance');
         this.menuItems.splice(index, 1);
@@ -135,14 +174,14 @@ constructor(private instanceService: InstanceService,
   }
 
   onInstanceAdded(instance: Instance): void {
-    const item: MenuItem = this.instanceToMenuItem(instance);
+    const item: InstanceMenuItem = this.instanceToMenuItem(instance);
     this.menuItems.push(item);
     this.onSearchChange(this.currentQuery);
     this.highlightCurrent(item);
   }
 
   onInstanceEdited(instance: Instance): void {
-    const item: MenuItem = this.instanceToMenuItem(instance);
+    const item: InstanceMenuItem = this.instanceToMenuItem(instance);
     const index: number = this.menuItems.findIndex(inst => inst.id === instance.id.toString());
     this.menuItems[index] = item;
     this.onSearchChange(this.currentQuery);
@@ -151,11 +190,9 @@ constructor(private instanceService: InstanceService,
 
   onSearchChange(searchQuery: string): void {
     this.currentQuery = searchQuery;
-    this.menuItems = this.menuItems.map( (menuitem: MenuItem) => {
-      menuitem.visible = !menuitem.label.toLowerCase().startsWith(searchQuery.toLowerCase())
-                         ? false
-                         : true ;
-      return menuitem;
+    this.menuItems = this.menuItems.map((instanceMenuItem: InstanceMenuItem) => {
+      instanceMenuItem.visible = instanceMenuItem.label.toLowerCase().startsWith(searchQuery.toLowerCase());
+      return instanceMenuItem;
     });
 
     // [0] element of menuItems is Create button
@@ -168,8 +205,10 @@ constructor(private instanceService: InstanceService,
 
 
   highlightCurrent(menuitem: MenuItem) {
-    this.menuItems = this.menuItems.map(i => {i.expanded = false;
-                                              return i; });
+    this.menuItems = this.menuItems.map(i => {
+      i.expanded = false;
+      return i;
+    });
     menuitem.expanded = true;
   }
 }

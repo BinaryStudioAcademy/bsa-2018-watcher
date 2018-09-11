@@ -32,6 +32,8 @@
         public float RamMaxPercent { get; set; }
         public float DiskMaxPercent { get; set; }
 
+        public DateTime StatusCheckedAt { get; set; }
+
 
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }

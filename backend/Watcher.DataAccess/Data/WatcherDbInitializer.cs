@@ -125,6 +125,7 @@
                 .RuleFor(o => o.Title, f => f.PickRandom("Instance" + f.Random.Number(999)))
                 .RuleFor(o => o.Address, f => f.Internet.Mac())
                 .RuleFor(o => o.IsActive, true)
+                .RuleFor(o => o.StatusCheckedAt, new DateTime(2018, 1, 1, 1, 1, 1))
                 .RuleFor(o => o.OrganizationId, f => f.PickRandom(organizations).Id)
                 .RuleFor(o => o.IsDeleted, false)
                 .RuleFor(o => o.AggregationForDay, true)

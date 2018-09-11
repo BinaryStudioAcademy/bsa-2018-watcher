@@ -258,6 +258,8 @@ namespace Watcher.DataAccess.Data.Migrations
 
                     b.Property<float>("RamMaxPercent");
 
+                    b.Property<DateTime>("StatusCheckedAt");
+
                     b.Property<string>("Title")
                         .IsRequired();
 
