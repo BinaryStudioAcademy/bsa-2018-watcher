@@ -1,6 +1,6 @@
 <p-toast class="system-notification" position="top-right" key="system-message" [baseZIndex]="5000">
     <ng-template let-message pTemplate="message">
-      
+
       <div *ngIf="message.severity != 'chat'" class="message-container">
         <span class="message-img icon-style fa fa-3x info"
         [ngClass]="{
@@ -9,11 +9,13 @@
       </span>
         <div class="message-content">
           <span class="message-title text-overflow">System message</span>
+          <div *ngIf="message.data.instanceId && message.data.instanceGuidId"
+          class="message-text">{{message.data.instanceGuidId}}</div>
           <div class="message-text">{{message.data.text}}</div>
           <div class="message-date text-overflow">{{message.data.createdAt | date:'short'}}</div>
         </div>
       </div>
-  
+
       <div *ngIf="message.severity == 'chat'" class="message-container action" (click)="openChat(message.data?.chatId)">
         <img class="message-img" src="{{message.data.user.photoURL}}" />
         <div class="message-content">
@@ -22,6 +24,6 @@
           <div class="message-date text-overflow">{{message.data.createdAt | date:'short'}}</div>
         </div>
       </div>
-  
+
     </ng-template>
   </p-toast>

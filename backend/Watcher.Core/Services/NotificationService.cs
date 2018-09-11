@@ -71,18 +71,20 @@
             var notifications = new List<NotificationDto>();
 
             var organizationId = notificationRequest.OrganizationId;
+            int? instanceId = null;
+            if(notificationRequest.InstanceId != null)
+            {
+                var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(i => i.GuidId == notificationRequest.InstanceId);
+                if (instance == null) return null;
+
+                organizationId = instance.OrganizationId;
+                instanceId = instance.Id;
+            }
 
             var entity = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
 
-            if (entity.InstanceId != null)
-            {
-                var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(i => i.GuidId == notificationRequest.InstanceId);
-
-                if (instance == null) return null;
-
-                entity.InstanceId = instance.Id;
-                organizationId = instance.OrganizationId;
-            }
+            entity.InstanceId = instanceId;
+            entity.InstanceGuidId = notificationRequest.InstanceId;
 
             if (entity.UserId != null)
             {

@@ -65,6 +65,7 @@ export class NotificationsHubService {
   private registerOnServerEvents(): void {
     this.hubConnection.on('AddNotification', (data: Notification) => {
       console.log('Notification added');
+      console.log(data);
       this.notificationReceived.emit(data);
     });
 

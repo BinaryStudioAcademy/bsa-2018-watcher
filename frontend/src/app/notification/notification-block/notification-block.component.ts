@@ -70,7 +70,7 @@ export class NotificationBlockComponent implements OnInit {
       this.notifications = value;
       this.notificationCounter = this.calcNotReadNotifications(value);
       this.isLoading = false;
-      console.log(this.isLoading);
+      console.log(value);
     });
   }
 

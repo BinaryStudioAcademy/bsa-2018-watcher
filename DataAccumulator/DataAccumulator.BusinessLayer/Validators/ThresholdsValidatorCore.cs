@@ -52,7 +52,6 @@ namespace DataAccumulator.BusinessLayer.Validators
                 {
                     StringBuilder textMessage = new StringBuilder();
 
-                    textMessage.Append(instanceValidatorDto.ClientId);
                     foreach (var item in validationResult.Errors)
                     {
                         var name = item.FormattedMessagePlaceholderValues["PropertyName"]
@@ -68,9 +67,9 @@ namespace DataAccumulator.BusinessLayer.Validators
                            ? name
                            : name.Remove(index, "Local".Length);
 
-                        name = name.ToLower().PadRight(12, ' ');
+                        name = name.ToLower();
 
-                        textMessage.Append(" " + name + " has reached " +item.AttemptedValue.ToString().Substring(0, 4) + "% ");
+                        textMessage.Append(" " + name + " has reached " + item.AttemptedValue.ToString().Substring(0, 4) + "% ");
                     }
                     var message = new InstanceNotificationMessage()
                     {
