@@ -278,11 +278,9 @@ namespace DataAccumulator.WebAPI.Controllers
                         IsActive = true,
 
                         RamValidator = true,
-                        UsageRamMBytesMax = 15000,
                         RamUsagePercentageMax = 95,
 
                         LocalDiskVallidator = true,
-                        LocalDiskUsageMBytesMax = 1500000,
                         LocalDiskUsagePercentageMax = 95,
 
                         CpuValidator = true,
@@ -296,11 +294,9 @@ namespace DataAccumulator.WebAPI.Controllers
                         IsActive = true,
 
                         RamValidator = true,
-                        UsageRamMBytesMax = 1,
                         RamUsagePercentageMax = 1,
 
                         LocalDiskVallidator = true,
-                        LocalDiskUsageMBytesMax = 1,
                         LocalDiskUsagePercentageMax = 1,
 
                         CpuValidator = true,
