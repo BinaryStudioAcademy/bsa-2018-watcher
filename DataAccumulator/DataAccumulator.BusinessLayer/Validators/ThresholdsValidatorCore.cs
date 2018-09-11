@@ -17,10 +17,10 @@ namespace DataAccumulator.BusinessLayer.Validators
         private readonly IInstanceSettingsService<InstanceSettingsDto> _instanceValidatorService;
         private readonly IServiceBusProvider _serviceBusProvider;
 
-        public ThresholdsValidatorCore(IInstanceSettingsService<InstanceSettingsDto> instanceValidatorService, 
+        public ThresholdsValidatorCore(IInstanceSettingsService<InstanceSettingsDto> instanceSettingService, 
             IServiceBusProvider serviceBusProvider)
         {
-            _instanceValidatorService = instanceValidatorService;
+            _instanceValidatorService = instanceSettingService;
             _serviceBusProvider = serviceBusProvider;
         }
 
@@ -42,6 +42,7 @@ namespace DataAccumulator.BusinessLayer.Validators
                     new PropertyChain(), new RulesetValidatorSelector(validatorParams.ToArray()));
 
                 var validationResult = await validator.ValidateAsync(context);
+               var validatorErrors = validationResult.Errors;
                 if (!validationResult.IsValid)
                 {
                     var message = new InstanceValidatorMessage()

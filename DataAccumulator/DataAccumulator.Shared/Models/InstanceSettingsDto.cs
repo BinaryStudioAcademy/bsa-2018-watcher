@@ -14,13 +14,13 @@ namespace DataAccumulator.Shared.Models
 
         public bool IsActive { get; set; }
 
-        public bool RamValidator { get; set; } = false;
+        public bool RamValidator { get; set; } = true;
         public float RamUsagePercentageMax { get; set; }
 
-        public bool LocalDiskVallidator { get; set; } = false;
+        public bool LocalDiskVallidator { get; set; } = true;
         public float LocalDiskUsagePercentageMax { get; set; }
 
-        public bool CpuValidator { get; set; } = false;
+        public bool CpuValidator { get; set; } = true;
         public float CpuUsagePercentageMax { get; set; }
     }
 }
