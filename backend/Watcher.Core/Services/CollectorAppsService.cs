@@ -18,18 +18,28 @@
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Entities;
     using Watcher.DataAccess.Interfaces;
+    using Microsoft.AspNetCore.Http;
+
     public class CollectorAppsService : ICollectorAppsService
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
         private readonly IEmailProvider _emailProvider;
+        private readonly IFileStorageProvider _fileStorageProvider;
         public CollectorAppsService(IUnitOfWork uow,
                                     IMapper mapper,
-                                    IEmailProvider emailProvider)
+                                    IEmailProvider emailProvider,
+                                    IFileStorageProvider fileStorageProvider)
         {
             _uow = uow;
             _mapper = mapper;
             _emailProvider = emailProvider;
+            _fileStorageProvider = fileStorageProvider;
+        }
+
+        public async Task<string> UploadFileToStorage(IFormFile file)
+        {
+            return await _fileStorageProvider.UploadFormFileWithNameAsync(file);
         }
 
     }

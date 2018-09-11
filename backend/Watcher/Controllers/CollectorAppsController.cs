@@ -20,29 +20,28 @@ namespace Watcher.Controllers
     [ApiController]
     public class CollectorAppsController : ControllerBase
     {
-
-        public CollectorAppsController()
+        private readonly ICollectorAppsService _collectorAppsService;
+        public CollectorAppsController(ICollectorAppsService collectorAppsService)
         {
-
+            _collectorAppsService = collectorAppsService;
         }
         
         [HttpPost("uploadApp"), DisableRequestSizeLimit]
         public virtual async Task<ActionResult> UploadFile()
         {
-
             try
             {
                 var file = Request.Form.Files[0];
                 if (file.Length > 0)
                 {
-                    string fileName = file.FileName;
+                    return Ok(await _collectorAppsService.UploadFileToStorage(file));
                 }
-                return Ok(file.FileName);  // path
             }
             catch (System.Exception ex)
             {
                 return BadRequest();
             }
+            return BadRequest();
         }
     }
 }
