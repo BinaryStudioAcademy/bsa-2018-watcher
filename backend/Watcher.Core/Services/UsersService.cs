@@ -165,7 +165,8 @@ namespace Watcher.Core.Services
                     {
                         Name = request.CompanyName ?? "Default",
                         IsActive = true,
-                        CreatedByUserId = entity.Id
+                        CreatedByUserId = entity.Id,
+                        ThemeId = 1
                     };
                     createdUser.UserOrganizations.Add(
                         new UserOrganization
