@@ -16,6 +16,8 @@ namespace DataCollector
         private readonly Dictionary<int, PerformanceCounter> _processCpuCounters;
         private readonly Dictionary<string, PerformanceCounter> _systemCounters;
 
+        private readonly float _totalRamMbyte;
+
         private Collector()
         {
             _processCpuCounters = new Dictionary<int, PerformanceCounter>();
@@ -30,6 +32,7 @@ namespace DataCollector
                 { "LocalDisk", new PerformanceCounter("LogicalDisk", "% Free Space", "C:") }
             };
             _systemCounters["CPU"].NextValue();
+            _totalRamMbyte = GetTotalRAM();
             Thread.Sleep(1000);
         }
 
@@ -47,9 +50,9 @@ namespace DataCollector
                     InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
                     InterruptsTimePercent = _systemCounters["InterruptsTime"].NextValue(),
 
-                    TotalRamMBytes = GetTotalRAM(),
-                    RamUsagePercentage = 100 - (_systemCounters["FreeRam"].NextValue() / (GetTotalRAM() / 100)),
-                    UsageRamMBytes = GetTotalRAM() - _systemCounters["FreeRam"].NextValue(),
+                    TotalRamMBytes = _totalRamMbyte,
+                    RamUsagePercentage = 100 - (_systemCounters["FreeRam"].NextValue() / (_totalRamMbyte / 100)),
+                    UsageRamMBytes = _totalRamMbyte - _systemCounters["FreeRam"].NextValue(),
 
                     CpuUsagePercentage = _systemCounters["CPU"].NextValue(),
 
@@ -99,7 +102,7 @@ namespace DataCollector
 
         private async Task<List<ProcessData>> GetProcesses()
         {
-            var processes = Process.GetProcesses();
+            var processes = Process.GetProcesses().Where(item => item.ProcessName != "Idle").ToArray();
             var result = new List<ProcessData>(processes.Length);
             var ListCPU = new Dictionary<int, float>(processes.Length);
 
@@ -111,6 +114,7 @@ namespace DataCollector
                 if (item.ProcessName == "Idle") continue; // cpu > 350%
 
                 if (_processCpuCounters.ContainsKey(item.Id)) continue;
+
                 var cpu = new PerformanceCounter("Process", "% Processor Time", item.ProcessName, true);
                 cpu.NextValue();
                 _processCpuCounters.Add(item.Id, cpu);
@@ -119,14 +123,14 @@ namespace DataCollector
             await Task.Delay(1000);
             // Thread.Sleep(1000);
 
-            foreach (var item in processes.Where(item => item.ProcessName != "Idle"))
+            foreach (var item in processes)
             {
                 if (!_processCpuCounters.TryGetValue(item.Id, out var counter)) continue;
                 ListCPU.Add(item.Id, (float)Math.Round(counter.NextValue() / Environment.ProcessorCount, 2));
                 counter.Dispose();
             }
 
-            foreach (var item in processes.Where(item => item.ProcessName != "Idle"))
+            foreach (var item in processes)
             {
                 try
                 {
@@ -138,7 +142,7 @@ namespace DataCollector
                     {
                         pCpu = cpuP;
                     }
-                    var pRam = (ramMBytes / GetTotalRAM()) * 100;
+                    var pRam = (ramMBytes / _totalRamMbyte) * 100;
                     if (_processCpuCounters.TryGetValue(item.Id, out var counter))
                     {
                         counter.Dispose();
