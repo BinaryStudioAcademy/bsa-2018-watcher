@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
+using FluentValidation;
+using FluentValidation.Internal;
+
 using DataAccumulator.BusinessLayer.Interfaces;
 using DataAccumulator.Shared.Exceptions;
 using DataAccumulator.Shared.Models;
-using FluentValidation;
-using FluentValidation.Internal;
+
 using ServiceBus.Shared.Messages;
+using ServiceBus.Shared.Enums;
 
 namespace DataAccumulator.BusinessLayer.Validators
 {
@@ -45,12 +47,12 @@ namespace DataAccumulator.BusinessLayer.Validators
                var validatorErrors = validationResult.Errors;
                 if (!validationResult.IsValid)
                 {
-                    var message = new InstanceValidatorMessage()
+                    var message = new InstanceNotificationMessage()
                     {
                         InstanceId = instanceValidatorDto.ClientId,
-                        ValidatorMessage = validationResult.ToString()
+                        Text = validationResult.ToString()
                     };
-                    await _serviceBusProvider.SendDataMessage(message);
+                    await _serviceBusProvider.SendNotificationMessage(message);
                 }
             }
             catch (NotFoundException e)

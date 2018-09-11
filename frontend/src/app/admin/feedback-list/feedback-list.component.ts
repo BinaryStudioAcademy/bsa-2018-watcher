@@ -82,7 +82,7 @@ export class FeedbackListComponent implements OnInit {
     this.responseForm.reset();
     this.display = true;
     this.feedback = feedback;
-    this.email = feedback.email; // feedback.emailuser
+    this.email = feedback.email;
   }
 
   onCancel() {
