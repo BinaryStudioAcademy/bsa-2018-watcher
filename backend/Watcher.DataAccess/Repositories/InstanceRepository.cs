@@ -19,7 +19,6 @@
         {
             var entity = await GetFirstOrDefaultAsync(i => i.GuidId == instanceId);
             if (entity == null) return null;
-            // entity.
             entity.StatusCheckedAt = time;
             return entity;
         }
