@@ -76,7 +76,7 @@
                 OnWait);
 
             _azureQueueReceiver.Receive<InstanceValidatorMessage>(
-                _instanceErrorQueueClient,
+                _instanceNotifyQueueClient,
                 OnNotifyProcessAsync,
                 ExceptionReceivedHandler,
                 ExceptionWhileProcessingHandler,
