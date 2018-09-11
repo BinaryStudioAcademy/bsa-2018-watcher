@@ -71,6 +71,7 @@ export class EditInstanceComponent implements OnInit {
         aggregationForHour: true,
         aggregationForDay: true,
         aggregationForMonth: true,
+        aggregationForWeek: true,
         cpuMaxPercent: 90,
         ramMaxPercent: 90,
         diskMaxPercent: 90,
@@ -86,6 +87,7 @@ export class EditInstanceComponent implements OnInit {
       aggregationHour: new FormControl({value: instance.aggregationForHour, disabled: false}),
       aggregationDay: new FormControl({value: instance.aggregationForDay, disabled: false}),
       aggregationMonth: new FormControl({value: instance.aggregationForMonth, disabled: false}),
+      aggregationWeek: new FormControl({value: instance.aggregationForWeek, disabled: false}),
       cpuMax: new FormControl({value: instance.cpuMaxPercent, disabled: false}),
       ramMax: new FormControl({value: instance.ramMaxPercent, disabled: false}),
       diskMax: new FormControl({value: instance.diskMaxPercent, disabled: false})
@@ -136,6 +138,7 @@ export class EditInstanceComponent implements OnInit {
       aggregationForDay: this.instanceForm.controls.aggregationDay.value,
       aggregationForHour: this.instanceForm.controls.aggregationHour.value,
       aggregationForMonth: this.instanceForm.controls.aggregationMonth.value,
+      aggregationForWeek: this.instanceForm.controls.aggregationWeek.value,
       cpuMaxPercent: this.instanceForm.controls.cpuMax.value,
       ramMaxPercent: this.instanceForm.controls.ramMax.value,
       diskMaxPercent: this.instanceForm.controls.diskMax.value,
