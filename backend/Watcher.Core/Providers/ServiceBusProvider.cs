@@ -23,7 +23,6 @@
     using ServiceBus.Shared.Messages;
     using ServiceBus.Shared.Queue;
 
-    using Watcher.Common.Dtos.Plots;
     using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
 
@@ -34,16 +33,19 @@
         private readonly IHubContext<DashboardsHub> _dashboardsHubContext;
         private readonly IOptions<AzureQueueSettings> _queueOptions;
         private readonly IAzureQueueReceiver _azureQueueReceiver;
+        private readonly IAzureQueueSender _azureQueueSender;
 
         private readonly QueueClient _instanceDataQueueClient;
         private readonly QueueClient _instanceErrorQueueClient;
+        private readonly QueueClient _instanceSettingsQueueClient;
 
         public ServiceBusProvider(
             ILoggerFactory loggerFactory,
             IServiceScopeFactory scopeFactory,
             IHubContext<DashboardsHub> dashboardsHubContext,
             IOptions<AzureQueueSettings> queueOptions,
-            IAzureQueueReceiver azureQueueReceiver)
+            IAzureQueueReceiver azureQueueReceiver,
+            IAzureQueueSender azureQueueSender)
         {
             _logger = loggerFactory?.CreateLogger<ServiceBusProvider>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _scopeFactory = scopeFactory;
@@ -51,6 +53,7 @@
             _queueOptions = queueOptions;
             _instanceDataQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.DataQueueName);
             _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
+            _instanceSettingsQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.SettingsQueueName);
 
             _azureQueueReceiver = azureQueueReceiver;
             _azureQueueReceiver.Receive<InstanceCollectedDataMessage>(
@@ -66,11 +69,18 @@
                 ExceptionReceivedHandler,
                 ExceptionWhileProcessingHandler,
                 OnWait);
+
+            _azureQueueSender = azureQueueSender;
         }
 
         private void OnWait()
         {
             Debug.WriteLine("*******************WAITING***********************");
+        }
+
+        public Task SendInstanceSettingsAsync(InstanceSettingsMessage message)
+        {
+            return _azureQueueSender.SendAsync(_instanceSettingsQueueClient, message);
         }
 
         private async Task<MessageProcessResponse> OnErrorProcessAsync(InstanceErrorMessage arg, CancellationToken stoppingToken)
@@ -153,7 +163,7 @@
             {
                 await _instanceDataQueueClient.CloseAsync();
                 await _instanceErrorQueueClient.CloseAsync();
-
+                await _instanceDataQueueClient.CloseAsync();
                 disposedValue = true;
             }
         }

@@ -31,9 +31,28 @@
       </div>
     </div>
 
-    <!-- <div class="invalid" *ngIf="instanceForm.get('address').errors && (instanceForm.get('address').touched ||instanceForm.get('address').dirty)">
-      <label>Address is required.</label>
-    </div> -->
+    <div class="label">Aggregation:</div>
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12 ui-md-6 ui-lg-4 aggregation-checks">
+        <p-checkbox formControlName="aggregationHour" label="Hourly" inputId="hour" binary="true"></p-checkbox>
+        <p-checkbox formControlName="aggregationDay" label="Daily" inputId="day" binary="true"></p-checkbox>
+        <p-checkbox formControlName="aggregationMonth" label="Monthly" inputId="month" binary="true"></p-checkbox>
+      </div>
+    </div>
+
+    <div class="label">Receive notifications on:</div>
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12 ui-md-6 ui-lg-4">
+          <div class="secondary-label">Max cpu percent: {{instanceForm.controls.cpuMax.value}}</div>
+          <p-slider formControlName="cpuMax" [min]="0" [max]="100"></p-slider>
+
+          <div class="secondary-label">Max ram percent: {{instanceForm.controls.ramMax.value}}</div>
+          <p-slider formControlName="ramMax" [min]="0" [max]="100"></p-slider>
+
+          <div class="secondary-label">Max disk percent: {{instanceForm.controls.diskMax.value}}</div>
+          <p-slider formControlName="diskMax" [min]="0" [max]="100"></p-slider>
+      </div>
+    </div>
 
     <div *ngIf="id" class="label">Identifier:</div>
     <div *ngIf="id" class="ui-g ui-fluid">

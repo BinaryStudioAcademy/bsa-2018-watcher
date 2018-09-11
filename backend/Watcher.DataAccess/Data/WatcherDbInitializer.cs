@@ -126,7 +126,13 @@
                 .RuleFor(o => o.Address, f => f.Internet.Mac())
                 .RuleFor(o => o.IsActive, true)
                 .RuleFor(o => o.OrganizationId, f => f.PickRandom(organizations).Id)
-                .RuleFor(o => o.IsDeleted, false);
+                .RuleFor(o => o.IsDeleted, false)
+                .RuleFor(o => o.AggregationForDay, true)
+                .RuleFor(o => o.AggregationForHour, true)
+                .RuleFor(o => o.AggregationForMonth, true)
+                .RuleFor(o => o.CpuMaxPercent, 90)
+                .RuleFor(o => o.RamMaxPercent, 90)
+                .RuleFor(o => o.DiskMaxPercent, 90);
 
             var instances = instanceFaker.Generate(amount).ToArray();
 
@@ -144,6 +150,7 @@
                 //.RuleFor(o => o.ShowCommon, true)
                 .RuleFor(o => o.Threshold, f => f.Random.Number(100))
                 .RuleFor(o => o.MostLoaded, 1)
+                .RuleFor(o => o.HistoryTime, 5)
                 .RuleFor(o => o.DashboardId, f => f.PickRandom(dashboards).Id)
                 .RuleFor(o => o.SchemeType, "ordinal")
                 .RuleFor(o => o.ShowLegend, true)

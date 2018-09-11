@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using AutoMapper;
 
 using Microsoft.EntityFrameworkCore;
-
+using ServiceBus.Shared.Messages;
 using Watcher.Common.Dtos;
 using Watcher.Common.Requests;
 using Watcher.Core.Interfaces;
@@ -19,11 +18,13 @@ namespace Watcher.Core.Services
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly IServiceBusProvider _serviceBus;
 
-        public InstanceService(IUnitOfWork uow, IMapper mapper)
+        public InstanceService(IUnitOfWork uow, IMapper mapper, IServiceBusProvider serviceBus)
         {
             _uow = uow;
             _mapper = mapper;
+            _serviceBus = serviceBus;
         }
 
         public async Task<IEnumerable<InstanceDto>> GetAllEntitiesAsync()
@@ -78,6 +79,18 @@ namespace Watcher.Core.Services
 
             if (entity == null) return null;
 
+            InstanceSettingsMessage message = new InstanceSettingsMessage()
+            {
+                InstanceId = entity.GuidId,
+                AggregationForHour = entity.AggregationForHour,
+                AggregationForDay = entity.AggregationForDay,
+                AggregationForMonth = entity.AggregationForMonth,
+                CpuMaxPercent = entity.CpuMaxPercent,
+                RamMaxPercent = entity.CpuMaxPercent,
+                DiskMaxPercent = entity.DiskMaxPercent
+            };
+            await _serviceBus.SendInstanceSettingsAsync(message);
+
             var dto = _mapper.Map<Instance, InstanceDto>(entity);
 
             return dto;
@@ -91,6 +104,18 @@ namespace Watcher.Core.Services
             // In returns updated entity, you could do smth with it or just leave as it is
             var updated = await _uow.InstanceRepository.UpdateAsync(entity);
             var result = await _uow.SaveAsync();
+
+            InstanceSettingsMessage message = new InstanceSettingsMessage()
+            {
+                InstanceId = updated.GuidId,
+                AggregationForHour = updated.AggregationForHour,
+                AggregationForDay = updated.AggregationForDay,
+                AggregationForMonth = updated.AggregationForMonth,
+                CpuMaxPercent = updated.CpuMaxPercent,
+                RamMaxPercent = updated.CpuMaxPercent,
+                DiskMaxPercent = updated.DiskMaxPercent
+            };
+            await _serviceBus.SendInstanceSettingsAsync(message);
 
             return result;
         }
