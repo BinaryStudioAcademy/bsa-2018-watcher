@@ -1,10 +1,13 @@
-﻿using DataAccumulator.BusinessLayer.Interfaces;
-using DataAccumulator.Shared.Models;
+﻿using System;
+using System.Threading.Tasks;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Context;
-using System;
-using System.Threading.Tasks;
+
+using DataAccumulator.BusinessLayer.Interfaces;
+using DataAccumulator.Shared.Models;
+
 
 namespace DataAccumulator.WebAPI.Controllers
 {
@@ -20,20 +23,6 @@ namespace DataAccumulator.WebAPI.Controllers
         {
             _logger = logger;
             _service = service;
-        }
-
-        [HttpGet("test")]
-        public async Task Test()
-        {
-            try
-            {
-                await _service.SaveActionLog(new ActionLogDto("test message", DateTime.Now, Shared.Enums.LogLevel.State));
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-                Console.WriteLine(e);
-            }
         }
 
         [HttpPost]

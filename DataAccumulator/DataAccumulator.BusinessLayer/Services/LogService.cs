@@ -43,14 +43,14 @@ namespace DataAccumulator.BusinessLayer.Services
                     InstanceId = actionLog.ClientId,
                     Text = actionLog.Message,
                     CreatedAt = actionLog.Timestamp,
-                    Type = (NotificationType)actionLog.LogLevel
+                    Type = (InstanceNotifyType)actionLog.LogLevel
                 };
 
                 // Send log to backend like notification
                 await _serviceBusProvider.SendNotificationMessage(message);
             }
 
-            //await _repository.AddEntity(actionLog);
+            await _repository.AddEntity(actionLog);
         }
     }
 }

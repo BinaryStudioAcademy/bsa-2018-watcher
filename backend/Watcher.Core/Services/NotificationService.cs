@@ -70,40 +70,52 @@
             var receivers = new List<User>();
             var notifications = new List<NotificationDto>();
 
-            if (notificationRequest.InstanceId != null)
+            var organizationId = notificationRequest.OrganizationId;
+
+            var entity = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
+
+            if (entity.InstanceId != null)
             {
                 var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(i => i.GuidId == notificationRequest.InstanceId);
-                notificationRequest.OrganizationId = instance.OrganizationId;
+
+                if (instance == null) return null;
+
+                entity.InstanceId = instance.Id;
+                organizationId = instance.OrganizationId;
             }
 
-            if (notificationRequest.UserId != null)
-                receivers.Add(await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == notificationRequest.UserId));
-            else
+            if (entity.UserId != null)
+            {
+                receivers.Add(await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == entity.UserId));
+            }
+            else if (organizationId != null)
             {
                 Organization organizationReceiver =
-                    await _uow.OrganizationRepository.GetFirstOrDefaultAsync(o => o.Id == notificationRequest.OrganizationId, 
+                    await _uow.OrganizationRepository.GetFirstOrDefaultAsync(o => o.Id == organizationId,
                                                                             include: organizations => organizations.Include(o => o.UserOrganizations)
                                                                                                                     .ThenInclude(uo => uo.User));
 
                 foreach (UserOrganization userOrganization in organizationReceiver.UserOrganizations)
                     receivers.Add(userOrganization.User);
             }
+            else
+            {
+                return null;
+            }
 
             foreach (User receiver in receivers)
             {
-                notificationRequest.UserId = receiver.Id;
+                entity.UserId = receiver.Id;
 
                 var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(
-                    ns => ns.Type == notificationRequest.Type && ns.UserId == notificationRequest.UserId);
+                    ns => ns.Type == notificationRequest.Type && ns.UserId == entity.UserId);
 
-                if (notificationSetting == null) return null;
+                if (notificationSetting == null) continue;
                 
                 if (notificationSetting.IsDisable) continue;
 
-                notificationRequest.NotificationSettingId = notificationSetting.Id;
-
-                var entity = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
-
+                entity.NotificationSettingId = notificationSetting.Id;
+               
                 entity = await _uow.NotificationsRepository.CreateAsync(entity);
                 var result = await _uow.SaveAsync();
                 if (!result)

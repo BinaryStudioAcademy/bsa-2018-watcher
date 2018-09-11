@@ -154,15 +154,13 @@
 
                 var result = await notificationService.CreateEntityAsync(notificationRequest);
 
-                if (!result.Any())
+                if (result == null)
                 {
                     return MessageProcessResponse.Abandon;
                 }
             }
 
-            //await _notificationsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ValidatorMessage);
-
-            _logger.LogInformation("Validator Message with to Dashboards hub clients was sent.");
+            _logger.LogInformation("Instance Notification Message was created.");
 
             return MessageProcessResponse.Complete;
         }

@@ -4,11 +4,14 @@
     using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
-    using DataAccumulator.BusinessLayer.Interfaces;
-    using DataAccumulator.Shared.Models;
+
     using Microsoft.Azure.ServiceBus;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+
+    using DataAccumulator.BusinessLayer.Interfaces;
+    using DataAccumulator.Shared.Models;
+
     using ServiceBus.Shared.Common;
     using ServiceBus.Shared.Messages;
     using ServiceBus.Shared.Queue;

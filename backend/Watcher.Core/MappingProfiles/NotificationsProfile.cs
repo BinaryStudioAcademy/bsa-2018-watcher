@@ -1,8 +1,5 @@
 ﻿namespace Watcher.Core.MappingProfiles
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     using AutoMapper;
 
     using Watcher.Common.Dtos;
