@@ -91,6 +91,13 @@
             </div>
           </div>
 
+        <div class="label">Theme</div>
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12">
+						<p-dropdown [options]="themeDropdown" [(ngModel)]="organization.theme" (onChange)="onChange($event.value)"></p-dropdown>
+					</div>
+				</div>
+
           <div class="label">Description:</div>
           <div class="ui-g ui-fluid">
             <div class="ui-g-12">

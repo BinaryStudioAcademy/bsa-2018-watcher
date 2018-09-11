@@ -10,6 +10,9 @@ import { environment } from '../../../environments/environment';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { User } from '../../shared/models/user.model';
 import { UserOrganizationService } from '../../core/services/user-organization.service';
+import { SelectItem } from 'node_modules/primeng/api';
+import { Theme } from '../../shared/models/theme.model';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-organization-profile',
@@ -23,7 +26,8 @@ export class OrganizationProfileComponent implements OnInit {
     private organizationInvitesService: OrganizationInvitesService,
     private authService: AuthService,
     private userOrganizationService: UserOrganizationService,
-    private toastrService: ToastrService) {
+    private toastrService: ToastrService,
+    private themeService: ThemeService) {
       this.cropperSettings = new CropperSettings();
       this.cropperSettings.width = 400;
       this.cropperSettings.height = 200;
@@ -53,6 +57,9 @@ export class OrganizationProfileComponent implements OnInit {
   imageUrl = '';
   imageType: string;
   data: any;
+  themes: Theme[] = [];
+  themeDropdown: SelectItem[] = [];
+  selectedTheme: Theme;
 
   user: User;
 
@@ -74,6 +81,16 @@ export class OrganizationProfileComponent implements OnInit {
         console.log('EDITABLE');
         console.log(this.editable);
       });
+
+      this.themeService.getAll().subscribe(
+        (data) => {
+          debugger;
+          if (data.length > 0) {
+            data.forEach(d => this.themeDropdown.push({label: d.name, value: d.name}));
+            this.themes = data;
+          }
+        }
+      );
   }
 
   onSubmit() {
@@ -190,5 +207,12 @@ export class OrganizationProfileComponent implements OnInit {
     this.organization.imageType = this.imageType;
     this.imageUrl = this.data.image;
     this.display = false;
+  }
+
+  onChange(value: string): void {
+
+    const selectedTheme = this.themes.find(t => t.name === value);
+    this.themeService.applyTheme(selectedTheme);
+    debugger;
   }
 }

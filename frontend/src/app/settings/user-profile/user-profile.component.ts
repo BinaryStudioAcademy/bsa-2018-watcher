@@ -2,14 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/services/auth.service';
-import { ThemeService } from '../../core/services/theme.service';
-import { Theme } from '../../shared/models/theme.model';
 import { User } from '../../shared/models/user.model';
 import { ToastrService } from '../../core/services/toastr.service';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { PathService } from '../../core/services/path.service';
 import { UserDto } from '../../shared/models/user-dto.model';
-import { SelectItem } from 'node_modules/primeng/api';
 
 @Component({
   selector: 'app-user-profile',
@@ -21,9 +18,7 @@ export class UserProfileComponent implements OnInit {
   photoUrl: string;
   photoType: string;
   isUpdating: Boolean = false;
-  themes: Theme[] = [];
-  themeDropdown: SelectItem[] = [];
-  selectedTheme: Theme;
+
 
   @ViewChild('cropper', undefined)
 
@@ -36,8 +31,7 @@ export class UserProfileComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private toastrService: ToastrService,
-    private pathService: PathService,
-    private themeService: ThemeService) {
+    private pathService: PathService) {
 
     this.cropperSettings = new CropperSettings();
     this.cropperSettings.width = 200;
@@ -62,8 +56,7 @@ export class UserProfileComponent implements OnInit {
     firstName: new FormControl({ value: '', disabled: true }, Validators.required),
     emailForNotifications: new FormControl({ value: '', disabled: true }, Validators.email),
     lastName: new FormControl({ value: '', disabled: true }, Validators.required),
-    bio: new FormControl({ value: '', disabled: true }),
-    theme: new FormControl({ value: 'Default'})
+    bio: new FormControl({ value: '', disabled: true })
   });
 
   ngOnInit() {
@@ -72,17 +65,6 @@ export class UserProfileComponent implements OnInit {
         this.user = { ...userData };
         this.userId = userData.id;
         this.setUserData();
-      }
-    );
-
-    this.themeService.getAll().subscribe(
-      (data) => {
-        if (data.length > 0) {
-          data.forEach(d => this.themeDropdown.push({label: d.name, value: d.name}));
-          this.themes = data;
-          this.userForm.controls['theme'].setValue(this.themeDropdown[0].value);
-        }
-
       }
     );
   }

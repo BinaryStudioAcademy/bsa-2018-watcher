@@ -21,18 +21,16 @@ export class ThemeService {
     return this.apiService.get(`/${this.ctrlUrl}/`) as Observable<Theme[]>;
   }
 
-  public applyTheme(user: User) {
-
-    const theme: Theme = user.lastPickedOrganization.theme;
+  public applyTheme(theme: Theme) {
 
     const head = document.head;
 
     const link = document.createElement('link');
     link.type = 'text/css';
 
-    link.setAttribute('href', '/assets/darkness.css');
+    link.setAttribute('href', `/assets/${theme.name}.css`);
     link.setAttribute('rel', 'stylesheet');
-
+    debugger;
     head.appendChild(link);
   }
 }
