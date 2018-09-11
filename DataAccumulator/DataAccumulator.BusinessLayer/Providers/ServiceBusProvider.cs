@@ -24,6 +24,7 @@
         private readonly QueueClient _instanceDataQueueClient;
         private readonly QueueClient _instanceErrorQueueClient;
         private readonly QueueClient _instanceSettingsQueueClient;
+        private readonly QueueClient _instanceNotifyQueueClient;
 
         public ServiceBusProvider(ILoggerFactory loggerFactory,
                                   IInstanceSettingsService<InstanceSettingsDto> instanceSettingsService,
@@ -39,6 +40,7 @@
             _instanceDataQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.DataQueueName);
             _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
             _instanceSettingsQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.SettingsQueueName);
+            _instanceNotifyQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.NotifyQueueName);
 
             _azureQueueReceiver.Receive<InstanceSettingsMessage>(
                _instanceSettingsQueueClient,
@@ -76,6 +78,11 @@
             _logger.LogInformation($"Error message was of {instanceId} instance was send to service bus: {errorMessage}");
             var message = new InstanceErrorMessage { InstanceId = instanceId, ErrorMessage = errorMessage };
             return _azureQueueSender.SendAsync(_instanceErrorQueueClient, message);
+        }
+
+        public Task SendValidatorMessage(InstanceValidatorMessage message)
+        {
+            return _azureQueueSender.SendAsync(_instanceNotifyQueueClient, message);
         }
 
         private void ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
@@ -129,7 +136,8 @@
             {
                 await _instanceDataQueueClient.CloseAsync();
                 await _instanceErrorQueueClient.CloseAsync();
-                await _instanceDataQueueClient.CloseAsync();
+                await _instanceSettingsQueueClient.CloseAsync();
+                await _instanceNotifyQueueClient.CloseAsync();
 
                 disposedValue = true;
             }

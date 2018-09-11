@@ -38,6 +38,7 @@
         private readonly QueueClient _instanceDataQueueClient;
         private readonly QueueClient _instanceErrorQueueClient;
         private readonly QueueClient _instanceSettingsQueueClient;
+        private readonly QueueClient _instanceNotifyQueueClient;
 
         public ServiceBusProvider(
             ILoggerFactory loggerFactory,
@@ -54,6 +55,7 @@
             _instanceDataQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.DataQueueName);
             _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
             _instanceSettingsQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.SettingsQueueName);
+            _instanceNotifyQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.NotifyQueueName);
 
             _azureQueueReceiver = azureQueueReceiver;
             _azureQueueReceiver.Receive<InstanceCollectedDataMessage>(
@@ -66,6 +68,13 @@
             _azureQueueReceiver.Receive<InstanceErrorMessage>(
                 _instanceErrorQueueClient,
                 OnErrorProcessAsync,
+                ExceptionReceivedHandler,
+                ExceptionWhileProcessingHandler,
+                OnWait);
+
+            _azureQueueReceiver.Receive<InstanceValidatorMessage>(
+                _instanceErrorQueueClient,
+                OnNotifyProcessAsync,
                 ExceptionReceivedHandler,
                 ExceptionWhileProcessingHandler,
                 OnWait);
@@ -98,6 +107,24 @@
 
             await _dashboardsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ErrorMessage);
             _logger.LogInformation("Error Message with to Dashboards hub clients was sent.");
+            return MessageProcessResponse.Complete;
+        }
+
+        private async Task<MessageProcessResponse> OnNotifyProcessAsync(InstanceValidatorMessage arg, CancellationToken stoppingToken)
+        {
+            if (stoppingToken.IsCancellationRequested)
+            {
+                using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+                using (LogContext.PushProperty("Source", this.GetType().Name))
+                {
+                    _logger.LogError("Cancellation was requested, stopping token.");
+                }
+
+                return MessageProcessResponse.Abandon;
+            }
+
+            await _dashboardsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ValidatorMessage);
+            _logger.LogInformation("Notify Message with to Dashboards hub clients was sent.");
             return MessageProcessResponse.Complete;
         }
 
@@ -163,7 +190,9 @@
             {
                 await _instanceDataQueueClient.CloseAsync();
                 await _instanceErrorQueueClient.CloseAsync();
-                await _instanceDataQueueClient.CloseAsync();
+                await _instanceSettingsQueueClient.CloseAsync();
+                await _instanceNotifyQueueClient.CloseAsync();
+
                 disposedValue = true;
             }
         }
