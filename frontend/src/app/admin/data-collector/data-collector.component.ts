@@ -67,14 +67,35 @@ export class DataCollectorComponent implements OnInit {
     this.fileInput.upload();
   }
 
-  uploadDebFile(files) {
-    const fileToUpload = files.files[0];
-    this.collectorAppsService.uploadInstaller(fileToUpload).subscribe(
+  uploadDebFile(file) {
+    this.collectorAppsService.uploadInstaller(file).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.collectorApp.debLink = Math.round(100 * event.loaded / event.total).toString();
         } else if (event.type === HttpEventType.Response) {
           this.collectorApp.debLink = event.body.toString();
+        }
+      });
+  }
+
+  uploadTgxFile(file) {
+    this.collectorAppsService.uploadInstaller(file).subscribe(
+      event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.collectorApp.tgzLink = Math.round(100 * event.loaded / event.total).toString();
+        } else if (event.type === HttpEventType.Response) {
+          this.collectorApp.tgzLink = event.body.toString();
+        }
+      });
+  }
+
+  uploadExeFile(file) {
+    this.collectorAppsService.uploadInstaller(file).subscribe(
+      event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.collectorApp.exeLink = Math.round(100 * event.loaded / event.total).toString();
+        } else if (event.type === HttpEventType.Response) {
+          this.collectorApp.exeLink = event.body.toString();
         }
       });
   }

@@ -42,7 +42,6 @@ export class ApiService {
       if (!file) { return; }
       const formData = new FormData();
       formData.append('fileItem', file[0], file[0].name);
-      debugger;
       const uploadReq = new HttpRequest('POST', `${environment.server_url}${path}`, formData, {
         reportProgress: true,
       });
