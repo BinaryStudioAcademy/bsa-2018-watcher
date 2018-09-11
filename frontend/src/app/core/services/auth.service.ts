@@ -12,6 +12,7 @@ import { distinctUntilChanged, first } from 'rxjs/operators';
 import { Token } from '../../shared/models/token.model';
 import { UserProfile} from '../../shared/models/user-profile';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ThemeService } from './theme.service';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +29,7 @@ export class AuthService {
 
   constructor(private _firebaseAuth: AngularFireAuth,
               private tokenService: TokenService,
+              private themeService: ThemeService,
               private router: Router,
               ) {
     _firebaseAuth.authState.subscribe((user) => {
@@ -128,6 +130,9 @@ export class AuthService {
     return this.tokenService.login(request).toPromise()
       .then(tokenDto => {
         this.setAuth(tokenDto);
+        if (tokenDto.user.lastPickedOrganization.theme) {
+          this.themeService.applyTheme(tokenDto.user.lastPickedOrganization.theme);
+        }
       })
       .catch(err => {
         throw err;

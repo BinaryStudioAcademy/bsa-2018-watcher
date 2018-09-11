@@ -2,10 +2,6 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Theme } from '../../shared/models/theme.model';
 import { Observable } from 'rxjs';
-import { User } from '../../shared/models/user.model';
-import { DomSanitizer } from '../../../../node_modules/@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
-
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +10,7 @@ export class ThemeService {
 
   private readonly ctrlUrl = 'Themes';
 
-
-  constructor(private apiService: ApiService, private http: HttpClient) { }
+  constructor(private apiService: ApiService) { }
 
   public getAll(): Observable<Theme[]> {
     return this.apiService.get(`/${this.ctrlUrl}/`) as Observable<Theme[]>;
@@ -24,16 +19,6 @@ export class ThemeService {
   public applyTheme(theme: Theme) {
 
     const cssUrl = `/assets/themes/${theme.name}.css`;
-
-    const themeLink: HTMLElement = document.getElementById('themeLink');
-    if (themeLink) {
-      document.head.removeChild(themeLink);
-    }
-
-    const themeStyle: HTMLElement = document.getElementById('themeStyle');
-    if (themeStyle) {
-      document.head.removeChild(themeStyle);
-    }
 
     const head = document.head;
 
@@ -78,5 +63,21 @@ export class ThemeService {
       style.appendChild(styleText);
 
       head.appendChild(style);
+  }
+
+  public setDefaultTheme() {
+    this.deleteThemeTags();
+  }
+
+  private deleteThemeTags() {
+    const themeLink: HTMLElement = document.getElementById('themeLink');
+    if (themeLink) {
+      document.head.removeChild(themeLink);
+    }
+
+    const themeStyle: HTMLElement = document.getElementById('themeStyle');
+    if (themeStyle) {
+      document.head.removeChild(themeStyle);
+    }
   }
 }
