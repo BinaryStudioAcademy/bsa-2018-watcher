@@ -1,25 +1,25 @@
 <header id="header">
   <div class="container">
     <h1>
-      <a (click)="onBack('startbanner')">Watcher</a>
+      <a routerLink="/" fragment="home">Watcher</a>
       <i class="fas fa-bars" id="mobile" (click)="show()"></i>
     </h1>
     <nav id="nav">
       <ul id="desktop">
         <li>
-          <a (click)="scrollTo('startbanner')">Home</a>
+          <a routerLink="/" fragment="home">Home</a>
         </li>
         <li>
-          <a (click)="scrollTo('why-watcher')">Why watcher</a>
+          <a routerLink="/" fragment="why-watcher">Why watcher</a>
         </li>
         <li>
-          <a (click)="scrollTo('cards')">Advantages</a>
+          <a routerLink="/" fragment="advantages">Advantages</a>
         </li>
         <li>
-          <a (click)="onAbout()">About</a>
+          <a>About</a>
         </li>
         <li>
-          <a (click)="scrollTo('contacts')">Contact us</a>
+          <a routerLink="/" fragment="contacts">Contact us</a>
         </li>
         <li id="btnAutorization">
           <app-authorization></app-authorization>
@@ -36,7 +36,7 @@
     <div class="description">
       <p>We are a friendly team of developers.</p>
       <p>This is a group project of the Binary Studio Academy 2018.</p>
-      
+
     </div>
   </section>
   <div class="section-wrp">
@@ -82,7 +82,7 @@
       <div class="ui-lg-3 ui-g-12 ">
         <img src="\assets\TeamPhotos\Tetiana_Zaichuk.jpg" alt="photo" class="small-photo" />
       </div>
-    </div>    
+    </div>
   </div>
 </div>
 <footer class="footer-distributed ">
@@ -103,13 +103,12 @@
 
   <div class="footer-left ">
     <p class="footer-links ">
-      <a (click)="onBack('startbanner')">Home</a> ·
-      <a (click)="scrollTo( 'why-watcher') ">Why watcher</a> ·
-      <a (click)="scrollTo( 'cards') ">Advantages</a> ·
-      <a (click)="onAbout() ">About</a> ·
-      <a (click)="scrollTo( 'contacts') ">Contact us</a>
+      <a routerLink="/" fragment="home">Home</a> ·
+      <a routerLink="/" fragment="why-watcher">Why watcher</a> ·
+      <a routerLink="/" fragment="advantages">Advantages</a> ·
+      <a routerLink="/about">About</a> ·
+      <a routerLink="/" fragment="contacts">Contact us</a>
     </p>
-
     <p>Watcher © 2018</p>
   </div>
 </footer>

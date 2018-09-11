@@ -7,17 +7,13 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./about.component.sass']
 })
 export class AboutComponent implements OnInit {
-
-  isAbout: Boolean = false;
-
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
+    window.scrollTo(0, 0);
   }
 
-  onBack(id: string): void {
-    this.router.navigate([`/${id}`]);
-    // to this.scrollTo(id);
+  goToLink(section: string): void {
+    this.router.navigate(['/', section]);
   }
-
 }

@@ -1,35 +1,35 @@
 <header id="header">
-    <div class="container">
-        <h1>
-            <a (click)="scrollTo('startbanner')">Watcher</a>
-            <i class="fas fa-bars" id="mobile" (click)="show()"></i>
-        </h1>
-        <nav id="nav">
-            <ul id="desktop">
-                <li>
-                    <a (click)="scrollTo('startbanner')">Home</a>
-                </li>
-                <li>
-                    <a (click)="scrollTo('why-watcher')">Why watcher</a>
-                </li>
-                <li>
-                    <a (click)="scrollTo('cards')">Advantages</a>
-                </li>
-                <li>
-                    <a (click)="onAbout()">About</a>
-                </li>
-                <li>
-                    <a (click)="scrollTo('contacts')">Contact us</a>
-                </li>
-                <li id="btnAutorization">
-                    <app-authorization></app-authorization>
-                </li>
-            </ul>
-        </nav>
-    </div>
+  <div class="container">
+    <h1>
+      <a routerLink="/" fragment="home">Watcher</a>
+      <i class="fas fa-bars" id="mobile" (click)="show()"></i>
+    </h1>
+    <nav id="nav">
+      <ul id="desktop">
+        <li>
+          <a routerLink="/" fragment="home">Home</a>
+        </li>
+        <li>
+          <a routerLink="/" fragment="why-watcher">Why watcher</a>
+        </li>
+        <li>
+          <a routerLink="/" fragment="advantages">Advantages</a>
+        </li>
+        <li>
+          <a routerLink="/about">About</a>
+        </li>
+        <li>
+          <a routerLink="/" fragment="contacts">Contact us</a>
+        </li>
+        <li id="btnAutorization">
+          <app-authorization></app-authorization>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </header>
 
-<div id="startbanner" class="banner">
+<div id="home" class="banner">
     <h1>Stay up to date </h1>
     <p>Get the real-time insights that your machine needs for faster reaction.</p>
 </div>
@@ -80,7 +80,7 @@
         </div>
     </div>
 </div>
-<div class="cards ui-g " id="cards">
+<div class="cards ui-g " id="advantages">
     <div class="cards_item ui-lg-4 ui-g-12 ">
         <div class="card ">
             <div class="card_image card_image--female "></div>
@@ -151,7 +151,6 @@
 </div>
 
 <footer class="footer-distributed ">
-
     <div class="footer-right ">
         <a href="https://www.facebook.com/bsa.watcher.1">
             <i class="fa fa-facebook "></i>
@@ -168,14 +167,13 @@
     </div>
 
     <div class="footer-left ">
-        <p class="footer-links ">
-            <a (click)="scrollTo( 'startbanner') ">Home</a> ·
-            <a (click)="scrollTo( 'why-watcher') ">Why watcher</a> ·
-            <a (click)="scrollTo( 'cards') ">Advantages</a> ·
-            <a (click)="onAbout() ">About</a> ·
-            <a (click)="scrollTo( 'contacts') ">Contact us</a>
-        </p>
-
-        <p>Watcher © 2018</p>
+      <p class="footer-links ">
+        <a routerLink="/" fragment="home">Home</a> ·
+        <a routerLink="/" fragment="why-watcher">Why watcher</a> ·
+        <a routerLink="/" fragment="advantages">Advantages</a> ·
+        <a routerLink="/about">About</a> ·
+        <a routerLink="/" fragment="contacts">Contact us</a>
+      </p>
+      <p>Watcher © 2018</p>
     </div>
 </footer>
