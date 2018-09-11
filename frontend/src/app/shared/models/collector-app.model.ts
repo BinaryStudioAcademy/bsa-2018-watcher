@@ -5,5 +5,5 @@ export interface CollectorApp  {
     exeLink: string;
     debLink: string;
     tgzLink: string;
-    isActual: boolean;
+    IsActive: boolean;
  }

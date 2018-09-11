@@ -23,7 +23,7 @@ export class DataCollectorComponent implements OnInit {
     exeLink: 'exe',
     debLink: 'deb',
     tgzLink: 'tgz',
-    isActual: true
+    IsActive: true
   }, {
     id: 2,
     createdAt: new Date(),
@@ -31,7 +31,7 @@ export class DataCollectorComponent implements OnInit {
     exeLink: 'exe',
     debLink: 'deb',
     tgzLink: 'tgz',
-    isActual: false
+    IsActive: false
   }];
 
   collectorApp: CollectorApp;
@@ -46,7 +46,7 @@ export class DataCollectorComponent implements OnInit {
       exeLink: '',
       tgzLink: '',
       debLink: '',
-      isActual: false,
+      IsActive: false,
       version: ''
     };
   }
