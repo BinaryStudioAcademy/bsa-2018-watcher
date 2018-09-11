@@ -54,7 +54,7 @@ namespace DataCollector
                 Collector.Instance);
 
             _logger = new Logger(_client, ClientIdentifier, uri + "/log");
-            _logger.Log("Data collection began").GetAwaiter().GetResult();
+            _logger.Log("Data collection began", LogLevel.State).GetAwaiter().GetResult();
 
             AppDomain.CurrentDomain.ProcessExit += CollectorClosing;
             AppDomain.CurrentDomain.UnhandledException += GlobalExceptionHandler;
@@ -68,12 +68,12 @@ namespace DataCollector
 
         private static async void CollectorClosing(object sender, EventArgs e)
         {
-            await _logger.Log("Data collection stopped");
+            await _logger.Log("Data collection stopped", LogLevel.State);
         }
 
         protected static void OnExit(object sender, EventArgs e)
         {
-            _logger.Log("Data collection stopped").GetAwaiter().GetResult();
+            _logger.Log("Data collection stopped", LogLevel.State).GetAwaiter().GetResult();
             Console.WriteLine("Exiting...");
             SaveGuid();
             Closing.Set();

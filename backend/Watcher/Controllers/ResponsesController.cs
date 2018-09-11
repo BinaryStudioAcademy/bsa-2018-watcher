@@ -117,13 +117,19 @@
                 return StatusCode(500);
             }
             var userFeedback = request.Feedback.User;
-            if(userFeedback!=null) {
-                var notificationDto = new NotificationDto();
-                notificationDto.CreatedAt = request.CreatedAt;
-                notificationDto.Text = request.Text;
-                notificationDto.UserId = userFeedback.Id;
-                notificationDto.OrganizationId = userFeedback.LastPickedOrganizationId;
-                await _notificationService.CreateEntityAsync(notificationDto, NotificationType.Info);
+
+            if (userFeedback != null)
+            {
+                var notificationRequest = new NotificationRequest
+                {
+                    Text = request.Text,
+                    CreatedAt = request.CreatedAt,
+                    UserId = userFeedback.Id,
+                    OrganizationId = userFeedback.LastPickedOrganizationId,
+                    Type = NotificationType.Info
+                };
+
+                await _notificationService.CreateEntityAsync(notificationRequest);
             }
             else
             {

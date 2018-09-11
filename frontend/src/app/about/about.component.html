@@ -1,0 +1,114 @@
+<header id="header">
+  <div class="container">
+    <h1>
+      <a routerLink="/" fragment="home">Watcher</a>
+      <i class="fas fa-bars" id="mobile" (click)="show()"></i>
+    </h1>
+    <nav id="nav">
+      <ul id="desktop">
+        <li>
+          <a routerLink="/" fragment="home">Home</a>
+        </li>
+        <li>
+          <a routerLink="/" fragment="why-watcher">Why watcher</a>
+        </li>
+        <li>
+          <a routerLink="/" fragment="advantages">Advantages</a>
+        </li>
+        <li>
+          <a routerLink="/" fragment="contacts">Contact us</a>
+        </li>
+        <li>
+          <a>About</a>
+        </li>
+        <li id="btnAutorization">
+          <app-authorization></app-authorization>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="content-wrp">
+  <section class="section-wrp main-section">
+    <p class="part-proj">A platform for monitoring the consumption of resources and other system information on virtual machines for analysis
+      and emergency feedback.</p>
+    <h1 class="page-title">About us</h1>
+    <div class="description">
+      <p>We are a friendly team of developers.</p>
+      <p>This is a group project of the Binary Studio Academy 2018.</p>
+
+    </div>
+  </section>
+  <div class="section-wrp">
+    <h1 class="page-title title">Our coaches</h1>
+    <div class="ui-g text-center">
+      <div class="ui-lg-4 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Alik_Rakhmonov.jpg" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-4 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Maxim_Goncharuk_1.png" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-4 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Nikita_Potapenko_1.jpg" alt="photo" class="small-photo" />
+      </div>
+    </div>
+  </div>
+  <div class="section-wrp">
+    <h1 class="page-title title">Students</h1>
+    <div class="ui-g text-center">
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Volodymyr_Bilyk_1.jpg" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Oleksii_Tymchenko_1.jpg" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Alexander_Gorban_1.jpg" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Bohdan_Mosiyuk_1.jpg" alt="photo" class="small-photo" />
+      </div>
+    </div>
+    <div class="ui-g text-center">
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Pavlo_Boliubash.jpg" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Rostyslav_Diakiv.JPG" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Kostya_Hrytsyuk.png" alt="photo" class="small-photo" />
+      </div>
+      <div class="ui-lg-3 ui-g-12 ">
+        <img src="\assets\TeamPhotos\Tetiana_Zaichuk.jpg" alt="photo" class="small-photo" />
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="footer-distributed ">
+  <div class="footer-right ">
+    <a href="https://www.facebook.com/bsa.watcher.1">
+      <i class="fa fa-facebook "></i>
+    </a>
+    <a href="https://twitter.com/BsaWatcher">
+      <i class="fa fa-twitter "></i>
+    </a>
+    <a href="https://www.linkedin.com/in/bsa-watcher-7b510016b/">
+      <i class="fa fa-linkedin "></i>
+    </a>
+    <a href="https://github.com/BinaryStudioAcademy/bsa-2018-watcher">
+      <i class="fa fa-github "></i>
+    </a>
+  </div>
+
+  <div class="footer-left ">
+    <p class="footer-links ">
+      <a routerLink="/" fragment="home">Home</a> ·
+      <a routerLink="/" fragment="why-watcher">Why watcher</a> ·
+      <a routerLink="/" fragment="advantages">Advantages</a> ·
+      <a routerLink="/" fragment="contacts">Contact us</a> ·
+      <a routerLink="/about">About</a>
+    </p>
+    <p>Watcher © 2018</p>
+  </div>
+</footer>

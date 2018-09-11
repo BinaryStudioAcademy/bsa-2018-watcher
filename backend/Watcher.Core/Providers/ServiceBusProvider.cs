@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Core.Providers
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
@@ -23,18 +24,21 @@
     using ServiceBus.Shared.Common;
     using ServiceBus.Shared.Messages;
     using ServiceBus.Shared.Queue;
+    using ServiceBus.Shared.Enums;
 
     using Watcher.Common.Dtos;
     using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
+    using Watcher.Common.Enums;
+    using Watcher.Common.Requests;
     using Watcher.DataAccess.Interfaces;
+
 
     public class ServiceBusProvider : IServiceBusProvider, IDisposable
     {
         private readonly ILogger<ServiceBusProvider> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IHubContext<DashboardsHub> _dashboardsHubContext;
-        private readonly IHubContext<NotificationsHub> _notificationsHubContext;
         private readonly IOptions<AzureQueueSettings> _queueOptions;
         private readonly IAzureQueueReceiver _azureQueueReceiver;
         private readonly IAzureQueueSender _azureQueueSender;
@@ -48,7 +52,6 @@
             ILoggerFactory loggerFactory,
             IServiceScopeFactory scopeFactory,
             IHubContext<DashboardsHub> dashboardsHubContext,
-            IHubContext<NotificationsHub> notificationsHubContext,
             IOptions<AzureQueueSettings> queueOptions,
             IAzureQueueReceiver azureQueueReceiver,
             IAzureQueueSender azureQueueSender)
@@ -56,7 +59,6 @@
             _logger = loggerFactory?.CreateLogger<ServiceBusProvider>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _scopeFactory = scopeFactory;
             _dashboardsHubContext = dashboardsHubContext;
-            _notificationsHubContext = notificationsHubContext;
             _queueOptions = queueOptions;
             _instanceDataQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.DataQueueName);
             _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
@@ -78,7 +80,7 @@
                 ExceptionWhileProcessingHandler,
                 OnWait);
 
-            _azureQueueReceiver.Receive<InstanceValidatorMessage>(
+            _azureQueueReceiver.Receive<InstanceNotificationMessage>(
                 _instanceNotifyQueueClient,
                 OnNotifyProcessAsync,
                 ExceptionReceivedHandler,
@@ -116,7 +118,7 @@
             return MessageProcessResponse.Complete;
         }
 
-        private async Task<MessageProcessResponse> OnNotifyProcessAsync(InstanceValidatorMessage arg, CancellationToken stoppingToken)
+        private async Task<MessageProcessResponse> OnNotifyProcessAsync(InstanceNotificationMessage arg, CancellationToken stoppingToken)
         {
             if (stoppingToken.IsCancellationRequested)
             {
@@ -129,8 +131,40 @@
                 return MessageProcessResponse.Abandon;
             }
 
-            await _notificationsHubContext.Clients.Group(arg.InstanceId.ToString()).SendAsync("Send", arg.ValidatorMessage);
-            _logger.LogInformation("Validator Message with to Dashboards hub clients was sent.");
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
+
+                var notificationRequest = new NotificationRequest
+                {
+                    Text = arg.Text,
+                    CreatedAt = arg.CreatedAt,
+                    InstanceId = arg.InstanceId
+                };
+
+                switch (arg.Type)
+                {
+                    case InstanceNotifyType.Critical:
+                        notificationRequest.Type = NotificationType.Error;
+                        break;
+                    case InstanceNotifyType.Error:
+                        notificationRequest.Type = NotificationType.Warning;
+                        break;
+                    default:
+                        notificationRequest.Type = NotificationType.Info;
+                        break;
+                }
+
+                var result = await notificationService.CreateEntityAsync(notificationRequest);
+
+                if (result == null)
+                {
+                    return MessageProcessResponse.Abandon;
+                }
+            }
+
+            _logger.LogInformation("Instance Notification Message was created.");
+
             return MessageProcessResponse.Complete;
         }
 
