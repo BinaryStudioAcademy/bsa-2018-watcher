@@ -23,17 +23,31 @@ export class ThemeService {
 
   public applyTheme(theme: Theme) {
 
+    const cssUrl = `/assets/themes/${theme.name}.css`;
+
+    const themeLink: HTMLElement = document.getElementById('themeLink');
+    if (themeLink) {
+      document.head.removeChild(themeLink);
+    }
+
+    const themeStyle: HTMLElement = document.getElementById('themeStyle');
+    if (themeStyle) {
+      document.head.removeChild(themeStyle);
+    }
+
     const head = document.head;
 
     const link = document.createElement('link');
     link.type = 'text/css';
 
-    link.setAttribute('href', `/assets/${theme.name}.css`);
+    link.setAttribute('id', 'themeLink');
+    link.setAttribute('href', cssUrl);
     link.setAttribute('rel', 'stylesheet');
 
     head.appendChild(link);
 
     const style = document.createElement('style');
+    style.setAttribute('id', 'themeStyle');
     style.setAttribute('type', 'text/css');
     const styleText = document.createTextNode(`
       body {
@@ -42,12 +56,6 @@ export class ThemeService {
 
       .header {
         background-color: ${theme.themeSecondaryColor};
-      }
-
-      .header button:hover {
-        color: #F56C00 !important;
-        background-color: transparent !important;
-        border-color: transparent !important;
       }
 
       .ui-tabmenuitem #lastTab .ui-menuitem-icon {

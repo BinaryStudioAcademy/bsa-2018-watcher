@@ -605,7 +605,7 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Themes");
 
                     b.HasData(
-                        new { Id = 1, BodyColor = "#F8FAFC !global", ButtonFontSize = "14px !global", ControlsHeight = "33px", IsDeleted = false, Name = "Default", ThemePrimaryColor = "none", ThemeSecondaryColor = "none" },
+                        new { Id = 1, BodyColor = "#F8FAFC !global", ButtonFontSize = "14px !global", ControlsHeight = "33px", IsDeleted = false, Name = "Default", ThemePrimaryColor = "#007ad9", ThemeSecondaryColor = "#ffffff" },
                         new { Id = 2, BodyColor = "#F8FAFC", ButtonFontSize = "14px", ControlsHeight = "33px", IsDeleted = false, Name = "Darkness", ThemePrimaryColor = "#f58400", ThemeSecondaryColor = "#ffffff" }
                     );
                 });

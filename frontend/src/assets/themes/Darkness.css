@@ -753,3 +753,21 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   color: #ffffff; }
   .ui-radiobutton-box:not(.ui-state-disabled):not(.ui-state-active):hover a {
     color: #ffffff; }
+
+/* Dropdown*/
+
+.ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item {
+  color: #ffffff !important;
+}
+
+.ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item:hover {
+  color: #000000 !important;
+}
+
+/* Header */
+
+.header button:hover {
+  color: #F56C00 !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+}

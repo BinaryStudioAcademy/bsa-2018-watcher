@@ -68,6 +68,9 @@ export class OrganizationProfileComponent implements OnInit {
   isSending: Boolean = false;
 
   ngOnInit() {
+    if (this.themeDropdown.length === 0) {
+      this.fillDropdown(); }
+
     this.authService.currentUser.subscribe(
       async (userData) => {
         this.user = { ...userData };
@@ -79,7 +82,7 @@ export class OrganizationProfileComponent implements OnInit {
         this.imageUrl = this.user.lastPickedOrganization.imageURL;
         const role = await this.userOrganizationService.getOrganizationRole();
         this.editable = role.name === 'Manager' ? true : false;
-        this.fillDropdown();
+
         console.log('EDITABLE');
         console.log(this.editable);
       });
@@ -211,7 +214,6 @@ export class OrganizationProfileComponent implements OnInit {
   }
 
   onChange(value: string): void {
-    debugger;
     this.selectedTheme = this.themes.find(t => t.name === value);
     this.themeService.applyTheme(this.selectedTheme);
   }

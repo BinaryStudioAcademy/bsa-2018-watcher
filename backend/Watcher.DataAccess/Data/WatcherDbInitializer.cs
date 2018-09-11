@@ -33,7 +33,7 @@
             };
 
             var themes = new Theme[] {
-                new Theme { Id = 1, Name="Default", BodyColor = "#F8FAFC !global", ThemePrimaryColor = "none", ThemeSecondaryColor = "none", ControlsHeight = "33px", ButtonFontSize = "14px !global", IsDeleted = false },
+                new Theme { Id = 1, Name="Default", BodyColor = "#F8FAFC !global", ThemePrimaryColor = "#007ad9", ThemeSecondaryColor = "#ffffff", ControlsHeight = "33px", ButtonFontSize = "14px !global", IsDeleted = false },
                 new Theme { Id = 2, Name = "Darkness", BodyColor = "#F8FAFC", ThemePrimaryColor = "#f58400", ThemeSecondaryColor = "#ffffff", ControlsHeight = "33px", ButtonFontSize = "14px", IsDeleted = false}
             };
 
