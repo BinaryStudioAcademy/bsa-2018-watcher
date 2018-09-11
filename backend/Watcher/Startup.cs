@@ -86,6 +86,8 @@ namespace Watcher
                     o.ConnectionString = serviceBusSection["ConnectionString"];
                     o.DataQueueName = serviceBusSection["DataQueueName"];
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
+                    o.SettingsQueueName = serviceBusSection["SettingsQueueName"];
+                    o.NotifyQueueName = serviceBusSection["NotifyQueueName"];
                 });
             
             services.ConfigureSwagger(Configuration);
@@ -117,6 +119,7 @@ namespace Watcher
             services.AddTransient<ICollectorActionLogService, CollectorActionLogService>();
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
+            services.AddTransient<IAzureQueueSender, AzureQueueSender>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
             
             // repo initialization localhost while development env, azure in prod

@@ -235,6 +235,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Address")
                         .IsRequired();
 
+                    b.Property<bool>("AggregationForDay");
+
+                    b.Property<bool>("AggregationForHour");
+
+                    b.Property<bool>("AggregationForMonth");
+
+                    b.Property<float>("CpuMaxPercent");
+
+                    b.Property<float>("DiskMaxPercent");
+
                     b.Property<Guid>("GuidId");
 
                     b.Property<bool>("IsActive");
@@ -246,6 +256,8 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.Property<string>("Platform")
                         .IsRequired();
 
+                    b.Property<float>("RamMaxPercent");
+
                     b.Property<string>("Title")
                         .IsRequired();
 
@@ -256,16 +268,16 @@ namespace Watcher.DataAccess.Data.Migrations
                     b.ToTable("Instances");
 
                     b.HasData(
-                        new { Id = 81, Address = "e8:d9:78:67:af:b3", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 76, Platform = "Windows", Title = "Instance543" },
-                        new { Id = 82, Address = "b7:31:83:93:1b:c9", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 72, Platform = "Windows", Title = "Instance184" },
-                        new { Id = 83, Address = "14:7c:f9:1e:9e:63", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 80, Platform = "Linux", Title = "Instance814" },
-                        new { Id = 84, Address = "49:c2:6b:97:56:ef", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 75, Platform = "Windows", Title = "Instance613" },
-                        new { Id = 85, Address = "1e:db:44:46:0d:01", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 78, Platform = "Windows", Title = "Instance758" },
-                        new { Id = 86, Address = "a1:db:5f:5c:24:6c", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 79, Platform = "Linux", Title = "Instance520" },
-                        new { Id = 87, Address = "c3:56:da:8a:2b:f5", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 78, Platform = "Windows", Title = "Instance785" },
-                        new { Id = 88, Address = "4b:dc:1d:3d:10:38", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 73, Platform = "Linux", Title = "Instance237" },
-                        new { Id = 89, Address = "a5:23:bb:36:03:6e", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 74, Platform = "Linux", Title = "Instance63" },
-                        new { Id = 90, Address = "0f:23:83:76:cf:c7", GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 71, Platform = "Windows", Title = "Instance449" }
+                        new { Id = 81, Address = "37:22:f2:5d:8c:f8", AggregationForDay = false, AggregationForHour = false, AggregationForMonth = false, CpuMaxPercent = 0f, DiskMaxPercent = 0f, GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 76, Platform = "Linux", RamMaxPercent = 0f, Title = "Instance182" },
+                        new { Id = 82, Address = "7a:db:32:bb:5b:c2", AggregationForDay = false, AggregationForHour = false, AggregationForMonth = false, CpuMaxPercent = 0f, DiskMaxPercent = 0f, GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 78, Platform = "Linux", RamMaxPercent = 0f, Title = "Instance369" },
+                        new { Id = 83, Address = "a1:b5:02:9d:a2:a3", AggregationForDay = false, AggregationForHour = false, AggregationForMonth = false, CpuMaxPercent = 0f, DiskMaxPercent = 0f, GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 75, Platform = "Windows", RamMaxPercent = 0f, Title = "Instance970" },
+                        new { Id = 84, Address = "88:08:62:98:11:a9", AggregationForDay = false, AggregationForHour = false, AggregationForMonth = false, CpuMaxPercent = 0f, DiskMaxPercent = 0f, GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 78, Platform = "Linux", RamMaxPercent = 0f, Title = "Instance610" },
+                        new { Id = 85, Address = "b3:16:96:4a:c8:63", AggregationForDay = false, AggregationForHour = false, AggregationForMonth = false, CpuMaxPercent = 0f, DiskMaxPercent = 0f, GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 73, Platform = "Linux", RamMaxPercent = 0f, Title = "Instance896" },
+                        new { Id = 86, Address = "ba:95:d0:cb:af:81", AggregationForDay = false, AggregationForHour = false, AggregationForMonth = false, CpuMaxPercent = 0f, DiskMaxPercent = 0f, GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 72, Platform = "Linux", RamMaxPercent = 0f, Title = "Instance34" },
+                        new { Id = 87, Address = "80:e3:45:08:d5:72", AggregationForDay = false, AggregationForHour = false, AggregationForMonth = false, CpuMaxPercent = 0f, DiskMaxPercent = 0f, GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 75, Platform = "Windows", RamMaxPercent = 0f, Title = "Instance731" },
+                        new { Id = 88, Address = "0b:22:7d:81:af:8a", AggregationForDay = false, AggregationForHour = false, AggregationForMonth = false, CpuMaxPercent = 0f, DiskMaxPercent = 0f, GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 72, Platform = "Linux", RamMaxPercent = 0f, Title = "Instance664" },
+                        new { Id = 89, Address = "5e:9e:9e:7d:9b:f2", AggregationForDay = false, AggregationForHour = false, AggregationForMonth = false, CpuMaxPercent = 0f, DiskMaxPercent = 0f, GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 73, Platform = "Linux", RamMaxPercent = 0f, Title = "Instance833" },
+                        new { Id = 90, Address = "89:61:dc:fc:f6:cf", AggregationForDay = false, AggregationForHour = false, AggregationForMonth = false, CpuMaxPercent = 0f, DiskMaxPercent = 0f, GuidId = new Guid("00000000-0000-0000-0000-000000000000"), IsActive = true, IsDeleted = false, OrganizationId = 79, Platform = "Linux", RamMaxPercent = 0f, Title = "Instance909" }
                     );
                 });
 

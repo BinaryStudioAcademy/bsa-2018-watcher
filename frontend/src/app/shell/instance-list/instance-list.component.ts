@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {AfterContentChecked, AfterViewChecked} from '@angular/core';
 import { InstanceService } from '../../core/services/instance.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -8,14 +7,13 @@ import { User } from '../../shared/models/user.model';
 import { Instance } from '../../shared/models/instance.model';
 import { Router } from '@angular/router';
 import { UserOrganizationService } from '../../core/services/user-organization.service';
-import { NavigationStart} from '@angular/router';
 
 @Component({
   selector: 'app-instance-list',
   templateUrl: './instance-list.component.html',
   styleUrls: ['./instance-list.component.sass']
 })
-export class InstanceListComponent implements OnInit, AfterContentChecked, AfterViewChecked  {
+export class InstanceListComponent implements OnInit {
 constructor(private instanceService: InstanceService,
   private toastrService: ToastrService,
   private authService: AuthService,
@@ -23,13 +21,6 @@ constructor(private instanceService: InstanceService,
   private router: Router) {
   this.instanceService.instanceAdded.subscribe(instance => this.onInstanceAdded(instance));
   this.instanceService.instanceEdited.subscribe(instance => this.onInstanceEdited(instance));
-
-  router.events.forEach((event) => {
-    if (event instanceof NavigationStart) {
-      this.clearSettings(this.router.url);
-      this.previousSettingUrl = this.router.url;
-    }
-  });
  }
 
   menuItems: MenuItem[];
@@ -52,14 +43,6 @@ constructor(private instanceService: InstanceService,
         this.isManager = role.name === 'Manager' ? true : false;
         this.configureInstances(this.user.lastPickedOrganizationId);
       });
-  }
-
-   ngAfterContentChecked(): void {
-    this.highlightCurrentSetting();
-  }
-
-  ngAfterViewChecked(): void {
-    this.highlightCurrentSetting();
   }
 
   configureInstances(organizationId: number): void {
@@ -101,7 +84,8 @@ constructor(private instanceService: InstanceService,
         label: 'Activities',
         icon: 'fa fa fa-history',
         routerLink: [`/user/instances/${instance.guidId}/activities`],
-        styleClass: 'instance-options'
+        styleClass: 'instance-options',
+        command: () =>  this.highlightCurrent(item)
       }, {
         label: 'Download app',
         icon: 'fa fa-download',
@@ -110,18 +94,21 @@ constructor(private instanceService: InstanceService,
         command: () => {
           this.showDownloadModal = true;
           this.currentGuidId = instance.guidId;
+          this.highlightCurrent(item);
         }
       }, {
         label: 'Report',
         icon: 'fa fa-stack-exchange',
         routerLink: [`/user/instances/${instance.id}/${instance.guidId}/report`],
-        styleClass: 'instance-options'
+        styleClass: 'instance-options',
+        command: () =>  this.highlightCurrent(item)
       }, {
         label: 'Delete',
         icon: 'fa fa-close',
         command: () => {
           const index = this.menuItems.findIndex(i => i === item);
           this.deleteInstance(instance.id, index);
+          this.highlightCurrent(item);
         },
         styleClass: 'instance-options',
         visible: this.isManager
@@ -151,7 +138,7 @@ constructor(private instanceService: InstanceService,
     const item: MenuItem = this.instanceToMenuItem(instance);
     this.menuItems.push(item);
     this.onSearchChange(this.currentQuery);
-    this.expandElement(item);
+    this.highlightCurrent(item);
   }
 
   onInstanceEdited(instance: Instance): void {
@@ -159,7 +146,7 @@ constructor(private instanceService: InstanceService,
     const index: number = this.menuItems.findIndex(inst => inst.id === instance.id.toString());
     this.menuItems[index] = item;
     this.onSearchChange(this.currentQuery);
-    this.expandElement(item);
+    this.highlightCurrent(item);
   }
 
   onSearchChange(searchQuery: string): void {
@@ -175,37 +162,14 @@ constructor(private instanceService: InstanceService,
     this.menuItems[0].visible = this.isManager;
   }
 
-  expandElement(menuitem: MenuItem): void {
-    this.menuItems[0].expanded = false;
-    menuitem.expanded = true;
-  }
   onClose(): void {
     this.showDownloadModal = false;
   }
 
-  private clearSettings(url: string): void {
-    if (this.router.url !== this.previousSettingUrl) {
-      const setting = this.getSettingByUrl(url);
 
-      if (setting) {
-        setting.classList.remove('ui-state-active');
-        setting.parentElement.classList.remove('ui-state-active');
-      }
-    }
-  }
-
-  private highlightCurrentSetting(): void {
-    const setting = this.getSettingByUrl(this.router.url);
-
-    if (setting) {
-      this.clearSettings(this.previousSettingUrl);
-
-      setting.classList.add('ui-state-active');
-      setting.parentElement.classList.add('ui-state-active');
-    }
-  }
-
-  private getSettingByUrl(url: string): Element {
-    return document.querySelector(`div.ui-panelmenu-header a[href="${url}"]`);
+  highlightCurrent(menuitem: MenuItem) {
+    this.menuItems = this.menuItems.map(i => {i.expanded = false;
+                                              return i; });
+    menuitem.expanded = true;
   }
 }

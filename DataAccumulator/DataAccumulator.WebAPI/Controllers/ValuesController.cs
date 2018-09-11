@@ -19,13 +19,16 @@ namespace DataAccumulator.WebAPI.Controllers
     {
         private readonly ILogger<ValuesController> _logger;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;
+        private readonly IInstanceSettingsRepository<InstanceSettings> _validatorRepository;
 
         public ValuesController(ILogger<ValuesController> logger, 
                                 IDataAccumulatorRepository<CollectedData> repository,
+                                IInstanceSettingsRepository<InstanceSettings> validatorRepository,
                                 IServiceBusProvider serviceBusProvider)
         {
             _logger = logger;
             _repository = repository;
+            _validatorRepository = validatorRepository;
         }
 
         [HttpGet("AllInOrder")]
@@ -264,6 +267,43 @@ namespace DataAccumulator.WebAPI.Controllers
                     });
 
                     return Ok("Database DataAccumulator was created, and collection 'CollectedData' was filled with 5 sample items");
+                }
+
+                if (setting == "initvalidator")
+                {
+                    await _validatorRepository.AddEntityAsync(new InstanceSettings()
+                    {
+                        Id = Guid.NewGuid(),
+                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        IsActive = true,
+
+                        RamValidator = true,
+                        RamUsagePercentageMax = 95,
+
+                        LocalDiskVallidator = true,
+                        LocalDiskUsagePercentageMax = 95,
+
+                        CpuValidator = true,
+                        CpuUsagePercentageMax = 100
+                    });
+
+                    await _validatorRepository.AddEntityAsync(new InstanceSettings()
+                    {
+                        Id = Guid.NewGuid(),
+                        ClientId = new Guid("76053df4-6687-4353-8937-b45556748abe"),
+                        IsActive = true,
+
+                        RamValidator = true,
+                        RamUsagePercentageMax = 1,
+
+                        LocalDiskVallidator = true,
+                        LocalDiskUsagePercentageMax = 1,
+
+                        CpuValidator = true,
+                        CpuUsagePercentageMax = 1
+                    });
+
+                    return Ok("Database InstanceValidators was created, and collection 'InstanceValidator' was filled with 2 sample items");
                 }
 
                 return BadRequest();
