@@ -128,7 +128,7 @@
   </div>
 
   <div *ngIf="activeTab === tabs[1]">
-    <div class="workspace" *ngIf="instanceId">
+    <div class="workspace">
       <div class="dashboard-options">
         <p-tieredMenu class="text-left" [model]="cogItems" [popup]="true"></p-tieredMenu>
         <span class="fa fa-fw fa-gear options-btn" (click)="cog.toggle($event)" *ngIf="isManager"></span>
@@ -151,6 +151,7 @@
           </app-chart>
         </div>
       </div>
+      <app-edit-chart [onDisplay]="onDisplayChartEditing" [dashboardChart]="chartToEdit"></app-edit-chart>
     </div>
   </div>
 </div>
