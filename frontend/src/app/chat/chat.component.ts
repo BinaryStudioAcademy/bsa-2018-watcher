@@ -37,6 +37,7 @@ export class ChatComponent implements OnInit {
   currentUserId: string;
 
   isLoading: Boolean = false;
+  isOpeningChat: Boolean = false;
 
   ngOnInit() {
     this.calculateMaxSupportedOpenedWindows(window.innerWidth);
@@ -61,20 +62,24 @@ export class ChatComponent implements OnInit {
   }
 
   openChat() {
-    if (!this.chatWindows.some(c => c.chat.id === this.selectedChat.id)) {
-      this.chatService.get(this.selectedChat.id).subscribe((value: Chat) => {
-        this.chatWindows.unshift({
-          chat: value,
-          isCollapsed: false,
-          unreadMessages: 0
+    if (!this.isOpeningChat) {
+      if (!this.chatWindows.some(c => c.chat.id === this.selectedChat.id)) {
+        this.isOpeningChat = true;
+        this.chatService.get(this.selectedChat.id).subscribe((value: Chat) => {
+          this.chatWindows.unshift({
+            chat: value,
+            isCollapsed: false,
+            unreadMessages: 0
+          });
+          this.removeWindowsOverflow();
+          this.isOpeningChat = false;
         });
-        this.removeWindowsOverflow();
-      });
-    } else {
-      // If chat opened but collpsed
-      const window = this.chatWindows.find(cw => cw.chat.id === this.selectedChat.id);
-      window.unreadMessages = 0;
-      window.isCollapsed = false;
+      } else {
+        // If chat opened but collapsed
+        const window = this.chatWindows.find(cw => cw.chat.id === this.selectedChat.id);
+        window.unreadMessages = 0;
+        window.isCollapsed = false;
+      }
     }
 
     // Clear counter when chat opens
