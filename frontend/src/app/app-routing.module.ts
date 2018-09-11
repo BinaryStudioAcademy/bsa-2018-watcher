@@ -1,6 +1,6 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
-import {LandingComponent} from './landing/landing.component';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { LandingComponent } from './landing/landing.component';
 import { HomeGuard } from './core/guards/home.guard';
 import { NotexistGuard } from './core/guards/notexist.guard';
 import { ShellComponent } from './shell/shell.component';

@@ -1,27 +1,10 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy
-} from '@angular/core';
-import {
-  FeedbackService
-} from '../core/services/feedback.service';
-import {
-  ToastrService
-} from '../core/services/toastr.service';
-import {
-  LongAnswerType
-} from '../shared/models/long-answer-type.enum';
-import {
-  ShortAnswerType
-} from '../shared/models/short-answer-type.enum';
-import {
-  Feedback
-} from '../shared/models/feedback.model';
-import {
-  Router,
-  ActivatedRoute
-} from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FeedbackService } from '../core/services/feedback.service';
+import { ToastrService } from '../core/services/toastr.service';
+import { LongAnswerType } from '../shared/models/long-answer-type.enum';
+import { ShortAnswerType } from '../shared/models/short-answer-type.enum';
+import { Feedback } from '../shared/models/feedback.model';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
@@ -41,7 +24,7 @@ export class LandingComponent implements OnInit, OnDestroy {
     private feedbackService: FeedbackService,
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService,
-    private router: Router) {}
+    private router: Router) { }
 
   ngOnInit() {
     window.scrollTo(0, 0);
@@ -69,10 +52,10 @@ export class LandingComponent implements OnInit, OnDestroy {
     };
 
     this.feedbackService.create(newFeedback).subscribe(value => {
-        this.toastrService.success('Added new feedback');
-      }, error => {
-        this.toastrService.error(`Error ocured status: ${error.message}`);
-      });
+      this.toastrService.success('Added new feedback');
+    }, error => {
+      this.toastrService.error(`Error ocured status: ${error.message}`);
+    });
 
     this.name = '';
     this.email = '';
@@ -87,10 +70,11 @@ export class LandingComponent implements OnInit, OnDestroy {
   scrollTo(id: string): void {
     const element = document.getElementById(id);
     if (element) {
-    element.scrollIntoView({
-      block: 'start',
-      behavior: 'smooth'
-    }); }
+      element.scrollIntoView({
+        block: 'start',
+        behavior: 'smooth'
+      });
+    }
     const menu = document.getElementById('nav');
     if (menu.style.display === 'block') {
       this.show();
