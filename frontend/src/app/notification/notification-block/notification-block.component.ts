@@ -70,6 +70,7 @@ export class NotificationBlockComponent implements OnInit {
   loadNotifications(): void {
     this.isLoading = true;
     this.notificationsService.getAll(this.authService.getCurrentUser().id).subscribe((value: Notification[]) => {
+      value.reverse();
       this.notifications = value;
       this.notificationCounter = this.calcNotReadNotifications(value);
       this.isLoading = false;
