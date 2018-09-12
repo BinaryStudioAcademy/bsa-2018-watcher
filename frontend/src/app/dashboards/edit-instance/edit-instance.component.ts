@@ -61,17 +61,20 @@ export class EditInstanceComponent implements OnInit {
     if (instance) {
       this.instanceTitle = 'EDIT INSTANCE';
     } else {
-      instance.title = '';
-      instance.platform = '';
-      instance.address = '';
-      instance.guidId = '';
-      instance.aggregationForHour = true;
-      instance.aggregationForDay = true;
-      instance.aggregationForMonth = true;
-      instance.cpuMaxPercent = 90;
-      instance.ramMaxPercent = 90;
-      instance.diskMaxPercent = 90;
-      instance.isActive = true;
+      instance = {
+        title: '',
+        platform: '',
+        address: '',
+        guidId: '',
+        aggregationForHour: true,
+        aggregationForDay: true,
+        aggregationForMonth: true,
+        statusCheckedAt: new Date(),
+        cpuMaxPercent: 90,
+        ramMaxPercent: 90,
+        diskMaxPercent: 90,
+        isActive: true,
+      };
       this.instanceTitle = 'NEW INSTANCE';
     }
 
