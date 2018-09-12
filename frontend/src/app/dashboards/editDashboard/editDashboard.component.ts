@@ -1,17 +1,13 @@
 import { Component, OnInit, OnChanges, Output, Input } from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import {NgModel} from '@angular/forms';
+import { NgModel} from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { DashboardChart } from '../models/dashboard-chart';
-import { ChartType, chartTypes } from '../../shared/models/chart-type.enum';
+
+import { ChartType } from '../../shared/models/chart-type.enum';
 import { DataProperty } from '../../shared/models/data-property.enum';
-import { CollectedDataService } from '../../core/services/collected-data.service';
-import { CollectedData } from '../../shared/models/collected-data.model';
 import { DataService } from '../../core/services/data.service';
-import { ChartService } from '../../core/services/chart.service';
 import { defaultOptions } from '../charts/models/chart-options';
-import {dashboardChartTypes} from '../charts/models/dashboardChartTypes';
-import { ChartRequest } from '../../shared/requests/chart-request.model';
 
 @Component({
   selector: 'app-edit-dashboard',
@@ -21,30 +17,25 @@ import { ChartRequest } from '../../shared/requests/chart-request.model';
 export class EditDashboardComponent implements OnInit, OnChanges {
   title = '';
 
-  @Output() edited = new EventEmitter<any>(); // string
+  @Output() edited = new EventEmitter<any>();
   @Output() closed = new EventEmitter();
   @Input() display: boolean;
   @Input() dashboardTitle: string;
 
   showPreview = false;
   dropdownSources: SelectItem[];
-  collectedDataForChart: CollectedData[] = [];
   dashboardCharts: DashboardChart[] = [];
-  newCharts: ChartRequest[] = [];
 
   isSource: Boolean = false;
   isCustomize: Boolean = false;
   sources: DataProperty[];
-  isIncluded: Boolean[] = [];
+  countToGenerate = 4;
 
-  constructor(private collectedDataService: CollectedDataService,
-              private dataService: DataService,
-              private chartService: ChartService) { }
+  constructor(private dataService: DataService) { }
 
   closeDialog(): void {
     this.closed.emit();
     this.title = '';
-    // this.dashboardTitle = '';
     this.reset();
   }
 
@@ -59,15 +50,8 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   edit(model: NgModel): void {
-    let correction = 0;
-    for (let i = 0; i < 4; i++) {
-      if (!this.isIncluded[i] && this.isCustomize) {
-         this.dashboardCharts.splice(i - correction, 1);
-         correction++;
-      }
-    }
+    this.dashboardCharts = this.dashboardCharts.filter(chart => chart.isIncluded && chart.dataSources && chart.dataSources.length > 0);
     this.edited.emit({title: this.title, charts: this.isSource ? this.dashboardCharts : null});
-    // this.edited.emit(this.title);
     this.title = '';
     model.reset();
     this.reset();
@@ -79,9 +63,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
     this.isCustomize = false;
     this.showPreview = false;
     this.dashboardCharts = [];
-    this.isIncluded = [];
-    this.dashboardCharts = [];
-    this.isIncluded = [];
     this.fillCharts();
   }
 
@@ -90,10 +71,6 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.collectedDataService.getBuilderData().subscribe(value => {
-      this.collectedDataForChart = value;
-    });
-
     this.dropdownSources = [
         { label: 'CPU %', value: DataProperty.cpuUsagePercentage},
         { label: 'RAM %', value: DataProperty.ramUsagePercentage },
@@ -104,18 +81,18 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   fillCharts() {
-    for (let i = 0; i < 4; i++) {
-        this.isIncluded.push(true);
-        const dashboardChart = { ...defaultOptions };
-        this.dashboardCharts.push(dashboardChart);
-        this.dashboardCharts[i].chartType = dashboardChartTypes[i];
-        this.dashboardCharts[i].chartType.name = dashboardChartTypes[i].name;
-        this.dashboardCharts[i].chartType.type = dashboardChartTypes[i].type;
-        this.dashboardCharts[i].chartType.title = dashboardChartTypes[i].title;
-        this.dashboardCharts[i].title = dashboardChartTypes[i].title;
-        this.dashboardCharts[i].showXAxis = false;
-        this.dashboardCharts[i].showYAxis = false;
-        this.dashboardCharts[i].showLegend = false;
+    for (let i = 0; i < this.countToGenerate; i++) {
+      const chart = Object.assign({
+        ...defaultOptions,
+      }, {
+        type: i,
+        title: ChartType[i],
+        showXAxis: false,
+        showYAxis: false,
+        showLegend: false
+      });
+
+      this.dashboardCharts.push(chart);
     }
   }
 
@@ -124,13 +101,8 @@ export class EditDashboardComponent implements OnInit, OnChanges {
   }
 
   processData(dashboardChart: DashboardChart) {
-    this.showPreview = false;
-    dashboardChart.data = this.dataService.prepareData(dashboardChart.chartType.type,
-      this.sources, this.collectedDataForChart);
-
     dashboardChart.dataSources = this.sources;
-
-    switch (dashboardChart.chartType.type) {
+    switch (dashboardChart.type) {
       case ChartType.BarVertical:
         dashboardChart.xAxisLabel = 'Parameters';
         dashboardChart.yAxisLabel = 'Percentage %';
@@ -144,41 +116,8 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         dashboardChart.xAxisLabel = '';
         break;
     }
+    this.showPreview = this.dataService.fulfillChart(this.dataService.fakeCollectedData, dashboardChart, true);
 
-    if (dashboardChart.data && dashboardChart.data.length > 0) {
-      this.showPreview = true;
-    }
     return dashboardChart;
   }
-
-  createChartRequest(dashboardChart: DashboardChart): ChartRequest {
-    const chart: ChartRequest = {
-      showCommon: dashboardChart.showCommon,
-      threshold: dashboardChart.threshold,
-      mostLoaded: 1,
-      schemeType: dashboardChart.schemeType,
-      dashboardId: 0,
-      showLegend: dashboardChart.showLegend,
-      legendTitle: dashboardChart.legendTitle,
-      gradient: dashboardChart.gradient,
-      showXAxis: dashboardChart.showXAxis,
-      showYAxis: dashboardChart.showYAxis,
-      showXAxisLabel: dashboardChart.showXAxisLabel,
-      showYAxisLabel: dashboardChart.showYAxisLabel,
-      yAxisLabel: dashboardChart.yAxisLabel,
-      xAxisLabel: dashboardChart.xAxisLabel,
-      autoScale: dashboardChart.autoScale,
-      showGridLines: dashboardChart.showGridLines,
-      rangeFillOpacity: dashboardChart.rangeFillOpacity,
-      roundDomains: dashboardChart.roundDomains,
-      isTooltipDisabled: dashboardChart.tooltipDisabled,
-      isShowSeriesOnHover: dashboardChart.showSeriesOnHover,
-      title: dashboardChart.title,
-      type: dashboardChart.chartType.type,
-      sources: this.sources.join(),
-      isLightTheme: dashboardChart.theme === 'light',
-    };
-    return chart;
-  }
-
 }

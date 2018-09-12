@@ -82,7 +82,7 @@ export class FeedbackListComponent implements OnInit {
     this.responseForm.reset();
     this.display = true;
     this.feedback = feedback;
-    this.email = feedback.user.email;
+    this.email = feedback.email;
   }
 
   onCancel() {
@@ -118,8 +118,6 @@ export class FeedbackListComponent implements OnInit {
       subscribe(
         value => {
           this.toastrService.success('Added new response');
-          // this.notificationsService.connectToSignalR();
-          // this.notificationsService.send(this.feedback.id.toString(), 'The response to your feedback has been sent to your email.');
         },
         error => {
           this.toastrService.error(`Error ocured status: ${error.message}`);

@@ -6,6 +6,7 @@ export interface Chart  {
    showCommon: boolean;
    threshold: number;
    mostLoaded: number;
+   historyTime: number;
    dashboardId: number;
    schemeType: string;
    showLegend: boolean;

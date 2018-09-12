@@ -16,4 +16,16 @@ export class AggregatedDataService {
     return this.apiService.get(`${this.ctrlUrl}/${request.id}/${request.type}
                                                 /${request.from.toISOString()}/${request.to.toISOString()}`) as Observable<CollectedData[]>;
   }
+
+  getCountOfEntities(request: AggregateDataRequest): Observable<number> {
+    return this.apiService.get(`${this.ctrlUrl}/getCount/${request.id}/${request.type}
+                                                /${request.from.toISOString()}/${request.to.toISOString()}`) as Observable<number>;
+  }
+
+  getDataByInstanceIdAndTypeInTimePaging(request: AggregateDataRequest,
+                                                  page: number, count: number): Observable<CollectedData[]> {
+    return this.apiService.get(`${this.ctrlUrl}/${request.id}/${request.type}
+                                                /${request.from.toISOString()}/${request.to.toISOString()}
+                                                /${page}/${count}`) as Observable<CollectedData[]>;
+  }
 }

@@ -9,6 +9,7 @@
   <p-table [value]="lstFeedbacks" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]" [lazy]="true" (onLazyLoad)="loadFeedbacksLazy($event)">
     <ng-template pTemplate="header" let-columns>
       <tr>
+        <th>FEEDBACK</th>
         <th>DATE</th>
         <th>USER NAME</th>
         <th>TEXT</th>
@@ -21,8 +22,12 @@
     </ng-template>
     <ng-template pTemplate="body" let-feedback>
       <tr>
+        <td class="center">
+          <i *ngIf="feedback.main.user" class="fa fa-check-circle-o" style="font-size: 25px"></i>
+          <i *ngIf="!feedback.main.user" class="fa fa-times-circle-o" style="font-size: 25px"></i>
+        </td>
         <td class="center">{{feedback.main.createdAt | date:'shortDate'}}</td>
-        <td class="center">{{feedback.main.user.displayName}}</td>
+        <td class="center">{{feedback.main.name}}</td>
         <td>{{feedback.main.text}}</td>
         <td class="center">
           <i *ngIf="feedback.willuse==='Yes'" class="fa fa-check-circle-o" style="font-size: 25px"></i>
@@ -48,7 +53,7 @@
           <i *ngIf="feedback.quickness==='Null'" class="fa fa-circle-thin" style="font-size: 25px"></i>
         </td>
         <td>
-          <div class="center" *ngIf="feedback.main.user.email">
+          <div class="center" *ngIf="feedback.main.email">
             <button pButton type="button " label="Response " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(feedback.main)"></button>
           </div>
         </td>

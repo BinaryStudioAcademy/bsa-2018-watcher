@@ -68,32 +68,26 @@ export class OrganizationProfileComponent implements OnInit {
   isSending: Boolean = false;
 
   ngOnInit() {
-    if (this.themeDropdown.length === 0) {
-      this.fillDropdown(); }
+      if (this.themeDropdown.length === 0) {
+          this.fillDropdown();
+      }
 
-    this.authService.currentUser.subscribe(
-      async (userData) => {
-        this.user = { ...userData };
-        if (this.user.lastPickedOrganization !== undefined) {
-          this.organization = this.user.lastPickedOrganization;
-          this.name = this.organization.name;
-          this.selectedTheme = this.organization.theme;
-        }
-        this.imageUrl = this.user.lastPickedOrganization.imageURL;
-        const role = await this.userOrganizationService.getOrganizationRole();
-        this.editable = role.name === 'Manager' ? true : false;
+      this.authService.currentUser.subscribe(user => {
+        console.log(user);
+        this.user = user;
 
-        console.log('EDITABLE');
-        console.log(this.editable);
+        this.organizationService.get(this.user.lastPickedOrganizationId).subscribe(async (org) => {
+          console.log(org);
+          this.organization = org;
+            this.name = this.organization.name;
+            this.selectedTheme = this.organization.theme;
+          this.imageUrl = org.imageURL;
+          const role = await this.userOrganizationService.getOrganizationRole();
+          this.editable = role.name === 'Manager' ? true : false;
+          console.log('EDITABLE');
+          console.log(this.editable);
+        });
       });
-
-      this.themeService.getAll().subscribe(
-        (data) => {
-          if (data.length > 0) {
-            this.themes = data;
-          }
-        }
-      );
   }
 
   onSubmit() {
@@ -138,7 +132,7 @@ export class OrganizationProfileComponent implements OnInit {
       createdByUser: null,
       organization: null,
       createdDate: null,
-      expirationDate: null,
+      experationDate: null,
       link: null,
       state: OrganizationInviteState.Pending
     };

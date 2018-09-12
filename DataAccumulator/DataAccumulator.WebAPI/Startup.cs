@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using DataAccumulator.BusinessLayer.Interfaces;
 using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.BusinessLayer.Providers;
+using DataAccumulator.BusinessLayer.Validators;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
@@ -50,16 +51,18 @@ namespace DataAccumulator
                     o.ConnectionString = serviceBusSection["ConnectionString"];
                     o.DataQueueName = serviceBusSection["DataQueueName"];
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
+                    o.SettingsQueueName = serviceBusSection["SettingsQueueName"];
+                    o.NotifyQueueName = serviceBusSection["NotifyQueueName"];
                 });
 
-            services.AddTransient<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>();
-            services.AddTransient<IDataAggregatorRepository<CollectedData>, DataAggregatorRepository>();
-
-            services.AddScoped<IDataAccumulatorService<CollectedDataDto>, DataAccumulatorService>();
-            services.AddScoped<IDataAggregatorService<CollectedDataDto>, DataAggregatorService>();
+            services.AddTransient<IDataAccumulatorService<CollectedDataDto>, DataAccumulatorService>();
+            services.AddTransient<IDataAggregatorService<CollectedDataDto>, DataAggregatorService>();
+            services.AddTransient<IInstanceSettingsService<InstanceSettingsDto>, InstanceSettingsService>();
 
             services.AddTransient<IAggregatorService<CollectedDataDto>, AggregatorService>();
             services.AddTransient<IDataAggregatorCore<CollectedDataDto>, DataAggregatorCore>();
+
+            services.AddTransient<IThresholdsValidatorCore<CollectedDataDto>, ThresholdsValidatorCore>();
 
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ILogRepository, LogRepository>();
@@ -70,16 +73,17 @@ namespace DataAccumulator
                     return new JobFactory(provider);
                 });
 
+            // repo initialization localhost while development env, azure in prod
+            ConfigureCosmosDb(services, Configuration);
+
             services.AddTransient<CollectedDataAggregatingByHourJob>();
             services.AddTransient<CollectedDataAggregatingByDayJob>();
             services.AddTransient<CollectedDataAggregatingByWeekJob>();
             services.AddTransient<CollectedDataAggregatingByMonthJob>();
 
             services.AddTransient<IAzureQueueSender, AzureQueueSender>();
+            services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
-
-            // repo initialization localhost while development env, azure in prod
-            ConfigureCosmosDb(services, Configuration);
 
             var mapper = MapperConfiguration().CreateMapper();
             services.AddTransient(_ => mapper);
@@ -109,6 +113,8 @@ namespace DataAccumulator
                     quartz.AddMonthlyJob<CollectedDataAggregatingByMonthJob>("CollectedDataAggregatingByMonth", "DataAggregator");
                 }
             });
+
+            var provider = app.ApplicationServices.GetService<IServiceBusProvider>();
         }
         public virtual void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
         {
@@ -121,6 +127,8 @@ namespace DataAccumulator
                 options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage"));
             services.AddTransient<ILogRepository, LogRepository>(
                 options => new LogRepository(connectionString, "bsa-watcher-data-storage"));
+            services.AddTransient<IInstanceSettingsRepository<InstanceSettings>, InstanceSettingsRepository>(
+              options => new InstanceSettingsRepository(connectionString, "bsa-watcher-data-storage"));
         }
 
         public MapperConfiguration MapperConfiguration()
@@ -131,6 +139,9 @@ namespace DataAccumulator
                 cfg.CreateMap<CollectedDataDto, CollectedData>();
                 cfg.CreateMap<CollectedData, CollectedData>();
                 cfg.CreateMap<ActionLogDto, ActionLog>();
+                cfg.CreateMap<InstanceSettings, InstanceSettingsDto>();
+                cfg.CreateMap<InstanceSettingsDto, InstanceSettings>();
+                cfg.CreateMap<InstanceSettings, InstanceSettings>();
             });
 
             return config;

@@ -4,10 +4,17 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AccordionModule, TabViewModule, ProgressSpinnerModule, ButtonModule } from 'primeng/primeng';
-import { PanelModule } from 'primeng/primeng';
-import { RadioButtonModule } from 'primeng/primeng';
-import { DialogModule } from 'primeng/primeng';
+import {
+  AccordionModule,
+  TabViewModule,
+  ProgressSpinnerModule,
+  ButtonModule,
+  InputTextareaModule,
+  InputTextModule,
+  PanelModule,
+  RadioButtonModule,
+  DialogModule } from 'primeng/primeng';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
@@ -27,7 +34,7 @@ import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdia
 import { ShellModule } from './shell/shell.module';
 import { CustomConfirmDialogComponent } from './notification/custom-confirm-dialog/custom-confirm-dialog.component';
 import { SystemNotificationComponent } from './notification/system-notification/system-notification.component';
-
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +44,7 @@ import { SystemNotificationComponent } from './notification/system-notification/
     AuthorizationComponent,
     CustomConfirmDialogComponent,
     SystemNotificationComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,6 +60,8 @@ import { SystemNotificationComponent } from './notification/system-notification/
     ToastModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
+    InputTextareaModule,
+    InputTextModule,
 
     AngularFireModule.initializeApp(environment.firebase, 'watcherapp'),
     AngularFireDatabaseModule,

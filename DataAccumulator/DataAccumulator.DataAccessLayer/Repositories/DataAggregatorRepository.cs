@@ -105,6 +105,25 @@ namespace DataAccumulator.DataAccessLayer.Repositories
 
         // Query by instance and type in time
         public async Task<IEnumerable<CollectedData>> GetEntitiesByInstanceIdAndTypeInTime(Guid id, CollectedDataType collectedDataType,
+            DateTime timeFrom, DateTime timeTo, int page = 1, int count = 10)
+        {
+            try
+            {
+                var query = _context.Datasets
+                    .Find(d => d.ClientId == id && d.CollectedDataType == collectedDataType && d.Time >= timeFrom && d.Time <= timeTo);
+
+                query.Skip(count * (page - 1)).Limit(count);
+
+                return await query.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<long> GetCountOfEntities(Guid id, CollectedDataType collectedDataType,
             DateTime timeFrom, DateTime timeTo)
         {
             try
@@ -112,7 +131,7 @@ namespace DataAccumulator.DataAccessLayer.Repositories
                 var query = _context.Datasets
                     .Find(d => d.ClientId == id && d.CollectedDataType == collectedDataType && d.Time >= timeFrom && d.Time <= timeTo);
 
-                return await query.ToListAsync();
+                return await query.CountAsync();
             }
             catch (Exception e)
             {

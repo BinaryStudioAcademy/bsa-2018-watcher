@@ -37,6 +37,7 @@ export class OrganizationInvitesHub {
       this.hubConnection.start()
         .then(() => {
           console.log('OrganizationInvitesHub connected');
+          this.isConnect = true;
           this.registerOnServerEvents();
         })
         .catch(err => {

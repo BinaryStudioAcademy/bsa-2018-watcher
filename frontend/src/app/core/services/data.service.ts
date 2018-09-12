@@ -1,196 +1,160 @@
 import {Injectable} from '@angular/core';
-import {CustomData, date_sort_asc} from '../../dashboards/charts/models';
-import {CollectedData} from '../../shared/models/collected-data.model';
+import {CustomData} from '../../dashboards/charts/models';
+
+import {CollectedData, defaultCollectedData} from '../../shared/models/collected-data.model';
 import {NumberSeriesItem, SeriesItem} from '../../dashboards/models/series-item';
 import {MultiChartItem} from '../../dashboards/models/multi-chart-item';
 import {DataProperty, dataPropertyLables} from '../../shared/models/data-property.enum';
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {Chart} from '../../shared/models/chart.model';
 import {DashboardChart} from '../../dashboards/models/dashboard-chart';
-import {dashboardChartTypes} from '../../dashboards/charts/models/dashboardChartTypes';
 import {defaultOptions} from '../../dashboards/charts/models/chart-options';
 import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {colorSets} from '@swimlane/ngx-charts/release/utils';
 
 @Injectable()
 export class DataService {
+  // Collected data with interval of 10-15 seconds for last hour
+  private _hourlyCollectedData: CollectedData[] = [];
+  private _fakeCollectedData: CollectedData[] = [];
+
+  set fakeCollectedData(data: CollectedData[]) {
+    this._fakeCollectedData = data || [];
+  }
+
+  get fakeCollectedData(): CollectedData[] {
+    return this._fakeCollectedData;
+  }
+
+  set hourlyCollectedData(data: CollectedData[]) {
+    this._hourlyCollectedData = data || [];
+  }
+
+  get hourlyCollectedData(): CollectedData[] {
+    return this._hourlyCollectedData;
+  }
+
+  getLastCollectedData(dataArr: CollectedData[]): CollectedData {
+    if (dataArr && dataArr.length) {
+      return dataArr[dataArr.length - 1];
+    } else {
+      return defaultCollectedData; // TODO: return default value with 0 or
+    }
+  }
+
   constructor() {
   }
 
-  convertStringToArrEnum(sources: string): DataProperty[] {
-    const array: DataProperty[] = [];
-    const arrNumbers = sources.split(',');
+  fulfillChart(dataArr: CollectedData[], chart: DashboardChart, isFake: boolean = false): boolean {
+    let chartData: CustomData[] = [];
 
-    for (let i = 0; i < arrNumbers.length; i++) {
-      array.push(+arrNumbers[i]);
+    if (!chart.dataSources || chart.dataSources.length < 1) {
+      chart.data = chartData;
+      return false;
     }
 
-    return array;
-  }
-
-  instantiateDashboardChart(value: Chart, collData: CollectedData[]): DashboardChart {
-    const dataProps = this.convertStringToArrEnum(value.sources);
-    let chartData = [];
-    if (value.showCommon) {
-      chartData = this.prepareData(value.type, dataProps, collData);
-    } else {
-      chartData = this.prepareProcessData(value.type, dataProps[0], collData, value.mostLoaded);
-    }
-    const dashChart: DashboardChart = {
-      view: [600, 300],
-      id: value.id,
-      showCommon: value.showCommon,
-      threshold: value.threshold,
-      mostLoaded: value.mostLoaded,
-      colorScheme: {...colorSets.find(s => s.name === value.schemeType)}, // {...defaultOptions.colorScheme},
-      schemeType: defaultOptions.schemeType,
-      showLegend: value.showLegend,
-      legendTitle: value.legendTitle,
-      gradient: value.gradient,
-      showXAxis: value.showXAxis,
-      showYAxis: value.showYAxis,
-      showXAxisLabel: value.showXAxisLabel,
-      showYAxisLabel: value.showYAxisLabel,
-      yAxisLabel: value.yAxisLabel,
-      xAxisLabel: value.xAxisLabel,
-      yScaleMin: defaultOptions.yScaleMin,
-      yScaleMax: defaultOptions.yScaleMax,
-      autoScale: value.autoScale,
-      showGridLines: value.showGridLines,
-      rangeFillOpacity: value.rangeFillOpacity,
-      roundDomains: value.roundDomains,
-      tooltipDisabled: value.isTooltipDisabled,
-      showSeriesOnHover: value.isShowSeriesOnHover,
-      curve: defaultOptions.curve,
-      curveClosed: defaultOptions.curveClosed,
-      title: value.title,
-      dataSources: dataProps,
-      data: chartData,
-      activeEntries: [],
-      chartType: {...dashboardChartTypes.find(ct => ct.type === value.type)}, // disassemble and get first
-      theme: value.isLightTheme ? 'light' : 'dark'
-    };
-
-    return dashChart;
-  }
-
-  instantiateDashboardChartFromRequest(value: ChartRequest, chartId: number, collData: CollectedData[]): DashboardChart {
-    const chart: Chart = {
-      id: chartId,
-      ...value,
-      scheme: {...colorSets.find(s => s.name === value.schemeType)}
-    };
-
-    return this.instantiateDashboardChart(chart, collData);
-  }
-
-  // dataSource - property to show on the chart
-  prepareData(chartType: ChartType, dataSources: DataProperty[], dataToTransform: CollectedData[]): CustomData[] {
-    if (!dataSources
-      || (!chartType && chartType !== ChartType.BarVertical)
-      || (!dataToTransform || dataToTransform.length < 1)) {
-      return [];
-    }
-
-    switch (chartType) {
-      case ChartType.LineChart:
-        const data = this.mapToMultiData(dataToTransform, dataSources);
-        for (let i = 0; i < data.length; i++) {
-          data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
-        }
-        return data;
-      case ChartType.Pie:
-        return this.mapToPieSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources[0]);
-      default:
-        return this.mapToSeriesItem(dataToTransform[dataToTransform.length - 1], dataSources);
-    }
-  }
-
-  mapToPieSeriesItem(data: CollectedData, prop: DataProperty): NumberSeriesItem[] {
-    const items: NumberSeriesItem[] = [];
-    const propStr = DataProperty[prop];
-    items.push(
-      {
-        name: dataPropertyLables[prop],
-        value: data[propStr]
-      });
-
-    let itemName = '';
-    let itemValue = 0;
-    switch (prop) {
-      case DataProperty.cpuUsagePercentage:
-      case DataProperty.ramUsagePercentage:
-      case DataProperty.localDiskUsagePercentage:
-        itemName = 'Available';
-        itemValue = 100;
-        break;
-      case DataProperty.usageRamMBytes:
-        itemName = 'Free Ram MegaBytes';
-        itemValue = data[DataProperty[DataProperty.totalRamMBytes]];
-        break;
-      case DataProperty.localDiskUsageMBytes:
-        itemName = 'Free Local Disc MegaBytes';
-        itemValue = data[DataProperty[DataProperty.localDiskTotalMBytes]];
-        break;
-      default:
-    }
-
-    items.push(
-      {
-        name: itemName,
-        value: itemValue - data[propStr]
-      });
-
-    return items;
-  }
-
-  // dataSource - property to show on the chart
-  prepareProcessData(chartType: ChartType, dataSource: DataProperty, dataToTransform: CollectedData[], processesAmount = 0): CustomData[] {
-    if (!dataSource
-      || (!chartType && chartType !== ChartType.BarVertical)
-      || (!dataToTransform || dataToTransform.length < 1)
-      || processesAmount < 1) {
-      return [];
-    }
-    if (chartType === ChartType.LineChart) {
-      const data = this.mapToProcessMultiData(dataToTransform, dataSource, processesAmount);
-      for (let i = 0; i < data.length; i++) {
-        data[i].series.sort((a, b) => date_sort_asc(a.name, b.name));
+    if (chart.showCommon) {
+      switch (chart.type) {
+        case ChartType.LineChart:
+        case ChartType.BarHorizontal2D:
+        case ChartType.BarHorizontalNormalized:
+        case ChartType.BarHorizontalStacked:
+        case ChartType.BarVertical2D:
+        case ChartType.BarVerticalNormalized:
+        case ChartType.BarVerticalStacked:
+        case ChartType.PolarChart:
+        case ChartType.AreaChart:
+        case ChartType.AreaChartNormalized:
+        case ChartType.AreaChartStacked:
+        case ChartType.HeatMap:
+          let filteredData: CollectedData[] = [];
+          if (isFake) {
+            filteredData = dataArr;
+          } else {
+            filteredData = this.getDataByMinutes(dataArr, chart.historyTime);
+          }
+          chartData = this.mapToMultiData(filteredData, chart.dataSources);
+          break;
+        case ChartType.Pie:
+          chartData = this.mapToPieSeriesItem(this.getLastCollectedData(dataArr), this.getFirstSource(chart.dataSources));
+          break;
+        default:
+          chartData = this.mapToSeriesItem(this.getLastCollectedData(dataArr), chart.dataSources);
+          break;
       }
-      return data;
     } else {
-      return this.mapToProcessesSeriesItem(dataToTransform[dataToTransform.length - 1], dataSource, processesAmount);
+      switch (chart.type) {
+        case ChartType.LineChart:
+        case ChartType.BarHorizontal2D:
+        case ChartType.BarHorizontalNormalized:
+        case ChartType.BarHorizontalStacked:
+        case ChartType.BarVertical2D:
+        case ChartType.BarVerticalNormalized:
+        case ChartType.BarVerticalStacked:
+        case ChartType.PolarChart:
+        case ChartType.AreaChart:
+        case ChartType.AreaChartNormalized:
+        case ChartType.AreaChartStacked:
+        case ChartType.HeatMap:
+          let filteredData: CollectedData[] = [];
+          if (isFake) {
+            filteredData = dataArr;
+          } else {
+            filteredData = this.getDataByMinutes(dataArr, chart.historyTime);
+          }
+          chartData = this.mapToProcessMultiData(filteredData, this.getFirstSource(chart.dataSources), chart.mostLoaded);
+          break;
+        case ChartType.Pie:
+          chartData = this.mapToProcessesSeriesItem(this.getLastCollectedData(dataArr),
+            this.getFirstSource(chart.dataSources), chart.mostLoaded);
+          break;
+        default:
+          chartData = this.mapToProcessesSeriesItem(this.getLastCollectedData(dataArr),
+            this.getFirstSource(chart.dataSources), chart.mostLoaded);
+          break;
+      }
+    }
+
+
+    if (chartData && chartData.length > 0) {
+      chart.data = chartData;
+      return true;
+    } else {
+      chart.data = [];
+      return true;
     }
   }
 
-  mapToMultiData(data: CollectedData[], properties: DataProperty[]): MultiChartItem[] {
+  mapToMultiData(dataArr: CollectedData[], properties: DataProperty[]): MultiChartItem[] {
     const items: MultiChartItem[] = [];
     for (let i = 0; i < properties.length; i++) {
       const item: MultiChartItem = {name: dataPropertyLables[properties[i]], series: []};
-      item.series = data.map(p => this.mapToLineChartSeriesItem(p, properties[i]));
+      item.series = dataArr.map(p => this.mapToLineChartSeriesItem(p, properties[i]));
       items.push(item);
     }
 
     return items;
   }
 
-  mapToProcessMultiData(data: CollectedData[], property: DataProperty, processesAmount: number = 1) {
+
+  mapToProcessMultiData(dataArr: CollectedData[], property: DataProperty, processesAmount: number = 1) {
     const items: MultiChartItem[] = [];
     const stringProperty = DataProperty[property];
-    const lastData = data[data.length - 1];
-    lastData.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
-    const topProcessesNames: string[] = [];
-    for (let i = 0; i < processesAmount; i++) {
-      topProcessesNames.push(lastData.processes[i].name);
-    }
-    for (let i = 0; i < processesAmount; i++) {
-      const pName = topProcessesNames[i];
-      const item: MultiChartItem = {name: pName, series: []}; // {name: data[data.length - 1].processes[i].name, series: []};
-      item.series = data.map(d => this.mapToProcessesLineChartSeriesItem(d, pName, stringProperty));
+    const latestData = this.getLastCollectedData(dataArr);
+    latestData.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
+    for (let i = 0; i < Math.min(processesAmount, latestData.processes.length); i++) {
+      const pName = latestData.processes[i].name;
+      const item: MultiChartItem = {name: pName, series: []};
+      item.series = dataArr.map(d => this.mapToProcessesLineChartSeriesItem(d, pName, stringProperty));
       items.push(item);
     }
 
     return items;
+  }
+
+  getDataByMinutes(dataArr: CollectedData[], minutes: number = 5) {
+    const minutesAgo = new Date(Date.now() - minutes * 60000);
+    return dataArr.filter(value => value.time > minutesAgo);
   }
 
   mapToProcessesSeriesItem(data: CollectedData, property: DataProperty, processesAmount: number = 1): NumberSeriesItem[] {
@@ -246,6 +210,7 @@ export class DataService {
     const process = data.processes.find((value, index, obj) => {
       return value.name === processName;
     });
+
     const seriesItem: SeriesItem = {
       value: 0, // data.processes[processIndex][DataProperty[property]],
       name: new Date(data.time)
@@ -258,63 +223,47 @@ export class DataService {
     return seriesItem;
   }
 
-  mapToLineChartSeriesItem(data: CollectedData, property: DataProperty): SeriesItem {
-    const seriesItem: SeriesItem = {
-      value: data[DataProperty[property]],
-      name: new Date(data.time)
-    };
+  // PIE
+  mapToPieSeriesItem(data: CollectedData, prop: DataProperty): NumberSeriesItem[] {
+    const items: NumberSeriesItem[] = [];
+    const propStr = DataProperty[prop];
+    items.push(
+      {
+        name: dataPropertyLables[prop],
+        value: data[propStr]
+      });
 
-    return seriesItem;
+    let itemName = '';
+    let itemValue = 0;
+    switch (prop) {
+      case DataProperty.cpuUsagePercentage:
+      case DataProperty.ramUsagePercentage:
+      case DataProperty.localDiskUsagePercentage:
+        itemName = 'Available';
+        itemValue = 100;
+        break;
+      case DataProperty.usageRamMBytes:
+        itemName = 'Free Ram MegaBytes';
+        itemValue = data[DataProperty[DataProperty.totalRamMBytes]];
+        break;
+      case DataProperty.localDiskUsageMBytes:
+        itemName = 'Free Local Disc MegaBytes';
+        itemValue = data[DataProperty[DataProperty.localDiskTotalMBytes]];
+        break;
+      default:
+    }
+
+    items.push(
+      {
+        name: itemName,
+        value: itemValue - data[propStr]
+      });
+
+    return items;
   }
 
-  // TODO: change to swithch
-  prepareDataTick(chartToUpdate: DashboardChart, newData: CollectedData): CustomData[] {
-    if (!newData) {
-      return chartToUpdate.data ? chartToUpdate.data : [];
-    }
 
-    if (chartToUpdate.showCommon) {
-      switch (chartToUpdate.chartType.type) {
-        case ChartType.LineChart:
-          return this.mapToMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources);
-        case ChartType.Pie:
-          return this.mapToPieSeriesItem(newData, chartToUpdate.dataSources[0]);
-        default:
-          return this.mapToSeriesItem(newData, chartToUpdate.dataSources);
-      }
-    } else {
-      if (chartToUpdate.chartType.type === ChartType.LineChart) {
-        return this.mapToProcessMultiDataOnUpdate(chartToUpdate.data, newData, chartToUpdate.dataSources[0], chartToUpdate.mostLoaded);
-      } else {
-        return this.mapToProcessesSeriesItem(newData, chartToUpdate.dataSources[0], chartToUpdate.mostLoaded);
-      }
-    }
-  }
-
-  mapToProcessMultiDataOnUpdate(oldData: CustomData[],
-                                newData: CollectedData,
-                                property: DataProperty,
-                                procAmount: number = 1): CustomData[] {
-    const prop = DataProperty[property];
-    if (oldData[0].series.length > 20) { // TODO: refactor
-      for (let i = 0; i < oldData.length; i++) {
-        // oldData.push(oldData.slice(1)); // Start from first element(removes oldest data el)
-        oldData[i].series.shift();
-      }
-      // TODO: remove oldest element from array - use order by or sort or smt coz data can be not ordered by date
-      // TODO: maybe depend on chart's setting get from old array specific amount of data or etc.
-    }
-
-    const processes = this.getMostLoadedProcesses(newData, prop, procAmount);
-
-    const newDataToPush = this.mapToProcessMultiData([newData], property, procAmount);
-    for (let i = 0; i < procAmount; i++) {
-      oldData[i].series.push(...newDataToPush[i].series);
-    }
-
-    return oldData;
-  }
-
+  // HELPERS
   getMostLoadedProcesses(data: CollectedData, stringProperty: string, procAmount: number = 1): string[] {
     data.processes.sort((a, b) => b[stringProperty] - a[stringProperty]); // sort by descending
     const topProcessesNames: string[] = [];
@@ -325,20 +274,199 @@ export class DataService {
     return topProcessesNames;
   }
 
-  mapToMultiDataOnUpdate(oldData: CustomData[], newData: CollectedData, properties: DataProperty[]): CustomData[] {
-    if (oldData[0].series.length > 20) { // TODO: refactor
-      for (let i = 0; i < oldData.length; i++) {
-        // oldData.push(oldData.slice(1)); // Start from first element(removes oldest data el)
-        oldData[i].series.shift();
-      }
-      // TODO: remove oldest element from array - use order by or sort or smt coz data can be not ordered by date
-      // TODO: maybe depend on chart's setting get from old array specific amount of data or etc.
+  instantiateDashboardChart(value: Chart): DashboardChart {
+    const dataProps = this.convertStringToArrEnum(value.sources);
+    const dashChart: DashboardChart = {
+      view: [600, 300],
+      id: value.id,
+      showCommon: value.showCommon,
+      threshold: value.threshold,
+      mostLoaded: value.mostLoaded,
+      historyTime: value.historyTime,
+      colorScheme: {...colorSets.find(s => s.name === value.schemeType)},
+      schemeType: defaultOptions.schemeType,
+      showLegend: value.showLegend,
+      legendTitle: value.legendTitle,
+      gradient: value.gradient,
+      showXAxis: value.showXAxis,
+      showYAxis: value.showYAxis,
+      showXAxisLabel: value.showXAxisLabel,
+      showYAxisLabel: value.showYAxisLabel,
+      yAxisLabel: value.yAxisLabel,
+      xAxisLabel: value.xAxisLabel,
+      yScaleMin: defaultOptions.yScaleMin,
+      yScaleMax: defaultOptions.yScaleMax,
+      autoScale: value.autoScale,
+      showGridLines: value.showGridLines,
+      rangeFillOpacity: value.rangeFillOpacity,
+      roundDomains: value.roundDomains,
+      tooltipDisabled: value.isTooltipDisabled,
+      showSeriesOnHover: value.isShowSeriesOnHover,
+      curve: defaultOptions.curve,
+      curveClosed: defaultOptions.curveClosed,
+      title: value.title,
+      dataSources: dataProps,
+      data: [],
+      activeEntries: [],
+      colectedData: {} as CollectedData,
+      type: value.type,
+      theme: value.isLightTheme ? 'light' : 'dark',
+      isIncluded: false
+    };
+
+    this.fulfillChart(this._hourlyCollectedData, dashChart);
+    return dashChart;
+  }
+
+  instantiateDashboardChartFromRequest(value: ChartRequest, chartId: number): DashboardChart {
+    const chart: Chart = {
+      id: chartId,
+      ...value,
+      scheme: {...colorSets.find(s => s.name === value.schemeType)}
+    };
+
+    return this.instantiateDashboardChart(chart);
+  }
+
+  mapToLineChartSeriesItem(data: CollectedData, property: DataProperty): SeriesItem {
+    const seriesItem: SeriesItem = {
+      value: data[DataProperty[property]],
+      name: new Date(data.time)
+    };
+
+    return seriesItem;
+  }
+
+  getFirstSource(sources: DataProperty[]): DataProperty {
+    if (sources && sources.length > 0) {
+      return sources[0];
+    } else {
+      return DataProperty.id;
     }
-    const newDataToPush = this.mapToMultiData([newData], properties);
-    for (let i = 0; i < properties.length; i++) {
-      oldData[i].series.push(...newDataToPush[i].series);
+  }
+
+  pushLatestCollectedData(latestData: CollectedData) {
+    // Filter all data that younger than 1 hour and push there this data
+    const hourAgo = new Date(Date.now() - 60 * 60000);
+    this._hourlyCollectedData = [...this._hourlyCollectedData.filter(value => value.time > hourAgo), latestData];
+  }
+
+  convertStringToArrEnum(sources: string): DataProperty[] {
+    const array: DataProperty[] = [];
+    const arrNumbers = sources.split(',');
+
+    for (let i = 0; i < arrNumbers.length; i++) {
+      array.push(+arrNumbers[i]);
     }
 
-    return oldData;
+    return array;
   }
+
+
+
+  // UPDATE
+  // updateChartWithLatestData(chartToUpdate: DashboardChart): boolean {
+  //   const latestData = this.getLastCollectedData(this._hourlyCollectedData);
+  //   if (!latestData) {
+  //     return false; // Update was unsuccessful
+  //     // return chartToUpdate.data ? chartToUpdate.data : [];
+  //   }
+  //
+  //   let chartData: CustomData[] = [];
+  //   if (chartToUpdate.showCommon) {
+  //     switch (chartToUpdate.type) {
+  //       case ChartType.LineChart:
+  //       case ChartType.BarHorizontal2D:
+  //       case ChartType.BarHorizontalNormalized:
+  //       case ChartType.BarHorizontalStacked:
+  //       case ChartType.BarVertical2D:
+  //       case ChartType.BarVerticalNormalized:
+  //       case ChartType.BarVerticalStacked:
+  //       case ChartType.PolarChart:
+  //       case ChartType.AreaChart:
+  //       case ChartType.AreaChartNormalized:
+  //       case ChartType.AreaChartStacked:
+  //       case ChartType.HeatMap:
+  //         chartData = this.mapToMultiData(this._hourlyCollectedData, chartToUpdate.dataSources);
+  //         break;
+  //       case ChartType.Pie:
+  //         chartData = this.mapToPieSeriesItem(latestData, this.getFirstSource(chartToUpdate.dataSources));
+  //         break;
+  //       default:
+  //         chartData = this.mapToSeriesItem(latestData, chartToUpdate.dataSources);
+  //         break;
+  //     }
+  //   } else {
+  //     const source = this.getFirstSource(chartToUpdate.dataSources);
+  //     switch (chartToUpdate.type) {
+  //       case ChartType.LineChart:
+  //       case ChartType.BarHorizontal2D:
+  //       case ChartType.BarHorizontalNormalized:
+  //       case ChartType.BarHorizontalStacked:
+  //       case ChartType.BarVertical2D:
+  //       case ChartType.BarVerticalNormalized:
+  //       case ChartType.BarVerticalStacked:
+  //       case ChartType.PolarChart:
+  //       case ChartType.AreaChart:
+  //       case ChartType.AreaChartNormalized:
+  //       case ChartType.AreaChartStacked:
+  //       case ChartType.HeatMap:
+  //
+  //         chartData = this.mapToProcessMultiData(chartToUpdate.data, source, chartToUpdate.mostLoaded);
+  //         // chartData = this.mapToProcessMultiDataOnUpdate(chartToUpdate.data, source, chartToUpdate.mostLoaded);
+  //         break;
+  //       case ChartType.Pie:
+  //         chartData = this.mapToProcessesSeriesItem(latestData, source, chartToUpdate.mostLoaded);
+  //         break;
+  //       default:
+  //         chartData = this.mapToProcessesSeriesItem(latestData, source, chartToUpdate.mostLoaded);
+  //         break;
+  //     }
+  //   }
+  //
+  //   chartToUpdate.data = chartData; // [...tempData];
+  // }
+
+  // mapToMultiDataOnUpdate(oldData: CustomData[], newData: CollectedData, properties: DataProperty[], minutes: number): CustomData[] {
+  //   const minutesAgo = new Date(Date.now() - minutes * 60000);
+  //   // const dataForLast10Minutes = dataArr.filter(value => value.time > fiveMinAgo);
+  //
+  //   if (oldData[0].series.length > 20) { // TODO: refactor
+  //     for (let i = 0; i < oldData.length; i++) {
+  //       // oldData.push(oldData.slice(1)); // Start from first element(removes oldest data el)
+  //       oldData[i].series.shift();
+  //     }
+  //     // TODO: remove oldest element from array - use order by or sort or smt coz data can be not ordered by date
+  //     // TODO: maybe depend on chart's setting get from old array specific amount of data or etc.
+  //   }
+  //   const newDataToPush = this.mapToMultiData([newData], properties);
+  //   for (let i = 0; i < properties.length; i++) {
+  //     oldData[i].series.push(...newDataToPush[i].series);
+  //   }
+  //
+  //   return oldData;
+  // }
+  //
+  // mapToProcessMultiDataOnUpdate(oldData: CustomData[],
+  //                               property: DataProperty,
+  //                               procAmount: number = 1): CustomData[] {
+  //   const prop = DataProperty[property];
+  //   if (oldData[0].series.length > 20) { // TODO: refactor
+  //     for (let i = 0; i < oldData.length; i++) {
+  //       // oldData.push(oldData.slice(1)); // Start from first element(removes oldest data el)
+  //       oldData[i].series.shift();
+  //     }
+  //     // TODO: remove oldest element from array - use order by or sort or smt coz data can be not ordered by date
+  //     // TODO: maybe depend on chart's setting get from old array specific amount of data or etc.
+  //   }
+  //
+  //   const processes = this.getMostLoadedProcesses(this.getLastCollectedData(this._hourlyCollectedData), prop, procAmount);
+  //
+  //   const newDataToPush = this.mapToProcessMultiData(this._hourlyCollectedData, property, procAmount);
+  //   for (let i = 0; i < procAmount; i++) {
+  //     oldData[i].series.push(...newDataToPush[i].series);
+  //   }
+  //
+  //   return oldData;
+  // }
 }

@@ -20,6 +20,16 @@ namespace Watcher.Common.Dtos
 
         public Guid GuidId { get; set; }
 
+        public bool AggregationForHour { get; set; }
+        public bool AggregationForDay { get; set; }
+        public bool AggregationForMonth { get; set; }
+
+        public DateTime StatusCheckedAt { get; set; }
+
+        public float CpuMaxPercent { get; set; }
+        public float RamMaxPercent { get; set; }
+        public float DiskMaxPercent { get; set; }
+
         public OrganizationDto Organization { get; set; }
         
         public IList<DashboardDto> Dashboards { get; set; }

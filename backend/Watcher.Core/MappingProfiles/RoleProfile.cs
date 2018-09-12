@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AutoMapper;
-using Watcher.Common.Dtos;
-using Watcher.Common.Requests;
-using Watcher.DataAccess.Entities;
-
-namespace Watcher.Core.MappingProfiles
+﻿namespace Watcher.Core.MappingProfiles
 {
+    using AutoMapper;
+    using Watcher.Common.Dtos;
+    using Watcher.Common.Requests;
+    using Watcher.DataAccess.Entities;
+
     public class RoleProfile : Profile
     {
         public RoleProfile()

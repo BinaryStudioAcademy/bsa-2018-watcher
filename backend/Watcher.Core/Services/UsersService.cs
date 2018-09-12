@@ -1,6 +1,4 @@
-﻿using Watcher.DataAccess.Entities;
-
-namespace Watcher.Core.Services
+﻿namespace Watcher.Core.Services
 {
     using System;
     using System.Collections.Generic;
@@ -9,10 +7,12 @@ namespace Watcher.Core.Services
 
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
+
     using Watcher.Common.Dtos;
     using Watcher.Common.Enums;
     using Watcher.Common.Requests;
     using Watcher.Core.Interfaces;
+    using Watcher.DataAccess.Entities;
     using Watcher.DataAccess.Interfaces;
 
     public class UsersService : IUsersService
@@ -166,8 +166,10 @@ namespace Watcher.Core.Services
                         Name = request.CompanyName ?? "Default",
                         IsActive = true,
                         CreatedByUserId = entity.Id,
-                        ThemeId = 1
-                    };
+                        ThemeId = 1,
+                        ImageURL = await _fileStorageProvider.UploadFileFromStreamAsync(
+                            "https://bsawatcherfiles.blob.core.windows.net/watcher/9580e672-01f4-4429-9d04-4f8d1984b25b.png")
+                };
                     createdUser.UserOrganizations.Add(
                         new UserOrganization
                         {
@@ -233,6 +235,7 @@ namespace Watcher.Core.Services
         {
             var existingEntity = await GetEntityByIdAsync(id);
             var entity = _mapper.Map<UserDto, User>(existingEntity);
+            entity.Role = _mapper.Map<RoleDto, Role>(request.Role);
             entity.Bio = request.Bio;
             entity.FirstName = request.FirstName;
             entity.LastName = request.LastName;

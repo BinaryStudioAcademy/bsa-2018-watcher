@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
-import { ToastrService } from '../../core/services/toastr.service';
-import { InstanceService } from '../../core/services/instance.service';
-import { AuthService } from '../../core/services/auth.service';
-import { Instance } from '../../shared/models/instance.model';
-import { InstanceRequest } from '../models/instance-request.model';
-import { SelectItem } from '../../../../node_modules/primeng/api';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ToastrService} from '../../core/services/toastr.service';
+import {InstanceService} from '../../core/services/instance.service';
+import {AuthService} from '../../core/services/auth.service';
+import {Instance} from '../../shared/models/instance.model';
+import {InstanceRequest} from '../models/instance-request.model';
+import {SelectItem} from 'primeng/api';
 
 @Component({
   selector: 'app-edit-instance',
@@ -21,15 +21,14 @@ export class EditInstanceComponent implements OnInit {
   instance: Instance;
   instanceTitle: string;
   platformsDropdown: SelectItem[];
-  selectedPlatform: string;
   isSaving: Boolean = false;
 
   constructor(private activateRoute: ActivatedRoute,
-    private fb: FormBuilder,
-    private toastrService: ToastrService,
-    private instanceService: InstanceService,
-    private authService: AuthService,
-    private router: Router) {
+              private fb: FormBuilder,
+              private toastrService: ToastrService,
+              private instanceService: InstanceService,
+              private authService: AuthService,
+              private router: Router) {
     this.platformsDropdown = [];
   }
 
@@ -40,7 +39,6 @@ export class EditInstanceComponent implements OnInit {
         this.instanceService.getOne(this.id).subscribe((data: Instance) => {
           if (data) {
             this.instance = data;
-            console.log(this.instance.guidId);
             this.instanceForm = this.getInstanceForm(this.instance);
           }
         });
@@ -54,31 +52,41 @@ export class EditInstanceComponent implements OnInit {
       this.organizationId = user.lastPickedOrganization.id;
     }
     this.instanceForm = this.getInstanceForm(this.instance);
-    this.fillDropdown();
+    this.fillPlatformsDropdown();
     this.instanceForm.controls['platform'].setValue(this.platformsDropdown[0].value);
   }
 
   getInstanceForm(instance: Instance) {
     let form: FormGroup;
-
     if (instance) {
-      form = this.fb.group({
-        title: new FormControl({ value: instance.title, disabled: false }, Validators.required),
-        platform: new FormControl({ value: instance.platform, disabled: false }, Validators.required),
-        address: new FormControl({ value: instance.address, disabled: false }), // , Validators.required
-        guid: new FormControl({ value: instance.guidId, disabled: false })
-      });
       this.instanceTitle = 'EDIT INSTANCE';
-
     } else {
-      form = this.fb.group({
-        title: new FormControl({ value: '', disabled: false }, Validators.required),
-        platform: new FormControl({ value: '', disabled: false }, Validators.required),
-        address: new FormControl({ value: '', disabled: false }), // , Validators.required
-        guid: new FormControl({ value: '', disabled: false })
-      });
+      instance.title = '';
+      instance.platform = '';
+      instance.address = '';
+      instance.guidId = '';
+      instance.aggregationForHour = true;
+      instance.aggregationForDay = true;
+      instance.aggregationForMonth = true;
+      instance.cpuMaxPercent = 90;
+      instance.ramMaxPercent = 90;
+      instance.diskMaxPercent = 90;
+      instance.isActive = true;
       this.instanceTitle = 'NEW INSTANCE';
     }
+
+    form = this.fb.group({
+      title: new FormControl({value: instance.title, disabled: false}, Validators.required),
+      platform: new FormControl({value: instance.platform, disabled: false}, Validators.required),
+      address: new FormControl({value: instance.address, disabled: false}), // , Validators.required
+      guid: new FormControl({value: instance.guidId, disabled: false}),
+      aggregationHour: new FormControl({value: instance.aggregationForHour, disabled: false}),
+      aggregationDay: new FormControl({value: instance.aggregationForDay, disabled: false}),
+      aggregationMonth: new FormControl({value: instance.aggregationForMonth, disabled: false}),
+      cpuMax: new FormControl({value: instance.cpuMaxPercent, disabled: false}),
+      ramMax: new FormControl({value: instance.ramMaxPercent, disabled: false}),
+      diskMax: new FormControl({value: instance.diskMaxPercent, disabled: false})
+    });
     return form;
   }
 
@@ -91,16 +99,13 @@ export class EditInstanceComponent implements OnInit {
         this.instanceService.update(request, this.id).subscribe((res: Response) => {
           this.toastrService.success('updated instance');
 
-          const updatedInstance: Instance = {
-            title: request.title,
-            address: request.address,
-            id: this.id,
-            platform: request.platform,
-            guidId: request.guidId,
-            isActive: true,
-            dashboards: this.instance.dashboards,
-            organization: this.instance.organization
-          };
+          const updatedInstance: Instance = Object.assign({}, request,
+            {
+              id: this.id,
+              dashboards: this.instance.dashboards,
+              organization: this.instance.organization,
+              statusCheckedAt: this.instance.statusCheckedAt
+            });
 
           this.instanceService.instanceEdited.emit(updatedInstance);
           this.router.navigate([`/user/instances/${updatedInstance.id}/${this.instance.guidId}/dashboards`]);
@@ -120,21 +125,26 @@ export class EditInstanceComponent implements OnInit {
     }
   }
 
-  getNewInstance() {
-    const newInstance: InstanceRequest = {
+  getNewInstance(): InstanceRequest {
+    return {
       title: this.instanceForm.controls.title.value,
       address: this.instanceForm.controls.address.value,
       platform: this.instanceForm.controls.platform.value,
       isActive: true,
+      aggregationForDay: this.instanceForm.controls.aggregationDay.value,
+      aggregationForHour: this.instanceForm.controls.aggregationHour.value,
+      aggregationForMonth: this.instanceForm.controls.aggregationMonth.value,
+      cpuMaxPercent: this.instanceForm.controls.cpuMax.value,
+      ramMaxPercent: this.instanceForm.controls.ramMax.value,
+      diskMaxPercent: this.instanceForm.controls.diskMax.value,
       organizationId: this.organizationId
     };
-    return newInstance;
   }
 
-  private fillDropdown(): void {
+  private fillPlatformsDropdown(): void {
     this.platformsDropdown.push(
-      { label: 'Windows', value: 'Windows' },
-      { label: 'Linux', value: 'Linux' });
+      {label: 'Windows', value: 'Windows'},
+      {label: 'Linux', value: 'Linux'});
   }
 
   copyToClipboard(message: string): void {

@@ -1,18 +1,20 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { Router, RouterEvent, ActivatedRoute } from '@angular/router';
+import {Component, OnInit, EventEmitter} from '@angular/core';
+import {MenuItem} from 'primeng/api';
+import {Router, RouterEvent, ActivatedRoute} from '@angular/router';
 
-import { PathService } from '../../core/services/path.service';
-import { MessageService } from 'primeng/api';
-import { AuthService } from '../../core/services/auth.service';
-import { UserService } from '../../core/services/user.service';
-import { ToastrService } from '../../core/services/toastr.service';
+import {PathService} from '../../core/services/path.service';
+import {MessageService} from 'primeng/api';
+import {AuthService} from '../../core/services/auth.service';
+import {UserService} from '../../core/services/user.service';
+import {ToastrService} from '../../core/services/toastr.service';
 import {TokenService} from '../../core/services/token.service';
-import { OverlayPanel } from 'primeng/components/overlaypanel/overlaypanel';
+import {OverlayPanel} from 'primeng/components/overlaypanel/overlaypanel';
 
-import { Organization } from '../../shared/models/organization.model';
-import { User } from '../../shared/models/user.model';
+import {Organization} from '../../shared/models/organization.model';
+import {User} from '../../shared/models/user.model';
+import { DashboardsHub } from '../../core/hubs/dashboards.hub';
 import { ThemeService } from '../../core/services/theme.service';
+
 
 
 @Component({
@@ -38,6 +40,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private tokenService: TokenService,
+    private dashboardsHub: DashboardsHub,
     private userService: UserService,
     private toastrService: ToastrService,
     private router: Router,
@@ -85,26 +88,26 @@ export class HeaderComponent implements OnInit {
       icon: 'fa fa-fw fa-user',
       routerLink: ['/user/settings/user-profile'],
     },
-    {
-      label: 'Organization',
-      icon: 'fa fa-fw fa-building',
-      routerLink: ['/user/settings/organization-profile'],
-    },
-    {
-      label: 'Members',
-      icon: 'fa fa-fw fa-users',
-      routerLink: [`/user/settings/organization-members`],
-    },
-    {
-      label: 'Notifications',
-      icon: 'fa fa-fw fa-send',
-      routerLink: ['/user/settings/notification-settings'],
-    }
+      {
+        label: 'Organization',
+        icon: 'fa fa-fw fa-building',
+        routerLink: ['/user/settings/organization-profile'],
+      },
+      {
+        label: 'Members',
+        icon: 'fa fa-fw fa-users',
+        routerLink: [`/user/settings/organization-members`],
+      },
+      {
+        label: 'Notifications',
+        icon: 'fa fa-fw fa-send',
+        routerLink: ['/user/settings/notification-settings'],
+      }
     ];
 
     this.authService.currentUser.subscribe(
       userData => {
-        this.currentUser = { ...userData };
+        this.currentUser = {...userData};
         this.currentUser.photoURL = this.pathService.convertToUrl(this.currentUser.photoURL);
         this.fillOrganizations();
       }
@@ -132,7 +135,9 @@ export class HeaderComponent implements OnInit {
     this.orgItems.push({
       label: 'Add new',
       icon: 'fa fa-fw fa-plus',
-      command: (onclick) => { this.addNewOrganization(); },
+      command: (onclick) => {
+        this.addNewOrganization();
+      },
     });
   }
 
@@ -174,14 +179,16 @@ export class HeaderComponent implements OnInit {
     // update user in beckend
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
       .subscribe(value => {
-        // update user in frontend
-        this.currentUser.lastPickedOrganizationId = item.id;
-        this.currentUser.lastPickedOrganization = item;
-        this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
-        // notify user about changes
-        this.toastrService.success(`Organization by default was updated. Current organization: "${item.name}"`);
-        this.isChangingOrganization = false;
-      },
+          this.dashboardsHub.unSubscribeFromOrganizationById(this.currentUser.lastPickedOrganizationId);
+          this.dashboardsHub.subscribeToOrganizationById(item.id);
+          // update user in frontend
+          this.currentUser.lastPickedOrganizationId = item.id;
+          this.currentUser.lastPickedOrganization = item;
+          this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
+          // notify user about changes
+          this.toastrService.success(`Organization by default was updated. Current organization: "${item.name}"`);
+          this.isChangingOrganization = false;
+        },
         err => {
           this.toastrService.error('Organization by default was not updated.');
           this.isChangingOrganization = false;

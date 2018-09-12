@@ -20,6 +20,10 @@ namespace Watcher.Common.Dtos
 
         public LongAnswerType Quickness { get; set; }
 
+        public string Name { get; set; }
+
+        public string Email { get; set; }
+
         public DateTime CreatedAt { get; set; }
         
         public UserDto User { get; set; }

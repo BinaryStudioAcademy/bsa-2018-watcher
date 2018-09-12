@@ -30,7 +30,6 @@ export class TokensInterceptor implements HttpInterceptor {
             } else {
               headers = this.headersConfig;
             }
-            console.log(headers);
             const request = req.clone({setHeaders: headers, responseType: 'json'});
             return next.handle(request);
           }));
