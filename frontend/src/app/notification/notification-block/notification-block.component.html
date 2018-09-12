@@ -19,7 +19,8 @@
             'error': notification?.notificationSetting?.type == type.Error}">
         </span>
         <div class="message-content" [ngClass]="{'unread-message': !notification.wasRead}">
-          <span class="message-title text-overflow" style="width:240px">System message</span>
+            <span *ngIf="message.data.instanceGuidId" (click)='redirectToInstance(message.data)'  class="message-title text-overflow clickable" style="width:240px">Instance message</span>
+            <span  *ngIf="!message.data.instanceGuidId" class="message-title text-overflow" style="width:240px">System message</span>
           <div class="message-text">{{notification.text}}</div>
           <div class="message-date text-overflow">{{notification.createdAt | date:'short'}}</div>
         </div>
