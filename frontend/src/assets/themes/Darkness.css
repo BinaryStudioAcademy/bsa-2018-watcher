@@ -683,8 +683,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 /* Panel menu */
 
-.ui-panelmenu .ui-panelmenu-header.ui-state-active > a,a:hover:focus {
-  
+.ui-panelmenu .ui-panelmenu-header.ui-state-active{
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: #F56C00 !important;

@@ -88,6 +88,14 @@ export class OrganizationProfileComponent implements OnInit {
           console.log(this.editable);
         });
       });
+
+      this.themeService.getAll().subscribe(
+        (data) => {
+          if (data.length > 0) {
+            this.themes = data;
+          }
+        }
+      );
   }
 
   onSubmit() {
