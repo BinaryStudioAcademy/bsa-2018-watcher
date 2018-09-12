@@ -19,9 +19,13 @@
             'error': notification?.notificationSetting?.type == type.Error,
             'system': notification?.notificationSetting?.type == type.System}">
         </span>
-        <div class="message-content action" (click)="extendedNotification = extendedNotification ? null : notification.id">
+        <div class="message-content">
           <span class="message-title text-overflow">{{type[notification.notificationSetting.type]}} message</span>
-          <div class="message-text" [ngClass]="{'message-text-short': extendedNotification !== notification.id}">{{notification.text}}</div>
+          <div class="message-text action"
+            [ngClass]="{'message-text-short': extendedNotification !== notification.id}"
+            (click)="extendedNotification = extendedNotification ? null : notification.id">
+            {{notification.text}}
+          </div>
           <div class="message-date text-overflow">{{notification.createdAt | date:'short'}}</div>
         </div>
       </div>
