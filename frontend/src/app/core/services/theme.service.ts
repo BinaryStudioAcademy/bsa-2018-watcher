@@ -20,6 +20,8 @@ export class ThemeService {
 
     const cssUrl = `/assets/themes/${theme.name}.css`;
 
+    this.deleteThemeTags();
+
     const head = document.head;
 
     const link = document.createElement('link');
