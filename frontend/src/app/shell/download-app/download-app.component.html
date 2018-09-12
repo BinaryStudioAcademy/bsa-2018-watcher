@@ -60,7 +60,7 @@
                 <div class="ui-g">
                     <div class="ui-g-12 ui-md-12">
                         <div class="ui-input">
-                            <a href="https://bsawatcherfiles.blob.core.windows.net/watcher/DataCollector.exe"
+                            <a href="{{collectorApp.exeLink}}"
                                 pButton label="Download" (click)="closeDialog()" class="ui-button-info">
                             </a>      
                         </div>
@@ -71,14 +71,14 @@
                 <div class="ui-g">
                     <div class="ui-g-12 ui-md-6">
                         <div class="ui-input">
-                            <a href="https://bsawatcherfiles.blob.core.windows.net/watcher/DataCollector-1.0-3.deb"
+                            <a href="{{collectorApp.debLink}}"
                                 pButton label="Download .deb" (click)="closeDialog()" class="ui-button-info">
                             </a>      
                         </div>
                     </div>
                     <div class="ui-g-12 ui-md-6">
                         <div class="ui-input">
-                            <a href="https://bsawatcherfiles.blob.core.windows.net/watcher/DataCollector-1.0.tgz"
+                            <a href="{{collectorApp.tgzLink}}}"
                                 pButton label="Download .tgz" (click)="closeDialog()" class="ui-button-info">
                             </a>      
                         </div>

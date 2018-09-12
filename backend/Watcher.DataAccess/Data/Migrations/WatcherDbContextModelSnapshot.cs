@@ -15,7 +15,7 @@ namespace Watcher.DataAccess.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.2-rtm-30932")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -136,6 +136,29 @@ namespace Watcher.DataAccess.Data.Migrations
                         new { Id = 29, CreatedById = "8f5487ae-243e-4fe1-9051-8c3aaf7f0013", IsDeleted = false, Name = "dolorem", Type = 0 },
                         new { Id = 30, CreatedById = "b7002900-2813-4bba-9c01-835a58145c98", IsDeleted = false, Name = "ut", Type = 0 }
                     );
+                });
+
+            modelBuilder.Entity("Watcher.DataAccess.Entities.CollectorAppVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("DebLink");
+
+                    b.Property<string>("ExeLink");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("TgzLink");
+
+                    b.Property<string>("Version");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CollectorAppVersions");
                 });
 
             modelBuilder.Entity("Watcher.DataAccess.Entities.Dashboard", b =>

@@ -7,6 +7,9 @@ import { DataService } from '../../../core/services/data.service';
 import { dataPropertyLables, DataProperty } from '../../../shared/models/data-property.enum';
 import { CollectedData } from '../../../shared/models/collected-data.model';
 import { CollectedDataService } from '../../../core/services/collected-data.service';
+import { timeFormat } from 'd3-time-format';
+import { formatDate } from '@angular/common';
+import { DataType } from '../../../shared/models/data-type.enum';
 
 @Component({
   selector: 'app-edit-report-chart',
@@ -24,6 +27,9 @@ export class EditReportChartComponent implements OnInit {
   @Input() dashboardChart: DashboardChart;
   @Input() collectedData: CollectedData[];
   @Input() edit: boolean;
+  @Input() dateFrom: Date;
+  @Input() dateTo: Date;
+  @Input() dataType: DataType;
 
   dropdownTypes: SelectItem[] = [];
   dropdownGroupSources: SelectItemGroup[];
@@ -142,6 +148,20 @@ export class EditReportChartComponent implements OnInit {
   }
 
   processData(): void {
+    const hourDifference = (this.dateTo.getTime() - this.dateFrom.getTime()) / (60 * 60000);
+
+    if (hourDifference > 23) {
+    this.dashboardChart.dateTickFormatting = (value) => {
+      if (value instanceof Date) {
+        if (this.dataType === DataType.AggregationForHour) {
+          return formatDate((<Date>value), 'MMM, d h', 'en-US');
+        } else {
+          return formatDate((<Date>value), 'MMM, d', 'en-US');
+        }
+      }
+     };
+    }
+
     const data = this.collectedData && this.edit ? this.collectedData : this.dataService.fakeCollectedData;
     this.isPreviewAvailable = this.dataService.fulfillChart(data, this.dashboardChart, true);
   }

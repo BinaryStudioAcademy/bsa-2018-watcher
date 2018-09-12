@@ -22,9 +22,13 @@
       <p-calendar #cf2 [(ngModel)]="dateTo" [readonlyInput]="true"></p-calendar>
     </div>
     <div class="ui-g-2 ui-fluid bottom-flex">
-      <p-button label="Get info" [disabled]="!dateTo || !dateFrom" (click)="getInfo()"></p-button>
+      <button (click)="getInfo()" class="ui-button ui-state-default ui-corner-all ui-button-text-only ui-widget btn-inline-flex get-info"
+        [disabled]="!dateTo || !dateFrom">
+        <p-progressSpinner class="btn-spinner" *ngIf="isGetting" strokeWidth="5"></p-progressSpinner>
+        <span class="ui-button-text" *ngIf="!isGetting">Get info</span>
+      </button>
     </div>
-    <div class="ui-g-2 ui-fluid bottom-flex">
+    <div class="ui-g-2 bottom-flex">
       <p-button label="Convert to PDF" [disabled]="!collectedData || (activeTab === tabs[1] && charts.length === 0)" (click)="convertPDF()"></p-button>
     </div>
   </div>
@@ -158,7 +162,7 @@
         </div>
       </div>
       <app-edit-report-chart (addChart)="onAddChart($event)" (editChart)="onEditChart($event)" (closed)="onClosed()" [onDisplay]="onDisplayChartEditing"
-                              [dashboardChart]="chartToEdit" [collectedData]="collectedData" [edit]="edit">
+                              [dashboardChart]="chartToEdit" [collectedData]="collectedData" [edit]="edit" [dateFrom]="dateFrom" [dateTo]="dateTo" [dataType]="selectedType">
 
       </app-edit-report-chart>
     </div>

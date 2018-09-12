@@ -14,6 +14,7 @@ import { ChatType } from 'src/app/shared/models/chat-type.enum';
 import { ChatRequest } from '../../shared/requests/chat-request';
 import { NotificationType } from '../../shared/models/notification-type.enum';
 import { NotificationSetting } from 'src/app/shared/models/notification-setting.model';
+import { OrganizationService } from '../../core/services/organization.service';
 
 @Component({
   selector: 'app-organization-members',
@@ -34,6 +35,7 @@ export class OrganizationMembersComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private organizationService: OrganizationService,
     private userOrganizationService: UserOrganizationService,
     private organizationRoleService: OrganizationRoleService,
     private chatHub: ChatHub,
@@ -46,6 +48,15 @@ export class OrganizationMembersComponent implements OnInit {
       return;
     }
 
+    this.downloadContent();
+
+    this.organizationService.organizationChanged.subscribe( () => {
+      this.currentUser = this.authService.getCurrentUser();
+      this.downloadContent();
+    });
+  }
+
+  downloadContent() {
     this.userOrganizationService
         .getByOrganizationId(this.currentUser.lastPickedOrganizationId)
         .subscribe((value: UserOrganization[]) => {
