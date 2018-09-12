@@ -146,7 +146,7 @@ namespace DataAccumulator.WebAPI.Controllers
                     await _repository.AddEntity(new CollectedData()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        ClientId = new Guid("b733a60b-c35b-4705-ab84-d10e34950950"),
 
                         CollectedDataType = CollectedDataType.Accumulation,
 
@@ -274,8 +274,13 @@ namespace DataAccumulator.WebAPI.Controllers
                     await _validatorRepository.AddEntityAsync(new InstanceSettings()
                     {
                         Id = Guid.NewGuid(),
-                        ClientId = new Guid("25320c5e-f58a-4b1f-b63a-8ee07a840bdf"),
+                        ClientId = new Guid("b733a60b-c35b-4705-ab84-d10e34950950"),
                         IsActive = true,
+
+                        AggregationForHour = true,
+                        AggregationForDay = true,
+                        AggregationForWeek = true,
+                        AggregationForMonth = true,
 
                         RamValidator = true,
                         RamUsagePercentageMax = 95,
@@ -292,6 +297,11 @@ namespace DataAccumulator.WebAPI.Controllers
                         Id = Guid.NewGuid(),
                         ClientId = new Guid("76053df4-6687-4353-8937-b45556748abe"),
                         IsActive = true,
+
+                        AggregationForHour = false,
+                        AggregationForDay = false,
+                        AggregationForWeek = false,
+                        AggregationForMonth = false,
 
                         RamValidator = true,
                         RamUsagePercentageMax = 1,
