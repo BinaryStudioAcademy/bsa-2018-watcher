@@ -105,7 +105,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
               this.fillDashboardChartsWithData(this.activeDashboardItem);
             }
           }
-          this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
+          if (this.dashboardsHub.isConnect) {
+            this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
+          }
+          this.dashboardsHub.connectionEstablished$.subscribe(established => {
+            if (established) {
+              this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
+            } else {
+
+            }
+          });
         }, err => {
           console.error(err);
           this.toastrService.error('Error occurred while fetching instance\'s Collected Data');
