@@ -26,15 +26,18 @@
         private readonly IMapper _mapper;
         private readonly IEmailProvider _emailProvider;
         private readonly IFileStorageProvider _fileStorageProvider;
+        private readonly INotificationService _notificationService;
         public CollectorAppsService(IUnitOfWork uow,
                                     IMapper mapper,
                                     IEmailProvider emailProvider,
-                                    IFileStorageProvider fileStorageProvider)
+                                    IFileStorageProvider fileStorageProvider,
+                                    INotificationService notificationService)
         {
             _uow = uow;
             _mapper = mapper;
             _emailProvider = emailProvider;
             _fileStorageProvider = fileStorageProvider;
+            _notificationService = notificationService;
         }
 
         public async Task<string> UploadFileToStorage(IFormFile file)
@@ -132,6 +135,7 @@
             if(result)
             {
                 return _mapper.Map<CollectorAppVersion, CollectorAppVersionDto>(entity);
+                //_notificationService.
             }
 
             return null;
