@@ -40,6 +40,10 @@ export class DataCollectorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.updateData();
+  }
+
+  updateData() {
     this.collectorAppsService.getAll().subscribe(
       value => {
         this.collectorApps = value;
@@ -48,7 +52,6 @@ export class DataCollectorComponent implements OnInit {
           this.toastrService.error(`Error ocured status: ${error.message}`);
         });
   }
-
   showAddWindow() {
     this.displayAddWindow = true;
   }
@@ -97,7 +100,8 @@ export class DataCollectorComponent implements OnInit {
   onSubmit() {
     this.collectorAppsService.create(this.collectorApp).subscribe(
       value => {
-      this.toastrService.success('CollectorApp was created and sends to email.');
+      this.updateData();
+      this.toastrService.success('CollectorApp was created.');
       },
       error => {
         this.toastrService.error(`Error ocured status: ${error.message}`);
@@ -106,6 +110,25 @@ export class DataCollectorComponent implements OnInit {
       this.initData();
   }
 
+  onDelete(collectorAppToDel) {
+    this.toastrService.confirm().then(
+      confirm => {
+        if (confirm) {
+          this.collectorAppsService.delete(collectorAppToDel.id).subscribe(
+            result => {
+              if (result) {
+                this.updateData();
+                this.toastrService.success('CollectorApp was removed.');
+              } else {
+                this.toastrService.error(`CollectorApp was not removed`);
+              }
+            },
+            error => {
+              this.toastrService.error(`Error ocured status: ${error.message}`);
+          });
+        }
+      });
+  }
 
 
 }

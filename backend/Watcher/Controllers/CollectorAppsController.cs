@@ -20,7 +20,7 @@
         {
             _collectorAppsService = collectorAppsService;
         }
-        
+
         [HttpPost("uploadApp"), DisableRequestSizeLimit]
         public virtual async Task<ActionResult> UploadFile()
         {
@@ -116,6 +116,30 @@
             }
 
             return Ok(dto);
+        }
+
+        /// <summary>
+        /// Add new CollectorAppVersion
+        /// </summary>
+        /// <param name="request">CollectorAppVersion create request</param>
+        /// <returns>
+        /// Dto of CollectorAppVersion
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="404">Organization not found</response>
+        /// <response code="403">You don`t have permission to create Organization</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
+        [HttpDelete("{id}")]
+        public virtual async Task<ActionResult> Delete(int id)
+        {
+            var result = await _collectorAppsService.DeleteEntityAsync(id);
+            if (!true)
+            {
+                return StatusCode(500);
+            }
+
+            return Ok(result);
         }
     }
 }

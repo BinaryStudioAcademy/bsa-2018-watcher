@@ -29,7 +29,7 @@
         <td class="center"><p-checkbox binary="true" [(ngModel)]="collectorApp.isActive"></p-checkbox></td>
         <td>
           <div class="center">
-            <button pButton type="button " label="Remove" class="btnedit ui-button-primary ui-button-raised " (click)="Delete(collectorApp)"></button>
+            <button pButton type="button " label="Remove" class="btnedit ui-button-primary ui-button-raised " (click)="onDelete(collectorApp)"></button>
           </div>
         </td>
       </tr>
@@ -41,12 +41,12 @@
 <p-dialog header="Add new dataCollector version." [(visible)]="displayAddWindow" [modal]="true"
   [maximizable]="false" [baseZIndex]="10000" [width]="600">
 
-    <div class="ui-g ui-fluid">
+<!--     <div class="ui-g ui-fluid">
       <div class="ui-g-12">
         <p class="field">Ceated At:</p>
         <input type="text" [(ngModel)]="collectorApp.ceatedAt" pInputText placeholder="Ceated At" />
       </div>
-    </div>
+    </div> -->
 
     <div class="ui-g ui-fluid">
       <div class="ui-g-8">

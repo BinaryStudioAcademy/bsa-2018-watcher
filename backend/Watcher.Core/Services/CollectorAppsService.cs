@@ -78,5 +78,16 @@
             var dto = _mapper.Map<CollectorAppVersion, CollectorAppVersionDto>(entity);
             return dto;
         }
+
+        public async Task<bool> DeleteEntityAsync(int id)
+        {
+            var entity = await _uow.CollectorAppVersionRepository.GetFirstOrDefaultAsync(i => i.Id == id);
+
+            await _uow.CollectorAppVersionRepository.DeleteAsync(id);
+
+            var result = await _uow.SaveAsync();
+
+            return result;
+        }
     }
 }

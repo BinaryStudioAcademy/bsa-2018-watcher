@@ -26,5 +26,9 @@ export class CollectorAppsService {
     return this.apiService.post(`/${this.ctrlUrl}`, collectorApp);
   }
 
+  delete(id: number): Observable<boolean> {
+    return this.apiService.delete(`/${this.ctrlUrl}/${id}`);
+  }
+
 
 }
