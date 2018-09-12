@@ -134,8 +134,14 @@
             var result = await _uow.SaveAsync();
             if(result)
             {
+                await _notificationService.CreateEntityForAllAsync(new NotificationRequest
+                {
+                    CreatedAt = DateTime.Now,
+                    Type = NotificationType.System,
+                    Text = "New version DataCollector!"
+                });
                 return _mapper.Map<CollectorAppVersion, CollectorAppVersionDto>(entity);
-                //_notificationService.
+               
             }
 
             return null;
