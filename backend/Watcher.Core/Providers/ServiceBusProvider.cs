@@ -1,7 +1,6 @@
 ﻿namespace Watcher.Core.Providers
 {
     using System;
-    using System.Linq;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
@@ -22,17 +21,16 @@
     using Serilog.Context;
 
     using ServiceBus.Shared.Common;
+    using ServiceBus.Shared.Enums;
     using ServiceBus.Shared.Messages;
     using ServiceBus.Shared.Queue;
-    using ServiceBus.Shared.Enums;
 
     using Watcher.Common.Dtos;
-    using Watcher.Core.Hubs;
-    using Watcher.Core.Interfaces;
     using Watcher.Common.Enums;
     using Watcher.Common.Requests;
+    using Watcher.Core.Hubs;
+    using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Interfaces;
-
 
     public class ServiceBusProvider : IServiceBusProvider, IDisposable
     {
@@ -47,6 +45,7 @@
         private readonly QueueClient _instanceErrorQueueClient;
         private readonly QueueClient _instanceSettingsQueueClient;
         private readonly QueueClient _instanceNotifyQueueClient;
+        private readonly QueueClient _instanceAnomalyReportQueueClient;
 
         public ServiceBusProvider(
             ILoggerFactory loggerFactory,
@@ -64,6 +63,7 @@
             _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
             _instanceSettingsQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.SettingsQueueName);
             _instanceNotifyQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.NotifyQueueName);
+            _instanceAnomalyReportQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.AnomalyReportQueueName);
 
             _azureQueueReceiver = azureQueueReceiver;
             _azureQueueReceiver.Receive<InstanceCollectedDataMessage>(
@@ -87,12 +87,53 @@
                 ExceptionWhileProcessingHandler,
                 OnWait);
 
+            _azureQueueReceiver.Receive<InstanceAnomalyReportMessage>(
+                _instanceAnomalyReportQueueClient,
+                OnAnomalyReportProcessAsync,
+                ExceptionReceivedHandler,
+                ExceptionWhileProcessingHandler,
+                OnWait);
+
             _azureQueueSender = azureQueueSender;
         }
 
-        private void OnWait()
+        private async Task<MessageProcessResponse> OnAnomalyReportProcessAsync(InstanceAnomalyReportMessage arg, CancellationToken stoppingToken)
         {
-            Debug.WriteLine("*******************WAITING***********************");
+            if (stoppingToken.IsCancellationRequested)
+            {
+                using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+                using (LogContext.PushProperty("Source", this.GetType().Name))
+                {
+                    _logger.LogError("Cancellation was requested, stopping token.");
+                }
+
+                return MessageProcessResponse.Abandon;
+            }
+
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
+
+                var notificationRequest = new NotificationRequest
+                                              {
+                                                  Text = "Anomaly Report was created on instance: " + arg.InstanceId,
+                                                  CreatedAt = arg.AnomalyReport.Date,
+                                                  InstanceId = arg.InstanceId,
+                                                  Type = NotificationType.Info
+                                              };
+
+                var result = await notificationService.CreateAnomalyReportNotificationAsync(notificationRequest, arg.AnomalyReport);
+
+                if (result == null)
+                {
+                    return MessageProcessResponse.Abandon;
+                }
+            }
+
+            _logger.LogInformation("Instance Notification Message was created.");
+
+            return MessageProcessResponse.Complete;
         }
 
         public Task SendInstanceSettingsAsync(InstanceSettingsMessage message)
@@ -216,16 +257,17 @@
             if (collectedDataDto != null)
             {
                 tasks.Add(_dashboardsHubContext.Clients.Group(collectedDataDto.ClientId.ToString()).SendAsync("InstanceDataTick", collectedDataDto));
+                _logger.LogInformation("Information Message with instanceData to Dashboards hub clients was sent.");
             }
 
             if (instanceCheckedDto != null)
             {
                 tasks.Add(_dashboardsHubContext.Clients.Group(instanceCheckedDto.OrganizationId.ToString()).SendAsync("InstanceStatusCheck", instanceCheckedDto));
+                _logger.LogInformation("Information Message with instance check tome to Dashboards hub clients was sent.");
             }
 
             await Task.WhenAll(tasks);
 
-            _logger.LogInformation("Information Message with instanceData to Dashboards hub clients was sent.");
             return MessageProcessResponse.Complete;
         }
 
@@ -242,6 +284,11 @@
         private void ExceptionWhileProcessingHandler(Exception ex)
         {
             _logger.LogError($"Message handler encountered an exception {ex.Message}.");
+        }
+
+        private void OnWait()
+        {
+            Debug.WriteLine("*******************WAITING***********************");
         }
 
         #region Disposable Support

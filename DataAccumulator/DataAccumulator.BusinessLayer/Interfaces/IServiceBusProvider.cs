@@ -14,5 +14,7 @@
 
         Task SendErrorMessage(Guid instanceId, string errorMessage);
         Task SendNotificationMessage(InstanceNotificationMessage message);
+
+        Task SendAnomalyReportMessage(InstanceAnomalyReportMessage message);
     }
 }

@@ -88,6 +88,7 @@ namespace Watcher
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
                     o.SettingsQueueName = serviceBusSection["SettingsQueueName"];
                     o.NotifyQueueName = serviceBusSection["NotifyQueueName"];
+                    o.AnomalyReportQueueName = serviceBusSection["AnomalyReportQueueName"];
                 });
             
             services.ConfigureSwagger(Configuration);

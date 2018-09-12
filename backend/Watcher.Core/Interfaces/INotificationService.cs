@@ -3,9 +3,10 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using DataAccumulator.Shared.Models;
+
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
-    using Watcher.Common.Enums;
 
     public interface INotificationService
     {
@@ -24,5 +25,7 @@
         Task<bool> UpdateEntitiesAsync(IEnumerable<NotificationUpdateRequest> requests);
 
         Task<bool> DeleteEntityByIdAsync(int id);
+
+        Task<IEnumerable<NotificationDto>> CreateAnomalyReportNotificationAsync(NotificationRequest request, AzureMLAnomalyReport report);
     }
 }

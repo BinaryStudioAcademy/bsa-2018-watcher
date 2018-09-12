@@ -7,20 +7,27 @@ using DataAccumulator.Shared.Models;
 
 namespace DataAccumulator.DataAggregator
 {
+    using DataAccumulator.BusinessLayer.Interfaces;
+
+    using ServiceBus.Shared.Messages;
+
     public class DataAggregatorCore : IDataAggregatorCore<CollectedDataDto>
     {
         private readonly IAggregatorService<CollectedDataDto> _aggregatorService;
         private readonly IAnomalyDetector _anomalyDetector;
+        private readonly IServiceBusProvider _serviceBusProvider;
 
-        public DataAggregatorCore(IAggregatorService<CollectedDataDto> aggregatorService, IAnomalyDetector anomalyDetector)
+        public DataAggregatorCore(IAggregatorService<CollectedDataDto> aggregatorService, IAnomalyDetector anomalyDetector, IServiceBusProvider provider)
         {
             _aggregatorService = aggregatorService;
             _anomalyDetector = anomalyDetector;
+            _serviceBusProvider = provider;
         }
 
         public async Task AggregatingData(CollectedDataType sourceType, CollectedDataType destinationType, 
             TimeSpan interval, bool deleteSource)
         {
+            // Need destinationType,
             // Subtract interval from the current time
             DateTime timeFrom = DateTime.Now.Add(-interval);
             DateTime timeTo = DateTime.Now;
@@ -33,7 +40,7 @@ namespace DataAccumulator.DataAggregator
 
             if (filteredCollectedDataDtos != null)
             {
-                await SendMLReport(filteredCollectedDataDtos);
+                await SendMLReport(filteredCollectedDataDtos, destinationType);
 
                 var collectedDataDtosAverage =
                     from collectedDataDto in filteredCollectedDataDtos
@@ -106,11 +113,23 @@ namespace DataAccumulator.DataAggregator
             }
         }
 
-        private async Task SendMLReport(IEnumerable<CollectedDataDto> data)
+        private async Task SendMLReport(IEnumerable<CollectedDataDto> data, CollectedDataType reportType)
         {
             try
             {
-                var result = await _anomalyDetector.AnalyzeData(data);
+                var collectedDataDtos = data as CollectedDataDto[] ?? data.ToArray();
+                var firstData = collectedDataDtos.FirstOrDefault();
+                if (firstData != null)
+                {
+                    var result = await _anomalyDetector.AnalyzeData(collectedDataDtos);
+                    result.CollectedDataTypeOfReport = reportType;
+                    var reportMessage = new InstanceAnomalyReportMessage
+                                          {
+                                              AnomalyReport = result,
+                                              InstanceId = firstData.ClientId
+                                          };
+                    await _serviceBusProvider.SendAnomalyReportMessage(reportMessage);
+                }
                 // WebServer - DataAccumulator
                 // TODO: Create new notification model 
                 // Notification { Type => Hourly|Weekly|Dayly, Report => AzureMLReport }  

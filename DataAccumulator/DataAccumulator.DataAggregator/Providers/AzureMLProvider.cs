@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace DataAccumulator.DataAggregator.Providers
 {
-    public class AzureMLProvider: IAzureMLProvider
+    public class AzureMLProvider : IAzureMLProvider
     {
         private static HttpClient _client = new HttpClient();
         public AzureMLProvider(IOptions<AzureMLOptions> options)

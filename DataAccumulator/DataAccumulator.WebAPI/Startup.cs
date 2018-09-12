@@ -59,6 +59,7 @@ namespace DataAccumulator
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
                     o.SettingsQueueName = serviceBusSection["SettingsQueueName"];
                     o.NotifyQueueName = serviceBusSection["NotifyQueueName"];
+                    o.AnomalyReportQueueName = serviceBusSection["AnomalyReportQueueName"];
                 });
 
             var azureMLSection = Configuration.GetSection("AzureML");

@@ -4,16 +4,18 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
-    
-    using Microsoft.EntityFrameworkCore;
+
+    using DataAccumulator.Shared.Models;
+
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.EntityFrameworkCore;
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
-    using Watcher.Core.Interfaces;
-    using Watcher.DataAccess.Interfaces;
     using Watcher.Core.Hubs;
+    using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Entities;
+    using Watcher.DataAccess.Interfaces;
 
     public class NotificationService : INotificationService
     {
@@ -226,6 +228,11 @@
             var result = await _uow.SaveAsync();
 
             return result;
+        }
+
+        public Task<IEnumerable<NotificationDto>> CreateAnomalyReportNotificationAsync(NotificationRequest request, AzureMLAnomalyReport report)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

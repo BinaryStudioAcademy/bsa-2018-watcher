@@ -7,6 +7,8 @@ namespace DataAccumulator.Shared.Models
     {
         public DateTime Date { get; set; }
 
+        public CollectedDataType CollectedDataTypeOfReport { get; set; }
+
         public List<AzureMLAnomalyGroup> AnomalyGroups { get; set; }
     }
 
