@@ -14,7 +14,6 @@
                                        bool dayAggregation,
                                        bool weekAggregation,
                                        bool monthAggregation,
-                                       bool weekAggregation,
                                        float cpuMax,
                                        float ramMax,
                                        float diskMax): base(instanceId)
@@ -24,7 +23,6 @@
             AggregationForDay = dayAggregation;
             AggregationForWeek = weekAggregation;
             AggregationForMonth = monthAggregation;
-            AggregationForWeek = weekAggregation;
             CpuMaxPercent = cpuMax;
             RamMaxPercent = ramMax;
             DiskMaxPercent = diskMax;
@@ -36,7 +34,6 @@
         public bool AggregationForDay { get; set; }
         public bool AggregationForWeek { get; set; }
         public bool AggregationForMonth { get; set; }
-        public bool AggregationForWeek { get; set; }
 
         public float CpuMaxPercent { get; set; }
         public float RamMaxPercent { get; set; }

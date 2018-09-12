@@ -28,7 +28,6 @@
         public bool AggregationForDay { get; set; }
         public bool AggregationForWeek { get; set; }
         public bool AggregationForMonth { get; set; }
-        public bool AggregationForWeek { get; set; }
 
         public float CpuMaxPercent { get; set; }
         public float RamMaxPercent { get; set; }

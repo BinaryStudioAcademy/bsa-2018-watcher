@@ -80,12 +80,12 @@
                 instanceId = instance.Id;
             }
 
-            var entity = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
+            var entityNotification = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
 
-            entity.InstanceId = instanceId;
-            entity.InstanceGuidId = notificationRequest.InstanceId;
+            entityNotification.InstanceId = instanceId;
+            entityNotification.InstanceGuidId = notificationRequest.InstanceId;
 
-            if (entity.UserId != null)
+            if (entityNotification.UserId != null)
             {
                 receivers.Add(await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == notificationRequest.UserId));
             }
