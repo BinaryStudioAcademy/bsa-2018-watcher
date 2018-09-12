@@ -11,8 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccumulator.BusinessLayer\DataAccumulator.BusinessLayer.csproj" />
-    <ProjectReference Include="..\DataAccumulator.DataAccessLayer\DataAccumulator.DataAccessLayer.csproj" />
-    <ProjectReference Include="..\DataAccumulator.Shared\DataAccumulator.Shared.csproj" />
   </ItemGroup>
 
 </Project>

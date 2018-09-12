@@ -236,19 +236,17 @@
             var receivers = new List<User>();
             var notifications = new List<NotificationDto>();
 
-            if (notificationRequest.InstanceId != null)
-            {
-                var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(i => i.GuidId == notificationRequest.InstanceId,
-                                   include: instances => instances.Include(o => o.Organization)
-                                                                     .ThenInclude(uo => uo.UserOrganizations)
-                                                                        .ThenInclude(uo => uo.User));
+            if (notificationRequest.InstanceId == null) return notifications;
 
-                if (instance != null)
-                {
-                    notificationRequest.OrganizationId = instance.OrganizationId;
-                    receivers.AddRange(instance.Organization.UserOrganizations.Select(userOrganization => userOrganization.User));
-                }
-            }
+            var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(i => i.GuidId == notificationRequest.InstanceId,
+                               include: instances => instances.Include(o => o.Organization)
+                                   .ThenInclude(uo => uo.UserOrganizations)
+                                   .ThenInclude(uo => uo.User));
+
+            if (instance == null) return notifications;
+
+            notificationRequest.OrganizationId = instance.OrganizationId;
+            receivers.AddRange(instance.Organization.UserOrganizations.Select(userOrganization => userOrganization.User));
 
             var stringHtml = @"<html>
                       <body>
@@ -258,14 +256,14 @@
                       <p>Sincerely,<br>-Jack</br></p>
                       </body>
                       </html>";
-            
+
             foreach (var receiver in receivers)
             {
                 var entity = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
                 entity.UserId = receiver.Id;
-
+                entity.InstanceId = instance.Id;
                 var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(
-                    ns => ns.Type == notificationRequest.Type && ns.UserId == entity.UserId);
+                                              ns => ns.Type == notificationRequest.Type && ns.UserId == entity.UserId);
 
                 if (notificationSetting == null || notificationSetting.IsDisable) continue;
 
