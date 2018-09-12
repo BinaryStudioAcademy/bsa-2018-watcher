@@ -15,6 +15,8 @@ namespace Watcher.Common.Requests
 
         public int MostLoaded { get; set; }
 
+        public int HistoryTime { get; set; }
+
         public int DashboardId { get; set; }
         
         public string SchemeType { get; set; } // = "ordinal";

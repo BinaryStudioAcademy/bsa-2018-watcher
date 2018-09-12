@@ -36,8 +36,61 @@
         [HttpGet("{userId}")]
         public virtual async Task<ActionResult<IEnumerable<NotificationDto>>> GetEntitiesByUserId(string userId)
         {
-            // Fix?
             var dtos = await _notificationService.GetEntitiesByUserIdAsync(userId);
+
+            return Ok(dtos);
+        }
+
+        /// <summary>
+        /// Add new notification
+        /// </summary>
+        /// <param name="request">Notification create request</param>
+        /// <returns>
+        /// Dto of Notification
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
+        [HttpPost]
+        public virtual async Task<ActionResult<NotificationDto>> Create([FromBody] NotificationRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var dtos = await _notificationService.CreateEntityAsync(request);
+            if (dtos == null)
+            {
+                return StatusCode(500);
+            }
+
+            return Ok(dtos);
+        }
+
+        /// <summary>
+        /// Add new notification for everyone user
+        /// </summary>
+        /// <param name="request">Notification create request</param>
+        /// <returns>
+        /// Dto of Notifications
+        /// </returns>
+        /// <response code="500">Internal error on server</response>
+        /// <response code="400">Model is not valid</response>
+        /// <response code="200">Success</response>
+        [HttpPost("everyone")]
+        public virtual async Task<ActionResult<NotificationDto>> CreateForAll([FromBody] NotificationRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var dtos = await _notificationService.CreateEntityForAllAsync(request);
+            if (dtos == null)
+            {
+                return StatusCode(500);
+            }
 
             return Ok(dtos);
         }
@@ -77,7 +130,7 @@
         }
 
 
-        [HttpPut("{id}")]
+        [HttpDelete("{id}")]
         public virtual async Task<ActionResult> Delete([FromRoute] int id)
         {
             if (!ModelState.IsValid)

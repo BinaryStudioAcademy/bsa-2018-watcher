@@ -12,7 +12,7 @@
 
         Task<DashboardDto> GetDashboardByIdAsync(int id);
 
-        Task<DashboardDto> CreateDashboardAsync(DashboardRequest dashbordRequest);
+        Task<DashboardDto> CreateDashboardAsync(CreateDashboardRequest dashbordRequest);
 
         Task<bool> UpdateDashboardByIdAsync(DashboardRequest dashbordRequest, int id);
 

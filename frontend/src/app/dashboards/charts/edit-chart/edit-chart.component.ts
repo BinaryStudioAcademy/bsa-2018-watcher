@@ -30,21 +30,25 @@ export class EditChartComponent implements OnInit {
   @Input() dashboardId: number;
   @Input() dashboardChart: DashboardChart;
 
-  dropdownTypes: SelectItem[] = [];
-  dropdownSources: SelectItem[];
-  dropdownGroupSources: SelectItemGroup[];
+  dropdownTypes: SelectItemGroup[] = [];
+  dropdownSources: SelectItem[] = [];
+  dropdownGroupSources: SelectItemGroup[] = [];
 
   type = ChartType;
   colorSchemes = colorSets;
 
-  historyTime: number;
+  isEditing: boolean;
   isPreviewAvailable: boolean;
   isTimeAvailable: boolean;
-  isXAxisAvailable: boolean;
-  isYAxisAvailable: boolean;
 
   get dialogTitle() {
-    return (this.dashboardChart && this.dashboardChart.id) ? 'Edit chart' : 'Create chart';
+    if (this.dashboardChart && this.dashboardChart.id) {
+      this.isEditing = true;
+      return 'Edit Chart';
+    } else {
+      this.isEditing = false;
+      return 'CreateChart';
+    }
   }
 
   get spinnerDisabled() {
@@ -61,26 +65,61 @@ export class EditChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.onDisplay.subscribe((isShow: boolean) => this.visible = isShow);
-    this.dashboardChart.showCommon = false;
-
-    // Fill dropdawn with sources
-    Object.keys(ChartType).forEach(type => {
-      const number = Number(type);
-      if (!isNaN(number)) {
-        this.dropdownTypes.push({label: chartTypeLabels[number], value: number });
-      }
+    this.onDisplay.subscribe((isShow: boolean) => {
+      this.visible = isShow;
+      this.processData();
     });
 
+    this.dashboardChart.showCommon = false;
+
+    // Fill dropdown with grouped sources
+    this.dropdownTypes = [{
+      label: 'Bar Charts',
+      items: [
+        { label: chartTypeLabels[ChartType.BarVertical], value: ChartType.BarVertical },
+        { label: chartTypeLabels[ChartType.BarHorizontal], value: ChartType.BarHorizontal },
+        { label: chartTypeLabels[ChartType.BarVertical2D], value: ChartType.BarVertical2D },
+        { label: chartTypeLabels[ChartType.BarHorizontal2D], value: ChartType.BarHorizontal2D },
+        { label: chartTypeLabels[ChartType.BarVerticalStacked], value: ChartType.BarVerticalStacked },
+        { label: chartTypeLabels[ChartType.BarHorizontalStacked], value: ChartType.BarHorizontalStacked },
+        { label: chartTypeLabels[ChartType.BarVerticalNormalized], value: ChartType.BarVerticalNormalized },
+        { label: chartTypeLabels[ChartType.BarHorizontalNormalized], value: ChartType.BarHorizontalNormalized },
+      ]
+    }, {
+      label: 'Line/Area Charts',
+      items: [
+        { label: chartTypeLabels[ChartType.LineChart], value: ChartType.LineChart },
+        { label: chartTypeLabels[ChartType.AreaChart], value: ChartType.AreaChart },
+        { label: chartTypeLabels[ChartType.AreaChartNormalized], value: ChartType.AreaChartNormalized },
+        { label: chartTypeLabels[ChartType.AreaChartStacked], value: ChartType.AreaChartStacked },
+      ],
+    }, {
+      label: 'Pie Charts',
+      items: [
+        { label: chartTypeLabels[ChartType.Pie], value: ChartType.Pie },
+        { label: chartTypeLabels[ChartType.PieGrid], value: ChartType.PieGrid },
+        { label: chartTypeLabels[ChartType.AdvancedPie], value: ChartType.AdvancedPie },
+      ]
+    }, {
+        label: 'Other Charts',
+        items: [
+          { label: chartTypeLabels[ChartType.ResourcesTable], value: ChartType.ResourcesTable },
+          { label: chartTypeLabels[ChartType.NumberCards], value: ChartType.NumberCards },
+          { label: chartTypeLabels[ChartType.Guage], value: ChartType.Guage },
+          { label: chartTypeLabels[ChartType.PolarChart], value: ChartType.PolarChart },
+          { label: chartTypeLabels[ChartType.HeatMap], value: ChartType.HeatMap },
+          { label: chartTypeLabels[ChartType.TreeMap], value: ChartType.TreeMap },
+        ]}
+    ];
+
+    // Object.keys(ChartType).forEach(type => {
+    //   const number = Number(type);
+    //   if (!isNaN(number)) {
+    //     this.dropdownTypes.push({label: chartTypeLabels[number], value: number });
+    //   }
+    // });
+
     this.resetBuilderForm();
-  }
-
-  getMultiSelectNumber() {
-    return this.dashboardChart.type === ChartType.Pie ? 1 : null;
-  }
-
-  updtateReviewAllowing() {
-    this.isPreviewAvailable = this.dashboardChart.showCommon;
   }
 
   dropDownSelect(event) {
@@ -96,6 +135,7 @@ export class EditChartComponent implements OnInit {
 
     switch (this.dashboardChart.type) {
       case ChartType.ResourcesTable:
+      case ChartType.NumberCards:
         break;
       default:
         // Disabling another groups
@@ -114,12 +154,30 @@ export class EditChartComponent implements OnInit {
   resetBuilderForm() {
     this.dashboardChart.dataSources = [];
     this.createSourceItems();
-    this.updtateReviewAllowing();
     this.dropdownSources.forEach(item => item.disabled = false);
+
+    if (!this.isEditing) {
+      this.dashboardChart.title = chartTypeLabels[this.dashboardChart.type];
+      this.dashboardChart.xAxisLabel = '';
+      this.dashboardChart.yAxisLabel = '';
+      this.dashboardChart.legendTitle = 'Legend';
+    } else {
+      this.dashboardChart.title = this.dashboardChart.title || chartTypeLabels[this.dashboardChart.type];
+      this.dashboardChart.legendTitle = this.dashboardChart.legendTitle || 'Legend';
+    }
+
+    this.isPreviewAvailable = this.dashboardChart.showCommon;
+    this.dashboardChart.showXAxis = true;
+    this.dashboardChart.showYAxis = true;
+    this.isTimeAvailable = false;
+
 
     switch (this.dashboardChart.type) {
       case ChartType.ResourcesTable:
-        this.dashboardChart.showCommon = true; // TODO: change
+        this.dashboardChart.showCommon = true;
+        this.dashboardChart.showXAxis = false;
+        this.dashboardChart.showYAxis = false;
+        this.dashboardChart.showLegend = false;
         this.dashboardChart.dataSources = [
           DataProperty.name,
           DataProperty.pCpu,
@@ -128,29 +186,54 @@ export class EditChartComponent implements OnInit {
         ];
         break;
       case ChartType.LineChart:
+      case ChartType.AreaChart:
+      case ChartType.AreaChartStacked:
+      case ChartType.AreaChartNormalized:
+      case ChartType.PolarChart:
         this.isTimeAvailable = true;
-        this.isXAxisAvailable = true;
         this.dashboardChart.xAxisLabel = 'Time';
-        this.isYAxisAvailable = true;
-        this.dashboardChart.yAxisLabel = 'Percentage %';
+        this.dashboardChart.yAxisLabel = 'Value';
         break;
       case ChartType.BarVertical:
-        this.isTimeAvailable = false;
-        this.isXAxisAvailable = true;
         this.dashboardChart.xAxisLabel = 'Parameters';
-        this.isYAxisAvailable = true;
-        this.dashboardChart.yAxisLabel = 'Percentage %';
+        this.dashboardChart.yAxisLabel = 'Value';
+        break;
+      case ChartType.BarVertical2D:
+      case ChartType.BarVerticalStacked:
+      case ChartType.BarVerticalNormalized:
+        this.isPreviewAvailable = true;
+        this.dashboardChart.xAxisLabel = 'Parameters';
+        this.dashboardChart.yAxisLabel = 'Value';
+        break;
+      case ChartType.BarHorizontal:
+        this.dashboardChart.xAxisLabel = 'Value';
+        this.dashboardChart.yAxisLabel = 'Parameters';
+        break;
+      case ChartType.BarHorizontal2D:
+      case ChartType.BarHorizontalStacked:
+      case ChartType.BarHorizontalNormalized:
+        this.isTimeAvailable = true;
+        this.dashboardChart.xAxisLabel = 'Value';
+        this.dashboardChart.yAxisLabel = 'Parameters';
         break;
       case ChartType.Guage:
-        this.isTimeAvailable = false;
-        this.isYAxisAvailable = true;
+        this.dashboardChart.showXAxis = false;
+        this.dashboardChart.showLegend = false;
         this.dashboardChart.yAxisLabel = 'Process';
-        this.isXAxisAvailable = false;
-        this.dashboardChart.xAxisLabel = '';
       break;
-      default:
-        this.isYAxisAvailable = false;
-        this.isXAxisAvailable = false;
+      case ChartType.HeatMap:
+        this.dashboardChart.showLegend = false;
+        this.dashboardChart.yAxisLabel = 'Intensivity';
+        this.dashboardChart.xAxisLabel = 'Parameters';
+        break;
+      case ChartType.Pie:
+      case ChartType.AdvancedPie:
+      case ChartType.PieGrid:
+      case ChartType.TreeMap:
+      case ChartType.NumberCards:
+        this.dashboardChart.showLegend = false;
+        this.dashboardChart.showXAxis = false;
+        this.dashboardChart.showYAxis = false;
         break;
     }
   }
@@ -167,6 +250,9 @@ export class EditChartComponent implements OnInit {
         return;
       }
       case ChartType.Pie:
+      case ChartType.AdvancedPie:
+      case ChartType.PieGrid:
+      case ChartType.TreeMap:
         if (this.dashboardChart.showCommon) {
           this.dropdownGroupSources = [{
             label: 'Percentage',
@@ -211,7 +297,7 @@ export class EditChartComponent implements OnInit {
     ];
   }
 
-  processChartType() {
+  selectChartType() {
     this.resetBuilderForm();
     this.processData();
   }
@@ -229,7 +315,7 @@ export class EditChartComponent implements OnInit {
       return;
     }
 
-    this.isPreviewAvailable = this.dataService.fulfillChart(this.dataService.fakeCollectedData, this.dashboardChart);
+    this.isPreviewAvailable = this.dataService.fulfillChart(this.dataService.fakeCollectedData, this.dashboardChart, true);
   }
 
   closeDialog() {
@@ -275,6 +361,7 @@ export class EditChartComponent implements OnInit {
       showCommon: this.dashboardChart.showCommon,
       threshold: this.dashboardChart.threshold,
       mostLoaded: this.dashboardChart.mostLoaded,
+      historyTime: this.dashboardChart.historyTime,
       schemeType: this.dashboardChart.colorScheme.name,
       dashboardId: this.dashboardId,
       showLegend: this.dashboardChart.showLegend,

@@ -1,6 +1,19 @@
+.working-area
+    margin: 20px
+
+.title
+    padding-bottom: 10px
+    font-size: 22px
+    font-weight: normal
+    text-transform: uppercase
+
+hr
+    border: 0
+    height: 0
+    border-top: 1px solid rgba(0, 0, 0, 0.1)
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3)
+    
 .table
-    width: 90%
-    margin: auto
 
 .t-header
     background: #007ad9 !important
@@ -32,14 +45,17 @@
     align-items: center
 
 .filters
-    width: 90%
-    margin: auto
-    margin-top: 50px
     display: flex
     justify-content: space-between
+    margin-bottom: 20px
 
 .filter-label
+    font-size: 14px
+    padding-top: 2px
+    padding-left: 2px
+    padding-bottom: 13px
     margin-bottom: 2px
+    margin-top: 0
 
 .bottom-flex
     display: flex
@@ -47,7 +63,72 @@
     align-items: flex-end
 
 .paginator
-    width: 90%
-    margin: auto
     margin-top: 20px
     margin-bottom: 5px
+
+.charts-area
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr))
+    grid-gap: 20px
+    justify-content: center
+
+.chart
+    display: flex
+    min-height: 400px
+
+.chart-title
+    text-align: center
+    font-size: 20px
+    font-weight: bold
+
+.chart-item
+    position: relative
+    box-shadow: 2px 2px 5px 0px #c2c1c1
+    background-color: white
+    padding: 15px
+
+.icon-panel
+    position: absolute
+    top: .25em
+    right: .25em
+    display: inline-block
+    vertical-align: text-top
+
+.action-icon
+	cursor: pointer
+	color: gray
+
+.action-icon:hover
+    color: black
+
+.dashboard-options
+    text-align: right
+    margin-top: 15px
+    margin-bottom: 15px
+
+.options-btn
+    color: #9d9d9d
+    background-color: #F8FAFC
+    border: 1px solid #F8FAFC
+    font-size: 20px
+    cursor: pointer
+    &:hover
+        color: black
+
+.disabled-opt
+    color: #9d9d9d !important
+
+.gear:hover, .gear:enabled:focus, .gear:enabled:hover
+    color: #474747
+    background-color: #F8FAFC
+    border: 1px solid #F8FAFC
+
+.tutorial
+    margin: 100px auto
+    width: max-content
+    .tutorial-item 
+        font-size: 30px
+        white-space: nowrap
+        margin: 15px
+        color: gray
+

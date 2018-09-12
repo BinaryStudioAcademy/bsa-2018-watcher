@@ -51,6 +51,9 @@
 
         private ICollectorAppVersionRepository _collectorAppVersionRepository;
 
+
+        private IThemeRepository _themeRepository;
+        
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -118,6 +121,8 @@
                 return _notificationsRepository;
             }
         }
+
+        public IThemeRepository ThemeRepository => _themeRepository ?? (_themeRepository = new ThemeRepository(_context, _mapper));
         
         public async Task<bool> SaveAsync()
         {

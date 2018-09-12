@@ -2,7 +2,17 @@ export interface InstanceRequest  {
     title: string;
     address: string;
     platform: string;
-    guidId?: string;
     isActive: boolean;
+
+    aggregationForHour: boolean;
+    aggregationForDay: boolean;
+    aggregationForMonth: boolean;
+
+    cpuMaxPercent: number;
+    ramMaxPercent: number;
+    diskMaxPercent: number;
+
     organizationId: number;
+    guidId?: string;
+
 }

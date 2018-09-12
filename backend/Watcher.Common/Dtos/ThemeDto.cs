@@ -10,8 +10,14 @@ namespace Watcher.Common.Dtos
 
         public string Name { get; set; }
 
-        public string FontFamily { get; set; }
+        public string BodyColor { get; set; }
 
-        public string BackgroundColor { get; set; }
+        public string ThemePrimaryColor { get; set; }
+
+        public string ThemeSecondaryColor { get; set; }
+
+        public string ControlsHeight { get; set; }
+
+        public string ButtonFontSize { get; set; }
     }
 }

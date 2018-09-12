@@ -10,6 +10,9 @@ import { environment } from '../../../environments/environment';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { User } from '../../shared/models/user.model';
 import { UserOrganizationService } from '../../core/services/user-organization.service';
+import { SelectItem } from 'node_modules/primeng/api';
+import { Theme } from '../../shared/models/theme.model';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-organization-profile',
@@ -23,7 +26,8 @@ export class OrganizationProfileComponent implements OnInit {
     private organizationInvitesService: OrganizationInvitesService,
     private authService: AuthService,
     private userOrganizationService: UserOrganizationService,
-    private toastrService: ToastrService) {
+    private toastrService: ToastrService,
+    private themeService: ThemeService) {
       this.cropperSettings = new CropperSettings();
       this.cropperSettings.width = 400;
       this.cropperSettings.height = 200;
@@ -53,6 +57,10 @@ export class OrganizationProfileComponent implements OnInit {
   imageUrl = '';
   imageType: string;
   data: any;
+  themes: Theme[] = [];
+  themeDropdown: SelectItem[] = [];
+  selectedTheme: Theme;
+  selectedThemeName: string;
 
   user: User;
 
@@ -61,6 +69,10 @@ export class OrganizationProfileComponent implements OnInit {
   isSending: Boolean = false;
 
   ngOnInit() {
+      if (this.themeDropdown.length === 0) {
+          this.fillDropdown();
+      }
+
       this.authService.currentUser.subscribe(user => {
         console.log(user);
         this.user = user;
@@ -68,7 +80,9 @@ export class OrganizationProfileComponent implements OnInit {
         this.organizationService.get(this.user.lastPickedOrganizationId).subscribe(async (org) => {
           console.log(org);
           this.organization = org;
-          this.name = this.organization.name;
+            this.name = this.organization.name;
+            this.selectedTheme = this.organization.theme;
+            this.selectedThemeName = this.selectedTheme.name;
           this.imageUrl = org.imageURL;
           const role = await this.userOrganizationService.getOrganizationRole();
           this.editable = role.name === 'Manager' ? true : false;
@@ -76,6 +90,14 @@ export class OrganizationProfileComponent implements OnInit {
           console.log(this.editable);
         });
       });
+
+      this.themeService.getAll().subscribe(
+        (data) => {
+          if (data.length > 0) {
+            this.themes = data;
+          }
+        }
+      );
   }
 
   onSubmit() {
@@ -83,6 +105,7 @@ export class OrganizationProfileComponent implements OnInit {
       // Update Organization
       this.isUpdating = true;
       this.organization.name = this.name;
+      this.organization.themeId = this.selectedTheme.id;
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
           // Update lastPickedOrganization in User on frontend
@@ -119,7 +142,7 @@ export class OrganizationProfileComponent implements OnInit {
       createdByUser: null,
       organization: null,
       createdDate: null,
-      expirationDate: null,
+      experationDate: null,
       link: null,
       state: OrganizationInviteState.Pending
     };
@@ -192,5 +215,16 @@ export class OrganizationProfileComponent implements OnInit {
     this.organization.imageType = this.imageType;
     this.imageUrl = this.data.image;
     this.display = false;
+  }
+
+  onChange(value: string): void {
+    this.selectedTheme = this.themes.find(t => t.name === value);
+    this.themeService.applyTheme(this.selectedTheme);
+  }
+
+  private fillDropdown(): void {
+    this.themeDropdown.push(
+      { label: 'Default', value: 'Default' },
+      { label: 'Darkness', value: 'Darkness' });
   }
 }

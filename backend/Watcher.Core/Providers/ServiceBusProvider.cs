@@ -1,6 +1,8 @@
 ﻿namespace Watcher.Core.Providers
 {
     using System;
+    using System.Linq;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
@@ -22,10 +24,15 @@
     using ServiceBus.Shared.Common;
     using ServiceBus.Shared.Messages;
     using ServiceBus.Shared.Queue;
+    using ServiceBus.Shared.Enums;
 
-    using Watcher.Common.Dtos.Plots;
+    using Watcher.Common.Dtos;
     using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
+    using Watcher.Common.Enums;
+    using Watcher.Common.Requests;
+    using Watcher.DataAccess.Interfaces;
+
 
     public class ServiceBusProvider : IServiceBusProvider, IDisposable
     {
@@ -34,16 +41,20 @@
         private readonly IHubContext<DashboardsHub> _dashboardsHubContext;
         private readonly IOptions<AzureQueueSettings> _queueOptions;
         private readonly IAzureQueueReceiver _azureQueueReceiver;
+        private readonly IAzureQueueSender _azureQueueSender;
 
         private readonly QueueClient _instanceDataQueueClient;
         private readonly QueueClient _instanceErrorQueueClient;
+        private readonly QueueClient _instanceSettingsQueueClient;
+        private readonly QueueClient _instanceNotifyQueueClient;
 
         public ServiceBusProvider(
             ILoggerFactory loggerFactory,
             IServiceScopeFactory scopeFactory,
             IHubContext<DashboardsHub> dashboardsHubContext,
             IOptions<AzureQueueSettings> queueOptions,
-            IAzureQueueReceiver azureQueueReceiver)
+            IAzureQueueReceiver azureQueueReceiver,
+            IAzureQueueSender azureQueueSender)
         {
             _logger = loggerFactory?.CreateLogger<ServiceBusProvider>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _scopeFactory = scopeFactory;
@@ -51,6 +62,8 @@
             _queueOptions = queueOptions;
             _instanceDataQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.DataQueueName);
             _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
+            _instanceSettingsQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.SettingsQueueName);
+            _instanceNotifyQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.NotifyQueueName);
 
             _azureQueueReceiver = azureQueueReceiver;
             _azureQueueReceiver.Receive<InstanceCollectedDataMessage>(
@@ -59,18 +72,32 @@
                 ExceptionReceivedHandler,
                 ExceptionWhileProcessingHandler,
                 OnWait);
-            
+
             _azureQueueReceiver.Receive<InstanceErrorMessage>(
                 _instanceErrorQueueClient,
                 OnErrorProcessAsync,
                 ExceptionReceivedHandler,
                 ExceptionWhileProcessingHandler,
                 OnWait);
+
+            _azureQueueReceiver.Receive<InstanceNotificationMessage>(
+                _instanceNotifyQueueClient,
+                OnNotifyProcessAsync,
+                ExceptionReceivedHandler,
+                ExceptionWhileProcessingHandler,
+                OnWait);
+
+            _azureQueueSender = azureQueueSender;
         }
 
         private void OnWait()
         {
             Debug.WriteLine("*******************WAITING***********************");
+        }
+
+        public Task SendInstanceSettingsAsync(InstanceSettingsMessage message)
+        {
+            return _azureQueueSender.SendAsync(_instanceSettingsQueueClient, message);
         }
 
         private async Task<MessageProcessResponse> OnErrorProcessAsync(InstanceErrorMessage arg, CancellationToken stoppingToken)
@@ -91,6 +118,56 @@
             return MessageProcessResponse.Complete;
         }
 
+        private async Task<MessageProcessResponse> OnNotifyProcessAsync(InstanceNotificationMessage arg, CancellationToken stoppingToken)
+        {
+            if (stoppingToken.IsCancellationRequested)
+            {
+                using (LogContext.PushProperty("ClassName", this.GetType().FullName))
+                using (LogContext.PushProperty("Source", this.GetType().Name))
+                {
+                    _logger.LogError("Cancellation was requested, stopping token.");
+                }
+
+                return MessageProcessResponse.Abandon;
+            }
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
+
+                var notificationRequest = new NotificationRequest
+                {
+                    Text = arg.Text,
+                    CreatedAt = arg.CreatedAt,
+                    InstanceId = arg.InstanceId
+                };
+
+                switch (arg.Type)
+                {
+                    case InstanceNotifyType.Critical:
+                        notificationRequest.Type = NotificationType.Error;
+                        break;
+                    case InstanceNotifyType.Error:
+                        notificationRequest.Type = NotificationType.Warning;
+                        break;
+                    default:
+                        notificationRequest.Type = NotificationType.Info;
+                        break;
+                }
+
+                var result = await notificationService.CreateEntityAsync(notificationRequest);
+
+                if (result == null)
+                {
+                    return MessageProcessResponse.Abandon;
+                }
+            }
+
+            _logger.LogInformation("Instance Notification Message was created.");
+
+            return MessageProcessResponse.Complete;
+        }
+
         private async Task<MessageProcessResponse> OnProcessAsync(InstanceCollectedDataMessage arg, CancellationToken stoppingToken)
         {
             if (stoppingToken.IsCancellationRequested)
@@ -104,17 +181,29 @@
                 return MessageProcessResponse.Abandon;
             }
 
-            CollectedDataDto dto = null;
+            CollectedDataDto collectedDataDto = null;
+            InstanceCheckedDto instanceCheckedDto = null;
             using (var scope = _scopeFactory.CreateScope())
             {
                 var repo = scope.ServiceProvider.GetRequiredService<IDataAccumulatorRepository<CollectedData>>();
+                var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
                 var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
-
                 var data = await repo.GetEntityIdAsync(arg.CollectedDataId);
 
                 if (data != null)
                 {
-                    dto = mapper.Map<CollectedData, CollectedDataDto>(data);
+                    var result = await uow.InstanceRepository.UpateLastCheckedAsync(arg.InstanceId, data.Time);
+                    if (result != null)
+                    {
+                        await uow.SaveAsync();
+                        instanceCheckedDto = new InstanceCheckedDto
+                        {
+                            InstanceGuidId = result.GuidId,
+                            StatusCheckedAt = result.StatusCheckedAt
+                        };
+                    }
+
+                    collectedDataDto = mapper.Map<CollectedData, CollectedDataDto>(data);
                 }
                 else
                 {
@@ -122,7 +211,19 @@
                 }
             }
 
-            await _dashboardsHubContext.Clients.Group(dto.ClientId.ToString()).SendAsync("InstanceDataTick", dto);
+            var tasks = new List<Task>(2);
+            if (collectedDataDto != null)
+            {
+                tasks.Add(_dashboardsHubContext.Clients.Group(collectedDataDto.ClientId.ToString()).SendAsync("InstanceDataTick", collectedDataDto));
+            }
+
+            if (instanceCheckedDto != null)
+            {
+                tasks.Add(_dashboardsHubContext.Clients.Group(instanceCheckedDto.InstanceGuidId.ToString()).SendAsync("InstanceStatusCheck", instanceCheckedDto));
+            }
+
+            await Task.WhenAll(tasks);
+
             _logger.LogInformation("Information Message with instanceData to Dashboards hub clients was sent.");
             return MessageProcessResponse.Complete;
         }
@@ -153,6 +254,8 @@
             {
                 await _instanceDataQueueClient.CloseAsync();
                 await _instanceErrorQueueClient.CloseAsync();
+                await _instanceSettingsQueueClient.CloseAsync();
+                await _instanceNotifyQueueClient.CloseAsync();
 
                 disposedValue = true;
             }

@@ -86,6 +86,8 @@ namespace Watcher
                     o.ConnectionString = serviceBusSection["ConnectionString"];
                     o.DataQueueName = serviceBusSection["DataQueueName"];
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
+                    o.SettingsQueueName = serviceBusSection["SettingsQueueName"];
+                    o.NotifyQueueName = serviceBusSection["NotifyQueueName"];
                 });
             
             services.ConfigureSwagger(Configuration);
@@ -115,9 +117,14 @@ namespace Watcher
             services.AddTransient<IUserOrganizationService, UserOrganizationService>();
             services.AddTransient<IAggregateDataService, AggregatedDataService>();
             services.AddTransient<ICollectorActionLogService, CollectorActionLogService>();
+<<<<<<< HEAD
             services.AddTransient<ICollectorAppsService, CollectorAppsService>();
+=======
+            services.AddTransient<IThemeService, ThemeService>();
+>>>>>>> dev
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
+            services.AddTransient<IAzureQueueSender, AzureQueueSender>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
             
             // repo initialization localhost while development env, azure in prod
@@ -334,6 +341,7 @@ namespace Watcher
                     cfg.AddProfile<OrganizationInvitesProfile>();
                     cfg.AddProfile<CollectedDataProfile>();
                     cfg.AddProfile<CollectorActionLogProfile>();
+                    cfg.AddProfile<ThemeProfile>();
 
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/

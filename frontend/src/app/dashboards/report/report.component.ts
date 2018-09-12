@@ -1,16 +1,20 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter, QueryList, ViewChildren } from '@angular/core';
 import { AggregatedDataService } from '../../core/services/aggregated-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { DataType } from '../../shared/models/data-type.enum';
 import { CollectedData } from '../../shared/models/collected-data.model';
 import { AggregateDataRequest } from '../../shared/models/aggregate-data-request.model';
-import { SelectItem } from 'primeng/api';
+import { SelectItem, MenuItem } from 'primeng/api';
 import { Calendar } from 'primeng/primeng';
 import { formatDate } from '@angular/common';
 import * as jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { Observable } from 'rxjs';
 import { ProcessData } from '../../shared/models/process-data.model';
+import { DashboardChart } from '../models/dashboard-chart';
+import { defaultOptions } from '../charts/models/chart-options';
+import { DataService } from '../../core/services/data.service';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-report',
@@ -22,9 +26,11 @@ export class ReportComponent implements OnInit {
   @ViewChild('cf1') calendarFilter1: Calendar;
   @ViewChild('cf2') calendarFilter2: Calendar;
   @ViewChild('ct') timeInput: Calendar;
+  @ViewChildren('chartPDF') chartPDF: QueryList<ElementRef>;
 
   private id: string;
 
+  collectedDataTable: CollectedData[];
   collectedData: CollectedData[];
 
   types: SelectItem[];
@@ -38,10 +44,46 @@ export class ReportComponent implements OnInit {
   recordsPerPage = 1;
   totalRecords: number;
 
+  chartToEdit = {...defaultOptions};
+  charts: DashboardChart[];
+
+  editChartIndex: number;
+  edit: boolean;
+  close: boolean;
+
+  cogItems: MenuItem[];
+
+  tabs: MenuItem[];
+  activeTab: MenuItem;
+
+  onDisplayChartEditing = new EventEmitter<boolean>();
+
   constructor(private aggregatedDateService: AggregatedDataService,
-              private activateRoute: ActivatedRoute) { }
+              private activateRoute: ActivatedRoute,
+              private dataService: DataService) { }
 
   ngOnInit() {
+    this.charts = [];
+
+    this.tabs = [
+      { label: 'Table', command: () => this.activeTab = this.tabs[0] },
+      { label: 'Chart', command: () => this.activeTab = this.tabs[1] }
+    ];
+
+    this.activeTab = this.tabs[0];
+
+    this.cogItems = [{
+      label: 'Add item',
+      icon: 'fa fa-fw fa-plus',
+
+      command: (event?: any) => {
+        this.close = false;
+
+        this.decomposeChart(defaultOptions);
+        this.showChartCreating();
+      },
+    }];
+
     this.cols = [
       { field: 'name', header: 'Name' },
       { field: 'pCpu', header: 'CPU,%' },
@@ -82,26 +124,32 @@ export class ReportComponent implements OnInit {
         this.calendarFilter2.showTime = true;
         break;
       case 'AggregationForDay':
-        this.dateFrom.setHours(0);
-        this.dateFrom.setMinutes(0);
-        this.dateTo.setHours(0);
-        this.dateTo.setMinutes(0);
+        if (this.dateFrom && this.dateTo) {
+          this.dateFrom.setHours(0);
+          this.dateFrom.setMinutes(0);
+          this.dateTo.setHours(0);
+          this.dateTo.setMinutes(0);
+        }
         this.calendarFilter1.showTime = false;
         this.calendarFilter2.showTime = false;
         break;
       case 'AggregationForWeek':
-        this.dateFrom.setHours(0);
-        this.dateFrom.setMinutes(0);
-        this.dateTo.setHours(0);
-        this.dateTo.setMinutes(0);
+        if (this.dateFrom && this.dateTo) {
+          this.dateFrom.setHours(0);
+          this.dateFrom.setMinutes(0);
+          this.dateTo.setHours(0);
+          this.dateTo.setMinutes(0);
+        }
         this.calendarFilter1.showTime = false;
         this.calendarFilter2.showTime = false;
         break;
       case 'AggregationForMonth':
-        this.dateFrom.setHours(0);
-        this.dateFrom.setMinutes(0);
-        this.dateTo.setHours(0);
-        this.dateTo.setMinutes(0);
+        if (this.dateFrom && this.dateTo) {
+          this.dateFrom.setHours(0);
+          this.dateFrom.setMinutes(0);
+          this.dateTo.setHours(0);
+          this.dateTo.setMinutes(0);
+        }
         this.calendarFilter1.showTime = false;
         this.calendarFilter2.showTime = false;
         break;
@@ -120,7 +168,7 @@ export class ReportComponent implements OnInit {
   getInfo(): void {
     const request: AggregateDataRequest = this.createRequest();
 
-    this.getCollectedData(request, 1, this.recordsPerPage).subscribe((data: CollectedData[]) => {
+    this.getCollectedData(request).subscribe((data: CollectedData[]) => {
       data.forEach(item => {
         item.time = new Date(item.time);
         item.processes = item.processes.map(p => this.roundProcess(p));
@@ -130,6 +178,8 @@ export class ReportComponent implements OnInit {
         });
       });
       this.collectedData = data;
+      this.charts.forEach(item => this.dataService.fulfillChart(this.collectedData, item, true));
+      this.collectedDataTable = data.slice(0, this.recordsPerPage);
     });
 
     this.aggregatedDateService.getCountOfEntities(request).subscribe(totalRecords => {
@@ -138,27 +188,14 @@ export class ReportComponent implements OnInit {
     });
   }
 
-  private getCollectedData(request: AggregateDataRequest, page: number = -1, records: number = -1): Observable<CollectedData[]> {
-    if (page >= 0 && records >= 0) {
-      return this.aggregatedDateService.getDataByInstanceIdAndTypeInTimePaging(request,
-        page, records);
-    } else {
+  private getCollectedData(request: AggregateDataRequest): Observable<CollectedData[]> {
       return this.aggregatedDateService.getDataByInstanceIdAndTypeInTime(request);
-    }
   }
 
   paginate(event) {
-    this.getCollectedData(this.createRequest(), event.page + 1, this.recordsPerPage).subscribe((data: CollectedData[]) => {
-      data.forEach(item => {
-        item.time = new Date(item.time);
-        item.processes = item.processes.map(p => this.roundProcess(p));
-
-        item.processes.sort((item1, item2) => {
-          return item2.pCpu - item1.pCpu;
-        });
-      });
-      this.collectedData = data;
-    });
+    const start = event.page * this.recordsPerPage;
+    const end = event.page * this.recordsPerPage + this.recordsPerPage;
+    this.collectedDataTable = this.collectedData.slice(start, end);
   }
 
   roundProcess(processData: ProcessData) {
@@ -181,19 +218,12 @@ export class ReportComponent implements OnInit {
   }
 
   convertPDF(): void {
-    const doc = new jsPDF('p', 'mm', 'a4');
-    doc.setFontSize(10);
+    const doc = new jsPDF('p', 'pt', 'a4');
 
-    this.getCollectedData(this.createRequest()).subscribe((data: CollectedData[]) => {
-      data.forEach(item => {
-        item.time = new Date(item.time);
-        item.processes = item.processes.map(p => this.roundProcess(p));
-        item.processes.sort((item1, item2) => {
-          return item2.pCpu - item1.pCpu;
-        });
-      });
+    if (this.activeTab === this.tabs[0]) {
+      doc.setFontSize(10);
 
-      const tables = this.createTables(data);
+      const tables = this.createTables(this.collectedData);
 
       doc.deletePage(1);
       tables.forEach(item => {
@@ -204,8 +234,30 @@ export class ReportComponent implements OnInit {
 
       // tslint:disable-next-line:max-line-length
       doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
+    } else {
+      doc.setFontSize(20);
+      const eventRender = new EventEmitter();
+      doc.text(`${this.types[this.selectedType - 1].label} Report`, 200, 40);
+      doc.text(`${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`, 150, 70);
+      this.chartPDF.forEach(item => {
+        html2canvas(item.nativeElement).then(canvas => {
+          const contentDataURL = canvas.toDataURL('image/png');
+          doc.addImage(contentDataURL, 'PNG', 15, 250, 531, 250);
+          doc.addPage();
+          eventRender.emit();
+        });
+      });
 
-    });
+      let renderedImg = 0;
+      eventRender.subscribe(() => {
+        renderedImg++;
+        if (renderedImg === this.chartPDF.length) {
+          doc.deletePage(this.chartPDF.length + 1);
+          // tslint:disable-next-line:max-line-length
+          doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
+        }
+      });
+    }
   }
 
   private createTables(data: CollectedData[]): any[] {
@@ -240,6 +292,45 @@ export class ReportComponent implements OnInit {
     });
 
     return tables;
+  }
+
+  decomposeChart(chart: DashboardChart): void {
+    this.chartToEdit = {...chart};
+    this.chartToEdit.colorScheme = {...chart.colorScheme};
+    this.chartToEdit.type = chart.type;
+  }
+
+  showChartCreating() {
+    this.onDisplayChartEditing.emit(true);
+  }
+
+  editChart(chart: DashboardChart): void {
+    this.edit = true;
+    this.editChartIndex = this.charts.indexOf(chart);
+    this.decomposeChart(chart);
+    this.showChartCreating();
+  }
+
+  deleteChart(chart: DashboardChart): void {
+    const indexDeleteChart = this.charts.indexOf(chart);
+    this.charts.splice(indexDeleteChart, 1);
+  }
+
+  onAddChart(event: DashboardChart): void {
+    this.charts.push({...event});
+    this.decomposeChart(defaultOptions);
+  }
+
+  onEditChart(event: DashboardChart): void {
+    this.charts[this.editChartIndex] = {...event};
+    this.edit = false;
+    this.decomposeChart(defaultOptions);
+  }
+
+  onClosed(): void {
+    this.close = true;
+    this.edit = false;
+    this.decomposeChart(defaultOptions);
   }
 
 }

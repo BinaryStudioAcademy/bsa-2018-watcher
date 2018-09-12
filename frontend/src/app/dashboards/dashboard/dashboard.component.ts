@@ -21,7 +21,6 @@ import {DashboardRequest} from '../../shared/models/dashboard-request.model';
 import {CollectedData} from '../../shared/models/collected-data.model';
 
 import {UserOrganizationService} from '../../core/services/user-organization.service';
-import {ChartRequest} from '../../shared/requests/chart-request.model';
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {CollectedDataType} from '../../shared/models/collected-data-type.enum';
 
@@ -57,89 +56,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private toastrService: ToastrService,
               private activateRoute: ActivatedRoute,
               private authService: AuthService,
-              private chartService: ChartService,
               private dataService: DataService,
+              private chartService: ChartService,
               private userOrganizationService: UserOrganizationService) {
   }
 
   async ngOnInit(): Promise<void> {
-    // TODO: maybe do unrelated request with fork join to reduce # of request
-    this.collectedDataService.getBuilderData()
-      .subscribe(value => {
-        this.dataService.fakeCollectedData = value;
-      });
-
-    try {
-      const [firebaseToken, watcherToken] = await this.authService.getTokens().toPromise();
-      await this.dashboardsHub.connectToSignalR(firebaseToken, watcherToken);
-    } catch (e) {
-      console.error('Error occurred while connecting to signalRHub ' + JSON.stringify(e));
-    }
     this.instanceService.instanceRemoved.subscribe(instance => this.onInstanceRemoved(instance));
-
-    this.paramsSubscription = this.activateRoute.params.subscribe(params => {
-      if (this.instanceGuidId) {
-        this.dashboardsHub.unSubscribeFromInstanceById(this.instanceGuidId);
-      }
-
-      this.instanceId = params.insId;
-      this.instanceGuidId = params.guidId;
-      this.dashboardMenuItems = [];
-      this.dashboards = [];
-      this.dataService.hourlyCollectedData = [];
-      if (!this.instanceId) {
-        return;
-      }
-
-      this.isLoading = true;
-      this.getDashboardsByInstanceId(this.instanceId).then(value => {
-        this.onDashboards(value);
-        this.isLoading = false;
-        this.collectedDataService.getCollectedDataByInstanceId(this.instanceGuidId, CollectedDataType.Accumulation)
-          .subscribe( data => {
-            this.dataService.hourlyCollectedData = data;
-            if (this.dataService.hourlyCollectedData && this.dataService.hourlyCollectedData.length > 0) {
-              // -1 is last item - plus sign
-              for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
-                for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
-                  this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.dashboardMenuItems[i].charts[j]);
-                }
-              }
-            }
-            this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
-          }, err => {
-            console.error(err);
-            this.toastrService.error('Error occurred while fetching instance\'s Collected Data');
-            this.isLoading = false;
-          });
-      }).catch(reason => {
-        console.error(reason);
-        this.toastrService.error('Error occurred while fetching instance\'s Dashboards');
-        this.isLoading = false;
-      });
-    });
-
-    this.cogItems = [{
-      label: 'Add item',
-      icon: 'fa fa-fw fa-plus',
-
-      command: (event?: any) => {
-        this.decomposeChart(defaultOptions);
-        this.showChartCreating();
-      },
-    },
-      {
-        label: 'Edit',
-        icon: 'fa fa-fw fa-edit',
-        command: () => this.showCreatePopup(false),
-      },
-      {
-        label: 'Delete',
-        icon: 'fa fa-fw fa-remove',
-        command: () => this.delete(),
-      }
-    ];
-
+    this.paramsSubscription = this.activateRoute.params.subscribe(par => this.onInstanceChanged(par));
+    this.createCogItems();
     this.subscribeToCollectedData();
   }
 
@@ -147,19 +72,59 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.paramsSubscription.unsubscribe();
   }
 
+  onInstanceChanged(params) {
+    if (this.instanceGuidId) {
+      this.dashboardsHub.unSubscribeFromInstanceById(this.instanceGuidId);
+    }
+
+    this.instanceId = params.insId;
+    this.instanceGuidId = params.guidId;
+    this.dashboardMenuItems = [];
+    this.dashboards = [];
+    this.dataService.hourlyCollectedData = [];
+    if (!this.instanceId) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.getDashboardsByInstanceId(this.instanceId).then(value => {
+      this.onDashboards(value);
+      this.isLoading = false;
+      this.collectedDataService.getCollectedDataByInstanceId(this.instanceGuidId, CollectedDataType.Accumulation)
+        .subscribe(data => {
+          this.dataService.hourlyCollectedData = data;
+          if (this.dataService.hourlyCollectedData && this.dataService.hourlyCollectedData.length > 0) {
+            // -1 is last item - plus sign
+            if (this.dashboardMenuItems && this.dashboardMenuItems.length > 1) {
+              this.fillDashboardChartsWithData(this.activeDashboardItem);
+            }
+          }
+          this.dashboardsHub.subscribeToInstanceById(this.instanceGuidId);
+        }, err => {
+          console.error(err);
+          this.toastrService.error('Error occurred while fetching instance\'s Collected Data');
+          this.isLoading = false;
+        });
+    }).catch(reason => {
+      console.error(reason);
+      this.toastrService.error('Error occurred while fetching instance\'s Dashboards');
+      this.isLoading = false;
+    });
+  }
+
   subscribeToCollectedData(): void {
     this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
       this.dataService.pushLatestCollectedData(latestData);
+      if (!this.activeDashboardItem.charts || this.activeDashboardItem.charts.length < 1) {
+        return;
+      }
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
         switch (this.activeDashboardItem.charts[i].type) {
           case ChartType.ResourcesTable:
-          case ChartType.NumberCards:
             this.activeDashboardItem.charts[i].colectedData = latestData;
             break;
           default:
-            this.dataService.updateChartWithLatestData(this.activeDashboardItem.charts[i]);
-            // const tempData =
-            // this.activeDashboardItem.charts[i].data = [...tempData];
+            this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.activeDashboardItem.charts[i], false);
             break;
         }
       }
@@ -205,55 +170,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return lastItem;
   }
 
-  createDashboard(newDashboard: DashboardRequest, charts: Array<DashboardChart>): void {
-    this.dashboardsService.create(newDashboard)
+  createDashboard(title: string, instanceId: number, charts: DashboardChart[]): void {
+    const createRequest = this.chartService.instantiateCreateDashboardRequest(title, instanceId, charts);
+    this.dashboardsService.create(createRequest)
       .subscribe((dto) => {
           const item: DashboardMenuItem = this.transformToMenuItem(dto);
           this.dashboardMenuItems.unshift(item);
           this.activeDashboardItem = this.dashboardMenuItems[0];
           this.toastrService.success('Successfully added new dashboard!');
-          if (charts) {
-            charts.forEach(c => {
-              c.showXAxis = true;
-              c.showYAxis = true;
-              c.showLegend = true;
-            });
-            this.onAddedCharts(charts, dto.id);
-          }
         },
         error => {
           this.toastrService.error(`Error occurred status: ${error}`);
         });
-  }
-
-  createChartRequest(dashboardChart: DashboardChart): ChartRequest {
-    const chart: ChartRequest = {
-      showCommon: dashboardChart.showCommon,
-      threshold: dashboardChart.threshold,
-      mostLoaded: 1,
-      schemeType: dashboardChart.schemeType,
-      dashboardId: 0,
-      showLegend: dashboardChart.showLegend,
-      legendTitle: dashboardChart.legendTitle,
-      gradient: dashboardChart.gradient,
-      showXAxis: dashboardChart.showXAxis,
-      showYAxis: dashboardChart.showYAxis,
-      showXAxisLabel: dashboardChart.showXAxisLabel,
-      showYAxisLabel: dashboardChart.showYAxisLabel,
-      yAxisLabel: dashboardChart.yAxisLabel,
-      xAxisLabel: dashboardChart.xAxisLabel,
-      autoScale: dashboardChart.autoScale,
-      showGridLines: dashboardChart.showGridLines,
-      rangeFillOpacity: dashboardChart.rangeFillOpacity,
-      roundDomains: dashboardChart.roundDomains,
-      isTooltipDisabled: dashboardChart.tooltipDisabled,
-      isShowSeriesOnHover: dashboardChart.showSeriesOnHover,
-      title: dashboardChart.title,
-      type: dashboardChart.type,
-      sources: dashboardChart.dataSources.join(),
-      isLightTheme: dashboardChart.theme === 'light',
-    };
-    return chart;
   }
 
   updateDashboard(editTitle: string): void {
@@ -314,10 +242,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.showChartCreating();
   }
 
-  onEdited(event: any) { // title: string
+  onEdited(event: any) {
     if (this.creation === true) {
-      const newdash: DashboardRequest = {title: event.title, instanceId: this.instanceId};
-      this.createDashboard(newdash, event.charts);
+      this.createDashboard(event.title, this.instanceId, event.charts);
       let index = 0;
       // switching to new tab
       if (this.dashboardMenuItems.length >= 2) {
@@ -329,21 +256,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     this.creation = false;
     this.displayEditDashboard = false;
-  }
-
-  onAddedCharts(array: Array<DashboardChart>, id: number) {
-    array.forEach(chart => {
-      const newChart = this.createChartRequest(chart);
-      newChart.dashboardId = id;
-      this.chartService.create(newChart).subscribe(value => {
-        chart.id = value.id;
-        // const dashboardChart: DashboardChart = this.dataService.instantiateDashboardChart(value);
-        this.onChartEdited(chart); // dashboardChart);
-        // this.toastrService.success('Chart was created');
-      }, error => {
-        this.toastrService.error(`Error occurred status: ${error.message}`);
-      });
-    });
   }
 
   onChartDeleted(chartId: number) {
@@ -389,7 +301,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onChartEdited(chart?: DashboardChart) {
-    // TODO: don't fill this chart with data, it's already filled in edit chart component
+    // Don't fill this chart with data, it's already filled in edit chart component
     const updateChartIndex = this.activeDashboardItem.charts.findIndex(ch => ch.id === chart.id);
     if (updateChartIndex >= 0) {
       this.activeDashboardItem.charts[updateChartIndex] = chart;
@@ -408,21 +320,58 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   transformToMenuItem(dashboard: Dashboard): DashboardMenuItem {
-    // debugger; // TODO: check how data source looks for multiple chart
     const item: DashboardMenuItem = {
       label: dashboard.title,
       dashId: dashboard.id,
       createdAt: dashboard.createdAt,
       charts: dashboard.charts.map(c => this.dataService.instantiateDashboardChart(c)),
-      command: () => this.activeDashboardItem = item
+      command: () => {
+        this.activeDashboardItem = item;
+        this.fillDashboardChartsWithData(this.activeDashboardItem);
+      }
     };
     return item;
   }
 
-  onInstanceRemoved(id: number) {
+  fillDashboardChartsWithData(dashboardItem: DashboardMenuItem): void {
+    for (let j = 0; j < dashboardItem.charts.length; j++) {
+      this.dataService.fulfillChart(this.dataService.hourlyCollectedData, dashboardItem.charts[j], false);
+    }
+    // for (let i = 0; i < this.dashboardMenuItems.length - 1; i++) {
+    //   for (let j = 0; j < this.dashboardMenuItems[i].charts.length; j++) {
+    //     this.dataService.fulfillChart(this.dataService.hourlyCollectedData, this.dashboardMenuItems[i].charts[j]);
+    //   }
+    // }
+  }
+
+  onInstanceRemoved(id: number): void {
     this.instanceId = null;
     this.dashboards = [];
     this.dashboardMenuItems = [];
     this.activeDashboardItem = null;
+    this.dataService.hourlyCollectedData = [];
+  }
+
+  createCogItems() {
+    this.cogItems = [{
+      label: 'Add item',
+      icon: 'fa fa-fw fa-plus',
+
+      command: (event?: any) => {
+        this.decomposeChart(defaultOptions);
+        this.showChartCreating();
+      },
+    },
+      {
+        label: 'Edit',
+        icon: 'fa fa-fw fa-edit',
+        command: () => this.showCreatePopup(false),
+      },
+      {
+        label: 'Delete',
+        icon: 'fa fa-fw fa-remove',
+        command: () => this.delete(),
+      }
+    ];
   }
 }

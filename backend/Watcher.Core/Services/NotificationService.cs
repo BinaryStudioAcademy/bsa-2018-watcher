@@ -1,9 +1,7 @@
 ﻿namespace Watcher.Core.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using System.Linq;
 
     using AutoMapper;
     
@@ -12,7 +10,6 @@
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
-    using Watcher.Common.Enums;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Interfaces;
     using Watcher.Core.Hubs;
@@ -67,76 +64,77 @@
 
             return dto;
         }
-        // TODO: this method must be like CreateEntityAsync(NotificationDto notificationDto, NotificationType notificationType)
-        //public async Task<NotificationDto> CreateEntityAsync(NotificationRequest request)
-        //{
-        //    var entity = _mapper.Map<NotificationRequest, Notification>(request);
 
-        //    entity = await _uow.NotificationsRepository.CreateAsync(entity);
-        //    var result = await _uow.SaveAsync();
-        //    if (!result)
-        //    {
-        //        return null;
-        //    }
-
-        //    if (entity == null) return null;
-
-        //    var dto = _mapper.Map<Notification, NotificationDto>(entity);
-
-        //    return dto;
-        //}
-
-        public async Task<IEnumerable<NotificationDto>> CreateEntityAsync(NotificationDto notificationDto, NotificationType notificationType)
+        public async Task<IEnumerable<NotificationDto>> CreateEntityAsync(NotificationRequest notificationRequest)
         {
-            List<User> receivers = new List<User>();
-            List<NotificationDto> dtos = new List<NotificationDto>();
+            var receivers = new List<User>();
+            var notifications = new List<NotificationDto>();
 
-            if (notificationDto.UserId != null)
-                receivers.Add(await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == notificationDto.UserId));
-            else
+            var organizationId = notificationRequest.OrganizationId;
+            int? instanceId = null;
+
+            if (notificationRequest.InstanceId != null)
             {
-                Organization organizationReceiver =
-                    await _uow.OrganizationRepository.GetFirstOrDefaultAsync(o => o.Id == notificationDto.OrganizationId, 
+                var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(i => i.GuidId == notificationRequest.InstanceId);
+
+                if (instance != null)
+                {
+                    instanceId = instance.Id;
+                    organizationId = instance.OrganizationId;
+                }
+            }
+
+            if (notificationRequest.UserId != null)
+            {
+                receivers.Add(await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == notificationRequest.UserId));
+            }
+            else if (organizationId != null)
+            {
+                var organizationReceiver =
+                    await _uow.OrganizationRepository.GetFirstOrDefaultAsync(o => o.Id == organizationId,
                                                                             include: organizations => organizations.Include(o => o.UserOrganizations)
                                                                                                                     .ThenInclude(uo => uo.User));
 
-                foreach (UserOrganization userOrganization in organizationReceiver.UserOrganizations)
+                foreach (var userOrganization in organizationReceiver.UserOrganizations)
                     receivers.Add(userOrganization.User);
             }
-
-            foreach (User receiver in receivers)
+            else
             {
-                notificationDto.UserId = receiver.Id;
+                return null;
+            }
 
-                var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(ns => ns.Type == notificationType
-                                                                                                                 && ns.UserId == notificationDto.UserId);
+            var usersCount = await _uow.UsersRepository.CountAsync(x => x.Id != null);
+            receivers = await _uow.UsersRepository.GetRangeAsync(count: usersCount);
+            
+            foreach (var receiver in receivers)
+            {
+                var entity = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
+                entity.UserId = receiver.Id;
+                entity.InstanceId = instanceId;
 
-                if (notificationSetting == null) return null;
-                
-                if (notificationSetting.IsDisable) continue;
+                var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(
+                    ns => ns.Type == notificationRequest.Type && ns.UserId == entity.UserId);
 
-                notificationDto.NotificationSettingId = notificationSetting.Id;
+                if (notificationSetting == null || notificationSetting.IsDisable) continue;
 
-                var entity = _mapper.Map<NotificationDto, Notification>(notificationDto);
-
-                entity = await _uow.NotificationsRepository.CreateAsync(entity);
+                entity.NotificationSettingId = notificationSetting.Id;
+               
+                var created = await _uow.NotificationsRepository.CreateAsync(entity);
                 var result = await _uow.SaveAsync();
                 if (!result)
                 {
                     return null;
                 }
 
-                entity = await _uow.NotificationsRepository.GetFirstOrDefaultAsync(n => n.Id == entity.Id,
-                    include: notifications => notifications.Include(n => n.NotificationSetting));
+                var dto = _mapper.Map<Notification, NotificationDto>(created);
+                dto.NotificationSetting = _mapper.Map<NotificationSetting, NotificationSettingDto>(notificationSetting);
 
-                var dto = _mapper.Map<Notification, NotificationDto>(entity);
-
-                if (dto.NotificationSetting.IsEmailable)
+                if (notificationSetting.IsEmailable)
                     await _emailProvider.SendMessageOneToOne("watcher@net.com",
-                        $"{dto.NotificationSetting.Type} Notification", receiver.EmailForNotifications,
+                        $"{notificationSetting.Type} Notification", receiver.EmailForNotifications,
                         dto.Text, "");
 
-                dtos.Add(dto);
+                notifications.Add(dto);
 
                 if (!NotificationsHub.UsersConnections.ContainsKey(dto.UserId)) continue;
 
@@ -145,7 +143,55 @@
                         .SendAsync("AddNotification", dto);
             }
 
-            return dtos;
+            return notifications;
+        }
+
+        public async Task<IEnumerable<NotificationDto>> CreateEntityForAllAsync(NotificationRequest notificationRequest)
+        {
+            var notifications = new List<NotificationDto>();
+            
+            var usersCount = await _uow.UsersRepository.CountAsync(x => x.Id != null);
+            var receivers = await _uow.UsersRepository.GetRangeAsync(count: usersCount);
+
+            foreach (var receiver in receivers)
+            {
+                var entity = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
+                
+                entity.UserId = receiver.Id;
+
+                var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(
+                    ns => ns.Type == notificationRequest.Type && ns.UserId == entity.UserId);
+
+                if (notificationSetting == null || notificationSetting.IsDisable) continue;
+
+                entity.NotificationSettingId = notificationSetting.Id;
+
+                var created = await _uow.NotificationsRepository.CreateAsync(entity);
+                var result = await _uow.SaveAsync();
+
+                if (!result)
+                {
+                    return null;
+                }
+
+                var dto = _mapper.Map<Notification, NotificationDto>(created);
+                dto.NotificationSetting = _mapper.Map<NotificationSetting, NotificationSettingDto>(notificationSetting);
+
+                notifications.Add(dto);
+
+                if (notificationSetting.IsEmailable)
+                    await _emailProvider.SendMessageOneToOne("watcher@net.com",
+                        $"{notificationSetting.Type} Notification", receiver.EmailForNotifications,
+                        entity.Text, "");
+
+                if (!NotificationsHub.UsersConnections.ContainsKey(entity.UserId)) continue;
+
+                foreach (var connectionId in NotificationsHub.UsersConnections[entity.UserId])
+                    await _notificationsHub.Clients.Client(connectionId)
+                        .SendAsync("AddNotification", dto);
+            }
+
+            return notifications;
         }
 
         public async Task<bool> UpdateEntityByIdAsync(NotificationUpdateRequest request, int id)

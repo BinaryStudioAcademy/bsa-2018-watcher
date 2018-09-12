@@ -10,9 +10,9 @@
         Task SendDataMessage(InstanceCollectedDataMessage message);
 
         Task SendDataMessage(Guid instanceId, Guid dataId);
-
         Task SendErrorMessage(InstanceErrorMessage message);
 
         Task SendErrorMessage(Guid instanceId, string errorMessage);
+        Task SendNotificationMessage(InstanceNotificationMessage message);
     }
 }

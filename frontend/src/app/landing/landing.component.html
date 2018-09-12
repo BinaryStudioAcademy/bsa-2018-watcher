@@ -1,28 +1,25 @@
 <header id="header">
     <div class="container">
         <h1>
-            <a (click)="scrollTo('startbanner')">Watcher</a>
+            <a routerLink="/" fragment="home">Watcher</a>
             <i class="fas fa-bars" id="mobile" (click)="show()"></i>
         </h1>
         <nav id="nav">
             <ul id="desktop">
                 <li>
-                    <a (click)="scrollTo('startbanner')">Home</a>
+                    <a routerLink="/" fragment="home">Home</a>
                 </li>
                 <li>
-                    <a (click)="scrollTo('why-watcher')">Why watcher</a>
+                    <a routerLink="/" fragment="why-watcher">Why watcher</a>
                 </li>
                 <li>
-                    <a (click)="scrollTo('cards')">Advantages</a>
+                    <a routerLink="/" fragment="advantages">Advantages</a>
                 </li>
                 <li>
-                    <a (click)="scrollTo('about')">About</a>
+                    <a routerLink="/" fragment="contacts">Contact us</a>
                 </li>
                 <li>
-                    <a (click)="scrollTo('feedback')">Feedback</a>
-                </li>
-                <li>
-                    <a (click)="scrollTo('contacts')">Contacts</a>
+                    <a routerLink="/about">About</a>
                 </li>
                 <li id="btnAutorization">
                     <app-authorization></app-authorization>
@@ -32,7 +29,7 @@
     </div>
 </header>
 
-<div id="startbanner" class="banner">
+<div id="home" class="banner">
     <h1>Stay up to date </h1>
     <p>Get the real-time insights that your machine needs for faster reaction.</p>
 </div>
@@ -63,7 +60,8 @@
                     Look at the whole data.
                 </h1>
                 <p>
-                    No more jumping between tools and custom views in unstructured data sources. Our UI give you a single view of your entire stack—every change, every second, in full context.
+                    No more jumping between tools and custom views in unstructured data sources. Our UI give you a single view of your entire
+                    stack—every change, every second, in full context.
                     <p>
             </div>
         </div>
@@ -73,7 +71,8 @@
             <div class="infoContent left ">
                 <img src="https://newrelic.com/content/dam/component-assets/homepage/hp01/hp01-arrows.png " alt="Plot ">
                 <h1> Get everyone on the same page.</h1>
-                <p>We know the power of teamwork which helps us empower your teams, too. You can orient around what matters, resolve issues fast, and accelerate deploy cycles.
+                <p>We know the power of teamwork which helps us empower your teams, too. You can orient around what matters,
+                    resolve issues fast, and accelerate deploy cycles.
                     <p>
             </div>
         </div>
@@ -81,7 +80,7 @@
         </div>
     </div>
 </div>
-<div class="cards ui-g " id="cards">
+<div class="cards ui-g " id="advantages">
     <div class="cards_item ui-lg-4 ui-g-12 ">
         <div class="card ">
             <div class="card_image card_image--female "></div>
@@ -116,75 +115,65 @@
         </div>
     </div>
 </div>
-
-<div class="cards ui-g " id="about">
-    <div class="ui-lg-6 ui-g-12 ">
-        <div class="small-content left">
-            <h1>About</h1>
-            <p>A platform for monitoring the consumption of resources and other system information on virtual 
-                machines for analysis and emergency feedback.</p>
+<div class="cards " id="contacts">
+    <div class="ui-g ">
+        <div class="ui-lg-12 ui-g-12 text-center">
+            <h1>Contact us</h1>
         </div>
     </div>
-    <div class="about-logo ui-lg-6 ui-g-12 ">
-    </div>
-</div>
-<div class="cards ui-g " id="feedback">
-    <div class="ui-lg-6 ui-g-12 container-feedback">
-        <div class="ui-g ">  
-             <div class="ui-lg-6 ui-g-12 ">
-                <div class="text">Your name: </div>
-                <input type="text" [(ngModel)]="name" class="input-btn-field left"/>
-                <div class="text-email">Email: </div>
-                <input type="text" [(ngModel)]="email" class="input-btn-field left"/>
-            </div>
-            <div class="ui-lg-6 ui-g-12 ">
-                <div class="text">Comments or suggestions:</div>
-                <textarea rows="6" [(ngModel)]="text" pInputTextarea class="input-btn-field right"></textarea>    
+    <div class="ui-g ">
+        <div class="ui-lg-6 ui-g-12 ">
+            <div class="small-content left">
+                <p class="label">
+                    <i class="fa fa-phone"></i> Phone
+                </p>
+                <p class="text">+48 602 123 249</p>
+                <p class="label">
+                    <i class="fa fa-location-arrow"></i> Lviv
+                </p>
+                <p class="text">Chornovola Ave Lviv, Ukraine</p>
+                <p class="label">
+                    <i class="fa fa-envelope-o"></i> Contact us
+                </p>
+                <p class="text">watcheracademy@gmail.com</p>
             </div>
         </div>
-        <div class="text-center input-btn-field">
-            <button pButton type="submit" label="Submit" [disabled]="!(text && name && email)" class="ui-button-raised ui-button-success" (click)="onFeedback()"></button>
-        </div> 
-    </div>
-    <div class="ui-lg-6 ui-g-12 ">
-        <div class="small-content right">
-            <h1>FEEDBACK</h1>
-            <div>Thank you for taking the time to fill in our online feedback form. By providing us your feedback, you are helping us
-                understand what we do well and what improvements we need to implement. </div>
+        <div class="ui-lg-6 ui-g-12 ">
+            <input type="text" [(ngModel)]="name" class="input-btn-field input" pInputText placeholder="Your name" />
+            <input type="text" [(ngModel)]="email" class="input-btn-field input" pInputText placeholder="Your email" />
+            <textarea rows="7" [(ngModel)]="text" pInputTextarea class="input-btn-field input" placeholder="Comments or suggestions"></textarea>
+            <div class="text-center input-btn-field">
+                <button pButton type="submit" label="Submit" [disabled]="!(text && name && email)" class="ui-button-raised ui-button-success"
+                    (click)="onFeedback()"></button>
+            </div>
         </div>
-    </div>
-</div>
-<div class="cards ui-g " id="contacts">
-    <div class="ui-lg-6 ui-g-12 ">
-        <div class="small-content left">
-            <h1>Contacts</h1>
-            <p>Our email: watcheracademy@gmail.com (We usually respond within a day.)</p>
-        </div>
-    </div>
-    <div class="ui-lg-6 ui-g-12 ">
-        <!-- <p-gmap [options]="options" [overlays]="overlays" [style]="{'width':'100%','height':'250px'}" ></p-gmap> -->
     </div>
 </div>
 
 <footer class="footer-distributed ">
-
     <div class="footer-right ">
-        <a href="https://www.facebook.com/bsa.watcher.1"><i class="fa fa-facebook "></i></a>
-        <a href="https://twitter.com/BsaWatcher"><i class="fa fa-twitter "></i></a>
-        <a href="https://www.linkedin.com/in/bsa-watcher-7b510016b/"><i class="fa fa-linkedin "></i></a>
-        <a href="https://github.com/BinaryStudioAcademy/bsa-2018-watcher"><i class="fa fa-github "></i></a>
+        <a href="https://www.facebook.com/bsa.watcher.1">
+            <i class="fa fa-facebook "></i>
+        </a>
+        <a href="https://twitter.com/BsaWatcher">
+            <i class="fa fa-twitter "></i>
+        </a>
+        <a href="https://www.linkedin.com/in/bsa-watcher-7b510016b/">
+            <i class="fa fa-linkedin "></i>
+        </a>
+        <a href="https://github.com/BinaryStudioAcademy/bsa-2018-watcher">
+            <i class="fa fa-github "></i>
+        </a>
     </div>
 
     <div class="footer-left ">
         <p class="footer-links ">
-            <a (click)="scrollTo( 'startbanner') ">Home</a> ·
-            <a (click)="scrollTo( 'why-watcher') ">Why watcher</a> ·
-            <a (click)="scrollTo( 'cards') ">Advantages</a> ·
-            <a (click)="scrollTo( 'about') ">About</a> ·
-            <a (click)="scrollTo( 'feedback') ">Feedback</a> ·
-            <a (click)="scrollTo( 'contacts') ">Contacts</a>            
+            <a routerLink="/" fragment="home">Home</a> ·
+            <a routerLink="/" fragment="why-watcher">Why watcher</a> ·
+            <a routerLink="/" fragment="advantages">Advantages</a> ·
+            <a routerLink="/" fragment="contacts">Contact us</a> ·
+            <a routerLink="/about">About</a>
         </p>
-
         <p>Watcher © 2018</p>
     </div>
 </footer>

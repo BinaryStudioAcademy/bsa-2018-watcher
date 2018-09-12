@@ -19,7 +19,8 @@
                     [autoWidth]="false"
                     [(ngModel)]="dashboardChart.type"
                     placeholder="Select a type"
-                    (onChange)="processChartType()">
+                    [group]="true"
+                    (onChange)="selectChartType()">
         </p-dropdown>
         <p class="field">Show total:
           <p-checkbox [ngModel]="dashboardChart?.showCommon"
@@ -29,18 +30,19 @@
           </p-checkbox>
         </p><!--type [disabled]="!dashboardChart.dataSources.length<1"-->
         <p class="field">Select source: </p>
-        <p-multiSelect *ngIf="dashboardChart.showCommon && dashboardChart.type !== type.Pie"
+        <p-multiSelect *ngIf="dashboardChart.showCommon && dashboardChart.type !== type.Pie
+                              && dashboardChart.type != type.AdvancedPie && dashboardChart.type != type.PieGrid"
                        class="custom-multiselect"
                        [filter]="false"
                        [showHeader]="false"
                        [options]="dropdownSources"
                        [(ngModel)]="dashboardChart.dataSources"
                        maxSelectedLabels="1"
-                       [selectionLimit]="getMultiSelectNumber()"
                        (onChange)="multiSelect($event)">
         </p-multiSelect>
 
-        <p-dropdown *ngIf="!dashboardChart.showCommon || dashboardChart.type == type.Pie"
+        <p-dropdown *ngIf="!dashboardChart.showCommon || dashboardChart.type == type.Pie
+                          || dashboardChart.type == type.AdvancedPie || dashboardChart.type == type.PieGrid"
                     [autoWidth]="false"
                     [options]="dropdownGroupSources"
                     placeholder="Select a type"
@@ -65,10 +67,11 @@
                     [disabled]="dashboardChart.showCommon">
           </p-slider>
         </div>
-        <p class="field">Show data for (5-60 min): {{historyTime}}</p>
+        <p class="field">Show data for (5-60 min): {{dashboardChart.historyTime}}</p>
         <div class="field">
           <p-slider class="chart-menu-slider"
-                    [(ngModel)]="historyTime"
+                    [(ngModel)]="dashboardChart.historyTime"
+                    [disabled]="!isTimeAvailable"
                     [min]="5"
                     [max]="60">
           </p-slider>
@@ -77,6 +80,11 @@
         <p class="field">Title: </p>
         <input type="text"
                [(ngModel)]="dashboardChart.title"
+               pInputText/>
+        <p class="field">Legend title: </p>
+        <input type="text"
+               [(ngModel)]="dashboardChart.legendTitle"
+               [disabled]="!dashboardChart.showLegend"
                pInputText/>
         <p class="field">Color schemes:</p>
         <p-dropdown [options]="colorSchemes"
@@ -88,12 +96,12 @@
         </p-dropdown>
         <p class="field">Y axis label (optional): </p>
         <input type="text"
-               [disabled]="!isYAxisAvailable"
+               [disabled]="!dashboardChart.showYAxis"
                [(ngModel)]="dashboardChart.yAxisLabel"
                pInputText/>
         <p class="field">X axis label (optional): </p>
         <input type="text"
-               [disabled]="!isXAxisAvailable"
+               [disabled]="!dashboardChart.showXAxis"
                [(ngModel)]="dashboardChart.xAxisLabel"
                pInputText/>
       </div>

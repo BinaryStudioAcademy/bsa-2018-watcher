@@ -9,6 +9,7 @@ export const defaultOptions = {
   showCommon: true,
   threshold: 0,
   mostLoaded: 1,
+  historyTime: 5,
   // colorScheme:  {
   //   domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   // },

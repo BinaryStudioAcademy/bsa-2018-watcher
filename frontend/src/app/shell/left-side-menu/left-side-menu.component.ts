@@ -1,8 +1,8 @@
-import { Component, OnInit} from '@angular/core';
-import { AfterContentChecked, AfterViewChecked} from '@angular/core';
-import { NavigationStart} from '@angular/router';
-import { Router, RouterEvent} from '@angular/router';
-import { MenuItem} from 'primeng/api';
+import {Component, OnInit} from '@angular/core';
+import {AfterContentChecked, AfterViewChecked} from '@angular/core';
+import {NavigationStart} from '@angular/router';
+import {Router, RouterEvent} from '@angular/router';
+import {MenuItem} from 'primeng/api';
 
 @Component({
   selector: 'app-left-side-menu',
@@ -36,7 +36,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     this.initMenuItems();
     this.changeMenu();
     this.subscribeRouteChanges();
-    }
+  }
 
   ngAfterContentChecked(): void {
     this.highlightCurrentSetting();

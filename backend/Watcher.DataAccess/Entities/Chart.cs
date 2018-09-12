@@ -19,6 +19,8 @@
 
         public int MostLoaded { get; set; }
 
+        public int HistoryTime { get; set; }
+
         public int DashboardId { get; set; }
         public Dashboard Dashboard { get; set; }
 

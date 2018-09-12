@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace DataCollector
@@ -21,12 +22,12 @@ namespace DataCollector
 
         public static Collector Instance => Value.Value;
 
-        public CollectedData Collect()
+        public async Task<CollectedData> Collect()
         {
-            CollectedData dataItem = new CollectedData();
+            CollectedData dataItem = null;
             try
             {
-                var allProcesses = GetProcesses();
+                var allProcesses = await GetProcesses();
 
                 dataItem = new CollectedData
                 {
@@ -42,7 +43,7 @@ namespace DataCollector
 
                     LocalDiskTotalMBytes = GetDiskTotalMbytes(),
                     LocalDiskUsageMBytes = GetDiskTotalMbytes() - GetDiskFreeMbytes(),
-                    LocalDiskUsagePercentage = GetLocalDiskFreeSpacePercent(),
+                    LocalDiskUsagePercentage = GetLocalDiskUsagePercent(),
 
                     Processes = allProcesses,
                     ProcessesCount = allProcesses.Count,
@@ -50,7 +51,7 @@ namespace DataCollector
 
                 };
             }
-            catch (Exception e)
+            catch (Exception)
             {
                  // ignored 
             }
@@ -105,19 +106,21 @@ namespace DataCollector
             return float.Parse(disc[2], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture) / 1024.0f;
         }
 
-        private float GetLocalDiskFreeSpacePercent()
+        private float GetLocalDiskUsagePercent()
         {
             string strData = Bash("df -t xfs -t ext4 | awk '{print $2 \";\" $3 \";\" $4 \";\" $5}'");
             var allParts = strData.Split("\n");
             var disc = allParts[1].Split(";");
-            return 100.0f - float.Parse(disc[3].Split("%")[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture)/1024.0f;
+            return float.Parse(disc[3].Split("%")[0], System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
-        private List<ProcessData> GetProcesses()
+        private async  Task<List<ProcessData>> GetProcesses()
         {
+            await Task.Delay(100);
             string output = Bash("ps -xo rss,pmem,pcpu,comm | awk '{print $1 \";\" $2 \";\" $3  \";\" $4}'");
             processData = new List<ProcessData>();
             int counter = 0;
+
             foreach (string row in output.Split("\n"))
             {
                 if (counter == 0)
