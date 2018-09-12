@@ -3,8 +3,11 @@
 export interface Theme  {
    id: number;
    name: string;
-   fontFamily: string;
-   backgroundColor: string;
+   bodyColor: string;
+   themePrimaryColor: string;
+   themeSecondaryColor: string;
+   controlsHeight: string;
+   buttonFontSize: string;
 }
 
 

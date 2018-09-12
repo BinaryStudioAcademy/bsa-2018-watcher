@@ -11,9 +11,21 @@ namespace Watcher.DataAccess.Entities
         [Required]
         public string Name { get; set; }
 
-        public string FontFamily { get; set; }
+        [Required]
+        public string BodyColor { get; set; }
 
-        public string BackgroundColor { get; set; }
+        [Required]
+        public string ThemePrimaryColor { get; set; }
+
+        [Required]
+        public string ThemeSecondaryColor { get; set; }
+
+        [Required]
+        public string ControlsHeight { get; set; }
+
+        //Button        
+        [Required]
+        public string ButtonFontSize { get; set; }
 
         [Required]
         public bool IsDeleted { get; set; }

@@ -24,8 +24,6 @@ namespace Watcher.Common.Requests
 
         public int? ThemeId { get; set; }
 
-        public ThemeDto Theme { get; set; }
-
         public int? ChatId { get; set; }
 
         public string CreatedByUserId { get; set; }

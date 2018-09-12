@@ -12,7 +12,9 @@ import {OverlayPanel} from 'primeng/components/overlaypanel/overlaypanel';
 
 import {Organization} from '../../shared/models/organization.model';
 import {User} from '../../shared/models/user.model';
-import {DashboardsHub} from '../../core/hubs/dashboards.hub';
+import { DashboardsHub } from '../../core/hubs/dashboards.hub';
+import { ThemeService } from '../../core/services/theme.service';
+
 
 
 @Component({
@@ -43,8 +45,8 @@ export class HeaderComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private authService: AuthService,
-    private pathService: PathService) {
-  }
+    private pathService: PathService,
+    private themeService: ThemeService) { }
 
   onFeedback(): void {
     this.router.navigate(['/user/feedback']);
@@ -57,6 +59,7 @@ export class HeaderComponent implements OnInit {
   logout(): void {
     if (this.authService.isLoggedIn()) {
       this.authService.logout();
+      this.themeService.setDefaultTheme();
     }
   }
 
