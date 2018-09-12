@@ -61,17 +61,21 @@ export class EditInstanceComponent implements OnInit {
     if (instance) {
       this.instanceTitle = 'EDIT INSTANCE';
     } else {
-      instance.title = '';
-      instance.platform = '';
-      instance.address = '';
-      instance.guidId = '';
-      instance.aggregationForHour = true;
-      instance.aggregationForDay = true;
-      instance.aggregationForMonth = true;
-      instance.cpuMaxPercent = 90;
-      instance.ramMaxPercent = 90;
-      instance.diskMaxPercent = 90;
-      instance.isActive = true;
+      instance = {
+        title: '',
+        platform: '',
+        address: '',
+        guidId: '',
+        aggregationForHour: true,
+        aggregationForDay: true,
+        aggregationForMonth: true,
+        aggregationForWeek: true,
+        statusCheckedAt: new Date(),
+        cpuMaxPercent: 90,
+        ramMaxPercent: 90,
+        diskMaxPercent: 90,
+        isActive: true,
+      };
       this.instanceTitle = 'NEW INSTANCE';
     }
 
@@ -83,6 +87,7 @@ export class EditInstanceComponent implements OnInit {
       aggregationHour: new FormControl({value: instance.aggregationForHour, disabled: false}),
       aggregationDay: new FormControl({value: instance.aggregationForDay, disabled: false}),
       aggregationMonth: new FormControl({value: instance.aggregationForMonth, disabled: false}),
+      aggregationWeek: new FormControl({value: instance.aggregationForWeek, disabled: false}),
       cpuMax: new FormControl({value: instance.cpuMaxPercent, disabled: false}),
       ramMax: new FormControl({value: instance.ramMaxPercent, disabled: false}),
       diskMax: new FormControl({value: instance.diskMaxPercent, disabled: false})
@@ -134,6 +139,7 @@ export class EditInstanceComponent implements OnInit {
       aggregationForDay: this.instanceForm.controls.aggregationDay.value,
       aggregationForHour: this.instanceForm.controls.aggregationHour.value,
       aggregationForMonth: this.instanceForm.controls.aggregationMonth.value,
+      aggregationForWeek: this.instanceForm.controls.aggregationWeek.value,
       cpuMaxPercent: this.instanceForm.controls.cpuMax.value,
       ramMaxPercent: this.instanceForm.controls.ramMax.value,
       diskMaxPercent: this.instanceForm.controls.diskMax.value,

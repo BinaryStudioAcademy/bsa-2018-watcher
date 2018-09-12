@@ -1,19 +1,21 @@
 <p-toast class="system-notification" position="top-right" key="system-message" [baseZIndex]="5000">
     <ng-template let-message pTemplate="message">
-      
+
       <div *ngIf="message.severity != 'chat'" class="message-container">
         <span class="message-img icon-style fa fa-3x info"
         [ngClass]="{
           'warning': message.data.notificationSetting?.type == type.Warning,
-          'error': message.data.notificationSetting?.type == type.Error}">
+          'error': message.data.notificationSetting?.type == type.Error,
+          'system': message.data.notificationSetting?.type == type.System}">
       </span>
         <div class="message-content">
-          <span class="message-title text-overflow">System message</span>
+          <span *ngIf="message.data.instanceGuidId" (click)='redirectToInstance(message.data)'  class="message-title text-overflow clickable" style="width:240px">Instance message</span>
+         <span  *ngIf="!message.data.instanceGuidId" class="message-title text-overflow" style="width:240px">System message</span>
           <div class="message-text">{{message.data.text}}</div>
           <div class="message-date text-overflow">{{message.data.createdAt | date:'short'}}</div>
         </div>
       </div>
-  
+
       <div *ngIf="message.severity == 'chat'" class="message-container action" (click)="openChat(message.data?.chatId)">
         <img class="message-img" src="{{message.data.user.photoURL}}" />
         <div class="message-content">
@@ -22,6 +24,6 @@
           <div class="message-date text-overflow">{{message.data.createdAt | date:'short'}}</div>
         </div>
       </div>
-  
+
     </ng-template>
   </p-toast>

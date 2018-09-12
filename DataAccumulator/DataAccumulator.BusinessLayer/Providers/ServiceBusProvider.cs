@@ -113,9 +113,19 @@
             InstanceSettingsDto dto = new InstanceSettingsDto()
             {
                 ClientId = arg.InstanceId,
+                IsActive = arg.IsActive,
+
+                AggregationForHour = arg.AggregationForHour,
+                AggregationForDay = arg.AggregationForDay,
+                AggregationForWeek = arg.AggregationForWeek,
+                AggregationForMonth = arg.AggregationForMonth,
+
                 CpuUsagePercentageMax = arg.CpuMaxPercent,
                 RamUsagePercentageMax = arg.RamMaxPercent,
                 LocalDiskUsagePercentageMax = arg.DiskMaxPercent,
+                CpuValidator = true,
+                RamValidator = true,
+                LocalDiskVallidator = true,
             };
 
             var x = await _instanceSettingsService.AddEntityAsync(dto);
