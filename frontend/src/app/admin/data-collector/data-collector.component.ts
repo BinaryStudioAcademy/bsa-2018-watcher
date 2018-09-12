@@ -111,24 +111,27 @@ export class DataCollectorComponent implements OnInit {
   }
 
   onDelete(collectorAppToDel) {
-    this.toastrService.confirm().then(
-      confirm => {
-        if (confirm) {
-          this.collectorAppsService.delete(collectorAppToDel.id).subscribe(
-            result => {
-              if (result) {
-                this.updateData();
-                this.toastrService.success('CollectorApp was removed.');
-              } else {
-                this.toastrService.error(`CollectorApp was not removed`);
-              }
-            },
-            error => {
-              this.toastrService.error(`Error ocured status: ${error.message}`);
-          });
-        }
-      });
+    if (collectorAppToDel.isActive) {
+      this.toastrService.notice('This version of the application is selected as the current version '
+      + 'and can not be deleted. Change the current version of the application and try again.');
+    } else {
+      this.toastrService.confirm().then(
+        confirm => {
+          if (confirm) {
+            this.collectorAppsService.delete(collectorAppToDel.id).subscribe(
+              result => {
+                if (result) {
+                  this.updateData();
+                  this.toastrService.success('CollectorApp was removed.');
+                } else {
+                  this.toastrService.error(`CollectorApp was not removed`);
+                }
+              },
+              error => {
+                this.toastrService.error(`Error ocured status: ${error.message}`);
+            });
+          }
+        });
+    }
   }
-
-
 }

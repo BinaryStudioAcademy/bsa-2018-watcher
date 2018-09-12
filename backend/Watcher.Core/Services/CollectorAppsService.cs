@@ -83,6 +83,8 @@
         {
             var entity = await _uow.CollectorAppVersionRepository.GetFirstOrDefaultAsync(i => i.Id == id);
 
+            if (entity.IsActive) return false;
+
             await _uow.CollectorAppVersionRepository.DeleteAsync(id);
 
             var result = await _uow.SaveAsync();
