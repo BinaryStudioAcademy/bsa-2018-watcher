@@ -8,8 +8,7 @@ import { InputTextModule,
          ButtonModule,
          RadioButtonModule,
          InputTextareaModule,
-         ProgressSpinnerModule,
-         FileUploadModule} from 'primeng/primeng';
+         ProgressSpinnerModule } from 'primeng/primeng';
 import { FeedbackComponent } from '../feedback/feedback.component';
 
 @NgModule({
@@ -21,7 +20,6 @@ import { FeedbackComponent } from '../feedback/feedback.component';
     InputTextareaModule,
     ButtonModule,
     RadioButtonModule,
-    FileUploadModule,
     InputTextModule,
     ProgressSpinnerModule
   ],

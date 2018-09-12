@@ -30,8 +30,6 @@ export class ReportComponent implements OnInit {
 
   private id: string;
 
-  isGetting: boolean;
-
   collectedDataTable: CollectedData[];
   collectedData: CollectedData[];
 
@@ -168,7 +166,6 @@ export class ReportComponent implements OnInit {
   }
 
   getInfo(): void {
-    this.isGetting = true;
     const request: AggregateDataRequest = this.createRequest();
 
     this.getCollectedData(request).subscribe((data: CollectedData[]) => {
@@ -181,26 +178,8 @@ export class ReportComponent implements OnInit {
         });
       });
       this.collectedData = data;
-      const hourDifference = (this.dateTo.getTime() - this.dateFrom.getTime()) / (60 * 60000);
-      this.charts.forEach(item => {
-
-        if (hourDifference > 23) {
-        item.dateTickFormatting = (value) => {
-          if (value instanceof Date) {
-            if (this.selectedType === DataType.AggregationForHour) {
-              return formatDate((<Date>value), 'MMM, d h', 'en-US');
-            } else {
-              return formatDate((<Date>value), 'MMM, d', 'en-US');
-            }
-          }
-        };
-        }
-
-        this.dataService.fulfillChart(this.collectedData, item, true);
-      });
+      this.charts.forEach(item => this.dataService.fulfillChart(this.collectedData, item, true));
       this.collectedDataTable = data.slice(0, this.recordsPerPage);
-
-      this.isGetting = false;
     });
 
     this.aggregatedDateService.getCountOfEntities(request).subscribe(totalRecords => {

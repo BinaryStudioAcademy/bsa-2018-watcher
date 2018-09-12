@@ -7,18 +7,27 @@ using DataAccumulator.Shared.Models;
 
 namespace DataAccumulator.DataAggregator
 {
+    using DataAccumulator.BusinessLayer.Interfaces;
+
+    using ServiceBus.Shared.Messages;
+
     public class DataAggregatorCore : IDataAggregatorCore<CollectedDataDto>
     {
         private readonly IAggregatorService<CollectedDataDto> _aggregatorService;
+        private readonly IAnomalyDetector _anomalyDetector;
+        private readonly IServiceBusProvider _serviceBusProvider;
 
-        public DataAggregatorCore(IAggregatorService<CollectedDataDto> aggregatorService)
+        public DataAggregatorCore(IAggregatorService<CollectedDataDto> aggregatorService, IAnomalyDetector anomalyDetector, IServiceBusProvider provider)
         {
             _aggregatorService = aggregatorService;
+            _anomalyDetector = anomalyDetector;
+            _serviceBusProvider = provider;
         }
 
         public async Task AggregatingData(CollectedDataType sourceType, CollectedDataType destinationType, 
             TimeSpan interval, bool deleteSource)
         {
+            // Need destinationType,
             // Subtract interval from the current time
             DateTime timeFrom = DateTime.Now.Add(-interval);
             DateTime timeTo = DateTime.Now;
@@ -31,6 +40,8 @@ namespace DataAccumulator.DataAggregator
 
             if (filteredCollectedDataDtos != null)
             {
+                await SendMLReport(filteredCollectedDataDtos, destinationType);
+
                 var collectedDataDtosAverage =
                     from collectedDataDto in filteredCollectedDataDtos
                     group collectedDataDto by collectedDataDto.ClientId
@@ -91,7 +102,6 @@ namespace DataAccumulator.DataAggregator
                     await _aggregatorService.AddAggregatorEntityAsync(collectedDataDto);
                 }
 
-
                 if (deleteSource)
                 {
                     // Delete already aggregated CollectedDataDto from source table MongoDb
@@ -103,7 +113,32 @@ namespace DataAccumulator.DataAggregator
             }
         }
 
-        public async Task<IEnumerable<CollectedDataDto>> FilterCollectedDataByInstanceSettings(List<CollectedDataDto> collectedDataDtos, 
+        private async Task SendMLReport(IEnumerable<CollectedDataDto> data, CollectedDataType reportType)
+        {
+            try
+            {
+                var collectedDataDtos = data as CollectedDataDto[] ?? data.ToArray();
+                var firstData = collectedDataDtos.FirstOrDefault();
+                if (firstData != null)
+                {
+                    var result = await _anomalyDetector.AnalyzeData(collectedDataDtos);
+                    result.CollectedDataTypeOfReport = reportType;
+                    var reportMessage = new InstanceAnomalyReportMessage
+                                          {
+                                              AnomalyReport = result,
+                                              InstanceId = firstData.ClientId
+                                          };
+                    await _serviceBusProvider.SendAnomalyReportMessage(reportMessage);
+                }
+                // TODO: Save report in MongoDB
+            }
+            catch (Exception)
+            {
+                // TODO: handle exception
+            }
+        }
+
+        private async Task<IEnumerable<CollectedDataDto>> FilterCollectedDataByInstanceSettings(List<CollectedDataDto> collectedDataDtos, 
             CollectedDataType destinationType)
         {
             var instanceSettingsDtos = await _aggregatorService.GetInstanceSettingsEntitiesAsync();

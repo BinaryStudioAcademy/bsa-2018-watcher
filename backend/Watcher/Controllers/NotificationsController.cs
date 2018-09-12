@@ -1,7 +1,10 @@
 ﻿namespace Watcher.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using DataAccumulator.Shared.Models;
 
     using Microsoft.AspNetCore.Mvc;
 
@@ -60,6 +63,30 @@
             }
 
             var dtos = await _notificationService.CreateEntityAsync(request);
+            if (dtos == null)
+            {
+                return StatusCode(500);
+            }
+
+            return Ok(dtos);
+        }
+
+        [HttpPost("Report")]
+        public virtual async Task<ActionResult<NotificationDto>> CreateReport([FromBody] NotificationRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var report = new AzureMLAnomalyReport
+                {
+                    Date = DateTime.UtcNow,
+                    AnomalyGroups = new List<AzureMLAnomalyGroup>(),
+                    CollectedDataTypeOfReport = CollectedDataType.AggregationForHour
+                };
+
+            var dtos = await _notificationService.CreateAnomalyReportNotificationAsync(request, report);
             if (dtos == null)
             {
                 return StatusCode(500);

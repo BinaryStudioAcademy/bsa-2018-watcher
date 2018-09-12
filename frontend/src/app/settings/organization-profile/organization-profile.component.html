@@ -1,4 +1,4 @@
-<!-- <div class="container"> -->
+<div class="container">
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6 title-block">
       <div class="title">ORGANIZATION PROFILE</div>
@@ -35,7 +35,7 @@
     <div *ngIf="organization" class="grid-item orgData">
       <div class="ui-g">
         <div class="ui-g-12 ui-md-12 ui-lg-12">
-          <div class="label label-main">Name*:</div>
+          <div class="label">Name*:</div>
           <div class="ui-g ui-fluid">
             <div class="ui-g-12">
               <div class="ui-inputgroup">
@@ -49,7 +49,7 @@
             </div>
           </div>
 
-          <div class="label label-main">Email:</div>
+          <div class="label">Email:</div>
           <div class="ui-g ui-fluid">
             <div class="ui-g-12">
               <div class="ui-inputgroup">
@@ -62,7 +62,7 @@
             </div>
           </div>
 
-          <div class="label label-main">Contact number:</div>
+          <div class="label">Contact number:</div>
           <div class="ui-g ui-fluid">
             <div class="ui-g-12">
               <div class="ui-inputgroup">
@@ -72,7 +72,7 @@
             </div>
           </div>
 
-          <div class="label label-main">Web site:</div>
+          <div class="label">Web site:</div>
           <div class="ui-g ui-fluid">
             <div class="ui-g-12">
               <div class="ui-inputgroup">
@@ -91,14 +91,14 @@
             </div>
           </div>
 
-        <div class="label label-main">Theme</div>
+        <div class="label">Theme</div>
 				<div class="ui-g ui-fluid">
 					<div class="ui-g-12">
 						<p-dropdown [options]="themeDropdown" [(ngModel)]="selectedThemeName" [placeholder]="selectedThemeName" (onChange)="onChange($event.value)" [style]="{'width':'110px'}"></p-dropdown>
 					</div>
 				</div>
 
-          <div class="label label-main">Description:</div>
+          <div class="label">Description:</div>
           <div class="ui-g ui-fluid">
             <div class="ui-g-12">
               <textarea rows="5" pInputTextarea
@@ -108,7 +108,7 @@
           </div>
         </div>
 
-        <div class="btn-panel"><!-- btn-save -->
+        <div class="btn-panel btn-save">
           <button (click)="onSubmit()"
             class="ui-button ui-state-default ui-corner-all ui-button-text-only ui-button-success btn-inline-flex"
             [disabled]="cName?.invalid || cEmail?.invalid || cWebSite?.invalid || isUpdating"
@@ -120,7 +120,7 @@
       </div>
 
     </div>
-    <div *ngIf="editable" class="grid-item ui-g invite space-between-sides">
+    <div *ngIf="editable" class="grid-item ui-g invite">
       <div class="ui-g-12 ui-md-12 ui-lg-12">
 
         <div class="label">Invite:</div>
@@ -143,7 +143,7 @@
           </div>
         </div>
 
-        <div class="label label-main">Send invite link to:</div>
+        <div class="label">Send invite link to:</div>
         <div class="ui-g">
           <div class="ui-g-12 ui-lg-12 flex-input-button">
             <div class="ui-fluid small-space inputEmail view-inline">
@@ -155,7 +155,7 @@
                 </div>
               </div>
             </div>
-            <button (click)="onSentInviteToEmail()" class="ui-button ui-state-default ui-corner-all ui-button-success ui-button-text-only ui-widget btn-inline-flex get-info"
+            <button (click)="onSentInviteToEmail()" class="ui-button ui-state-default ui-corner-all ui-button-success ui-button-text-only ui-widget btn-inline-flex"
               [disabled]="inviteLink === '' || iEmail?.invalid || isSending">
               <p-progressSpinner class="btn-spinner" *ngIf="isSending" strokeWidth="5"></p-progressSpinner>
               <span class="ui-button-text" *ngIf="!isSending">Send</span>
@@ -165,8 +165,8 @@
 
       </div>
     </div>
-    <div *ngIf="editable" class="grid-item list-invites space-between-sides">
+    <div *ngIf="editable" class="grid-item list-invites">
       <app-invites-list></app-invites-list>
     </div>
   </div>
-<!-- </div> -->
+</div>

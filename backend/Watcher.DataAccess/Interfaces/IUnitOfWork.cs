@@ -45,8 +45,6 @@
 
         IChartsRepository ChartsRepository { get;  }
 
-        ICollectorAppVersionRepository CollectorAppVersionRepository { get; }
-
         IThemeRepository ThemeRepository { get; }
 
         Task<bool> SaveAsync();

@@ -27,11 +27,10 @@ namespace Watcher.Core.Providers
             return path;
         }
 
-
-        public async Task<string> UploadFormFileWithNameAsync(IFormFile formFile)
+        public async Task<string> UploadFormFileAsync(IFormFile formFile, OperatingSystems system)
         {
-            
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", formFile.FileName);
+            var fileName = Guid.NewGuid() + Path.GetExtension(formFile.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
 
             using (var stream = new FileStream(path, FileMode.Create))
             {
@@ -146,7 +145,5 @@ namespace Watcher.Core.Providers
                 return Task.FromException<string>(ex);
             }
         }
-
-
     }
 }

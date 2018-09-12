@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using FluentValidation;
-using FluentValidation.Internal;
-
 using DataAccumulator.BusinessLayer.Interfaces;
 using DataAccumulator.Shared.Exceptions;
 using DataAccumulator.Shared.Models;
 
+using FluentValidation;
+using FluentValidation.Internal;
+
 using ServiceBus.Shared.Messages;
-using ServiceBus.Shared.Enums;
 
 namespace DataAccumulator.BusinessLayer.Validators
 {
