@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using DataAccumulator.DataAccessLayer.Data;
 using DataAccumulator.DataAccessLayer.Entities;
@@ -67,6 +67,24 @@ namespace DataAccumulator.DataAccessLayer.Repositories
                 throw;
             }
         }
+
+        public async Task<InstanceSettings> GetLastEntityByInstanceIdAsync(Guid clientId)
+        {
+            try
+            {
+                var data = await _context.InstanceSettingsCollection
+                    .Find(i => i.ClientId == clientId)
+                    .ToListAsync();
+                var entity = data.LastOrDefault();
+                return entity;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
 
         public async Task AddEntityAsync(InstanceSettings item)
         {

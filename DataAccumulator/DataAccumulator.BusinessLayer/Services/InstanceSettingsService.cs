@@ -55,6 +55,17 @@ namespace DataAccumulator.BusinessLayer.Services
             return _mapper.Map<InstanceSettings, InstanceSettingsDto>(entity);
         }
 
+        public async Task<InstanceSettingsDto> GetLastEntityByInstanceIdAsync(Guid clientId)
+        {
+            var entity = await _repository.GetLastEntityByInstanceIdAsync(clientId);
+            if (entity == null)
+            {
+                throw new NotFoundException();
+            }
+
+            return _mapper.Map<InstanceSettings, InstanceSettingsDto>(entity);
+        }
+
         public async Task<InstanceSettingsDto> AddEntityAsync(InstanceSettingsDto dataDto)
         {
             if (dataDto?.Id == Guid.Empty)
