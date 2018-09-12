@@ -71,7 +71,7 @@
             var entity = _mapper.Map<OrganizationInviteRequest, OrganizationInvite>(request);
             entity.CreatedDate = DateTime.Now;
             entity.ExperationDate = entity.CreatedDate.AddDays(20); // TODO get from config Experation Days
-            entity.Link = GetHashString(entity.Id + entity.CreatedByUserId + entity.CreatedDate);
+            entity.Link = GetHashString(entity.Id + entity.CreatedByUserId + entity.CreatedDate + entity.CreatedDate.Millisecond);
             entity.State = OrganizationInviteState.Pending;
 
             entity = await _uow.OrganizationInvitesRepository.CreateAsync(entity);

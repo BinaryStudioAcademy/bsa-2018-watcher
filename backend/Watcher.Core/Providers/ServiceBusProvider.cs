@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
@@ -25,10 +26,12 @@
     using ServiceBus.Shared.Queue;
     using ServiceBus.Shared.Enums;
 
+    using Watcher.Common.Dtos;
     using Watcher.Core.Hubs;
     using Watcher.Core.Interfaces;
     using Watcher.Common.Enums;
     using Watcher.Common.Requests;
+    using Watcher.DataAccess.Interfaces;
 
 
     public class ServiceBusProvider : IServiceBusProvider, IDisposable
@@ -69,7 +72,7 @@
                 ExceptionReceivedHandler,
                 ExceptionWhileProcessingHandler,
                 OnWait);
-            
+
             _azureQueueReceiver.Receive<InstanceErrorMessage>(
                 _instanceErrorQueueClient,
                 OnErrorProcessAsync,
@@ -178,17 +181,29 @@
                 return MessageProcessResponse.Abandon;
             }
 
-            CollectedDataDto dto = null;
+            CollectedDataDto collectedDataDto = null;
+            InstanceCheckedDto instanceCheckedDto = null;
             using (var scope = _scopeFactory.CreateScope())
             {
                 var repo = scope.ServiceProvider.GetRequiredService<IDataAccumulatorRepository<CollectedData>>();
+                var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
                 var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
-
                 var data = await repo.GetEntityIdAsync(arg.CollectedDataId);
 
                 if (data != null)
                 {
-                    dto = mapper.Map<CollectedData, CollectedDataDto>(data);
+                    var result = await uow.InstanceRepository.UpateLastCheckedAsync(arg.InstanceId, data.Time);
+                    if (result != null)
+                    {
+                        await uow.SaveAsync();
+                        instanceCheckedDto = new InstanceCheckedDto
+                        {
+                            InstanceGuidId = result.GuidId,
+                            StatusCheckedAt = result.StatusCheckedAt
+                        };
+                    }
+
+                    collectedDataDto = mapper.Map<CollectedData, CollectedDataDto>(data);
                 }
                 else
                 {
@@ -196,7 +211,19 @@
                 }
             }
 
-            await _dashboardsHubContext.Clients.Group(dto.ClientId.ToString()).SendAsync("InstanceDataTick", dto);
+            var tasks = new List<Task>(2);
+            if (collectedDataDto != null)
+            {
+                tasks.Add(_dashboardsHubContext.Clients.Group(collectedDataDto.ClientId.ToString()).SendAsync("InstanceDataTick", collectedDataDto));
+            }
+
+            if (instanceCheckedDto != null)
+            {
+                tasks.Add(_dashboardsHubContext.Clients.Group(instanceCheckedDto.InstanceGuidId.ToString()).SendAsync("InstanceStatusCheck", instanceCheckedDto));
+            }
+
+            await Task.WhenAll(tasks);
+
             _logger.LogInformation("Information Message with instanceData to Dashboards hub clients was sent.");
             return MessageProcessResponse.Complete;
         }

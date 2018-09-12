@@ -1,7 +1,5 @@
 ﻿namespace Watcher.Core.MappingProfiles
 {
-    using System.Linq;
-
     using AutoMapper;
 
     using Watcher.Common.Dtos;
@@ -18,7 +16,7 @@
             CreateMap<Instance, InstanceDto>();
 
             CreateMap<InstanceDto, Instance>()
-                .ForMember(d => d.OrganizationId, o => o.MapFrom( s => s.Organization.Id));
+                .ForMember(d => d.OrganizationId, o => o.MapFrom(s => s.Organization.Id));
 
             CreateMap<InstanceRequest, Instance>()
                 .ForMember(d => d.Id, o => o.Ignore());
