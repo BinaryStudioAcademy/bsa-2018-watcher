@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AutoMapper;
 using DataAccumulator.BusinessLayer.Interfaces;
@@ -8,6 +11,7 @@ using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
 using DataAccumulator.Shared.Exceptions;
 using DataAccumulator.Shared.Models;
+using Newtonsoft.Json;
 
 namespace DataAccumulator.BusinessLayer.Services
 {
@@ -15,11 +19,13 @@ namespace DataAccumulator.BusinessLayer.Services
     {
         private readonly IMapper _mapper;
         private readonly IDataAggregatorRepository<CollectedData> _repository;
+        private readonly IAnomalyDetector _anomalyDetector;
 
-        public DataAggregatorService(IMapper mapper, IDataAggregatorRepository<CollectedData> repository)
+        public DataAggregatorService(IMapper mapper, IDataAggregatorRepository<CollectedData> repository, IAnomalyDetector anomalyDetector)
         {
             _mapper = mapper;
             _repository = repository;
+            _anomalyDetector = anomalyDetector;
         }
 
         public async Task<IEnumerable<CollectedDataDto>> GetEntitiesAsync()
@@ -91,6 +97,12 @@ namespace DataAccumulator.BusinessLayer.Services
             }
 
             return await _repository.RemoveEntity(id);
+        }
+
+        public async Task<AzureMLAnomalyReport> RunMl(Guid id)
+        {
+            var data = await _repository.GetEntitiesByInstanceIdAndTypeInTime(id, CollectedDataType.Accumulation, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1), count: 1000);
+            return await _anomalyDetector.AnalyzeData(data);
         }
     }
 }
