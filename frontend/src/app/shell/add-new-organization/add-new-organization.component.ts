@@ -1,12 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators, MinLengthValidator } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { OrganizationService } from '../../core/services/organization.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { Organization } from '../../shared/models/organization.model';
 import { User } from '../../shared/models/user.model';
-import { Spinner } from 'primeng/spinner';
-import { tree } from 'd3';
 
 @Component({
   selector: 'app-add-new-organization',
@@ -57,11 +55,14 @@ export class AddNewOrganizationComponent implements OnInit {
 
     this.organizationService.create(this.organization).subscribe(
       value => {
+        const previousOrganizationId = this.user.lastPickedOrganizationId;
+
         this.user.organizations.push(value);
         this.user.lastPickedOrganization = value;
         this.user.lastPickedOrganizationId = value.id;
-
         this.authService.updateCurrentUser(this.user);
+
+        this.organizationService.organizationChanged.emit({from: previousOrganizationId, to: value.id});
 
         this.toastrService.success(`${value.name} organization Successfully established,
           and it was set as the default organization.`);
