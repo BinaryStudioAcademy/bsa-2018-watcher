@@ -130,7 +130,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   subscribeToCollectedData(): void {
     this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
       this.dataService.pushLatestCollectedData(latestData);
-      if (!this.activeDashboardItem.charts || this.activeDashboardItem.charts.length < 1) {
+      if (!this.activeDashboardItem || !this.activeDashboardItem.charts || this.activeDashboardItem.charts.length < 1) {
         return;
       }
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
