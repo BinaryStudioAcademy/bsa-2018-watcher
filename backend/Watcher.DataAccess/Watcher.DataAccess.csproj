@@ -5,8 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20180910102301_SettingsFieldsInstance.cs" />
-    <Compile Remove="Data\Migrations\20180911095830_AggregationForWeekInInstanceModel.cs" />
+    <Compile Remove="Data\Migrations\20180909232926_ExtendedThemeEntity.cs" />
+    <Compile Remove="Data\Migrations\20180910135905_RemovedThemeFromUser.cs" />
+    <Compile Remove="Data\Migrations\20180912000450_ExtendedThemeEntity.cs" />
+    <Compile Remove="Data\Migrations\20180912055450_UpdatedInstanceSettings.cs" />
   </ItemGroup>
 
   <ItemGroup>

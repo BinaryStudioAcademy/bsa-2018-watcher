@@ -48,6 +48,11 @@
         private INotificationsRepository _notificationsRepository;
 
         private IUserChatRepository _userChatRepository;
+
+        private ICollectorAppVersionRepository _collectorAppVersionRepository;
+
+
+        private IThemeRepository _themeRepository;
         
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
@@ -99,6 +104,8 @@
 
         public IUserChatRepository UserChatRepository => _userChatRepository ?? (_userChatRepository = new UserChatRepository(_context));
 
+        public ICollectorAppVersionRepository CollectorAppVersionRepository => _collectorAppVersionRepository ?? (_collectorAppVersionRepository = new CollectorAppVersionRepository(_context, _mapper));
+
         public IOrganizationInvitesRepository OrganizationInvitesRepository =>
             _organizationInvitesRepository
             ?? (_organizationInvitesRepository = new OrganizationInvitesRepository(_context, _mapper));
@@ -114,6 +121,8 @@
                 return _notificationsRepository;
             }
         }
+
+        public IThemeRepository ThemeRepository => _themeRepository ?? (_themeRepository = new ThemeRepository(_context, _mapper));
         
         public async Task<bool> SaveAsync()
         {

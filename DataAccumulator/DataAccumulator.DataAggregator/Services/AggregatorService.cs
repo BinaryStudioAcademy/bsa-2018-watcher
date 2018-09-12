@@ -14,13 +14,15 @@ namespace DataAccumulator.DataAggregator.Services
     {
         private readonly IMapper _mapper;
         private readonly IDataAggregatorRepository<CollectedData> _dataAggregatorRepository;
+        private readonly IInstanceSettingsRepository<InstanceSettings> _instanceSettingsRepository;
 
         public AggregatorService(IMapper mapper,
-            IDataAccumulatorRepository<CollectedData> dataAccumulatorRepository,
-            IDataAggregatorRepository<CollectedData> dataAggregatorRepository)
+            IDataAggregatorRepository<CollectedData> dataAggregatorRepository,
+            IInstanceSettingsRepository<InstanceSettings> instanceSettingsRepository)
         {
             _mapper = mapper;
             _dataAggregatorRepository = dataAggregatorRepository;
+            _instanceSettingsRepository = instanceSettingsRepository;
         }
 
         public async Task<IEnumerable<CollectedDataDto>> GetSourceEntitiesAsync(CollectedDataType sourceType, 
@@ -56,6 +58,17 @@ namespace DataAccumulator.DataAggregator.Services
             await _dataAggregatorRepository.AddEntity(mappedEntity);
 
             return collectedDataDto;
+        }
+
+        public async Task<IEnumerable<InstanceSettingsDto>> GetInstanceSettingsEntitiesAsync()
+        {
+            var entities = await _instanceSettingsRepository.GetAllEntitiesAsync();
+            if (entities == null)
+            {
+                throw new NotFoundException();
+            }
+
+            return _mapper.Map<IEnumerable<InstanceSettings>, IEnumerable<InstanceSettingsDto>>(entities);
         }
     }
 }

@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container"> -->
 	<div class="ui-g ui-fluid">
 		<div class="ui-g-12 ui-lg-6">
 			<div class="title">USER PROFILE</div>
@@ -21,7 +21,7 @@
 					Display Name is required.
 				</div>
 
-				<div class="label">First Name</div>
+				<div class="label label-main">First Name</div>
 				<div class="ui-g ui-fluid">
 					<div class="ui-g-12">
 						<div class="ui-inputgroup">
@@ -34,7 +34,7 @@
 					Fisrt Name is required.
 				</div>
 
-				<div class="label">Last Name</div>
+				<div class="label label-main">Last Name</div>
 				<div class="ui-g ui-fluid">
 					<div class="ui-g-12">
 						<div class="ui-inputgroup">
@@ -47,7 +47,7 @@
 					Last Name is required.
 				</div>
 
-				<div class="label">Email</div>
+				<div class="label label-main">Email</div>
 				<div class="ui-g ui-fluid">
 					<div class="ui-g-12">
 						<div class="ui-inputgroup">
@@ -56,7 +56,7 @@
 					</div>
 				</div>
 
-				<div class="label">Email for notifications</div>
+				<div class="label label-main">Email for notifications</div>
 				<div class="ui-g ui-fluid">
 					<div class="ui-g-12">
 						<div class="ui-inputgroup">
@@ -69,13 +69,12 @@
 					Email for notifications is invalid.
 				</div>
 
-				<div class="label">Bio</div>
+				<div class="label label-main">Bio</div>
 				<div class="ui-g ui-fluid">
 					<div class="ui-g-12">
 						<textarea rows="5" formControlName="bio" pInputTextarea></textarea>
 					</div>
 				</div>
-
 
 				<div class="btn-panel">
 					<button type="submit" [disabled]="!userForm.valid || isUpdating" class="ui-button-raised ui-button-success btn-inline-flex ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
@@ -108,4 +107,4 @@
 			</p-dialog>
 		</div>
 	</div>
-</div>
+<!-- </div> -->

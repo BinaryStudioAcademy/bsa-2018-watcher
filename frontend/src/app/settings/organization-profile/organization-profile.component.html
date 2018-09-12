@@ -1,13 +1,13 @@
-<div class="container">
+<!-- <div class="container"> -->
   <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-lg-6 header">
+    <div class="ui-g-12 ui-lg-6 title-block">
       <div class="title">ORGANIZATION PROFILE</div>
       <hr>
     </div>
   </div>
 
   <div class="grid-container">
-    <div *ngIf="organization" class="grid-item logo">
+    <div *ngIf="organization" class="grid-item grid-logo">
       <div class="ui-g-12 ui-md-8 ui-lg-5">
         <div class="label">Organization logo</div>
         <figure class="cap-bot">
@@ -91,6 +91,13 @@
             </div>
           </div>
 
+        <div class="label">Theme</div>
+				<div class="ui-g ui-fluid">
+					<div class="ui-g-12">
+						<p-dropdown [options]="themeDropdown" [(ngModel)]="selectedThemeName" [placeholder]="selectedThemeName" (onChange)="onChange($event.value)" [style]="{'width':'110px'}"></p-dropdown>
+					</div>
+				</div>
+
           <div class="label">Description:</div>
           <div class="ui-g ui-fluid">
             <div class="ui-g-12">
@@ -148,7 +155,7 @@
                 </div>
               </div>
             </div>
-            <button (click)="onSentInviteToEmail()" class="ui-button ui-state-default ui-corner-all ui-button-success ui-button-text-only ui-widget btn-inline-flex"
+            <button (click)="onSentInviteToEmail()" class="ui-button ui-state-default ui-corner-all ui-button-success ui-button-text-only ui-widget btn-inline-flex get-info"
               [disabled]="inviteLink === '' || iEmail?.invalid || isSending">
               <p-progressSpinner class="btn-spinner" *ngIf="isSending" strokeWidth="5"></p-progressSpinner>
               <span class="ui-button-text" *ngIf="!isSending">Send</span>
@@ -162,4 +169,4 @@
       <app-invites-list></app-invites-list>
     </div>
   </div>
-</div>
+<!-- </div> -->

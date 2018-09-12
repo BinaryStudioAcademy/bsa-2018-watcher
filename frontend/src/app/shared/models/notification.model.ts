@@ -6,8 +6,6 @@ export interface Notification  {
    createdAt: Date;
    wasRead: boolean;
    userId: string;
-   instanceId?: number;
-   instanceGuidId?: string;
    notificationSettingId: Number;
    notificationSetting: NotificationSetting;
 }

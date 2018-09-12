@@ -118,6 +118,11 @@ namespace Watcher
             services.AddTransient<IAggregateDataService, AggregatedDataService>();
             services.AddTransient<ICollectorActionLogService, CollectorActionLogService>();
 
+            services.AddTransient<ICollectorAppsService, CollectorAppsService>();
+
+            services.AddTransient<IThemeService, ThemeService>();
+
+
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddTransient<IAzureQueueSender, AzureQueueSender>();
             services.AddSingleton<IServiceBusProvider, ServiceBusProvider>();
@@ -336,6 +341,7 @@ namespace Watcher
                     cfg.AddProfile<OrganizationInvitesProfile>();
                     cfg.AddProfile<CollectedDataProfile>();
                     cfg.AddProfile<CollectorActionLogProfile>();
+                    cfg.AddProfile<ThemeProfile>();
 
                 }); // Scoped Lifetime!
             // https://lostechies.com/jimmybogard/2016/07/20/integrating-automapper-with-asp-net-core-di/

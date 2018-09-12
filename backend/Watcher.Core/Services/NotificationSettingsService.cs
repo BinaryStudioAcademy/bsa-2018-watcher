@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Watcher.Core.Services
+﻿namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -8,6 +6,7 @@ namespace Watcher.Core.Services
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
+    using Watcher.Common.Enums;
     using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Entities;
     using Watcher.DataAccess.Interfaces;
@@ -24,7 +23,7 @@ namespace Watcher.Core.Services
 
         public async Task<IEnumerable<NotificationSettingDto>> GetEntitysByUserIdAsync(string userId)
         {
-            var entity = await _uow.NotificationSettingsRepository.GetRangeAsync(1, int.MaxValue, x => x.UserId == userId && x.ChatId == null);
+            var entity = await _uow.NotificationSettingsRepository.GetRangeAsync(1, int.MaxValue, x => x.UserId == userId && x.Type != NotificationType.Chat);
 
             if (entity == null) return null;
 
