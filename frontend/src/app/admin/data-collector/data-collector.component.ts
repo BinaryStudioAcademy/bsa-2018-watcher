@@ -101,7 +101,13 @@ export class DataCollectorComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.collectorAppsService.create(this.collectorApp).subscribe(
+      value => {
+      this.toastrService.success('CollectorApp was created and sends to email.');
+      },
+      error => {
+        this.toastrService.error(`Error ocured status: ${error.message}`);
+      });
   }
 
 }

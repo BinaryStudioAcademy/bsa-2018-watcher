@@ -51,9 +51,9 @@
         /// <response code="403">You don`t have permission to create watch Organizations</response>
         /// <response code="400">Model is not valid</response>
         /// <response code="200">Success</response>
-        [HttpGet("activ")]
+        [HttpGet("active")]
         [AllowAnonymous]
-        public virtual async Task<ActionResult> GetActiv()
+        public virtual async Task<ActionResult> GetActive()
         {
             var dto = await _collectorAppsService.GetActiveEntityAsync();
             if (dto == null)
@@ -115,7 +115,7 @@
                 return StatusCode(500);
             }
 
-            return CreatedAtAction("GetById", new { id = dto.Id }, dto);
+            return Ok(dto);
         }
     }
 }

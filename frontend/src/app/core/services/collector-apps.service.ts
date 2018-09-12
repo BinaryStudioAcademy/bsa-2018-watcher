@@ -19,11 +19,11 @@ export class CollectorAppsService {
   }
 
   getLast(): Observable<CollectorApp> {
-    return this.apiService.get(`/${this.ctrlUrl}/last`);
+    return this.apiService.get(`/${this.ctrlUrl}/active`);
   }
 
-  create(organization: CollectorApp): Observable<CollectorApp> {
-    return this.apiService.post(`/${this.ctrlUrl}`, organization);
+  create(collectorApp: CollectorApp): Observable<CollectorApp> {
+    return this.apiService.post(`/${this.ctrlUrl}`, collectorApp);
   }
 
 
