@@ -14,6 +14,7 @@ import {Organization} from '../../shared/models/organization.model';
 import {User} from '../../shared/models/user.model';
 import { DashboardsHub } from '../../core/hubs/dashboards.hub';
 import { ThemeService } from '../../core/services/theme.service';
+import { OrganizationService } from '../../core/services/organization.service';
 
 
 
@@ -40,9 +41,9 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private tokenService: TokenService,
-    private dashboardsHub: DashboardsHub,
     private userService: UserService,
     private toastrService: ToastrService,
+    private organizationService: OrganizationService,
     private router: Router,
     private authService: AuthService,
     private pathService: PathService,
@@ -179,8 +180,7 @@ export class HeaderComponent implements OnInit {
     // update user in beckend
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
       .subscribe(value => {
-          this.dashboardsHub.unSubscribeFromOrganizationById(this.currentUser.lastPickedOrganizationId);
-          this.dashboardsHub.subscribeToOrganizationById(item.id);
+          this.organizationService.organizationChanged.emit({from: this.currentUser.lastPickedOrganizationId, to: item.id});
           // update user in frontend
           this.currentUser.lastPickedOrganizationId = item.id;
           this.currentUser.lastPickedOrganization = item;

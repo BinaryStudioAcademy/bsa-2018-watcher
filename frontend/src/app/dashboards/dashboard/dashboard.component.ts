@@ -22,6 +22,7 @@ import {CollectedData} from '../../shared/models/collected-data.model';
 import {UserOrganizationService} from '../../core/services/user-organization.service';
 import {ChartType} from '../../shared/models/chart-type.enum';
 import {CollectedDataType} from '../../shared/models/collected-data-type.enum';
+import { OrganizationService } from '../../core/services/organization.service';
 
 
 @Component({
@@ -49,6 +50,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isManager: boolean;
 
   constructor(private dashboardsService: DashboardService,
+              private organizationService: OrganizationService,
               private collectedDataService: CollectedDataService,
               private instanceService: InstanceService,
               private dashboardsHub: DashboardsHub,
@@ -64,6 +66,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.paramsSubscription = this.activateRoute.params.subscribe(par => this.onInstanceChanged(par));
     this.createCogItems();
     this.subscribeToCollectedData();
+
+    this.organizationService.organizationChanged.subscribe( ({from, to}) => {
+      this.dashboardsHub.unSubscribeFromOrganizationById(from);
+      this.dashboardsHub.subscribeToOrganizationById(to);
+      this.instanceId = null;
+    });
   }
 
   ngOnDestroy(): void {
