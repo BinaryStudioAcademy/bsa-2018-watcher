@@ -1,12 +1,15 @@
-﻿using DataAccumulator.DataAggregator.Interfaces;
-using DataAccumulator.Shared.Models;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+
+using DataAccumulator.DataAggregator.Interfaces;
+using DataAccumulator.Shared.Models;
+
+using Microsoft.Extensions.Options;
+
+using Newtonsoft.Json;
 
 namespace DataAccumulator.DataAggregator.Providers
 {
@@ -18,6 +21,7 @@ namespace DataAccumulator.DataAggregator.Providers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.Value.ApiKey);
             _client.BaseAddress = new Uri(options.Value.Url);
         }
+
         public async Task<AzureMLResponse> CheckAnomaly(List<Dictionary<string, string>> input)
         {
             var request = new

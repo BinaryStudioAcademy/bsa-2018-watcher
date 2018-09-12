@@ -1,27 +1,32 @@
 ﻿using System;
+
 using AutoMapper;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+
 using DataAccumulator.BusinessLayer.Interfaces;
-using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.BusinessLayer.Providers;
+using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.BusinessLayer.Validators;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
 using DataAccumulator.DataAggregator;
 using DataAccumulator.DataAggregator.Interfaces;
+using DataAccumulator.DataAggregator.Providers;
 using DataAccumulator.DataAggregator.Services;
 using DataAccumulator.Shared.Models;
-using DataAccumulator.WebAPI.TasksScheduler;
 using DataAccumulator.WebAPI.Extensions;
+using DataAccumulator.WebAPI.TasksScheduler;
 using DataAccumulator.WebAPI.TasksScheduler.Jobs;
-using ServiceBus.Shared.Queue;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
 using Quartz.Spi;
-using DataAccumulator.DataAggregator.Providers;
+
+using ServiceBus.Shared.Queue;
 
 namespace DataAccumulator
 {

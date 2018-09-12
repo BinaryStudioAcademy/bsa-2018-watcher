@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataAccumulator.Shared.Models
+﻿namespace DataAccumulator.Shared.Models
 {
     public class AzureMLOptions
     {

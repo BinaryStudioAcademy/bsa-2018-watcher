@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DataAccumulator.DataAggregator.Interfaces;
 using DataAccumulator.Shared.Models;
@@ -11,6 +9,7 @@ namespace DataAccumulator.WebAPI.TasksScheduler.Jobs
     public class CollectedDataAggregatingByDayJob : IJob
     {
         private readonly IDataAggregatorCore<CollectedDataDto> _dataAggregatorCore;
+
         public CollectedDataAggregatingByDayJob(IDataAggregatorCore<CollectedDataDto> dataAggregatorCore)
         {
             _dataAggregatorCore = dataAggregatorCore;

@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+using Newtonsoft.Json;
 
 namespace DataAccumulator.Shared.Models
 {
@@ -12,13 +13,14 @@ namespace DataAccumulator.Shared.Models
         [JsonProperty("ZSpike")]
         public string ZSpikeRaw { get; set; }
         [JsonIgnore]
-        public bool TSpike { get => ToBool(TSpikeRaw);  }
+        public bool TSpike => ToBool(TSpikeRaw);
+
         [JsonIgnore]
-        public bool ZSpike { get => ToBool(ZSpikeRaw); }
+        public bool ZSpike => ToBool(ZSpikeRaw);
 
         public DateTime Time { get; set; }
 
-        private static bool ToBool(string str) => str == "1" ? true : false;
+        private static bool ToBool(string str) => str == "1";
 
     }
 

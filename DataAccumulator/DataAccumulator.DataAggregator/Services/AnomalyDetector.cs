@@ -1,15 +1,14 @@
-﻿using DataAccumulator.DataAccessLayer.Entities;
-using DataAccumulator.DataAggregator.Interfaces;
-using DataAccumulator.Shared.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
+using DataAccumulator.DataAggregator.Interfaces;
+using DataAccumulator.Shared.Models;
 
 namespace DataAccumulator.DataAggregator.Services
 {
-    public class AnomalyDetector: IAnomalyDetector
+    public class AnomalyDetector : IAnomalyDetector
     {
         private readonly IAzureMLProvider _azureMLProvider;
 
