@@ -24,7 +24,7 @@
           <span *ngIf="!notification.instanceGuidId" class="message-title text-overflow">{{type[notification.notificationSetting.type]}} message</span>
           <div class="message-text action"
             [ngClass]="{'message-text-short': extendedNotification !== notification.id}"
-            (click)="extendedNotification = extendedNotification ? null : notification.id">
+            (click)="extendedNotification = extendedNotification === notification.id ? null : notification.id">
             {{notification.text}}
           </div>
           <div class="message-date text-overflow">{{notification.createdAt | date:'short'}}</div>
