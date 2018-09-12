@@ -55,7 +55,7 @@ export class EditReportChartComponent implements OnInit {
 
   ngOnInit() {
     this.onDisplay.subscribe((isShow: boolean) => this.visible = isShow);
-    this.dashboardChart.showCommon = false;
+    this.dashboardChart.showCommon = true;
 
     // Fill dropdown with sources
     Object.keys(ChartType).forEach(type => {
