@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter, QueryList, ViewChildren } from '@angular/core';
 import { AggregatedDataService } from '../../core/services/aggregated-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { DataType } from '../../shared/models/data-type.enum';
@@ -26,7 +26,7 @@ export class ReportComponent implements OnInit {
   @ViewChild('cf1') calendarFilter1: Calendar;
   @ViewChild('cf2') calendarFilter2: Calendar;
   @ViewChild('ct') timeInput: Calendar;
-  @ViewChild('chartsPDF') chartsPDF: ElementRef;
+  @ViewChildren('chartPDF') chartPDF: QueryList<ElementRef>;
 
   private id: string;
 
@@ -235,19 +235,24 @@ export class ReportComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
     } else {
-      html2canvas(this.chartsPDF.nativeElement).then(canvas => {
-        // Few necessary setting options
-        const imgWidth = 208;
-        const pageHeight = 295;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-        const heightLeft = imgHeight;
+      const eventRender = new EventEmitter();
+      doc.deletePage(1);
+      this.chartPDF.forEach(item => {
+        html2canvas(item.nativeElement).then(canvas => {
+          const contentDataURL = canvas.toDataURL('image/png');
+          doc.addPage();
+          doc.addImage(contentDataURL, 'PNG', 35, 100);
+          eventRender.emit();
+        });
+      });
 
-        const contentDataURL = canvas.toDataURL('image/png');
-        const position = 0;
-        doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-
-        // tslint:disable-next-line:max-line-length
-      doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
+      let renderedImg = 0;
+      eventRender.subscribe(() => {
+        renderedImg++;
+        if (renderedImg === this.chartPDF.length) {
+          // tslint:disable-next-line:max-line-length
+          doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
+        }
       });
     }
   }
