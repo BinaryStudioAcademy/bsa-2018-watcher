@@ -60,6 +60,7 @@ export class OrganizationProfileComponent implements OnInit {
   themes: Theme[] = [];
   themeDropdown: SelectItem[] = [];
   selectedTheme: Theme;
+  selectedThemeName: string;
 
   user: User;
 
@@ -81,6 +82,7 @@ export class OrganizationProfileComponent implements OnInit {
           this.organization = org;
             this.name = this.organization.name;
             this.selectedTheme = this.organization.theme;
+            this.selectedThemeName = this.selectedTheme.name;
           this.imageUrl = org.imageURL;
           const role = await this.userOrganizationService.getOrganizationRole();
           this.editable = role.name === 'Manager' ? true : false;
