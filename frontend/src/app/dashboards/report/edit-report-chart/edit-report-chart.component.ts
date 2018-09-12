@@ -38,7 +38,7 @@ export class EditReportChartComponent implements OnInit {
   isYAxisAvailable: boolean;
 
   get dialogTitle() {
-    return (this.dashboardChart && this.dashboardChart.id) ? 'Edit chart' : 'Create chart';
+    return (this.edit) ? 'Edit chart' : 'Create chart';
   }
 
   get spinnerDisabled() {
@@ -142,11 +142,25 @@ export class EditReportChartComponent implements OnInit {
   }
 
   processData(): void {
-    this.isPreviewAvailable = this.dataService.fulfillChart(this.dataService.fakeCollectedData, this.dashboardChart, true);
+    const data = this.collectedData ? this.collectedData : this.dataService.fakeCollectedData;
+    this.isPreviewAvailable = this.dataService.fulfillChart(data, this.dashboardChart, true);
   }
 
   closeDialog() {
     this.visible = false;
     this.closed.emit();
+  }
+
+  onSaveChart(): void {
+    const data = this.collectedData ? this.collectedData : [];
+    this.dataService.fulfillChart(data, this.dashboardChart, true);
+
+    if (this.edit) {
+      this.editChart.emit(this.dashboardChart);
+    } else {
+      this.addChart.emit(this.dashboardChart);
+    }
+
+    this.visible = false;
   }
 }

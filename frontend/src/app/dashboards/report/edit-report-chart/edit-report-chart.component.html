@@ -21,13 +21,7 @@
                     placeholder="Select a type"
                     (onChange)="processChartType()">
         </p-dropdown>
-        <p class="field">Show total:
-          <p-checkbox [ngModel]="dashboardChart?.showCommon"
-                      (ngModelChange)="dashboardChart.showCommon=$event"
-                      (onChange)="resetBuilderForm()"
-                      binary="true">
-          </p-checkbox>
-        </p>
+        
         <p class="field">Select source: </p>
         <p-dropdown [ngModel]="dashboardChart.dataSources"
                     [autoWidth]="false"

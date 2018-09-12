@@ -42,9 +42,10 @@ export class ReportComponent implements OnInit {
   recordsPerPage = 1;
   totalRecords: number;
 
-  chartToEdit: DashboardChart;
+  chartToEdit = {...defaultOptions};
   charts: DashboardChart[];
 
+  editChartIndex: number;
   edit: boolean;
   close: boolean;
 
@@ -53,13 +54,15 @@ export class ReportComponent implements OnInit {
   tabs: MenuItem[];
   activeTab: MenuItem;
 
-  onDisplayChartEditing: EventEmitter<boolean>;
+  onDisplayChartEditing = new EventEmitter<boolean>();
 
   constructor(private aggregatedDateService: AggregatedDataService,
               private activateRoute: ActivatedRoute,
               private dataService: DataService) { }
 
   ngOnInit() {
+    this.charts = [];
+
     this.tabs = [
       { label: 'Table', command: () => this.activeTab = this.tabs[0] },
       { label: 'Chart', command: () => this.activeTab = this.tabs[1] }
@@ -72,7 +75,6 @@ export class ReportComponent implements OnInit {
       icon: 'fa fa-fw fa-plus',
 
       command: (event?: any) => {
-        this.edit = false;
         this.close = false;
 
         this.decomposeChart(defaultOptions);
@@ -273,6 +275,35 @@ export class ReportComponent implements OnInit {
 
   showChartCreating() {
     this.onDisplayChartEditing.emit(true);
+  }
+
+  editChart(chart: DashboardChart): void {
+    this.edit = true;
+    this.editChartIndex = this.charts.indexOf(chart);
+    this.decomposeChart(chart);
+    this.showChartCreating();
+  }
+
+  deleteChart(chart: DashboardChart): void {
+    const indexDeleteChart = this.charts.indexOf(chart);
+    this.charts.splice(indexDeleteChart, 1);
+  }
+
+  onAddChart(event: DashboardChart): void {
+    this.charts.push({...event});
+    this.decomposeChart(defaultOptions);
+  }
+
+  onEditChart(event: DashboardChart): void {
+    this.charts[this.editChartIndex] = {...event};
+    this.edit = false;
+    this.decomposeChart(defaultOptions);
+  }
+
+  onClosed(): void {
+    this.close = true;
+    this.edit = false;
+    this.decomposeChart(defaultOptions);
   }
 
 }
