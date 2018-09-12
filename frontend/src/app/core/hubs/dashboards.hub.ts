@@ -11,10 +11,10 @@ import {InstanceChecked} from '../../shared/models/instance-checked';
 @Injectable()
 export class DashboardsHub {
   private hubName = 'dashboards';
+  private isConnect: boolean;
   private hubConnection: HubConnection | undefined;
   private connectionEstablishedSub = new Subject<boolean>();
   public connectionEstablished$ = from(this.connectionEstablishedSub);
-  public isConnect: boolean;
 
   private infoSub = new Subject<CollectedData>();
   public infoSubObservable = from(this.infoSub);
@@ -76,35 +76,35 @@ export class DashboardsHub {
   }
 
   subscribeToInstanceById(instanceGuidId: string): void {
-    if (this.hubConnection) {
+    if (this.isConnect) {
       this.hubConnection.invoke('SubscribeToInstanceById', instanceGuidId)
         .catch(err => console.error(err));
     }
   }
 
   subscribeToOrganizationById(id: number): void {
-    if (this.hubConnection) {
+    if (this.isConnect) {
       this.hubConnection.invoke('SubscribeToOrganizationById', id)
         .catch(err => console.error(err));
     }
   }
 
   unSubscribeFromInstanceById(instanceGuidId: string): void {
-    if (this.hubConnection) {
+    if (this.isConnect) {
       this.hubConnection.invoke('UnSubscribeFromInstanceById', instanceGuidId)
         .catch(err => console.error(err));
     }
   }
 
   unSubscribeFromOrganizationById(id: number): void {
-    if (this.hubConnection) {
+    if (this.isConnect) {
       this.hubConnection.invoke('UnSubscribeFromOrganizationById', id)
         .catch(err => console.error(err));
     }
   }
 
   send(userId: string, item: string): string {
-    if (this.hubConnection) {
+    if (this.isConnect) {
       this.hubConnection.invoke('Send', userId, item)
         .catch(err => console.error(err));
     }

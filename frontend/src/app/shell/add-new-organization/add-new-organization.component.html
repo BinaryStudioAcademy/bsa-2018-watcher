@@ -63,9 +63,7 @@
   </form>
 
   <p-footer>
-    <div class="text-center">
-        <button pButton type="button" label="Add" [disabled]="!organizationForm.valid" (click)="hiddenSaveButton.click()"  class="ui-button-success button"></button>
-        <button pButton type="button" class="ui-button-raised ui-button-danger button" (click)="onClose()" label="Cancel"></button>  
-    </div>
+      <button pButton type="button" label="Add" [disabled]="!organizationForm.valid" (click)="hiddenSaveButton.click()"  class="ui-button-success button"></button>
+      <button pButton type="button" class="ui-button-raised ui-button-danger button" (click)="onClose()" label="Cancel"></button>
   </p-footer>
 </p-dialog>
