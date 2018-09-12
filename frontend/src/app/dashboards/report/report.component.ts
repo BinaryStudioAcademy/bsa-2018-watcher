@@ -14,6 +14,7 @@ import { ProcessData } from '../../shared/models/process-data.model';
 import { DashboardChart } from '../models/dashboard-chart';
 import { defaultOptions } from '../charts/models/chart-options';
 import { DataService } from '../../core/services/data.service';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-report',
@@ -25,6 +26,7 @@ export class ReportComponent implements OnInit {
   @ViewChild('cf1') calendarFilter1: Calendar;
   @ViewChild('cf2') calendarFilter2: Calendar;
   @ViewChild('ct') timeInput: Calendar;
+  @ViewChild('chartsPDF') chartsPDF: ElementRef;
 
   private id: string;
 
@@ -217,20 +219,37 @@ export class ReportComponent implements OnInit {
 
   convertPDF(): void {
     const doc = new jsPDF('p', 'mm', 'a4');
-    doc.setFontSize(10);
 
-    const tables = this.createTables(this.collectedData);
+    if (this.activeTab === this.tabs[0]) {
+      doc.setFontSize(10);
 
-    doc.deletePage(1);
-    tables.forEach(item => {
-      doc.addPage();
-      doc.autoTable(item.cols, item.rows);
-      doc.text(`Time: ${item.time}`, 20, doc.autoTable.previous.finalY + 10);
+      const tables = this.createTables(this.collectedData);
+
+      doc.deletePage(1);
+      tables.forEach(item => {
+        doc.addPage();
+        doc.autoTable(item.cols, item.rows);
+        doc.text(`Time: ${item.time}`, 20, doc.autoTable.previous.finalY + 10);
+      });
 
       // tslint:disable-next-line:max-line-length
       doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
+    } else {
+      html2canvas(this.chartsPDF.nativeElement).then(canvas => {
+        // Few necessary setting options
+        const imgWidth = 208;
+        const pageHeight = 295;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const heightLeft = imgHeight;
 
-    });
+        const contentDataURL = canvas.toDataURL('image/png');
+        const position = 0;
+        doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+
+        // tslint:disable-next-line:max-line-length
+      doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
+      });
+    }
   }
 
   private createTables(data: CollectedData[]): any[] {
