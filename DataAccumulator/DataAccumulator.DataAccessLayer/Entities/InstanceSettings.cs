@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
 using DataAccumulator.DataAccessLayer.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;

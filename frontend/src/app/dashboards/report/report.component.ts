@@ -213,7 +213,6 @@ export class ReportComponent implements OnInit {
       ramMBytesMax: +processData.ramMBytesMax.toFixed(2),
       ramMBytesMin: +processData.ramMBytesMin.toFixed(2)
     };
-    console.log(item);
     return item;
   }
 
