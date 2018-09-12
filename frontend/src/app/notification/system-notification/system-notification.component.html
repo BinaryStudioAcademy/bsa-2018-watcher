@@ -5,7 +5,8 @@
         <span class="message-img icon-style fa fa-3x info"
         [ngClass]="{
           'warning': message.data.notificationSetting?.type == type.Warning,
-          'error': message.data.notificationSetting?.type == type.Error}">
+          'error': message.data.notificationSetting?.type == type.Error,
+          'system': message.data.notificationSetting?.type == type.System}">
       </span>
         <div class="message-content">
           <span *ngIf="message.data.instanceGuidId" (click)='redirectToInstance(message.data)'  class="message-title text-overflow clickable" style="width:240px">Instance message</span>
