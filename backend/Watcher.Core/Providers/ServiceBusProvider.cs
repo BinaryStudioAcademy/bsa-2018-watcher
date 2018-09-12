@@ -199,6 +199,7 @@
                         instanceCheckedDto = new InstanceCheckedDto
                         {
                             InstanceGuidId = result.GuidId,
+                            OrganizationId = result.OrganizationId,
                             StatusCheckedAt = result.StatusCheckedAt
                         };
                     }
@@ -219,7 +220,7 @@
 
             if (instanceCheckedDto != null)
             {
-                tasks.Add(_dashboardsHubContext.Clients.Group(instanceCheckedDto.InstanceGuidId.ToString()).SendAsync("InstanceStatusCheck", instanceCheckedDto));
+                tasks.Add(_dashboardsHubContext.Clients.Group(instanceCheckedDto.OrganizationId.ToString()).SendAsync("InstanceStatusCheck", instanceCheckedDto));
             }
 
             await Task.WhenAll(tasks);

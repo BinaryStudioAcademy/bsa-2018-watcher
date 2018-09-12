@@ -8,6 +8,9 @@
     public class InstanceCheckedDto
     {
         public Guid InstanceGuidId { get; set; }
+
+        public int OrganizationId { get; set; }
+
         public DateTime StatusCheckedAt { get; set; }
     }
 }
