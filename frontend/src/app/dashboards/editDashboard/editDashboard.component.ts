@@ -111,7 +111,7 @@ export class EditDashboardComponent implements OnInit, OnChanges {
         dashboardChart.xAxisLabel = 'Time';
         dashboardChart.yAxisLabel = 'Percentage %';
         break;
-      case ChartType.Guage:
+      case ChartType.Gauge:
         dashboardChart.yAxisLabel = 'Process';
         dashboardChart.xAxisLabel = '';
         break;

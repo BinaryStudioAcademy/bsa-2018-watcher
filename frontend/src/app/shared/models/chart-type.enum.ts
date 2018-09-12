@@ -4,7 +4,7 @@ export enum ChartType {
     BarVertical = 0,
     LineChart,
     Pie,
-    Guage,
+    Gauge,
     NumberCards,
     ResourcesTable,
     PolarChart,
@@ -47,7 +47,7 @@ chartTypeLabels[ChartType.AreaChartStacked] = 'Area Stacked Chart';
 chartTypeLabels[ChartType.AreaChartNormalized] = 'Area Normalized Chart';
 
 chartTypeLabels[ChartType.ResourcesTable] = 'Resources Table';
-chartTypeLabels[ChartType.Guage] = 'Guage';
+chartTypeLabels[ChartType.Gauge] = 'Gauge';
 chartTypeLabels[ChartType.NumberCards] = 'Number Cards';
 chartTypeLabels[ChartType.PolarChart] = 'Polar Chart';
 chartTypeLabels[ChartType.TreeMap] = 'Tree Map';
