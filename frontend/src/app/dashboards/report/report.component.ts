@@ -218,7 +218,7 @@ export class ReportComponent implements OnInit {
   }
 
   convertPDF(): void {
-    const doc = new jsPDF('p', 'mm', 'a4');
+    const doc = new jsPDF('p', 'pt', 'a4');
 
     if (this.activeTab === this.tabs[0]) {
       doc.setFontSize(10);
@@ -235,13 +235,15 @@ export class ReportComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
     } else {
+      doc.setFontSize(20);
       const eventRender = new EventEmitter();
-      doc.deletePage(1);
+      doc.text(`${this.types[this.selectedType - 1].label} Report`, 200, 40);
+      doc.text(`${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`, 150, 70);
       this.chartPDF.forEach(item => {
         html2canvas(item.nativeElement).then(canvas => {
           const contentDataURL = canvas.toDataURL('image/png');
+          doc.addImage(contentDataURL, 'PNG', 15, 250, 531, 250);
           doc.addPage();
-          doc.addImage(contentDataURL, 'PNG', 35, 100);
           eventRender.emit();
         });
       });
@@ -250,6 +252,7 @@ export class ReportComponent implements OnInit {
       eventRender.subscribe(() => {
         renderedImg++;
         if (renderedImg === this.chartPDF.length) {
+          doc.deletePage(this.chartPDF.length + 1);
           // tslint:disable-next-line:max-line-length
           doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
         }
