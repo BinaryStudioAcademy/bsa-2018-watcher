@@ -21,7 +21,7 @@ using DataAccumulator.WebAPI.Extensions;
 using DataAccumulator.WebAPI.TasksScheduler.Jobs;
 using ServiceBus.Shared.Queue;
 using Quartz.Spi;
-using ServiceBus.Shared.ML;
+using DataAccumulator.DataAggregator.Providers;
 
 namespace DataAccumulator
 {

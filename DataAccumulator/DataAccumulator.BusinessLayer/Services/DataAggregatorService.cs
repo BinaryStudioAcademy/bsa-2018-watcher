@@ -19,13 +19,11 @@ namespace DataAccumulator.BusinessLayer.Services
     {
         private readonly IMapper _mapper;
         private readonly IDataAggregatorRepository<CollectedData> _repository;
-        private readonly IAnomalyDetector _anomalyDetector;
 
-        public DataAggregatorService(IMapper mapper, IDataAggregatorRepository<CollectedData> repository, IAnomalyDetector anomalyDetector)
+        public DataAggregatorService(IMapper mapper, IDataAggregatorRepository<CollectedData> repository)
         {
             _mapper = mapper;
             _repository = repository;
-            _anomalyDetector = anomalyDetector;
         }
 
         public async Task<IEnumerable<CollectedDataDto>> GetEntitiesAsync()
@@ -97,12 +95,6 @@ namespace DataAccumulator.BusinessLayer.Services
             }
 
             return await _repository.RemoveEntity(id);
-        }
-
-        public async Task<AzureMLAnomalyReport> RunMl(Guid id)
-        {
-            var data = await _repository.GetEntitiesByInstanceIdAndTypeInTime(id, CollectedDataType.Accumulation, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1), count: 1000);
-            return await _anomalyDetector.AnalyzeData(data);
         }
     }
 }

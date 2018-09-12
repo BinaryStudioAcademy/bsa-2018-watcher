@@ -16,6 +16,5 @@ namespace DataAccumulator.BusinessLayer.Interfaces
         Task<TDto> AddEntityAsync(TDto entity);
         Task<TDto> UpdateEntityAsync(TDto entity);
         Task<bool> DeleteEntityAsync(Guid id);
-        Task<AzureMLAnomalyReport> RunMl(Guid id);
     }
 }

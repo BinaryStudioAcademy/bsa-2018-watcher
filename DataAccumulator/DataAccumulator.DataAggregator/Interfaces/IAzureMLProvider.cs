@@ -1,8 +1,8 @@
-﻿using ServiceBus.Shared.ML;
+﻿using DataAccumulator.Shared.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DataAccumulator.BusinessLayer.Interfaces
+namespace DataAccumulator.DataAggregator.Interfaces
 {
     public interface IAzureMLProvider
     {

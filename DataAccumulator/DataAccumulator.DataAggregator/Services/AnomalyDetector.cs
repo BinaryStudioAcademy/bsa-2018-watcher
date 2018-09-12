@@ -1,13 +1,13 @@
-﻿using DataAccumulator.BusinessLayer.Interfaces;
-using DataAccumulator.DataAccessLayer.Entities;
-using ServiceBus.Shared.ML;
+﻿using DataAccumulator.DataAccessLayer.Entities;
+using DataAccumulator.DataAggregator.Interfaces;
+using DataAccumulator.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccumulator.BusinessLayer.Services
+namespace DataAccumulator.DataAggregator.Services
 {
     public class AnomalyDetector: IAnomalyDetector
     {
@@ -18,7 +18,7 @@ namespace DataAccumulator.BusinessLayer.Services
             _azureMLProvider = azureMLProvider;
         }
 
-        public async Task<AzureMLAnomalyReport> AnalyzeData(IEnumerable<CollectedData> collectedData)
+        public async Task<AzureMLAnomalyReport> AnalyzeData(IEnumerable<CollectedDataDto> collectedData)
         {
             var data = new[]
             {
@@ -26,16 +26,12 @@ namespace DataAccumulator.BusinessLayer.Services
                 MapInput(collectedData, x => x.RamUsagePercentage),
                 MapInput(collectedData, x => x.LocalDiskUsagePercentage)
             };
-            var cpuData = MapInput(collectedData, x => x.CpuUsagePercentage);
-            var ramData = MapInput(collectedData, x => x.RamUsagePercentage);
-            var diskData = MapInput(collectedData, x => x.LocalDiskUsagePercentage);
-
             var results = await Task.WhenAll(data.Select(_azureMLProvider.CheckAnomaly));
 
             return BuildReport(results);
         }
 
-        private List<Dictionary<string, string>> MapInput<T>(IEnumerable<CollectedData> data, Func<CollectedData, T> selector)
+        private List<Dictionary<string, string>> MapInput<T>(IEnumerable<CollectedDataDto> data, Func<CollectedDataDto, T> selector)
         {
             return data.Select(x => new Dictionary<string, string>
             {
@@ -70,26 +66,5 @@ namespace DataAccumulator.BusinessLayer.Services
         private List<AzureMLAnomaly> GetAnomalies(List<AzureMLOutput> collection, Func<AzureMLOutput, bool> predicate)
             => collection.Where(predicate).Select(x => new AzureMLAnomaly { Time = x.Time, Data = x.Data }).ToList();
 
-    }
-
-    public class AzureMLAnomalyReport
-    {
-        public DateTime Date { get; set; }
-
-        public List<AzureMLAnomalyGroup> AnomalyGroups { get; set; }
-    }
-
-    public class AzureMLAnomalyGroup
-    {
-        public string Name { get; set; }
-        public List<AzureMLAnomaly> Warnings { get; set; }
-        public List<AzureMLAnomaly> Anomalies { get; set; }
-        public int Total { get; internal set; }
-    }
-
-    public class AzureMLAnomaly
-    {
-        public DateTime Time { get; set; }
-        public float Data { get; set; }
     }
 }

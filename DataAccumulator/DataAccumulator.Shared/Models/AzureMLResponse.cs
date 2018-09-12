@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace ServiceBus.Shared.ML
+namespace DataAccumulator.Shared.Models
 {
     public class AzureMLOutput
     {

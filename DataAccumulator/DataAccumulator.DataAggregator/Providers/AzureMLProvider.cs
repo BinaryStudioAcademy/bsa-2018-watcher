@@ -1,14 +1,14 @@
-﻿using DataAccumulator.BusinessLayer.Interfaces;
+﻿using DataAccumulator.DataAggregator.Interfaces;
+using DataAccumulator.Shared.Models;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using ServiceBus.Shared.ML;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace DataAccumulator.BusinessLayer.Providers
+namespace DataAccumulator.DataAggregator.Providers
 {
     public class AzureMLProvider: IAzureMLProvider
     {

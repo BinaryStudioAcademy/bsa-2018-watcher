@@ -50,13 +50,6 @@ namespace DataAccumulator.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("runml/{id}")]
-        public async Task<object> RunML(Guid id)
-        {
-            return await _dataAggregatorService.RunMl(id);
-        }
-
         // GET: api/v1/dataaccumulator/5
         [HttpGet("{id}", Name = "GetDataAggregator")]
         public async Task<IActionResult> Get(Guid id)
