@@ -11,10 +11,10 @@ import {InstanceChecked} from '../../shared/models/instance-checked';
 @Injectable()
 export class DashboardsHub {
   private hubName = 'dashboards';
-  private isConnect: boolean;
   private hubConnection: HubConnection | undefined;
   private connectionEstablishedSub = new Subject<boolean>();
   public connectionEstablished$ = from(this.connectionEstablishedSub);
+  public isConnect: boolean;
 
   private infoSub = new Subject<CollectedData>();
   public infoSubObservable = from(this.infoSub);
