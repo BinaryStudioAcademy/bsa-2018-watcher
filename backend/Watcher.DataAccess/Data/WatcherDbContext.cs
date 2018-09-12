@@ -159,7 +159,5 @@
         public DbSet<Theme> Themes { get; set; }
 
         public DbSet<OrganizationInvite> OrganizationInvites { get; set; }
-
-        public DbSet<CollectorAppVersion> CollectorAppVersions { get; set; }
     }
 }
