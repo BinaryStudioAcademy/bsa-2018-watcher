@@ -1,14 +1,18 @@
 <div class="center">
-  <div class="ui-g">
+  <div class="ui-g ">
     <div class="ui-g-12">
       <div class="title">FEEDBACK</div>
       <hr>
+    </div>
+  </div>
+  <div class="ui-g ">
+    <div class="ui-g-12">
       <div>Thank you for taking the time to fill in our online feedback form. By providing us your feedback, you are helping us
         understand what we do well and what improvements we need to implement. </div>
     </div>
   </div>
 
-  <div class="ui-g container">
+  <div class="ui-g text-center">
     <div class="ui-g-12">
       <div class="ui-g-4 ">
       </div>
@@ -28,11 +32,11 @@
   </div>
 
   <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
-    <div class="ui-g container">
+    <div class="ui-g text-center">
       <div class="ui-g-12">
         <div class="ui-g-4 ">
           Informatively
-        </div> 
+        </div>
         <div class="ui-g-2 ">
           <p-radioButton name="informatively" formControlName="informatively" value="Abstain"></p-radioButton>
         </div>
@@ -48,7 +52,7 @@
       </div>
     </div>
 
-    <div class="ui-g container">
+    <div class="ui-g text-center">
       <div class="ui-g-12">
         <div class="ui-g-4">
           Friendliness
@@ -68,13 +72,13 @@
       </div>
     </div>
 
-    <div class="ui-g container">
+    <div class="ui-g text-center">
       <div class="ui-g-12">
         <div class="ui-g-4 ">
           Quickness
         </div>
         <div class="ui-g-2 ">
-          <p-radioButton name="quickness"  formControlName="quickness" value="Abstain"></p-radioButton>
+          <p-radioButton name="quickness" formControlName="quickness" value="Abstain"></p-radioButton>
         </div>
         <div class="ui-g-2 ">
           <p-radioButton name="quickness" formControlName="quickness" value="Unsatisfied"></p-radioButton>
@@ -94,16 +98,20 @@
         <p>
           <p-radioButton name="willUse" formControlName="willUse" value="Abstain"></p-radioButton> Abstain </p>
         <p>
-        <p>
-          <p-radioButton name="willUse" formControlName="willUse" value="yes"></p-radioButton> Yes </p>
-        <p>
-          <p-radioButton name="willUse" formControlName="willUse" value="maybe"></p-radioButton> Maybe </p>
-        <p>
-          <p-radioButton name="willUse" formControlName="willUse" value="no"></p-radioButton> No </p>
+          <p>
+            <p-radioButton name="willUse" formControlName="willUse" value="yes"></p-radioButton> Yes </p>
+          <p>
+            <p-radioButton name="willUse" formControlName="willUse" value="maybe"></p-radioButton> Maybe </p>
+          <p>
+            <p-radioButton name="willUse" formControlName="willUse" value="no"></p-radioButton> No </p>
       </div>
     </div>
 
-    <div class="label">Feel free to add any other comments or suggestions:</div>
+    <div class="ui-g ">
+      <div class="ui-g-12">
+        Feel free to add any other comments or suggestions:
+      </div>
+    </div>
     <div class="ui-g">
       <div class="ui-g-12">
         <textarea rows="5" formControlName="suggestions" pInputTextarea></textarea>
