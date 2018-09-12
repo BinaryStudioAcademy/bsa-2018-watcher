@@ -121,7 +121,6 @@ export class DataCollectorComponent implements OnInit {
             this.collectorAppsService.delete(collectorAppToDel.id).subscribe(
               result => {
                 if (result) {
-                  this.updateData();
                   this.toastrService.success('CollectorApp was removed.');
                 } else {
                   this.toastrService.error(`CollectorApp was not removed`);
@@ -132,6 +131,7 @@ export class DataCollectorComponent implements OnInit {
             });
           }
         });
+        this.updateData();
     }
   }
 

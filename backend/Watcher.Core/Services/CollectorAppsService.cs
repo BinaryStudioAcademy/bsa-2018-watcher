@@ -69,6 +69,18 @@
             entity.CreatedAt = DateTime.Now;
 
             entity = await _uow.CollectorAppVersionRepository.CreateAsync(entity);
+
+            if(entity != null && entity.IsActive)
+            {
+                var items = await _uow.CollectorAppVersionRepository
+                    .GetRangeAsync(1, int.MaxValue, x => x.Id != entity.Id && x.IsActive);
+
+                items.ForEach(x => {
+                    x.IsActive = false;
+                    _uow.CollectorAppVersionRepository.Update(x);
+                });
+            }
+
             var result = await _uow.SaveAsync();
 
             if (!result) return null;
@@ -106,7 +118,7 @@
             if (entity.IsActive) return _mapper.Map<CollectorAppVersion, CollectorAppVersionDto>(entity);
 
             var items = await _uow.CollectorAppVersionRepository.
-                GetRangeAsync(1, int.MaxValue, x => x.Id != id);
+                GetRangeAsync(1, int.MaxValue, x => x.Id != id && x.IsActive);
 
                 items.ForEach(x => {
                     x.IsActive = false;
