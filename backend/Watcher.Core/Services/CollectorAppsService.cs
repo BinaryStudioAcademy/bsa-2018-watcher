@@ -91,5 +91,31 @@
 
             return result;
         }
+
+        public async Task<CollectorAppVersionDto> SetActualApp(int id)
+        {
+            var entity = await _uow.CollectorAppVersionRepository.GetFirstOrDefaultAsync(i => i.Id == id);
+
+            if (entity.IsActive) return _mapper.Map<CollectorAppVersion, CollectorAppVersionDto>(entity);
+
+            var items = await _uow.CollectorAppVersionRepository.
+                GetRangeAsync(1, int.MaxValue, x => x.Id != id);
+
+                items.ForEach(x => {
+                    x.IsActive = false;
+                    _uow.CollectorAppVersionRepository.Update(x);
+                    });
+
+
+            entity.IsActive = true;
+            await _uow.CollectorAppVersionRepository.UpdateAsync(entity);
+            var result = await _uow.SaveAsync();
+            if(result)
+            {
+                return _mapper.Map<CollectorAppVersion, CollectorAppVersionDto>(entity);
+            }
+
+            return null;
+        }
     }
 }

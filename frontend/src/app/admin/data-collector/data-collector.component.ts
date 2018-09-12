@@ -134,4 +134,24 @@ export class DataCollectorComponent implements OnInit {
         });
     }
   }
+
+  ActiveAppChenge(collectorApp) {
+    this.toastrService.confirm().then(
+      confirm => {
+        if (confirm) {
+          this.collectorAppsService.setActualApp(collectorApp.id).subscribe(
+            result => {
+              if (result) {
+                this.updateData();
+                this.toastrService.success('Actual CollectorApp was changed.');
+              } else {
+                this.toastrService.error(`Actual CollectorApp was not changed`);
+              }
+            },
+            error => {
+              this.toastrService.error(`Error ocured status: ${error.message}`);
+          });
+        }
+      });
+  }
 }

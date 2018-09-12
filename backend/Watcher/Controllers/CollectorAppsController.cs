@@ -141,5 +141,18 @@
 
             return Ok(result);
         }
+
+
+        [HttpPut("{id}")]
+        public virtual async Task<ActionResult> SetActualApp(int id)
+        {
+            var result = await _collectorAppsService.SetActualApp(id);
+            if (true == null)
+            {
+                return StatusCode(500);
+            }
+
+            return Ok(result);
+        }
     }
 }

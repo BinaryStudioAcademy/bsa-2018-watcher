@@ -16,5 +16,7 @@
         Task<List<CollectorAppVersionDto>> GetAllEntityesAsync();
 
         Task<bool> DeleteEntityAsync(int id);
+
+        Task<CollectorAppVersionDto> SetActualApp(int id);
     }
 }

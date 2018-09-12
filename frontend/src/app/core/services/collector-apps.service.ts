@@ -30,5 +30,9 @@ export class CollectorAppsService {
     return this.apiService.delete(`/${this.ctrlUrl}/${id}`);
   }
 
+  setActualApp(id: number): Observable<CollectorApp> {
+    return this.apiService.put(`/${this.ctrlUrl}/${id}`);
+  }
+
 
 }
