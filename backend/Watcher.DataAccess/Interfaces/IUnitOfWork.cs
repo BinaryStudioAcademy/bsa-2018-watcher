@@ -45,6 +45,8 @@
 
         IChartsRepository ChartsRepository { get;  }
 
+        ICollectorAppVersionRepository CollectorAppVersionRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }

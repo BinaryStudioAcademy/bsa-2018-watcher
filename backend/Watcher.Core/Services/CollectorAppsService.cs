@@ -5,7 +5,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Security.Cryptography;
-
+    using System.Linq;
     using AutoMapper;
 
     using Microsoft.EntityFrameworkCore;
@@ -42,5 +42,41 @@
             return await _fileStorageProvider.UploadFormFileWithNameAsync(file);
         }
 
+        public async Task<List<CollectorAppVersionDto>> GetAllEntityesAsync()
+        {
+            var entities = await _uow.CollectorAppVersionRepository.GetRangeAsync(1, int.MaxValue);
+
+            var dtos = _mapper.Map<List<CollectorAppVersion>, List<CollectorAppVersionDto>>(entities);
+
+            return dtos;
+        }
+
+        public async Task<CollectorAppVersionDto> GetActiveEntityAsync()
+        {
+            var entity = await _uow.CollectorAppVersionRepository
+                .GetFirstOrDefaultAsync(x => x.IsActive);
+
+            if (entity == null) return null;
+
+            var dto = _mapper.Map<CollectorAppVersion, CollectorAppVersionDto>(entity);
+
+            return dto;
+        }
+
+        public async Task<CollectorAppVersionDto> CreateEntityAsync(CollectorAppVersionRequest request)
+        {
+            var entity = _mapper.Map<CollectorAppVersionRequest, CollectorAppVersion>(request);
+            entity.CreatedAt = DateTime.Now;
+
+            entity = await _uow.CollectorAppVersionRepository.CreateAsync(entity);
+            var result = await _uow.SaveAsync();
+
+            if (!result) return null;
+
+            if (entity == null) return null;
+
+            var dto = _mapper.Map<CollectorAppVersion, CollectorAppVersionDto>(entity);
+            return dto;
+        }
     }
 }

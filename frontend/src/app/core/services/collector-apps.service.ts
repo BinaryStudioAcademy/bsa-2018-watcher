@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {ApiService} from './api.service';
 import { HttpHeaders, HttpEvent } from '@angular/common/http';
+import { CollectorApp } from '../../shared/models/collector-app.model';
 
 @Injectable()
 export class CollectorAppsService {
@@ -10,10 +11,20 @@ export class CollectorAppsService {
   constructor(private apiService: ApiService) { }
 
   public uploadInstaller(file): Observable<HttpEvent<{}>> {
-
     return this.apiService.uploadFile(`/${this.ctrlUrl}/uploadApp`, file);
   }
 
+  getAll(): Observable<CollectorApp[]> {
+    return this.apiService.get(`/${this.ctrlUrl}`);
+  }
+
+  getLast(): Observable<CollectorApp> {
+    return this.apiService.get(`/${this.ctrlUrl}/last`);
+  }
+
+  create(organization: CollectorApp): Observable<CollectorApp> {
+    return this.apiService.post(`/${this.ctrlUrl}`, organization);
+  }
 
 
 }
