@@ -113,7 +113,7 @@ export class InstanceListComponent implements OnInit {
       guidId: instance.guidId,
       statusCheckedAt: instance.statusCheckedAt,
       id: instance.id.toString(),
-      label: instance.title + this.instanceService.calculateSign(instance.statusCheckedAt),
+      label: instance.title, // + this.instanceService.calculateSign(instance.statusCheckedAt),
       routerLink: [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
         this.currentGuidId = instance.guidId;

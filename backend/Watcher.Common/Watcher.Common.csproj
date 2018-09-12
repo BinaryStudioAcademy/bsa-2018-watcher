@@ -43,6 +43,9 @@
     <None Update="MoveToFrontend\collected-data.model.ts">
       <CustomToolNamespace>Dtos\Plots\Temp\CollectedDataDto.cs</CustomToolNamespace>
     </None>
+    <None Update="MoveToFrontend\collector-app-version.model.ts">
+      <CustomToolNamespace>Dtos\CollectorAppVersionDto.cs</CustomToolNamespace>
+    </None>
     <None Update="MoveToFrontend\dashboard.model.ts">
       <CustomToolNamespace>Dtos\DashboardDto.cs</CustomToolNamespace>
     </None>
