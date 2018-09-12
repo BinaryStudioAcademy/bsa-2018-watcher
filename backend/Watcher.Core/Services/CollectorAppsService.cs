@@ -89,6 +89,13 @@
 
             var result = await _uow.SaveAsync();
 
+            if(result)
+            {
+                await _fileStorageProvider.DeleteFileAsync(entity.ExeLink);
+                await _fileStorageProvider.DeleteFileAsync(entity.DebLink);
+                await _fileStorageProvider.DeleteFileAsync(entity.TgzLink);
+            }
+
             return result;
         }
 
