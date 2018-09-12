@@ -312,7 +312,7 @@ export class DataService {
       type: value.type,
       theme: value.isLightTheme ? 'light' : 'dark',
       isIncluded: false,
-      dateTickFormatting: function(val): string { return val; }
+      dateTickFormatting: null
     };
 
     this.fulfillChart(this._hourlyCollectedData, dashChart);
