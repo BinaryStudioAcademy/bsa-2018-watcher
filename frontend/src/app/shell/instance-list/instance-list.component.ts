@@ -50,7 +50,9 @@ export class InstanceListComponent implements OnInit {
       async user => {
         this.user = user;
         const role = await this.userOrganizationService.getOrganizationRole();
-        this.isManager = role.name === 'Manager';
+        if (role) {
+          this.isManager = role.name === 'Manager';
+        } else { this.isManager = false; }
         if (this.dashboardsHub.isConnect) {
           this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
         }

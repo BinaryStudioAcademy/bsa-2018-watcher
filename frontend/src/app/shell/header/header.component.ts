@@ -15,6 +15,7 @@ import {User} from '../../shared/models/user.model';
 import { DashboardsHub } from '../../core/hubs/dashboards.hub';
 import { ThemeService } from '../../core/services/theme.service';
 import { OrganizationService } from '../../core/services/organization.service';
+import { Subscription } from 'rxjs';
 
 
 
@@ -29,6 +30,7 @@ export class HeaderComponent implements OnInit {
 
   currentUser: User;
   currentOrganizationName: string;
+  userSubscription: Subscription;
   private regexInstancesdUrl: RegExp = /\/user\/instances/;
 
   userItems: MenuItem[];
@@ -58,6 +60,8 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(): void {
+    this.userSubscription.unsubscribe();
+    this.currentUser = null;
     if (this.authService.isLoggedIn()) {
       this.authService.logout();
       this.themeService.setDefaultTheme();
@@ -106,7 +110,7 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.authService.currentUser.subscribe(
+    this.userSubscription = this.authService.currentUser.subscribe(
       userData => {
         this.currentUser = {...userData};
         this.currentUser.photoURL = this.pathService.convertToUrl(this.currentUser.photoURL);
@@ -151,10 +155,9 @@ export class HeaderComponent implements OnInit {
   }
 
   isAdmin() {
-    if (this.currentUser.role.name === 'Admin') {
-      return true;
+    if (this.currentUser) {
+      return this.currentUser.role.name === 'Admin' ? true : false;
     }
-    return false;
   }
 
   getUserClaims() {
