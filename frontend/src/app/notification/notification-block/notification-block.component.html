@@ -16,7 +16,8 @@
         <span class="message-img icon-style fa fa-3x info"
           [ngClass]="{
             'warning': notification?.notificationSetting?.type == type.Warning,
-            'error': notification?.notificationSetting?.type == type.Error}">
+            'error': notification?.notificationSetting?.type == type.Error,
+            'system': message.data.notificationSetting?.type == type.System}">
         </span>
         <div class="message-content" [ngClass]="{'unread-message': !notification.wasRead}">
           <span class="message-title text-overflow" style="width:240px">System message</span>

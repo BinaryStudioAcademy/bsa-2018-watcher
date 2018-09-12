@@ -49,18 +49,21 @@ export class NotificationBlockComponent implements OnInit {
 
   private subscribeToEvents(): void {
     this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
-      if (!value.notificationSetting.isDisable) {
-        this.notificationCounter++;
-        if (!value.notificationSetting.isMute) {
-          this.systemToastrService.send(value);
-        }
+      this.notificationCounter++;
+      if (!value.notificationSetting.isMute) {
+        this.systemToastrService.send(value);
       }
       this.notifications.unshift(value);
     });
 
     this.notificationsHubService.notificationDeleted.subscribe((value: Notification) => {
       const index = this.notifications.findIndex(item => item.id === value.id);
-      this.notifications.splice(index, 1);
+      if (index !== -1) {
+        if (!this.notifications[index].wasRead) {
+          this.notificationCounter--;
+        }
+        this.notifications.splice(index, 1);
+      }
     });
   }
 
@@ -70,7 +73,6 @@ export class NotificationBlockComponent implements OnInit {
       this.notifications = value;
       this.notificationCounter = this.calcNotReadNotifications(value);
       this.isLoading = false;
-      console.log(this.isLoading);
     });
   }
 
@@ -102,7 +104,10 @@ export class NotificationBlockComponent implements OnInit {
     }
 
     const index = this.notifications.findIndex(item => item.id === id);
-    this.notifications.splice(index, 1);
-    this.notificationsHubService.delete(notify);
+
+    if (index !== -1) {
+      this.notifications.splice(index, 1);
+      this.notificationsHubService.delete(notify);
+    }
   }
 }
