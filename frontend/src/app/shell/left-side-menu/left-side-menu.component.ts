@@ -80,7 +80,7 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
     },
     {
       label: 'DataCollector',
-      icon: 'fa fa-fw fa-bullhorn',
+      icon: 'fa fa-fw fa-download',
       routerLink: ['/admin/data-collector']
     }];
   }

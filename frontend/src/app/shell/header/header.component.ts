@@ -83,7 +83,7 @@ export class HeaderComponent implements OnInit {
       routerLink: ['/admin/feedback-list']
     }, {
       label: 'DataCollector',
-      icon: 'fa fa-fw fa-bullhorn',
+      icon: 'fa fa-fw fa-download',
       routerLink: ['/admin/data-collector']
     }];
 
