@@ -41,6 +41,7 @@ import { EditChartComponent } from './charts/edit-chart/edit-chart.component';
 import { InstanceActivityComponent } from './instance-activity/instance-activity.component';
 import { ReportComponent } from './report/report.component';
 import { ResourceTableComponent } from './charts/resource-table/resource-table.component';
+import { EditReportChartComponent } from './report/edit-report-chart/edit-report-chart.component';
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import { ResourceTableComponent } from './charts/resource-table/resource-table.c
     EditChartComponent,
     ReportComponent,
     InstanceActivityComponent,
-    ResourceTableComponent
+    ResourceTableComponent,
+    EditReportChartComponent
   ],
   exports: []
 })

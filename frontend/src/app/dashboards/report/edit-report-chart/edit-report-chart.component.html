@@ -19,30 +19,11 @@
                     [autoWidth]="false"
                     [(ngModel)]="dashboardChart.type"
                     placeholder="Select a type"
-                    [group]="true"
-                    (onChange)="selectChartType()">
+                    (onChange)="processChartType()">
         </p-dropdown>
-        <p class="field">Show total:
-          <p-checkbox [ngModel]="dashboardChart?.showCommon"
-                      (ngModelChange)="dashboardChart.showCommon=$event"
-                      (onChange)="resetBuilderForm()"
-                      binary="true">
-          </p-checkbox>
-        </p><!--type [disabled]="!dashboardChart.dataSources.length<1"-->
+        
         <p class="field">Select source: </p>
-        <p-multiSelect *ngIf="dashboardChart.showCommon && dashboardChart.type !== type.Pie
-                              && dashboardChart.type != type.AdvancedPie && dashboardChart.type != type.PieGrid"
-                       class="custom-multiselect"
-                       [filter]="false"
-                       [showHeader]="false"
-                       [options]="dropdownSources"
-                       [(ngModel)]="dashboardChart.dataSources"
-                       maxSelectedLabels="1"
-                       (onChange)="multiSelect($event)">
-        </p-multiSelect>
-
-        <p-dropdown *ngIf="!dashboardChart.showCommon || dashboardChart.type == type.Pie
-                          || dashboardChart.type == type.AdvancedPie || dashboardChart.type == type.PieGrid"
+        <p-dropdown [ngModel]="dashboardChart.dataSources"
                     [autoWidth]="false"
                     [options]="dropdownGroupSources"
                     placeholder="Select a type"
@@ -50,41 +31,10 @@
                     [group]="true">
         </p-dropdown>
 
-        <p class="field">Number of heavy processes:</p>
-        <div class="chart-menu-spiner">
-          <p-spinner size="17"
-                     [(ngModel)]="dashboardChart.mostLoaded"
-                     (onChange)="processData()"
-                     [disabled]="spinnerDisabled"
-                     [step]="1"
-                     [min]="1"
-                     [max]="100"></p-spinner>
-        </div>
-        <p class="field">Threshold: {{dashboardChart.threshold}}</p>
-        <div class="field">
-          <p-slider class="chart-menu-slider"
-                    [(ngModel)]="dashboardChart.threshold"
-                    [disabled]="dashboardChart.showCommon">
-          </p-slider>
-        </div>
-        <p class="field">Show data for (5-60 min): {{dashboardChart.historyTime}}</p>
-        <div class="field">
-          <p-slider class="chart-menu-slider"
-                    [(ngModel)]="dashboardChart.historyTime"
-                    [disabled]="!isTimeAvailable"
-                    [min]="5"
-                    [max]="60">
-          </p-slider>
-        </div>
         <div class="chart-panel-menu-title field">Stylization:</div>
         <p class="field">Title: </p>
         <input type="text"
                [(ngModel)]="dashboardChart.title"
-               pInputText/>
-        <p class="field">Legend title: </p>
-        <input type="text"
-               [(ngModel)]="dashboardChart.legendTitle"
-               [disabled]="!dashboardChart.showLegend"
                pInputText/>
         <p class="field">Color schemes:</p>
         <p-dropdown [options]="colorSchemes"
@@ -96,12 +46,12 @@
         </p-dropdown>
         <p class="field">Y axis label (optional): </p>
         <input type="text"
-               [disabled]="!dashboardChart.showYAxis"
+               [disabled]="!isYAxisAvailable"
                [(ngModel)]="dashboardChart.yAxisLabel"
                pInputText/>
         <p class="field">X axis label (optional): </p>
         <input type="text"
-               [disabled]="!dashboardChart.showXAxis"
+               [disabled]="!isXAxisAvailable"
                [(ngModel)]="dashboardChart.xAxisLabel"
                pInputText/>
       </div>
@@ -122,18 +72,11 @@
   </div>
   <p-footer>
     <div class="text-center">
-      <!-- <button *ngIf="dashboardChart.showCommon"
-              type="button"
-              pButton
-              class="ui-button-raised ui-button-icon-primary"
-              (click)="showPreview()"
-              label="Preview">
-      </button> -->
       <button type="button"
               pButton
               class="ui-button-raised ui-button-success"
               [disabled]="!isValid"
-              (click)="onEditChart()"
+              (click)="onSaveChart()"
               label="Save">
       </button>
       <button type="button"
