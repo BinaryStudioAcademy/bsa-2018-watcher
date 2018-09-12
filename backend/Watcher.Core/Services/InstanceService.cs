@@ -82,8 +82,10 @@ namespace Watcher.Core.Services
             InstanceSettingsMessage message = new InstanceSettingsMessage()
             {
                 InstanceId = entity.GuidId,
+                IsActive = entity.IsActive,
                 AggregationForHour = entity.AggregationForHour,
                 AggregationForDay = entity.AggregationForDay,
+                AggregationForWeek = entity.AggregationForWeek,
                 AggregationForMonth = entity.AggregationForMonth,
                 CpuMaxPercent = entity.CpuMaxPercent,
                 RamMaxPercent = entity.CpuMaxPercent,
@@ -108,8 +110,10 @@ namespace Watcher.Core.Services
             InstanceSettingsMessage message = new InstanceSettingsMessage()
             {
                 InstanceId = updated.GuidId,
+                IsActive = updated.IsActive,
                 AggregationForHour = updated.AggregationForHour,
                 AggregationForDay = updated.AggregationForDay,
+                AggregationForWeek = updated.AggregationForWeek,
                 AggregationForMonth = updated.AggregationForMonth,
                 CpuMaxPercent = updated.CpuMaxPercent,
                 RamMaxPercent = updated.CpuMaxPercent,

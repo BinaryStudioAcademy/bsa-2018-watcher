@@ -8,24 +8,11 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
-    using Microsoft.Extensions.Logging;
-
-    using Serilog.Context;
-
-    using Watcher.Common.Helpers.Extensions;
-    using Watcher.Core.Interfaces;
-    using Watcher.DataAccess.Entities;
 
     public class DashboardsHub : Hub
     {
-        private readonly IServiceBusProvider _serviceBusProvider;
-        private readonly ILogger<DashboardsHub> _logger;
-
-        public DashboardsHub(IServiceBusProvider serviceBusProvider,
-                             ILogger<DashboardsHub> logger)
+        public DashboardsHub()
         {
-            _serviceBusProvider = serviceBusProvider;
-            _logger = logger;
         }
 
         /// <summary>
@@ -60,12 +47,6 @@
         [Authorize]
         public Task GetClaims()
         {
-            var id = Context.User.GetUserId();
-            var mail = Context.User.GetUserEmail();
-            var role = Context.User.GetUserRole();
-            var IdUserRole = Context.User.IsInRole("User");
-            var IsAdminRole = Context.User.IsInRole("Admin");
-
             var claims = Context.User.Claims.Select(u => new { u.Type, u.Value });
             return Clients.Client(Context.ConnectionId).SendAsync("UserClaimsData", claims);
         }
@@ -73,15 +54,25 @@
         [Authorize]
         public Task SubscribeToInstanceById(Guid GuidId)
         {
-            var name = Context.User.FindFirstValue("unique_name");
-            Debug.WriteLine($"*****************{name}****************");
             return Groups.AddToGroupAsync(Context.ConnectionId, GuidId.ToString());
+        }
+
+        [Authorize]
+        public Task SubscribeToOrganizationById(int id)
+        {
+            return Groups.AddToGroupAsync(Context.ConnectionId, id.ToString());
         }
 
         [Authorize]
         public Task UnSubscribeFromInstanceById(Guid GuidId)
         {
             return Groups.RemoveFromGroupAsync(Context.ConnectionId, GuidId.ToString());
+        }
+
+        [Authorize]
+        public Task UnSubscribeFromOrganizationById(int id)
+        {
+            return Groups.RemoveFromGroupAsync(Context.ConnectionId, id.ToString());
         }
 
         [Authorize(Roles = "User")]

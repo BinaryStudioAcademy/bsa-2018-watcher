@@ -113,6 +113,13 @@
             InstanceSettingsDto dto = new InstanceSettingsDto()
             {
                 ClientId = arg.InstanceId,
+                IsActive = arg.IsActive,
+
+                AggregationForHour = arg.AggregationForHour,
+                AggregationForDay = arg.AggregationForDay,
+                AggregationForWeek = arg.AggregationForWeek,
+                AggregationForMonth = arg.AggregationForMonth,
+
                 CpuUsagePercentageMax = arg.CpuMaxPercent,
                 RamUsagePercentageMax = arg.RamMaxPercent,
                 LocalDiskUsagePercentageMax = arg.DiskMaxPercent,

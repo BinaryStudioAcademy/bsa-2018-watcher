@@ -9,16 +9,20 @@
         }
 
         public InstanceSettingsMessage(Guid instanceId, 
+                                       bool isActive,
                                        bool hourAggregation,
                                        bool dayAggregation,
+                                       bool weekAggregation,
                                        bool monthAggregation,
                                        bool weekAggregation,
                                        float cpuMax,
                                        float ramMax,
                                        float diskMax): base(instanceId)
         {
+            IsActive = isActive;
             AggregationForHour = hourAggregation;
             AggregationForDay = dayAggregation;
+            AggregationForWeek = weekAggregation;
             AggregationForMonth = monthAggregation;
             AggregationForWeek = weekAggregation;
             CpuMaxPercent = cpuMax;
@@ -26,8 +30,11 @@
             DiskMaxPercent = diskMax;
         }
 
+        public bool IsActive { get; set; }
+
         public bool AggregationForHour { get; set; }
         public bool AggregationForDay { get; set; }
+        public bool AggregationForWeek { get; set; }
         public bool AggregationForMonth { get; set; }
         public bool AggregationForWeek { get; set; }
 

@@ -19,6 +19,7 @@ export class UserProfileComponent implements OnInit {
   photoType: string;
   isUpdating: Boolean = false;
 
+
   @ViewChild('cropper', undefined)
 
   cropper: ImageCropperComponent;

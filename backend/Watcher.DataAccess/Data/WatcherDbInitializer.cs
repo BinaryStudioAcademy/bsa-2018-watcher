@@ -32,6 +32,11 @@
                 new OrganizationRole {Id = 2, Name = "Member", IsDeleted = false}
             };
 
+            var themes = new Theme[] {
+                new Theme { Id = 1, Name="Default", BodyColor = "#F8FAFC", ThemePrimaryColor = "#007ad9", ThemeSecondaryColor = "#ffffff", ControlsHeight = "33px", ButtonFontSize = "14px", IsDeleted = false },
+                new Theme { Id = 2, Name = "Darkness", BodyColor = "#F8FAFC", ThemePrimaryColor = "#f58400", ThemeSecondaryColor = "#ffffff", ControlsHeight = "33px", ButtonFontSize = "14px", IsDeleted = false}
+            };
+
             var userFaker = new Faker<User>()
                 .RuleFor(o => o.Id, f => Guid.NewGuid().ToString())
                 .RuleFor(o => o.FirstName, f => f.Name.FirstName())
@@ -96,15 +101,6 @@
 
             var responces = responceFaker.Generate(amount).ToArray();
 
-            var themeFaker = new Faker<Theme>()
-                .RuleFor(o => o.Id, f => f.UniqueIndex)
-                .RuleFor(o => o.Name, f => f.PickRandom("Theme" + f.Random.Number(999)))
-                .RuleFor(o => o.BackgroundColor, f => f.PickRandom("White", "Gray", "Yellow"))
-                .RuleFor(o => o.FontFamily, f => f.PickRandom("Helvetica", "Univers", "Frutiger", "Trade"))
-                .RuleFor(o => o.IsDeleted, false);
-
-            var themes = themeFaker.Generate(amount).ToArray();
-
             var organizationFaker = new Faker<Organization>()
                 .RuleFor(o => o.Id, f => f.UniqueIndex)
                 .RuleFor(o => o.IsActive, true)
@@ -125,6 +121,7 @@
                 .RuleFor(o => o.Title, f => f.PickRandom("Instance" + f.Random.Number(999)))
                 .RuleFor(o => o.Address, f => f.Internet.Mac())
                 .RuleFor(o => o.IsActive, true)
+                .RuleFor(o => o.StatusCheckedAt, new DateTime(2018, 1, 1, 1, 1, 1))
                 .RuleFor(o => o.OrganizationId, f => f.PickRandom(organizations).Id)
                 .RuleFor(o => o.IsDeleted, false)
                 .RuleFor(o => o.AggregationForDay, true)

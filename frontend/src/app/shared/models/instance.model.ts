@@ -20,6 +20,8 @@ export interface Instance  {
    guidId?: string;
    organization?: Organization;
    dashboards?: Dashboard[];
+
+   statusCheckedAt: Date;
 }
 
 

@@ -25,6 +25,8 @@ namespace Watcher.Common.Dtos
         public bool AggregationForMonth { get; set; }
         public bool AggregationForWeek { get; set; }
 
+        public DateTime StatusCheckedAt { get; set; }
+
         public float CpuMaxPercent { get; set; }
         public float RamMaxPercent { get; set; }
         public float DiskMaxPercent { get; set; }

@@ -10,8 +10,12 @@ namespace DataAccumulator.Shared.Models
 
         // ClientId - Instance identification number
         public Guid ClientId { get; set; }
-
         public bool IsActive { get; set; }
+
+        public bool AggregationForHour { get; set; }
+        public bool AggregationForDay { get; set; }
+        public bool AggregationForWeek { get; set; }
+        public bool AggregationForMonth { get; set; }
 
         public bool RamValidator { get; set; }
         public float RamUsagePercentageMax { get; set; }

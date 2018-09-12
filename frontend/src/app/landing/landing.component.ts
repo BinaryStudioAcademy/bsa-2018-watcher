@@ -87,7 +87,7 @@ export class LandingComponent implements OnInit, OnDestroy {
   }
 
   resize(): void {
-    if (window.innerWidth > 730) {
+    if (window.innerWidth > 800) {
       document.getElementById('nav').style.visibility = 'visible';
     }
   }
