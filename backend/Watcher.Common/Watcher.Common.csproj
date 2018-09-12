@@ -64,6 +64,9 @@
     <None Update="MoveToFrontend\message.model.ts">
       <CustomToolNamespace>Dtos\MessageDto.cs</CustomToolNamespace>
     </None>
+    <None Update="MoveToFrontend\notification-request.model.ts">
+      <CustomToolNamespace>Requests\NotificationRequest.cs</CustomToolNamespace>
+    </None>
     <None Update="MoveToFrontend\notification-setting.model.ts">
       <CustomToolNamespace>Dtos\NotificationSettingDto.cs</CustomToolNamespace>
     </None>
