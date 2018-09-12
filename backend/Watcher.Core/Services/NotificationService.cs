@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
+    
     using Microsoft.EntityFrameworkCore;
     using Microsoft.AspNetCore.SignalR;
 
@@ -71,21 +72,19 @@
 
             var organizationId = notificationRequest.OrganizationId;
             int? instanceId = null;
-            if(notificationRequest.InstanceId != null)
+
+            if (notificationRequest.InstanceId != null)
             {
                 var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(i => i.GuidId == notificationRequest.InstanceId);
-                if (instance == null) return null;
 
-                organizationId = instance.OrganizationId;
-                instanceId = instance.Id;
+                if (instance != null)
+                {
+                    instanceId = instance.Id;
+                    organizationId = instance.OrganizationId;
+                }
             }
 
-            var entityNotification = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
-
-            entityNotification.InstanceId = instanceId;
-            entityNotification.InstanceGuidId = notificationRequest.InstanceId;
-
-            if (entityNotification.UserId != null)
+            if (notificationRequest.UserId != null)
             {
                 receivers.Add(await _uow.UsersRepository.GetFirstOrDefaultAsync(u => u.Id == notificationRequest.UserId));
             }
@@ -112,7 +111,6 @@
                 var entity = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
                 entity.UserId = receiver.Id;
                 entity.InstanceId = instanceId;
-                entity.InstanceGuidId = notificationRequest.InstanceId;
 
                 var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(
                     ns => ns.Type == notificationRequest.Type && ns.UserId == entity.UserId);

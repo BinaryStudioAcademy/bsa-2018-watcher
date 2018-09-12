@@ -7,7 +7,6 @@ export interface InstanceRequest  {
     aggregationForHour: boolean;
     aggregationForDay: boolean;
     aggregationForMonth: boolean;
-    aggregationForWeek: boolean;
 
     cpuMaxPercent: number;
     ramMaxPercent: number;

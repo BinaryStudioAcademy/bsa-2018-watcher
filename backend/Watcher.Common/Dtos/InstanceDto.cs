@@ -23,7 +23,6 @@ namespace Watcher.Common.Dtos
         public bool AggregationForHour { get; set; }
         public bool AggregationForDay { get; set; }
         public bool AggregationForMonth { get; set; }
-        public bool AggregationForWeek { get; set; }
 
         public DateTime StatusCheckedAt { get; set; }
 
