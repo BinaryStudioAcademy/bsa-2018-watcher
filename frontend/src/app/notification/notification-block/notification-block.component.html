@@ -15,6 +15,7 @@
 
         <span class="message-img icon-style fa fa-3x info"
           [ngClass]="{
+            'system': notification?.notificationSetting?.type == type.System,
             'warning': notification?.notificationSetting?.type == type.Warning,
             'error': notification?.notificationSetting?.type == type.Error}">
         </span>
