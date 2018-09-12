@@ -16,23 +16,7 @@ import { environment } from '../../../environments/environment';
 export class DataCollectorComponent implements OnInit {
   @ViewChild('fileInput') fileInput: FileUpload;
 
-  collectorApps: CollectorApp[] = [{
-    id: 1,
-    createdAt: new Date(),
-    version: '1.0.3',
-    exeLink: 'exe',
-    debLink: 'deb',
-    tgzLink: 'tgz',
-    IsActive: true
-  }, {
-    id: 2,
-    createdAt: new Date(),
-    version: '1.0.4',
-    exeLink: 'exe',
-    debLink: 'deb',
-    tgzLink: 'tgz',
-    IsActive: false
-  }];
+  collectorApps: CollectorApp[];
 
   collectorApp: CollectorApp;
 
@@ -40,19 +24,29 @@ export class DataCollectorComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private toastrService: ToastrService, private collectorAppsService: CollectorAppsService ) {
     this.displayAddWindow = false;
+    this.initData();
+  }
+
+  initData() {
     this.collectorApp = {
       id: 0,
       createdAt: new Date(),
       exeLink: '',
       tgzLink: '',
       debLink: '',
-      IsActive: false,
+      isActive: false,
       version: ''
     };
   }
 
   ngOnInit() {
-
+    this.collectorAppsService.getAll().subscribe(
+      value => {
+        this.collectorApps = value;
+        },
+        error => {
+          this.toastrService.error(`Error ocured status: ${error.message}`);
+        });
   }
 
   showAddWindow() {
@@ -108,6 +102,10 @@ export class DataCollectorComponent implements OnInit {
       error => {
         this.toastrService.error(`Error ocured status: ${error.message}`);
       });
+      this.displayAddWindow = false;
+      this.initData();
   }
+
+
 
 }

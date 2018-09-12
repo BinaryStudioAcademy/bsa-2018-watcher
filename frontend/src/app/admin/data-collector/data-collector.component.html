@@ -23,13 +23,13 @@
       <tr>
         <td class="center">{{collectorApp.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
         <td class="center">{{collectorApp.version}}</td>
-        <td class="center">{{collectorApp.exeLink}}</td>
-        <td class="center">{{collectorApp.debLink}}</td>
-        <td class="center">{{collectorApp.tgzLink}}</td>
-        <td class="center">{{collectorApp.IsActive}}</td>
+        <td class="center"><a href="{{collectorApp.exeLink}}">exe</a></td>
+        <td class="center"><a href="{{collectorApp.debLink}}">deb</a></td>
+        <td class="center"><a href="{{collectorApp.tgzLink}}">tgz</a></td>
+        <td class="center"><p-checkbox binary="true" [(ngModel)]="collectorApp.isActive"></p-checkbox></td>
         <td>
           <div class="center">
-            <button pButton type="button " label="Remove" class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(user)"></button>
+            <button pButton type="button " label="Remove" class="btnedit ui-button-primary ui-button-raised " (click)="Delete(collectorApp)"></button>
           </div>
         </td>
       </tr>
@@ -44,19 +44,19 @@
     <div class="ui-g ui-fluid">
       <div class="ui-g-12">
         <p class="field">Ceated At:</p>
-        <input type="text"  pInputText placeholder="Ceated At" />
+        <input type="text" [(ngModel)]="collectorApp.ceatedAt" pInputText placeholder="Ceated At" />
       </div>
     </div>
 
     <div class="ui-g ui-fluid">
       <div class="ui-g-8">
         <p class="field">Version:</p>
-        <input  type="text"  pInputText placeholder="Version number" />
+        <input  type="text" [(ngModel)]="collectorApp.version" pInputText placeholder="Version number" />
       </div>
       <div class="ui-g-4">
         <p class="center space">isActual:</p>
         <div class="center">
-          <p-checkbox  binary="false"></p-checkbox>
+          <p-checkbox binary="true" [(ngModel)]="collectorApp.isActive" ></p-checkbox>
         </div>
       </div>
     </div>
