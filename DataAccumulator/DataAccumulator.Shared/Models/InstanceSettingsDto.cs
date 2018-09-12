@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using DataAccumulator.Shared.Interfaces;
 
 namespace DataAccumulator.Shared.Models
@@ -7,7 +9,6 @@ namespace DataAccumulator.Shared.Models
     {
         // Id - InstanceValidator identification number
         public Guid Id { get; set; }
-
         // ClientId - Instance identification number
         public Guid ClientId { get; set; }
         public bool IsActive { get; set; }

@@ -7,7 +7,6 @@ import { SystemToastrService } from '../../core/services/system-toastr.service';
 
 import { NotificationType } from '../../shared/models/notification-type.enum';
 import { Notification } from '../../shared/models/notification.model';
-import { Router } from '@angular/router';
 
 
 @Component({
@@ -32,8 +31,7 @@ export class NotificationBlockComponent implements OnInit {
     private notificationsHubService: NotificationsHubService,
     private authService: AuthService,
     private notificationsService: NotificationService,
-    private systemToastrService: SystemToastrService,
-    private router: Router) { }
+    private systemToastrService: SystemToastrService) { }
 
   ngOnInit() {
     this.loadNotifications();
@@ -52,7 +50,6 @@ export class NotificationBlockComponent implements OnInit {
   private subscribeToEvents(): void {
     this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
       if (!value.notificationSetting.isDisable) {
-        console.log(value);
         this.notificationCounter++;
         if (!value.notificationSetting.isMute) {
           this.systemToastrService.send(value);
@@ -73,6 +70,7 @@ export class NotificationBlockComponent implements OnInit {
       this.notifications = value;
       this.notificationCounter = this.calcNotReadNotifications(value);
       this.isLoading = false;
+      console.log(this.isLoading);
     });
   }
 
@@ -106,10 +104,5 @@ export class NotificationBlockComponent implements OnInit {
     const index = this.notifications.findIndex(item => item.id === id);
     this.notifications.splice(index, 1);
     this.notificationsHubService.delete(notify);
-  }
-
-  redirectToInstance(notification): void {
-    const url = [`/user/instances/${notification.instanceId}/${notification.instanceGuidId}/dashboards`];
-    this.router.navigate(url);
   }
 }

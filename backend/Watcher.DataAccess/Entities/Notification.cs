@@ -20,7 +20,7 @@
         public User User { get; set; }
 
         public int? InstanceId { get; set; }
-        public Guid? InstanceGuidId { get; set; }
+        public Instance Instance { get; set; }
 
         public int NotificationSettingId { get; set; }
         public NotificationSetting NotificationSetting { get; set; }

@@ -107,6 +107,12 @@ namespace Watcher.DataAccess.Data.Migrations
                 keyColumn: "Id",
                 keyValue: "e338b266-bcb3-4a6b-b652-3f6aea7cc02f");
 
+            migrationBuilder.AddColumn<bool>(
+                name: "AggregationForWeek",
+                table: "Instances",
+                nullable: false,
+                defaultValue: false);
+
             migrationBuilder.UpdateData(
                 table: "Charts",
                 keyColumn: "Id",
@@ -950,6 +956,10 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "fe8a8ea3-19c2-4f0c-8f28-78fd03ef8734");
+
+            migrationBuilder.DropColumn(
+                name: "AggregationForWeek",
+                table: "Instances");
 
             migrationBuilder.UpdateData(
                 table: "Charts",

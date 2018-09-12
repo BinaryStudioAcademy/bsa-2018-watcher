@@ -123,9 +123,6 @@
                 CpuUsagePercentageMax = arg.CpuMaxPercent,
                 RamUsagePercentageMax = arg.RamMaxPercent,
                 LocalDiskUsagePercentageMax = arg.DiskMaxPercent,
-                CpuValidator = true,
-                RamValidator = true,
-                LocalDiskVallidator = true,
             };
 
             var x = await _instanceSettingsService.AddEntityAsync(dto);

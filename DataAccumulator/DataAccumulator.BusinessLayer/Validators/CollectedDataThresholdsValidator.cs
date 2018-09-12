@@ -14,21 +14,21 @@ namespace DataAccumulator.BusinessLayer.Validators
                 .NotNull()
                 .NotEqual(Guid.Empty);
 
-            RuleSet("Ram", () =>
+            RuleSet("RamUsage", () =>
             {
                 RuleFor(d => d.RamUsagePercentage)
                     .NotNull()
                     .LessThan(instanceValidatorDto.RamUsagePercentageMax);
             });
 
-            RuleSet("Disk", () =>
+            RuleSet("LocalDiskUsage", () =>
             {
                 RuleFor(d => d.LocalDiskUsagePercentage)
                     .NotNull()
                     .LessThan(instanceValidatorDto.LocalDiskUsagePercentageMax);
             });
 
-            RuleSet("Cpu", () =>
+            RuleSet("CpuUsage", () =>
             {
                 RuleFor(d => d.CpuUsagePercentage)
                     .NotNull()

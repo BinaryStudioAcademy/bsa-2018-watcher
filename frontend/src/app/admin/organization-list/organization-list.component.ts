@@ -88,7 +88,6 @@ export class OrganizationListComponent implements OnInit {
       aggregationForHour: instance.aggregationForHour,
       aggregationForDay: instance.aggregationForDay,
       aggregationForMonth: instance.aggregationForMonth,
-      aggregationForWeek: instance.aggregationForWeek,
       cpuMaxPercent: instance.cpuMaxPercent,
       ramMaxPercent: instance.ramMaxPercent,
       diskMaxPercent: instance.diskMaxPercent,
