@@ -6,16 +6,14 @@
 
     using DataAccumulator.DataAccessLayer.Entities;
 
-    using MongoDB.Bson;
-
     public interface IInstanceAnomalyReportsRepository
     {
         Task<List<InstanceAnomalyReport>> GetAllReportsAsync();
-        Task<IEnumerable<InstanceAnomalyReport>> GetReportsByInstanceIdAsync(Guid instanceId);
-        Task<InstanceAnomalyReport> GetReportByIdAsync(ObjectId reportId);
+        Task<List<InstanceAnomalyReport>> GetReportsByInstanceIdAsync(Guid instanceId);
+        Task<InstanceAnomalyReport> GetReportByIdAsync(Guid reportId);
         Task AddReportAsync(InstanceAnomalyReport report);
-        Task<bool> RemoveReportByIdAsync(ObjectId reportId);
+        Task<bool> RemoveReportByIdAsync(Guid reportId);
         Task<bool> RemoveAllReportsAsync();
-        Task<bool> ReportExistsAsync(ObjectId reportId);
+        Task<bool> ReportExistsAsync(Guid reportId);
     }
 }

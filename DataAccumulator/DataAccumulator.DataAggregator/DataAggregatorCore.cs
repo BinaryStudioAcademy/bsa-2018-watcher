@@ -7,24 +7,38 @@ using DataAccumulator.Shared.Models;
 
 namespace DataAccumulator.DataAggregator
 {
+    using System.Diagnostics;
+
     using DataAccumulator.BusinessLayer.Interfaces;
+    using DataAccumulator.DataAccessLayer.Entities;
+    using DataAccumulator.DataAccessLayer.Interfaces;
+
+    using Microsoft.Extensions.Logging;
 
     using ServiceBus.Shared.Messages;
 
     public class DataAggregatorCore : IDataAggregatorCore<CollectedDataDto>
     {
         private readonly IAggregatorService<CollectedDataDto> _aggregatorService;
+        private readonly IInstanceAnomalyReportsRepository _reportsRepository;
+        private readonly ILogger<DataAggregatorCore> _logger;
         private readonly IAnomalyDetector _anomalyDetector;
         private readonly IServiceBusProvider _serviceBusProvider;
 
-        public DataAggregatorCore(IAggregatorService<CollectedDataDto> aggregatorService, IAnomalyDetector anomalyDetector, IServiceBusProvider provider)
+        public DataAggregatorCore(IAggregatorService<CollectedDataDto> aggregatorService,
+                                  IInstanceAnomalyReportsRepository reportsRepository,
+                                  ILogger<DataAggregatorCore> logger,
+                                  IAnomalyDetector anomalyDetector,
+                                  IServiceBusProvider provider)
         {
             _aggregatorService = aggregatorService;
+            _reportsRepository = reportsRepository;
+            _logger = logger;
             _anomalyDetector = anomalyDetector;
             _serviceBusProvider = provider;
         }
 
-        public async Task AggregatingData(CollectedDataType sourceType, CollectedDataType destinationType, 
+        public async Task AggregatingData(CollectedDataType sourceType, CollectedDataType destinationType,
             TimeSpan interval, bool deleteSource)
         {
             // Need destinationType,
@@ -36,7 +50,7 @@ namespace DataAccumulator.DataAggregator
             var listCollectedDataDtos = sourceCollectedDataDtos.ToList();
             var filteredCollectedDataDtos =
                 await FilterCollectedDataByInstanceSettings(listCollectedDataDtos, destinationType);
-                
+
 
             if (filteredCollectedDataDtos != null)
             {
@@ -115,30 +129,40 @@ namespace DataAccumulator.DataAggregator
 
         private async Task SendMLReport(IEnumerable<CollectedDataDto> data, CollectedDataType reportType)
         {
+            var collectedDataDtos = data as CollectedDataDto[] ?? data.ToArray();
+            var firstData = collectedDataDtos.FirstOrDefault();
             try
             {
-                var collectedDataDtos = data as CollectedDataDto[] ?? data.ToArray();
-                var firstData = collectedDataDtos.FirstOrDefault();
                 if (firstData != null)
                 {
                     var result = await _anomalyDetector.AnalyzeData(collectedDataDtos);
                     result.CollectedDataTypeOfReport = reportType;
                     var reportMessage = new InstanceAnomalyReportMessage
-                                          {
-                                              AnomalyReport = result,
-                                              InstanceId = firstData.ClientId
-                                          };
+                    {
+                        AnomalyReport = result,
+                        InstanceId = firstData.ClientId
+                    };
+                    var report = new InstanceAnomalyReport
+                    {
+                        Id = Guid.NewGuid(),
+                        ClientId = firstData.ClientId,
+                        Date = result.Date,
+                        AnomalyGroups = result.AnomalyGroups,
+                        CollectedDataTypeOfReport = result.CollectedDataTypeOfReport
+                    };
+                    await _reportsRepository.AddReportAsync(report);
+                    Debug.WriteLine($"Generated id of report {report.Id}");
                     await _serviceBusProvider.SendAnomalyReportMessage(reportMessage);
                 }
-                // TODO: Save report in MongoDB
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: handle exception
+                _logger.LogError(ex, $"Unhandled error occurred while analyzing Anomalies of instance with id: {firstData?.ClientId}");
+                // TODO: Maybe send notification to user about that error that analyzing Anomalies of instance with id was unsuccessful
             }
         }
 
-        private async Task<IEnumerable<CollectedDataDto>> FilterCollectedDataByInstanceSettings(List<CollectedDataDto> collectedDataDtos, 
+        private async Task<IEnumerable<CollectedDataDto>> FilterCollectedDataByInstanceSettings(List<CollectedDataDto> collectedDataDtos,
             CollectedDataType destinationType)
         {
             var instanceSettingsDtos = await _aggregatorService.GetInstanceSettingsEntitiesAsync();
@@ -148,60 +172,60 @@ namespace DataAccumulator.DataAggregator
             switch (destinationType)
             {
                 case CollectedDataType.AggregationForHour:
-                {
-                    instanceSettingsList.ForEach(instanceSettings =>
                     {
-                        if (instanceSettings.IsActive && instanceSettings.AggregationForHour)
+                        instanceSettingsList.ForEach(instanceSettings =>
                         {
-                            var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
-                            filteredCollectedDataDtos.AddRange(data);
-                        }
-                    });
+                            if (instanceSettings.IsActive && instanceSettings.AggregationForHour)
+                            {
+                                var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
+                                filteredCollectedDataDtos.AddRange(data);
+                            }
+                        });
 
-                    break;
-                }
+                        break;
+                    }
 
                 case CollectedDataType.AggregationForDay:
-                {
-                    instanceSettingsList.ForEach(instanceSettings =>
                     {
-                        if (instanceSettings.IsActive && instanceSettings.AggregationForDay)
+                        instanceSettingsList.ForEach(instanceSettings =>
                         {
-                            var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
-                            filteredCollectedDataDtos.AddRange(data);
-                        }
-                    });
+                            if (instanceSettings.IsActive && instanceSettings.AggregationForDay)
+                            {
+                                var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
+                                filteredCollectedDataDtos.AddRange(data);
+                            }
+                        });
 
-                    break;
-                }
+                        break;
+                    }
 
                 case CollectedDataType.AggregationForWeek:
-                {
-                    instanceSettingsList.ForEach(instanceSettings =>
                     {
-                        if (instanceSettings.IsActive && instanceSettings.AggregationForWeek)
+                        instanceSettingsList.ForEach(instanceSettings =>
                         {
-                            var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
-                            filteredCollectedDataDtos.AddRange(data);
-                        }
-                    });
+                            if (instanceSettings.IsActive && instanceSettings.AggregationForWeek)
+                            {
+                                var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
+                                filteredCollectedDataDtos.AddRange(data);
+                            }
+                        });
 
-                    break;
-                }
+                        break;
+                    }
 
                 case CollectedDataType.AggregationForMonth:
-                {
-                    instanceSettingsList.ForEach(instanceSettings =>
                     {
-                        if (instanceSettings.IsActive && instanceSettings.AggregationForMonth)
+                        instanceSettingsList.ForEach(instanceSettings =>
                         {
-                            var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
-                            filteredCollectedDataDtos.AddRange(data);
-                        }
-                    });
+                            if (instanceSettings.IsActive && instanceSettings.AggregationForMonth)
+                            {
+                                var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
+                                filteredCollectedDataDtos.AddRange(data);
+                            }
+                        });
 
-                    break;
-                }
+                        break;
+                    }
             }
 
             return filteredCollectedDataDtos;

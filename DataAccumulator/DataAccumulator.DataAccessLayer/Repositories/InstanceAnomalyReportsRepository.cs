@@ -28,34 +28,43 @@
                            .ToListAsync();
         }
 
-        public Task<IEnumerable<InstanceAnomalyReport>> GetReportsByInstanceIdAsync(Guid instanceId)
+        public Task<List<InstanceAnomalyReport>> GetReportsByInstanceIdAsync(Guid instanceId)
         {
-            throw new NotImplementedException();
+            var filter = Builders<InstanceAnomalyReport>.Filter.Eq(i => i.ClientId, instanceId);
+            return _context.AnomalyReportsCollection.Find(filter).ToListAsync();
         }
 
-        public Task<InstanceAnomalyReport> GetReportByIdAsync(ObjectId reportId)
+        public Task<InstanceAnomalyReport> GetReportByIdAsync(Guid reportId)
         {
-            throw new NotImplementedException();
+            var filter = Builders<InstanceAnomalyReport>.Filter.Eq(i => i.Id, reportId);
+            return _context.AnomalyReportsCollection.Find(filter).FirstOrDefaultAsync();
         }
 
         public Task AddReportAsync(InstanceAnomalyReport report)
         {
-            throw new NotImplementedException();
+            return _context.AnomalyReportsCollection.InsertOneAsync(report);
         }
 
-        public Task<bool> RemoveReportByIdAsync(ObjectId reportId)
+        public async Task<bool> RemoveReportByIdAsync(Guid reportId)
         {
-            throw new NotImplementedException();
+            var filter = Builders<InstanceAnomalyReport>.Filter.Eq(i => i.Id, reportId);
+            var actionResult = await _context.AnomalyReportsCollection
+                                   .DeleteOneAsync(filter)
+                                   .ConfigureAwait(false);
+
+            return actionResult.IsAcknowledged
+                   && actionResult.DeletedCount > 0;
         }
 
-        public Task<bool> RemoveAllReportsAsync()
+        public async Task<bool> RemoveAllReportsAsync()
         {
-            throw new NotImplementedException();
+            var actionResult = await _context.AnomalyReportsCollection.DeleteManyAsync(new BsonDocument());
+            return actionResult.IsAcknowledged && actionResult.DeletedCount > 0;
         }
 
-        public Task<bool> ReportExistsAsync(ObjectId reportId)
+        public Task<bool> ReportExistsAsync(Guid reportId)
         {
-            throw new NotImplementedException();
+            return _context.AnomalyReportsCollection.Find(entity => entity.Id == reportId).AnyAsync();
         }
     }
 }
