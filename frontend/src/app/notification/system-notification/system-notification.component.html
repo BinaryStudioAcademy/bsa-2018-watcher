@@ -8,9 +8,8 @@
           'error': message.data.notificationSetting?.type == type.Error}">
       </span>
         <div class="message-content">
-          <span class="message-title text-overflow">System message</span>
-          <div *ngIf="message.data.instanceId && message.data.instanceGuidId"
-          class="message-text">{{message.data.instanceGuidId}}</div>
+          <span *ngIf="message.data.instanceGuidId" (click)='redirectToInstance(message.data)'  class="message-title text-overflow clickable" style="width:240px">Instance message</span>
+         <span  *ngIf="!message.data.instanceGuidId" class="message-title text-overflow" style="width:240px">System message</span>
           <div class="message-text">{{message.data.text}}</div>
           <div class="message-date text-overflow">{{message.data.createdAt | date:'short'}}</div>
         </div>
