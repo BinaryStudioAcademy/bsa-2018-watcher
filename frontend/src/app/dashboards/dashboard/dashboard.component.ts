@@ -6,7 +6,6 @@ import {MenuItem} from 'primeng/api';
 import {ToastrService} from '../../core/services/toastr.service';
 import {InstanceService} from '../../core/services/instance.service';
 import {DashboardService} from '../../core/services/dashboard.service';
-import {AuthService} from '../../core/services/auth.service';
 import {DataService} from '../../core/services/data.service';
 import {ChartService} from '../../core/services/chart.service';
 import {CollectedDataService} from '../../core/services/collected-data.service';
@@ -55,7 +54,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
               private dashboardsHub: DashboardsHub,
               private toastrService: ToastrService,
               private activateRoute: ActivatedRoute,
-              private authService: AuthService,
               private dataService: DataService,
               private chartService: ChartService,
               private userOrganizationService: UserOrganizationService) {

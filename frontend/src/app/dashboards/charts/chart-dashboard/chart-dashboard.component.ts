@@ -1,4 +1,6 @@
-import {Component, Input, EventEmitter, Output, OnChanges} from '@angular/core';
+import {Component, Input, EventEmitter, Output} from '@angular/core';
+import {MenuItem} from 'primeng/api';
+
 import {DashboardChart} from '../../models/dashboard-chart';
 import {ChartService} from '../../../core/services/chart.service';
 import {ToastrService} from '../../../core/services/toastr.service';
@@ -8,30 +10,23 @@ import {ToastrService} from '../../../core/services/toastr.service';
   templateUrl: './chart-dashboard.component.html',
   styleUrls: ['./chart-dashboard.component.sass']
 })
-export class ChartDashboardComponent implements OnChanges {
-  charts: DashboardChart[] = [];
+export class ChartDashboardComponent {
 
   @Input() dashboardCharts: DashboardChart[] = [];
   @Input() dashboardId: number;
   @Input() isManager: boolean;
+
   @Output() editChart = new EventEmitter<DashboardChart>();
   @Output() deleteChart = new EventEmitter<number>();
 
-  constructor(private chartService: ChartService, private toastrService: ToastrService) {}
+  currentChartMenu: MenuItem[] = [];
 
-  ngOnChanges(changes) {
-    const { dashboardCharts } = changes;
-    this.charts = (dashboardCharts && dashboardCharts.currentValue) ? this.mapMenu(this.dashboardCharts) : [];
-  }
+  constructor(
+    private chartService: ChartService,
+    private toastrService: ToastrService) {}
 
-  mapMenu(charts: DashboardChart[]) {
-    return charts.map(chart => Object.assign({}, chart, {
-      chartMenu: this.getItems(chart)
-    }));
-  }
-
-  getItems(chart: DashboardChart) {
-    return [{
+  createMenu(chart: DashboardChart) {
+    this.currentChartMenu = [{
       label: 'Edit',
       icon: 'fa fa-fw fa-edit',
       command: () => {
