@@ -39,7 +39,6 @@ import { ChatHub } from './hubs/chat.hub';
 import { NotificationsHubService } from './hubs/notifications.hub';
 import { OrganizationInvitesHub } from './hubs/organization-invites.hub';
 import { OrganizationRoleService } from './services/organization-role.service';
-import { CollectorAppsService } from './services/collector-apps.service';
 
 @NgModule({
   imports: [
@@ -69,7 +68,6 @@ import { CollectorAppsService } from './services/collector-apps.service';
     UserOrganizationService,
     UserService,
     InternalMessageService,
-    CollectorAppsService,
     ConfirmationService,
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokensInterceptor, multi: true },

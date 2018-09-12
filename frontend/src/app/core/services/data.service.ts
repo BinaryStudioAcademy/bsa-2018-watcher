@@ -311,8 +311,7 @@ export class DataService {
       colectedData: {} as CollectedData,
       type: value.type,
       theme: value.isLightTheme ? 'light' : 'dark',
-      isIncluded: false,
-      dateTickFormatting: null
+      isIncluded: false
     };
 
     this.fulfillChart(this._hourlyCollectedData, dashChart);

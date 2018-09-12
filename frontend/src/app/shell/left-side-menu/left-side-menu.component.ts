@@ -77,11 +77,6 @@ export class LeftSideMenuComponent implements OnInit, AfterContentChecked, After
       label: 'Feedbacks',
       icon: 'fa fa-fw fa-bullhorn',
       routerLink: ['/admin/feedback-list']
-    },
-    {
-      label: 'DataCollector',
-      icon: 'fa fa-fw fa-download',
-      routerLink: ['/admin/data-collector']
     }];
   }
 

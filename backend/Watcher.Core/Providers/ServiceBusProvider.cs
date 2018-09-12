@@ -240,6 +240,7 @@
                         instanceCheckedDto = new InstanceCheckedDto
                         {
                             InstanceGuidId = result.GuidId,
+                            OrganizationId = result.OrganizationId,
                             StatusCheckedAt = result.StatusCheckedAt
                         };
                     }

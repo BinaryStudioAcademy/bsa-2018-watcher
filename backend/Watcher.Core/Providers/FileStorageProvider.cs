@@ -47,7 +47,7 @@ namespace Watcher.Core.Providers
             return blob.Uri.ToString();
         }
 
-        public async Task<string> UploadFormFileWithNameAsync(IFormFile formFile)
+        public async Task<string> UploadFormFileAsync(IFormFile formFile, OperatingSystems system)
         {
             var client = _storageAccount.CreateCloudBlobClient();
 
@@ -58,7 +58,22 @@ namespace Watcher.Core.Providers
                 await container.CreateAsync();
             }
 
-            CloudBlockBlob blob = container.GetBlockBlobReference(formFile.FileName);
+            CloudBlockBlob blob;
+            switch (system)
+            {
+                case OperatingSystems.Windows:
+                    blob = container.GetBlockBlobReference("CollectorInstallerWindows.exe");
+                    break;
+                case OperatingSystems.LinuxDeb:
+                    blob = container.GetBlockBlobReference("CollectorInstallerLinuxDeb.deb");
+                    break;
+                case OperatingSystems.LinuxTgz:
+                    blob = container.GetBlockBlobReference("CollectorInstallerLinuxTgz.tgz");
+                    break;
+                default:
+                    blob = container.GetBlockBlobReference("CollectorInstaller");
+                    break;
+            }
 
             await SetPublicContainerPermissions(container);
 

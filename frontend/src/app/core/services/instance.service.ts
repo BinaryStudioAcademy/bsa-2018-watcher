@@ -7,6 +7,7 @@ import {EventEmitter} from '@angular/core';
 import {Instance} from '../../shared/models/instance.model';
 import {ApiService} from './api.service';
 import {map} from 'rxjs/operators';
+import {InstanceMenuItem} from '../../shell/models/instance-menu-item';
 
 @Injectable()
 export class InstanceService {
@@ -67,14 +68,28 @@ export class InstanceService {
   calculateSign(date: Date): string {
     const secondsDifference = (Date.now() - date.getTime()) / 1000;
     let sign: string;
-    if (secondsDifference <= 10) {
+    if (secondsDifference <= 15) {
       sign = '+';
-    } else if (secondsDifference > 10 && secondsDifference < 20) {
+    } else if (secondsDifference > 15 && secondsDifference < 25) {
       sign = '^';
-    } else if (secondsDifference >= 20) {
+    } else if (secondsDifference >= 25) {
       sign = '-';
     }
     return sign;
+  }
+
+  calculateStyle(item: InstanceMenuItem): void {
+    const secondsDifference = (Date.now() - item.statusCheckedAt.getTime()) / 1000;
+    if (secondsDifference <= 10) {
+      item.styleClass = 'active-instance';
+      item.icon = 'fa fa-check-circle-o';
+    } else if (secondsDifference > 10 && secondsDifference < 20) {
+      item.styleClass = 'semi-active-instance';
+      item.icon = 'fa fa-exclamation-circle';
+    } else if (secondsDifference >= 20) {
+      item.styleClass = 'non-active-instance';
+      item.icon = 'fa fa-ban';
+    }
   }
 }
 

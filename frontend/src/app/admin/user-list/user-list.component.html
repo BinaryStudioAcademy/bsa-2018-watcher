@@ -1,8 +1,14 @@
 <div class="working-area">
-  <div class="title">USERS</div>
-  <hr>
-  <p-table [value]="users" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]" [lazy]="true"
-    (onLazyLoad)="loadUsersLazy($event)">
+
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <div class="title">USERS</div>
+      <hr>
+    </div>
+  </div>
+
+
+  <p-table [value]="users" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]" [lazy]="true" (onLazyLoad)="loadUsersLazy($event)">
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th style="width:7%">CREATED AT</th>
@@ -20,25 +26,25 @@
     </ng-template>
     <ng-template pTemplate="body" let-user>
       <tr>
-        <td class="text-center">{{user.createdAt | date:'longDate'}}</td>
-        <td class="text-center">
+        <td class="center">{{user.createdAt | date:'longDate'}}</td>
+        <td class="center">
           <div class="small-photo ">
-            <img *ngIf="user.photoURL" src="{{user.photoURL}}" alt="profile photo" class="small-photo" />
+            <img *ngIf="user.photoURL" src="{{user.photoURL}}" alt="profile photo" class="small-photo" /> 
           </div>
         </td>
-        <td class="text-center">{{user.displayName}}</td>
-        <td class="text-center">{{user.firstName}}</td>
-        <td class="text-center">{{user.lastName}}</td>
-        <td class="text-center">{{user.bio}}</td>
-        <td class="text-center">{{user.email}}</td>
-        <td class="text-center">{{user.lastPickedOrganizationId}}</td>
-        <td class="text-center">
+        <td class="center">{{user.displayName}}</td>
+        <td class="center">{{user.firstName}}</td>
+        <td class="center">{{user.lastName}}</td>
+        <td class="center">{{user.bio}}</td>
+        <td class="center">{{user.email}}</td>
+        <td class="center">{{user.lastPickedOrganizationId}}</td>
+        <td class="center">
           <i *ngIf="user.isActive" class="fa fa-check-circle-o" style="font-size: 25px"></i>
           <i *ngIf="!user.isActive" class="fa fa-times-circle-o" style="font-size: 25px"></i>
         </td>
-        <td class="text-center">{{user.role.name}}</td>
+        <td class="center">{{user.role.name}}</td>
         <td>
-          <div class="text-center">
+          <div class="center">
             <button pButton type="button " label="Edit " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(user)"></button>
           </div>
         </td>
@@ -49,18 +55,18 @@
 </div>
 
 
-<p-dialog header="Update user" [(visible)]="displayPopup" [modal]="true" [maximizable]="false" [baseZIndex]="10000" [contentStyle]="{'overflow':'visible'}">
+<p-dialog header="Update user" [(visible)]="displayPopup" [modal]="true"
+  [maximizable]="false" [baseZIndex]="10000" [contentStyle]="{'overflow':'visible'}">
+  <!--[contentStyle]="{'overflow': 'hidden'}" -->
   <div class="ui-g">
     <div class="ui-g ui-g-6 ui-fluid">
-      <div class="ui-g-12 center-flex">
-        <span>Profile photo</span>
-      </div>
+      <div class="ui-g-12 center-flex"><span>Profile photo</span></div>
       <div class="ui-g-12">
         <figure class="center-flex">
           <div class="img1">
             <img src="{{photoUrl}}" alt="profile photo" class="img1">
           </div>
-          <figcaption class="text-center custom-upload-btn">
+          <figcaption class="center custom-upload-btn">
             <span>
               <i class="fa fa-camera"></i> Update profile photo</span>
             <p-fileUpload #upload mode="basic" name="myfile[]" files="photosList" accept="image/*" (uploadHandler)="onImageSelected($event.files)"
@@ -99,33 +105,26 @@
       <form [formGroup]="userForm">
         <div class="field">
           <p class="left-flex">Display name</p>
-          <div class="ui-fluid">
-            <input type="text" formControlName="displayName" pInputText />
-          </div>
+          <div class="ui-fluid"><input type="text" formControlName="displayName" pInputText /></div>
         </div>
         <div class="field">
           <p class="left-flex">First name</p>
-          <div class="ui-fluid">
-            <input type="text" formControlName="firstName" pInputText />
-          </div>
+          <div class="ui-fluid"><input type="text" formControlName="firstName" pInputText /></div>
         </div>
         <div class="field">
           <p class="left-flex">Last name</p>
-          <div class="ui-fluid">
-            <input type="text" formControlName="lastName" pInputText />
-          </div>
+          <div class="ui-fluid"><input type="text" formControlName="lastName" pInputText /></div>
         </div>
         <div class="field">
           <p class="left-flex">Bio</p>
-          <div class="ui-fluid">
-            <textarea rows="3" formControlName="bio" pInputTextarea></textarea>
-          </div>
+          <div class="ui-fluid"><textarea rows="3" formControlName="bio" pInputTextarea></textarea></div>
         </div>
       </form>
     </div>
   </div>
 
   <div class="ui-g">
+    <!--<div class="inline"> </div> appendTo="body"  , position:'fixed'-->
     <div class="ui-g-6 left-flex">List of other organizations</div>
     <div class="ui-g-4 ui-fluid">
       <p-dropdown [autoWidth]="false" [options]="dropdownCompany" [(ngModel)]="selectedCompany" filter="true"></p-dropdown>
@@ -136,7 +135,7 @@
   </div>
 
   <div class="ui-g">
-
+    
     <div class="ui-g ui-g-12 left-flex">List of your organization</div>
     <div class="ui-g ui-g-12 list-organization">
       <div class="ui-g ui-g-12">
@@ -158,7 +157,7 @@
   </div>
 
   <p-footer>
-    <div class="text-center">
+    <div class="center">
       <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
       <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
     </div>

@@ -102,7 +102,6 @@ namespace DataAccumulator.DataAggregator
                     await _aggregatorService.AddAggregatorEntityAsync(collectedDataDto);
                 }
 
-
                 if (deleteSource)
                 {
                     // Delete already aggregated CollectedDataDto from source table MongoDb
