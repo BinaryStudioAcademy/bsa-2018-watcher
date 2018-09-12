@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccumulator.DataAggregator.Interfaces;
@@ -22,13 +23,16 @@ namespace DataAccumulator.DataAggregator
             DateTime timeFrom = DateTime.Now.Add(-interval);
             DateTime timeTo = DateTime.Now;
 
-            var sourceCollectedDataDtos = 
-                await _aggregatorService.GetSourceEntitiesAsync(sourceType, timeFrom, timeTo);
+            var sourceCollectedDataDtos = await _aggregatorService.GetSourceEntitiesAsync(sourceType, timeFrom, timeTo);
+            var listCollectedDataDtos = sourceCollectedDataDtos.ToList();
+            var filteredCollectedDataDtos =
+                await FilterCollectedDataByInstanceSettings(listCollectedDataDtos, destinationType);
+                
 
-            if (sourceCollectedDataDtos != null)
+            if (filteredCollectedDataDtos != null)
             {
                 var collectedDataDtosAverage =
-                    from collectedDataDto in sourceCollectedDataDtos
+                    from collectedDataDto in filteredCollectedDataDtos
                     group collectedDataDto by collectedDataDto.ClientId
                     into collectedDataGroup
                     select new CollectedDataDto
@@ -91,12 +95,81 @@ namespace DataAccumulator.DataAggregator
                 if (deleteSource)
                 {
                     // Delete already aggregated CollectedDataDto from source table MongoDb
-                    foreach (var collectedDataDto in sourceCollectedDataDtos)
+                    foreach (var collectedDataDto in filteredCollectedDataDtos)
                     {
                         await _aggregatorService.DeleteAggregatedEntityAsync(collectedDataDto.Id);
                     }
                 }
             }
+        }
+
+        public async Task<IEnumerable<CollectedDataDto>> FilterCollectedDataByInstanceSettings(List<CollectedDataDto> collectedDataDtos, 
+            CollectedDataType destinationType)
+        {
+            var instanceSettingsDtos = await _aggregatorService.GetInstanceSettingsEntitiesAsync();
+            List<InstanceSettingsDto> instanceSettingsList = instanceSettingsDtos.ToList();
+            List<CollectedDataDto> filteredCollectedDataDtos = new List<CollectedDataDto>();
+
+            switch (destinationType)
+            {
+                case CollectedDataType.AggregationForHour:
+                {
+                    instanceSettingsList.ForEach(instanceSettings =>
+                    {
+                        if (instanceSettings.IsActive && instanceSettings.AggregationForHour)
+                        {
+                            var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
+                            filteredCollectedDataDtos.AddRange(data);
+                        }
+                    });
+
+                    break;
+                }
+
+                case CollectedDataType.AggregationForDay:
+                {
+                    instanceSettingsList.ForEach(instanceSettings =>
+                    {
+                        if (instanceSettings.IsActive && instanceSettings.AggregationForDay)
+                        {
+                            var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
+                            filteredCollectedDataDtos.AddRange(data);
+                        }
+                    });
+
+                    break;
+                }
+
+                case CollectedDataType.AggregationForWeek:
+                {
+                    instanceSettingsList.ForEach(instanceSettings =>
+                    {
+                        if (instanceSettings.IsActive && instanceSettings.AggregationForWeek)
+                        {
+                            var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
+                            filteredCollectedDataDtos.AddRange(data);
+                        }
+                    });
+
+                    break;
+                }
+
+                case CollectedDataType.AggregationForMonth:
+                {
+                    instanceSettingsList.ForEach(instanceSettings =>
+                    {
+                        if (instanceSettings.IsActive && instanceSettings.AggregationForMonth)
+                        {
+                            var data = collectedDataDtos.Where(d => d.ClientId == instanceSettings.ClientId).ToList();
+                            filteredCollectedDataDtos.AddRange(data);
+                        }
+                    });
+
+                    break;
+                }
+            }
+
+            return filteredCollectedDataDtos;
         }
     }
 }
