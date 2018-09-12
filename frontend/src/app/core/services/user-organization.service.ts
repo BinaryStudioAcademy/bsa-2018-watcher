@@ -43,4 +43,9 @@ export class UserOrganizationService {
     const user: User = this.authService.getCurrentUserLS();
     return this.getUserOrganizationRole(user.id, user.lastPickedOrganizationId).toPromise();
   }
+
+  async isOrganizationManager(): Promise<boolean> {
+    const role = await this.getOrganizationRole();
+    return role.name === 'Manager';
+  }
 }
