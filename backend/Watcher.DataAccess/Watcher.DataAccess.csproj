@@ -9,6 +9,7 @@
     <Compile Remove="Data\Migrations\20180910135905_RemovedThemeFromUser.cs" />
     <Compile Remove="Data\Migrations\20180912000450_ExtendedThemeEntity.cs" />
     <Compile Remove="Data\Migrations\20180912055450_UpdatedInstanceSettings.cs" />
+    <Compile Remove="Data\Migrations\20180912091349_instancesFix.cs" />
   </ItemGroup>
 
   <ItemGroup>
