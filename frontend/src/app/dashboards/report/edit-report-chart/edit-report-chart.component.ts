@@ -142,7 +142,7 @@ export class EditReportChartComponent implements OnInit {
   }
 
   processData(): void {
-    const data = this.collectedData ? this.collectedData : this.dataService.fakeCollectedData;
+    const data = this.collectedData && this.edit ? this.collectedData : this.dataService.fakeCollectedData;
     this.isPreviewAvailable = this.dataService.fulfillChart(data, this.dashboardChart, true);
   }
 
