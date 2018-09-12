@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { NotificationsHubService } from '../../core/hubs/notifications.hub';
 import { NotificationService } from '../../core/services/notification.service';
@@ -7,7 +8,6 @@ import { SystemToastrService } from '../../core/services/system-toastr.service';
 
 import { NotificationType } from '../../shared/models/notification-type.enum';
 import { Notification } from '../../shared/models/notification.model';
-import { Router } from '@angular/router';
 
 
 @Component({
@@ -27,6 +27,7 @@ export class NotificationBlockComponent implements OnInit {
   notifications: Notification[] = [];
   type = NotificationType;
   isLoading: Boolean = false;
+  extendedNotification: Number = null;
 
   constructor(
     private notificationsHubService: NotificationsHubService,
@@ -51,28 +52,31 @@ export class NotificationBlockComponent implements OnInit {
 
   private subscribeToEvents(): void {
     this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
-      if (!value.notificationSetting.isDisable) {
-        this.notificationCounter++;
-        if (!value.notificationSetting.isMute) {
-          this.systemToastrService.send(value);
-        }
+      this.notificationCounter++;
+      if (!value.notificationSetting.isMute) {
+        this.systemToastrService.send(value);
       }
       this.notifications.unshift(value);
     });
 
     this.notificationsHubService.notificationDeleted.subscribe((value: Notification) => {
       const index = this.notifications.findIndex(item => item.id === value.id);
-      this.notifications.splice(index, 1);
+      if (index !== -1) {
+        if (!this.notifications[index].wasRead) {
+          this.notificationCounter--;
+        }
+        this.notifications.splice(index, 1);
+      }
     });
   }
 
   loadNotifications(): void {
     this.isLoading = true;
     this.notificationsService.getAll(this.authService.getCurrentUser().id).subscribe((value: Notification[]) => {
+      value.reverse();
       this.notifications = value;
       this.notificationCounter = this.calcNotReadNotifications(value);
       this.isLoading = false;
-      console.log(this.isLoading);
     });
   }
 
@@ -93,6 +97,7 @@ export class NotificationBlockComponent implements OnInit {
   markAsRead(id: number): void {
     this.notificationCounter--;
     const notify = this.notifications.find(item => item.id === id);
+
     notify.wasRead = true;
     this.notificationsService.update(id, notify).subscribe();
   }
@@ -104,8 +109,11 @@ export class NotificationBlockComponent implements OnInit {
     }
 
     const index = this.notifications.findIndex(item => item.id === id);
-    this.notifications.splice(index, 1);
-    this.notificationsHubService.delete(notify);
+
+    if (index !== -1) {
+      this.notifications.splice(index, 1);
+      this.notificationsHubService.delete(notify);
+    }
   }
 
   redirectToInstance(notification): void {
