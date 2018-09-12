@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20180909232926_ExtendedThemeEntity.cs" />
+    <Compile Remove="Data\Migrations\20180910135905_RemovedThemeFromUser.cs" />
+    <Compile Remove="Data\Migrations\20180912000450_ExtendedThemeEntity.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="Bogus" Version="22.3.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.0" />

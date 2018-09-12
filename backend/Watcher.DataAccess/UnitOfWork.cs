@@ -48,6 +48,8 @@
         private INotificationsRepository _notificationsRepository;
 
         private IUserChatRepository _userChatRepository;
+
+        private IThemeRepository _themeRepository;
         
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
@@ -114,6 +116,8 @@
                 return _notificationsRepository;
             }
         }
+
+        public IThemeRepository ThemeRepository => _themeRepository ?? (_themeRepository = new ThemeRepository(_context, _mapper));
         
         public async Task<bool> SaveAsync()
         {

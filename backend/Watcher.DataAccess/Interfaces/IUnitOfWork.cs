@@ -45,6 +45,8 @@
 
         IChartsRepository ChartsRepository { get;  }
 
+        IThemeRepository ThemeRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }

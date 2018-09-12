@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from './core/services/auth.service';
+import { ThemeService } from './core/services/theme.service';
+import { DomSanitizer } from 'node_modules/@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +9,9 @@ import {AuthService} from './core/services/auth.service';
 })
 
 export class AppComponent implements OnInit {
-  constructor(private authService: AuthService) {
+  public cssUrl: string;
+
+  constructor(private authService: AuthService, private themeService: ThemeService, public sanitizer: DomSanitizer) {
   }
 
   async ngOnInit() {
@@ -15,5 +19,9 @@ export class AppComponent implements OnInit {
       await this.authService.populate();
     }
 
+    const user =  this.authService.getCurrentUserLS();
+    if (user) {
+      this.themeService.applyTheme(user.lastPickedOrganization.theme);
+    }
   }
 }
