@@ -49,18 +49,21 @@ export class NotificationBlockComponent implements OnInit {
 
   private subscribeToEvents(): void {
     this.notificationsHubService.notificationReceived.subscribe((value: Notification) => {
-      if (!value.notificationSetting.isDisable) {
-        this.notificationCounter++;
-        if (!value.notificationSetting.isMute) {
-          this.systemToastrService.send(value);
-        }
+      this.notificationCounter++;
+      if (!value.notificationSetting.isMute) {
+        this.systemToastrService.send(value);
       }
       this.notifications.unshift(value);
     });
 
     this.notificationsHubService.notificationDeleted.subscribe((value: Notification) => {
       const index = this.notifications.findIndex(item => item.id === value.id);
-      this.notifications.splice(index, 1);
+      if (index !== -1) {
+          if (!this.notifications[index].wasRead) {
+        this.notificationCounter--;
+      }
+        this.notifications.splice(index, 1);
+      }
     });
   }
 
