@@ -209,7 +209,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dashboardsService.update(this.dashboardMenuItems[index].dashId, request)
       .subscribe(
         (res: Response) => {
-          console.log(res);
           this.dashboardMenuItems[index].label = editTitle;
           this.toastrService.success('Successfully updated dashboard!');
         },
@@ -221,7 +220,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   deleteDashboard(dashboard: DashboardMenuItem): void {
     this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
-          console.log(res);
           // Search and delete selected Item
           const index = this.dashboardMenuItems.findIndex(d => d === this.activeDashboardItem);
           this.dashboardMenuItems.splice(index, 1);

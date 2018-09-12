@@ -1,6 +1,7 @@
 ﻿namespace Watcher.Controllers
 {
     using System;
+    using System.Data;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
@@ -22,6 +23,8 @@
         [DisableRequestSizeLimit]
         public async Task<IActionResult> UploadCollectorInstallerFile([FromForm] IFormFile file, [FromQuery] OperatingSystems system)
         {
+            DataTable dtPolicyDetails = new DataTable();
+            dtPolicyDetails.Columns.Add("PaymentHead");
             if (file == null || file.Length == 0)
                 return Content("file not selected");
 
