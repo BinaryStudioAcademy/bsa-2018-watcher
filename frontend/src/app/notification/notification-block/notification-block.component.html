@@ -9,7 +9,7 @@
     </div>
 
     <div class="notification-container">
-      <div class="ui-shadow message-container relative" *ngFor="let notification of notifications">
+      <div class="ui-shadow message-container relative" *ngFor="let notification of notifications" [ngClass]="{'unread-message': !notification.wasRead}">
         <div class="action-icon read-icon fa fa-fw fa-eye" *ngIf="!notification.wasRead" (click)="markAsRead(notification.id)"></div>
         <div class="action-icon close-icon fa fa-fw fa-times" (click)="remove(notification.id)"></div>
 
@@ -17,11 +17,11 @@
           [ngClass]="{
             'warning': notification?.notificationSetting?.type == type.Warning,
             'error': notification?.notificationSetting?.type == type.Error,
-            'system': message.data.notificationSetting?.type == type.System}">
+            'system': notification?.notificationSetting?.type == type.System}">
         </span>
-        <div class="message-content" [ngClass]="{'unread-message': !notification.wasRead}">
-          <span class="message-title text-overflow" style="width:240px">System message</span>
-          <div class="message-text">{{notification.text}}</div>
+        <div class="message-content action" (click)="extendedNotification = extendedNotification ? null : notification.id">
+          <span class="message-title text-overflow">{{type[notification.notificationSetting.type]}} message</span>
+          <div class="message-text" [ngClass]="{'message-text-short': extendedNotification !== notification.id}">{{notification.text}}</div>
           <div class="message-date text-overflow">{{notification.createdAt | date:'short'}}</div>
         </div>
       </div>

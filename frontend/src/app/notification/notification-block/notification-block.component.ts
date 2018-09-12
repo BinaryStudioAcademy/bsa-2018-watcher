@@ -7,6 +7,7 @@ import { SystemToastrService } from '../../core/services/system-toastr.service';
 
 import { NotificationType } from '../../shared/models/notification-type.enum';
 import { Notification } from '../../shared/models/notification.model';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 
 @Component({
@@ -26,8 +27,10 @@ export class NotificationBlockComponent implements OnInit {
   notifications: Notification[] = [];
   type = NotificationType;
   isLoading: Boolean = false;
+  extendedNotification: Number = null;
 
   constructor(
+    private router: Router,
     private notificationsHubService: NotificationsHubService,
     private authService: AuthService,
     private notificationsService: NotificationService,
@@ -40,6 +43,16 @@ export class NotificationBlockComponent implements OnInit {
 
   get notificationCounter() {
     return this._unreadedNotifications;
+  }
+
+  extendHideText(event) {
+    debugger
+    //this.extendedNotification = this.extendNotification ? 0 : notification.id"
+  }
+
+  openInstanceActivities(instanceId: string) {
+    debugger
+    this.router.navigate([`/user/instances/${instanceId}/activities`]);
   }
 
   set notificationCounter(value: number) {
@@ -70,6 +83,7 @@ export class NotificationBlockComponent implements OnInit {
   loadNotifications(): void {
     this.isLoading = true;
     this.notificationsService.getAll(this.authService.getCurrentUser().id).subscribe((value: Notification[]) => {
+      value.reverse();
       this.notifications = value;
       this.notificationCounter = this.calcNotReadNotifications(value);
       this.isLoading = false;
@@ -93,6 +107,7 @@ export class NotificationBlockComponent implements OnInit {
   markAsRead(id: number): void {
     this.notificationCounter--;
     const notify = this.notifications.find(item => item.id === id);
+
     notify.wasRead = true;
     this.notificationsService.update(id, notify).subscribe();
   }
