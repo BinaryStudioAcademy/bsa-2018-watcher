@@ -130,13 +130,7 @@ namespace DataAccumulator.DataAggregator
                                           };
                     await _serviceBusProvider.SendAnomalyReportMessage(reportMessage);
                 }
-                // WebServer - DataAccumulator
-                // TODO: Create new notification model 
-                // Notification { Type => Hourly|Weekly|Dayly, Report => AzureMLReport }  
                 // TODO: Save report in MongoDB
-                // WebServer - Watcher
-                // TODO: Send notification to Angular
-                // TODO: Send email to user
             }
             catch (Exception)
             {
