@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 using DataAccumulator.BusinessLayer.Interfaces;
@@ -8,7 +9,7 @@ using DataAccumulator.Shared.Models;
 
 using FluentValidation;
 using FluentValidation.Internal;
-
+using ServiceBus.Shared.Enums;
 using ServiceBus.Shared.Messages;
 
 namespace DataAccumulator.BusinessLayer.Validators
@@ -45,10 +46,33 @@ namespace DataAccumulator.BusinessLayer.Validators
                 var validationResult = await validator.ValidateAsync(context);
                 if (!validationResult.IsValid)
                 {
+                    StringBuilder textMessage = new StringBuilder();
+
+                    foreach (var item in validationResult.Errors)
+                    {
+                        var name = item.FormattedMessagePlaceholderValues["PropertyName"]
+                            .ToString();
+
+                        int index = name.IndexOf("Percentage");
+                        name = (index < 0)
+                            ? name
+                            : name.Remove(index, "Percentage".Length);
+
+                        index = name.IndexOf("Local");
+                        name = (index < 0)
+                           ? name
+                           : name.Remove(index, "Local".Length);
+
+                        name = name.ToLower();
+
+                        textMessage.Append(" " + name + " has reached " + item.AttemptedValue.ToString().Substring(0, 4) + "% ");
+                    }
                     var message = new InstanceNotificationMessage()
                     {
                         InstanceId = instanceValidatorDto.ClientId,
-                        Text = validationResult.ToString()
+                        CreatedAt = DateTime.Now,
+                        Type = InstanceNotifyType.Error,
+                        Text = textMessage.ToString()
                     };
                     await _serviceBusProvider.SendNotificationMessage(message);
                 }

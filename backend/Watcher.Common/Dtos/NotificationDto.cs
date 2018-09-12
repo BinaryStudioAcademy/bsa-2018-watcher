@@ -16,6 +16,7 @@ namespace Watcher.Common.Dtos
         public int? OrganizationId { get; set; }
 
         public int? InstanceId { get; set; }
+        public Guid? InstanceGuidId { get; set; }
 
         public string UserId { get; set; }
 
