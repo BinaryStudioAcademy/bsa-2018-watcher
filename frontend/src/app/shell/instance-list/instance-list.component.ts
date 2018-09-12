@@ -50,20 +50,19 @@ export class InstanceListComponent implements OnInit {
       async user => {
         this.user = user;
         const role = await this.userOrganizationService.getOrganizationRole();
-        if (role) {
-          this.isManager = role.name === 'Manager';
-        } else { this.isManager = false; }
+        if (!role) { return; }
+        this.isManager = role.name === 'Manager' ? true : false;
+
+        if (!this.authService.getCurrentUserLS()) { return; }
         if (this.dashboardsHub.isConnect) {
           this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
         }
         this.dashboardsHub.connectionEstablished$.subscribe(established => {
           if (established) {
             this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
-          } else {
-
           }
         });
-        this.configureInstances(this.user.lastPickedOrganizationId);
+        if (this.authService.getCurrentUserLS()) { this.configureInstances(this.user.lastPickedOrganizationId); }
       });
     this.dashboardsHub.instanceCheckedSubObservable.subscribe(value => {
       console.log(`Instance: ${value.instanceGuidId}, was checked at ${value.statusCheckedAt}`);

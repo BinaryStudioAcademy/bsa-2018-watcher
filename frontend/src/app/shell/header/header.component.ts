@@ -16,6 +16,9 @@ import { DashboardsHub } from '../../core/hubs/dashboards.hub';
 import { ThemeService } from '../../core/services/theme.service';
 import { OrganizationService } from '../../core/services/organization.service';
 import { Subscription } from 'rxjs';
+import { ChatHub } from 'src/app/core/hubs/chat.hub';
+import { OrganizationInvitesHub } from '../../core/hubs/organization-invites.hub';
+import { NotificationsHubService } from '../../core/hubs/notifications.hub';
 
 
 
@@ -49,7 +52,11 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private pathService: PathService,
-    private themeService: ThemeService) { }
+    private themeService: ThemeService,
+    private chatHub: ChatHub,
+    private dashboardsHub: DashboardsHub,
+    private invitesHub: OrganizationInvitesHub,
+    private notificationsHub: NotificationsHubService) { }
 
   onFeedback(): void {
     this.router.navigate(['/user/feedback']);
