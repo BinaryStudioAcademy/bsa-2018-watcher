@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AutoMapper;
 using DataAccumulator.BusinessLayer.Interfaces;
@@ -11,7 +8,6 @@ using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
 using DataAccumulator.Shared.Exceptions;
 using DataAccumulator.Shared.Models;
-using Newtonsoft.Json;
 
 namespace DataAccumulator.BusinessLayer.Services
 {

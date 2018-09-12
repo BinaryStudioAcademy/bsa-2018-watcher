@@ -14,7 +14,6 @@ import {Organization} from '../../shared/models/organization.model';
 import {User} from '../../shared/models/user.model';
 import { DashboardsHub } from '../../core/hubs/dashboards.hub';
 import { ThemeService } from '../../core/services/theme.service';
-import { OrganizationService } from '../../core/services/organization.service';
 
 
 
@@ -41,9 +40,9 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private tokenService: TokenService,
+    private dashboardsHub: DashboardsHub,
     private userService: UserService,
     private toastrService: ToastrService,
-    private organizationService: OrganizationService,
     private router: Router,
     private authService: AuthService,
     private pathService: PathService,
@@ -184,15 +183,12 @@ export class HeaderComponent implements OnInit {
     // update user in beckend
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
       .subscribe(value => {
+          this.dashboardsHub.unSubscribeFromOrganizationById(this.currentUser.lastPickedOrganizationId);
+          this.dashboardsHub.subscribeToOrganizationById(item.id);
           // update user in frontend
-          const previousOrganizationId = this.currentUser.lastPickedOrganizationId;
-
           this.currentUser.lastPickedOrganizationId = item.id;
           this.currentUser.lastPickedOrganization = item;
           this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
-
-          this.organizationService.organizationChanged.emit({from: previousOrganizationId, to: item.id});
-
           // notify user about changes
           this.toastrService.success(`Organization by default was updated. Current organization: "${item.name}"`);
           this.isChangingOrganization = false;

@@ -52,9 +52,6 @@
     <None Update="MoveToFrontend\filter.model.ts">
       <CustomToolNamespace>Dtos\Filter.cs</CustomToolNamespace>
     </None>
-    <None Update="MoveToFrontend\instance-checked.model.ts">
-      <CustomToolNamespace>Dtos\InstanceCheckedDto.cs</CustomToolNamespace>
-    </None>
     <None Update="MoveToFrontend\instance.model.ts">
       <CustomToolNamespace>Dtos\InstanceDto.cs</CustomToolNamespace>
     </None>

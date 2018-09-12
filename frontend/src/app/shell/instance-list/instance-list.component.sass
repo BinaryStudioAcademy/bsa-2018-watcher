@@ -1,92 +1,80 @@
 .menu
-  position: fixed
-  left: 0
-  top: 60px
-  height: calc(100% - 60px)
-  overflow-x: hidden
-  overflow-y: auto
-  width: 250px
-  background: #ffffff
-  border-right: 1px solid #e3e9ea
-
-/deep/ .active-instance
-          .fa-check-circle-o
-            color: #3eb839
-
-/deep/ .non-active-instance
-          .fa-ban
-            color: red
-
-/deep/ .semi-active-instance
-          .fa-exclamation-circle
-            color: yellow
+    position: fixed
+    left: 0
+    top: 60px
+    height: calc(100% - 60px)
+    overflow-x: hidden
+    overflow-y: auto
+    width: 250px
+    background: #ffffff
+    border-right: 1px solid #e3e9ea
 
 .panelMenuContainer
-  top: 60px
+    top: 60px
 
 /deep/ .menu
-  .ui-panelmenu .ui-panelmenu-panel
-    margin-top: 0
+    .ui-panelmenu .ui-panelmenu-panel
+        margin-top: 0
 
-  .ui-panelmenu-header-link
-    color: #34393a
-    padding: .7em
+    .ui-panelmenu-header-link
+        color: #34393a
+        padding: .7em
 
-  .ui-menuitem-icon
-    font-size: 1.6em
+    .ui-menuitem-icon
+        font-size: 1.6em
 
-  .ui-menuitem-text
-    font-size: 1.3em
-    font-weight: 500
+    .ui-menuitem-text
+        font-size: 1.3em
+        font-weight: 500
 
-  span.ui-menuitem-text
-    width: 185px
-    display: inline-block
-    text-overflow: ellipsis
-    overflow: hidden
+    span.ui-menuitem-text
+        width: 185px
+        display: inline-block
+        text-overflow: ellipsis
+        overflow: hidden
 
-  .ui-panelmenu .ui-panelmenu-header > a
-    background-color: #fff
-    width: 100%
-    height: 50px
-    display: block
-    padding: 10px 0 0 10px
-    cursor: pointer
-    border-top: 1px solid #e3e9ea
-    border-right: 1px solid transparent
-    border-bottom: 1px solid #e3e9ea
-    box-sizing: border-box
+    .ui-panelmenu .ui-panelmenu-header > a
+        background-color: #fff
+        width: 100%
+        height: 50px
+        display: block
+        padding: 10px 0 0 10px
+        cursor: pointer
+        border-top: 1px solid #e3e9ea
+        border-right: 1px solid transparent
+        border-bottom: 1px solid #e3e9ea
+        box-sizing: border-box
 
 .search
-  position: relative
-  display: flex
-  padding: .7em .9em
-  i
-    margin-top: 2px
-    margin-right: 12px
+    position: relative
+    display: flex
+    padding: .7em .9em
+    i
+        margin-top: 2px
+        margin-right: 12px
 
 input
-  position: relative
-  font-size: 1.2em
-  background-color: #ffffff
-  padding: 5px 12px
-  border: 1px solid #cccccc
-  border-radius: 4px
-  transition: box-shadow 0.3s, border-color 0.3s
-  width: 230px
+    position: relative
+    font-size: 1.2em
+    background-color: #ffffff
+    padding: 5px 12px
+    border: 1px solid #cccccc
+    border-radius: 4px
+    transition: box-shadow 0.3s, border-color 0.3s
+    width: 230px
 
 i
-  position: absolute
-  color: #777777
-  top: 18px
-  right: 15px
-  font-size: 1.2em
-  cursor: pointer
+    position: absolute
+    color: #777777
+    top: 18px
+    right: 15px
+    font-size: 1.2em
+    cursor: pointer
 
-/deep/ body .ui-panelmenu .ui-panelmenu-content .ui-menuitem .ui-menuitem-link
-  padding: 0.714em 1.4em !important
-  span.ui-menuitem-text
-    width: 160px
+/deep/body .ui-panelmenu .ui-panelmenu-content .ui-menuitem .ui-menuitem-link
+    padding: 0.714em 1.4em !important
+    span.ui-menuitem-text
+        width: 160px
 
 .spinner
   margin-top: 25px
