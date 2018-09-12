@@ -55,13 +55,15 @@ export class AddNewOrganizationComponent implements OnInit {
 
     this.organizationService.create(this.organization).subscribe(
       value => {
-        this.organizationService.organizationChanged.emit({from: this.user.lastPickedOrganizationId, to: value.id});
+        const previousOrganizationId = this.user.lastPickedOrganizationId;
 
         this.user.organizations.push(value);
         this.user.lastPickedOrganization = value;
         this.user.lastPickedOrganizationId = value.id;
-
         this.authService.updateCurrentUser(this.user);
+
+        this.organizationService.organizationChanged.emit({from: previousOrganizationId, to: value.id});
+
         this.toastrService.success(`${value.name} organization Successfully established,
           and it was set as the default organization.`);
 

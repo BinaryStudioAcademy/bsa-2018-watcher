@@ -180,11 +180,15 @@ export class HeaderComponent implements OnInit {
     // update user in beckend
     this.userService.updateLastPickedOrganization(this.currentUser.id, item.id)
       .subscribe(value => {
-          this.organizationService.organizationChanged.emit({from: this.currentUser.lastPickedOrganizationId, to: item.id});
           // update user in frontend
+          const previousOrganizationId = this.currentUser.lastPickedOrganizationId;
+
           this.currentUser.lastPickedOrganizationId = item.id;
           this.currentUser.lastPickedOrganization = item;
           this.authService.updateCurrentUser(this.currentUser); // update user in localStorage
+
+          this.organizationService.organizationChanged.emit({from: previousOrganizationId, to: item.id});
+
           // notify user about changes
           this.toastrService.success(`Organization by default was updated. Current organization: "${item.name}"`);
           this.isChangingOrganization = false;
