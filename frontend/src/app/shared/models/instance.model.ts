@@ -11,6 +11,7 @@ export interface Instance {
   aggregationForHour: boolean;
   aggregationForDay: boolean;
   aggregationForMonth: boolean;
+  aggregationForWeek: boolean;
 
   statusCheckedAt: Date;
 

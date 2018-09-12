@@ -3,7 +3,7 @@
     <div class="ui-g-12">
       <div class="title-block">
         <div class="title">Report</div>
-      </div>      
+      </div>
       <hr>
     </div>
   </div>
@@ -49,13 +49,13 @@
                 Name
               </th>
               <th class="data-header t-header" colspan="3">
-                CPU
+                CPU, %
               </th>
               <th class="data-header t-header" colspan="3">
-                RAM
+                RAM, %
               </th>
               <th class="data-header t-header" colspan="3">
-                RAM
+                RAM, MBytes
               </th>
             </tr>
             <tr class="row-header">
@@ -139,15 +139,15 @@
         <p class="tutorial-item">1. Get aggregated information</p>
         <p class="tutorial-item">2. Click <i class="fa fa-fw fa-gear"></i> for add chart</p>
       </div>
-  
+
       <div class="charts-area">
         <div #chartPDF class="chart-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
-      
+
           <div class="icon-panel">
             <i class="action-icon fa fa-fw fa-edit" (click)="editChart(chart)"></i>
             <i class="action-icon fa fa-fw fa-times" (click)="deleteChart(chart)"></i>
           </div>
-      
+
           <div class="chart-title">{{chart.title}}</div>
           <app-chart
             class="chart"

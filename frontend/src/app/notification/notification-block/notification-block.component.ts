@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { NotificationsHubService } from '../../core/hubs/notifications.hub';
 import { NotificationService } from '../../core/services/notification.service';
@@ -7,7 +8,6 @@ import { SystemToastrService } from '../../core/services/system-toastr.service';
 
 import { NotificationType } from '../../shared/models/notification-type.enum';
 import { Notification } from '../../shared/models/notification.model';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 
 @Component({
@@ -30,11 +30,11 @@ export class NotificationBlockComponent implements OnInit {
   extendedNotification: Number = null;
 
   constructor(
-    private router: Router,
     private notificationsHubService: NotificationsHubService,
     private authService: AuthService,
     private notificationsService: NotificationService,
-    private systemToastrService: SystemToastrService) { }
+    private systemToastrService: SystemToastrService,
+    private router: Router) { }
 
   ngOnInit() {
     this.loadNotifications();
@@ -43,16 +43,6 @@ export class NotificationBlockComponent implements OnInit {
 
   get notificationCounter() {
     return this._unreadedNotifications;
-  }
-
-  extendHideText(event) {
-    debugger
-    //this.extendedNotification = this.extendNotification ? 0 : notification.id"
-  }
-
-  openInstanceActivities(instanceId: string) {
-    debugger
-    this.router.navigate([`/user/instances/${instanceId}/activities`]);
   }
 
   set notificationCounter(value: number) {
@@ -124,5 +114,10 @@ export class NotificationBlockComponent implements OnInit {
       this.notifications.splice(index, 1);
       this.notificationsHubService.delete(notify);
     }
+  }
+
+  redirectToInstance(notification): void {
+    const url = [`/user/instances/${notification.instanceId}/${notification.instanceGuidId}/dashboards`];
+    this.router.navigate(url);
   }
 }
