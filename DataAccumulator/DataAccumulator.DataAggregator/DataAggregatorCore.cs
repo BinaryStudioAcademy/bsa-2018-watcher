@@ -10,10 +10,12 @@ namespace DataAccumulator.DataAggregator
     public class DataAggregatorCore : IDataAggregatorCore<CollectedDataDto>
     {
         private readonly IAggregatorService<CollectedDataDto> _aggregatorService;
+        private readonly IAnomalyDetector _anomalyDetector;
 
-        public DataAggregatorCore(IAggregatorService<CollectedDataDto> aggregatorService)
+        public DataAggregatorCore(IAggregatorService<CollectedDataDto> aggregatorService, IAnomalyDetector anomalyDetector)
         {
             _aggregatorService = aggregatorService;
+            _anomalyDetector = anomalyDetector;
         }
 
         public async Task AggregatingData(CollectedDataType sourceType, CollectedDataType destinationType, 
@@ -31,6 +33,8 @@ namespace DataAccumulator.DataAggregator
 
             if (filteredCollectedDataDtos != null)
             {
+                await SendMLReport(filteredCollectedDataDtos);
+
                 var collectedDataDtosAverage =
                     from collectedDataDto in filteredCollectedDataDtos
                     group collectedDataDto by collectedDataDto.ClientId
@@ -91,7 +95,6 @@ namespace DataAccumulator.DataAggregator
                     await _aggregatorService.AddAggregatorEntityAsync(collectedDataDto);
                 }
 
-
                 if (deleteSource)
                 {
                     // Delete already aggregated CollectedDataDto from source table MongoDb
@@ -103,7 +106,26 @@ namespace DataAccumulator.DataAggregator
             }
         }
 
-        public async Task<IEnumerable<CollectedDataDto>> FilterCollectedDataByInstanceSettings(List<CollectedDataDto> collectedDataDtos, 
+        private async Task SendMLReport(IEnumerable<CollectedDataDto> data)
+        {
+            try
+            {
+                var result = await _anomalyDetector.AnalyzeData(data);
+                // WebServer - DataAccumulator
+                // TODO: Create new notification model 
+                // Notification { Type => Hourly|Weekly|Dayly, Report => AzureMLReport }  
+                // TODO: Save report in MongoDB
+                // WebServer - Watcher
+                // TODO: Send notification to Angular
+                // TODO: Send email to user
+            }
+            catch (Exception)
+            {
+                // TODO: handle exception
+            }
+        }
+
+        private async Task<IEnumerable<CollectedDataDto>> FilterCollectedDataByInstanceSettings(List<CollectedDataDto> collectedDataDtos, 
             CollectedDataType destinationType)
         {
             var instanceSettingsDtos = await _aggregatorService.GetInstanceSettingsEntitiesAsync();
