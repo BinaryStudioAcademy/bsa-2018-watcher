@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ToastrService } from '../../core/services/toastr.service';
-import { CollectorAppsService } from '../../core/services/collector-apps.service';
-import { CollectorApp } from '../../shared/models/collector-app.model';
 
 @Component({
   selector: 'app-download-app',
@@ -13,11 +11,7 @@ export class DownloadAppComponent implements OnInit {
   @Output() closed: EventEmitter<void>;
   @Input() display: boolean;
   @Input() guid: string;
-
-  collectorApp: CollectorApp;
-
-  constructor(private toastrService: ToastrService,
-              private collectorAppsService: CollectorAppsService) {
+  constructor(private toastrService: ToastrService) {
     this.closed = new EventEmitter();
   }
 
@@ -25,14 +19,6 @@ export class DownloadAppComponent implements OnInit {
     this.closed.emit();
   }
   ngOnInit(): void {
-    this.collectorAppsService.getLast().subscribe(
-      result => {
-        this.collectorApp = result;
-      },
-      err => {
-
-      }
-    );
   }
   copyToClipboard(message: string): void {
     const selBox = document.createElement('textarea');

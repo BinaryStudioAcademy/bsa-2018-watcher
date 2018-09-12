@@ -14,13 +14,16 @@ namespace DataAccumulator.WebAPI.Controllers
 
     using Microsoft.Extensions.Logging;
 
+    using ServiceBus.Shared.Messages;
+
     [Route("api/v1/[controller]")]
     public class ValuesController : ControllerBase
     {
         private readonly ILogger<ValuesController> _logger;
         private readonly IDataAccumulatorRepository<CollectedData> _repository;
         private readonly IInstanceSettingsRepository<InstanceSettings> _validatorRepository;
-
+        private readonly IServiceBusProvider _serviceBusProvider;
+        
         public ValuesController(ILogger<ValuesController> logger, 
                                 IDataAccumulatorRepository<CollectedData> repository,
                                 IInstanceSettingsRepository<InstanceSettings> validatorRepository,
@@ -29,7 +32,10 @@ namespace DataAccumulator.WebAPI.Controllers
             _logger = logger;
             _repository = repository;
             _validatorRepository = validatorRepository;
+            _serviceBusProvider = serviceBusProvider;
         }
+
+
 
         [HttpGet("AllInOrder")]
         public IEnumerable<string> LogAllInOrder()
@@ -48,6 +54,26 @@ namespace DataAccumulator.WebAPI.Controllers
             _logger.LogError(errE, "Error");
             _logger.LogCritical(critE, "Crit");
             return new[] { "value1", "value2" };
+        }
+
+        [HttpGet("SendReport")]
+        public async Task<ActionResult> SendReport()
+        {
+            var report = new AzureMLAnomalyReport
+                             {
+                                 Date = DateTime.UtcNow,
+                                 AnomalyGroups = new List<AzureMLAnomalyGroup>(),
+                                 CollectedDataTypeOfReport = CollectedDataType.AggregationForHour
+                             };
+
+            var reportMessage = new InstanceAnomalyReportMessage
+                                    {
+                                        AnomalyReport = report,
+                                        InstanceId = Guid.Parse("11c1b774-b459-4cc1-9f70-a54c8964802d")
+                                    };
+            await _serviceBusProvider.SendAnomalyReportMessage(reportMessage);
+
+            return Ok();
         }
 
         // Call an initialization - GET api/v1/values/init

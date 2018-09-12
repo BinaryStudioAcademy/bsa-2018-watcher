@@ -51,30 +51,31 @@ export class InstanceListComponent implements OnInit {
         this.user = user;
         const role = await this.userOrganizationService.getOrganizationRole();
         this.isManager = role.name === 'Manager';
-        this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
+        if (this.dashboardsHub.isConnect) {
+          this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
+        }
+        this.dashboardsHub.connectionEstablished$.subscribe(established => {
+          if (established) {
+            this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
+          } else {
+
+          }
+        });
         this.configureInstances(this.user.lastPickedOrganizationId);
       });
     this.dashboardsHub.instanceCheckedSubObservable.subscribe(value => {
       console.log(`Instance: ${value.instanceGuidId}, was checked at ${value.statusCheckedAt}`);
       const instanceMenuItem = this.menuItems.find(value1 => value1.guidId === value.instanceGuidId);
       instanceMenuItem.statusCheckedAt = value.statusCheckedAt;
-      instanceMenuItem.label = instanceMenuItem.label.substring(0, instanceMenuItem.label.length - 1) +
-        this.instanceService.calculateSign(instanceMenuItem.statusCheckedAt);
-    });
-
-    /* timer takes a second argument, how often to emit subsequent values
-    in this case we will emit first value after 1 second and subsequent
-    values every 2 seconds after */
-    const source = timer(10000, 2000);
-    const subscribe = source.subscribe(val => {
-      this.checkInstancesStatus();
+      this.instanceService.calculateStyle(instanceMenuItem);
     });
   }
 
   checkInstancesStatus() {
     if (this.menuItems && this.menuItems.length > 1) {
-      this.menuItems.slice(1, this.menuItems.length).map(item => item.label = item.label.substring(0, item.label.length - 1) +
-        this.instanceService.calculateSign(item.statusCheckedAt));
+      this.menuItems.slice(1, this.menuItems.length).map(item => {
+        this.instanceService.calculateStyle(item);
+      });
     }
   }
 
@@ -97,6 +98,13 @@ export class InstanceListComponent implements OnInit {
         this.toastrService.success('Get instances from server');
       }
       this.isLoading = false;
+      /* timer takes a second argument, how often to emit subsequent values
+      in this case we will emit first value after 10 seconds and subsequent
+      values every 5 seconds after */
+      const source = timer(1, 5000);
+      const subscribe = source.subscribe(val => {
+        this.checkInstancesStatus();
+      });
     });
   }
 
@@ -105,8 +113,7 @@ export class InstanceListComponent implements OnInit {
       guidId: instance.guidId,
       statusCheckedAt: instance.statusCheckedAt,
       id: instance.id.toString(),
-      // TODO: Add here icon or something else that specifying Status of instance
-      label: instance.title + this.instanceService.calculateSign(instance.statusCheckedAt),
+      label: instance.title, // + this.instanceService.calculateSign(instance.statusCheckedAt),
       routerLink: [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
         this.currentGuidId = instance.guidId;
@@ -153,6 +160,8 @@ export class InstanceListComponent implements OnInit {
         visible: this.isManager
       }]
     };
+    this.instanceService.calculateStyle(item);
+
     return item;
   }
 

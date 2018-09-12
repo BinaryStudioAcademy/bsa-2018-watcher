@@ -6,11 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="System.Net.Http.Formatting.Extension" Version="5.2.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccumulator.DataAccessLayer\DataAccumulator.DataAccessLayer.csproj" />
-    <ProjectReference Include="..\DataAccumulator.Shared\DataAccumulator.Shared.csproj" />
+    <ProjectReference Include="..\DataAccumulator.BusinessLayer\DataAccumulator.BusinessLayer.csproj" />
   </ItemGroup>
 
 </Project>

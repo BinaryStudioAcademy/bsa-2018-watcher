@@ -5,12 +5,12 @@
     using System.Threading;
     using System.Threading.Tasks;
 
+    using DataAccumulator.BusinessLayer.Interfaces;
+    using DataAccumulator.Shared.Models;
+
     using Microsoft.Azure.ServiceBus;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-
-    using DataAccumulator.BusinessLayer.Interfaces;
-    using DataAccumulator.Shared.Models;
 
     using ServiceBus.Shared.Common;
     using ServiceBus.Shared.Messages;
@@ -28,6 +28,7 @@
         private readonly QueueClient _instanceErrorQueueClient;
         private readonly QueueClient _instanceSettingsQueueClient;
         private readonly QueueClient _instanceNotifyQueueClient;
+        private readonly QueueClient _instanceAnomalyReportQueueClient;
 
         public ServiceBusProvider(ILoggerFactory loggerFactory,
                                   IInstanceSettingsService<InstanceSettingsDto> instanceSettingsService,
@@ -44,6 +45,7 @@
             _instanceErrorQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.ErrorQueueName);
             _instanceSettingsQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.SettingsQueueName);
             _instanceNotifyQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.NotifyQueueName);
+            _instanceAnomalyReportQueueClient = new QueueClient(_queueOptions.Value.ConnectionString, _queueOptions.Value.AnomalyReportQueueName);
 
             _azureQueueReceiver.Receive<InstanceSettingsMessage>(
                _instanceSettingsQueueClient,
@@ -81,6 +83,11 @@
         public Task SendNotificationMessage(InstanceNotificationMessage message)
         {
             return _azureQueueSender.SendAsync(_instanceNotifyQueueClient, message);
+        }
+
+        public Task SendAnomalyReportMessage(InstanceAnomalyReportMessage message)
+        {
+            return _azureQueueSender.SendAsync(_instanceAnomalyReportQueueClient, message);
         }
 
         private void ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)

@@ -1,19 +1,22 @@
 ﻿namespace Watcher.Core.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
-    
-    using Microsoft.EntityFrameworkCore;
+
+    using DataAccumulator.Shared.Models;
+
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.EntityFrameworkCore;
 
     using Watcher.Common.Dtos;
     using Watcher.Common.Requests;
-    using Watcher.Core.Interfaces;
-    using Watcher.DataAccess.Interfaces;
     using Watcher.Core.Hubs;
+    using Watcher.Core.Interfaces;
     using Watcher.DataAccess.Entities;
+    using Watcher.DataAccess.Interfaces;
 
     public class NotificationService : INotificationService
     {
@@ -226,6 +229,76 @@
             var result = await _uow.SaveAsync();
 
             return result;
+        }
+
+        public async Task<IEnumerable<NotificationDto>> CreateAnomalyReportNotificationAsync(NotificationRequest notificationRequest, AzureMLAnomalyReport report)
+        {
+            var receivers = new List<User>();
+            var notifications = new List<NotificationDto>();
+
+            if (notificationRequest.InstanceId == null) return notifications;
+
+            var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(i => i.GuidId == notificationRequest.InstanceId,
+                               include: instances => instances.Include(o => o.Organization)
+                                   .ThenInclude(uo => uo.UserOrganizations)
+                                   .ThenInclude(uo => uo.User));
+
+            if (instance == null) return notifications;
+
+            notificationRequest.OrganizationId = instance.OrganizationId;
+            receivers.AddRange(instance.Organization.UserOrganizations.Select(userOrganization => userOrganization.User));
+
+            var stringHtml = @"<html>
+                      <body>
+                      <p>Dear Ms. Susan,</p>
+                      <p>Thank you for your letter of yesterday inviting me to come for an interview on Friday afternoon, 5th July, at 2:30.
+                              I shall be happy to be there as requested and will bring my diploma and other papers with me.</p>
+                      <p>Sincerely,<br>-Jack</br></p>
+                      </body>
+                      </html>";
+
+            foreach (var receiver in receivers)
+            {
+                var entity = _mapper.Map<NotificationRequest, Notification>(notificationRequest);
+                entity.UserId = receiver.Id;
+                entity.InstanceId = instance.Id;
+                var notificationSetting = await _uow.NotificationSettingsRepository.GetFirstOrDefaultAsync(
+                                              ns => ns.Type == notificationRequest.Type && ns.UserId == entity.UserId);
+
+                if (notificationSetting == null || notificationSetting.IsDisable) continue;
+
+                entity.NotificationSettingId = notificationSetting.Id;
+
+                var created = await _uow.NotificationsRepository.CreateAsync(entity);
+                var result = await _uow.SaveAsync();
+                if (!result)
+                {
+                    return null;
+                }
+
+                var dto = _mapper.Map<Notification, NotificationDto>(created);
+                dto.NotificationSetting = _mapper.Map<NotificationSetting, NotificationSettingDto>(notificationSetting);
+
+                if (notificationSetting.IsEmailable)
+                    await _emailProvider.SendMessageOneToOne("watcher@net.com",
+                        $"{notificationSetting.Type} Notification", receiver.EmailForNotifications,
+                        dto.Text, stringHtml);
+
+                notifications.Add(dto);
+
+                if (!NotificationsHub.UsersConnections.ContainsKey(dto.UserId)) continue;
+
+                foreach (string connectionId in NotificationsHub.UsersConnections[dto.UserId])
+                    await _notificationsHub.Clients.Client(connectionId)
+                        .SendAsync("AddNotification", dto);
+            }
+
+            return notifications;
+        }
+
+        private string CreateReportHtmlMessage(string message, AzureMLAnomalyReport report)
+        {
+            return null;
         }
     }
 }

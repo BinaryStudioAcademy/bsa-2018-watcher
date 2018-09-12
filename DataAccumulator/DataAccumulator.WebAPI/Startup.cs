@@ -1,26 +1,32 @@
 ﻿using System;
+
 using AutoMapper;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+
 using DataAccumulator.BusinessLayer.Interfaces;
-using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.BusinessLayer.Providers;
+using DataAccumulator.BusinessLayer.Services;
 using DataAccumulator.BusinessLayer.Validators;
 using DataAccumulator.DataAccessLayer.Entities;
 using DataAccumulator.DataAccessLayer.Interfaces;
 using DataAccumulator.DataAccessLayer.Repositories;
 using DataAccumulator.DataAggregator;
 using DataAccumulator.DataAggregator.Interfaces;
+using DataAccumulator.DataAggregator.Providers;
 using DataAccumulator.DataAggregator.Services;
 using DataAccumulator.Shared.Models;
-using DataAccumulator.WebAPI.TasksScheduler;
 using DataAccumulator.WebAPI.Extensions;
+using DataAccumulator.WebAPI.TasksScheduler;
 using DataAccumulator.WebAPI.TasksScheduler.Jobs;
-using ServiceBus.Shared.Queue;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
 using Quartz.Spi;
+
+using ServiceBus.Shared.Queue;
 
 namespace DataAccumulator
 {
@@ -53,7 +59,15 @@ namespace DataAccumulator
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
                     o.SettingsQueueName = serviceBusSection["SettingsQueueName"];
                     o.NotifyQueueName = serviceBusSection["NotifyQueueName"];
+                    o.AnomalyReportQueueName = serviceBusSection["AnomalyReportQueueName"];
                 });
+
+            var azureMLSection = Configuration.GetSection("AzureML");
+            services.Configure<AzureMLOptions>(o =>
+            {
+                o.ApiKey = azureMLSection["ApiKey"];
+                o.Url = azureMLSection["Url"];
+            });
 
             services.AddTransient<IDataAccumulatorService<CollectedDataDto>, DataAccumulatorService>();
             services.AddTransient<IDataAggregatorService<CollectedDataDto>, DataAggregatorService>();
@@ -63,6 +77,9 @@ namespace DataAccumulator
             services.AddTransient<IDataAggregatorCore<CollectedDataDto>, DataAggregatorCore>();
 
             services.AddTransient<IThresholdsValidatorCore<CollectedDataDto>, ThresholdsValidatorCore>();
+
+            services.AddTransient<IAzureMLProvider, AzureMLProvider>();
+            services.AddTransient<IAnomalyDetector, AnomalyDetector>();
 
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ILogRepository, LogRepository>();

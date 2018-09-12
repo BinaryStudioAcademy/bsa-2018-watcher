@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using SendGrid;
-using SendGrid.Helpers.Mail;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.Extensions.Configuration;
+
+using SendGrid;
+using SendGrid.Helpers.Mail;
+
 using Watcher.Core.Interfaces;
 
 namespace Watcher.Core.Providers
@@ -29,14 +32,14 @@ namespace Watcher.Core.Providers
             var response = await client.SendEmailAsync(msg);
         }
 
-        public async Task SendMessageOneToOne(string from, string subject, string recepient, string message, string messageHtml)
+        public Task SendMessageOneToOne(string from, string subject, string recepient, string message, string messageHtml)
         {
-            await SendMessage(from, subject, new List<string>() { recepient }, message, messageHtml);
+            return SendMessage(@from, subject, new List<string> { recepient }, message, messageHtml);
         }
         
-        public async Task SendMessageOneToMany(string from, string subject, List<string> recepients, string message, string messageHtml)
+        public Task SendMessageOneToMany(string from, string subject, List<string> recepients, string message, string messageHtml)
         {
-            await SendMessage(from, subject, recepients, message, messageHtml);
+            return SendMessage(@from, subject, recepients, message, messageHtml);
         }
 
     }

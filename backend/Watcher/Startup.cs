@@ -88,6 +88,7 @@ namespace Watcher
                     o.ErrorQueueName = serviceBusSection["ErrorQueueName"];
                     o.SettingsQueueName = serviceBusSection["SettingsQueueName"];
                     o.NotifyQueueName = serviceBusSection["NotifyQueueName"];
+                    o.AnomalyReportQueueName = serviceBusSection["AnomalyReportQueueName"];
                 });
             
             services.ConfigureSwagger(Configuration);
@@ -117,11 +118,7 @@ namespace Watcher
             services.AddTransient<IUserOrganizationService, UserOrganizationService>();
             services.AddTransient<IAggregateDataService, AggregatedDataService>();
             services.AddTransient<ICollectorActionLogService, CollectorActionLogService>();
-
-            services.AddTransient<ICollectorAppsService, CollectorAppsService>();
-
             services.AddTransient<IThemeService, ThemeService>();
-
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddTransient<IAzureQueueSender, AzureQueueSender>();

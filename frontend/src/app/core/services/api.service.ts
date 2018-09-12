@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpRequest, HttpEvent} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
@@ -36,16 +36,6 @@ export class ApiService {
       .pipe(
           map(this.extractData),
           catchError(this.handleError));
-  }
-
-  public uploadFile(path: string, file): Observable<HttpEvent<{}>> {
-      if (!file) { return; }
-      const formData = new FormData();
-      formData.append('fileItem', file[0], file[0].name);
-      const uploadReq = new HttpRequest('POST', `${environment.server_url}${path}`, formData, {
-        reportProgress: true,
-      });
-      return this.http.request(uploadReq);
   }
 
   public delete(path): Observable<any> {
