@@ -47,18 +47,18 @@ namespace DataCollector
                 var allProcesses = await GetProcesses();
                 dataItem = new CollectedData
                 {
-                    InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
-                    InterruptsTimePercent = _systemCounters["InterruptsTime"].NextValue(),
+                    InterruptsPerSeconds = (float)Math.Round(_systemCounters["Interrupts"].NextValue(), 2),
+                    InterruptsTimePercent = (float)Math.Round(_systemCounters["InterruptsTime"].NextValue(), 2),
 
-                    TotalRamMBytes = _totalRamMbyte,
-                    RamUsagePercentage = 100 - (_systemCounters["FreeRam"].NextValue() / (_totalRamMbyte / 100)),
-                    UsageRamMBytes = _totalRamMbyte - _systemCounters["FreeRam"].NextValue(),
+                    TotalRamMBytes = (float)Math.Round(_totalRamMbyte, 2),
+                    RamUsagePercentage = (float)Math.Round(100 - (_systemCounters["FreeRam"].NextValue() / (_totalRamMbyte / 100)), 2),
+                    UsageRamMBytes = (float)Math.Round(_totalRamMbyte -_systemCounters["FreeRam"].NextValue(), 2),
 
-                    CpuUsagePercentage = _systemCounters["CPU"].NextValue(),
+                    CpuUsagePercentage = (float)Math.Round(_systemCounters["CPU"].NextValue(), 2),
 
-                    LocalDiskTotalMBytes = GetDiskTotalMbytes(),
-                    LocalDiskUsageMBytes = GetDiskUsageMbytes(),
-                    LocalDiskUsagePercentage = 100 - _systemCounters["LocalDisk"].NextValue(),
+                    LocalDiskTotalMBytes = (float)Math.Round(GetDiskTotalMbytes()),
+                    LocalDiskUsageMBytes = (float)Math.Round(GetDiskUsageMbytes()),
+                    LocalDiskUsagePercentage = (float)Math.Round(100 - _systemCounters["LocalDisk"].NextValue(), 2),
 
                     Processes = allProcesses,
                     ProcessesCount = allProcesses.Count,
@@ -171,9 +171,9 @@ namespace DataCollector
                     group => new ProcessData
                     {
                         Name = group.Key,
-                        PCpu = group.Sum(proc => proc.PCpu),
-                        PRam = group.Sum(proc => proc.PRam),
-                        RamMBytes = group.Sum(proc => proc.RamMBytes)
+                        PCpu = (float)Math.Round(group.Sum(proc => proc.PCpu), 2),
+                        PRam = (float)Math.Round(group.Sum(proc => proc.PRam), 2),
+                        RamMBytes = (float)Math.Round(group.Sum(proc => proc.RamMBytes), 2)
                     }).ToList();
             return temp;
         }
