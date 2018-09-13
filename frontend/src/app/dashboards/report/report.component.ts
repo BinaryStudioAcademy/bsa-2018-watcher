@@ -300,7 +300,7 @@ export class ReportComponent implements OnInit {
       this.chartPDF.forEach(item => {
         html2canvas(item.nativeElement).then(canvas => {
           const contentDataURL = canvas.toDataURL('image/png');
-          doc.addImage(contentDataURL, 'PNG', 15, topMargin, 560, 210);
+          doc.addImage(contentDataURL, 'PNG', 15, topMargin, 560, 270);
           renderedImg++;
           if (renderedImg % 2 === 0) {
             doc.addPage();
