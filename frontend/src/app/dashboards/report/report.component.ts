@@ -61,6 +61,7 @@ export class ReportComponent implements OnInit {
   onDisplayChartEditing = new EventEmitter<boolean>();
 
   isGetting: boolean;
+  isConverting: boolean;
 
   constructor(private aggregatedDateService: AggregatedDataService,
               private activateRoute: ActivatedRoute,
@@ -72,9 +73,18 @@ export class ReportComponent implements OnInit {
     this.tabs = [
       { label: 'Table', command: () => {
         this.activeTab = this.tabs[0];
+        this.collectedData = null;
+        this.collectedDataTable = null;
+        this.dateFrom = null;
+        this.dateTo = null;
       }}, {
         label: 'Chart', command: () => {
           this.activeTab = this.tabs[1];
+          this.collectedData = null;
+          this.collectedDataTable = null;
+          this.dateFrom = null;
+          this.dateTo = null;
+          this.charts = [];
       }}
     ];
 
@@ -190,6 +200,7 @@ export class ReportComponent implements OnInit {
   }
 
   getInfo(): void {
+    this.isGetting = true;
     const request: AggregateDataRequest = this.createRequest();
 
     this.getCollectedData(request).subscribe((data: CollectedData[]) => {
@@ -220,9 +231,10 @@ export class ReportComponent implements OnInit {
         this.dataService.fulfillChart(this.collectedData, item, true);
       });
 
-      this.isGetting = false;
       this.charts.forEach(item => this.dataService.fulfillChart(this.collectedData, item, true));
       this.collectedDataTable = data.slice(0, this.recordsPerPage);
+
+      this.isGetting = false;
     });
 
     this.aggregatedDateService.getCountOfEntities(request).subscribe(totalRecords => {
@@ -259,6 +271,7 @@ export class ReportComponent implements OnInit {
   }
 
   convertPDF(): void {
+    this.isConverting = true;
     const doc = new jsPDF('p', 'pt', 'a4');
 
     if (this.activeTab === this.tabs[0]) {
@@ -275,6 +288,7 @@ export class ReportComponent implements OnInit {
 
       // tslint:disable-next-line:max-line-length
       doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
+      this.isConverting = false;
     } else {
       doc.setFontSize(20);
       const eventRender = new EventEmitter();
@@ -302,6 +316,7 @@ export class ReportComponent implements OnInit {
           doc.deletePage(this.chartPDF.length);
           // tslint:disable-next-line:max-line-length
           doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
+          this.isConverting = false;
         }
       });
     }
