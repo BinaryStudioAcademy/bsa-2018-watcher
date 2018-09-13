@@ -145,5 +145,17 @@ namespace Watcher.Core.Providers
                 return Task.FromException<string>(ex);
             }
         }
+
+        public async Task<string> UploadFormFileWithNameAsync(IFormFile formFile)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", formFile.FileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+
+            return path;
+        }
     }
 }
