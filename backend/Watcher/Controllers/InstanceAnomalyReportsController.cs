@@ -27,6 +27,7 @@
         public virtual ActionResult<InstanceAnomalyReport> GetReport([FromRoute] Guid instanceId)
         {
             var report = InstanceAnomalyReportsService.GetAnomalyReport(instanceId);
+            var html = InstanceAnomalyReportsService.GetHtml(report);
             return Ok(report);
         }
     }

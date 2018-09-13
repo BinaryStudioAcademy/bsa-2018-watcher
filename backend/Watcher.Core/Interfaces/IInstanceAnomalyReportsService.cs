@@ -16,5 +16,6 @@
         Task<bool> RemoveReportByIdAsync(Guid reportId);
         Task<bool> RemoveAllReportsAsync();
         Task<bool> ReportExistsAsync(Guid reportId);
+        // string GetHtml(InstanceAnomalyReport report);
     }
 }
