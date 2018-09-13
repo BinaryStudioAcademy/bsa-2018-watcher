@@ -119,6 +119,7 @@ namespace Watcher
             services.AddTransient<IAggregateDataService, AggregatedDataService>();
             services.AddTransient<ICollectorActionLogService, CollectorActionLogService>();
             services.AddTransient<IThemeService, ThemeService>();
+            services.AddTransient<ICollectorAppsService, CollectorAppsService>();
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddTransient<IAzureQueueSender, AzureQueueSender>();
