@@ -147,10 +147,6 @@
             pTooltip="Options" tooltipPosition="top">
               <p-tieredMenu #opt appendTo="body" [model]="currentChartMenu" [popup]="true"></p-tieredMenu>
           </div>
-          <div class="icon-panel" data-html2canvas-ignore>
-            <i class="action-icon fa fa-fw fa-edit" (click)="editChart(chart)"></i>
-            <i class="action-icon fa fa-fw fa-times" (click)="deleteChart(chart)"></i>
-          </div>
       
           <div class="chart-title">{{chart.title}}</div>
           <app-chart

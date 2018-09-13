@@ -146,20 +146,6 @@ export class EditReportChartComponent implements OnInit {
   }
 
   processData(): void {
-    const hourDifference = (this.dateTo.getTime() - this.dateFrom.getTime()) / (60 * 60000);
-
-    if (hourDifference > 23) {
-    this.dashboardChart.dateTickFormatting = (value) => {
-      if (value instanceof Date) {
-        if (this.dataType === DataType.AggregationForHour) {
-          return formatDate((<Date>value), 'MMM, d h', 'en-US');
-        } else {
-          return formatDate((<Date>value), 'MMM, d', 'en-US');
-        }
-      }
-     };
-    }
-
     const data = this.collectedData && this.edit ? this.collectedData : this.dataService.fakeCollectedData;
     this.isPreviewAvailable = this.dataService.fulfillChart(data, this.dashboardChart, true);
   }
