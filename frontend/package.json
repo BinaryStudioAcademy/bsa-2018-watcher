@@ -41,6 +41,7 @@
     "ngx-image-cropper": "^1.0.2",
     "ngx-img-cropper": "^0.10.4",
     "ngx-smooth-dnd": "^0.2.6",
+    "npm": "^6.4.1",
     "papaparse": "^4.6.0",
     "primeicons": "^1.0.0-beta.10",
     "primeng": "^6.1.0-rc.1",
