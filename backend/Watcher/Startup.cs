@@ -117,6 +117,7 @@ namespace Watcher
             services.AddTransient<IOrganizationRoleService, OrganizationRoleService>();
             services.AddTransient<IUserOrganizationService, UserOrganizationService>();
             services.AddTransient<IAggregateDataService, AggregatedDataService>();
+            services.AddTransient<IInstanceAnomalyReportsService, InstanceAnomalyReportsService>();
             services.AddTransient<ICollectorActionLogService, CollectorActionLogService>();
             services.AddTransient<IThemeService, ThemeService>();
             services.AddTransient<ICollectorAppsService, CollectorAppsService>();
@@ -290,6 +291,8 @@ namespace Watcher
                 options => new DataAggregatorRepository(connectionString, "bsa-watcher-data-storage"));
             services.AddScoped<ILogRepository, LogRepository>(
                     options => new LogRepository(connectionString, "bsa-watcher-data-storage"));
+            services.AddScoped<IInstanceAnomalyReportsRepository, InstanceAnomalyReportsRepository>(
+                options => new InstanceAnomalyReportsRepository(connectionString, "bsa-watcher-data-storage"));
         }
 
         public virtual void ConfigureFileStorage(IServiceCollection services, IConfiguration configuration)
@@ -333,6 +336,7 @@ namespace Watcher
                     cfg.AddProfile<MessageProfile>();
 
                     cfg.AddProfile<FeedbackProfile>();
+                    cfg.AddProfile<InstanceAnomalyReportProfile>();
                     cfg.AddProfile<RoleProfile>();
                     cfg.AddProfile<ResponseProfile>();
                     cfg.AddProfile<InstancesProfile>();

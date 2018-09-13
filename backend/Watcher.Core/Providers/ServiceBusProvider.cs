@@ -114,16 +114,17 @@
             using (var scope = _scopeFactory.CreateScope())
             {
                 var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
-
+                var reportsService = scope.ServiceProvider.GetRequiredService<IInstanceAnomalyReportsService>();
+                var report = await reportsService.GetReportByIdAsync(arg.AnomalyReportId);
                 var notificationRequest = new NotificationRequest
                                               {
                                                   Text = "Anomaly Report was created on instance: " + arg.InstanceId,
-                                                  CreatedAt = arg.AnomalyReport.Date,
-                                                  InstanceId = arg.InstanceId,
+                                                  CreatedAt = report.Date,
+                                                  InstanceId = report.ClientId,
                                                   Type = NotificationType.Info
                                               };
 
-                var result = await notificationService.CreateAnomalyReportNotificationAsync(notificationRequest, arg.AnomalyReport);
+                var result = await notificationService.CreateAnomalyReportNotificationAsync(notificationRequest, report);
 
                 if (result == null)
                 {

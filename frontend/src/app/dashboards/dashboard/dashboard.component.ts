@@ -130,7 +130,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   subscribeToCollectedData(): void {
     this.dashboardsHub.infoSubObservable.subscribe((latestData: CollectedData) => {
       this.dataService.pushLatestCollectedData(latestData);
-      if (!this.activeDashboardItem.charts || this.activeDashboardItem.charts.length < 1) {
+      if (!this.activeDashboardItem || !this.activeDashboardItem.charts || this.activeDashboardItem.charts.length < 1) {
         return;
       }
       for (let i = 0; i < this.activeDashboardItem.charts.length; i++) {
@@ -209,7 +209,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dashboardsService.update(this.dashboardMenuItems[index].dashId, request)
       .subscribe(
         (res: Response) => {
-          console.log(res);
           this.dashboardMenuItems[index].label = editTitle;
           this.toastrService.success('Successfully updated dashboard!');
         },
@@ -221,7 +220,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   deleteDashboard(dashboard: DashboardMenuItem): void {
     this.dashboardsService.delete(dashboard.dashId)
       .subscribe((res: Response) => {
-          console.log(res);
           // Search and delete selected Item
           const index = this.dashboardMenuItems.findIndex(d => d === this.activeDashboardItem);
           this.dashboardMenuItems.splice(index, 1);
