@@ -225,6 +225,9 @@ export class OrganizationProfileComponent implements OnInit {
   private fillDropdown(): void {
     this.themeDropdown.push(
       { label: 'Default', value: 'Default' },
-      { label: 'Darkness', value: 'Darkness' });
+      { label: 'Orange', value: 'Darkness' },
+      { label: 'Lightness', value: 'Lightness' },
+      { label: 'Voclain', value: 'Voclain' }
+      );
   }
 }
