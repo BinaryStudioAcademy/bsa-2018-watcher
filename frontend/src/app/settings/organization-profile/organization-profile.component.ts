@@ -74,20 +74,16 @@ export class OrganizationProfileComponent implements OnInit {
       }
 
       this.authService.currentUser.subscribe(user => {
-        console.log(user);
         this.user = user;
 
         this.organizationService.get(this.user.lastPickedOrganizationId).subscribe(async (org) => {
-          console.log(org);
           this.organization = org;
             this.name = this.organization.name;
             this.selectedTheme = this.organization.theme;
             this.selectedThemeName = this.selectedTheme.name;
           this.imageUrl = org.imageURL;
           const role = await this.userOrganizationService.getOrganizationRole();
-          this.editable = role.name === 'Manager';
-          console.log('EDITABLE');
-          console.log(this.editable);
+          this.editable = role.name === 'Manager' ? true : false;
         });
       });
 
@@ -187,7 +183,7 @@ export class OrganizationProfileComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
-    this.toastrService.success('Invitation link was copied to clipboard');
+    this.toastrService.info('Invitation link was copied to clipboard');
   }
 
   onImageSelected(upload) {
