@@ -19,7 +19,7 @@
       <div *ngIf="message.severity == 'chat'" class="message-container action" (click)="openChat(message.data?.chatId)">
         <img class="message-img" src="{{message.data.user.photoURL}}" />
         <div class="message-content">
-          <span class="message-title text-overflow">Chat message from {{message.data.user.displayName}}</span>
+          <span class="message-title text-overflow" style="width:95%">Chat message from {{message.data.user.displayName}}</span>
           <div class="message-text">{{message.data.text}}</div>
           <div class="message-date text-overflow">{{message.data.createdAt | date:'short'}}</div>
         </div>

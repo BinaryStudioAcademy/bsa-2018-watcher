@@ -31,7 +31,7 @@ namespace DataAccumulator.BusinessLayer.Validators
             try
             {
                 var instanceValidatorDto = await _instanceValidatorService
-                    .GetEntityByInstanceIdAsync(collectedDataDto.ClientId);
+                    .GetLastEntityByInstanceIdAsync(collectedDataDto.ClientId);
 
                 var validator = new CollectedDataThresholdsValidator(instanceValidatorDto);
 

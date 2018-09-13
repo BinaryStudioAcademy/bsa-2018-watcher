@@ -101,7 +101,7 @@ export class EditReportChartComponent implements OnInit {
         this.isYAxisAvailable = true;
         this.dashboardChart.yAxisLabel = 'Percentage %';
         break;
-      case ChartType.Guage:
+      case ChartType.Gauge:
         this.isTimeAvailable = false;
         this.isYAxisAvailable = true;
         this.dashboardChart.yAxisLabel = 'Process';
