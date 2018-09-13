@@ -108,6 +108,9 @@ export class OrganizationProfileComponent implements OnInit {
       this.organization.themeId = this.selectedTheme.id;
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
+
+          this.organization.theme = this.selectedTheme;
+
           // Update lastPickedOrganization in User on frontend
           this.user.lastPickedOrganization = this.organization;
 

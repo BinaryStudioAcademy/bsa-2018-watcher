@@ -24,15 +24,6 @@ export class ThemeService {
 
     const head = document.head;
 
-    const link = document.createElement('link');
-    link.type = 'text/css';
-
-    link.setAttribute('id', 'themeLink');
-    link.setAttribute('href', cssUrl);
-    link.setAttribute('rel', 'stylesheet');
-
-    head.appendChild(link);
-
     const style = document.createElement('style');
     style.setAttribute('id', 'themeStyle');
     style.setAttribute('type', 'text/css');
@@ -57,7 +48,7 @@ export class ThemeService {
         height: ${theme.controlsHeight};
       }
 
-      .logo, .logo:hover{
+      .logo, .logo:hover, logo:focus{
         background-color: transparent !important;
         color: ${theme.themeSecondaryColor} !important;
       }`);
@@ -65,6 +56,15 @@ export class ThemeService {
       style.appendChild(styleText);
 
       head.appendChild(style);
+
+      const link = document.createElement('link');
+      link.type = 'text/css';
+
+      link.setAttribute('id', 'themeLink');
+      link.setAttribute('href', cssUrl);
+      link.setAttribute('rel', 'stylesheet');
+
+      head.appendChild(link);
   }
 
   public setDefaultTheme() {

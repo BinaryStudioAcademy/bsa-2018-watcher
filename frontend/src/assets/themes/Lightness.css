@@ -690,6 +690,13 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 /* Panel menu */
 
+.ui-state-active {
+  border-color: #f6a828 !important;
+  background-color: #f6a828 !important;
+  color: #ffffff !important; }
+  .ui-state-active a {
+    color: #ffffff; }
+
 .ui-panelmenu .ui-panelmenu-header.ui-state-active{
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
@@ -699,8 +706,8 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 .ui-panelmenu .ui-panelmenu-header.ui-state-active > a:hover,
 .ui-panelmenu .ui-panelmenu-header:not(.ui-state-active) > a:hover {
-  border-color: #F8BD7F !important;
-  background-color: #F8BD7F !important;
+  border-color: #F67128 !important;
+  background-color: #F67128 !important;
   color: #1c94c4;
 }
 
@@ -742,8 +749,8 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 .ui-button.ui-state-default.ui-button-success,
 .ui-buttonset.ui-button-success > .ui-button.ui-state-default {
-  background-color: #BB0DFF !important;
-  border-color: #BB0DFF !important;
+  background-color: #2876F6 !important;
+  border-color: #2876F6 !important;
 }
 
 .ui-button.ui-state-default.ui-button-danger,
@@ -805,10 +812,36 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 .ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item-group.ui-state-highlight {
   background-color: #f6a828 !important;
 }
+
+.ui-multiselect-items-wrapper .ui-multiselect-items .ui-state-disabled {
+  opacity: 1 !important;
+}
+
 /* Header */
 
 .header button:hover {
   color: #f6a828 !important;
   background-color: transparent !important;
   border-color: transparent !important;
+}
+
+/* Datepicker */
+
+.ui-datepicker table td > a,
+.ui-datepicker table td > span {
+  background-color: #f6a828 !important;
+}
+
+.ui-datepicker table td.ui-datepicker-today > a {
+  background-color: #d0d0d0 !important;
+  color: #333333;
+}
+
+/* Paginator */
+.ui-paginator .ui-paginator-pages .ui-paginator-page {
+  background-color: transparent !important;
+}
+
+.ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active {
+  background-color: #f6a828 !important;
 }

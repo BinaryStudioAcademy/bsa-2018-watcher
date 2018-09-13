@@ -684,7 +684,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   color: #ffffff;
 }
 
-.ui-panelmenu .ui-panelmenu-header.ui-state-active > a:hover, a:focus ,
+.ui-panelmenu .ui-panelmenu-header.ui-state-active > a:hover ,
 .ui-panelmenu .ui-panelmenu-header:not(.ui-state-active) > a:hover {
   border-color: #F8BD7F !important;
   background-color: #F8BD7F !important;
@@ -792,9 +792,14 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 .ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item-group.ui-state-highlight {
   background-color: #F56C00 !important;
 }
+
+.ui-multiselect-items-wrapper .ui-multiselect-items .ui-state-disabled {
+  opacity: 1 !important;
+}
+
 /* Header */
 
-.header button:hover {
+.header button:hover, .header button:focus {
   color: #F56C00 !important;
   background-color: transparent !important;
   border-color: transparent !important;
