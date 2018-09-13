@@ -214,7 +214,9 @@
             }
             else if (!existingEntity.PhotoURL.Equals(entity.PhotoURL))
             {
-                await _fileStorageProvider.DeleteFileAsync(existingEntity.PhotoURL);
+                if(await _fileStorageProvider.IsExist(existingEntity.PhotoURL))
+                    await _fileStorageProvider.DeleteFileAsync(existingEntity.PhotoURL);
+
                 entity.PhotoURL = await _fileStorageProvider.UploadFileBase64Async(entity.PhotoURL, request.PhotoType); // TODO: change here for real image type
             }
 
@@ -244,7 +246,9 @@
             }
             else if (!existingEntity.PhotoURL.Equals(request.PhotoURL))
             {
-                await _fileStorageProvider.DeleteFileAsync(existingEntity.PhotoURL);
+                if (await _fileStorageProvider.IsExist(existingEntity.PhotoURL))
+                    await _fileStorageProvider.DeleteFileAsync(existingEntity.PhotoURL);
+
                 entity.PhotoURL = await _fileStorageProvider.UploadFileBase64Async(request.PhotoURL, request.PhotoType); // TODO: change here for real image type
             }
 
