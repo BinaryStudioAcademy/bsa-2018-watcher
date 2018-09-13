@@ -133,5 +133,22 @@
         {
             return _repository.ReportExistsAsync(reportId);
         }
+
+        public async Task<List<InstanceAnomalyReportDto>> GetReportsInTimeAsync(Guid id, CollectedDataType type, DateTime @from, DateTime to, int page, int count)
+        {
+            var reports = await _repository.GetReportsByParametersAsync(id, type, from, to, page, count);
+
+            if (reports != null && reports.Count > 0)
+            {
+                return _mapper.Map<List<InstanceAnomalyReport>, List<InstanceAnomalyReportDto>>(reports);
+            }
+
+            return new List<InstanceAnomalyReportDto>();
+        }
+
+        public Task<long> GetCountOfReportsAsync(Guid id, CollectedDataType type, DateTime @from, DateTime to)
+        {
+            return _repository.CountByParametersAsync(id, type, @from, to);
+        }
     }
 }

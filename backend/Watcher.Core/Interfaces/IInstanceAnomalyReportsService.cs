@@ -16,5 +16,9 @@
         Task<bool> RemoveReportByIdAsync(Guid reportId);
         Task<bool> RemoveAllReportsAsync();
         Task<bool> ReportExistsAsync(Guid reportId);
+
+        Task<List<InstanceAnomalyReportDto>> GetReportsInTimeAsync(Guid id, CollectedDataType type, DateTime @from, DateTime to, int page, int count);
+
+        Task<long> GetCountOfReportsAsync(Guid id, CollectedDataType type, DateTime @from, DateTime to);
     }
 }

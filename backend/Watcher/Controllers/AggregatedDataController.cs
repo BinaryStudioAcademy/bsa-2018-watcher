@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+
 using DataAccumulator.Shared.Models;
-using Watcher.Common.Requests;
+
 using Watcher.Core.Interfaces;
 
 namespace Watcher.Controllers
