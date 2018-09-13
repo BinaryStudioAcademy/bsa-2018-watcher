@@ -19,11 +19,12 @@ namespace DataAccumulator.DataAggregator.Services
 
         public async Task<AzureMLAnomalyReport> AnalyzeData(IEnumerable<CollectedDataDto> collectedData)
         {
+            var collectedDataDtos = collectedData as CollectedDataDto[] ?? collectedData.ToArray();
             var data = new[]
             {
-                MapInput(collectedData, x => x.CpuUsagePercentage),
-                MapInput(collectedData, x => x.RamUsagePercentage),
-                MapInput(collectedData, x => x.LocalDiskUsagePercentage)
+                MapInput(collectedDataDtos, x => x.CpuUsagePercentage),
+                MapInput(collectedDataDtos, x => x.RamUsagePercentage),
+                MapInput(collectedDataDtos, x => x.LocalDiskUsagePercentage)
             };
             var results = await Task.WhenAll(data.Select(_azureMLProvider.CheckAnomaly));
 

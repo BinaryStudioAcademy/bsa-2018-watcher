@@ -234,7 +234,7 @@
             return result;
         }
 
-        public async Task<IEnumerable<NotificationDto>> CreateAnomalyReportNotificationAsync(NotificationRequest notificationRequest, AzureMLAnomalyReport report)
+        public async Task<IEnumerable<NotificationDto>> CreateAnomalyReportNotificationAsync(NotificationRequest notificationRequest, InstanceAnomalyReportDto report)
         {
             var receivers = new List<User>();
             var notifications = new List<NotificationDto>();

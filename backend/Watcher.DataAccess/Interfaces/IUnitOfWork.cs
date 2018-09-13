@@ -47,6 +47,8 @@
 
         IThemeRepository ThemeRepository { get; }
 
+        ICollectorAppVersionRepository CollectorAppVersionRepository { get; }
+
         Task<bool> SaveAsync();
     }
 }

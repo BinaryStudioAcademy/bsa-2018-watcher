@@ -9,6 +9,24 @@ namespace Watcher.DataAccess.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "CollectorAppVersions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    Version = table.Column<string>(nullable: true),
+                    ExeLink = table.Column<string>(nullable: true),
+                    DebLink = table.Column<string>(nullable: true),
+                    TgzLink = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CollectorAppVersions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrganizationRoles",
                 columns: table => new
                 {
@@ -60,8 +78,11 @@ namespace Watcher.DataAccess.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: false),
-                    FontFamily = table.Column<string>(nullable: true),
-                    BackgroundColor = table.Column<string>(nullable: true),
+                    BodyColor = table.Column<string>(nullable: false),
+                    ThemePrimaryColor = table.Column<string>(nullable: false),
+                    ThemeSecondaryColor = table.Column<string>(nullable: false),
+                    ControlsHeight = table.Column<string>(nullable: false),
+                    ButtonFontSize = table.Column<string>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -127,6 +148,7 @@ namespace Watcher.DataAccess.Data.Migrations
                     ShowCommon = table.Column<bool>(nullable: false),
                     Threshold = table.Column<int>(nullable: false),
                     MostLoaded = table.Column<int>(nullable: false),
+                    HistoryTime = table.Column<int>(nullable: false),
                     DashboardId = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     SchemeType = table.Column<string>(nullable: true),
@@ -181,6 +203,8 @@ namespace Watcher.DataAccess.Data.Migrations
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     WasRead = table.Column<bool>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
+                    InstanceId = table.Column<int>(nullable: true),
+                    InstanceGuidId = table.Column<Guid>(nullable: true),
                     NotificationSettingId = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false)
                 },
@@ -242,6 +266,14 @@ namespace Watcher.DataAccess.Data.Migrations
                     Platform = table.Column<string>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     GuidId = table.Column<Guid>(nullable: false),
+                    AggregationForHour = table.Column<bool>(nullable: false),
+                    AggregationForDay = table.Column<bool>(nullable: false),
+                    AggregationForWeek = table.Column<bool>(nullable: false),
+                    AggregationForMonth = table.Column<bool>(nullable: false),
+                    CpuMaxPercent = table.Column<float>(nullable: false),
+                    RamMaxPercent = table.Column<float>(nullable: false),
+                    DiskMaxPercent = table.Column<float>(nullable: false),
+                    StatusCheckedAt = table.Column<DateTime>(nullable: false),
                     OrganizationId = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false)
                 },
@@ -368,6 +400,8 @@ namespace Watcher.DataAccess.Data.Migrations
                     Informatively = table.Column<int>(nullable: false),
                     Friendliness = table.Column<int>(nullable: false),
                     Quickness = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
                     ResponseId = table.Column<int>(nullable: true),
@@ -410,19 +444,11 @@ namespace Watcher.DataAccess.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Themes",
-                columns: new[] { "Id", "BackgroundColor", "FontFamily", "IsDeleted", "Name" },
+                columns: new[] { "Id", "BodyColor", "ButtonFontSize", "ControlsHeight", "IsDeleted", "Name", "ThemePrimaryColor", "ThemeSecondaryColor" },
                 values: new object[,]
                 {
-                    { 61, "Gray", "Univers", false, "Theme497" },
-                    { 62, "Gray", "Helvetica", false, "Theme140" },
-                    { 63, "White", "Trade", false, "Theme871" },
-                    { 64, "White", "Frutiger", false, "Theme602" },
-                    { 65, "Gray", "Helvetica", false, "Theme326" },
-                    { 66, "Gray", "Frutiger", false, "Theme509" },
-                    { 67, "White", "Trade", false, "Theme91" },
-                    { 68, "White", "Univers", false, "Theme292" },
-                    { 69, "White", "Frutiger", false, "Theme180" },
-                    { 70, "Yellow", "Trade", false, "Theme513" }
+                    { 1, "#F8FAFC", "14px", "33px", false, "Default", "#007ad9", "#ffffff" },
+                    { 2, "#F8FAFC", "14px", "33px", false, "Darkness", "#f58400", "#ffffff" }
                 });
 
             migrationBuilder.InsertData(
@@ -430,16 +456,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "Bio", "CreatedAt", "DisplayName", "Email", "EmailForNotifications", "FirstName", "IsActive", "IsDeleted", "LastName", "LastPickedOrganizationId", "PhotoURL", "RoleId" },
                 values: new object[,]
                 {
-                    { "0bddde5f-5756-4d7f-8521-42d0476f3aa0", null, new DateTime(2018, 9, 9, 1, 55, 45, 527, DateTimeKind.Local), "Ethyl", "Raphael.Murazik@hotmail.com", null, "Cali", true, false, "Kutch", null, "https://s3.amazonaws.com/uifaces/faces/twitter/tobysaxon/128.jpg", 1 },
-                    { "0b22d062-92ae-494c-9481-11c2931737da", null, new DateTime(2018, 9, 9, 5, 37, 2, 549, DateTimeKind.Local), "Winston", "Austyn77@yahoo.com", null, "Shayna", true, false, "Parker", null, "https://s3.amazonaws.com/uifaces/faces/twitter/gearpixels/128.jpg", 1 },
-                    { "9a549b2b-8fd0-4d70-9145-569474fea109", null, new DateTime(2018, 9, 9, 4, 14, 16, 766, DateTimeKind.Local), "Rodrigo", "Benton14@yahoo.com", null, "Tom", true, false, "Hauck", null, "https://s3.amazonaws.com/uifaces/faces/twitter/bargaorobalo/128.jpg", 1 },
-                    { "14e7d6f2-3626-423b-959b-e8ca1b882173", null, new DateTime(2018, 9, 9, 11, 48, 24, 489, DateTimeKind.Local), "Hope", "Sydnee90@yahoo.com", null, "Oliver", true, false, "Hoppe", null, "https://s3.amazonaws.com/uifaces/faces/twitter/bobbytwoshoes/128.jpg", 1 },
-                    { "36410a7e-ff1b-4570-8a45-82e6d045bfda", null, new DateTime(2018, 9, 9, 0, 52, 56, 943, DateTimeKind.Local), "Adan", "Bridget74@yahoo.com", null, "Jacky", true, false, "Keebler", null, "https://s3.amazonaws.com/uifaces/faces/twitter/oscarowusu/128.jpg", 1 },
-                    { "732bab35-8c9e-4812-b4ff-251abdf5b857", null, new DateTime(2018, 9, 9, 13, 36, 12, 571, DateTimeKind.Local), "Leslie", "Javier.Paucek@gmail.com", null, "Rylee", true, false, "Kuhlman", null, "https://s3.amazonaws.com/uifaces/faces/twitter/joreira/128.jpg", 2 },
-                    { "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", null, new DateTime(2018, 9, 9, 19, 34, 7, 631, DateTimeKind.Local), "Andrew", "Ezekiel.Hermiston1@yahoo.com", null, "Grover", true, false, "Ryan", null, "https://s3.amazonaws.com/uifaces/faces/twitter/angelceballos/128.jpg", 2 },
-                    { "6aa322ac-217f-449e-8ebf-12b4f2e2436c", null, new DateTime(2018, 9, 9, 8, 19, 36, 70, DateTimeKind.Local), "Makenna", "Davin_Schulist60@gmail.com", null, "Crawford", true, false, "Gaylord", null, "https://s3.amazonaws.com/uifaces/faces/twitter/oscarowusu/128.jpg", 2 },
-                    { "632bbf3e-2c78-49fc-ad87-e2e5e93b02e1", null, new DateTime(2018, 9, 9, 3, 38, 22, 832, DateTimeKind.Local), "Jacinthe", "Zoe82@gmail.com", null, "Kellie", true, false, "Stehr", null, "https://s3.amazonaws.com/uifaces/faces/twitter/suribbles/128.jpg", 2 },
-                    { "0da18978-1656-4b4d-ac10-940871d87e18", null, new DateTime(2018, 9, 9, 14, 28, 5, 94, DateTimeKind.Local), "Dillan", "Justus44@hotmail.com", null, "Carmel", true, false, "Bradtke", null, "https://s3.amazonaws.com/uifaces/faces/twitter/samihah/128.jpg", 2 }
+                    { "94f74064-0b77-4551-b2f4-c7cfbd48e7b3", null, new DateTime(2018, 9, 13, 11, 40, 45, 127, DateTimeKind.Local), "Ellsworth", "Keshaun.Parker61@yahoo.com", null, "London", true, false, "Smith", null, "https://s3.amazonaws.com/uifaces/faces/twitter/kylefoundry/128.jpg", 1 },
+                    { "f2818533-e97e-4bae-be99-8be3d29ff037", null, new DateTime(2018, 9, 13, 2, 52, 28, 733, DateTimeKind.Local), "Valerie", "Maureen_Reinger@hotmail.com", null, "Alexzander", true, false, "Goyette", null, "https://s3.amazonaws.com/uifaces/faces/twitter/maxlinderman/128.jpg", 1 },
+                    { "c69b3332-96a0-47d7-bca7-a4fde7277d7b", null, new DateTime(2018, 9, 13, 12, 43, 2, 866, DateTimeKind.Local), "Kara", "Susan_Hahn@yahoo.com", null, "Teagan", true, false, "Weimann", null, "https://s3.amazonaws.com/uifaces/faces/twitter/diansigitp/128.jpg", 1 },
+                    { "cbb4252f-aba5-44d6-8cf3-073ee809daca", null, new DateTime(2018, 9, 13, 10, 58, 16, 205, DateTimeKind.Local), "Laurence", "Pasquale.Schoen@gmail.com", null, "Kurt", true, false, "Hagenes", null, "https://s3.amazonaws.com/uifaces/faces/twitter/dicesales/128.jpg", 1 },
+                    { "2ed2cc2b-f1ff-4247-92e5-dd40fd88cd2e", null, new DateTime(2018, 9, 13, 12, 55, 11, 92, DateTimeKind.Local), "Paige", "Antonina.Tromp88@gmail.com", null, "Ervin", true, false, "Muller", null, "https://s3.amazonaws.com/uifaces/faces/twitter/erwanhesry/128.jpg", 1 },
+                    { "65d73488-1b38-456d-8fff-737be639e584", null, new DateTime(2018, 9, 13, 7, 28, 18, 199, DateTimeKind.Local), "Lizzie", "Brown_Hoppe@hotmail.com", null, "Lucienne", true, false, "Wuckert", null, "https://s3.amazonaws.com/uifaces/faces/twitter/chadengle/128.jpg", 1 },
+                    { "e697fc03-e37a-48e7-84c0-d3087cd1c915", null, new DateTime(2018, 9, 13, 2, 28, 54, 955, DateTimeKind.Local), "Abdul", "Era86@hotmail.com", null, "Dianna", true, false, "Huels", null, "https://s3.amazonaws.com/uifaces/faces/twitter/brenton_clarke/128.jpg", 1 },
+                    { "0673fee2-18bc-4d1f-9a8a-cafda74912e9", null, new DateTime(2018, 9, 13, 16, 42, 51, 572, DateTimeKind.Local), "Aletha", "Madge16@yahoo.com", null, "Van", true, false, "Hane", null, "https://s3.amazonaws.com/uifaces/faces/twitter/xravil/128.jpg", 2 },
+                    { "09aef456-5b88-4e19-89e6-ae20af967911", null, new DateTime(2018, 9, 13, 11, 56, 54, 658, DateTimeKind.Local), "Leatha", "Aletha.Trantow34@gmail.com", null, "Michale", true, false, "Howell", null, "https://s3.amazonaws.com/uifaces/faces/twitter/chris_frees/128.jpg", 2 },
+                    { "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9", null, new DateTime(2018, 9, 12, 19, 10, 24, 943, DateTimeKind.Local), "Shawn", "Nasir17@yahoo.com", null, "Darby", true, false, "Beer", null, "https://s3.amazonaws.com/uifaces/faces/twitter/cybind/128.jpg", 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -447,33 +473,33 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "CreatedById", "IsDeleted", "Name", "OrganizationId", "Type" },
                 values: new object[,]
                 {
-                    { 29, "14e7d6f2-3626-423b-959b-e8ca1b882173", false, "quos", null, 0 },
-                    { 30, "36410a7e-ff1b-4570-8a45-82e6d045bfda", false, "id", null, 0 },
-                    { 26, "36410a7e-ff1b-4570-8a45-82e6d045bfda", false, "recusandae", null, 0 },
-                    { 22, "36410a7e-ff1b-4570-8a45-82e6d045bfda", false, "commodi", null, 0 },
-                    { 21, "632bbf3e-2c78-49fc-ad87-e2e5e93b02e1", false, "id", null, 0 },
-                    { 25, "9a549b2b-8fd0-4d70-9145-569474fea109", false, "dolorem", null, 0 },
-                    { 23, "0da18978-1656-4b4d-ac10-940871d87e18", false, "voluptatem", null, 0 },
-                    { 28, "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", false, "animi", null, 0 },
-                    { 27, "0b22d062-92ae-494c-9481-11c2931737da", false, "commodi", null, 0 },
-                    { 24, "0b22d062-92ae-494c-9481-11c2931737da", false, "aliquam", null, 0 }
+                    { 30, "2ed2cc2b-f1ff-4247-92e5-dd40fd88cd2e", false, "in", null, 0 },
+                    { 26, "e697fc03-e37a-48e7-84c0-d3087cd1c915", false, "ad", null, 0 },
+                    { 23, "c69b3332-96a0-47d7-bca7-a4fde7277d7b", false, "aut", null, 0 },
+                    { 28, "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9", false, "sed", null, 0 },
+                    { 29, "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9", false, "repellat", null, 0 },
+                    { 27, "f2818533-e97e-4bae-be99-8be3d29ff037", false, "sunt", null, 0 },
+                    { 25, "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9", false, "occaecati", null, 0 },
+                    { 22, "f2818533-e97e-4bae-be99-8be3d29ff037", false, "molestiae", null, 0 },
+                    { 24, "f2818533-e97e-4bae-be99-8be3d29ff037", false, "non", null, 0 },
+                    { 21, "65d73488-1b38-456d-8fff-737be639e584", false, "distinctio", null, 0 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Feedbacks",
-                columns: new[] { "Id", "CreatedAt", "Friendliness", "Informatively", "IsDeleted", "Quickness", "ResponseId", "Text", "UserId", "WillUse" },
+                columns: new[] { "Id", "CreatedAt", "Email", "Friendliness", "Informatively", "IsDeleted", "Name", "Quickness", "ResponseId", "Text", "UserId", "WillUse" },
                 values: new object[,]
                 {
-                    { 42, new DateTime(2018, 9, 9, 2, 29, 5, 920, DateTimeKind.Local), 0, 0, false, 0, null, "Et est voluptatibus et qui cumque eos nesciunt praesentium illo.", "0bddde5f-5756-4d7f-8521-42d0476f3aa0", 0 },
-                    { 41, new DateTime(2018, 9, 9, 15, 52, 11, 195, DateTimeKind.Local), 0, 0, false, 0, null, "Nulla et perspiciatis.", "0b22d062-92ae-494c-9481-11c2931737da", 0 },
-                    { 48, new DateTime(2018, 9, 8, 23, 54, 56, 711, DateTimeKind.Local), 0, 0, false, 0, null, "Est ipsa consequatur ut provident ab.", "732bab35-8c9e-4812-b4ff-251abdf5b857", 0 },
-                    { 46, new DateTime(2018, 9, 9, 13, 51, 41, 285, DateTimeKind.Local), 0, 0, false, 0, null, "Consequatur dolor quia.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", 0 },
-                    { 50, new DateTime(2018, 9, 9, 14, 51, 6, 29, DateTimeKind.Local), 0, 0, false, 0, null, "Quas quas exercitationem officiis et error cumque impedit.", "632bbf3e-2c78-49fc-ad87-e2e5e93b02e1", 0 },
-                    { 45, new DateTime(2018, 9, 9, 14, 8, 1, 415, DateTimeKind.Local), 0, 0, false, 0, null, "Repellendus error officia tenetur et qui possimus voluptas.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", 0 },
-                    { 49, new DateTime(2018, 9, 9, 17, 44, 49, 86, DateTimeKind.Local), 0, 0, false, 0, null, "Maxime earum odit et non quisquam occaecati nobis aut.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", 0 },
-                    { 43, new DateTime(2018, 9, 9, 19, 25, 23, 926, DateTimeKind.Local), 0, 0, false, 0, null, "Adipisci quo dolores animi quo doloribus qui eos velit unde.", "632bbf3e-2c78-49fc-ad87-e2e5e93b02e1", 0 },
-                    { 47, new DateTime(2018, 9, 9, 4, 16, 23, 539, DateTimeKind.Local), 0, 0, false, 0, null, "Ad fugiat odit quam modi et debitis est perspiciatis.", "6aa322ac-217f-449e-8ebf-12b4f2e2436c", 0 },
-                    { 44, new DateTime(2018, 9, 9, 19, 8, 28, 32, DateTimeKind.Local), 0, 0, false, 0, null, "Sequi reprehenderit est delectus sit dolor.", "0da18978-1656-4b4d-ac10-940871d87e18", 0 }
+                    { 48, new DateTime(2018, 9, 13, 10, 9, 25, 35, DateTimeKind.Local), null, 0, 0, false, null, 0, null, "Non ipsa sequi velit.", "f2818533-e97e-4bae-be99-8be3d29ff037", 0 },
+                    { 41, new DateTime(2018, 9, 12, 21, 11, 27, 869, DateTimeKind.Local), null, 0, 0, false, null, 0, null, "Non qui enim itaque qui cumque tenetur excepturi.", "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9", 0 },
+                    { 42, new DateTime(2018, 9, 13, 13, 51, 27, 41, DateTimeKind.Local), null, 0, 0, false, null, 0, null, "Consequatur quidem quia.", "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9", 0 },
+                    { 45, new DateTime(2018, 9, 12, 23, 34, 46, 608, DateTimeKind.Local), null, 0, 0, false, null, 0, null, "Autem iste earum beatae qui consequatur incidunt deserunt.", "cbb4252f-aba5-44d6-8cf3-073ee809daca", 0 },
+                    { 46, new DateTime(2018, 9, 12, 23, 28, 8, 854, DateTimeKind.Local), null, 0, 0, false, null, 0, null, "Qui nemo necessitatibus sunt sapiente quis sed quas.", "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9", 0 },
+                    { 44, new DateTime(2018, 9, 12, 22, 37, 24, 629, DateTimeKind.Local), null, 0, 0, false, null, 0, null, "Consequatur voluptate perspiciatis.", "c69b3332-96a0-47d7-bca7-a4fde7277d7b", 0 },
+                    { 50, new DateTime(2018, 9, 12, 17, 38, 25, 186, DateTimeKind.Local), null, 0, 0, false, null, 0, null, "Facilis iste dolores ut doloremque quae sed nihil magnam sint.", "0673fee2-18bc-4d1f-9a8a-cafda74912e9", 0 },
+                    { 49, new DateTime(2018, 9, 13, 3, 10, 6, 73, DateTimeKind.Local), null, 0, 0, false, null, 0, null, "Corrupti veritatis iste consequatur facere et.", "0673fee2-18bc-4d1f-9a8a-cafda74912e9", 0 },
+                    { 47, new DateTime(2018, 9, 13, 14, 40, 41, 501, DateTimeKind.Local), null, 0, 0, false, null, 0, null, "Non quia consequatur.", "0673fee2-18bc-4d1f-9a8a-cafda74912e9", 0 },
+                    { 43, new DateTime(2018, 9, 13, 6, 7, 20, 25, DateTimeKind.Local), null, 0, 0, false, null, 0, null, "Illo voluptate exercitationem optio.", "cbb4252f-aba5-44d6-8cf3-073ee809daca", 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -481,16 +507,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "ChatId", "IsDeleted", "IsDisable", "IsEmailable", "IsMute", "Type", "UserId" },
                 values: new object[,]
                 {
-                    { 13, null, false, false, true, true, 1, "732bab35-8c9e-4812-b4ff-251abdf5b857" },
-                    { 11, null, false, true, true, false, 3, "0bddde5f-5756-4d7f-8521-42d0476f3aa0" },
-                    { 16, null, false, true, true, true, 3, "6aa322ac-217f-449e-8ebf-12b4f2e2436c" },
-                    { 15, null, false, false, true, true, 1, "0b22d062-92ae-494c-9481-11c2931737da" },
-                    { 14, null, false, true, false, true, 2, "14e7d6f2-3626-423b-959b-e8ca1b882173" },
-                    { 17, null, false, true, false, true, 2, "632bbf3e-2c78-49fc-ad87-e2e5e93b02e1" },
-                    { 19, null, false, true, false, true, 2, "9a549b2b-8fd0-4d70-9145-569474fea109" },
-                    { 18, null, false, true, false, true, 4, "632bbf3e-2c78-49fc-ad87-e2e5e93b02e1" },
-                    { 12, null, false, true, false, true, 4, "0da18978-1656-4b4d-ac10-940871d87e18" },
-                    { 20, null, false, false, false, false, 2, "0b22d062-92ae-494c-9481-11c2931737da" }
+                    { 16, null, false, false, true, true, 4, "09aef456-5b88-4e19-89e6-ae20af967911" },
+                    { 15, null, false, true, false, false, 2, "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9" },
+                    { 20, null, false, true, false, false, 1, "65d73488-1b38-456d-8fff-737be639e584" },
+                    { 11, null, false, true, false, false, 1, "94f74064-0b77-4551-b2f4-c7cfbd48e7b3" },
+                    { 13, null, false, true, true, true, 2, "f2818533-e97e-4bae-be99-8be3d29ff037" },
+                    { 14, null, false, true, false, false, 2, "c69b3332-96a0-47d7-bca7-a4fde7277d7b" },
+                    { 19, null, false, false, true, true, 4, "c69b3332-96a0-47d7-bca7-a4fde7277d7b" },
+                    { 12, null, false, true, false, false, 0, "94f74064-0b77-4551-b2f4-c7cfbd48e7b3" },
+                    { 17, null, false, false, true, false, 3, "cbb4252f-aba5-44d6-8cf3-073ee809daca" },
+                    { 18, null, false, false, true, false, 1, "f2818533-e97e-4bae-be99-8be3d29ff037" }
                 });
 
             migrationBuilder.InsertData(
@@ -498,16 +524,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "ContactNumber", "CreatedByUserId", "Description", "Email", "ImageURL", "IsActive", "IsDeleted", "Name", "ThemeId", "WebSite" },
                 values: new object[,]
                 {
-                    { 72, "(204) 999-6677 x405", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", "", "Domingo.Stiedemann@yahoo.com", null, true, false, "Company114", 67, "http://janis.com" },
-                    { 75, "614.292.9580 x822", "36410a7e-ff1b-4570-8a45-82e6d045bfda", "", "Alessandra.Heller42@gmail.com", null, true, false, "Company165", 67, "https://kamron.biz" },
-                    { 79, "(259) 858-0505 x993", "36410a7e-ff1b-4570-8a45-82e6d045bfda", "Dicta a hic tempora illo dolorem. Dolorum voluptas nemo ea ea.", "Lura_Kling61@yahoo.com", null, true, false, "Company833", 64, "http://marianna.name" },
-                    { 78, "(938) 960-5637", "0bddde5f-5756-4d7f-8521-42d0476f3aa0", "Quo consequatur vero sint ut autem aut doloremque ullam laborum. Rerum repellendus est qui sit rerum.", "Juliet_Powlowski@yahoo.com", null, true, false, "Company297", 65, "https://josiane.com" },
-                    { 80, "(732) 704-3028 x624", "0bddde5f-5756-4d7f-8521-42d0476f3aa0", "Id modi distinctio animi dolorem. Amet quia sint id harum exercitationem.", "Madison.Collins@yahoo.com", null, true, false, "Company179", 70, "http://orlo.name" },
-                    { 73, "(440) 509-1684", "14e7d6f2-3626-423b-959b-e8ca1b882173", "", "Sofia_Schaefer8@hotmail.com", null, true, false, "Company613", 69, "http://lew.info" },
-                    { 71, "439-419-3955 x8548", "36410a7e-ff1b-4570-8a45-82e6d045bfda", "Adipisci molestias non quisquam earum dolorum molestias iste. Explicabo ea ut mollitia itaque repudiandae. Est unde quasi.", "Jarrod_Hammes29@gmail.com", null, true, false, "Company541", 67, "https://chadrick.name" },
-                    { 74, "662.300.3345", "14e7d6f2-3626-423b-959b-e8ca1b882173", "Nostrum iusto voluptatem culpa ut.", "Madyson19@hotmail.com", null, true, false, "Company435", 68, "https://mose.info" },
-                    { 76, "1-958-620-8119 x139", "0da18978-1656-4b4d-ac10-940871d87e18", "", "Elias.Schmeler76@yahoo.com", null, true, false, "Company221", 61, "http://bert.biz" },
-                    { 77, "631.889.3525 x9022", "36410a7e-ff1b-4570-8a45-82e6d045bfda", "Enim sit quia nemo tempore accusantium. Voluptatibus eum aliquid ab. Mollitia iure doloremque omnis quaerat voluptatem ut suscipit.", "Dorothy.Torphy@hotmail.com", null, true, false, "Company782", 68, "https://alvina.org" }
+                    { 66, "(337) 675-8317 x628", "cbb4252f-aba5-44d6-8cf3-073ee809daca", "Dolorem illum debitis. Exercitationem aut est molestias voluptatem illo et magni iusto iste. Et illo quas minus dicta nobis fugit asperiores magni. Adipisci rerum qui.", "Wilton.Dietrich68@hotmail.com", null, true, false, "Company158", 1, "https://krystal.name" },
+                    { 69, "(696) 900-6739", "c69b3332-96a0-47d7-bca7-a4fde7277d7b", "Architecto impedit laudantium repudiandae.", "Hope_Runolfsson@gmail.com", null, true, false, "Company414", 1, "https://ludie.info" },
+                    { 68, "1-859-704-2256 x0237", "e697fc03-e37a-48e7-84c0-d3087cd1c915", "Vel et et debitis aut laudantium nihil rerum ipsa explicabo. Velit consectetur itaque a minus corporis ab ut. Consectetur aliquid id magni unde eos aliquam et.", "Sadie58@hotmail.com", null, true, false, "Company53", 2, "http://elyse.info" },
+                    { 62, "281-770-3987 x0300", "c69b3332-96a0-47d7-bca7-a4fde7277d7b", "Totam sint consequatur harum cumque minima sunt.", "Clement.Bruen49@yahoo.com", null, true, false, "Company351", 1, "http://shanelle.net" },
+                    { 64, "263-784-4409 x94920", "94f74064-0b77-4551-b2f4-c7cfbd48e7b3", "Qui enim ducimus sit non velit enim amet sit quisquam. Fugiat aperiam doloremque nobis laboriosam enim ea.", "Seamus_Davis15@gmail.com", null, true, false, "Company890", 1, "https://paula.com" },
+                    { 67, "273-747-3857", "65d73488-1b38-456d-8fff-737be639e584", "", "Neil_Abbott60@gmail.com", null, true, false, "Company628", 1, "http://joy.name" },
+                    { 63, "640.536.8640", "94f74064-0b77-4551-b2f4-c7cfbd48e7b3", "", "Eliseo.Grimes@yahoo.com", null, true, false, "Company634", 1, "https://karl.name" },
+                    { 61, "1-269-754-3661 x11161", "2ed2cc2b-f1ff-4247-92e5-dd40fd88cd2e", "Inventore neque qui. Sit et est voluptas eum. Aut quod temporibus iusto dicta. Ipsum harum et voluptate et eos sequi omnis.", "Gabe.Schmeler58@yahoo.com", null, true, false, "Company535", 2, "http://allen.biz" },
+                    { 65, "1-917-456-6123 x24786", "e697fc03-e37a-48e7-84c0-d3087cd1c915", "", "Mitchel_Miller@yahoo.com", null, true, false, "Company211", 1, "http://manuel.org" },
+                    { 70, "(814) 554-7458 x69651", "f2818533-e97e-4bae-be99-8be3d29ff037", "Est nemo quos qui. Ea ipsum quos est. Veniam vitae aut quaerat laudantium neque. Quia debitis aperiam fuga magni ipsa.", "Vicenta_Kub89@hotmail.com", null, true, false, "Company240", 2, "https://cathy.name" }
                 });
 
             migrationBuilder.InsertData(
@@ -515,33 +541,33 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "FeedbackId", "IsDeleted", "Text", "UserId" },
                 values: new object[,]
                 {
-                    { 56, new DateTime(2018, 9, 9, 2, 34, 33, 692, DateTimeKind.Local), 49, false, "Quia qui ad nihil reprehenderit.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c" },
-                    { 58, new DateTime(2018, 9, 9, 9, 54, 52, 111, DateTimeKind.Local), 46, false, "Omnis recusandae consectetur magnam provident explicabo.", "14e7d6f2-3626-423b-959b-e8ca1b882173" },
-                    { 54, new DateTime(2018, 9, 9, 14, 27, 16, 499, DateTimeKind.Local), 50, false, "Animi consequatur molestiae omnis.", "732bab35-8c9e-4812-b4ff-251abdf5b857" },
-                    { 51, new DateTime(2018, 9, 9, 12, 10, 3, 91, DateTimeKind.Local), 41, false, "Voluptas enim laborum ex explicabo voluptates est sequi.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c" },
-                    { 55, new DateTime(2018, 9, 9, 8, 58, 39, 165, DateTimeKind.Local), 44, false, "Et aut ea accusamus aliquam.", "9a549b2b-8fd0-4d70-9145-569474fea109" },
-                    { 52, new DateTime(2018, 9, 9, 8, 27, 14, 956, DateTimeKind.Local), 41, false, "Saepe alias maiores aut qui ea delectus.", "9a549b2b-8fd0-4d70-9145-569474fea109" },
-                    { 57, new DateTime(2018, 9, 9, 6, 24, 31, 160, DateTimeKind.Local), 49, false, "Libero consectetur alias dolorum deleniti.", "0b22d062-92ae-494c-9481-11c2931737da" },
-                    { 53, new DateTime(2018, 9, 9, 20, 59, 34, 800, DateTimeKind.Local), 48, false, "Modi sed quo doloremque quis atque incidunt corporis qui.", "0b22d062-92ae-494c-9481-11c2931737da" },
-                    { 60, new DateTime(2018, 9, 9, 3, 44, 42, 883, DateTimeKind.Local), 49, false, "Id quia unde quae eveniet delectus ea.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c" },
-                    { 59, new DateTime(2018, 9, 9, 19, 36, 22, 152, DateTimeKind.Local), 41, false, "Nesciunt aperiam recusandae tempore a.", "0da18978-1656-4b4d-ac10-940871d87e18" }
+                    { 52, new DateTime(2018, 9, 13, 13, 25, 43, 959, DateTimeKind.Local), 50, false, "Id eveniet minus enim facere eius.", "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9" },
+                    { 53, new DateTime(2018, 9, 12, 17, 58, 42, 446, DateTimeKind.Local), 42, false, "Qui hic omnis neque rerum molestiae qui.", "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9" },
+                    { 56, new DateTime(2018, 9, 13, 3, 16, 40, 384, DateTimeKind.Local), 42, false, "Distinctio ipsum dolorum commodi corporis debitis omnis maxime.", "09aef456-5b88-4e19-89e6-ae20af967911" },
+                    { 55, new DateTime(2018, 9, 13, 4, 45, 47, 625, DateTimeKind.Local), 49, false, "Libero tempore consectetur est voluptatibus quae nihil ratione iure fugit.", "c69b3332-96a0-47d7-bca7-a4fde7277d7b" },
+                    { 51, new DateTime(2018, 9, 13, 5, 51, 35, 385, DateTimeKind.Local), 42, false, "Id quasi enim et ipsa distinctio tempore nostrum.", "65d73488-1b38-456d-8fff-737be639e584" },
+                    { 60, new DateTime(2018, 9, 13, 13, 19, 16, 149, DateTimeKind.Local), 45, false, "Dolorum soluta in.", "c69b3332-96a0-47d7-bca7-a4fde7277d7b" },
+                    { 59, new DateTime(2018, 9, 13, 13, 59, 58, 711, DateTimeKind.Local), 46, false, "Vel culpa consequuntur et.", "2ed2cc2b-f1ff-4247-92e5-dd40fd88cd2e" },
+                    { 54, new DateTime(2018, 9, 13, 4, 47, 59, 137, DateTimeKind.Local), 45, false, "Eos voluptas atque.", "2ed2cc2b-f1ff-4247-92e5-dd40fd88cd2e" },
+                    { 58, new DateTime(2018, 9, 13, 11, 57, 19, 488, DateTimeKind.Local), 49, false, "Id id sed et ducimus praesentium commodi iusto.", "f2818533-e97e-4bae-be99-8be3d29ff037" },
+                    { 57, new DateTime(2018, 9, 13, 7, 47, 28, 444, DateTimeKind.Local), 50, false, "Molestiae maxime sunt dolore vel et omnis ut aperiam nostrum.", "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Instances",
-                columns: new[] { "Id", "Address", "GuidId", "IsActive", "IsDeleted", "OrganizationId", "Platform", "Title" },
+                columns: new[] { "Id", "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "AggregationForWeek", "CpuMaxPercent", "DiskMaxPercent", "GuidId", "IsActive", "IsDeleted", "OrganizationId", "Platform", "RamMaxPercent", "StatusCheckedAt", "Title" },
                 values: new object[,]
                 {
-                    { 83, "2d:74:0e:71:6f:7a", new Guid("00000000-0000-0000-0000-000000000000"), true, false, 76, "Linux", "Instance819" },
-                    { 90, "09:2f:b3:74:1b:82", new Guid("00000000-0000-0000-0000-000000000000"), true, false, 71, "Linux", "Instance474" },
-                    { 88, "e7:0a:de:ee:bf:6e", new Guid("00000000-0000-0000-0000-000000000000"), true, false, 74, "Windows", "Instance701" },
-                    { 85, "df:be:1e:09:9c:ab", new Guid("00000000-0000-0000-0000-000000000000"), true, false, 74, "Linux", "Instance856" },
-                    { 86, "5e:42:96:2e:00:e0", new Guid("00000000-0000-0000-0000-000000000000"), true, false, 77, "Windows", "Instance731" },
-                    { 89, "16:66:b1:ef:be:c1", new Guid("00000000-0000-0000-0000-000000000000"), true, false, 73, "Windows", "Instance831" },
-                    { 87, "c8:5c:b1:ee:61:bc", new Guid("00000000-0000-0000-0000-000000000000"), true, false, 76, "Linux", "Instance85" },
-                    { 81, "54:bc:6c:85:e1:55", new Guid("00000000-0000-0000-0000-000000000000"), true, false, 78, "Windows", "Instance802" },
-                    { 84, "04:d6:00:79:e3:b7", new Guid("00000000-0000-0000-0000-000000000000"), true, false, 72, "Windows", "Instance161" },
-                    { 82, "93:89:86:96:e6:11", new Guid("00000000-0000-0000-0000-000000000000"), true, false, 79, "Linux", "Instance46" }
+                    { 76, "a6:82:5a:d1:6d:0e", true, true, true, false, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 62, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance200" },
+                    { 74, "b8:6f:00:95:a8:58", true, true, true, false, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 66, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance261" },
+                    { 71, "d5:4e:e3:8d:ad:a8", true, true, true, false, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 61, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance399" },
+                    { 80, "37:0f:6e:a1:67:ca", true, true, true, false, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 70, "Windows", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance156" },
+                    { 72, "88:01:fd:f5:ed:f8", true, true, true, false, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 65, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance58" },
+                    { 78, "68:c1:f2:fa:5a:8f", true, true, true, false, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 67, "Windows", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance300" },
+                    { 75, "3a:99:1a:36:ac:df", true, true, true, false, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 61, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance403" },
+                    { 77, "0c:6f:99:b4:8b:18", true, true, true, false, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 61, "Windows", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance301" },
+                    { 79, "dc:f2:65:30:b4:35", true, true, true, false, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 61, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance714" },
+                    { 73, "28:c6:2c:63:40:e7", true, true, true, false, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 67, "Windows", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance431" }
                 });
 
             migrationBuilder.InsertData(
@@ -549,33 +575,33 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "ChatId", "CreatedAt", "IsDeleted", "Text", "UserId", "WasRead" },
                 values: new object[,]
                 {
-                    { 32, 25, new DateTime(2018, 9, 9, 7, 44, 12, 280, DateTimeKind.Local), false, "Quia eaque reiciendis id non.", "0bddde5f-5756-4d7f-8521-42d0476f3aa0", true },
-                    { 33, 25, new DateTime(2018, 9, 9, 18, 34, 36, 38, DateTimeKind.Local), false, "Sequi odit inventore unde quibusdam tempore voluptates consequuntur et.", "0da18978-1656-4b4d-ac10-940871d87e18", true },
-                    { 40, 27, new DateTime(2018, 9, 9, 16, 35, 21, 699, DateTimeKind.Local), false, "Minima natus unde dicta aspernatur earum deserunt sint tempora reprehenderit.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", true },
-                    { 38, 27, new DateTime(2018, 9, 9, 21, 9, 39, 318, DateTimeKind.Local), false, "Qui ut non accusamus quos voluptas voluptatum.", "36410a7e-ff1b-4570-8a45-82e6d045bfda", true },
-                    { 36, 27, new DateTime(2018, 9, 9, 0, 54, 33, 391, DateTimeKind.Local), false, "Est sed pariatur.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", true },
-                    { 37, 24, new DateTime(2018, 9, 9, 13, 45, 57, 927, DateTimeKind.Local), false, "Numquam facere ipsa porro.", "0b22d062-92ae-494c-9481-11c2931737da", true },
-                    { 39, 21, new DateTime(2018, 9, 9, 1, 15, 27, 632, DateTimeKind.Local), false, "Maiores dolor nihil earum suscipit at consectetur non et sunt.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", false },
-                    { 31, 26, new DateTime(2018, 9, 9, 4, 38, 36, 540, DateTimeKind.Local), false, "Voluptatum adipisci repellendus vitae facilis odit.", "0b22d062-92ae-494c-9481-11c2931737da", false },
-                    { 35, 26, new DateTime(2018, 9, 9, 6, 44, 26, 9, DateTimeKind.Local), false, "Nihil quia ad et odio et dolorem.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", true },
-                    { 34, 23, new DateTime(2018, 9, 9, 10, 21, 58, 678, DateTimeKind.Local), false, "Quam culpa qui autem accusamus.", "0b22d062-92ae-494c-9481-11c2931737da", true }
+                    { 38, 27, new DateTime(2018, 9, 13, 7, 40, 8, 109, DateTimeKind.Local), false, "Ut aliquid natus dicta aliquam ut sit.", "09aef456-5b88-4e19-89e6-ae20af967911", false },
+                    { 37, 27, new DateTime(2018, 9, 13, 10, 7, 51, 228, DateTimeKind.Local), false, "Dolor similique sit velit suscipit et itaque qui quam magni.", "c69b3332-96a0-47d7-bca7-a4fde7277d7b", true },
+                    { 40, 24, new DateTime(2018, 9, 13, 14, 21, 52, 931, DateTimeKind.Local), false, "Sed expedita dolores delectus et voluptas fuga qui.", "09aef456-5b88-4e19-89e6-ae20af967911", false },
+                    { 39, 22, new DateTime(2018, 9, 13, 12, 46, 6, 158, DateTimeKind.Local), false, "Saepe ducimus repellendus molestiae explicabo perspiciatis.", "2ed2cc2b-f1ff-4247-92e5-dd40fd88cd2e", false },
+                    { 33, 22, new DateTime(2018, 9, 13, 13, 48, 6, 762, DateTimeKind.Local), false, "Ea aperiam est corporis voluptatem qui quia.", "c69b3332-96a0-47d7-bca7-a4fde7277d7b", true },
+                    { 31, 22, new DateTime(2018, 9, 12, 17, 38, 1, 192, DateTimeKind.Local), false, "Praesentium vero itaque quibusdam quisquam id.", "2ed2cc2b-f1ff-4247-92e5-dd40fd88cd2e", false },
+                    { 35, 25, new DateTime(2018, 9, 13, 14, 58, 6, 592, DateTimeKind.Local), false, "Perferendis voluptates odit iusto rerum quo recusandae pariatur blanditiis.", "0673fee2-18bc-4d1f-9a8a-cafda74912e9", false },
+                    { 34, 28, new DateTime(2018, 9, 12, 21, 43, 45, 356, DateTimeKind.Local), false, "Sed sit maiores voluptas iure tempore voluptas numquam velit.", "65d73488-1b38-456d-8fff-737be639e584", true },
+                    { 32, 29, new DateTime(2018, 9, 13, 5, 50, 15, 946, DateTimeKind.Local), false, "Nesciunt labore quaerat odit et necessitatibus.", "09aef456-5b88-4e19-89e6-ae20af967911", true },
+                    { 36, 29, new DateTime(2018, 9, 13, 14, 36, 4, 868, DateTimeKind.Local), false, "Quo est perspiciatis voluptatem necessitatibus ea.", "09aef456-5b88-4e19-89e6-ae20af967911", true }
                 });
 
             migrationBuilder.InsertData(
                 table: "Notifications",
-                columns: new[] { "Id", "CreatedAt", "IsDeleted", "NotificationSettingId", "Text", "UserId", "WasRead" },
+                columns: new[] { "Id", "CreatedAt", "InstanceGuidId", "InstanceId", "IsDeleted", "NotificationSettingId", "Text", "UserId", "WasRead" },
                 values: new object[,]
                 {
-                    { 116, new DateTime(2018, 9, 9, 5, 23, 32, 536, DateTimeKind.Local), false, 13, "Officiis dolores dolores tenetur nesciunt.", "36410a7e-ff1b-4570-8a45-82e6d045bfda", false },
-                    { 113, new DateTime(2018, 9, 9, 5, 26, 37, 181, DateTimeKind.Local), false, 13, "Porro et architecto nulla.", "9a549b2b-8fd0-4d70-9145-569474fea109", false },
-                    { 114, new DateTime(2018, 9, 9, 19, 49, 50, 408, DateTimeKind.Local), false, 17, "Sequi eius est dolores aspernatur.", "9a549b2b-8fd0-4d70-9145-569474fea109", false },
-                    { 117, new DateTime(2018, 9, 9, 6, 20, 10, 310, DateTimeKind.Local), false, 11, "Et beatae non non natus quasi fugit officiis.", "0bddde5f-5756-4d7f-8521-42d0476f3aa0", false },
-                    { 120, new DateTime(2018, 9, 9, 21, 57, 27, 602, DateTimeKind.Local), false, 18, "Quis sint beatae assumenda.", "0da18978-1656-4b4d-ac10-940871d87e18", false },
-                    { 115, new DateTime(2018, 9, 9, 16, 29, 11, 14, DateTimeKind.Local), false, 12, "Doloremque impedit quod aut odit dolore delectus fuga rem mollitia.", "14e7d6f2-3626-423b-959b-e8ca1b882173", false },
-                    { 119, new DateTime(2018, 9, 9, 0, 37, 52, 879, DateTimeKind.Local), false, 20, "Unde accusantium accusamus.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", false },
-                    { 118, new DateTime(2018, 9, 9, 16, 54, 34, 750, DateTimeKind.Local), false, 20, "Soluta sit iure est qui odit.", "0b22d062-92ae-494c-9481-11c2931737da", false },
-                    { 112, new DateTime(2018, 9, 9, 11, 58, 14, 361, DateTimeKind.Local), false, 18, "Aut adipisci facere perferendis.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", false },
-                    { 111, new DateTime(2018, 9, 9, 18, 37, 9, 256, DateTimeKind.Local), false, 16, "Tempora omnis nobis a enim explicabo qui vitae.", "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", false }
+                    { 106, new DateTime(2018, 9, 13, 7, 6, 6, 306, DateTimeKind.Local), null, null, false, 17, "Minima expedita enim corporis quas.", "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9", false },
+                    { 107, new DateTime(2018, 9, 13, 12, 23, 38, 343, DateTimeKind.Local), null, null, false, 11, "Et possimus autem quisquam facilis vero magnam iste sed dolor.", "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9", false },
+                    { 103, new DateTime(2018, 9, 13, 12, 16, 23, 131, DateTimeKind.Local), null, null, false, 13, "Optio non est ut hic et.", "e697fc03-e37a-48e7-84c0-d3087cd1c915", false },
+                    { 108, new DateTime(2018, 9, 12, 22, 5, 3, 366, DateTimeKind.Local), null, null, false, 11, "Consequatur officiis distinctio ducimus consequatur.", "65d73488-1b38-456d-8fff-737be639e584", false },
+                    { 102, new DateTime(2018, 9, 13, 14, 40, 35, 487, DateTimeKind.Local), null, null, false, 18, "Non quia et ea voluptates vel reiciendis aut ipsum harum.", "94f74064-0b77-4551-b2f4-c7cfbd48e7b3", false },
+                    { 104, new DateTime(2018, 9, 12, 20, 11, 16, 592, DateTimeKind.Local), null, null, false, 18, "Est provident sunt sit et sint beatae ut.", "2ed2cc2b-f1ff-4247-92e5-dd40fd88cd2e", false },
+                    { 109, new DateTime(2018, 9, 13, 2, 38, 45, 112, DateTimeKind.Local), null, null, false, 18, "Ab assumenda illo.", "2ed2cc2b-f1ff-4247-92e5-dd40fd88cd2e", false },
+                    { 105, new DateTime(2018, 9, 12, 23, 5, 32, 248, DateTimeKind.Local), null, null, false, 15, "Earum veniam reprehenderit nostrum voluptatibus vel voluptatem iusto.", "09aef456-5b88-4e19-89e6-ae20af967911", false },
+                    { 101, new DateTime(2018, 9, 13, 3, 2, 14, 427, DateTimeKind.Local), null, null, false, 19, "Deleniti quia quasi qui mollitia ut vel aut accusamus a.", "cbb4252f-aba5-44d6-8cf3-073ee809daca", false },
+                    { 110, new DateTime(2018, 9, 13, 16, 18, 1, 561, DateTimeKind.Local), null, null, false, 14, "Blanditiis officiis magni quisquam dignissimos cupiditate.", "09aef456-5b88-4e19-89e6-ae20af967911", false }
                 });
 
             migrationBuilder.InsertData(
@@ -583,16 +609,16 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "UserId", "OrganizationId", "OrganizationRoleId" },
                 values: new object[,]
                 {
-                    { "36410a7e-ff1b-4570-8a45-82e6d045bfda", 71, 1 },
-                    { "0da18978-1656-4b4d-ac10-940871d87e18", 79, 1 },
-                    { "9a549b2b-8fd0-4d70-9145-569474fea109", 77, 1 },
-                    { "cd12165e-60bb-40a0-a6da-ee98a35e2a2c", 75, 1 },
-                    { "632bbf3e-2c78-49fc-ad87-e2e5e93b02e1", 76, 1 },
-                    { "6aa322ac-217f-449e-8ebf-12b4f2e2436c", 74, 1 },
-                    { "0b22d062-92ae-494c-9481-11c2931737da", 74, 1 },
-                    { "0bddde5f-5756-4d7f-8521-42d0476f3aa0", 73, 1 },
-                    { "732bab35-8c9e-4812-b4ff-251abdf5b857", 72, 1 },
-                    { "14e7d6f2-3626-423b-959b-e8ca1b882173", 76, 1 }
+                    { "2ed2cc2b-f1ff-4247-92e5-dd40fd88cd2e", 66, 1 },
+                    { "0673fee2-18bc-4d1f-9a8a-cafda74912e9", 66, 1 },
+                    { "e697fc03-e37a-48e7-84c0-d3087cd1c915", 69, 1 },
+                    { "65d73488-1b38-456d-8fff-737be639e584", 64, 1 },
+                    { "cbb4252f-aba5-44d6-8cf3-073ee809daca", 64, 1 },
+                    { "94f74064-0b77-4551-b2f4-c7cfbd48e7b3", 65, 1 },
+                    { "c69b3332-96a0-47d7-bca7-a4fde7277d7b", 68, 1 },
+                    { "397c0e5c-ca8b-4ad3-b25c-2f13b1bf49b9", 63, 1 },
+                    { "09aef456-5b88-4e19-89e6-ae20af967911", 63, 1 },
+                    { "f2818533-e97e-4bae-be99-8be3d29ff037", 69, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -600,33 +626,33 @@ namespace Watcher.DataAccess.Data.Migrations
                 columns: new[] { "Id", "CreatedAt", "InstanceId", "IsDeleted", "Title" },
                 values: new object[,]
                 {
-                    { 98, new DateTime(2018, 9, 9, 12, 18, 28, 429, DateTimeKind.Local), 89, false, "Title719" },
-                    { 93, new DateTime(2018, 9, 9, 6, 26, 18, 615, DateTimeKind.Local), 85, false, "Title328" },
-                    { 96, new DateTime(2018, 9, 9, 7, 13, 27, 393, DateTimeKind.Local), 85, false, "Title756" },
-                    { 100, new DateTime(2018, 9, 9, 4, 23, 15, 916, DateTimeKind.Local), 90, false, "Title956" },
-                    { 91, new DateTime(2018, 9, 9, 1, 13, 23, 708, DateTimeKind.Local), 82, false, "Title187" },
-                    { 94, new DateTime(2018, 9, 9, 6, 20, 43, 423, DateTimeKind.Local), 82, false, "Title568" },
-                    { 97, new DateTime(2018, 9, 9, 5, 36, 59, 89, DateTimeKind.Local), 82, false, "Title712" },
-                    { 92, new DateTime(2018, 9, 9, 9, 7, 26, 619, DateTimeKind.Local), 84, false, "Title344" },
-                    { 99, new DateTime(2018, 9, 9, 18, 42, 20, 709, DateTimeKind.Local), 84, false, "Title235" },
-                    { 95, new DateTime(2018, 9, 9, 13, 3, 4, 274, DateTimeKind.Local), 87, false, "Title317" }
+                    { 88, new DateTime(2018, 9, 13, 9, 5, 46, 733, DateTimeKind.Local), 76, false, "Title347" },
+                    { 90, new DateTime(2018, 9, 13, 11, 22, 56, 703, DateTimeKind.Local), 76, false, "Title136" },
+                    { 87, new DateTime(2018, 9, 12, 23, 58, 59, 90, DateTimeKind.Local), 74, false, "Title819" },
+                    { 85, new DateTime(2018, 9, 13, 14, 16, 21, 782, DateTimeKind.Local), 71, false, "Title925" },
+                    { 86, new DateTime(2018, 9, 13, 8, 41, 55, 580, DateTimeKind.Local), 71, false, "Title412" },
+                    { 83, new DateTime(2018, 9, 13, 7, 44, 43, 558, DateTimeKind.Local), 75, false, "Title892" },
+                    { 82, new DateTime(2018, 9, 13, 1, 54, 9, 261, DateTimeKind.Local), 77, false, "Title639" },
+                    { 81, new DateTime(2018, 9, 13, 2, 51, 20, 342, DateTimeKind.Local), 79, false, "Title400" },
+                    { 89, new DateTime(2018, 9, 13, 10, 13, 40, 631, DateTimeKind.Local), 73, false, "Title562" },
+                    { 84, new DateTime(2018, 9, 13, 12, 39, 49, 469, DateTimeKind.Local), 78, false, "Title868" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Charts",
-                columns: new[] { "Id", "AutoScale", "DashboardId", "Gradient", "IsDeleted", "IsLightTheme", "IsShowSeriesOnHover", "IsTooltipDisabled", "LegendTitle", "MostLoaded", "RangeFillOpacity", "RoundDomains", "SchemeType", "ShowCommon", "ShowGridLines", "ShowLegend", "ShowXAxis", "ShowXAxisLabel", "ShowYAxis", "ShowYAxisLabel", "Sources", "Threshold", "Title", "Type", "XAxisLabel", "YAxisLabel" },
+                columns: new[] { "Id", "AutoScale", "DashboardId", "Gradient", "HistoryTime", "IsDeleted", "IsLightTheme", "IsShowSeriesOnHover", "IsTooltipDisabled", "LegendTitle", "MostLoaded", "RangeFillOpacity", "RoundDomains", "SchemeType", "ShowCommon", "ShowGridLines", "ShowLegend", "ShowXAxis", "ShowXAxisLabel", "ShowYAxis", "ShowYAxisLabel", "Sources", "Threshold", "Title", "Type", "XAxisLabel", "YAxisLabel" },
                 values: new object[,]
                 {
-                    { 108, true, 93, false, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 40, "", 0, "X Label", "Y Label" },
-                    { 110, true, 93, false, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 78, "", 3, "X Label", "Y Label" },
-                    { 103, true, 91, false, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 37, "", 1, "X Label", "Y Label" },
-                    { 102, true, 94, false, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 59, "", 3, "X Label", "Y Label" },
-                    { 105, true, 94, false, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 3, "", 1, "X Label", "Y Label" },
-                    { 106, true, 94, false, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 76, "", 2, "X Label", "Y Label" },
-                    { 101, true, 97, false, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 14, "", 1, "X Label", "Y Label" },
-                    { 104, true, 99, false, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 73, "", 1, "X Label", "Y Label" },
-                    { 107, true, 99, false, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 98, "", 0, "X Label", "Y Label" },
-                    { 109, true, 95, false, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 57, "", 2, "X Label", "Y Label" }
+                    { 92, true, 88, false, 5, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 71, "", 1, "X Label", "Y Label" },
+                    { 94, true, 88, false, 5, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 30, "", 2, "X Label", "Y Label" },
+                    { 100, true, 87, false, 5, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 19, "", 1, "X Label", "Y Label" },
+                    { 91, true, 86, false, 5, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 78, "", 3, "X Label", "Y Label" },
+                    { 95, true, 86, false, 5, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 33, "", 0, "X Label", "Y Label" },
+                    { 99, true, 86, false, 5, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 69, "", 1, "X Label", "Y Label" },
+                    { 93, true, 83, false, 5, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 4, "", 2, "X Label", "Y Label" },
+                    { 96, true, 83, false, 5, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 67, "", 1, "X Label", "Y Label" },
+                    { 97, true, 89, false, 5, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 24, "", 3, "X Label", "Y Label" },
+                    { 98, true, 89, false, 5, false, true, true, false, "Legend", 1, 0.5, false, "ordinal", false, true, true, true, true, true, true, "0,1", 11, "", 2, "X Label", "Y Label" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -906,6 +932,9 @@ namespace Watcher.DataAccess.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Charts");
+
+            migrationBuilder.DropTable(
+                name: "CollectorAppVersions");
 
             migrationBuilder.DropTable(
                 name: "Feedbacks");

@@ -9,6 +9,7 @@ import { Chat } from '../../shared/models/chat.model';
 import { MessageRequest } from '../../shared/requests/message-request';
 import { ChatRequest } from '../../shared/requests/chat-request';
 import { ChatUpdateRequest } from '../../shared/requests/chat-update-request';
+import { Subject } from 'rxjs';
 
 
 @Injectable()
@@ -17,7 +18,8 @@ export class ChatHub {
     private hubName = 'chatsHub';
     private isConnect: boolean;
 
-    public messageReceived = new EventEmitter<Message>();
+    private messageSub = new Subject<Message>();
+    public messageReceived = this.messageSub.asObservable();
     public chatMessagesWasRead = new EventEmitter<number>();
     public chatCreated = new EventEmitter<Chat>();
     public chatChanged = new EventEmitter<Chat>();
@@ -58,7 +60,8 @@ export class ChatHub {
 
     private registerOnEvents(): void {
         this.hubConnection.on('ReceiveMessage', (data: any) => {
-            this.messageReceived.emit(data);
+            this.messageSub.next(data);
+            // this.messageReceived.emit(data);
             console.log('Message Received');
         });
 

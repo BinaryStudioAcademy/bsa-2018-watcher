@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div id="dvTableContent" runat="server">
+    </div>
+<table>
+    <tr>
+        <td>
+            <br/>
+            <span style="font-family: Arial; font-size: 14pt">
+                Hello <b>{UserName},</b>
+                <br/><br/>
+                <table width="100%" border="0" cellspacing="5" cellpadding="10">
+                    <tr>
+                        <td width="100%" align="center" valign="middle" colspan="2">
+                            Analyze by date - {date}<br/><span><br/></span>
+                            <div style="border-top: 3px solid #22BCE5"> </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="50%" align="left" valign="middle">
+                            CPU
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="50%" align="center" valign="middle">
+                            <b>Warnings</b>
+                        </td>
+                        <td width="50%" align="center" valign="middle">
+                            <b>Anomalies</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="35%" align="left" valign="middle">
+                            {Date1} : {value1} %
+                        </td>
+                        <td width="65%" align="left" valign="middle">
+                            {Date2} : {value2} %
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="50%" align="left" valign="middle">
+                            RAM
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="50%" align="left" valign="middle">
+                            DISK
+                        </td>
+                    </tr>
+                </table>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td width="100%" align="right" valign="middle">
+            <br/>
+            <span style="font-family: Arial; font-size: 14pt">
+                Best wishes,<br/>
+                <a style="color: #22BCE5" href="bsa-watcher.azurewebsites.net"><b>Watcher</b></a>
+            </span>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -2,17 +2,15 @@
 {
     using System;
 
-    using DataAccumulator.Shared.Models;
-
     public class InstanceAnomalyReportMessage : InstanceMessage
     {
         public InstanceAnomalyReportMessage() { }
 
-        public InstanceAnomalyReportMessage(Guid instanceId, AzureMLAnomalyReport report) : base(instanceId)
+        public InstanceAnomalyReportMessage(Guid instanceId, Guid reportId) : base(instanceId)
         {
-            AnomalyReport = report;
+            AnomalyReportId = reportId;
         }
 
-        public AzureMLAnomalyReport AnomalyReport { get; set; }
+        public Guid AnomalyReportId { get; set; }
     }
 }
