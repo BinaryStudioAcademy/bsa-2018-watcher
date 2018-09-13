@@ -93,6 +93,7 @@ namespace DataAccumulator
             // repo initialization localhost while development env, azure in prod
             ConfigureCosmosDb(services, Configuration);
 
+            // services.AddTransient<CollectedDataAggregatingByFiveMinutesJob>();
             services.AddTransient<CollectedDataAggregatingByHourJob>();
             services.AddTransient<CollectedDataAggregatingByDayJob>();
             services.AddTransient<CollectedDataAggregatingByWeekJob>();
@@ -124,6 +125,7 @@ namespace DataAccumulator
             {
                 if (Configuration.GetSection("DataAggregator").GetValue<bool>("Aggregating"))
                 {
+                    // quartz.AddJob<CollectedDataAggregatingByFiveMinutesJob>("CollectedDataAggregatingByFiveMinutes", "DataAggregator", 5);
                     quartz.AddHourlyJob<CollectedDataAggregatingByHourJob>("CollectedDataAggregatingByHour", "DataAggregator");
                     quartz.AddDailyJob<CollectedDataAggregatingByDayJob>("CollectedDataAggregatingByDay", "DataAggregator");
                     quartz.AddWeeklyJob<CollectedDataAggregatingByWeekJob>("CollectedDataAggregatingByWeek", "DataAggregator");
@@ -146,6 +148,8 @@ namespace DataAccumulator
                 options => new LogRepository(connectionString, "bsa-watcher-data-storage"));
             services.AddTransient<IInstanceSettingsRepository<InstanceSettings>, InstanceSettingsRepository>(
               options => new InstanceSettingsRepository(connectionString, "bsa-watcher-data-storage"));
+            services.AddTransient<IInstanceAnomalyReportsRepository, InstanceAnomalyReportsRepository>(
+                options => new InstanceAnomalyReportsRepository(connectionString, "bsa-watcher-data-storage"));
         }
 
         public MapperConfiguration MapperConfiguration()

@@ -38,13 +38,12 @@ namespace DataAccumulator.DataAggregator
             _serviceBusProvider = provider;
         }
 
-        public async Task AggregatingData(CollectedDataType sourceType, CollectedDataType destinationType,
-            TimeSpan interval, bool deleteSource)
+        public async Task AggregatingData(CollectedDataType sourceType, CollectedDataType destinationType, TimeSpan interval, bool deleteSource)
         {
             // Need destinationType,
             // Subtract interval from the current time
-            DateTime timeFrom = DateTime.Now.Add(-interval);
-            DateTime timeTo = DateTime.Now;
+            var timeFrom = DateTime.UtcNow.Add(-interval);
+            var timeTo = DateTime.UtcNow;
 
             var sourceCollectedDataDtos = await _aggregatorService.GetSourceEntitiesAsync(sourceType, timeFrom, timeTo);
             var listCollectedDataDtos = sourceCollectedDataDtos.ToList();
@@ -54,10 +53,18 @@ namespace DataAccumulator.DataAggregator
 
             if (filteredCollectedDataDtos != null)
             {
-                await SendMLReport(filteredCollectedDataDtos, destinationType);
+                var collectedDataDtos = filteredCollectedDataDtos as CollectedDataDto[] ?? filteredCollectedDataDtos.ToArray();
+                try
+                {
+                    await SendMLReport(collectedDataDtos, destinationType);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Unhandled error occurred while analyzing Anomalies");
+                }
 
                 var collectedDataDtosAverage =
-                    from collectedDataDto in filteredCollectedDataDtos
+                    from collectedDataDto in collectedDataDtos
                     group collectedDataDto by collectedDataDto.ClientId
                     into collectedDataGroup
                     select new CollectedDataDto
@@ -119,7 +126,7 @@ namespace DataAccumulator.DataAggregator
                 if (deleteSource)
                 {
                     // Delete already aggregated CollectedDataDto from source table MongoDb
-                    foreach (var collectedDataDto in filteredCollectedDataDtos)
+                    foreach (var collectedDataDto in collectedDataDtos)
                     {
                         await _aggregatorService.DeleteAggregatedEntityAsync(collectedDataDto.Id);
                     }
@@ -127,39 +134,75 @@ namespace DataAccumulator.DataAggregator
             }
         }
 
-        private async Task SendMLReport(IEnumerable<CollectedDataDto> data, CollectedDataType reportType)
+        private Task SendMLReport(IEnumerable<CollectedDataDto> data, CollectedDataType reportType)
         {
-            var collectedDataDtos = data as CollectedDataDto[] ?? data.ToArray();
-            var firstData = collectedDataDtos.FirstOrDefault();
-            try
-            {
-                if (firstData != null)
-                {
-                    var result = await _anomalyDetector.AnalyzeData(collectedDataDtos);
-                    result.CollectedDataTypeOfReport = reportType;
-                    var report = new InstanceAnomalyReport
+            var results = (from d in data
+                           group d by d.ClientId into g
+                           select new { ClientId = g.Key, CollectedDatas = g.ToList() }).ToList();
+
+            var tasks = results.Select(
+                async r =>
                     {
-                        Id = Guid.NewGuid(),
-                        ClientId = firstData.ClientId,
-                        Date = result.Date,
-                        AnomalyGroups = result.AnomalyGroups,
-                        CollectedDataTypeOfReport = result.CollectedDataTypeOfReport
-                    };
-                    await _reportsRepository.AddReportAsync(report);
-                    var reportMessage = new InstanceAnomalyReportMessage
-                                            {
-                                                AnomalyReportId = report.Id,
-                                                InstanceId = firstData.ClientId
-                                            };
-                    Debug.WriteLine($"Generated id of report {report.Id}");
-                    await _serviceBusProvider.SendAnomalyReportMessage(reportMessage);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Unhandled error occurred while analyzing Anomalies of instance with id: {firstData?.ClientId}");
-                // TODO: Maybe send notification to user about that error that analyzing Anomalies of instance with id was unsuccessful
-            }
+                        try
+                        {
+                            var result = await _anomalyDetector.AnalyzeData(r.CollectedDatas);
+                            result.CollectedDataTypeOfReport = reportType;
+                            var report = new InstanceAnomalyReport
+                            {
+                                Id = Guid.NewGuid(),
+                                ClientId = r.ClientId,
+                                Date = result.Date,
+                                AnomalyGroups = result.AnomalyGroups,
+                                CollectedDataTypeOfReport = result.CollectedDataTypeOfReport
+                            };
+                            await _reportsRepository.AddReportAsync(report);
+                            var reportMessage =
+                                new InstanceAnomalyReportMessage
+                                {
+                                    AnomalyReportId = report.Id,
+                                    InstanceId = r.ClientId
+                                };
+                            Debug.WriteLine($"Generated id of report {report.Id}");
+                            await _serviceBusProvider.SendAnomalyReportMessage(reportMessage);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, $"Unhandled error occurred while analyzing Anomalies of instance with id: {r?.ClientId}");
+                            // TODO: Maybe send notification to user about that error that analyzing Anomalies of instance with id was unsuccessful
+                        }
+                    });
+
+            return Task.WhenAll(tasks);
+
+            //var res = Parallel.ForEach(
+            //    results,
+            //    async obj =>
+            //        {
+            //            try
+            //            {
+            //                var result = await _anomalyDetector.AnalyzeData(obj.CollectedDatas);
+            //                result.CollectedDataTypeOfReport = reportType;
+            //                var report = new InstanceAnomalyReport
+            //                {
+            //                    Id = Guid.NewGuid(),
+            //                    ClientId = obj.ClientId,
+            //                    Date = result.Date,
+            //                    AnomalyGroups = result.AnomalyGroups,
+            //                    CollectedDataTypeOfReport =
+            //                                         result.CollectedDataTypeOfReport
+            //                };
+            //                await _reportsRepository.AddReportAsync(report);
+            //                var reportMessage =
+            //                    new InstanceAnomalyReportMessage { AnomalyReportId = report.Id, InstanceId = obj.ClientId };
+            //                Debug.WriteLine($"Generated id of report {report.Id}");
+            //                await _serviceBusProvider.SendAnomalyReportMessage(reportMessage);
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                _logger.LogError(ex, $"Unhandled error occurred while analyzing Anomalies of instance with id: {obj?.ClientId}");
+            //                // TODO: Maybe send notification to user about that error that analyzing Anomalies of instance with id was unsuccessful
+            //            }
+            //        });
         }
 
         private async Task<IEnumerable<CollectedDataDto>> FilterCollectedDataByInstanceSettings(List<CollectedDataDto> collectedDataDtos,
@@ -231,4 +274,6 @@ namespace DataAccumulator.DataAggregator
             return filteredCollectedDataDtos;
         }
     }
+
+    // public class 
 }
