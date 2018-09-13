@@ -43,10 +43,10 @@
           <i *ngIf="!userOrganization.user.isActive" class="fa fa-times-circle-o" style="font-size: 25px"></i>
         </td>
         <td class="center">
-          <p *ngIf="!isManager || userOrganization.user.id === currentUser.id || userOrganization.user.id === currentOrganization.usersId">
+          <p *ngIf="!isManager || userOrganization.user.id === currentUser.id || userOrganization.user.id === currentOrganization.createdByUserId">
           {{userOrganization.organizationRole.name}}
         </p>
-          <p-dropdown *ngIf="isManager && userOrganization.user.id !== currentUser.id && userOrganization.user.id !== currentOrganization.usersId"
+          <p-dropdown *ngIf="isManager && userOrganization.user.id !== currentUser.id && userOrganization.user.id !== currentOrganization.createdByUserId"
           [options]="dropdownRole"
           (onChange) = "changeRole(dd, userOrganization)"
           [autoDisplayFirst] = "false"
