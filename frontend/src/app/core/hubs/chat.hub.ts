@@ -18,8 +18,7 @@ export class ChatHub {
     private hubName = 'chatsHub';
     private isConnect: boolean;
 
-    private messageSub = new Subject<Message>();
-    public messageReceived = this.messageSub.asObservable();
+    public messageReceived = new EventEmitter<Message>();
     public chatMessagesWasRead = new EventEmitter<number>();
     public chatCreated = new EventEmitter<Chat>();
     public chatChanged = new EventEmitter<Chat>();
@@ -60,8 +59,7 @@ export class ChatHub {
 
     private registerOnEvents(): void {
         this.hubConnection.on('ReceiveMessage', (data: any) => {
-            this.messageSub.next(data);
-            // this.messageReceived.emit(data);
+            this.messageReceived.emit(data);
             console.log('Message Received');
         });
 
@@ -126,5 +124,13 @@ export class ChatHub {
     public deleteChat(chatId: number) {
         this.hubConnection.invoke('DeleteChat', chatId)
             .catch(err => console.error(err));
+    }
+
+    public disconnect() {
+        this.messageReceived = new EventEmitter<Message>();
+        this.chatMessagesWasRead = new EventEmitter<number>();
+        this.chatCreated = new EventEmitter<Chat>();
+        this.chatChanged = new EventEmitter<Chat>();
+        this.chatDeleted = new EventEmitter<Chat>();
     }
 }
