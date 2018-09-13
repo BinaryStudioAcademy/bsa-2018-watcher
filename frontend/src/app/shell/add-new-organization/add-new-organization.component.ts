@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { OrganizationService } from '../../core/services/organization.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastrService } from '../../core/services/toastr.service';
+
 import { Organization } from '../../shared/models/organization.model';
 import { User } from '../../shared/models/user.model';
 
@@ -30,7 +33,8 @@ export class AddNewOrganizationComponent implements OnInit {
   constructor(  private organizationService: OrganizationService,
                 private authService: AuthService,
                 private toastrService: ToastrService,
-                private fb: FormBuilder) {
+                private fb: FormBuilder,
+                private router: Router) {
   }
 
   ngOnInit() {
@@ -63,6 +67,7 @@ export class AddNewOrganizationComponent implements OnInit {
         this.authService.updateCurrentUser(this.user);
 
         this.organizationService.organizationChanged.emit({from: previousOrganizationId, to: value.id});
+        this.reloadRouteIfInstancesRoute();
 
         this.toastrService.success(`${value.name} organization Successfully established,
           and it was set as the default organization.`);
@@ -76,6 +81,12 @@ export class AddNewOrganizationComponent implements OnInit {
       }
     );
     this.onClose();
+  }
+
+    reloadRouteIfInstancesRoute() {
+    if (this.router.url.match(/\/user\/instances/)) {
+      this.router.navigate(['/user/instances']);
+    }
   }
 
   clearFields(): void {
