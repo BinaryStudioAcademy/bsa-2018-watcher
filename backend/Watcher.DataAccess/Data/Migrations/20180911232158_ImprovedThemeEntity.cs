@@ -753,19 +753,19 @@ namespace Watcher.DataAccess.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Notifications",
-                columns: new[] { "Id", "CreatedAt", "InstanceId", "IsDeleted", "NotificationSettingId", "Text", "UserId", "WasRead" },
+                columns: new[] { "Id", "CreatedAt", "IsDeleted", "NotificationSettingId", "Text", "UserId", "WasRead" },
                 values: new object[,]
                 {
-                    { 104, new DateTime(2018, 9, 12, 0, 18, 52, 522, DateTimeKind.Local), null, false, 15, "Eveniet laudantium et cupiditate.", "76acb978-b2aa-4340-84d0-02494e5175e4", false },
-                    { 110, new DateTime(2018, 9, 11, 6, 37, 37, 590, DateTimeKind.Local), null, false, 20, "Enim necessitatibus porro quisquam nobis velit dolor aliquam vel at.", "76acb978-b2aa-4340-84d0-02494e5175e4", false },
-                    { 102, new DateTime(2018, 9, 11, 9, 20, 11, 539, DateTimeKind.Local), null, false, 13, "Assumenda voluptatem dolore eligendi.", "e338b266-bcb3-4a6b-b652-3f6aea7cc02f", false },
-                    { 105, new DateTime(2018, 9, 11, 16, 39, 26, 183, DateTimeKind.Local), null, false, 17, "Quod voluptates sed voluptate unde sunt error esse.", "e338b266-bcb3-4a6b-b652-3f6aea7cc02f", false },
-                    { 108, new DateTime(2018, 9, 11, 12, 4, 58, 400, DateTimeKind.Local), null, false, 18, "Autem debitis animi fugiat explicabo voluptatem aperiam perferendis consequatur.", "e338b266-bcb3-4a6b-b652-3f6aea7cc02f", false },
-                    { 109, new DateTime(2018, 9, 12, 1, 16, 10, 800, DateTimeKind.Local), null, false, 16, "Vero enim harum dolorem dolores iste beatae odit sit ea.", "76acb978-b2aa-4340-84d0-02494e5175e4", false },
-                    { 103, new DateTime(2018, 9, 12, 2, 6, 37, 410, DateTimeKind.Local), null, false, 12, "Et expedita similique iusto.", "c9d3c359-9b33-48fd-95d0-502911a4d3bc", false },
-                    { 107, new DateTime(2018, 9, 11, 6, 22, 45, 749, DateTimeKind.Local), null, false, 20, "Temporibus ab quas enim doloribus praesentium explicabo aut hic.", "844e83a9-5a4d-40c3-b7ce-a5e9a30ee905", false },
-                    { 106, new DateTime(2018, 9, 11, 3, 58, 46, 320, DateTimeKind.Local), null, false, 17, "Voluptatem voluptatem culpa quae aliquam blanditiis et.", "2819394b-d044-4be1-960d-a60e12a21f7a", false },
-                    { 101, new DateTime(2018, 9, 11, 15, 29, 11, 981, DateTimeKind.Local), null, false, 17, "Cum aut illum illum adipisci tempore dolorem.", "9d3f18be-2903-40c5-954d-1b3718154f55", false }
+                    { 104, new DateTime(2018, 9, 12, 0, 18, 52, 522, DateTimeKind.Local), false, 15, "Eveniet laudantium et cupiditate.", "76acb978-b2aa-4340-84d0-02494e5175e4", false },
+                    { 110, new DateTime(2018, 9, 11, 6, 37, 37, 590, DateTimeKind.Local), false, 20, "Enim necessitatibus porro quisquam nobis velit dolor aliquam vel at.", "76acb978-b2aa-4340-84d0-02494e5175e4", false },
+                    { 102, new DateTime(2018, 9, 11, 9, 20, 11, 539, DateTimeKind.Local), false, 13, "Assumenda voluptatem dolore eligendi.", "e338b266-bcb3-4a6b-b652-3f6aea7cc02f", false },
+                    { 105, new DateTime(2018, 9, 11, 16, 39, 26, 183, DateTimeKind.Local), false, 17, "Quod voluptates sed voluptate unde sunt error esse.", "e338b266-bcb3-4a6b-b652-3f6aea7cc02f", false },
+                    { 108, new DateTime(2018, 9, 11, 12, 4, 58, 400, DateTimeKind.Local), false, 18, "Autem debitis animi fugiat explicabo voluptatem aperiam perferendis consequatur.", "e338b266-bcb3-4a6b-b652-3f6aea7cc02f", false },
+                    { 109, new DateTime(2018, 9, 12, 1, 16, 10, 800, DateTimeKind.Local), false, 16, "Vero enim harum dolorem dolores iste beatae odit sit ea.", "76acb978-b2aa-4340-84d0-02494e5175e4", false },
+                    { 103, new DateTime(2018, 9, 12, 2, 6, 37, 410, DateTimeKind.Local), false, 12, "Et expedita similique iusto.", "c9d3c359-9b33-48fd-95d0-502911a4d3bc", false },
+                    { 107, new DateTime(2018, 9, 11, 6, 22, 45, 749, DateTimeKind.Local), false, 20, "Temporibus ab quas enim doloribus praesentium explicabo aut hic.", "844e83a9-5a4d-40c3-b7ce-a5e9a30ee905", false },
+                    { 106, new DateTime(2018, 9, 11, 3, 58, 46, 320, DateTimeKind.Local), false, 17, "Voluptatem voluptatem culpa quae aliquam blanditiis et.", "2819394b-d044-4be1-960d-a60e12a21f7a", false },
+                    { 101, new DateTime(2018, 9, 11, 15, 29, 11, 981, DateTimeKind.Local), false, 17, "Cum aut illum illum adipisci tempore dolorem.", "9d3f18be-2903-40c5-954d-1b3718154f55", false }
                 });
 
             migrationBuilder.InsertData(
@@ -857,19 +857,19 @@ namespace Watcher.DataAccess.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Instances",
-                columns: new[] { "Id", "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "GuidId", "IsActive", "IsDeleted", "OrganizationId", "Platform", "RamMaxPercent", "StatusCheckedAt", "Title" },
+                columns: new[] { "Id", "Address", "GuidId", "IsActive", "IsDeleted", "OrganizationId", "Platform", "StatusCheckedAt", "Title" },
                 values: new object[,]
                 {
-                    { 73, "14:75:ba:1f:90:03", true, true, true, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 68, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance972" },
-                    { 72, "8e:a1:f8:a5:c6:23", true, true, true, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 64, "Windows", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance511" },
-                    { 79, "90:f5:f2:2d:11:a5", true, true, true, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 70, "Windows", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance544" },
-                    { 78, "45:58:36:21:06:b0", true, true, true, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 70, "Windows", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance379" },
-                    { 80, "2a:42:10:0e:c7:1e", true, true, true, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 65, "Windows", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance897" },
-                    { 74, "9e:a3:88:cf:44:0b", true, true, true, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 69, "Windows", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance191" },
-                    { 71, "5f:9b:bb:7b:ac:c5", true, true, true, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 65, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance663" },
-                    { 75, "72:64:8e:8e:94:3f", true, true, true, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 65, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance718" },
-                    { 77, "10:53:e8:e1:11:ea", true, true, true, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 61, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance917" },
-                    { 76, "8f:f9:b3:30:e9:e9", true, true, true, 90f, 90f, new Guid("00000000-0000-0000-0000-000000000000"), true, false, 69, "Linux", 90f, new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance140" }
+                    { 73, "14:75:ba:1f:90:03",  new Guid("00000000-0000-0000-0000-000000000000"), true, false, 68, "Linux",  new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance972" },
+                    { 72, "8e:a1:f8:a5:c6:23",  new Guid("00000000-0000-0000-0000-000000000000"), true, false, 64, "Windows",  new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance511" },
+                    { 79, "90:f5:f2:2d:11:a5",  new Guid("00000000-0000-0000-0000-000000000000"), true, false, 70, "Windows",  new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance544" },
+                    { 78, "45:58:36:21:06:b0",  new Guid("00000000-0000-0000-0000-000000000000"), true, false, 70, "Windows",  new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance379" },
+                    { 80, "2a:42:10:0e:c7:1e",  new Guid("00000000-0000-0000-0000-000000000000"), true, false, 65, "Windows",  new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance897" },
+                    { 74, "9e:a3:88:cf:44:0b",  new Guid("00000000-0000-0000-0000-000000000000"), true, false, 69, "Windows",  new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance191" },
+                    { 71, "5f:9b:bb:7b:ac:c5",  new Guid("00000000-0000-0000-0000-000000000000"), true, false, 65, "Linux",  new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance663" },
+                    { 75, "72:64:8e:8e:94:3f",  new Guid("00000000-0000-0000-0000-000000000000"), true, false, 65, "Linux",  new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance718" },
+                    { 77, "10:53:e8:e1:11:ea",  new Guid("00000000-0000-0000-0000-000000000000"), true, false, 61, "Linux",  new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance917" },
+                    { 76, "8f:f9:b3:30:e9:e9",  new Guid("00000000-0000-0000-0000-000000000000"), true, false, 69, "Linux",  new DateTime(2018, 1, 1, 1, 1, 1, 0, DateTimeKind.Unspecified), "Instance140" }
                 });
 
             migrationBuilder.InsertData(

@@ -251,71 +251,71 @@ namespace Watcher.DataAccess.Data.Migrations
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 71,
-                columns: new[] { "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "OrganizationId", "Title" },
-                values: new object[] { "d4:20:62:4c:d5:09", true, true, true, 90f, 90f, 64, "Instance386" });
+                columns: new[] { "Address",  "OrganizationId", "Title" },
+                values: new object[] { "d4:20:62:4c:d5:09",  64, "Instance386" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 72,
-                columns: new[] { "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "OrganizationId", "Title" },
-                values: new object[] { "9d:73:46:bd:54:91", true, true, true, 90f, 90f, 63, "Instance104" });
+                columns: new[] { "Address",  "OrganizationId", "Title" },
+                values: new object[] { "9d:73:46:bd:54:91",  63, "Instance104" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 73,
-                columns: new[] { "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "OrganizationId", "Title" },
-                values: new object[] { "81:76:08:eb:c7:67", true, true, true, 90f, 90f, 65, "Instance188" });
+                columns: new[] { "Address",  "OrganizationId", "Title" },
+                values: new object[] { "81:76:08:eb:c7:67",  65, "Instance188" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 74,
-                columns: new[] { "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "a0:d6:7f:a6:89:92", true, true, true, 90f, 90f, 70, "Linux", "Instance97" });
+                columns: new[] { "Address",  "OrganizationId", "Platform", "Title" },
+                values: new object[] { "a0:d6:7f:a6:89:92",  70, "Linux", "Instance97" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 75,
-                columns: new[] { "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "65:75:cd:b8:2e:d5", true, true, true, 90f, 90f, 68, "Windows", "Instance47" });
+                columns: new[] { "Address",  "OrganizationId", "Platform", "Title" },
+                values: new object[] { "65:75:cd:b8:2e:d5",  68, "Windows", "Instance47" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 76,
-                columns: new[] { "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "3a:ca:99:53:c6:5d", true, true, true, 90f, 90f, 61, "Windows", "Instance522" });
+                columns: new[] { "Address",  "OrganizationId", "Platform", "Title" },
+                values: new object[] { "3a:ca:99:53:c6:5d",  61, "Windows", "Instance522" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 77,
-                columns: new[] { "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "OrganizationId", "Title" },
-                values: new object[] { "8b:c1:0c:96:6d:c6", true, true, true, 90f, 90f, 70, "Instance519" });
+                columns: new[] { "Address",  "OrganizationId", "Title" },
+                values: new object[] { "8b:c1:0c:96:6d:c6",  70, "Instance519" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 78,
-                columns: new[] { "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "OrganizationId", "Title" },
-                values: new object[] { "95:32:57:f6:aa:0b", true, true, true, 90f, 90f, 67, "Instance203" });
+                columns: new[] { "Address",  "OrganizationId", "Title" },
+                values: new object[] { "95:32:57:f6:aa:0b",  67, "Instance203" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 79,
-                columns: new[] { "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "Platform", "Title" },
-                values: new object[] { "9a:13:16:00:49:d5", true, true, true, 90f, 90f, "Windows", "Instance735" });
+                columns: new[] { "Address",  "Platform", "Title" },
+                values: new object[] { "9a:13:16:00:49:d5",  "Windows", "Instance735" });
 
             migrationBuilder.UpdateData(
                 table: "Instances",
                 keyColumn: "Id",
                 keyValue: 80,
-                columns: new[] { "Address", "AggregationForDay", "AggregationForHour", "AggregationForMonth", "CpuMaxPercent", "DiskMaxPercent", "OrganizationId", "Platform", "Title" },
-                values: new object[] { "7b:85:89:9d:ae:a3", true, true, true, 90f, 90f, 65, "Windows", "Instance875" });
+                columns: new[] { "Address",  "OrganizationId", "Platform", "Title" },
+                values: new object[] { "7b:85:89:9d:ae:a3",  65, "Windows", "Instance875" });
 
             migrationBuilder.InsertData(
                 table: "Users",

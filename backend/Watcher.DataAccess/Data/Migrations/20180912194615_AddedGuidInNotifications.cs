@@ -6,15 +6,7 @@ namespace Watcher.DataAccess.Data.Migrations
     public partial class AddedGuidInNotifications : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Notifications_Instances_InstanceId",
-                table: "Notifications");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Notifications_InstanceId",
-                table: "Notifications");
-
+        {   
             migrationBuilder.DeleteData(
                 table: "UserOrganizations",
                 keyColumns: new[] { "UserId", "OrganizationId" },
