@@ -676,14 +676,15 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 /* Panel menu */
 
-.ui-panelmenu .ui-panelmenu-header.ui-state-active{
+.ui-panelmenu .ui-panelmenu-header.ui-state-active > a{
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: #F56C00 !important;
+  border-color: #F56C00 !important;
   color: #ffffff;
 }
 
-.ui-panelmenu .ui-panelmenu-header.ui-state-active > a:hover,
+.ui-panelmenu .ui-panelmenu-header.ui-state-active > a:hover, a:focus ,
 .ui-panelmenu .ui-panelmenu-header:not(.ui-state-active) > a:hover {
   border-color: #F8BD7F !important;
   background-color: #F8BD7F !important;
@@ -805,3 +806,24 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   color: #ffffff; }
   .ui-state-active a {
     color: #ffffff; }
+
+/* Datepicker */
+
+.ui-datepicker table td > a,
+.ui-datepicker table td > span {
+  background-color: #F56C00 !important;
+}
+
+.ui-datepicker table td.ui-datepicker-today > a {
+  background-color: #d0d0d0 !important;
+  color: #333333;
+}
+
+/* Paginator */
+.ui-paginator .ui-paginator-pages .ui-paginator-page {
+  background-color: transparent !important;
+}
+
+.ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active {
+  background-color: #F56C00 !important;
+}
