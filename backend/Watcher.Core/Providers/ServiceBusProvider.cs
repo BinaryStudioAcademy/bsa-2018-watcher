@@ -118,7 +118,7 @@
                 var report = await reportsService.GetReportByIdAsync(arg.AnomalyReportId);
                 var notificationRequest = new NotificationRequest
                                               {
-                                                  Text = "Anomaly Report was created on instance: " + arg.InstanceId,
+                                                  // Text = "Anomaly Report was created for instance: " + arg.InstanceId,
                                                   CreatedAt = report.Date,
                                                   InstanceId = report.ClientId,
                                                   Type = NotificationType.Info

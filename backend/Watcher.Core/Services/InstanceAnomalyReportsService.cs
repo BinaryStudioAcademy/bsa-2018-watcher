@@ -24,7 +24,7 @@
             _mapper = mapper;
         }
 
-        public static string GetHtml(InstanceAnomalyReport report) => GenerateWholeHtml.GenerateHtml(report);
+        public static string GetHtml(InstanceAnomalyReportDto report) => GenerateWholeHtml.GenerateHtml(report);
 
         public static InstanceAnomalyReport GetAnomalyReport(Guid instanceId)
         {

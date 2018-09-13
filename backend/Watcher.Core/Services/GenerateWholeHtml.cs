@@ -1,12 +1,12 @@
 ﻿using System.Data;
-using DataAccumulator.DataAccessLayer.Entities;
+
 using DataAccumulator.Shared.Models;
 
 namespace Watcher.Core.Services
 {
     public static class GenerateWholeHtml
     {
-        public static string GenerateHtml(InstanceAnomalyReport report) // AzureMLAnomalyReport
+        public static string GenerateHtml(InstanceAnomalyReportDto report)
         {
             var html = "<!DOCTYPE html><html xmlns = 'http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8'/><title>Analyze </title></head><body>"
                 + "<table><tr><td><br/><span style = 'font-family: Arial; font-size: 14pt'>Hello <b>" + /*UserName + */
@@ -26,7 +26,7 @@ namespace Watcher.Core.Services
         {
             var Warnings = group.Warnings;
             var Anomalies = group.Anomalies;
-            DataTable dtProcess = new DataTable();
+            var dtProcess = new DataTable();
             dtProcess.Columns.Add("DateWarnings");
             dtProcess.Columns.Add("ValueWarnings");
             dtProcess.Columns.Add("DateAnomalies");
@@ -34,8 +34,11 @@ namespace Watcher.Core.Services
             var countRow = Warnings.Count > Anomalies.Count ? Warnings.Count : Anomalies.Count;
             for (var i = 0; i < countRow; i++)
             {
-                dtProcess.Rows.Add(Warnings.Count <= i ? "" : "" + Warnings[i].Time, Warnings.Count <= i ? "" : "" + Warnings[i].Data,
-                    Anomalies.Count <= i ? "" : "" + Anomalies[i].Time, Anomalies.Count <= i ? "" : "" + Anomalies[i].Data);
+                dtProcess.Rows.Add(
+                    Warnings.Count <= i ? string.Empty : string.Empty + Warnings[i].Time,
+                    Warnings.Count <= i ? string.Empty : string.Empty + Warnings[i].Data,
+                    Anomalies.Count <= i ? string.Empty : string.Empty + Anomalies[i].Time,
+                    Anomalies.Count <= i ? string.Empty : string.Empty + Anomalies[i].Data);
             }
 
             var process = "<table style='width: 100%; border-spacing: 25px 10px' cellspacing='5' cellpadding='7' align='center' border=1 frame=void rules=rows>";
@@ -46,10 +49,10 @@ namespace Watcher.Core.Services
 
             foreach (DataRow dr in dtProcess.Rows)
             {
-                process = process + "<tr><td width = '25%' align = 'center' valign = 'middle'>" + dr["DateWarnings"].ToString() +
-                    "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["ValueWarnings"].ToString() +
-                    "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["DateAnomalies"].ToString() +
-                    "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["ValueAnomalies"].ToString() + "</td></tr>";
+                process = process + "<tr><td width = '25%' align = 'center' valign = 'middle'>" + dr["DateWarnings"] +
+                    "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["ValueWarnings"] +
+                    "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["DateAnomalies"] +
+                    "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["ValueAnomalies"] + "</td></tr>";
             }
 
             process = process + "</table>";
