@@ -85,7 +85,7 @@ export class InvitesListComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
-    this.toastrService.success('Invitation link was copied to clipboard');
+    this.toastrService.info('Invitation link was copied to clipboard');
   }
 
   onPaginate(event): void {
