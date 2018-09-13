@@ -1,14 +1,16 @@
 .cards
-  margin-top: 8vh
-  padding: 0 3vw
   font-family:  helvetica, sans-serif
   max-width: 1200px
+  margin-left: auto
+  margin-right: auto
   display: flex
   flex-wrap: wrap
   justify-content: space-between
   .cards_item
     display: flex
     max-width: 380px
+    margin-top: 8vh
+
 
 .card
   background-color: white
@@ -55,29 +57,25 @@
   background-image: url('https://newrelic.com/content/dam/component-assets/homepage/hp02/hp02-devops.jpg')
 
 @media (max-width: 1300px)
-  .cards_item
-    margin-top: 8vh
+  .cards
+    padding: 0 3vw
+    .cards_item
+      max-width: 450px
+    .last
+      margin-left: auto
+      margin-right: auto
 
-@media (max-width: 1190px)
-  .cards_item
-    max-width: 500px
-  .last
-    margin-left: auto
-    margin-right: auto
-
-@media (max-width: 1025px)
+@media (max-width: 1080px)
   .cards_item
     font-size: 15px
+    margin-left: auto
+    margin-right: auto
 
 
 @media (max-width: 850px)
   .cards
     .cards_item
       max-width: 600px
-      font-size: 15px
-      margin-left: auto
-      margin-right: auto
-      margin-top: 8vh
 
 .ui-g-12,
 .ui-lg-4,
