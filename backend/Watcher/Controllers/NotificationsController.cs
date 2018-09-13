@@ -79,20 +79,21 @@
                 return BadRequest(ModelState);
             }
 
-            var report = new AzureMLAnomalyReport
-                {
-                    Date = DateTime.UtcNow,
-                    AnomalyGroups = new List<AzureMLAnomalyGroup>(),
-                    CollectedDataTypeOfReport = CollectedDataType.AggregationForHour
-                };
+            return Ok();
+            //var report = new AzureMLAnomalyReport
+            //    {
+            //        Date = DateTime.UtcNow,
+            //        AnomalyGroups = new List<AzureMLAnomalyGroup>(),
+            //        CollectedDataTypeOfReport = CollectedDataType.AggregationForHour
+            //    };
 
-            var dtos = await _notificationService.CreateAnomalyReportNotificationAsync(request, report);
-            if (dtos == null)
-            {
-                return StatusCode(500);
-            }
+            //var dtos = await _notificationService.CreateAnomalyReportNotificationAsync(request, report);
+            //if (dtos == null)
+            //{
+            //    return StatusCode(500);
+            //}
 
-            return Ok(dtos);
+            //return Ok(dtos);
         }
 
         /// <summary>

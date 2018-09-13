@@ -11,8 +11,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    using MongoDB.Bson;
-
     using Watcher.Common.Dtos;
     using Watcher.Common.Dtos.Plots;
     using Watcher.Core.Interfaces;
@@ -29,22 +27,10 @@
     [ApiController]
     public class CollectedDataController : ControllerBase
     {
-        /// <summary>
-        /// The Samples Service service
-        /// </summary>
         private readonly ICollectedDataService _collectedDataService;
-
         private readonly IInstanceService _instanceService;
-
         private readonly IMapper _mapper;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CollectedDataController"/> class. 
-        /// </summary>
-        /// <param name="service">
-        /// The service.
-        /// </param>
-        /// <param name="instanceService"></param>
         public CollectedDataController(ICollectedDataService service,
                                        IMapper mapper,
                                        IInstanceService instanceService)

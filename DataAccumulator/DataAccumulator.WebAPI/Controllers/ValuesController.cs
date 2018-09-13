@@ -68,7 +68,7 @@ namespace DataAccumulator.WebAPI.Controllers
 
             var reportMessage = new InstanceAnomalyReportMessage
                                     {
-                                        AnomalyReport = report,
+                                        AnomalyReportId = Guid.NewGuid(),
                                         InstanceId = Guid.Parse("11c1b774-b459-4cc1-9f70-a54c8964802d")
                                     };
             await _serviceBusProvider.SendAnomalyReportMessage(reportMessage);

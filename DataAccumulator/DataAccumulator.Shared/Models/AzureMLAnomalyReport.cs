@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace DataAccumulator.Shared.Models
 {
+    using MongoDB.Bson.Serialization.Attributes;
+
     public class AzureMLAnomalyReport
     {
         public DateTime Date { get; set; }
@@ -22,6 +24,7 @@ namespace DataAccumulator.Shared.Models
 
     public class AzureMLAnomaly
     {
+        [BsonDateTimeOptions]
         public DateTime Time { get; set; }
         public float Data { get; set; }
     }
