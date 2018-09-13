@@ -696,10 +696,11 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   .ui-state-active a {
     color: #ffffff; }
 
-.ui-panelmenu .ui-panelmenu-header.ui-state-active{
+.ui-panelmenu .ui-panelmenu-header.ui-state-active a {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: #c95864 !important;
+  border-color: #c95864 !important;
   color: #ffffff;
 }
 
@@ -732,7 +733,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 /* Tabmenu */
 
 .ui-tabmenu {
-  background-color: #ffffff !important;
+  background-color: transparent !important;
 }
 
 .ui-tabmenu .ui-widget-header {
