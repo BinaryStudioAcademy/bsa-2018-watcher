@@ -15,10 +15,10 @@
     <ROW Property="ARPPRODUCTICON" Value="DataCollector.exe" Type="8"/>
     <ROW Property="IAgree" Value="No" Type="4"/>
     <ROW Property="Manufacturer" Value="Binary studio academy Watcher team"/>
-    <ROW Property="ProductCode" Value="1033:{64B87B87-22E1-48D6-9418-F4163699BE01} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{D59EB571-5973-4731-81AD-D32786CAD283} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Data collector"/>
-    <ROW Property="ProductVersion" Value="1.0.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="1.0.4" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{7E658A15-62C7-4871-9A46-F7BFB65DB73D}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>

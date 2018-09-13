@@ -30,6 +30,8 @@ export class ReportComponent implements OnInit {
 
   private id: string;
 
+  isGetting: boolean;
+
   collectedDataTable: CollectedData[];
   collectedData: CollectedData[];
 
@@ -188,6 +190,7 @@ export class ReportComponent implements OnInit {
   }
 
   getInfo(): void {
+    this.isGetting = true;
     const request: AggregateDataRequest = this.createRequest();
 
     if (this.activeTab === this.tabs[1]) {
@@ -203,8 +206,26 @@ export class ReportComponent implements OnInit {
 <<<<<<< Updated upstream
       });
       this.collectedData = data;
-      this.charts.forEach(item => this.dataService.fulfillChart(this.collectedData, item, true));
+      const hourDifference = (this.dateTo.getTime() - this.dateFrom.getTime()) / (60 * 60000);
+      this.charts.forEach(item => {
+
+        if (hourDifference > 23) {
+        item.dateTickFormatting = (value) => {
+          if (value instanceof Date) {
+            if (this.selectedType === DataType.AggregationForHour) {
+              return formatDate((<Date>value), 'MMM, d h', 'en-US');
+            } else {
+              return formatDate((<Date>value), 'MMM, d', 'en-US');
+            }
+          }
+        };
+        }
+
+        this.dataService.fulfillChart(this.collectedData, item, true);
+      });
       this.collectedDataTable = data.slice(0, this.recordsPerPage);
+
+      this.isGetting = false;
     });
 =======
         this.collectedData = data;
@@ -297,7 +318,7 @@ export class ReportComponent implements OnInit {
   }
 
   convertPDF(): void {
-    const doc = new jsPDF('p', 'mm', 'a4');
+    const doc = new jsPDF('p', 'pt', 'a4');
 
     if (this.activeTab === this.tabs[0]) {
       doc.setFontSize(10);
@@ -314,13 +335,20 @@ export class ReportComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
     } else {
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+      doc.setFontSize(20);
+>>>>>>> dev
       const eventRender = new EventEmitter();
-      doc.deletePage(1);
+      doc.text(`${this.types[this.selectedType - 1].label} Report`, 200, 40);
+      doc.text(`${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`, 150, 70);
       this.chartPDF.forEach(item => {
         html2canvas(item.nativeElement).then(canvas => {
           const contentDataURL = canvas.toDataURL('image/png');
+          doc.addImage(contentDataURL, 'PNG', 15, 250, 531, 250);
           doc.addPage();
+<<<<<<< HEAD
           doc.addImage(contentDataURL, 'PNG', 35, 100);
 =======
       doc.setFontSize(20);
@@ -340,6 +368,8 @@ export class ReportComponent implements OnInit {
             topMargin += 250 + 50;
           }
 >>>>>>> Stashed changes
+=======
+>>>>>>> dev
           eventRender.emit();
         });
       });
@@ -347,6 +377,7 @@ export class ReportComponent implements OnInit {
       eventRender.subscribe(() => {
         renderedImg++;
         if (renderedImg === this.chartPDF.length) {
+          doc.deletePage(this.chartPDF.length + 1);
           // tslint:disable-next-line:max-line-length
           doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
         }

@@ -1,12 +1,6 @@
 <div class="working-area">
-
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-12">
       <div class="title">ORGANIZATIONS</div>
       <hr>
-    </div>
-  </div>
-
   <p-table [value]="organizations" [paginator]="true" [rows]="5" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5,10,20]" [lazy]="true" (onLazyLoad)="loadOrganizationsLazy($event)">
     <ng-template pTemplate="header" let-columns>
       <tr>
@@ -22,20 +16,20 @@
     </ng-template>
     <ng-template pTemplate="body" let-organization>
       <tr>
-        <td class="center">{{organization.name}}</td>
-        <td class="center">{{organization.description}}</td>
-        <td class="center">{{organization.email}}</td>
-        <td class="center">
+        <td class="text-center">{{organization.name}}</td>
+        <td class="text-center">{{organization.description}}</td>
+        <td class="text-center">{{organization.email}}</td>
+        <td class="text-center">
           <a href="organization.webSite">{{organization.webSite}}</a>
         </td>
-        <td class="center">{{organization.contactNumber}}</td>
-        <td class="center">
+        <td class="text-center">{{organization.contactNumber}}</td>
+        <td class="text-center">
           <i *ngIf="organization.isActive" class="fa fa-check-circle-o" style="font-size: 25px"></i>
           <i *ngIf="!organization.isActive" class="fa fa-times-circle-o" style="font-size: 25px"></i>
         </td>
-        <td class="center">{{organization.themeId}}</td>
+        <td class="text-center">{{organization.themeId}}</td>
         <td>
-          <div class="center">
+          <div class="text-center">
             <button pButton type="button " label="Edit " class="btnedit ui-button-primary ui-button-raised " (click)="showPopup(organization)"></button>
           </div>
         </td>
@@ -67,8 +61,8 @@
         </div>
       </div>
       <div class="ui-g-4">
-        <p class="center space">Is active </p>
-        <div class="center">
+        <p class="text-center space">Is active </p>
+        <div class="text-center">
           <p-checkbox formControlName="isActive" binary="true"></p-checkbox>
         </div>
       </div>
@@ -96,15 +90,15 @@
   <div class="border">
 
     <div class="ui-g ui-fluid">
-      <div class="ui-g-3 center">Id</div>
-      <div class="ui-g-6 center">Title</div>
+      <div class="ui-g-3 text-center">Id</div>
+      <div class="ui-g-6 text-center">Title</div>
       <div class="ui-g-3 ">Active</div>
     </div>
     <p-scrollPanel [style]="{width: '100%', height: '50px'}" styleClass="custom">
 
       <div *ngFor="let instance of lstInstances" class="ui-g ui-fluid">
-        <div class="ui-g-3 center">{{instance.id}} </div>
-        <div class="ui-g-6 center">{{instance.title}} </div>
+        <div class="ui-g-3 text-center">{{instance.id}} </div>
+        <div class="ui-g-6 text-center">{{instance.title}} </div>
         <div class="ui-g-3 ">
           <p-checkbox [(ngModel)]="instance.isActive" binary="true"></p-checkbox>
         </div>
@@ -115,7 +109,7 @@
   </div>
 
   <p-footer>
-    <div class="center">
+    <div class="text-center">
       <button type="button" pButton class="ui-button-raised ui-button-success" (click)="onSubmit()" label="Save"></button>
       <button type="button" pButton (click)="onCancel()" label="Cancel" class="ui-button-warning"></button>
     </div>
