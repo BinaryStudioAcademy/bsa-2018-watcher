@@ -42,8 +42,14 @@ export class TokensInterceptor implements HttpInterceptor {
           if (watcherToken) {
             this.headersConfig['WatcherAuthorization'] = watcherToken;
           }
-          const request = req.clone({setHeaders: this.headersConfig, responseType: 'json'});
-          return next.handle(request);
+
+          if (req.url.match(/\/uploadApp/)) {
+            const request = req.clone();
+            return next.handle(request);
+          } else {
+            const request = req.clone({setHeaders: this.headersConfig, responseType: 'json'});
+            return next.handle(request);
+          }
         })
       );
     }
