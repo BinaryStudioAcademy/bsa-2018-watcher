@@ -22,15 +22,16 @@
   h1
     margin-top: 2px
 
-  .picture
-    background-size: cover
+.picture
+  background-size: cover
 
-  .pict1
-    background: url(/assets/screenshots/dash1.png) no-repeat
-  .pict2
-    background: url(/assets/screenshots/dash2.png) no-repeat center
-  .pict3
-    background: url(/assets/screenshots/dash3.png) no-repeat
+.pict1
+  background: url(/assets/screenshots/dash1.png) no-repeat
+.pict2
+  background: url(/assets/screenshots/dash2.png) no-repeat center
+.pict3
+  background: url(/assets/screenshots/dash3.png) no-repeat
+
 
 .input-btn-field
   margin: 0 0 10px 10px
@@ -77,11 +78,18 @@
     line-height: 35px
     margin-left: 3px
 
+#contacts
+    .title
+      float: left
+    .right
+      float: right
+
 @media (max-width: 1250px)
   .infoContent.left
     padding-left: 3vw
   .infoContent.right
     padding-right: 3vw
+
 
 @media (max-width: 1025px)
   .wrapper-content
@@ -92,6 +100,10 @@
       height: 100vh
       margin-top: 8vh
       box-shadow: 3px 4px 21px -5px rgba(0,0,0,0.75)
+      .text
+        height: 25vh
+      .picture
+        height: 65vh
       img
         width: 50px
       .infoContent.left,
@@ -105,9 +117,17 @@
         float: left
       .infoContent.right
         float: right
-  .picture
-    height: 50vh
-    padding: 0
 
+@media (max-width: 500px)
+  .wrapper-content
+    .content
+      .picture
+        height: 50vh
+  .picture.pict2
+    background: url(/assets/screenshots/dash2.png) 15% no-repeat
 
-
+@media (max-width: 340px)
+  .wrapper-content
+    .content
+      .picture
+        height: 40vh

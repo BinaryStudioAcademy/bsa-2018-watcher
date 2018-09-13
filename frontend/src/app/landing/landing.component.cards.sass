@@ -1,10 +1,8 @@
 .cards
-  padding-top: 8vh
+  margin-top: 8vh
+  padding: 0 3vw
   font-family:  helvetica, sans-serif
   max-width: 1200px
-  margin-left: auto
-  margin-right: auto
-  width: 100%
   display: flex
   flex-wrap: wrap
   justify-content: space-between
@@ -57,8 +55,6 @@
   background-image: url('https://newrelic.com/content/dam/component-assets/homepage/hp02/hp02-devops.jpg')
 
 @media (max-width: 1300px)
-  .cards
-    padding: 0 3vw
   .cards_item
     margin-top: 8vh
 
@@ -69,10 +65,14 @@
     margin-left: auto
     margin-right: auto
 
+@media (max-width: 1025px)
+  .cards_item
+    font-size: 15px
+
+
 @media (max-width: 850px)
   .cards
     .cards_item
-      color: red
       max-width: 600px
       font-size: 15px
       margin-left: auto
