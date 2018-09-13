@@ -93,7 +93,7 @@ namespace DataAccumulator
             // repo initialization localhost while development env, azure in prod
             ConfigureCosmosDb(services, Configuration);
 
-            // services.AddTransient<CollectedDataAggregatingByFiveMinutesJob>();
+            services.AddTransient<CollectedDataAggregatingByFiveMinutesJob>();
             services.AddTransient<CollectedDataAggregatingByHourJob>();
             services.AddTransient<CollectedDataAggregatingByDayJob>();
             services.AddTransient<CollectedDataAggregatingByWeekJob>();
@@ -125,7 +125,7 @@ namespace DataAccumulator
             {
                 if (Configuration.GetSection("DataAggregator").GetValue<bool>("Aggregating"))
                 {
-                    // quartz.AddJob<CollectedDataAggregatingByFiveMinutesJob>("CollectedDataAggregatingByFiveMinutes", "DataAggregator", 5);
+                    quartz.AddJob<CollectedDataAggregatingByFiveMinutesJob>("CollectedDataAggregatingByFiveMinutes", "DataAggregator", 5);
                     quartz.AddHourlyJob<CollectedDataAggregatingByHourJob>("CollectedDataAggregatingByHour", "DataAggregator");
                     quartz.AddDailyJob<CollectedDataAggregatingByDayJob>("CollectedDataAggregatingByDay", "DataAggregator");
                     quartz.AddWeeklyJob<CollectedDataAggregatingByWeekJob>("CollectedDataAggregatingByWeek", "DataAggregator");

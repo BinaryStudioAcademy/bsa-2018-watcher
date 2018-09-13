@@ -47,8 +47,7 @@ namespace DataAccumulator.DataAggregator
 
             var sourceCollectedDataDtos = await _aggregatorService.GetSourceEntitiesAsync(sourceType, timeFrom, timeTo);
             var listCollectedDataDtos = sourceCollectedDataDtos.ToList();
-            var filteredCollectedDataDtos =
-                await FilterCollectedDataByInstanceSettings(listCollectedDataDtos, destinationType);
+            var filteredCollectedDataDtos = await FilterCollectedDataByInstanceSettings(listCollectedDataDtos, destinationType);
 
 
             if (filteredCollectedDataDtos != null)
