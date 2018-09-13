@@ -20,5 +20,6 @@ namespace Watcher.Core.Interfaces
         Task<string> UploadFileFromStreamAsync(string url, string containerName = "watcher");
         Task<string> UploadFileBase64Async(string base64string, string imageType = "png", string containerName = "watcher");
         Task DeleteFileAsync(string UriPath);
+        Task<bool> IsExist(string path);
     }
 }

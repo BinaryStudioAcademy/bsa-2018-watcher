@@ -146,6 +146,31 @@ namespace Watcher.Core.Providers
             }
         }
 
+        public Task<bool> IsExist(string path)
+        {
+            try
+            {
+                string parent = string.Copy(Directory.GetCurrentDirectory());
+                while (new DirectoryInfo(parent).Name != "Watcher")
+                {
+                    parent = Directory.GetParent(parent).FullName;
+                }
+
+                var directory = new DirectoryInfo(Path.Combine(parent, "wwwroot", "images"));
+                if (!directory.Exists) directory.Create();
+
+                string filename = path;
+
+                var file = new FileInfo(directory + @"\\" + filename);
+
+                return Task.FromResult(file.Exists);
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<bool>(ex);
+            }
+        }
+
         public async Task<string> UploadFormFileWithNameAsync(IFormFile formFile)
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", formFile.FileName);

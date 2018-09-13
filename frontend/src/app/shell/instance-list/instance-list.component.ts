@@ -48,6 +48,8 @@ export class InstanceListComponent implements OnInit {
       });
     this.authService.currentUser.subscribe(
       async user => {
+        // check to prevent queries while it`s not necessary
+        if (!this.router.url.match(/user\/instances/)) { return; }
         this.user = user;
         const role = await this.userOrganizationService.getOrganizationRole();
         if (!role) { return; }
