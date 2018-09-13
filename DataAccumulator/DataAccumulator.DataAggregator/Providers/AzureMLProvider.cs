@@ -15,9 +15,10 @@ namespace DataAccumulator.DataAggregator.Providers
 {
     public class AzureMLProvider : IAzureMLProvider
     {
-        private static HttpClient _client = new HttpClient();
+        private readonly HttpClient _client;
         public AzureMLProvider(IOptions<AzureMLOptions> options)
         {
+            _client = new HttpClient();
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.Value.ApiKey);
             _client.BaseAddress = new Uri(options.Value.Url);
         }

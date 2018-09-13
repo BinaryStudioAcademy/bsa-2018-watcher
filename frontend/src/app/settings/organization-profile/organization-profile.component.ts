@@ -85,7 +85,7 @@ export class OrganizationProfileComponent implements OnInit {
             this.selectedThemeName = this.selectedTheme.name;
           this.imageUrl = org.imageURL;
           const role = await this.userOrganizationService.getOrganizationRole();
-          this.editable = role.name === 'Manager' ? true : false;
+          this.editable = role.name === 'Manager';
           console.log('EDITABLE');
           console.log(this.editable);
         });
