@@ -116,9 +116,11 @@ export class OrganizationMembersComponent implements OnInit {
   createChat(userOrganization: UserOrganization): void {
     const targetUser: User = userOrganization.user;
     const users = [targetUser];
-
+    const chatName =  this.currentUser.firstName && targetUser.firstName
+                      ? `${this.currentUser.firstName}, ${targetUser.firstName}`
+                      : `${this.currentUser.displayName}, ${targetUser.displayName}`;
     const newChat: ChatRequest = {
-      name: targetUser.displayName,
+      name: chatName,
       createdById: this.currentUser.id,
       users: users,
       organizationId: null,
