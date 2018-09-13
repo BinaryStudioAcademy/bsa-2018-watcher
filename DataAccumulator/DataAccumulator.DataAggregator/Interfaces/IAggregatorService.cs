@@ -12,6 +12,10 @@ namespace DataAccumulator.DataAggregator.Interfaces
             DateTime timeFrom, DateTime timeTo);
         Task<bool> DeleteAggregatedEntityAsync(Guid id);
         Task<TEntity> AddAggregatorEntityAsync(TEntity entity);
+        Task AddAggregatorEntitiesAsync(IEnumerable<TEntity> entities);
+
         Task<IEnumerable<InstanceSettingsDto>> GetInstanceSettingsEntitiesAsync();
+
+        Task DeleteManyAggregatedEntitiesAsync(IEnumerable<Guid> idsToDelete);
     }
 }

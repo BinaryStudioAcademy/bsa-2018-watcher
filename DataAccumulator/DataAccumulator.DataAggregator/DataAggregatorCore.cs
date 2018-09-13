@@ -45,23 +45,11 @@ namespace DataAccumulator.DataAggregator
             var timeFrom = DateTime.UtcNow.Add(-interval);
             var timeTo = DateTime.UtcNow;
 
-            var sourceCollectedDataDtos = await _aggregatorService.GetSourceEntitiesAsync(sourceType, timeFrom, timeTo);
-            var listCollectedDataDtos = sourceCollectedDataDtos.ToList();
-            var filteredCollectedDataDtos = await FilterCollectedDataByInstanceSettings(listCollectedDataDtos, destinationType);
-
-
-            if (filteredCollectedDataDtos != null)
+            var sourceCollectedDataDtos = (await _aggregatorService.GetSourceEntitiesAsync(sourceType, timeFrom, timeTo)).ToList();
+            var filteredCollectedDataDtos = await FilterCollectedDataByInstanceSettings(sourceCollectedDataDtos, destinationType);
+            var collectedDataDtos = filteredCollectedDataDtos as CollectedDataDto[] ?? filteredCollectedDataDtos.ToArray();
+            if (collectedDataDtos.Any())
             {
-                var collectedDataDtos = filteredCollectedDataDtos as CollectedDataDto[] ?? filteredCollectedDataDtos.ToArray();
-                try
-                {
-                    await SendMLReport(collectedDataDtos, destinationType);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"Unhandled error occurred while analyzing Anomalies");
-                }
-
                 var collectedDataDtosAverage =
                     from collectedDataDto in collectedDataDtos
                     group collectedDataDto by collectedDataDto.ClientId
@@ -116,20 +104,23 @@ namespace DataAccumulator.DataAggregator
                             .Max(d => d.Time)
                     };
 
-                // Save aggregated CollectedDataDto to destination table MongoDb
-                foreach (var collectedDataDto in collectedDataDtosAverage)
-                {
-                    await _aggregatorService.AddAggregatorEntityAsync(collectedDataDto);
-                }
+                var tasks = new List<Task> {
+                    SendMLReport(collectedDataDtos, destinationType),
+                    _aggregatorService.AddAggregatorEntitiesAsync(collectedDataDtosAverage)
+                                               };
 
+                // await SendMLReport(collectedDataDtos, destinationType);
+
+                // Save aggregated CollectedDataDto to destination table MongoDb
+                // await _aggregatorService.AddAggregatorEntitiesAsync(collectedDataDtosAverage);
                 if (deleteSource)
                 {
                     // Delete already aggregated CollectedDataDto from source table MongoDb
-                    foreach (var collectedDataDto in collectedDataDtos)
-                    {
-                        await _aggregatorService.DeleteAggregatedEntityAsync(collectedDataDto.Id);
-                    }
+                    // await _aggregatorService.DeleteManyAggregatedEntitiesAsync(collectedDataDtos.Select(dto => dto.Id));
+                    tasks.Add(_aggregatorService.DeleteManyAggregatedEntitiesAsync(collectedDataDtos.Select(dto => dto.Id)));
                 }
+
+                await Task.WhenAll(tasks);
             }
         }
 
