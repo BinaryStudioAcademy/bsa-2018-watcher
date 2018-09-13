@@ -156,7 +156,6 @@ export class AuthService {
 
     return await this._firebaseAuth.auth.signInWithPopup(provider)
       .then(res => {
-        console.log(res);
         return this.login(res, 'Google');
       })
       .then(() => {

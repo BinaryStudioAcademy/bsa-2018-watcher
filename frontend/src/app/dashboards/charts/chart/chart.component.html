@@ -26,7 +26,8 @@
   [curve]="chart.curve"
   [rangeFillOpacity]="chart.rangeFillOpacity"
   [roundDomains]="chart.roundDomains"
-  [tooltipDisabled]="chart.tooltipDisabled">
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [xAxisTickFormatting]="chart.dateTickFormatting">
 </ngx-charts-line-chart>
 
 <ngx-charts-bar-vertical
@@ -239,7 +240,8 @@
   [roundDomains]="chart.roundDomains"
   [showGridLines]="chart.showGridLines"
   [curve]="chart.curve"
-  [tooltipDisabled]="chart.tooltipDisabled">
+  [tooltipDisabled]="chart.tooltipDisabled"
+  [xAxisTickFormatting]="chart.dateTickFormatting">
 </ngx-charts-area-chart>
 
 <ngx-charts-area-chart-stacked
@@ -316,7 +318,7 @@ class="chart-container"
 </ngx-charts-advanced-pie-chart>
 
 <ngx-charts-gauge
-  *ngIf="chart.type === type.Guage"
+  *ngIf="chart.type === type.Gauge"
   [scheme]="chart.colorScheme"
   [results]="data"
   [activeEntries]="activeEntries"

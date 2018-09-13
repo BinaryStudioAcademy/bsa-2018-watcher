@@ -48,20 +48,23 @@ export class InstanceListComponent implements OnInit {
       });
     this.authService.currentUser.subscribe(
       async user => {
+        // check to prevent queries while it`s not necessary
+        if (!this.router.url.match(/user\/instances/)) { return; }
         this.user = user;
         const role = await this.userOrganizationService.getOrganizationRole();
+        if (!role) { return; }
         this.isManager = role.name === 'Manager';
+
+        if (!this.authService.getCurrentUserLS()) { return; }
         if (this.dashboardsHub.isConnect) {
           this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
         }
         this.dashboardsHub.connectionEstablished$.subscribe(established => {
           if (established) {
             this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
-          } else {
-
           }
         });
-        this.configureInstances(this.user.lastPickedOrganizationId);
+        if (this.authService.getCurrentUserLS()) { this.configureInstances(this.user.lastPickedOrganizationId); }
       });
     this.dashboardsHub.instanceCheckedSubObservable.subscribe(value => {
       const instanceMenuItem = this.menuItems.find(value1 => value1.guidId === value.instanceGuidId);
@@ -112,7 +115,8 @@ export class InstanceListComponent implements OnInit {
       guidId: instance.guidId,
       statusCheckedAt: instance.statusCheckedAt,
       id: instance.id.toString(),
-      label: instance.title, // + this.instanceService.calculateSign(instance.statusCheckedAt),
+      icon: 'fa fa-circle',
+      label: instance.title,
       routerLink: [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
         this.currentGuidId = instance.guidId;

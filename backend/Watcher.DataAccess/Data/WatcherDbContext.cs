@@ -1,12 +1,12 @@
 ﻿namespace Watcher.DataAccess.Data
 {
-    using Microsoft.EntityFrameworkCore;
-    using System.Linq.Expressions;
     using System.Linq;
+    using System.Linq.Expressions;
+
+    using Microsoft.EntityFrameworkCore;
+
     using Watcher.Common.Interfaces.Entities;
     using Watcher.DataAccess.Entities;
-
-
 
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class WatcherDbContext : DbContext
@@ -159,5 +159,7 @@
         public DbSet<Theme> Themes { get; set; }
 
         public DbSet<OrganizationInvite> OrganizationInvites { get; set; }
+
+        public DbSet<CollectorAppVersion> CollectorAppVersions { get; set; }
     }
 }

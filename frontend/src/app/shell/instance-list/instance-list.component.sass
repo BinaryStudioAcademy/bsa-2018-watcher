@@ -9,17 +9,26 @@
   background: #ffffff
   border-right: 1px solid #e3e9ea
 
+.status-icon
+  float: right
+  margin-right: 10px
+  font-size: 1.3em !important
+  margin-top: 5px
+
 /deep/ .active-instance
-          .fa-check-circle-o
-            color: #3eb839
+          .fa-circle
+            @extend .status-icon
+            color: #009933
 
 /deep/ .non-active-instance
-          .fa-ban
-            color: red
+          .fa-circle
+            @extend .status-icon
+            color: #FF6600
 
 /deep/ .semi-active-instance
-          .fa-exclamation-circle
-            color: yellow
+          .fa-circle
+            @extend .status-icon
+            color: #f1e10efa
 
 .panelMenuContainer
   top: 60px

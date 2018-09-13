@@ -58,12 +58,10 @@ export class EditReportChartComponent implements OnInit {
     this.dashboardChart.showCommon = true;
 
     // Fill dropdown with sources
-    Object.keys(ChartType).forEach(type => {
-      const number = Number(type);
-      if (!isNaN(number) && number < 4) {
-        this.dropdownTypes.push({label: chartTypeLabels[number], value: number });
-      }
-    });
+      this.dropdownTypes.push({label: chartTypeLabels[0], value: 0 });
+      this.dropdownTypes.push({label: chartTypeLabels[1], value: 1 });
+      this.dropdownTypes.push({label: chartTypeLabels[2], value: 2 });
+      this.dropdownTypes.push({label: chartTypeLabels[7], value: 7 });
 
     this.collectedDataService.getBuilderData().subscribe(data => {
       this.dataService.fakeCollectedData = data;
@@ -101,7 +99,7 @@ export class EditReportChartComponent implements OnInit {
         this.isYAxisAvailable = true;
         this.dashboardChart.yAxisLabel = 'Percentage %';
         break;
-      case ChartType.Guage:
+      case ChartType.Gauge:
         this.isTimeAvailable = false;
         this.isYAxisAvailable = true;
         this.dashboardChart.yAxisLabel = 'Process';

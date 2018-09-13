@@ -172,6 +172,14 @@ namespace Watcher.Core.Providers
             await blob.DeleteAsync();
         }
 
+        public async Task<bool> IsExist(string path)
+        {
+            var client = _storageAccount.CreateCloudBlobClient();
+            var blob = await client.GetBlobReferenceFromServerAsync(new Uri(path));
+            
+            return await blob.ExistsAsync();
+        }
+
         private Task SetPublicContainerPermissions(CloudBlobContainer container)
         {
             var permissions = new BlobContainerPermissions
@@ -180,6 +188,29 @@ namespace Watcher.Core.Providers
             };
 
             return container.SetPermissionsAsync(permissions);
+        }
+
+        public async Task<string> UploadFormFileWithNameAsync(IFormFile formFile)
+        {
+            var client = _storageAccount.CreateCloudBlobClient();
+
+            var container = client.GetContainerReference("watcher");
+
+            if (await container.ExistsAsync() == false)
+            {
+                await container.CreateAsync();
+            }
+
+            CloudBlockBlob blob = container.GetBlockBlobReference(formFile.FileName);
+
+            await SetPublicContainerPermissions(container);
+
+            using (var stream = formFile.OpenReadStream())
+            {
+                await blob.UploadFromStreamAsync(stream);
+            }
+
+            return blob.Uri.ToString();
         }
     }
 }

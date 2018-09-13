@@ -15,6 +15,10 @@ import {User} from '../../shared/models/user.model';
 import { DashboardsHub } from '../../core/hubs/dashboards.hub';
 import { ThemeService } from '../../core/services/theme.service';
 import { OrganizationService } from '../../core/services/organization.service';
+import { Subscription } from 'rxjs';
+import { ChatHub } from 'src/app/core/hubs/chat.hub';
+import { OrganizationInvitesHub } from '../../core/hubs/organization-invites.hub';
+import { NotificationsHubService } from '../../core/hubs/notifications.hub';
 
 
 
@@ -29,6 +33,7 @@ export class HeaderComponent implements OnInit {
 
   currentUser: User;
   currentOrganizationName: string;
+  userSubscription: Subscription;
   private regexInstancesdUrl: RegExp = /\/user\/instances/;
 
   userItems: MenuItem[];
@@ -47,7 +52,11 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private pathService: PathService,
-    private themeService: ThemeService) { }
+    private themeService: ThemeService,
+    private chatHub: ChatHub,
+    private dashboardsHub: DashboardsHub,
+    private invitesHub: OrganizationInvitesHub,
+    private notificationsHub: NotificationsHubService) { }
 
   onFeedback(): void {
     this.router.navigate(['/user/feedback']);
@@ -58,6 +67,8 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(): void {
+    this.userSubscription.unsubscribe();
+    this.currentUser = null;
     if (this.authService.isLoggedIn()) {
       this.authService.logout();
       this.themeService.setDefaultTheme();
@@ -82,6 +93,10 @@ export class HeaderComponent implements OnInit {
       label: 'Feedbacks',
       icon: 'fa fa-fw fa-bullhorn',
       routerLink: ['/admin/feedback-list']
+    }, {
+      label: 'DataCollector',
+      icon: 'fa fa-fw fa-download',
+      routerLink: ['/admin/data-collector-apps']
     }];
 
     this.cogItems = [{
@@ -106,7 +121,7 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    this.authService.currentUser.subscribe(
+    this.userSubscription = this.authService.currentUser.subscribe(
       userData => {
         this.currentUser = {...userData};
         this.currentUser.photoURL = this.pathService.convertToUrl(this.currentUser.photoURL);
@@ -151,10 +166,9 @@ export class HeaderComponent implements OnInit {
   }
 
   isAdmin() {
-    if (this.currentUser.role.name === 'Admin') {
-      return true;
+    if (this.currentUser) {
+      return this.currentUser.role.name === 'Admin' ? true : false;
     }
-    return false;
   }
 
   getUserClaims() {

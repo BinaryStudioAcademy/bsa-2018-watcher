@@ -1,7 +1,7 @@
-<div class="header">
+<div *ngIf="currentUser" class="header">
 
   <div class="logo-wr">
-      <a routerLink="/user" class="logo">WATCHER | {{currentUser.lastPickedOrganization.name}}</a>
+      <a routerLink="/user" class="logo">WATCHER | {{currentUser?.lastPickedOrganization.name}}</a>
   </div>
 
   <div class="ui-toolbar-group-right">

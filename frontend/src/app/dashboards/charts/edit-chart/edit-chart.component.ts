@@ -105,7 +105,7 @@ export class EditChartComponent implements OnInit {
         items: [
           { label: chartTypeLabels[ChartType.ResourcesTable], value: ChartType.ResourcesTable },
           { label: chartTypeLabels[ChartType.NumberCards], value: ChartType.NumberCards },
-          { label: chartTypeLabels[ChartType.Guage], value: ChartType.Guage },
+          { label: chartTypeLabels[ChartType.Gauge], value: ChartType.Gauge },
           { label: chartTypeLabels[ChartType.PolarChart], value: ChartType.PolarChart },
           { label: chartTypeLabels[ChartType.HeatMap], value: ChartType.HeatMap },
           { label: chartTypeLabels[ChartType.TreeMap], value: ChartType.TreeMap },
@@ -216,7 +216,7 @@ export class EditChartComponent implements OnInit {
         this.dashboardChart.xAxisLabel = 'Value';
         this.dashboardChart.yAxisLabel = 'Parameters';
         break;
-      case ChartType.Guage:
+      case ChartType.Gauge:
         this.dashboardChart.showXAxis = false;
         this.dashboardChart.showLegend = false;
         this.dashboardChart.yAxisLabel = 'Process';

@@ -56,7 +56,12 @@ export class ReportComponent implements OnInit {
   tabs: MenuItem[];
   activeTab: MenuItem;
 
+  currentChartMenu: MenuItem[] = [];
+
   onDisplayChartEditing = new EventEmitter<boolean>();
+
+  isGetting: boolean;
+  isConverting: boolean;
 
   constructor(private aggregatedDateService: AggregatedDataService,
               private activateRoute: ActivatedRoute,
@@ -66,8 +71,21 @@ export class ReportComponent implements OnInit {
     this.charts = [];
 
     this.tabs = [
-      { label: 'Table', command: () => this.activeTab = this.tabs[0] },
-      { label: 'Chart', command: () => this.activeTab = this.tabs[1] }
+      { label: 'Table', command: () => {
+        this.activeTab = this.tabs[0];
+        this.collectedData = null;
+        this.collectedDataTable = null;
+        this.dateFrom = null;
+        this.dateTo = null;
+      }}, {
+        label: 'Chart', command: () => {
+          this.activeTab = this.tabs[1];
+          this.collectedData = null;
+          this.collectedDataTable = null;
+          this.dateFrom = null;
+          this.dateTo = null;
+          this.charts = [];
+      }}
     ];
 
     this.activeTab = this.tabs[0];
@@ -115,6 +133,22 @@ export class ReportComponent implements OnInit {
     const x = this.activateRoute.params.subscribe(params => {
       this.id = params['guidId'];
     });
+  }
+
+  createMenu(chart: DashboardChart) {
+    this.currentChartMenu = [{
+      label: 'Edit',
+      icon: 'fa fa-fw fa-edit',
+      command: () => {
+        this.editChart(chart);
+      },
+    }, {
+      label: 'Delete',
+      icon: 'fa fa-fw fa-remove',
+      command: () => {
+        this.deleteChart(chart);
+      }
+    }];
   }
 
   changeType(ev): void {
@@ -166,6 +200,7 @@ export class ReportComponent implements OnInit {
   }
 
   getInfo(): void {
+    this.isGetting = true;
     const request: AggregateDataRequest = this.createRequest();
 
     this.getCollectedData(request).subscribe((data: CollectedData[]) => {
@@ -178,18 +213,37 @@ export class ReportComponent implements OnInit {
         });
       });
       this.collectedData = data;
+      this.collectedDataTable = data.slice(0, this.recordsPerPage);
+      const hourDifference = (this.dateTo.getTime() - this.dateFrom.getTime()) / (60 * 60000);
+      this.charts.forEach(item => {
+        if (hourDifference > 23) {
+          item.dateTickFormatting = (value) => {
+            if (value instanceof Date) {
+              if (this.selectedType === DataType.AggregationForHour) {
+                return formatDate((<Date>value), 'MMM, d, h a', 'en-US');
+              } else {
+                return formatDate((<Date>value), 'MMM, d', 'en-US');
+              }
+            }
+          };
+        }
+
+        this.dataService.fulfillChart(this.collectedData, item, true);
+      });
+
       this.charts.forEach(item => this.dataService.fulfillChart(this.collectedData, item, true));
       this.collectedDataTable = data.slice(0, this.recordsPerPage);
+
+      this.isGetting = false;
     });
 
     this.aggregatedDateService.getCountOfEntities(request).subscribe(totalRecords => {
       this.totalRecords = totalRecords;
-      console.log(totalRecords);
     });
   }
 
-  private getCollectedData(request: AggregateDataRequest): Observable<CollectedData[]> {
-      return this.aggregatedDateService.getDataByInstanceIdAndTypeInTime(request);
+  private getCollectedData(request): Observable<CollectedData[]> {
+    return this.aggregatedDateService.getDataByInstanceIdAndTypeInTime(request);
   }
 
   paginate(event) {
@@ -217,6 +271,7 @@ export class ReportComponent implements OnInit {
   }
 
   convertPDF(): void {
+    this.isConverting = true;
     const doc = new jsPDF('p', 'pt', 'a4');
 
     if (this.activeTab === this.tabs[0]) {
@@ -233,27 +288,39 @@ export class ReportComponent implements OnInit {
 
       // tslint:disable-next-line:max-line-length
       doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
+      this.isConverting = false;
     } else {
       doc.setFontSize(20);
       const eventRender = new EventEmitter();
-      doc.text(`${this.types[this.selectedType - 1].label} Report`, 200, 40);
+      let renderedImg = 0;
+      let pages = 1;
+      doc.text(`${this.types[this.selectedType - 1].label} Report`, 220, 40);
       doc.text(`${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`, 150, 70);
+      let topMargin = 100;
       this.chartPDF.forEach(item => {
         html2canvas(item.nativeElement).then(canvas => {
           const contentDataURL = canvas.toDataURL('image/png');
-          doc.addImage(contentDataURL, 'PNG', 15, 250, 531, 250);
-          doc.addPage();
+          doc.addImage(contentDataURL, 'PNG', 15, topMargin, 560, 270);
+          renderedImg++;
+          if (renderedImg % 2 === 0) {
+            doc.addPage();
+            pages++;
+            topMargin = 100;
+          } else {
+            topMargin += 250 + 50;
+          }
           eventRender.emit();
         });
       });
 
-      let renderedImg = 0;
       eventRender.subscribe(() => {
-        renderedImg++;
         if (renderedImg === this.chartPDF.length) {
-          doc.deletePage(this.chartPDF.length + 1);
+          if (renderedImg % 2 === 0) {
+            doc.deletePage(pages);
+          }
           // tslint:disable-next-line:max-line-length
           doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
+          this.isConverting = false;
         }
       });
     }
@@ -316,6 +383,21 @@ export class ReportComponent implements OnInit {
   }
 
   onAddChart(event: DashboardChart): void {
+    if (this.dateTo && this.dateFrom) {
+      const hourDifference = (this.dateTo.getTime() - this.dateFrom.getTime()) / (60 * 60000);
+      if (hourDifference > 23) {
+        event.dateTickFormatting = (value) => {
+          if (value instanceof Date) {
+            if (this.selectedType === DataType.AggregationForHour) {
+              return formatDate((<Date>value), 'MMM, d, h a', 'en-US');
+            } else {
+              return formatDate((<Date>value), 'MMM, d', 'en-US');
+            }
+          }
+        };
+      }
+    }
+
     this.charts.push({...event});
     this.decomposeChart(defaultOptions);
   }

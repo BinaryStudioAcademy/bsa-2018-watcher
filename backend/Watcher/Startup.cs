@@ -120,6 +120,7 @@ namespace Watcher
             services.AddTransient<IInstanceAnomalyReportsService, InstanceAnomalyReportsService>();
             services.AddTransient<ICollectorActionLogService, CollectorActionLogService>();
             services.AddTransient<IThemeService, ThemeService>();
+            services.AddTransient<ICollectorAppsService, CollectorAppsService>();
 
             services.AddTransient<IAzureQueueReceiver, AzureQueueReceiver>();
             services.AddTransient<IAzureQueueSender, AzureQueueSender>();

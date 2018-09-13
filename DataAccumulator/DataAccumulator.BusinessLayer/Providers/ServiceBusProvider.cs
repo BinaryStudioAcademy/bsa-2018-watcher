@@ -130,6 +130,12 @@
                 CpuUsagePercentageMax = arg.CpuMaxPercent,
                 RamUsagePercentageMax = arg.RamMaxPercent,
                 LocalDiskUsagePercentageMax = arg.DiskMaxPercent,
+
+                //validators are enabled by default
+                //maybe in future we may add ability to change it
+                CpuValidator = true,
+                RamValidator = true,
+                LocalDiskVallidator = true,
             };
 
             var x = await _instanceSettingsService.AddEntityAsync(dto);

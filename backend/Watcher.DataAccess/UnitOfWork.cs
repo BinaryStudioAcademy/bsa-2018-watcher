@@ -50,7 +50,9 @@
         private IUserChatRepository _userChatRepository;
 
         private IThemeRepository _themeRepository;
-        
+
+        private ICollectorAppVersionRepository _collectorAppVersionRepository;
+
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;
@@ -100,6 +102,8 @@
         public IMessagesRepository MessagesRepository => _messagesRepository ?? (_messagesRepository = new MessagesRepository(_context, _mapper));
 
         public IUserChatRepository UserChatRepository => _userChatRepository ?? (_userChatRepository = new UserChatRepository(_context));
+
+        public ICollectorAppVersionRepository CollectorAppVersionRepository => _collectorAppVersionRepository ?? (_collectorAppVersionRepository = new CollectorAppVersionRepository(_context, _mapper));
 
         public IOrganizationInvitesRepository OrganizationInvitesRepository =>
             _organizationInvitesRepository

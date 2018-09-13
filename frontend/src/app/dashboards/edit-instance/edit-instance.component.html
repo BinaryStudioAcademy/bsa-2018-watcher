@@ -1,6 +1,6 @@
-<div class="container">
+<div class="working-area">
   <div class="ui-g ui-fluid">
-    <div class="ui-g-12 ui-lg-6">
+    <div class="ui-g-12 ui-lg-6 space">
       <div class="title">{{instanceTitle}}</div>
       <hr>
     </div>
@@ -17,30 +17,31 @@
       <label>Title is required.</label>
     </div>
 
-    <div class="label">Platform:</div>
+    <div class="label label-main">Platform:</div>
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-md-6 ui-lg-6">
         <p-dropdown [options]="platformsDropdown" [formGroup]="instanceForm" formControlName="platform"></p-dropdown>
       </div>
     </div>
 
-    <div class="label">IP address:</div>
+    <div class="label label-main">IP address:</div>
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-md-6 ui-lg-4">
         <input pInputText type="text" formControlName="address" pInputText placeholder="Address">
       </div>
     </div>
 
-    <div class="label">Aggregation:</div>
+    <div class="label label-main">Aggregation:</div>
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-md-6 ui-lg-4 aggregation-checks">
         <p-checkbox formControlName="aggregationHour" label="Hourly" inputId="hour" binary="true"></p-checkbox>
         <p-checkbox formControlName="aggregationDay" label="Daily" inputId="day" binary="true"></p-checkbox>
+        <p-checkbox formControlName="aggregationWeek" label="Weekly" inputId="week" binary="true"></p-checkbox>
         <p-checkbox formControlName="aggregationMonth" label="Monthly" inputId="month" binary="true"></p-checkbox>
       </div>
     </div>
 
-    <div class="label">Receive notifications on:</div>
+    <div class="label label-main">Receive notifications on:</div>
     <div class="ui-g ui-fluid">
       <div class="ui-g-12 ui-md-6 ui-lg-4">
           <div class="secondary-label">Max cpu percent: {{instanceForm.controls.cpuMax.value}}</div>
@@ -54,7 +55,7 @@
       </div>
     </div>
 
-    <div *ngIf="id" class="label">Identifier:</div>
+    <div *ngIf="id" class="label label-main">Identifier:</div>
     <div *ngIf="id" class="ui-g ui-fluid">
       <div class="ui-g-12 ui-md-6 ui-lg-4">
         <div class="ui-inputgroup identifier">
