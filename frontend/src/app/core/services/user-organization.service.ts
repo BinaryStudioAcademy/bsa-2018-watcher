@@ -41,6 +41,7 @@ export class UserOrganizationService {
 
   getOrganizationRole(): Promise<OrganizationRole> {
     const user: User = this.authService.getCurrentUserLS();
+    if (!user) { return null; }
     return this.getUserOrganizationRole(user.id, user.lastPickedOrganizationId).toPromise();
   }
 

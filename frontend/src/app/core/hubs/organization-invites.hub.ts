@@ -30,6 +30,7 @@ export class OrganizationInvitesHub {
   }
 
   private startInviteHubConnection(): void {
+    if (!this.authService.getCurrentUserLS()) { return; }
     if (this.isConnect) { return; }
     this.authService.getTokens().subscribe( ([firebaseToken, watcherToken]) => {
       this.createConnection(firebaseToken, watcherToken);
