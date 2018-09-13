@@ -53,7 +53,7 @@ export class InstanceListComponent implements OnInit {
         this.user = user;
         const role = await this.userOrganizationService.getOrganizationRole();
         if (!role) { return; }
-        this.isManager = role.name === 'Manager' ? true : false;
+        this.isManager = role.name === 'Manager';
 
         if (!this.authService.getCurrentUserLS()) { return; }
         if (this.dashboardsHub.isConnect) {
@@ -115,7 +115,8 @@ export class InstanceListComponent implements OnInit {
       guidId: instance.guidId,
       statusCheckedAt: instance.statusCheckedAt,
       id: instance.id.toString(),
-      label: instance.title, // + this.instanceService.calculateSign(instance.statusCheckedAt),
+      icon: 'fa fa-circle',
+      label: instance.title,
       routerLink: [`/user/instances/${instance.id}/${instance.guidId}/dashboards`],
       command: () => {
         this.currentGuidId = instance.guidId;
