@@ -114,7 +114,8 @@
             using (var scope = _scopeFactory.CreateScope())
             {
                 var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
-
+                var reportsService = scope.ServiceProvider.GetRequiredService<IInstanceAnomalyReportsService>();
+                var report = reportsService.GetReportByIdAsync(arg.AnomalyReportId);
                 var notificationRequest = new NotificationRequest
                                               {
                                                   Text = "Anomaly Report was created on instance: " + arg.InstanceId,

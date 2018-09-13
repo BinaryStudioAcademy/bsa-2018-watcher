@@ -2,6 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using AutoMapper;
 
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.DataAccessLayer.Interfaces;
@@ -12,10 +15,13 @@
     public class InstanceAnomalyReportsService : IInstanceAnomalyReportsService
     {
         private readonly IInstanceAnomalyReportsRepository _repository;
+        private readonly IMapper _mapper;
 
-        public InstanceAnomalyReportsService(IInstanceAnomalyReportsRepository repository)
+        public InstanceAnomalyReportsService(IInstanceAnomalyReportsRepository repository,
+                                             IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public static InstanceAnomalyReport GetAnomalyReport(Guid instanceId)
@@ -56,15 +62,76 @@
             }
 
             var report = new InstanceAnomalyReport
-                        {
-                            Id = Guid.NewGuid(),
-                            Date = DateTime.UtcNow.AddHours(1),
-                            ClientId = Guid.NewGuid(),
-                            AnomalyGroups = groups,
-                            CollectedDataTypeOfReport = CollectedDataType.AggregationForHour
-                        };
-            
+            {
+                Id = Guid.NewGuid(),
+                Date = DateTime.UtcNow.AddHours(1),
+                ClientId = Guid.NewGuid(),
+                AnomalyGroups = groups,
+                CollectedDataTypeOfReport = CollectedDataType.AggregationForHour
+            };
+
             return report;
+        }
+
+        public async Task<List<InstanceAnomalyReportDto>> GetAllReportsAsync()
+        {
+            var reports = await _repository.GetAllReportsAsync();
+
+            if (reports != null && reports.Count > 0)
+            {
+                return _mapper.Map<List<InstanceAnomalyReport>, List<InstanceAnomalyReportDto>>(reports);
+            }
+
+            return new List<InstanceAnomalyReportDto>();
+        }
+
+        public async Task<List<InstanceAnomalyReportDto>> GetReportsByInstanceIdAsync(Guid instanceId)
+        {
+            var reports = await _repository.GetReportsByInstanceIdAsync(instanceId);
+
+            if (reports != null && reports.Count > 0)
+            {
+                return _mapper.Map<List<InstanceAnomalyReport>, List<InstanceAnomalyReportDto>>(reports);
+            }
+
+            return new List<InstanceAnomalyReportDto>();
+        }
+
+        public async Task<InstanceAnomalyReportDto> GetReportByIdAsync(Guid reportId)
+        {
+            var report = await _repository.GetReportByIdAsync(reportId);
+
+            if (report == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<InstanceAnomalyReport, InstanceAnomalyReportDto>(report);
+        }
+
+        public Task AddReportAsync(InstanceAnomalyReport report)
+        {
+            if (report != null)
+            {
+                return _repository.AddReportAsync(report);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task<bool> RemoveReportByIdAsync(Guid reportId)
+        {
+            return _repository.RemoveReportByIdAsync(reportId);
+        }
+
+        public Task<bool> RemoveAllReportsAsync()
+        {
+            return _repository.RemoveAllReportsAsync();
+        }
+
+        public Task<bool> ReportExistsAsync(Guid reportId)
+        {
+            return _repository.ReportExistsAsync(reportId);
         }
     }
 }

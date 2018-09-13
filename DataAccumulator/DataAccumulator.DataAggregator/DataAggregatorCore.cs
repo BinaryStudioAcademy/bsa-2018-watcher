@@ -137,11 +137,6 @@ namespace DataAccumulator.DataAggregator
                 {
                     var result = await _anomalyDetector.AnalyzeData(collectedDataDtos);
                     result.CollectedDataTypeOfReport = reportType;
-                    var reportMessage = new InstanceAnomalyReportMessage
-                    {
-                        AnomalyReport = result,
-                        InstanceId = firstData.ClientId
-                    };
                     var report = new InstanceAnomalyReport
                     {
                         Id = Guid.NewGuid(),
@@ -151,6 +146,11 @@ namespace DataAccumulator.DataAggregator
                         CollectedDataTypeOfReport = result.CollectedDataTypeOfReport
                     };
                     await _reportsRepository.AddReportAsync(report);
+                    var reportMessage = new InstanceAnomalyReportMessage
+                                            {
+                                                AnomalyReportId = report.Id,
+                                                InstanceId = firstData.ClientId
+                                            };
                     Debug.WriteLine($"Generated id of report {report.Id}");
                     await _serviceBusProvider.SendAnomalyReportMessage(reportMessage);
                 }

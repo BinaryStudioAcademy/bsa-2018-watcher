@@ -335,6 +335,7 @@ namespace Watcher
                     cfg.AddProfile<MessageProfile>();
 
                     cfg.AddProfile<FeedbackProfile>();
+                    cfg.AddProfile<InstanceAnomalyReportProfile>();
                     cfg.AddProfile<RoleProfile>();
                     cfg.AddProfile<ResponseProfile>();
                     cfg.AddProfile<InstancesProfile>();
