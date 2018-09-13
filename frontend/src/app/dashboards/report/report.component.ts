@@ -294,14 +294,14 @@ export class ReportComponent implements OnInit {
       const eventRender = new EventEmitter();
       let renderedImg = 0;
       let pages = 1;
-      doc.text(`${this.types[this.selectedType - 1].label} Report`, 200, 40);
+      doc.text(`${this.types[this.selectedType - 1].label} Report`, 220, 40);
       doc.text(`${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`, 150, 70);
       let topMargin = 100;
       this.chartPDF.forEach(item => {
         html2canvas(item.nativeElement).then(canvas => {
           const contentDataURL = canvas.toDataURL('image/png');
-          renderedImg++;
           doc.addImage(contentDataURL, 'PNG', 15, topMargin, 560, 210);
+          renderedImg++;
           if (renderedImg % 2 === 0) {
             doc.addPage();
             pages++;
@@ -315,7 +315,7 @@ export class ReportComponent implements OnInit {
 
       eventRender.subscribe(() => {
         if (renderedImg === this.chartPDF.length) {
-          if (pages > 1) {
+          if (renderedImg % 2 === 0) {
             doc.deletePage(pages);
           }
           // tslint:disable-next-line:max-line-length
