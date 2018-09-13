@@ -56,6 +56,8 @@ export class ReportComponent implements OnInit {
   tabs: MenuItem[];
   activeTab: MenuItem;
 
+  currentChartMenu: MenuItem[] = [];
+
   onDisplayChartEditing = new EventEmitter<boolean>();
 
   constructor(private aggregatedDateService: AggregatedDataService,
@@ -66,8 +68,12 @@ export class ReportComponent implements OnInit {
     this.charts = [];
 
     this.tabs = [
-      { label: 'Table', command: () => this.activeTab = this.tabs[0] },
-      { label: 'Chart', command: () => this.activeTab = this.tabs[1] }
+      { label: 'Table', command: () => {
+        this.activeTab = this.tabs[0];
+      }}, {
+        label: 'Chart', command: () => {
+          this.activeTab = this.tabs[1];
+      }}
     ];
 
     this.activeTab = this.tabs[0];
@@ -115,6 +121,22 @@ export class ReportComponent implements OnInit {
     const x = this.activateRoute.params.subscribe(params => {
       this.id = params['guidId'];
     });
+  }
+
+  createMenu(chart: DashboardChart) {
+    this.currentChartMenu = [{
+      label: 'Edit',
+      icon: 'fa fa-fw fa-edit',
+      command: () => {
+        this.editChart(chart);
+      },
+    }, {
+      label: 'Delete',
+      icon: 'fa fa-fw fa-remove',
+      command: () => {
+        this.deleteChart(chart);
+      }
+    }];
   }
 
   changeType(ev): void {
@@ -168,7 +190,79 @@ export class ReportComponent implements OnInit {
   getInfo(): void {
     const request: AggregateDataRequest = this.createRequest();
 
-    this.getCollectedData(request).subscribe((data: CollectedData[]) => {
+    if (this.activeTab === this.tabs[1]) {
+      this.getCollectedData(request).subscribe((data: CollectedData[]) => {
+        data.forEach(item => {
+          item.time = new Date(item.time);
+          item.processes = item.processes.map(p => this.roundProcess(p));
+
+          item.processes.sort((item1, item2) => {
+            return item2.pCpu - item1.pCpu;
+          });
+        });
+<<<<<<< Updated upstream
+      });
+      this.collectedData = data;
+      this.charts.forEach(item => this.dataService.fulfillChart(this.collectedData, item, true));
+      this.collectedDataTable = data.slice(0, this.recordsPerPage);
+    });
+=======
+        this.collectedData = data;
+        const hourDifference = (this.dateTo.getTime() - this.dateFrom.getTime()) / (60 * 60000);
+        this.charts.forEach(item => {
+          if (hourDifference > 23) {
+            item.dateTickFormatting = (value) => {
+              if (value instanceof Date) {
+                if (this.selectedType === DataType.AggregationForHour) {
+                  return formatDate((<Date>value), 'MMM, d, h a', 'en-US');
+                } else {
+                  return formatDate((<Date>value), 'MMM, d', 'en-US');
+                }
+              }
+            };
+          }
+
+          this.dataService.fulfillChart(this.collectedData, item, true);
+        });
+
+        this.isGetting = false;
+      });
+    }
+
+    if (this.activeTab === this.tabs[0]) {
+      this.getCollectedData(request, 0, this.recordsPerPage).subscribe((data: CollectedData[]) => {
+        data.forEach(item => {
+          item.time = new Date(item.time);
+          item.processes = item.processes.map(p => this.roundProcess(p));
+
+          item.processes.sort((item1, item2) => {
+            return item2.pCpu - item1.pCpu;
+          });
+        });
+>>>>>>> Stashed changes
+
+        this.collectedDataTable = data;
+
+        this.isGetting = false;
+      });
+
+      this.aggregatedDateService.getCountOfEntities(request).subscribe(totalRecords => {
+        this.totalRecords = totalRecords;
+      });
+    }
+  }
+
+  private getCollectedData(request: AggregateDataRequest, page = -1, records = -1): Observable<CollectedData[]> {
+    if (page === -1 || records === -1) {
+      return this.aggregatedDateService.getDataByInstanceIdAndTypeInTime(request);
+    } else {
+      return this.aggregatedDateService.getDataByInstanceIdAndTypeInTimePaging(request, page, records);
+    }
+  }
+
+  paginate(event) {
+    const request: AggregateDataRequest = this.createRequest();
+    this.getCollectedData(request, 0, this.recordsPerPage).subscribe((data: CollectedData[]) => {
       data.forEach(item => {
         item.time = new Date(item.time);
         item.processes = item.processes.map(p => this.roundProcess(p));
@@ -177,25 +271,11 @@ export class ReportComponent implements OnInit {
           return item2.pCpu - item1.pCpu;
         });
       });
-      this.collectedData = data;
-      this.charts.forEach(item => this.dataService.fulfillChart(this.collectedData, item, true));
-      this.collectedDataTable = data.slice(0, this.recordsPerPage);
+
+      this.collectedDataTable = data;
+
+      this.isGetting = false;
     });
-
-    this.aggregatedDateService.getCountOfEntities(request).subscribe(totalRecords => {
-      this.totalRecords = totalRecords;
-      console.log(totalRecords);
-    });
-  }
-
-  private getCollectedData(request: AggregateDataRequest): Observable<CollectedData[]> {
-      return this.aggregatedDateService.getDataByInstanceIdAndTypeInTime(request);
-  }
-
-  paginate(event) {
-    const start = event.page * this.recordsPerPage;
-    const end = event.page * this.recordsPerPage + this.recordsPerPage;
-    this.collectedDataTable = this.collectedData.slice(start, end);
   }
 
   roundProcess(processData: ProcessData) {
@@ -213,7 +293,6 @@ export class ReportComponent implements OnInit {
       ramMBytesMax: +processData.ramMBytesMax.toFixed(2),
       ramMBytesMin: +processData.ramMBytesMin.toFixed(2)
     };
-    console.log(item);
     return item;
   }
 
@@ -235,6 +314,7 @@ export class ReportComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       doc.save(`Report ${DataType[this.selectedType]} Period ${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`);
     } else {
+<<<<<<< Updated upstream
       const eventRender = new EventEmitter();
       doc.deletePage(1);
       this.chartPDF.forEach(item => {
@@ -242,11 +322,28 @@ export class ReportComponent implements OnInit {
           const contentDataURL = canvas.toDataURL('image/png');
           doc.addPage();
           doc.addImage(contentDataURL, 'PNG', 35, 100);
+=======
+      doc.setFontSize(20);
+      let renderedImg = 0;
+      const eventRender = new EventEmitter();
+      doc.text(`${this.types[this.selectedType - 1].label} Report`, 200, 40);
+      doc.text(`${formatDate(this.dateFrom, 'dd/MM/yy HH:mm', 'en-US')} - ${formatDate(this.dateTo, 'dd/MM/yy HH:mm', 'en-US')}`, 150, 70);
+      let topMargin = 100;
+      this.chartPDF.forEach(item => {
+        html2canvas(item.nativeElement).then(canvas => {
+          const contentDataURL = canvas.toDataURL('image/png');
+          doc.addImage(contentDataURL, 'PNG', 15, topMargin, 560, 200);
+          if (renderedImg % 2 !== 0) {
+            doc.addPage();
+            topMargin = 100;
+          } else {
+            topMargin += 250 + 50;
+          }
+>>>>>>> Stashed changes
           eventRender.emit();
         });
       });
 
-      let renderedImg = 0;
       eventRender.subscribe(() => {
         renderedImg++;
         if (renderedImg === this.chartPDF.length) {
@@ -314,6 +411,21 @@ export class ReportComponent implements OnInit {
   }
 
   onAddChart(event: DashboardChart): void {
+    if (this.dateTo && this.dateFrom) {
+      const hourDifference = (this.dateTo.getTime() - this.dateFrom.getTime()) / (60 * 60000);
+      if (hourDifference > 23) {
+        event.dateTickFormatting = (value) => {
+          if (value instanceof Date) {
+            if (this.selectedType === DataType.AggregationForHour) {
+              return formatDate((<Date>value), 'MMM, d, h a', 'en-US');
+            } else {
+              return formatDate((<Date>value), 'MMM, d', 'en-US');
+            }
+          }
+        };
+      }
+    }
+
     this.charts.push({...event});
     this.decomposeChart(defaultOptions);
   }

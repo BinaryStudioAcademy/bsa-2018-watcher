@@ -22,7 +22,15 @@
       <p-calendar #cf2 [(ngModel)]="dateTo" [readonlyInput]="true"></p-calendar>
     </div>
     <div class="ui-g-2 ui-fluid bottom-flex">
+<<<<<<< Updated upstream
       <p-button label="Get info" [disabled]="!dateTo || !dateFrom" (click)="getInfo()"></p-button>
+=======
+      <button (click)="getInfo()" class="ui-button ui-state-default ui-corner-all ui-button-text-only ui-widget btn-inline-flex get-info"
+        [disabled]="!dateTo || !dateFrom || (activeTab === tabs[1] && charts.length === 0)">
+        <p-progressSpinner class="btn-spinner" *ngIf="isGetting" strokeWidth="5"></p-progressSpinner>
+        <span class="ui-button-text" *ngIf="!isGetting">Get info</span>
+      </button>
+>>>>>>> Stashed changes
     </div>
     <div class="ui-g-2 ui-fluid bottom-flex">
       <p-button label="Convert to PDF" [disabled]="!collectedData || (activeTab === tabs[1] && charts.length === 0)" (click)="convertPDF()"></p-button>
@@ -38,11 +46,6 @@
 
     <div *ngFor="let collected of collectedDataTable" class="table">
         <p-table #dt [columns]="cols" [value]="collected.processes">
-          <ng-template pTemplate="caption">
-            <div class="ui-helper-clearfix left-flex">
-              <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Export to CSV" (click)="dt.exportCSV()"></button>
-            </div>
-          </ng-template>
           <ng-template pTemplate="header" let-columns>
             <tr class="row-header">
               <th class="text-center name-header t-header" [pSortableColumn]="columns[0].field" rowspan="2">
@@ -131,8 +134,7 @@
     <div class="workspace">
       <div class="dashboard-options">
         <p-tieredMenu class="text-left" #cog [model]="cogItems" [popup]="true"></p-tieredMenu>
-        <span *ngIf="collectedData" class="fa fa-fw fa-gear options-btn" (click)="cog.toggle($event)"></span>
-        <span *ngIf="!collectedData" class="fa fa-fw fa-gear options-btn disabled-opt"></span>
+        <span class="fa fa-fw fa-gear options-btn" (click)="cog.toggle($event)"></span>
       </div>
 
       <div *ngIf="charts.length === 0" class="tutorial">
@@ -143,7 +145,13 @@
       <div class="charts-area">
         <div #chartPDF class="chart-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
       
-          <div class="icon-panel">
+          <div data-html2canvas-ignore
+            class="icon-panel action-icon fa fa-fw fa-cog"
+            (click)="createMenu(chart);opt.toggle($event);"
+            pTooltip="Options" tooltipPosition="top">
+              <p-tieredMenu #opt appendTo="body" [model]="currentChartMenu" [popup]="true"></p-tieredMenu>
+          </div>
+          <div class="icon-panel" data-html2canvas-ignore>
             <i class="action-icon fa fa-fw fa-edit" (click)="editChart(chart)"></i>
             <i class="action-icon fa fa-fw fa-times" (click)="deleteChart(chart)"></i>
           </div>
