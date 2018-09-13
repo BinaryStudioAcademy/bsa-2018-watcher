@@ -23,7 +23,11 @@
                 throw new HttpStatusCodeException(HttpStatusCode.NotFound, $"Entity {entity.GetType().Name} with id: {entity.Id} not found");
             }
 
-            findEntity.RoleId = entity.Role.Id;
+            if (entity.Role != null)
+            {
+                findEntity.RoleId = entity.Role.Id;
+            }
+
             findEntity.Bio = entity.Bio;
             findEntity.FirstName = entity.FirstName;
             findEntity.LastName = entity.LastName;

@@ -27,7 +27,7 @@
 
             try
             {
-                var url = await _fileStorageProvider.UploadFormFileAsync(file);
+                var url = await _fileStorageProvider.UploadFormFileAsync(file, system);
                 return Ok(url);
             }
             catch (Exception e)

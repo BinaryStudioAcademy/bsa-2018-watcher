@@ -49,11 +49,10 @@
 
         private IUserChatRepository _userChatRepository;
 
+        private IThemeRepository _themeRepository;
+
         private ICollectorAppVersionRepository _collectorAppVersionRepository;
 
-
-        private IThemeRepository _themeRepository;
-        
         public UnitOfWork(WatcherDbContext context, IMapper mapper)
         {
             _context = context;

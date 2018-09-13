@@ -7,9 +7,6 @@ import { DataService } from '../../../core/services/data.service';
 import { dataPropertyLables, DataProperty } from '../../../shared/models/data-property.enum';
 import { CollectedData } from '../../../shared/models/collected-data.model';
 import { CollectedDataService } from '../../../core/services/collected-data.service';
-import { timeFormat } from 'd3-time-format';
-import { formatDate } from '@angular/common';
-import { DataType } from '../../../shared/models/data-type.enum';
 
 @Component({
   selector: 'app-edit-report-chart',
@@ -27,9 +24,6 @@ export class EditReportChartComponent implements OnInit {
   @Input() dashboardChart: DashboardChart;
   @Input() collectedData: CollectedData[];
   @Input() edit: boolean;
-  @Input() dateFrom: Date;
-  @Input() dateTo: Date;
-  @Input() dataType: DataType;
 
   dropdownTypes: SelectItem[] = [];
   dropdownGroupSources: SelectItemGroup[];
@@ -105,7 +99,7 @@ export class EditReportChartComponent implements OnInit {
         this.isYAxisAvailable = true;
         this.dashboardChart.yAxisLabel = 'Percentage %';
         break;
-      case ChartType.Guage:
+      case ChartType.Gauge:
         this.isTimeAvailable = false;
         this.isYAxisAvailable = true;
         this.dashboardChart.yAxisLabel = 'Process';

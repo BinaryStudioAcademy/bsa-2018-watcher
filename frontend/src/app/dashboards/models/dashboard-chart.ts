@@ -42,5 +42,5 @@ export interface DashboardChart {
   type: ChartType;
   theme: string;
   isIncluded: boolean;
-  dateTickFormatting(value): string;
+  dateTickFormatting: (val) => string;
 }

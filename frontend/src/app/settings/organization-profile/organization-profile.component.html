@@ -1,4 +1,4 @@
-<!-- <div class="container"> -->
+<div class="container">
   <div class="ui-g ui-fluid">
     <div class="ui-g-12 ui-lg-6 title-block">
       <div class="title">ORGANIZATION PROFILE</div>
@@ -155,7 +155,7 @@
                 </div>
               </div>
             </div>
-            <button (click)="onSentInviteToEmail()" class="ui-button ui-state-default ui-corner-all ui-button-success ui-button-text-only ui-widget btn-inline-flex get-info"
+            <button (click)="onSentInviteToEmail()" class="ui-button ui-state-default ui-corner-all ui-button-success ui-button-text-only ui-widget btn-inline-flex"
               [disabled]="inviteLink === '' || iEmail?.invalid || isSending">
               <p-progressSpinner class="btn-spinner" *ngIf="isSending" strokeWidth="5"></p-progressSpinner>
               <span class="ui-button-text" *ngIf="!isSending">Send</span>
@@ -169,4 +169,4 @@
       <app-invites-list></app-invites-list>
     </div>
   </div>
-<!-- </div> -->
+</div>

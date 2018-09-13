@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc;
-using Serilog.Context;
-
 using DataAccumulator.BusinessLayer.Interfaces;
 using DataAccumulator.Shared.Models;
 
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
+using Serilog.Context;
 
 namespace DataAccumulator.WebAPI.Controllers
 {

@@ -19,7 +19,7 @@
 .message-container
 	display: grid
 	grid-template-columns: auto 1fr
-	grid-template-rows: 100px
+	// grid-template-rows: 100px
 	.message-content
 		display: grid
 		grid-template-rows: auto 1fr auto
@@ -29,13 +29,18 @@
 		margin-bottom: 5px
 		font-weight: bolder
 		font-size: 1.1em
-		width: 250px
+		width: 85%
 	.message-img
-		height: 100px
+		min-height: 100px
 		width: 100px
+		display: flex
+		justify-content: center
+		align-content: center
+		flex-direction: column
 	.message-text
 		color: black
 		line-height: 1.5em
+	.message-text-short
 		max-height: 3em
 		overflow: hidden
 		display: -webkit-box
@@ -74,7 +79,7 @@
 	content: "\f071"
 
 .system
-	background-color: #85F490
+	background-color: #B7D8B7
 .system:before
 	content: "\f0e0"
 
@@ -82,3 +87,7 @@
 	text-align: center
 	line-height: 100px
 	color: white
+
+.clickable
+  text-decoration: underline
+  cursor: pointer

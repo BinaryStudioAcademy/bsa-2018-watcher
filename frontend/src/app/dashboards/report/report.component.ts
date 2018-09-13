@@ -30,8 +30,6 @@ export class ReportComponent implements OnInit {
 
   private id: string;
 
-  isGetting: boolean;
-
   collectedDataTable: CollectedData[];
   collectedData: CollectedData[];
 
@@ -61,6 +59,8 @@ export class ReportComponent implements OnInit {
   currentChartMenu: MenuItem[] = [];
 
   onDisplayChartEditing = new EventEmitter<boolean>();
+
+  isGetting: boolean;
 
   constructor(private aggregatedDateService: AggregatedDataService,
               private activateRoute: ActivatedRoute,
@@ -190,7 +190,6 @@ export class ReportComponent implements OnInit {
   }
 
   getInfo(): void {
-    this.isGetting = true;
     const request: AggregateDataRequest = this.createRequest();
 
     this.getCollectedData(request).subscribe((data: CollectedData[]) => {
@@ -222,10 +221,12 @@ export class ReportComponent implements OnInit {
       });
 
       this.isGetting = false;
+      this.charts.forEach(item => this.dataService.fulfillChart(this.collectedData, item, true));
+      this.collectedDataTable = data.slice(0, this.recordsPerPage);
+    });
 
-      this.aggregatedDateService.getCountOfEntities(request).subscribe(totalRecords => {
-        this.totalRecords = totalRecords;
-      });
+    this.aggregatedDateService.getCountOfEntities(request).subscribe(totalRecords => {
+      this.totalRecords = totalRecords;
     });
   }
 

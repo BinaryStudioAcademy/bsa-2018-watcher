@@ -15,7 +15,6 @@ import { DropdownModule } from 'primeng/dropdown';
 
 import { ImageCropperModule } from 'ngx-img-cropper';
 import { FileUploadModule } from 'primeng/fileupload';
-import { DataCollectorComponent } from './data-collector/data-collector.component';
 
 @NgModule({
   imports: [
@@ -40,8 +39,7 @@ import { DataCollectorComponent } from './data-collector/data-collector.componen
     AdminPageComponent,
     FeedbackListComponent,
     UserListComponent,
-    OrganizationListComponent,
-    DataCollectorComponent
+    OrganizationListComponent
   ]
 })
 export class AdminModule { }

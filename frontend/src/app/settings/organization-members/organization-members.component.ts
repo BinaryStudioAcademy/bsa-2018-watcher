@@ -1,15 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SelectItem } from 'primeng/api';
+import { Dropdown } from 'primeng/primeng';
+
+import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
 import { UserOrganizationService } from '../../core/services/user-organization.service';
 import { OrganizationRoleService } from '../../core/services/organization-role.service';
+import { OrganizationService } from '../../core/services/organization.service';
+
+import { ChatHub } from 'src/app/core/hubs/chat.hub';
+
 import { User } from '../../shared/models/user.model';
-import { SelectItem, LazyLoadEvent } from 'primeng/api';
-import { UserService } from '../../core/services/user.service';
-import { ToastrService } from '../../core/services/toastr.service';
+import { Organization } from '../../shared/models/organization.model';
 import { UserOrganization } from '../../shared/models/user-organization.model';
 import { OrganizationRole } from '../../shared/models/organization-role.model';
-import { Dropdown } from 'primeng/primeng';
-import { ChatHub } from 'src/app/core/hubs/chat.hub';
 import { ChatType } from 'src/app/shared/models/chat-type.enum';
 import { ChatRequest } from '../../shared/requests/chat-request';
 import { NotificationType } from '../../shared/models/notification-type.enum';
@@ -25,7 +29,8 @@ export class OrganizationMembersComponent implements OnInit {
   userOrganizations: UserOrganization[];
   currentUser: User;
   lstRoles: OrganizationRole[];
-  dropdownRole: SelectItem[];
+  dropdownRole: SelectItem[] = [];
+  currentOrganization: Organization;
 
   isManager: boolean;
 
@@ -34,11 +39,11 @@ export class OrganizationMembersComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private organizationService: OrganizationService,
     private userOrganizationService: UserOrganizationService,
     private organizationRoleService: OrganizationRoleService,
     private chatHub: ChatHub,
     private toastrService: ToastrService) {
-    this.dropdownRole = [];
   }
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -46,6 +51,17 @@ export class OrganizationMembersComponent implements OnInit {
       return;
     }
 
+    this.currentOrganization = this.currentUser.lastPickedOrganization;
+    this.downloadContent();
+
+    this.organizationService.organizationChanged.subscribe( () => {
+      this.currentUser = this.authService.getCurrentUser();
+      this.currentOrganization = this.currentUser.lastPickedOrganization;
+      this.downloadContent();
+    });
+  }
+
+  downloadContent() {
     this.userOrganizationService
         .getByOrganizationId(this.currentUser.lastPickedOrganizationId)
         .subscribe((value: UserOrganization[]) => {
