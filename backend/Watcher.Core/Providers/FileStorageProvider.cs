@@ -172,6 +172,14 @@ namespace Watcher.Core.Providers
             await blob.DeleteAsync();
         }
 
+        public async Task<bool> IsExist(string path)
+        {
+            var client = _storageAccount.CreateCloudBlobClient();
+            var blob = await client.GetBlobReferenceFromServerAsync(new Uri(path));
+            
+            return await blob.ExistsAsync();
+        }
+
         private Task SetPublicContainerPermissions(CloudBlobContainer container)
         {
             var permissions = new BlobContainerPermissions

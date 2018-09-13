@@ -64,7 +64,6 @@ export class InstanceListComponent implements OnInit {
             this.dashboardsHub.subscribeToOrganizationById(this.user.lastPickedOrganizationId);
           }
         });
-        console.log('SUBSCRIPTION CHANGED');
         if (this.authService.getCurrentUserLS()) { this.configureInstances(this.user.lastPickedOrganizationId); }
       });
     this.dashboardsHub.instanceCheckedSubObservable.subscribe(value => {
