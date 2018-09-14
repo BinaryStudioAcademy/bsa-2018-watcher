@@ -62,7 +62,7 @@
             return Ok(tokenResponse);
         }
 
-        [Authorize] // Authorize Validate only Firebase token
+        // [Authorize] // Authorize Validate only Firebase token
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
         {
