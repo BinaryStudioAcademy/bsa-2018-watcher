@@ -135,29 +135,32 @@ export class HeaderComponent implements OnInit {
   }
 
   private fillOrganizations(): void {
-    this.orgItems = new Array<MenuItem>();
 
-    this.currentUser.organizations.forEach(element => {
-      this.orgItems.push({
-        label: element.name,
-        id: element.id.toString(),
-        icon: 'fa fa-fw fa-building',
-        command: (onclick) => {
-          this.changeLastPicOrganizations(element);
-          if (this.isInstancesRoute()) {
-            this.router.navigate(['/user/instances']);
-          }
-        },
-        styleClass: (element.id === this.currentUser.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
-        disabled: (element.id === this.currentUser.lastPickedOrganizationId)
+    this.userService.get(this.currentUser.id).subscribe( userDto => {
+      this.orgItems = new Array<MenuItem>();
+
+      userDto.organizations.forEach(element => {
+        this.orgItems.push({
+          label: element.name,
+          id: element.id.toString(),
+          icon: 'fa fa-fw fa-building',
+          command: (onclick) => {
+            this.changeLastPicOrganizations(element);
+            if (this.isInstancesRoute()) {
+              this.router.navigate(['/user/instances']);
+            }
+          },
+          styleClass: (element.id === this.currentUser.lastPickedOrganizationId) ? 'selectedMenuItem' : '',
+          disabled: (element.id === this.currentUser.lastPickedOrganizationId)
+        });
       });
-    });
-    this.orgItems.push({
-      label: 'Add new',
-      icon: 'fa fa-fw fa-plus',
-      command: (onclick) => {
-        this.addNewOrganization();
-      },
+      this.orgItems.push({
+        label: 'Add new',
+        icon: 'fa fa-fw fa-plus',
+        command: (onclick) => {
+          this.addNewOrganization();
+        },
+      });
     });
   }
 
