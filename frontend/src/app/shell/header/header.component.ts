@@ -207,8 +207,6 @@ export class HeaderComponent implements OnInit {
 
           this.organizationService.organizationChanged.emit({from: previousOrganizationId, to: item.id});
 
-          this.themeService.applyThemeById(this.currentUser.lastPickedOrganization.themeId);
-
           // notify user about changes
           this.toastrService.success(`Organization by default was updated. Current organization: "${item.name}"`);
           this.isChangingOrganization = false;

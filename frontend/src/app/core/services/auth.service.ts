@@ -242,6 +242,9 @@ export class AuthService {
 
   updateCurrentUser(user: User) {
     localStorage.setItem('currentUser', JSON.stringify(user));
+
+    this.themeService.applyThemeById(user.lastPickedOrganization.themeId);
+
     // Set current user data into observable
     this.currentUserSubject.next(user);
   }
