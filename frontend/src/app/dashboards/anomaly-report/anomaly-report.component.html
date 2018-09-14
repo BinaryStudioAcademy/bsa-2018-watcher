@@ -23,7 +23,7 @@
     </div>
     <div class="ui-g-2 bottom-flex">
       <button type="button" class="ui-button ui-state-default ui-corner-all ui-button-text-only ui-widget btn-inline-flex get-info-but"
-           (click)="getInfo()" [disabled]="!dateTo || !dateFrom ">
+           (click)="getInfo()" [disabled]="!dateTo || !dateFrom || isGetting">
         <p-progressSpinner class="btn-spinner" *ngIf="isGetting" strokeWidth="5"></p-progressSpinner>
         <span class="ui-button-text" *ngIf="!isGetting">Get info</span>
       </button>
@@ -31,10 +31,10 @@
     <div class="ui-g-2"></div>
   </div>
 
-  <p-table #dt [value]="reports">
+  <p-table #dt [value]="reports" *ngIf="reports">
     <ng-template pTemplate="header" let-columns>
       <tr class="row-header">
-        <th class="text-center name-header t-header">
+        <th class="text-center t-header">
           Date
         </th>
         <th class="data-header t-header">
@@ -57,11 +57,10 @@
           <div class="ui-g-8 ui-fluid">
             <input type="text" [ngModel]="rowData.link" pInputText />
           </div>
-          <p-button class="ui-g-4" label="Mock"></p-button>
+          <p-button class="ui-g-4" (click)="onCopy()" label="Copy"></p-button>
         </td>
       </tr>
     </ng-template>
   </p-table>
-
   
 </div>

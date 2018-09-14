@@ -6,6 +6,7 @@ import { AnomalyReportService } from '../../core/services/anomaly-report.service
 import { InstanceAnomalyReport } from '../../shared/models/instance-anomaly-report.model';
 import { ActivatedRoute } from '@angular/router';
 import { AnomalyReportRequest } from '../../shared/models/anomaly-report-request.model';
+import { ToastrService } from '../../core/services/toastr.service';
 
 @Component({
   selector: 'app-anomaly-report',
@@ -33,7 +34,8 @@ export class AnomalyReportComponent implements OnInit {
   isGetting: boolean;
 
   constructor(private anomalyReportService: AnomalyReportService,
-              private activateRoute: ActivatedRoute) { }
+              private activateRoute: ActivatedRoute,
+              private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.types = [
@@ -110,5 +112,21 @@ export class AnomalyReportComponent implements OnInit {
       to: this.dateTo
     };
   }
+
+  onCopy(link: string) {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = link;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this.toastrService.info('Link was copied to clipboard');
+  }
+
 
 }
