@@ -20,15 +20,6 @@ export class ShellComponent implements OnInit {
   showInstanceList: boolean;
 
   ngOnInit(): void {
-    this.organizationService.organizationChanged.subscribe( () => {
-      const currentUser = this.authService.getCurrentUserLS();
-      if (currentUser) {
-        const themeId = currentUser.lastPickedOrganization.themeId;
-        if (themeId) {
-          this.themeService.applyThemeById(themeId);
-        }
-      }
-    });
 
     this.checkRoute();
     this.subscribeRouteChanges();
