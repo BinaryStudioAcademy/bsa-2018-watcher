@@ -118,17 +118,17 @@
                 var report = await reportsService.GetReportByIdAsync(arg.AnomalyReportId);
                 var notificationRequest = new NotificationRequest
                                               {
-                                                  // Text = "Anomaly Report was created for instance: " + arg.InstanceId,
                                                   CreatedAt = report.Date,
                                                   InstanceId = report.ClientId,
                                                   Type = NotificationType.Info
                                               };
 
-                var result = await notificationService.CreateAnomalyReportNotificationAsync(notificationRequest, report);
+                var htmlFileUrl = await notificationService.CreateAnomalyReportNotificationAsync(notificationRequest, report);
 
-                if (result == null)
+                if (!string.IsNullOrWhiteSpace(htmlFileUrl))
                 {
-                    return MessageProcessResponse.Abandon;
+                    await reportsService.UpdateReportAsync(report.Id, htmlFileUrl);
+                    // return MessageProcessResponse.Abandon;
                 }
             }
 

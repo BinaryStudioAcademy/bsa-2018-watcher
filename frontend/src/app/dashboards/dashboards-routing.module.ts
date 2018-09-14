@@ -5,6 +5,7 @@ import { EditInstanceComponent } from './edit-instance/edit-instance.component';
 import { ManagerGuard } from '../core/guards/manager.guard';
 import { ReportComponent } from './report/report.component';
 import { InstanceActivityComponent } from './instance-activity/instance-activity.component';
+import { AnomalyReportComponent } from './anomaly-report/anomaly-report.component';
 
 const dashboardRoutes: Routes = [
   {
@@ -33,6 +34,10 @@ const dashboardRoutes: Routes = [
   {
     path: ':insId/:guidId/report',
     component: ReportComponent
+  },
+  {
+    path: ':insId/:guidId/anomaly-report',
+    component: AnomalyReportComponent
   }];
 
 @NgModule({

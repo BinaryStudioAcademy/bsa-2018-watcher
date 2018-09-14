@@ -36,7 +36,7 @@
         // /InstanceAnomalyReports/Report/774186a3-2850-4792-a648-53b07db62af2
 
         [HttpGet("{id}/{type}/{from}/{to}")]
-        public virtual async Task<ActionResult<IEnumerable<CollectedDataDto>>> GetDataByInstance(Guid id, 
+        public virtual async Task<ActionResult<IEnumerable<InstanceAnomalyReport>>> GetDataByInstance(Guid id, 
                                                                                                  CollectedDataType type, 
                                                                                                  DateTime from, 
                                                                                                  DateTime to)
@@ -49,13 +49,13 @@
         [HttpGet("getCount/{id}/{type}/{from}/{to}")]
         public virtual async Task<ActionResult<int>> GetCount(Guid id, CollectedDataType type, DateTime from, DateTime to)
         {
-            var dtos = await _service.GetCountOfReportsAsync(id, type, @from, to);
+            var dtos = await _service.GetCountOfReportsAsync(id, type, from, to);
 
             return Ok(dtos);
         }
 
         [HttpGet("{id}/{type}/{from}/{to}/{page}/{count}")]
-        public virtual async Task<ActionResult<IEnumerable<CollectedDataDto>>> GetDataByInstancePagination(Guid id, 
+        public virtual async Task<ActionResult<IEnumerable<InstanceAnomalyReport>>> GetDataByInstancePagination(Guid id, 
                                                                                                            CollectedDataType type,
                                                                                                            DateTime from, 
                                                                                                            DateTime to,
@@ -74,7 +74,8 @@
             var report = InstanceAnomalyReportsService.GetAnomalyReport(instanceId);
             var dto = _mapper.Map<InstanceAnomalyReport, InstanceAnomalyReportDto>(report);
             var html = InstanceAnomalyReportsService.GetHtml(dto);
-            _emailProvider.SendMessageOneToOne("watcher@net.com", "Analyze", "target.com", "", html);
+            var htmlLetter = InstanceAnomalyReportsService.GetHtmlForLetter("userName", html, "bsa-watcher.azurewebsites.net");
+            _emailProvider.SendMessageOneToOne("watcher@net.com", "Analyze", "target.com", "", htmlLetter);
             return Ok(report);
         }
     }

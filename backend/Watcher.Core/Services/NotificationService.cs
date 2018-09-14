@@ -1,5 +1,6 @@
 ﻿namespace Watcher.Core.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -24,13 +25,19 @@
         private readonly IMapper _mapper;
         private readonly IHubContext<NotificationsHub> _notificationsHub;
         private readonly IEmailProvider _emailProvider;
-
-        public NotificationService(IUnitOfWork uow, IMapper mapper, IHubContext<NotificationsHub> notificationsHub, IEmailProvider emailProvider)
+        private readonly IFileStorageProvider _fileStorageProvider;
+        
+        public NotificationService(IUnitOfWork uow, 
+                                   IMapper mapper, 
+                                   IHubContext<NotificationsHub> notificationsHub, 
+                                   IEmailProvider emailProvider,
+                                   IFileStorageProvider fileStorageProvider)
         {
             _uow = uow;
             _mapper = mapper;
             _notificationsHub = notificationsHub;
             _emailProvider = emailProvider;
+            _fileStorageProvider = fileStorageProvider;
         }
 
         public async Task<IEnumerable<NotificationDto>> GetAllEntitiesAsync()
@@ -231,23 +238,24 @@
             return result;
         }
 
-        public async Task<IEnumerable<NotificationDto>> CreateAnomalyReportNotificationAsync(NotificationRequest notificationRequest, InstanceAnomalyReportDto report)
+        public async Task<string> CreateAnomalyReportNotificationAsync(NotificationRequest notificationRequest, InstanceAnomalyReportDto report)
         {
             var receivers = new List<User>();
             var notifications = new List<NotificationDto>();
 
-            if (notificationRequest.InstanceId == null) return notifications;
+            if (notificationRequest.InstanceId == null) return string.Empty;
 
             var instance = await _uow.InstanceRepository.GetFirstOrDefaultAsync(i => i.GuidId == notificationRequest.InstanceId,
                                include: instances => instances.Include(o => o.Organization)
                                    .ThenInclude(uo => uo.UserOrganizations)
                                    .ThenInclude(uo => uo.User));
-            if (instance == null) return notifications;
+            if (instance == null) return string.Empty;
 
-            notificationRequest.Text = $"Anomaly Report was created for instance: {instance.Title} (id: {instance.Id})";
+            var htmlTable = InstanceAnomalyReportsService.GetHtml(report);
+            var htmlDocUrl = await _fileStorageProvider.UploadHtmlFileAsync(htmlTable, report.Id);
+            notificationRequest.Text = $"Anomaly Report was created for instance: {instance.Title} (id: {instance.Id}). Download it <a href=\"{htmlDocUrl}\">here</a>";
             notificationRequest.OrganizationId = instance.OrganizationId;
             receivers.AddRange(instance.Organization.UserOrganizations.Select(userOrganization => userOrganization.User));
-            var stringHtml = GenerateWholeHtml.GenerateHtml(report);
 
             foreach (var receiver in receivers)
             {
@@ -271,21 +279,26 @@
                 var dto = _mapper.Map<Notification, NotificationDto>(created);
                 dto.NotificationSetting = _mapper.Map<NotificationSetting, NotificationSettingDto>(notificationSetting);
 
+
                 if (notificationSetting.IsEmailable)
-                    await _emailProvider.SendMessageOneToOne("watcher@net.com",
-                        $"{notificationSetting.Type} Notification", receiver.EmailForNotifications,
-                        dto.Text, stringHtml);
+                {
+                    var htmlLetter = InstanceAnomalyReportsService.GetHtmlForLetter(receiver.DisplayName, htmlTable, htmlDocUrl);
+                    await _emailProvider.SendMessageOneToOne(
+                        "watcher@net.com",
+                        $"{notificationSetting.Type} Notification",
+                        receiver.EmailForNotifications,
+                        dto.Text, htmlLetter);
+                }
 
                 notifications.Add(dto);
 
                 if (!NotificationsHub.UsersConnections.ContainsKey(dto.UserId)) continue;
 
                 foreach (string connectionId in NotificationsHub.UsersConnections[dto.UserId])
-                    await _notificationsHub.Clients.Client(connectionId)
-                        .SendAsync("AddNotification", dto);
+                    await _notificationsHub.Clients.Client(connectionId).SendAsync("AddNotification", dto);
             }
 
-            return notifications;
+            return htmlDocUrl;
         }
 
         private string CreateReportHtmlMessage(string message, AzureMLAnomalyReport report)

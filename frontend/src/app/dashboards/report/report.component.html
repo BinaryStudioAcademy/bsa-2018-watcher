@@ -10,7 +10,7 @@
 
   <div class="ui-g filters">
     <div class="ui-g-2 ui-fluid left-padding">
-      <p class="filter-label">Title:</p>
+      <p class="filter-label">Type:</p>
       <p-dropdown [autoWidth]="false" [options]="types" [(ngModel)]="selectedType" (onChange)="changeType($event)"></p-dropdown>
     </div>
     <div class="ui-g-2 ui-fluid">
@@ -23,14 +23,14 @@
     </div>
     <div class="ui-g-2 bottom-flex">
       <button type="button" class="ui-button ui-state-default ui-corner-all ui-button-text-only ui-widget btn-inline-flex get-info-but"
-          (click)="getInfo()" [disabled]="!dateTo || !dateFrom || (activeTab === tabs[1] && charts.length === 0)">
+          (click)="getInfo()" [disabled]="!dateTo || !dateFrom || (activeTab === tabs[1] && charts.length === 0) || isGetting">
         <p-progressSpinner class="btn-spinner" *ngIf="isGetting" strokeWidth="5"></p-progressSpinner>
         <span class="ui-button-text" *ngIf="!isGetting">Get info</span>
       </button>
     </div>
     <div class="ui-g-2 bottom-flex">
       <button type="button" class="ui-button ui-state-default ui-corner-all ui-button-text-only ui-widget btn-inline-flex convert-but"
-          (click)="convertPDF()" [disabled]="!collectedData || (activeTab === tabs[1] && charts.length === 0)">
+          (click)="convertPDF()" [disabled]="!collectedData || (activeTab === tabs[1] && charts.length === 0) || isConverting">
         <p-progressSpinner class="btn-spinner" *ngIf="isConverting" strokeWidth="5"></p-progressSpinner>
         <span class="ui-button-text" *ngIf="!isConverting">Convert to PDF</span>
       </button>

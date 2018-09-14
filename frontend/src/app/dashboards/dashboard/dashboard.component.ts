@@ -79,6 +79,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onInstanceChanged(params) {
+    this.isLoading = true;
+
     if (this.instanceGuidId) {
       this.dashboardsHub.unSubscribeFromInstanceById(this.instanceGuidId);
     }
@@ -89,13 +91,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dashboards = [];
     this.dataService.hourlyCollectedData = [];
     if (!this.instanceId) {
+      this.isLoading = false;
       return;
     }
 
-    this.isLoading = true;
+
     this.getDashboardsByInstanceId(this.instanceId).then(value => {
       this.onDashboards(value);
-      this.isLoading = false;
       this.collectedDataService.getCollectedDataByInstanceId(this.instanceGuidId, CollectedDataType.Accumulation)
         .subscribe(data => {
           this.dataService.hourlyCollectedData = data;
@@ -115,6 +117,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
             }
           });
+          this.isLoading = false;
         }, err => {
           console.error(err);
           this.toastrService.error('Error occurred while fetching instance\'s Collected Data');

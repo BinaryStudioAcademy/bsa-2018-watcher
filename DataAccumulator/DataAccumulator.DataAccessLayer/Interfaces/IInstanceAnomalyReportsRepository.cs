@@ -25,5 +25,7 @@
                                                                              int count = 10);
 
         Task<long> CountByParametersAsync(Guid id, CollectedDataType type, DateTime @from, DateTime to);
+
+        Task UpdateReportHtmlUrlAsync(Guid reportId, string htmlUrl);
     }
 }
