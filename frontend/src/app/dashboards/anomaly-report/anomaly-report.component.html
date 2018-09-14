@@ -31,7 +31,7 @@
     <div class="ui-g-2"></div>
   </div>
 
-  <p-table #dt [value]="reports" *ngIf="reports">
+  <p-table #dt [value]="reports" *ngIf="reports" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header" let-columns>
       <tr class="row-header">
         <th class="text-center t-name t-header">
@@ -54,10 +54,10 @@
           {{types[rowData.collectedDataTypeOfReport - 1].label}}
         </td>
         <td class="ui-g text-center">
-          <div class="ui-g-8 ui-fluid">
+          <div class="ui-g-10 ui-fluid">
             <input type="text" [ngModel]="rowData.htmlDocUrl" pInputText />
           </div>
-          <p-button class="ui-g-4" (click)="onCopy(rowData.htmlDocUrl)" label="Copy"></p-button>
+          <p-button class="ui-g-2 left-flex" (click)="onCopy(rowData.htmlDocUrl)" label="Copy"></p-button>
         </td>
       </tr>
     </ng-template>
