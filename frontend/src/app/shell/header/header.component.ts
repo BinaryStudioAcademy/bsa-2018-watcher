@@ -73,6 +73,10 @@ export class HeaderComponent implements OnInit {
       this.authService.logout();
       this.themeService.setDefaultTheme();
     }
+    this.chatHub.disconnect();
+    this.dashboardsHub.disconnect();
+    this.notificationsHub.disconnect();
+    this.invitesHub.disconnect();
   }
 
   openUserProfile(panel: OverlayPanel): void {
