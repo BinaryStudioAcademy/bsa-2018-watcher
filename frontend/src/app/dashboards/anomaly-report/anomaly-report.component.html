@@ -31,7 +31,7 @@
     <div class="ui-g-2"></div>
   </div>
 
-  <p-table #dt [value]="reports">
+  <p-table #dt [value]="reports" *ngIf="reports">
     <ng-template pTemplate="header" let-columns>
       <tr class="row-header">
         <th class="text-center t-name t-header">
