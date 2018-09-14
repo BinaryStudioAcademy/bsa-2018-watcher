@@ -35,15 +35,15 @@ namespace DataCollector
                     //InterruptsPerSeconds = _systemCounters["Interrupts"].NextValue(),
                     //InterruptsTimePercent = _systemCounters["InterruptsTime"].NextValue(),
 
-                    TotalRamMBytes = GetTotalRam(),
-                    RamUsagePercentage = GetUsageRamPercentages(),
-                    UsageRamMBytes = GetUsageRam(),
+                    TotalRamMBytes = (float)Math.Round(GetTotalRam(), 2),
+                    RamUsagePercentage = (float)Math.Round(GetUsageRamPercentages(), 2),
+                    UsageRamMBytes = (float)Math.Round(GetUsageRam(), 2),
 
-                    CpuUsagePercentage = GetUsageCpuPercentages(),
+                    CpuUsagePercentage = (float)Math.Round(GetUsageCpuPercentages(),2),
 
-                    LocalDiskTotalMBytes = GetDiskTotalMbytes(),
-                    LocalDiskUsageMBytes = GetDiskTotalMbytes() - GetDiskFreeMbytes(),
-                    LocalDiskUsagePercentage = GetLocalDiskUsagePercent(),
+                    LocalDiskTotalMBytes = (float)Math.Round(GetDiskTotalMbytes(), 2),
+                    LocalDiskUsageMBytes = (float)Math.Round(GetDiskTotalMbytes() - GetDiskFreeMbytes(), 2),
+                    LocalDiskUsagePercentage = (float)Math.Round(GetLocalDiskUsagePercent(), 2),
 
                     Processes = allProcesses,
                     ProcessesCount = allProcesses.Count,
@@ -153,9 +153,9 @@ namespace DataCollector
                     group => new ProcessData
                     {
                         Name = group.Key,
-                        PCpu = group.Sum(proc => proc.PCpu),
-                        PRam = group.Sum(proc => proc.PRam),
-                        RamMBytes = group.Sum(proc => proc.RamMBytes)
+                        PCpu = (float)Math.Round(group.Sum(proc => proc.PCpu), 2),
+                        PRam = (float)Math.Round(group.Sum(proc => proc.PRam), 2),
+                        RamMBytes = (float)Math.Round(group.Sum(proc => proc.RamMBytes), 2)
                     }).ToList();
             return temp;
         }

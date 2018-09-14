@@ -1973,29 +1973,7 @@ body .ui-toast .ui-toast-message {
 
 body .ui-widget-overlay {
   background-color: rgba(0, 0, 0, 0.4); }
-body .ui-overlaypanel {
-  background-color: #ffffff;
-  color: #333333;
-  padding: 0;
-  border: 1px solid #c8c8c8;
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  border-radius: 0; }
-  body .ui-overlaypanel .ui-overlaypanel-content {
-    padding: 0.571em 1em; }
-  body .ui-overlaypanel .ui-overlaypanel-close {
-    background-color: #007ad9;
-    color: #ffffff;
-    width: 1.538em;
-    height: 1.538em;
-    line-height: 1.538em;
-    text-align: center;
-    position: absolute;
-    top: -0.769em;
-    right: -0.769em; }
-    body .ui-overlaypanel .ui-overlaypanel-close:hover {
-      background-color: #005b9f;
-      color: #ffffff; }
+
 body .ui-dialog {
   padding: 0;
   -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
@@ -2550,3 +2528,27 @@ body .ui-inplace {
     width: calc(100% - 2.357em); }
 
 /* Add your customizations of theme here */
+
+body .ui-overlaypanel {
+  background-color: #ffffff;
+  color: #333333;
+  padding: 0;
+  border: 1px solid #c8c8c8;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0; }
+  body .ui-overlaypanel .ui-overlaypanel-content {
+    padding: 0; }
+  body .ui-overlaypanel .ui-overlaypanel-close {
+    background-color: #007ad9;
+    color: #ffffff;
+    width: 1.538em;
+    height: 1.538em;
+    line-height: 1.538em;
+    text-align: center;
+    position: absolute;
+    top: -0.769em;
+    right: -0.769em; }
+    body .ui-overlaypanel .ui-overlaypanel-close:hover {
+      background-color: #005b9f;
+      color: #ffffff; }
