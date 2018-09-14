@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterEvent} from '@angular/router';
+import { OrganizationService } from '../core/services/organization.service';
 
 @Component({
   selector: 'app-shell',
@@ -8,12 +9,18 @@ import {Router, RouterEvent} from '@angular/router';
 })
 
 export class ShellComponent implements OnInit {
-  constructor(private router: Router) {  }
+  constructor(private router: Router,
+    private organizationService: OrganizationService) {  }
 
   private regexInstances: RegExp = /\/user\/instances/;
   showInstanceList: boolean;
 
   ngOnInit(): void {
+    this.organizationService.organizationChanged.subscribe( () => {
+      console.log('Organization changed in shell');
+      debugger
+    });
+
     this.checkRoute();
     this.subscribeRouteChanges();
   }
