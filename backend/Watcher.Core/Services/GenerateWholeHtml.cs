@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Data;
-using Pechkin;
-using System.IO;
 using DataAccumulator.Shared.Models;
 
 namespace Watcher.Core.Services
@@ -23,7 +21,7 @@ namespace Watcher.Core.Services
             html = html +
                    "</span></td></tr><tr><td width = '100%' align = 'left' valign = 'middle'><br/><span style = 'font-family: Arial; font-size: 14pt'>Best wishes,<br/>" +
                    "<a style = 'color: #22BCE5' href = 'bsa-watcher.azurewebsites.net'><b> Watcher </b></a></span></td></tr></table></body></html>";
-
+           
             return html;
         }
 
@@ -69,53 +67,6 @@ namespace Watcher.Core.Services
             process = process + "</table>";
             return process;
         }
-
-        public static void ConvertToPdf(string html) {
-            // byte[] pdfContent = new SimplePechkin(new GlobalConfig()).Convert("<html><body><h1>Hello world!</h1></body></html>");
-            // Simple PDF from String
-            byte[] pdfBuffer = new SimplePechkin(new GlobalConfig()).Convert(html);
-
-            // Folder where the file will be created
-            string directory = "";
-            // Name of the PDF
-            string filename = "analyze.pdf";
-
-            if (ByteArrayToFile(directory + filename, pdfBuffer))
-            {
-                Console.WriteLine("PDF Succesfully created");
-            }
-            else
-            {
-                Console.WriteLine("Cannot create PDF");
-            }
-        }
-
-        /// <summary>
-        /// Writes a byte array (format returned by SimplePechkin) into a file
-        /// </summary>
-        /// <param name="_FileName"></param>
-        /// <param name="_ByteArray"></param>
-        /// <returns></returns>
-        private static bool ByteArrayToFile(string _FileName, byte[] _ByteArray)
-        {
-            try
-            {
-                // Open file for reading
-                FileStream _FileStream = new FileStream(_FileName, FileMode.Create, FileAccess.Write);
-                // Writes a block of bytes to this stream using data from  a byte array.
-                _FileStream.Write(_ByteArray, 0, _ByteArray.Length);
-
-                // Close file stream
-                _FileStream.Close();
-
-                return true;
-            }
-            catch (Exception _Exception)
-            {
-                Console.WriteLine("Exception caught in process while trying to save : {0}", _Exception.ToString());
-            }
-
-            return false;
-        }
+        
     }
 }

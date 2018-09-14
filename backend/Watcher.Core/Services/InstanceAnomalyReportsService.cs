@@ -24,12 +24,7 @@
             _mapper = mapper;
         }
 
-        public static string GetHtml(InstanceAnomalyReportDto report)
-        {
-            var html = GenerateWholeHtml.GenerateHtml(report);
-            GenerateWholeHtml.ConvertToPdf(html);
-            return html;
-        }
+        public static string GetHtml(InstanceAnomalyReportDto report) => GenerateWholeHtml.GenerateHtml(report);
 
         public static InstanceAnomalyReport GetAnomalyReport(Guid instanceId)
         {
