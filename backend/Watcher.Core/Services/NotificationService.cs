@@ -282,7 +282,7 @@
 
                 if (notificationSetting.IsEmailable)
                 {
-                    var htmlLetter = InstanceAnomalyReportsService.GetHtmlForLetter(receiver.DisplayName, htmlTable, htmlDocUrl);
+                    var htmlLetter = InstanceAnomalyReportsService.GetHtmlForLetter(receiver.DisplayName, instance.Title, htmlDocUrl);
                     await _emailProvider.SendMessageOneToOne(
                         "watcher@net.com",
                         $"{notificationSetting.Type} Notification",

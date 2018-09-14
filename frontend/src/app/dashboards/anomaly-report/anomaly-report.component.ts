@@ -100,7 +100,7 @@ export class AnomalyReportComponent implements OnInit {
       data.forEach(item => {
         item.date = new Date(item.date);
         if (!item.htmlDocUrl) {
-          item.htmlDocUrl = 'https://academy2018.slack.com/archives/DBQSQ5WVC/p1536933960000100';
+          item.htmlDocUrl = 'https://bsawatcherfiles.blob.core.windows.net/watcher/f736284e-9044-4d94-8a4d-3456154de6dd.html';
         }
       });
       this.reports = data;
