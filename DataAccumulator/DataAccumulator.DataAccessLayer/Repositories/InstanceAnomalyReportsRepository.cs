@@ -7,6 +7,7 @@
     using DataAccumulator.DataAccessLayer.Data;
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.DataAccessLayer.Interfaces;
+    using DataAccumulator.Shared.Models;
 
     using MongoDB.Bson;
     using MongoDB.Driver;
@@ -32,6 +33,33 @@
         {
             var filter = Builders<InstanceAnomalyReport>.Filter.Eq(i => i.ClientId, instanceId);
             return _context.AnomalyReportsCollection.Find(filter).ToListAsync();
+        }
+
+        public Task<List<InstanceAnomalyReport>> GetReportsByParametersAsync(Guid instanceId, CollectedDataType type, DateTime @from, DateTime to, int page = 1, int count = 10)
+        {
+            var query = _context.AnomalyReportsCollection.Find(d => d.ClientId == instanceId 
+                                                                    && d.CollectedDataTypeOfReport == type 
+                                                                    && d.Date >= @from 
+                                                                    && d.Date <= to);
+
+            query.Skip(count * (page - 1)).Limit(count);
+
+            return query.ToListAsync();
+        }
+
+        public Task<long> CountByParametersAsync(Guid id, CollectedDataType type, DateTime @from, DateTime to)
+        {
+            var query = _context.AnomalyReportsCollection.Find(d => d.ClientId == id
+                                                                    && d.CollectedDataTypeOfReport == type
+                                                                    && d.Date >= @from
+                                                                    && d.Date <= to);
+
+            if (query != null)
+            {
+                return query.CountAsync();
+            }
+
+            return Task.FromResult((long)0);
         }
 
         public Task<InstanceAnomalyReport> GetReportByIdAsync(Guid reportId)

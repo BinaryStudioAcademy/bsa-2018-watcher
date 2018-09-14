@@ -12,6 +12,8 @@ using MongoDB.Driver;
 
 namespace DataAccumulator.DataAccessLayer.Repositories
 {
+    using System.Linq;
+
     public class DataAggregatorRepository : IDataAggregatorRepository<CollectedData>
     {
         private readonly DataAccumulatorContext _context = null;
@@ -154,6 +156,11 @@ namespace DataAccumulator.DataAccessLayer.Repositories
             }
         }
 
+        public Task AddEntitiesAsync(IEnumerable<CollectedData> items)
+        {
+            return _context.Datasets.InsertManyAsync(items);
+        }
+
         public async Task<bool> UpdateEntity(CollectedData collectedData)
         {
             try
@@ -207,6 +214,12 @@ namespace DataAccumulator.DataAccessLayer.Repositories
         {
             return _context.Datasets
                 .Find(entity => entity.Id == id).AnyAsync();
+        }
+
+        public async Task<bool> RemoveEntitiesByIdsAsync(IEnumerable<Guid> idsToDelete)
+        {
+            var actionResult = await _context.Datasets.DeleteManyAsync(data => idsToDelete.Contains(data.Id));
+            return actionResult.IsAcknowledged && actionResult.DeletedCount > 0;
         }
 
         // It creates a sample compound index 

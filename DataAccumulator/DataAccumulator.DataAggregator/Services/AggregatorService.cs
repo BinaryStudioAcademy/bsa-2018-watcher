@@ -10,6 +10,8 @@ using DataAccumulator.Shared.Models;
 
 namespace DataAccumulator.DataAggregator.Services
 {
+    using System.Linq;
+
     public class AggregatorService : IAggregatorService<CollectedDataDto>
     {
         private readonly IMapper _mapper;
@@ -60,6 +62,13 @@ namespace DataAccumulator.DataAggregator.Services
             return collectedDataDto;
         }
 
+        public Task AddAggregatorEntitiesAsync(IEnumerable<CollectedDataDto> dtos)
+        {
+            if(!dtos.Any()) return Task.CompletedTask;
+            var mappedEntities = _mapper.Map<IEnumerable<CollectedDataDto>, IEnumerable<CollectedData>>(dtos);
+            return _dataAggregatorRepository.AddEntitiesAsync(mappedEntities);
+        }
+
         public async Task<IEnumerable<InstanceSettingsDto>> GetInstanceSettingsEntitiesAsync()
         {
             var entities = await _instanceSettingsRepository.GetAllEntitiesAsync();
@@ -69,6 +78,12 @@ namespace DataAccumulator.DataAggregator.Services
             }
 
             return _mapper.Map<IEnumerable<InstanceSettings>, IEnumerable<InstanceSettingsDto>>(entities);
+        }
+
+        public Task DeleteManyAggregatedEntitiesAsync(IEnumerable<Guid> idsToDelete)
+        {
+            if(!idsToDelete.Any()) return Task.CompletedTask;
+            return _dataAggregatorRepository.RemoveEntitiesByIdsAsync(idsToDelete);
         }
     }
 }
