@@ -44,6 +44,13 @@
         <p-paginator [rows]="recordsPerPage" [totalRecords]="totalRecords" (onPageChange)="paginate($event)"></p-paginator>
     </div>
 
+    <div *ngIf="(!collectedData || collectedData?.length === 0) && !isGetting" class="tutorial">
+      <p class="tutorial-item">1. Select period of time in From and To fields</p>
+      <p class="tutorial-item">2. Get aggregated information</p>
+    </div>
+
+    <p-progressSpinner class="table-spinner" *ngIf="isGetting" strokeWidth="5"></p-progressSpinner>
+
     <div *ngFor="let collected of collectedDataTable" class="table">
         <p-table #dt [columns]="cols" [value]="collected.processes">
           <ng-template pTemplate="header" let-columns>
@@ -137,14 +144,14 @@
         <span class="fa fa-fw fa-gear options-btn" (click)="cog.toggle($event)"></span>
       </div>
 
-      <div *ngIf="charts.length === 0" class="tutorial">        
+      <div *ngIf="charts.length === 0" class="tutorial">
         <p class="tutorial-item">1. Click <i class="fa fa-fw fa-gear"></i> for add chart</p>
         <p class="tutorial-item">2. Get aggregated information</p>
       </div>
 
       <div class="charts-area">
         <div #chartPDF class="chart-item" [ngClass]="chart.theme" *ngFor="let chart of charts">
-      
+
           <div data-html2canvas-ignore
             class="icon-panel action-icon fa fa-fw fa-cog"
             (click)="createMenu(chart);opt.toggle($event);"

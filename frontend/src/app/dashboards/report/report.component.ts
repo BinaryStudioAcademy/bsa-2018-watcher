@@ -214,6 +214,7 @@ export class ReportComponent implements OnInit {
       });
       this.collectedData = data;
       this.collectedDataTable = data.slice(0, this.recordsPerPage);
+      console.log(this.collectedData.length);
       const hourDifference = (this.dateTo.getTime() - this.dateFrom.getTime()) / (60 * 60000);
       this.charts.forEach(item => {
         if (hourDifference > 23) {
@@ -233,7 +234,7 @@ export class ReportComponent implements OnInit {
 
       this.charts.forEach(item => this.dataService.fulfillChart(this.collectedData, item, true));
       this.collectedDataTable = data.slice(0, this.recordsPerPage);
-
+      debugger;
       this.isGetting = false;
     });
 
