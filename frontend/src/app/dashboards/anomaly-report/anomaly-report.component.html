@@ -31,16 +31,16 @@
     <div class="ui-g-2"></div>
   </div>
 
-  <p-table #dt [value]="reports" *ngIf="reports">
+  <p-table #dt [value]="reports">
     <ng-template pTemplate="header" let-columns>
       <tr class="row-header">
-        <th class="text-center t-header">
+        <th class="text-center t-name t-header">
           Date
         </th>
-        <th class="data-header t-header">
+        <th class="data-header t-type t-header">
           Type
         </th>
-        <th class="data-header t-header">
+        <th class="data-header t-link t-header">
           Link
         </th>
       </tr>
@@ -55,9 +55,9 @@
         </td>
         <td class="ui-g text-center">
           <div class="ui-g-8 ui-fluid">
-            <input type="text" [ngModel]="rowData.link" pInputText />
+            <input type="text" [ngModel]="rowData.htmlDocUrl" pInputText />
           </div>
-          <p-button class="ui-g-4" (click)="onCopy()" label="Copy"></p-button>
+          <p-button class="ui-g-4" (click)="onCopy(rowData.htmlDocUrl)" label="Copy"></p-button>
         </td>
       </tr>
     </ng-template>

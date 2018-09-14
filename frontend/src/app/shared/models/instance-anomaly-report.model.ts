@@ -7,7 +7,7 @@ export interface InstanceAnomalyReport  {
     date: Date;
     collectedDataTypeOfReport: DataType;
     anomalyGroups: AzureMLAnomalyGroup[];
-    link: string;
+    htmlDocUrl: string;
 }
 
 
