@@ -78,6 +78,7 @@ namespace Watcher.Core.Services
         public async Task<OrganizationDto> CreateEntityAsync(OrganizationRequest request)
         {
             var entity = _mapper.Map<OrganizationRequest, Organization>(request);
+            entity.ThemeId = 1;
             var result = false;
 
             entity.ImageURL = await _fileStorageProvider.UploadFileFromStreamAsync(
