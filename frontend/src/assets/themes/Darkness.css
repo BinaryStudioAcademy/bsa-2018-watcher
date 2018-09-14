@@ -709,7 +709,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 /* Tabmenu */
 
 .ui-tabmenu {
-  background-color: #ffffff !important;
+  background-color: transparent !important;
 }
 
 .ui-tabmenu .ui-widget-header {
@@ -824,6 +824,10 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   color: #333333;
 }
 
+.ui-datepicker .ui-timepicker a {
+  color: #ffffff !important;
+}
+
 /* Paginator */
 .ui-paginator .ui-paginator-pages .ui-paginator-page {
   background-color: transparent !important;
@@ -831,4 +835,11 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active {
   background-color: #F56C00 !important;
+}
+
+/* Scrollpanel */
+
+.ui-scrollpanel {
+  background-color: transparent !important;
+  color: #000000 !important;
 }
