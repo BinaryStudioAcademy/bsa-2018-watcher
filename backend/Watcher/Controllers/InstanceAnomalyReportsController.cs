@@ -74,7 +74,7 @@
             var report = InstanceAnomalyReportsService.GetAnomalyReport(instanceId);
             var dto = _mapper.Map<InstanceAnomalyReport, InstanceAnomalyReportDto>(report);
             var html = InstanceAnomalyReportsService.GetHtml(dto);
-            var htmlLetter = InstanceAnomalyReportsService.GetHtmlForLetter("userName", html);
+            var htmlLetter = InstanceAnomalyReportsService.GetHtmlForLetter("userName", html, "bsa-watcher.azurewebsites.net");
             _emailProvider.SendMessageOneToOne("watcher@net.com", "Analyze", "target.com", "", htmlLetter);
             return Ok(report);
         }
