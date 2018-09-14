@@ -67,6 +67,32 @@
             return Ok(dtos);
         }
 
+        [HttpDelete("{id}")]
+        public virtual async Task<ActionResult> DeleteReportById(Guid id)
+        {
+            var result = await _service.RemoveReportByIdAsync(id);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpDelete("Instance/{instanceId}")]
+        public virtual async Task<ActionResult> DeleteReportsByInstanceId(Guid instanceId)
+        {
+            var result = await _service.RemoveReportsByInstanceIdAsync(instanceId);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
         [HttpGet("Report/{instanceId}")]
         [AllowAnonymous]
         public virtual ActionResult<InstanceAnomalyReport> GetReport([FromRoute] Guid instanceId)

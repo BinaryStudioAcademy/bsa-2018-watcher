@@ -143,6 +143,11 @@
             return _repository.RemoveAllReportsAsync();
         }
 
+        public Task<bool> RemoveReportsByInstanceIdAsync(Guid instanceId)
+        {
+            return _repository.RemoveReportsByInstanceIdAsync(instanceId);
+        }
+
         public Task<bool> ReportExistsAsync(Guid reportId)
         {
             return _repository.ReportExistsAsync(reportId);

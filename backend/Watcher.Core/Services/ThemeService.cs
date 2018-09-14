@@ -35,6 +35,19 @@ namespace Watcher.Core.Services
             return dtos;
         }
 
+        public async Task<ThemeDto> GetById(int id)
+        {
+            var entity = await _uow.ThemeRepository
+                .GetFirstOrDefaultAsync(
+                    predicate: t => t.Id == id);
+
+            if (entity == null) return null;
+
+            var dto = _mapper.Map<Theme, ThemeDto>(entity);
+
+            return dto;
+        }
+
         public async Task<ThemeDto> CreateEntityAsync(ThemeDto themeDto)
         {
             var entity = _mapper.Map<ThemeDto, Theme>(themeDto);
