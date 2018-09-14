@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Watcher.Common.Dtos;
 using Watcher.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Watcher.Controllers
 {
@@ -32,6 +33,7 @@ namespace Watcher.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var dto = await _themeService.GetById(id);
