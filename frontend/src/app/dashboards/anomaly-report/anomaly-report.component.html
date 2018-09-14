@@ -62,9 +62,8 @@
         </div><div class="ui-g-1">
         <button type="button" class="ui-button ui-state-default ui-button-danger ui-corner-all ui-button-text-only ui-widget btn-inline-flex get-info-but"
         style="float: left;"
-        (click)="onDelete(rowData)" [disabled]="isDeletingOne">
-        <p-progressSpinner class="btn-spinner" *ngIf="isDeletingOne" strokeWidth="5"></p-progressSpinner>
-        <span class="ui-button-text" *ngIf="!isDeletingOne">Delete</span>
+        (click)="onDelete(rowData)">
+        <span class="ui-button-text" >Delete</span>
       </button>
       </div>
     </td>
