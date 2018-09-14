@@ -435,7 +435,7 @@
 .ui-datepicker .ui-datepicker-calendar td:not(.ui-state-disabled) a:hover {
   border-color: #fbcb09;
   background-color: #fdf5ce;
-  color: #c77405; }
+  color: #ffffff; }
   .ui-datepicker .ui-datepicker-calendar td:not(.ui-state-disabled) a:hover a {
     color: #c77405; }
 .ui-datepicker .ui-monthpicker .ui-monthpicker-month:hover {
@@ -697,7 +697,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   .ui-state-active a {
     color: #ffffff; }
 
-.ui-panelmenu .ui-panelmenu-header.ui-state-active{
+.ui-panelmenu .ui-panelmenu-header.ui-state-active a {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: #f6a828 !important;
@@ -729,7 +729,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 /* Tabmenu */
 
 .ui-tabmenu {
-  background-color: #1c94c4 !important;
+  background-color: transparent !important;
 }
 
 .ui-tabmenu .ui-widget-header {
@@ -790,17 +790,13 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   color: #000000 !important;
 }
 
-.ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item,
-.ui-dropdown-list {
-  background-color: #1c94c4 !important;
-}
-
 .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item.ui-state-highlight {
   color: #000000 !important;
+  background-color: transparent !important;
 }
 
 .ui-multiselect:not(.ui-state-disabled):hover {
-  background-color: #1c94c4 !important;
+  background-color: #ffffff !important;
   color: #000000 !important;
 }
 
@@ -819,7 +815,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 
 /* Header */
 
-.header button:hover {
+.header button:hover, .header button:focus {
   color: #f6a828 !important;
   background-color: transparent !important;
   border-color: transparent !important;
