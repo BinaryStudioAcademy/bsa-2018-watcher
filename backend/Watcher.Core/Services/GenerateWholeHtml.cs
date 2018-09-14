@@ -6,21 +6,28 @@ namespace Watcher.Core.Services
 {
     public static class GenerateWholeHtml
     {
+        public static string GenerateHtmlLetter(string userName, string html)
+        {
+            html = html.Insert(html.IndexOf("<table>", StringComparison.Ordinal), "<br/><span style = 'font-family: Arial; font-size: 14pt'>Hello <b>" + userName +
+                                                        ",</b><br/><br/></span>");
+            html = html.Insert(html.LastIndexOf("</body>", StringComparison.Ordinal),
+                "<br/><span style = 'font-family: Arial; font-size: 14pt'>Best wishes,<br/>" +
+                "<a style = 'color: #22BCE5' href = 'bsa-watcher.azurewebsites.net'><b> Watcher </b></a></span>");
+            return html;
+        }
+
         public static string GenerateHtml(InstanceAnomalyReportDto report)
         {
             var html =
                 "<!DOCTYPE html><html xmlns = 'http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8'/><title>Analyze </title></head><body>"
-                + "<table><tr><td><br/><span style = 'font-family: Arial; font-size: 14pt'>Hello <b>" + /*UserName + */
-                ",</b><br/><br/></span></td></tr><tr><td width = '100%' align = 'center' valign = 'middle'><span style = 'font-family: Arial; font-size: 14pt'>Analyze by date - "
+                + "<table><tr><td width = '100%' align = 'center' valign = 'middle'><span style = 'font-family: Arial; font-size: 14pt'>Analyze by date - "
                 + report.Date +
                 "<br/><span><br/></span><div style = 'border-top: 3px solid #22BCE5'></div></span></td></tr> <tr><td><br/><span style='font-family: Arial; font-size: 14pt'>";
 
             html = html + GenerateTable(report.AnomalyGroups[0], "CPU") +
                    GenerateTable(report.AnomalyGroups[0], "RAM") + GenerateTable(report.AnomalyGroups[0], "DISC");
 
-            html = html +
-                   "</span></td></tr><tr><td width = '100%' align = 'left' valign = 'middle'><br/><span style = 'font-family: Arial; font-size: 14pt'>Best wishes,<br/>" +
-                   "<a style = 'color: #22BCE5' href = 'bsa-watcher.azurewebsites.net'><b> Watcher </b></a></span></td></tr></table></body></html>";
+            html = html + "</span></td></tr></table></body></html>";
            
             return html;
         }

@@ -74,7 +74,8 @@
             var report = InstanceAnomalyReportsService.GetAnomalyReport(instanceId);
             var dto = _mapper.Map<InstanceAnomalyReport, InstanceAnomalyReportDto>(report);
             var html = InstanceAnomalyReportsService.GetHtml(dto);
-            _emailProvider.SendMessageOneToOne("watcher@net.com", "Analyze", "target.com", "", html);
+            var htmlLetter = InstanceAnomalyReportsService.GetHtmlForLetter("userName", html);
+            _emailProvider.SendMessageOneToOne("watcher@net.com", "Analyze", "target.com", "", htmlLetter);
             return Ok(report);
         }
     }

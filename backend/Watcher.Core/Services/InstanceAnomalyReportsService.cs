@@ -25,6 +25,8 @@
         }
 
         public static string GetHtml(InstanceAnomalyReportDto report) => GenerateWholeHtml.GenerateHtml(report);
+        
+        public static string GetHtmlForLetter(string userName, string html) => GenerateWholeHtml.GenerateHtmlLetter(userName, html);
 
         public static InstanceAnomalyReport GetAnomalyReport(Guid instanceId)
         {
