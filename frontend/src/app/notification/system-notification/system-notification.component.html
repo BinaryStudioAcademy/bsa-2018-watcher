@@ -9,9 +9,13 @@
           'system': message.data.notificationSetting?.type == type.System}">
       </span>
         <div class="message-content">
-            <span *ngIf="message.data.instanceGuidId" (click)='redirectToInstance(message.data)'  class="message-title text-overflow clickable" style="width:240px">Instance message</span>
+            <span *ngIf="message.data.instanceGuidId"
+                  (click)='redirectToInstance(message.data)'
+                  class="message-title text-overflow clickable" style="width:240px">
+              Instance message
+            </span>
             <span  *ngIf="!message.data.instanceGuidId" class="message-title text-overflow" style="width:240px">System message</span>
-          <div class="message-text message-text-short">{{message.data.text}}</div>
+          <div class="message-text message-text-short" [innerHTML]="message.data.text"></div>
           <div class="message-date text-overflow">{{message.data.createdAt | date:'short'}}</div>
         </div>
       </div>
@@ -20,7 +24,7 @@
         <img class="message-img" src="{{message.data.user.photoURL}}" />
         <div class="message-content">
           <span class="message-title text-overflow" style="width:95%">Chat message from {{message.data.user.displayName}}</span>
-          <div class="message-text message-text-short">{{message.data.text}}</div>
+          <div class="message-text message-text-short" >{{message.data.text}}</div>
           <div class="message-date text-overflow">{{message.data.createdAt | date:'short'}}</div>
         </div>
       </div>
