@@ -107,9 +107,6 @@
             {
                 return null;
             }
-
-            var usersCount = await _uow.UsersRepository.CountAsync(x => x.Id != null);
-            receivers = await _uow.UsersRepository.GetRangeAsync(count: usersCount);
             
             foreach (var receiver in receivers)
             {

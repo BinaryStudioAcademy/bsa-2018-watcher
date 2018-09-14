@@ -34,7 +34,9 @@
 
             var themes = new Theme[] {
                 new Theme { Id = 1, Name="Default", BodyColor = "#F8FAFC", ThemePrimaryColor = "#007ad9", ThemeSecondaryColor = "#ffffff", ControlsHeight = "33px", ButtonFontSize = "14px", IsDeleted = false },
-                new Theme { Id = 2, Name = "Darkness", BodyColor = "#F8FAFC", ThemePrimaryColor = "#f58400", ThemeSecondaryColor = "#ffffff", ControlsHeight = "33px", ButtonFontSize = "14px", IsDeleted = false}
+                new Theme { Id = 2, Name = "Darkness", BodyColor = "#F8FAFC", ThemePrimaryColor = "#f58400", ThemeSecondaryColor = "#ffffff", ControlsHeight = "33px", ButtonFontSize = "14px", IsDeleted = false},
+                new Theme { Id = 3, Name = "Lightness", BodyColor = "#F8FAFC", ThemePrimaryColor = "#1c94c4", ThemeSecondaryColor = "#f6a828", ControlsHeight = "33px", ButtonFontSize = "14px", IsDeleted = false},
+                new Theme { Id = 4, Name = "Voclain", BodyColor = "#F8FAFC", ThemePrimaryColor = "#c95864", ThemeSecondaryColor = "#ffffff", ControlsHeight = "33px", ButtonFontSize = "14px", IsDeleted = false}
             };
 
             var userFaker = new Faker<User>()

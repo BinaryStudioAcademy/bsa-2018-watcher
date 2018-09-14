@@ -9,6 +9,7 @@ import { Chat } from '../../shared/models/chat.model';
 import { MessageRequest } from '../../shared/requests/message-request';
 import { ChatRequest } from '../../shared/requests/chat-request';
 import { ChatUpdateRequest } from '../../shared/requests/chat-update-request';
+import { Subject } from 'rxjs';
 
 
 @Injectable()
@@ -123,5 +124,13 @@ export class ChatHub {
     public deleteChat(chatId: number) {
         this.hubConnection.invoke('DeleteChat', chatId)
             .catch(err => console.error(err));
+    }
+
+    public disconnect() {
+        this.messageReceived = new EventEmitter<Message>();
+        this.chatMessagesWasRead = new EventEmitter<number>();
+        this.chatCreated = new EventEmitter<Chat>();
+        this.chatChanged = new EventEmitter<Chat>();
+        this.chatDeleted = new EventEmitter<Chat>();
     }
 }
