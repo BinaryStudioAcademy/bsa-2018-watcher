@@ -40,6 +40,7 @@ export class EditChartComponent implements OnInit {
   isEditing: boolean;
   isPreviewAvailable: boolean;
   isTimeAvailable: boolean;
+  isSaving: boolean;
 
   get dialogTitle() {
     if (this.dashboardChart && this.dashboardChart.id) {
@@ -324,18 +325,23 @@ export class EditChartComponent implements OnInit {
   }
 
   onEditChart() {
+    this.isSaving = true;
     const chartRequest = this.createChartRequest();
     if (!this.dashboardChart.id) {
       this.chartService.create(chartRequest).subscribe((val) => {
         this.handleSuccessfulCreate(val);
+        this.isSaving = false;
       }, (err) => {
         this.handleFailedEdit(err);
+        this.isSaving = false;
       });
     } else {
       this.chartService.update(chartRequest, this.dashboardChart.id).subscribe(() => {
         this.handleSuccessfulEdit(chartRequest, this.dashboardChart.id);
+        this.isSaving = false;
       }, (err) => {
         this.handleFailedEdit(err);
+        this.isSaving = false;
       });
     }
   }
