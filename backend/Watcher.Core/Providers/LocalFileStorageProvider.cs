@@ -40,6 +40,11 @@ namespace Watcher.Core.Providers
             return path;
         }
 
+        public Task<string> UploadHtmlFileAsync(string htmlString, Guid reportId)
+        {
+            return Task.FromResult(string.Empty);
+        }
+
         public Task<string> UploadFileAsync(string path, string containerName = "watcher")
         {
             try

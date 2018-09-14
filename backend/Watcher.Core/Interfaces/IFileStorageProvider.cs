@@ -2,6 +2,8 @@
 
 namespace Watcher.Core.Interfaces
 {
+    using System;
+
     using Microsoft.AspNetCore.Http;
 
     using Watcher.Common.Enums;
@@ -14,6 +16,7 @@ namespace Watcher.Core.Interfaces
 
         Task<string> UploadFormFileWithNameAsync(IFormFile formFile);
 
+        Task<string> UploadHtmlFileAsync(string htmlString, Guid reportId);
 
         Task<string> UploadFileAsync(string path, string containerName = "watcher");
 

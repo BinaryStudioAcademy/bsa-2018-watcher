@@ -8,6 +8,7 @@ using Watcher.Core.Interfaces;
 namespace Watcher.Core.Providers
 {
     using System.Net.Http;
+    using System.Text;
 
     using Microsoft.AspNetCore.Http;
 
@@ -159,6 +160,26 @@ namespace Watcher.Core.Providers
             await SetPublicContainerPermissions(container);
 
             await blob.UploadFromByteArrayAsync(imageInBytes, 0, imageInBytes.Length);
+
+            return blob.Uri.ToString();
+        }
+
+        public async Task<string> UploadHtmlFileAsync(string htmlString, Guid reportId)
+        {
+            var filename = $"{reportId}.html";
+            var client = _storageAccount.CreateCloudBlobClient();
+
+            var container = client.GetContainerReference("watcher");
+            if (await container.ExistsAsync() == false)
+            {
+                await container.CreateAsync();
+            }
+
+            var blob = container.GetBlockBlobReference(filename);
+
+            await SetPublicContainerPermissions(container);
+
+            await blob.UploadTextAsync(htmlString);
 
             return blob.Uri.ToString();
         }

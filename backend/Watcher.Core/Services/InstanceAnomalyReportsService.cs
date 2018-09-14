@@ -25,6 +25,8 @@
         }
 
         public static string GetHtml(InstanceAnomalyReportDto report) => GenerateWholeHtml.GenerateHtml(report);
+        
+        public static string GetHtmlForLetter(string userName, string html, string link) => GenerateWholeHtml.GenerateHtmlLetter(userName, html, link);
 
         public static InstanceAnomalyReport GetAnomalyReport(Guid instanceId)
         {
@@ -119,6 +121,16 @@
             }
 
             return Task.CompletedTask;
+        }
+
+        public Task UpdateReportAsync(Guid reportId, string htmlUrl)
+        {
+            if (string.IsNullOrWhiteSpace(htmlUrl))
+            {
+                return Task.CompletedTask;
+            }
+
+            return _repository.UpdateReportHtmlUrlAsync(reportId, htmlUrl);
         }
 
         public Task<bool> RemoveReportByIdAsync(Guid reportId)
