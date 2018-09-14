@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import {HubConnection} from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import {environment} from '../../../environments/environment';
@@ -12,14 +12,11 @@ import {InstanceChecked} from '../../shared/models/instance-checked';
 export class DashboardsHub {
   private hubName = 'dashboards';
   private hubConnection: HubConnection | undefined;
-  private connectionEstablishedSub = new Subject<boolean>();
-  public connectionEstablished$ = from(this.connectionEstablishedSub);
+  public connectionEstablished$ = new EventEmitter<boolean>();
   public isConnect: boolean;
 
-  private infoSub = new Subject<CollectedData>();
-  public infoSubObservable = from(this.infoSub);
-  private instanceCheckedSub = new Subject<InstanceChecked>();
-  public instanceCheckedSubObservable = from(this.instanceCheckedSub);
+  public infoSubObservable = new EventEmitter<CollectedData>(); // from(this.infoSub);
+  public instanceCheckedSubObservable = new EventEmitter<InstanceChecked>();
 
   constructor(private authService: AuthService) {
     this.startConnection();
@@ -36,7 +33,7 @@ export class DashboardsHub {
         .then(() => {
           console.log('Dashboards Hub connected');
           this.isConnect = true;
-          this.connectionEstablishedSub.next(true);
+          this.connectionEstablished$.emit(true);
           this.registerOnEvents();
         })
         .catch(err => {
@@ -58,18 +55,18 @@ export class DashboardsHub {
   private registerOnEvents(): void {
     this.hubConnection.on('InstanceDataTick', (info: CollectedData) => {
         info.time = new Date(info.time);
-        this.infoSub.next(info);
+        this.infoSubObservable.emit(info);
       });
 
     this.hubConnection.on('InstanceStatusCheck', (info: InstanceChecked) => {
       info.statusCheckedAt = new Date(info.statusCheckedAt);
-      this.instanceCheckedSub.next(info);
+      this.instanceCheckedSubObservable.emit(info);
     });
 
     // On Close open connection again
     this.hubConnection.onclose((error: Error) => {
       this.isConnect = false;
-      this.connectionEstablishedSub.next(false);
+      this.connectionEstablished$.next(false);
       console.log('Dashboard Hub connection closed');
       console.error(error);
       this.startConnection();
@@ -110,5 +107,11 @@ export class DashboardsHub {
         .catch(err => console.error(err));
     }
     return item;
+  }
+
+  public disconnect() {
+    this.connectionEstablished$ = new EventEmitter<boolean>();
+    this.infoSubObservable = new EventEmitter<CollectedData>();
+    this.instanceCheckedSubObservable = new EventEmitter<InstanceChecked>();
   }
 }

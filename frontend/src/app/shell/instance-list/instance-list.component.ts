@@ -67,6 +67,7 @@ export class InstanceListComponent implements OnInit {
         if (this.authService.getCurrentUserLS()) { this.configureInstances(this.user.lastPickedOrganizationId); }
       });
     this.dashboardsHub.instanceCheckedSubObservable.subscribe(value => {
+      console.log(value.statusCheckedAt);
       const instanceMenuItem = this.menuItems.find(value1 => value1.guidId === value.instanceGuidId);
       instanceMenuItem.statusCheckedAt = value.statusCheckedAt;
       this.instanceService.calculateStyle(instanceMenuItem);

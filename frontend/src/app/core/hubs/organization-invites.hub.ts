@@ -75,4 +75,11 @@ export class OrganizationInvitesHub {
       this.startInviteHubConnection();
     });
   }
+
+  public disconnect() {
+    this.onAddInvite = new EventEmitter<OrganizationInvite>();
+    this.onUpdateInvite = new EventEmitter<OrganizationInvite>();
+    this.onDeleteInvite = new EventEmitter<number>();
+    this.connectionEstablished = new EventEmitter<Boolean>();
+  }
 }

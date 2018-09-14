@@ -54,7 +54,7 @@ export class LandingComponent implements OnInit, OnDestroy {
     this.feedbackService.create(newFeedback).subscribe(value => {
       this.toastrService.success('Added new feedback');
     }, error => {
-      this.toastrService.error(`Error ocured status: ${error.message}`);
+      this.toastrService.error(`Error ocurred status: ${error.message}`);
     });
 
     this.name = '';
