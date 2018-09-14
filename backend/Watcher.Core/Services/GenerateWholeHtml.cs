@@ -6,10 +6,10 @@ namespace Watcher.Core.Services
 {
     public static class GenerateWholeHtml
     {
-        public static string GenerateHtmlLetter(string userName, string html)
+        public static string GenerateHtmlLetter(string userName, string html, string link)
         {
             html = html.Insert(html.IndexOf("<table>", StringComparison.Ordinal), "<br/><span style = 'font-family: Arial; font-size: 14pt'>Hello <b>" + userName +
-                                                        ",</b><br/><br/></span>");
+                                                        ",</b> you can download it <a style = 'color: #22BCE5' href = " + link +">here</a><br/><br/></span>");
             html = html.Insert(html.LastIndexOf("</body>", StringComparison.Ordinal),
                 "<br/><span style = 'font-family: Arial; font-size: 14pt'>Best wishes,<br/>" +
                 "<a style = 'color: #22BCE5' href = 'bsa-watcher.azurewebsites.net'><b> Watcher </b></a></span>");
