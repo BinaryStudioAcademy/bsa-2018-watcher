@@ -23,6 +23,8 @@ namespace DataAccumulator.DataAccessLayer.Interfaces
         // add new entity
         Task AddEntity(CollectedData item);
 
+        Task AddEntitiesAsync(IEnumerable<CollectedData> items);
+
         // update single entity
         Task<bool> UpdateEntity(CollectedData collectedData);
 
@@ -36,5 +38,7 @@ namespace DataAccumulator.DataAccessLayer.Interfaces
 
         // check if entity exists
         Task<bool> EntityExistsAsync(Guid id);
+
+        Task<bool> RemoveEntitiesByIdsAsync(IEnumerable<Guid> idsToDelete);
     }
 }

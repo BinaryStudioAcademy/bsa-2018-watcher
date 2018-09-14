@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
 import { OrganizationService } from '../../core/services/organization.service';
 import { ToastrService } from '../../core/services/toastr.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -27,7 +28,8 @@ export class OrganizationProfileComponent implements OnInit {
     private authService: AuthService,
     private userOrganizationService: UserOrganizationService,
     private toastrService: ToastrService,
-    private themeService: ThemeService) {
+    private themeService: ThemeService,
+    private router: Router) {
       this.cropperSettings = new CropperSettings();
       this.cropperSettings.width = 400;
       this.cropperSettings.height = 200;
@@ -40,6 +42,12 @@ export class OrganizationProfileComponent implements OnInit {
       this.cropperSettings.noFileInput = true;
       this.cropperSettings.preserveSize = true;
       this.data = {};
+
+      router.events.forEach((event) => {
+        if (event instanceof NavigationStart) {
+          this.currentThemeCheck();
+        }
+      });
     }
 
   editable: boolean;
@@ -104,6 +112,9 @@ export class OrganizationProfileComponent implements OnInit {
       this.organization.themeId = this.selectedTheme.id;
       this.organizationService.update(this.organization.id, this.organization).subscribe(
         value => {
+
+          this.organization.theme = this.selectedTheme;
+
           // Update lastPickedOrganization in User on frontend
           this.user.lastPickedOrganization = this.organization;
 
@@ -215,12 +226,20 @@ export class OrganizationProfileComponent implements OnInit {
 
   onChange(value: string): void {
     this.selectedTheme = this.themes.find(t => t.name === value);
-    this.themeService.applyTheme(this.selectedTheme);
+    if (this.selectedTheme) {
+      this.themeService.applyTheme(this.selectedTheme);
+    }
+  }
+
+  private currentThemeCheck(): void {
+      this.themeService.applyTheme(this.organization.theme);
   }
 
   private fillDropdown(): void {
     this.themeDropdown.push(
       { label: 'Default', value: 'Default' },
-      { label: 'Darkness', value: 'Darkness' });
+      { label: 'Orange', value: 'Darkness' },
+      { label: 'Lightness', value: 'Lightness' },
+      { label: 'Voclain', value: 'Voclain' });
   }
 }
