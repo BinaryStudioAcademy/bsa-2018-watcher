@@ -69,6 +69,17 @@
             return _context.AnomalyReportsCollection.UpdateOneAsync(filter, updateBuilder);
         }
 
+        public async Task<bool> RemoveReportsByInstanceIdAsync(Guid instanceId)
+        {
+            var filter = Builders<InstanceAnomalyReport>.Filter.Eq(i => i.ClientId, instanceId);
+            var actionResult = await _context.AnomalyReportsCollection
+                                   .DeleteManyAsync(filter)
+                                   .ConfigureAwait(false);
+
+            return actionResult.IsAcknowledged
+                   && actionResult.DeletedCount > 0;
+        }
+
         public Task<InstanceAnomalyReport> GetReportByIdAsync(Guid reportId)
         {
             var filter = Builders<InstanceAnomalyReport>.Filter.Eq(i => i.Id, reportId);
