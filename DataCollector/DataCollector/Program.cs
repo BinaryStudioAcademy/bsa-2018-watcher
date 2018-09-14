@@ -37,6 +37,7 @@ namespace DataCollector
                         Console.WriteLine("Enter valid instance id that you got from site");
                         var id = Guid.Parse(Console.ReadLine());
                         ClientIdentifier = id;
+                        SaveGuid();
                         break;
                     }
                     catch (Exception)
