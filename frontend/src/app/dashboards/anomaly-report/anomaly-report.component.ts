@@ -2,6 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { DataType } from '../../shared/models/data-type.enum';
 import { Calendar } from 'primeng/primeng';
+import { AnomalyReportService } from '../../core/services/anomaly-report.service';
+import { InstanceAnomalyReport } from '../../shared/models/instance-anomaly-report.model';
+import { ActivatedRoute } from '@angular/router';
+import { AnomalyReportRequest } from '../../shared/models/anomaly-report-request.model';
 
 @Component({
   selector: 'app-anomaly-report',
@@ -13,13 +17,21 @@ export class AnomalyReportComponent implements OnInit {
   @ViewChild('cf1') calendarFilter1: Calendar;
   @ViewChild('cf2') calendarFilter2: Calendar;
 
+  id: string;
+
   types: SelectItem[];
   selectedType: DataType;
 
   dateFrom: Date;
   dateTo: Date;
 
-  constructor() { }
+  reports: InstanceAnomalyReport[];
+  totalRecords: number;
+
+  type: DataType;
+
+  constructor(private anomalyReportService: AnomalyReportService,
+              private activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.types = [
@@ -30,6 +42,10 @@ export class AnomalyReportComponent implements OnInit {
     ];
 
     this.selectedType = this.types[0].value;
+
+    this.activateRoute.params.subscribe(params => {
+      this.id = params['guidId'];
+    });
   }
 
   changeType(ev): void {
@@ -69,6 +85,24 @@ export class AnomalyReportComponent implements OnInit {
         this.calendarFilter2.showTime = false;
         break;
     }
+  }
+
+  getInfo(): void {
+    this.anomalyReportService.getDataByInstanceIdAndTypeInTime(this.createRequest()).subscribe((data: InstanceAnomalyReport[]) => {
+      data.forEach(item => {
+        item.date = new Date(item.date);
+      });
+      this.reports = data;
+    });
+  }
+
+  private createRequest(): AnomalyReportRequest {
+    return {
+      id: this.id,
+      type: this.selectedType,
+      from: this.dateFrom,
+      to: this.dateTo
+    };
   }
 
 }
