@@ -8,6 +8,8 @@ namespace Watcher.Core.Interfaces
     {
         Task<IEnumerable<ThemeDto>> GetAllEntitiesAsync();
 
+        Task<ThemeDto> GetById(int id);
+
         Task<ThemeDto> CreateEntityAsync(ThemeDto themeDto);
     }
 }

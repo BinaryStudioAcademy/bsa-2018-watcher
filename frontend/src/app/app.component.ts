@@ -21,7 +21,10 @@ export class AppComponent implements OnInit {
 
     const user =  this.authService.getCurrentUserLS();
     if (user) {
-      this.themeService.applyTheme(user.lastPickedOrganization.theme);
+      const themeId = user.lastPickedOrganization.themeId;
+      if (themeId) {
+      this.themeService.applyThemeById(themeId);
+      }
     }
   }
 }
