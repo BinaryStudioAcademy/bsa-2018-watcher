@@ -6,13 +6,11 @@ namespace Watcher.Core.Services
 {
     public static class GenerateWholeHtml
     {
-        public static string GenerateHtmlLetter(string userName, string html, string link)
+        public static string GenerateHtmlLetter(string userName, string instanceName, string link)
         {
-            html = html.Insert(html.IndexOf("<table>", StringComparison.Ordinal), "<br/><span style = 'font-family: Arial; font-size: 14pt'>Hello <b>" + userName +
-                                                        ",</b> you can download it <a style = 'color: #22BCE5' href = " + link +">here</a><br/><br/></span>");
-            html = html.Insert(html.LastIndexOf("</body>", StringComparison.Ordinal),
-                "<br/><span style = 'font-family: Arial; font-size: 14pt'>Best wishes,<br/>" +
-                "<a style = 'color: #22BCE5' href = 'bsa-watcher.azurewebsites.net'><b> Watcher </b></a></span>");
+            var html = "<!DOCTYPE html><html xmlns = 'http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8'/><title>Analyze </title></head><body><br/><span style = 'font-family: Arial; font-size: 14pt'>Hello <b>" + 
+                userName + ",</b><br/><br/> the anomaly report for instance: " + instanceName + " you can download <a style = 'color: #22BCE5' href = " + link + ">here</a><br/><br/>" +
+                "Best wishes,<br/><a style = 'color: #22BCE5' href = 'bsa-watcher.azurewebsites.net'><b> Watcher </b></a></span></body></html>";
             return html;
         }
 
@@ -20,7 +18,7 @@ namespace Watcher.Core.Services
         {
             var html =
                 "<!DOCTYPE html><html xmlns = 'http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8'/><title>Analyze </title></head><body>"
-                + "<table><tr><td width = '100%' align = 'center' valign = 'middle'><span style = 'font-family: Arial; font-size: 14pt'>Analyze by date - "
+                + "<table width = '100%' style='margin: 20px auto'><tr><td width = '100%' align = 'center' valign = 'middle'><span style = 'font-family: Arial; font-size: 14pt'>Analyze by date - "
                 + report.Date +
                 "<br/><span><br/></span><div style = 'border-top: 3px solid #22BCE5'></div></span></td></tr> <tr><td><br/><span style='font-family: Arial; font-size: 14pt'>";
 
@@ -28,7 +26,7 @@ namespace Watcher.Core.Services
                    GenerateTable(report.AnomalyGroups[0], "RAM") + GenerateTable(report.AnomalyGroups[0], "DISC");
 
             html = html + "</span></td></tr></table></body></html>";
-           
+
             return html;
         }
 
@@ -74,6 +72,6 @@ namespace Watcher.Core.Services
             process = process + "</table>";
             return process;
         }
-        
+
     }
 }
