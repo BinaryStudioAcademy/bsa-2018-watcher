@@ -226,7 +226,9 @@ export class OrganizationProfileComponent implements OnInit {
 
   onChange(value: string): void {
     this.selectedTheme = this.themes.find(t => t.name === value);
-    this.themeService.applyTheme(this.selectedTheme);
+    if (this.selectedTheme) {
+      this.themeService.applyTheme(this.selectedTheme);
+    }
   }
 
   private currentThemeCheck(): void {
@@ -236,9 +238,6 @@ export class OrganizationProfileComponent implements OnInit {
   private fillDropdown(): void {
     this.themeDropdown.push(
       { label: 'Default', value: 'Default' },
-      { label: 'Orange', value: 'Darkness' },
-      { label: 'Lightness', value: 'Lightness' },
-      { label: 'Voclain', value: 'Voclain' }
-      );
+      { label: 'Orange', value: 'Darkness' });
   }
 }
