@@ -30,7 +30,7 @@
     </div>
     <div class="ui-g-2 bottom-flex">
         <button type="button" class="ui-button ui-state-default ui-button-danger ui-corner-all ui-button-text-only ui-widget btn-inline-flex get-info-but"
-        (click)="deleteAll()" [disabled]="!dateTo || !dateFrom || isDeleting">
+        (click)="onDeleteAll()" [disabled]="!dateTo || !dateFrom || isDeleting">
         <p-progressSpinner class="btn-spinner" *ngIf="isDeleting" strokeWidth="5"></p-progressSpinner>
         <span class="ui-button-text" *ngIf="!isDeleting">Delete all</span>
       </button>
