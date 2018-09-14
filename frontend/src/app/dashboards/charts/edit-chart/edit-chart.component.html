@@ -121,7 +121,7 @@
     </div>
   </div>
   <p-footer>
-    <div class="text-center">
+    <div class="text-center btn-panel">
       <!-- <button *ngIf="dashboardChart.showCommon"
               type="button"
               pButton
@@ -130,17 +130,16 @@
               label="Preview">
       </button> -->
       <button type="button"
-              pButton
-              class="ui-button-raised ui-button-success"
-              [disabled]="!isValid"
-              (click)="onEditChart()"
-              label="Save">
+              class="ui-button-raised ui-button-success btn-inline-flex ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              [disabled]="!isValid || isSaving"
+              (click)="onEditChart()">
+              <p-progressSpinner class="btn-spinner" *ngIf="isSaving" strokeWidth="5"></p-progressSpinner>
+						  <span class="ui-button-text" *ngIf="!isSaving">Save</span>
       </button>
       <button type="button"
-              pButton
-              class="ui-button-warning"
-              (click)="closeDialog()"
-              label="Cancel">
+              class="ui-button-warning btn-inline-flex ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              (click)="closeDialog()">
+              <span class="ui-button-text">Cancel</span>
       </button>
     </div>
   </p-footer>
