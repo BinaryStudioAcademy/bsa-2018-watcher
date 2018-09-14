@@ -84,6 +84,10 @@ export class OrganizationProfileComponent implements OnInit {
       this.authService.currentUser.subscribe(user => {
         this.user = user;
 
+        if (!this.user.lastPickedOrganization) {
+          return;
+        }
+
         this.organizationService.get(this.user.lastPickedOrganizationId).subscribe(async (org) => {
           this.organization = org;
             this.name = this.organization.name;
@@ -234,7 +238,9 @@ export class OrganizationProfileComponent implements OnInit {
   }
 
   private currentThemeCheck(): void {
+    if (this.user.lastPickedOrganization) {
       this.themeService.applyTheme(this.organization.theme);
+    }
   }
 
   private fillDropdown(): void {
