@@ -81,4 +81,10 @@ export class NotificationsHubService {
       this.startNotificationsHubConnection();
     });
   }
+
+  public disconnect() {
+    this.notificationReceived = new EventEmitter<Notification>();
+    this.notificationDeleted = new EventEmitter<number>();
+    this.connectionEstablished = new EventEmitter<Boolean>();
+  }
 }
