@@ -30,6 +30,8 @@ export class AnomalyReportComponent implements OnInit {
 
   type: DataType;
 
+  isGetting: boolean;
+
   constructor(private anomalyReportService: AnomalyReportService,
               private activateRoute: ActivatedRoute) { }
 
@@ -88,11 +90,14 @@ export class AnomalyReportComponent implements OnInit {
   }
 
   getInfo(): void {
+    this.isGetting = true;
     this.anomalyReportService.getDataByInstanceIdAndTypeInTime(this.createRequest()).subscribe((data: InstanceAnomalyReport[]) => {
       data.forEach(item => {
         item.date = new Date(item.date);
       });
       this.reports = data;
+
+      this.isGetting = false;
     });
   }
 
