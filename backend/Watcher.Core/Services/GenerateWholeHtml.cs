@@ -1,5 +1,7 @@
-﻿using System.Data;
-
+﻿using System;
+using System.Data;
+using Pechkin;
+using System.IO;
 using DataAccumulator.Shared.Models;
 
 namespace Watcher.Core.Services
@@ -8,14 +10,18 @@ namespace Watcher.Core.Services
     {
         public static string GenerateHtml(InstanceAnomalyReportDto report)
         {
-            var html = "<!DOCTYPE html><html xmlns = 'http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8'/><title>Analyze </title></head><body>"
+            var html =
+                "<!DOCTYPE html><html xmlns = 'http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8'/><title>Analyze </title></head><body>"
                 + "<table><tr><td><br/><span style = 'font-family: Arial; font-size: 14pt'>Hello <b>" + /*UserName + */
                 ",</b><br/><br/></span></td></tr><tr><td width = '100%' align = 'center' valign = 'middle'><span style = 'font-family: Arial; font-size: 14pt'>Analyze by date - "
-                + report.Date + "<br/><span><br/></span><div style = 'border-top: 3px solid #22BCE5'></div></span></td></tr> <tr><td><br/><span style='font-family: Arial; font-size: 14pt'>";
+                + report.Date +
+                "<br/><span><br/></span><div style = 'border-top: 3px solid #22BCE5'></div></span></td></tr> <tr><td><br/><span style='font-family: Arial; font-size: 14pt'>";
 
-            html = html + GenerateTable(report.AnomalyGroups[0], "CPU") + GenerateTable(report.AnomalyGroups[0], "RAM") + GenerateTable(report.AnomalyGroups[0], "DISC");
+            html = html + GenerateTable(report.AnomalyGroups[0], "CPU") +
+                   GenerateTable(report.AnomalyGroups[0], "RAM") + GenerateTable(report.AnomalyGroups[0], "DISC");
 
-            html = html + "</span></td></tr><tr><td width = '100%' align = 'left' valign = 'middle'><br/><span style = 'font-family: Arial; font-size: 14pt'>Best wishes,<br/>" +
+            html = html +
+                   "</span></td></tr><tr><td width = '100%' align = 'left' valign = 'middle'><br/><span style = 'font-family: Arial; font-size: 14pt'>Best wishes,<br/>" +
                    "<a style = 'color: #22BCE5' href = 'bsa-watcher.azurewebsites.net'><b> Watcher </b></a></span></td></tr></table></body></html>";
 
             return html;
@@ -41,22 +47,75 @@ namespace Watcher.Core.Services
                     Anomalies.Count <= i ? string.Empty : string.Empty + Anomalies[i].Data);
             }
 
-            var process = "<table style='width: 100%; border-spacing: 25px 10px' cellspacing='5' cellpadding='7' align='center' border=1 frame=void rules=rows>";
-            process += "<tr><th colspan = '4' width = '100%' align = 'center' valign = 'middle' style = 'font-size: 15pt'>" +
+            var process =
+                "<table style='width: 100%; border-spacing: 25px 10px' cellspacing='5' cellpadding='7' align='center' border=1 frame=void rules=rows>";
+            process +=
+                "<tr><th colspan = '4' width = '100%' align = 'center' valign = 'middle' style = 'font-size: 15pt'>" +
                 title + "</th></tr>";
-            process += "<tr><th width = '50%' align = 'center' valign = 'middle' colspan = '2'> Warnings </th> <th width = '50%' align = 'center' valign = 'middle' colspan = '2'> Anomalies </th></tr>";
-            process += "<tr><th width = '25%' align = 'center' valign = 'middle'> Date </th> <th width = '25%' align = 'center' valign = 'middle'> CPU, % </th> <th width = '25%' align = 'center' valign = 'middle'> Date </th> <th width = '25%' align = 'center' valign = 'middle'> CPU, % </th></tr>";
+            process +=
+                "<tr><th width = '50%' align = 'center' valign = 'middle' colspan = '2'> Warnings </th> <th width = '50%' align = 'center' valign = 'middle' colspan = '2'> Anomalies </th></tr>";
+            process +=
+                "<tr><th width = '25%' align = 'center' valign = 'middle'> Date </th> <th width = '25%' align = 'center' valign = 'middle'> CPU, % </th> <th width = '25%' align = 'center' valign = 'middle'> Date </th> <th width = '25%' align = 'center' valign = 'middle'> CPU, % </th></tr>";
 
             foreach (DataRow dr in dtProcess.Rows)
             {
                 process = process + "<tr><td width = '25%' align = 'center' valign = 'middle'>" + dr["DateWarnings"] +
-                    "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["ValueWarnings"] +
-                    "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["DateAnomalies"] +
-                    "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["ValueAnomalies"] + "</td></tr>";
+                          "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["ValueWarnings"] +
+                          "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["DateAnomalies"] +
+                          "</td><td width = '25%' align = 'center' valign = 'middle'>" + dr["ValueAnomalies"] +
+                          "</td></tr>";
             }
 
             process = process + "</table>";
             return process;
+        }
+
+        public static void ConvertToPdf(string html) {
+            // byte[] pdfContent = new SimplePechkin(new GlobalConfig()).Convert("<html><body><h1>Hello world!</h1></body></html>");
+            // Simple PDF from String
+            byte[] pdfBuffer = new SimplePechkin(new GlobalConfig()).Convert(html);
+
+            // Folder where the file will be created
+            string directory = "";
+            // Name of the PDF
+            string filename = "analyze.pdf";
+
+            if (ByteArrayToFile(directory + filename, pdfBuffer))
+            {
+                Console.WriteLine("PDF Succesfully created");
+            }
+            else
+            {
+                Console.WriteLine("Cannot create PDF");
+            }
+        }
+
+        /// <summary>
+        /// Writes a byte array (format returned by SimplePechkin) into a file
+        /// </summary>
+        /// <param name="_FileName"></param>
+        /// <param name="_ByteArray"></param>
+        /// <returns></returns>
+        private static bool ByteArrayToFile(string _FileName, byte[] _ByteArray)
+        {
+            try
+            {
+                // Open file for reading
+                FileStream _FileStream = new FileStream(_FileName, FileMode.Create, FileAccess.Write);
+                // Writes a block of bytes to this stream using data from  a byte array.
+                _FileStream.Write(_ByteArray, 0, _ByteArray.Length);
+
+                // Close file stream
+                _FileStream.Close();
+
+                return true;
+            }
+            catch (Exception _Exception)
+            {
+                Console.WriteLine("Exception caught in process while trying to save : {0}", _Exception.ToString());
+            }
+
+            return false;
         }
     }
 }
