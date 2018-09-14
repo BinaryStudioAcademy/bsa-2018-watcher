@@ -69,8 +69,8 @@ export class HeaderComponent implements OnInit {
   logout(): void {
     this.userSubscription.unsubscribe();
     this.currentUser = null;
+    this.themeService.setDefaultTheme();
     if (this.authService.isLoggedIn()) {
-      this.themeService.setDefaultTheme();
       this.authService.logout();
     }
     this.chatHub.disconnect();
