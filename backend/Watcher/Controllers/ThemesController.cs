@@ -31,6 +31,20 @@ namespace Watcher.Controllers
             return Ok(dtos);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var dto = await _themeService.GetById(id);
+
+            if (dto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
+        }
+ 
+
         [HttpPost]
         public async Task<ActionResult<ThemeDto>> CreateTheme([FromBody] ThemeDto themeDto)
         {

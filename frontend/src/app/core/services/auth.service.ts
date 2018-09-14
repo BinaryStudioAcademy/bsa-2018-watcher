@@ -130,8 +130,8 @@ export class AuthService {
     return this.tokenService.login(request).toPromise()
       .then(tokenDto => {
         this.setAuth(tokenDto);
-        if (tokenDto.user.lastPickedOrganization.theme) {
-          this.themeService.applyTheme(tokenDto.user.lastPickedOrganization.theme);
+        if (tokenDto.user.lastPickedOrganization.themeId) {
+          this.themeService.applyThemeById(tokenDto.user.lastPickedOrganization.themeId);
         }
       })
       .catch(err => {

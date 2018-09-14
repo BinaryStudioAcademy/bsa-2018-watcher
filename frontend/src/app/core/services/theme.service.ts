@@ -16,6 +16,10 @@ export class ThemeService {
     return this.apiService.get(`/${this.ctrlUrl}/`) as Observable<Theme[]>;
   }
 
+  private getById(id: number): Observable<Theme> {
+    return this.apiService.get(`/${this.ctrlUrl}/${id}`) as Observable<Theme> ;
+  }
+
   public applyTheme(theme: Theme) {
 
     const cssUrl = `/assets/themes/${theme.name}.css`;
@@ -65,6 +69,11 @@ export class ThemeService {
       link.setAttribute('rel', 'stylesheet');
 
       head.appendChild(link);
+    }
+
+
+  public applyThemeById(themeId: number) {
+    this.getById(themeId).subscribe((theme: Theme) => this.applyTheme(theme) );
   }
 
   public setDefaultTheme() {

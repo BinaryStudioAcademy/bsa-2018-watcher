@@ -102,6 +102,16 @@ export class OrganizationProfileComponent implements OnInit {
           }
         }
       );
+
+      this.organizationService.organizationChanged.subscribe( () => {
+        const currentUser = this.authService.getCurrentUserLS();
+        if (currentUser) {
+          const themeId = currentUser.lastPickedOrganization.themeId;
+          if (themeId) {
+            this.themeService.applyThemeById(themeId);
+          }
+        }
+      });
   }
 
   onSubmit() {
