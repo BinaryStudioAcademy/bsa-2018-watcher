@@ -18,7 +18,7 @@
         }
 
         public async Task Execute(IJobExecutionContext context)
-        {
+     {
             try
             {
                 var sourceType = CollectedDataType.Accumulation;

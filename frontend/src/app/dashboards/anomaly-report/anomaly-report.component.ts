@@ -96,7 +96,9 @@ export class AnomalyReportComponent implements OnInit {
     this.anomalyReportService.getDataByInstanceIdAndTypeInTime(this.createRequest()).subscribe((data: InstanceAnomalyReport[]) => {
       data.forEach(item => {
         item.date = new Date(item.date);
-        item.htmlDocUrl = 'https://academy2018.slack.com/archives/DBQSQ5WVC/p1536933960000100';
+        if (!item.htmlDocUrl) {
+          item.htmlDocUrl = 'https://academy2018.slack.com/archives/DBQSQ5WVC/p1536933960000100';
+        }
       });
       this.reports = data;
 
