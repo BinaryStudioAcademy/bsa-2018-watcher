@@ -283,7 +283,7 @@ namespace Watcher
         {
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             string connectionString = configuration.GetConnectionString(enviroment == EnvironmentName.Production ? "AzureCosmosDbConnection" : "MongoDbConnection");
-
+            connectionString = "mongodb://bsa-watcher-data-storage:V5jooQo3AC9c2dp7Myzurle1rz0UnyHJMngmqJhDQQQ5BhQEq7H2TyGgXw7hl9y5o1Ivjh5m7FXQxPIzQzaDyw==@bsa-watcher-data-storage.documents.azure.com:10255/?ssl=true&replicaSet=globaldb"; 
             services.AddScoped<IDataAccumulatorRepository<CollectedData>, DataAccumulatorRepository>(
                   options => new DataAccumulatorRepository(connectionString, "bsa-watcher-data-storage", CollectedDataType.Accumulation));
 

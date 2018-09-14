@@ -94,6 +94,8 @@ export class AnomalyReportComponent implements OnInit {
   getInfo(): void {
     this.isGetting = true;
     this.anomalyReportService.getDataByInstanceIdAndTypeInTime(this.createRequest()).subscribe((data: InstanceAnomalyReport[]) => {
+      console.log(data);
+      this.sortByDueDate(data);
       data.forEach(item => {
         item.date = new Date(item.date);
         if (!item.htmlDocUrl) {
@@ -107,12 +109,31 @@ export class AnomalyReportComponent implements OnInit {
   }
 
   private createRequest(): AnomalyReportRequest {
+    console.log(this.id);
     return {
-      id: this.id,
+      // id: this.id,
+      id: 'fe8cdebb-babc-4757-9676-e3e969005b8c',
       type: this.selectedType,
       from: this.dateFrom,
       to: this.dateTo
     };
+  }
+
+  async onDelete(rowData: InstanceAnomalyReport) {
+    console.log(rowData);
+    if (await this.toastrService.confirm('You sure you want to delete report ?')) {
+      this.anomalyReportService.deleteData(rowData).subscribe((value) =>
+      this.toastrService.success('Deleted report'),
+    (error) => this.toastrService.error('Report wasn`t deleted'));
+    }
+  }
+
+  onSort() {
+    console.log('sorting');
+  }
+
+  private sortByDueDate(value): void {
+    value.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   onCopy(link: string) {
