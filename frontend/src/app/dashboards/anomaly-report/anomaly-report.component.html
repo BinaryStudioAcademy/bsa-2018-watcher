@@ -28,7 +28,13 @@
         <span class="ui-button-text" *ngIf="!isGetting">Get info</span>
       </button>
     </div>
-    <div class="ui-g-2"></div>
+    <div class="ui-g-2 bottom-flex">
+        <button type="button" class="ui-button ui-state-default ui-button-danger ui-corner-all ui-button-text-only ui-widget btn-inline-flex get-info-but"
+        (click)="deleteAll()" [disabled]="!dateTo || !dateFrom || isDeleting">
+        <p-progressSpinner class="btn-spinner" *ngIf="isDeleting" strokeWidth="5"></p-progressSpinner>
+        <span class="ui-button-text" *ngIf="!isDeleting">Delete all</span>
+      </button>
+    </div>
   </div>
 
   <p-table #dt [value]="reports" *ngIf="reports" [paginator]="true" [rows]="10" sortMode="single" sortField="date" (onSort)="onSort()" >
@@ -54,7 +60,12 @@
             <button pButton type="button" (click)="onCopy(rowData.htmlDocUrl)" label="Copy"></button>
           </div>
         </div><div class="ui-g-1">
-        <button pButton type="button" label="Danger" class="ui-button-danger" (click)="onDelete(rowData)" style="float: left;"></button>
+        <button type="button" class="ui-button ui-state-default ui-button-danger ui-corner-all ui-button-text-only ui-widget btn-inline-flex get-info-but"
+        style="float: left;"
+        (click)="onDelete(rowData)" [disabled]="isDeletingOne">
+        <p-progressSpinner class="btn-spinner" *ngIf="isDeletingOne" strokeWidth="5"></p-progressSpinner>
+        <span class="ui-button-text" *ngIf="!isDeletingOne">Delete</span>
+      </button>
       </div>
     </td>
       </tr>

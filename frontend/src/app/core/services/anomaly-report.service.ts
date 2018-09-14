@@ -32,4 +32,8 @@ export class AnomalyReportService {
   deleteData(item: InstanceAnomalyReport) {
     return this.apiService.delete(`${this.ctrlUrl}/${item.id}`);
   }
+
+  deleteAllData(instanceId: string) {
+    return this.apiService.delete(`${this.ctrlUrl}/Instance/${instanceId}`);
+  }
 }

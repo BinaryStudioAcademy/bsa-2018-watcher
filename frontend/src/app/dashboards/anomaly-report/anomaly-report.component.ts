@@ -32,6 +32,8 @@ export class AnomalyReportComponent implements OnInit {
   type: DataType;
 
   isGetting: boolean;
+  isDeleting: boolean;
+  isDeletingOne: boolean;
 
   constructor(private anomalyReportService: AnomalyReportService,
               private activateRoute: ActivatedRoute,
@@ -120,11 +122,25 @@ export class AnomalyReportComponent implements OnInit {
   }
 
   async onDelete(rowData: InstanceAnomalyReport) {
+    this.isDeletingOne = true;
     console.log(rowData);
     if (await this.toastrService.confirm('You sure you want to delete report ?')) {
-      this.anomalyReportService.deleteData(rowData).subscribe((value) =>
-      this.toastrService.success('Deleted report'),
+      this.anomalyReportService.deleteData(rowData).subscribe((value) => {
+      this.toastrService.success('Deleted report');
+      this.isDeletingOne = false;
+    },
     (error) => this.toastrService.error('Report wasn`t deleted'));
+    }
+  }
+
+  async onDeleteAll() {
+    this.isDeleting = true;
+    if (await this.toastrService.confirm('You sure you want to delete ALL reports ?')) {
+      this.anomalyReportService.deleteAllData(this.id).subscribe((value) => {
+      this.toastrService.success('Deleted reports');
+      this.isDeleting = false;
+    },
+    (error) => this.toastrService.error('Reports were not deleted'));
     }
   }
 
