@@ -24,6 +24,8 @@
             _mapper = mapper;
         }
 
+        public static string GetHtml(InstanceAnomalyReportDto report) => GenerateWholeHtml.GenerateHtml(report);
+
         public static InstanceAnomalyReport GetAnomalyReport(Guid instanceId)
         {
             var parameters = new List<string> { "CPU", "RAM", "DISC" };

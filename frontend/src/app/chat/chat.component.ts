@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, EventEmitter } from '@angular/core';
+import {Component, HostListener, OnInit, EventEmitter, OnDestroy} from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 
 import { ChatHub } from '../core/hubs/chat.hub';
@@ -17,7 +17,7 @@ import { ChatWindow } from '../shared/models/chat-window.model';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.sass']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
 
   constructor(
     private chatHub: ChatHub,
@@ -59,6 +59,10 @@ export class ChatComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  ngOnDestroy(): void {
+
   }
 
   openChat() {

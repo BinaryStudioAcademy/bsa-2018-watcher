@@ -242,20 +242,12 @@
                                include: instances => instances.Include(o => o.Organization)
                                    .ThenInclude(uo => uo.UserOrganizations)
                                    .ThenInclude(uo => uo.User));
-
             if (instance == null) return notifications;
 
+            notificationRequest.Text = $"Anomaly Report was created for instance: {instance.Title} (id: {instance.Id})";
             notificationRequest.OrganizationId = instance.OrganizationId;
             receivers.AddRange(instance.Organization.UserOrganizations.Select(userOrganization => userOrganization.User));
-
-            var stringHtml = @"<html>
-                      <body>
-                      <p>Dear Ms. Susan,</p>
-                      <p>Thank you for your letter of yesterday inviting me to come for an interview on Friday afternoon, 5th July, at 2:30.
-                              I shall be happy to be there as requested and will bring my diploma and other papers with me.</p>
-                      <p>Sincerely,<br>-Jack</br></p>
-                      </body>
-                      </html>";
+            var stringHtml = GenerateWholeHtml.GenerateHtml(report);
 
             foreach (var receiver in receivers)
             {

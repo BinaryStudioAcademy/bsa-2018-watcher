@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using AutoMapper;
+
     using DataAccumulator.DataAccessLayer.Entities;
     using DataAccumulator.Shared.Models;
 
@@ -19,12 +21,19 @@
     public class InstanceAnomalyReportsController : ControllerBase
     {
         private readonly IInstanceAnomalyReportsService _service;
+        private readonly IEmailProvider _emailProvider;
+        private readonly IMapper _mapper;
 
-        public InstanceAnomalyReportsController(IInstanceAnomalyReportsService service)
+        public InstanceAnomalyReportsController(IInstanceAnomalyReportsService service, 
+                                                IEmailProvider provider,
+                                                IMapper mapper)
         {
             _service = service;
+            _emailProvider = provider;
+            _mapper = mapper;
         }
 
+        // /InstanceAnomalyReports/Report/774186a3-2850-4792-a648-53b07db62af2
 
         [HttpGet("{id}/{type}/{from}/{to}")]
         public virtual async Task<ActionResult<IEnumerable<CollectedDataDto>>> GetDataByInstance(Guid id, 
@@ -63,6 +72,9 @@
         public virtual ActionResult<InstanceAnomalyReport> GetReport([FromRoute] Guid instanceId)
         {
             var report = InstanceAnomalyReportsService.GetAnomalyReport(instanceId);
+            var dto = _mapper.Map<InstanceAnomalyReport, InstanceAnomalyReportDto>(report);
+            var html = InstanceAnomalyReportsService.GetHtml(dto);
+            _emailProvider.SendMessageOneToOne("watcher@net.com", "Analyze", "target.com", "", html);
             return Ok(report);
         }
     }
