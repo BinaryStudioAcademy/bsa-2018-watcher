@@ -42,6 +42,7 @@ import { InstanceActivityComponent } from './instance-activity/instance-activity
 import { ReportComponent } from './report/report.component';
 import { ResourceTableComponent } from './charts/resource-table/resource-table.component';
 import { EditReportChartComponent } from './report/edit-report-chart/edit-report-chart.component';
+import { AnomalyReportComponent } from './anomaly-report/anomaly-report.component';
 
 @NgModule({
   imports: [
@@ -90,7 +91,8 @@ import { EditReportChartComponent } from './report/edit-report-chart/edit-report
     ReportComponent,
     InstanceActivityComponent,
     ResourceTableComponent,
-    EditReportChartComponent
+    EditReportChartComponent,
+    AnomalyReportComponent
   ],
   exports: []
 })

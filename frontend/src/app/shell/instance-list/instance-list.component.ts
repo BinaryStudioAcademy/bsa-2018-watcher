@@ -152,6 +152,12 @@ export class InstanceListComponent implements OnInit {
         styleClass: 'instance-options',
         command: () => this.highlightCurrent(item)
       }, {
+        label: 'Anomaly Report',
+        icon: 'fa fa-bug',
+        routerLink: [`/user/instances/${instance.id}/${instance.guidId}/anomaly-report`],
+        styleClass: 'instance-options',
+        command: () => this.highlightCurrent(item)
+      }, {
         label: 'Delete',
         icon: 'fa fa-close',
         command: () => {

@@ -71,7 +71,7 @@ export class LandingComponent implements OnInit, OnDestroy {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({
-        block: 'start',
+        block: id === 'why-watcher' ? 'end' : 'start',
         behavior: 'smooth'
       });
     }
