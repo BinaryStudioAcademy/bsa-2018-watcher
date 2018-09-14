@@ -21,6 +21,8 @@
         [BsonDateTimeOptions]
         public DateTime Date { get; set; }
 
+        public string HtmlDocUrl { get; set; }
+
         public CollectedDataType CollectedDataTypeOfReport { get; set; }
 
         public List<AzureMLAnomalyGroup> AnomalyGroups { get; set; }

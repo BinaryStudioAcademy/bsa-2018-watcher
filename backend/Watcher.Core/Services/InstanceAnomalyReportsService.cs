@@ -123,6 +123,16 @@
             return Task.CompletedTask;
         }
 
+        public Task UpdateReportAsync(Guid reportId, string htmlUrl)
+        {
+            if (string.IsNullOrWhiteSpace(htmlUrl))
+            {
+                return Task.CompletedTask;
+            }
+
+            return _repository.UpdateReportHtmlUrlAsync(reportId, htmlUrl);
+        }
+
         public Task<bool> RemoveReportByIdAsync(Guid reportId)
         {
             return _repository.RemoveReportByIdAsync(reportId);

@@ -62,6 +62,13 @@
             return Task.FromResult((long)0);
         }
 
+        public Task UpdateReportHtmlUrlAsync(Guid reportId, string htmlUrl)
+        {
+            var filter = Builders<InstanceAnomalyReport>.Filter.Eq(i => i.Id, reportId);
+            var updateBuilder = new UpdateDefinitionBuilder<InstanceAnomalyReport>().Set(anomalyReport => anomalyReport.HtmlDocUrl, htmlUrl);
+            return _context.AnomalyReportsCollection.UpdateOneAsync(filter, updateBuilder);
+        }
+
         public Task<InstanceAnomalyReport> GetReportByIdAsync(Guid reportId)
         {
             var filter = Builders<InstanceAnomalyReport>.Filter.Eq(i => i.Id, reportId);

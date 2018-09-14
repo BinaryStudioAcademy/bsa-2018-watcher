@@ -26,6 +26,6 @@
 
         Task<bool> DeleteEntityByIdAsync(int id);
 
-        Task<IEnumerable<NotificationDto>> CreateAnomalyReportNotificationAsync(NotificationRequest request, InstanceAnomalyReportDto report);
+        Task<string> CreateAnomalyReportNotificationAsync(NotificationRequest request, InstanceAnomalyReportDto report);
     }
 }

@@ -13,6 +13,8 @@
         Task<List<InstanceAnomalyReportDto>> GetReportsByInstanceIdAsync(Guid instanceId);
         Task<InstanceAnomalyReportDto> GetReportByIdAsync(Guid reportId);
         Task AddReportAsync(InstanceAnomalyReport report);
+        Task UpdateReportAsync(Guid reportId, string htmlUrl);
+
         Task<bool> RemoveReportByIdAsync(Guid reportId);
         Task<bool> RemoveAllReportsAsync();
         Task<bool> ReportExistsAsync(Guid reportId);
