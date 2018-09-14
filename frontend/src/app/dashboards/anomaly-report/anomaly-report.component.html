@@ -37,9 +37,9 @@
         <th class="text-center t-name t-header">
           Date
         </th>
-        <th class="data-header t-type t-header">
+        <!-- <th class="data-header t-type t-header">
           Type
-        </th>
+        </th> -->
         <th class="data-header t-link t-header">
           Link
         </th>
@@ -50,9 +50,9 @@
         <td class="text-center">
           {{rowData.date | date:'short'}}
         </td>
-        <td class="text-center">
+        <!-- <td class="text-center">
           {{types[rowData.collectedDataTypeOfReport - 1].label}}
-        </td>
+        </td> -->
         <td class="ui-g text-center">
           <div class="ui-g-10 ui-fluid">
             <input type="text" [ngModel]="rowData.htmlDocUrl" pInputText />
