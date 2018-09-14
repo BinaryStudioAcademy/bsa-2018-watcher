@@ -67,6 +67,32 @@
             return Ok(dtos);
         }
 
+        [HttpDelete("{id}")]
+        public virtual async Task<ActionResult> DeleteReportById(Guid id)
+        {
+            var result = await _service.RemoveReportByIdAsync(id);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpDelete("Instance/{instanceId}")]
+        public virtual async Task<ActionResult> DeleteReportsByInstanceId(Guid instanceId)
+        {
+            var result = await _service.RemoveReportsByInstanceIdAsync(instanceId);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
         [HttpGet("Report/{instanceId}")]
         [AllowAnonymous]
         public virtual ActionResult<InstanceAnomalyReport> GetReport([FromRoute] Guid instanceId)
@@ -74,7 +100,7 @@
             var report = InstanceAnomalyReportsService.GetAnomalyReport(instanceId);
             var dto = _mapper.Map<InstanceAnomalyReport, InstanceAnomalyReportDto>(report);
             var html = InstanceAnomalyReportsService.GetHtml(dto);
-            var htmlLetter = InstanceAnomalyReportsService.GetHtmlForLetter("userName", html, "bsa-watcher.azurewebsites.net");
+            var htmlLetter = InstanceAnomalyReportsService.GetHtmlForLetter("userName", "instanceName", "bsa-watcher.azurewebsites.net");
             _emailProvider.SendMessageOneToOne("watcher@net.com", "Analyze", "target.com", "", htmlLetter);
             return Ok(report);
         }

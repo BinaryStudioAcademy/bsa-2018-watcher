@@ -1,5 +1,6 @@
 <div class="notifications-wrapper">
-  <p-progressSpinner class="spinner notifications-empty" [style]="{width: '75px', height: '75px'}" *ngIf="isLoading" strokeWidth="2"></p-progressSpinner>
+  <p-progressSpinner class="spinner notifications-empty" [style]="{width: '75px', height: '75px'}" *ngIf="isLoading"
+                     strokeWidth="2"></p-progressSpinner>
   <div class="notifications-empty" *ngIf="notifications.length == 0 && !isLoading">
     You don`t have notifications yet.
   </div>
@@ -9,23 +10,26 @@
     </div>
 
     <div class="notification-container">
-      <div class="ui-shadow message-container relative" *ngFor="let notification of notifications" [ngClass]="{'unread-message': !notification.wasRead}">
-        <div class="action-icon read-icon fa fa-fw fa-eye" *ngIf="!notification.wasRead" (click)="markAsRead(notification.id)"></div>
+      <div class="ui-shadow message-container relative" *ngFor="let notification of notifications"
+           [ngClass]="{'unread-message': !notification.wasRead}">
+        <div class="action-icon read-icon fa fa-fw fa-eye" *ngIf="!notification.wasRead"
+             (click)="markAsRead(notification.id)"></div>
         <div class="action-icon close-icon fa fa-fw fa-times" (click)="remove(notification.id)"></div>
 
         <span class="message-img icon-style fa fa-3x info"
-          [ngClass]="{
+              [ngClass]="{
             'warning': notification?.notificationSetting?.type == type.Warning,
             'error': notification?.notificationSetting?.type == type.Error,
             'system': notification?.notificationSetting?.type == type.System}">
         </span>
         <div class="message-content">
-            <span *ngIf="notification.instanceGuidId" (click)='redirectToInstance(notification)'  class="message-title text-overflow clickable">Instance message</span>
+          <span *ngIf="notification.instanceGuidId" (click)='redirectToInstance(notification)'
+                class="message-title text-overflow clickable">Instance message</span>
           <span *ngIf="!notification.instanceGuidId" class="message-title text-overflow">{{type[notification.notificationSetting.type]}} message</span>
           <div class="message-text action"
-            [ngClass]="{'message-text-short': extendedNotification !== notification.id}"
-            (click)="extendedNotification = extendedNotification === notification.id ? null : notification.id">
-            {{notification.text}}
+               [ngClass]="{'message-text-short': extendedNotification !== notification.id}"
+               (click)="extendedNotification = extendedNotification === notification.id ? null : notification.id"
+               [innerHTML]="notification.text">
           </div>
           <div class="message-date text-overflow">{{notification.createdAt | date:'short'}}</div>
         </div>

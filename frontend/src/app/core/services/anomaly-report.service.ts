@@ -28,4 +28,12 @@ export class AnomalyReportService {
                                                 /${request.from.toISOString()}/${request.to.toISOString()}
                                                 /${page}/${count}`) as Observable<InstanceAnomalyReport[]>;
   }
+
+  deleteData(item: InstanceAnomalyReport) {
+    return this.apiService.delete(`${this.ctrlUrl}/${item.id}`);
+  }
+
+  deleteAllData(instanceId: string) {
+    return this.apiService.delete(`${this.ctrlUrl}/Instance/${instanceId}`);
+  }
 }

@@ -28,17 +28,20 @@
         <span class="ui-button-text" *ngIf="!isGetting">Get info</span>
       </button>
     </div>
-    <div class="ui-g-2"></div>
+    <div class="ui-g-2 bottom-flex">
+        <button type="button" class="ui-button ui-state-default ui-button-danger ui-corner-all ui-button-text-only ui-widget btn-inline-flex get-info-but"
+        (click)="onDeleteAll()" [disabled]="!dateTo || !dateFrom || isDeleting">
+        <p-progressSpinner class="btn-spinner" *ngIf="isDeleting" strokeWidth="5"></p-progressSpinner>
+        <span class="ui-button-text" *ngIf="!isDeleting">Delete all</span>
+      </button>
+    </div>
   </div>
 
-  <p-table #dt [value]="reports" *ngIf="reports" [paginator]="true" [rows]="10">
+  <p-table #dt [value]="reports" *ngIf="reports" [paginator]="true" [rows]="10" sortMode="single" sortField="date" (onSort)="onSort()" >
     <ng-template pTemplate="header" let-columns>
       <tr class="row-header">
-        <th class="text-center t-name t-header">
+        <th class="text-center t-name t-header" >
           Date
-        </th>
-        <th class="data-header t-type t-header">
-          Type
         </th>
         <th class="data-header t-link t-header">
           Link
@@ -47,20 +50,24 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
       <tr [pSelectableRow]="rowData" class="row-content">
-        <td class="text-center">
+        <td class="text-center" [attr.rowspan]="[rowData.date]">
           {{rowData.date | date:'short'}}
         </td>
-        <td class="text-center">
-          {{types[rowData.collectedDataTypeOfReport - 1].label}}
-        </td>
         <td class="ui-g text-center">
-          <div class="ui-g-10 ui-fluid">
+          <div class="ui-g-11 ui-fluid">
+              <div class="ui-inputgroup">
             <input type="text" [ngModel]="rowData.htmlDocUrl" pInputText />
+            <button pButton type="button" (click)="onCopy(rowData.htmlDocUrl)" label="Copy"></button>
           </div>
-          <p-button class="ui-g-2 left-flex" (click)="onCopy(rowData.htmlDocUrl)" label="Copy"></p-button>
-        </td>
+        </div><div class="ui-g-1">
+        <button type="button" class="ui-button ui-state-default ui-button-danger ui-corner-all ui-button-text-only ui-widget btn-inline-flex get-info-but"
+        style="float: left;"
+        (click)="onDelete(rowData)">
+        <span class="ui-button-text" >Delete</span>
+      </button>
+      </div>
+    </td>
       </tr>
     </ng-template>
   </p-table>
-  
 </div>
