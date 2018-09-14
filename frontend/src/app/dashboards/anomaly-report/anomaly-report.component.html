@@ -40,6 +40,9 @@
         <th class="data-header t-header">
           Type
         </th>
+        <th class="data-header t-header">
+          Link
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -48,7 +51,13 @@
           {{rowData.date | date:'short'}}
         </td>
         <td class="text-center">
-          {{rowData.collectedDataTypeOfReport}}
+          {{types[rowData.collectedDataTypeOfReport - 1].label}}
+        </td>
+        <td class="ui-g text-center">
+          <div class="ui-g-8 ui-fluid">
+            <input type="text" [ngModel]="rowData.link" pInputText />
+          </div>
+          <p-button class="ui-g-4" label="Mock"></p-button>
         </td>
       </tr>
     </ng-template>
