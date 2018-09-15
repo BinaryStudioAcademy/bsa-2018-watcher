@@ -37,11 +37,17 @@
     </div>
   </div>
 
-  <p-table #dt [value]="reports" *ngIf="reports" [paginator]="true" [rows]="10" sortMode="single" sortField="date" (onSort)="onSort()" >
+  <div *ngIf="!reports || reports?.length === 0" class="tutorial">
+    <p class="tutorial-item">1. Select period of time in From and To fields</p>
+    <p class="tutorial-item">2. Get anomaly information</p>
+  </div>
+
+  <p-table #dt [value]="reports" *ngIf="reports && reports?.length > 0" [paginator]="true" [rows]="10" sortMode="single" sortField="date" (onSort)="onSort()" >
     <ng-template pTemplate="header" let-columns>
       <tr class="row-header">
-        <th class="text-center t-name t-header" >
+        <th class="text-center t-name t-header" [pSortableColumn]="date">
           Date
+          <p-sortIcon [field]="date" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
         </th>
         <th class="data-header t-link t-header">
           Link

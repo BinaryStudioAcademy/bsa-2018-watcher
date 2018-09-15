@@ -125,6 +125,7 @@ export class AnomalyReportComponent implements OnInit {
       this.anomalyReportService.deleteData(rowData).subscribe((value) => {
       this.toastrService.success('Deleted report');
       this.isDeletingOne = false;
+      this.reports.splice(this.reports.indexOf(rowData), 1);
     },
     (error) => this.toastrService.error('Report wasn`t deleted'));
     }
