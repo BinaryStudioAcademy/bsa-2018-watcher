@@ -32,7 +32,7 @@
         public Task<List<InstanceAnomalyReport>> GetReportsByInstanceIdAsync(Guid instanceId)
         {
             var filter = Builders<InstanceAnomalyReport>.Filter.Eq(i => i.ClientId, instanceId);
-            return _context.AnomalyReportsCollection.Find(filter).ToListAsync();
+            return _context.AnomalyReportsCollection.Find(filter).SortByDescending(report => report.Date).ToListAsync();
         }
 
         public Task<List<InstanceAnomalyReport>> GetReportsByParametersAsync(Guid instanceId, CollectedDataType type, DateTime @from, DateTime to, int page = 1, int count = 10)
@@ -42,7 +42,7 @@
                                                                     && d.Date >= @from 
                                                                     && d.Date <= to);
 
-            query.Skip(count * (page - 1)).Limit(count);
+            query.SortByDescending(report => report.Date).Skip(count * (page - 1)).Limit(count);
 
             return query.ToListAsync();
         }

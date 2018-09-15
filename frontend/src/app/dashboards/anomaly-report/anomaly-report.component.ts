@@ -7,7 +7,7 @@ import { InstanceAnomalyReport } from '../../shared/models/instance-anomaly-repo
 import { ActivatedRoute } from '@angular/router';
 import { AnomalyReportRequest } from '../../shared/models/anomaly-report-request.model';
 import { ToastrService } from '../../core/services/toastr.service';
-import {date_sort_desc} from '../charts/models';
+import {date_sort_asc, date_sort_desc} from '../charts/models';
 
 @Component({
   selector: 'app-anomaly-report',
@@ -97,13 +97,14 @@ export class AnomalyReportComponent implements OnInit {
   getInfo(): void {
     this.isGetting = true;
     this.anomalyReportService.getDataByInstanceIdAndTypeInTime(this.createRequest()).subscribe((data: InstanceAnomalyReport[]) => {
-      this.sortByDueDate(data);
+      debugger;
       data.forEach(item => {
         item.date = new Date(item.date);
         if (!item.htmlDocUrl) {
           item.htmlDocUrl = 'https://bsawatcherfiles.blob.core.windows.net/watcher/f736284e-9044-4d94-8a4d-3456154de6dd.html';
         }
       });
+      this.sortByDueDate(data);
       this.reports = data;
 
       this.isGetting = false;
@@ -147,7 +148,8 @@ export class AnomalyReportComponent implements OnInit {
   }
 
   private sortByDueDate(value): void {
-    value.sort((a, b) => date_sort_desc(a, b)); // (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // debugger;
+    value.sort((a, b) => date_sort_asc(a, b)); // (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   onCopy(link: string) {
