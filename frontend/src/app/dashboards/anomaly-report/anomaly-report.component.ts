@@ -7,6 +7,7 @@ import { InstanceAnomalyReport } from '../../shared/models/instance-anomaly-repo
 import { ActivatedRoute } from '@angular/router';
 import { AnomalyReportRequest } from '../../shared/models/anomaly-report-request.model';
 import { ToastrService } from '../../core/services/toastr.service';
+import {date_sort_desc} from '../charts/models';
 
 @Component({
   selector: 'app-anomaly-report',
@@ -145,7 +146,7 @@ export class AnomalyReportComponent implements OnInit {
   }
 
   private sortByDueDate(value): void {
-    value.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    value.sort((a, b) => date_sort_desc(a, b)); // (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   onCopy(link: string) {
