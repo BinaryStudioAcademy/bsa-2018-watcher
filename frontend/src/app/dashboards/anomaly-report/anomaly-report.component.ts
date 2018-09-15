@@ -146,7 +146,7 @@ export class AnomalyReportComponent implements OnInit {
   }
 
   private sortByDueDate(value): void {
-    value.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    value.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }
 
   onCopy(link: string) {
