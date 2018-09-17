@@ -1,4 +1,4 @@
-#WATCHER
+# WATCHER
 
 The platform for monitoring the consumption of resources and other system information on virtual machines for analysis and emergency feedback. The platform consists of two web servers (ASP.NET Core) for processing data, cross-platform application (.NET Core) for gathering data and SPA (Angular) for managing information, as well as displaying charts and tables.
 
