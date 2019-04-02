@@ -46,7 +46,7 @@ deploy:
     server:
       secure: GCqb1Ka4XlvY8MkxWTFIEKRyPyeJn63fFZmwQZGgGnpzsX/eBLKza5n+7SpMFw4mJ1MLj0/7DAYnYG9QQVafesY70PIr7SlFqlraT22KnGA=
     website:
-      secure: 4eA/NT3kA8Un8WzchNKj7w==
+      secure: cDbNO7KXt5Cq0UGJ+GkMLA==
     username:
       secure: J8/Xl8QbjGaOqjFDlyc54g==
     password:
