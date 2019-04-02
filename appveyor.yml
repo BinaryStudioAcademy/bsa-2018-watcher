@@ -44,7 +44,7 @@ notifications:
 deploy:
   - provider: WebDeploy
     server:
-      secure: GCqb1Ka4XlvY8MkxWTFIEKRyPyeJn63fFZmwQZGgGnpzsX/eBLKza5n+7SpMFw4mpQXIS3fXnPkt3ARK7X1LrFFclOgiQ60Zwen2cm2Dx/Q=
+      secure: GCqb1Ka4XlvY8MkxWTFIEKRyPyeJn63fFZmwQZGgGnpzsX/eBLKza5n+7SpMFw4mJ1MLj0/7DAYnYG9QQVafesY70PIr7SlFqlraT22KnGA=
     website:
       secure: 4eA/NT3kA8Un8WzchNKj7w==
     username:
