@@ -57,13 +57,13 @@ deploy:
 # Deploy DataAccumulator
   - provider: WebDeploy
     server:
-      secure: GCqb1Ka4XlvY8MkxWTFIEIbEk+yFC8EXfdVwDNqEzVAKxUe4AXjWiaf6HXj1PkmX8gezwqZvHjyu/bh+eJR1SGdotpyJOQPeGe6eDUXBvVCkj3KI6FQ7I7KnTCOANcDBlnURqjtXg29Jq2r4ASNIWw==
+      secure: LnIWi29utYVomXWU0PG1AFecSPDJd/USEO4a4T86zexIwqk/aSVOHWAteyE/R9jIks5CUqKu9E4DthcBSp1f+YiSXPZpmCEv0aGMoGaH8K91YjIOXxc/BKY8o/L/ZvhK
     website:
-      secure: IV137Y6THFxLzDZI7AZjGwfYLIdFENA5kcKpZ4OEpXg=
+      secure: hYlvucHSM2LSWT8vhwdbNC3kD0gcgF0irLQfDIxB2ZU=
     username:
-      secure: 4bOILnGvJX90az4zPepc6/kJeQCoGki4hxZm8BnSC0U=
+      secure: /rzxhcd/9lH9CUiVczwWW2aV5iC1kEtmdtEUXfQ2ugo=
     password:
-      secure: caHBnqUecWjsXS5qn2KuUtvXtvhsgI1I84Ufl1Iffoad30jRzQvJimFYikaWN9jzBnKN56KJhKQpL4wZ/2v8nA==
+      secure: VkgvgECsj+SdjUoT5sYhacth/ab4Q0dRtRJQjL8pI78O61GhK474YqRauAmDopYqdV8weM61afpp2Rlg+/RIFg==
     remove_files: true
     app_offline: true
     artifact: dataaccumulator
