@@ -44,13 +44,13 @@ notifications:
 deploy:
   - provider: WebDeploy
     server:
-      secure: GCqb1Ka4XlvY8MkxWTFIEKRyPyeJn63fFZmwQZGgGnpzsX/eBLKza5n+7SpMFw4mJ1MLj0/7DAYnYG9QQVaferAktoWyR/lauzzwMw6byK8=
+      secure: GCqb1Ka4XlvY8MkxWTFIEKRyPyeJn63fFZmwQZGgGnpzsX/eBLKza5n+7SpMFw4mpQXIS3fXnPkt3ARK7X1LrFFclOgiQ60Zwen2cm2Dx/Q=
     website:
-      secure: cDbNO7KXt5Cq0UGJ+GkMLA==
+      secure: 4eA/NT3kA8Un8WzchNKj7w==
     username:
       secure: J8/Xl8QbjGaOqjFDlyc54g==
     password:
-      secure: oKuycG/m6HKIsIk1D0gcFw+8Q+ChRVaEXSwvxEOQJl6C4ZsvfnfdmGJ/3TcUuu3bNZLk31eX10rFQd//JVybCQ==
+      secure: hFkhEP/ZeDybHbIb1vAGKu2NZ52x/YymTxtJypk8CUjdkJlZHjpAKVyzuiKLp7ZoDLQDRFpFYvI/Z/VQyUmG2Q==
     remove_files: true
     app_offline: true
     artifact: api
