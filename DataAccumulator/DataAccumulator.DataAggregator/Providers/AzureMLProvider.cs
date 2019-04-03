@@ -54,15 +54,28 @@ namespace DataAccumulator.DataAggregator.Providers
                 }
             };
 
-            var response = await _client.PostAsJsonAsync("", request);
-            if (!response.IsSuccessStatusCode)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                throw new InvalidOperationException(responseContent);
-            }
+            //var response = await _client.PostAsJsonAsync("", request);
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    var responseContent = await response.Content.ReadAsStringAsync();
+            //    throw new InvalidOperationException(responseContent);
+            //}
 
-            var result = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<AzureMLResponse>(result);
+            //var result = await response.Content.ReadAsStringAsync();
+            //return JsonConvert.DeserializeObject<AzureMLResponse>(result);
+            return await Task.FromResult(new AzureMLResponse
+            {
+                Results = new AzureMLResult
+                {
+                    Output = new List<AzureMLOutput>
+                    { 
+                        new AzureMLOutput { Data = 1, Time = DateTime.Now, TSpikeRaw = "1", ZSpikeRaw = "1" },
+                        new AzureMLOutput { Data = 2, Time = DateTime.Now, TSpikeRaw = "2", ZSpikeRaw = "2" },
+                        new AzureMLOutput { Data = 3, Time = DateTime.Now, TSpikeRaw = "3", ZSpikeRaw = "3" },
+                        new AzureMLOutput { Data = 4, Time = DateTime.Now, TSpikeRaw = "4", ZSpikeRaw = "4" }
+                    } 
+                }
+            });
         }
     }
 }
