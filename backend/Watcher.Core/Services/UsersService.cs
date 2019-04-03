@@ -142,7 +142,7 @@
 
             var newPhotoUrl = await _fileStorageProvider.UploadFileFromStreamAsync(
                                   string.IsNullOrWhiteSpace(entity.PhotoURL)
-                                      ? "https://bsawatcherfiles.blob.core.windows.net/watcher/9c2c0291-728d-4e7b-bcb7-3b9432cb8733.png" // Standart photo path
+                                      ? "https://iupac.org/wp-content/uploads/2018/05/default-avatar.png" // Standart photo path
                                       : entity.PhotoURL);
 
             entity.PhotoURL = newPhotoUrl;
@@ -162,7 +162,7 @@
                         CreatedByUserId = entity.Id,
                         ThemeId = 1,
                         ImageURL = await _fileStorageProvider.UploadFileFromStreamAsync(
-                            "https://bsawatcherfiles.blob.core.windows.net/watcher/9580e672-01f4-4429-9d04-4f8d1984b25b.png")
+                            "https://iupac.org/wp-content/uploads/2018/05/default-avatar.png")
                 };
                     createdUser.UserOrganizations.Add(
                         new UserOrganization
