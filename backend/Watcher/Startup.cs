@@ -233,7 +233,7 @@ namespace Watcher
 
             app.UseHttpStatusCodeExceptionMiddleware();
 
-            UpdateDatabase(app);
+            //UpdateDatabase(app);
 
             app.UseCors("CorsPolicy");
             app.UseHsts();
